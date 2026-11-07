@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-load("//packages/bazel:bundle_v1.bzl", "poo_flow_bundle_v1")
+load("//packages/bazel:bundle_v1.bzl", "agentic_ai_lab_bundle_v1")
 
 package(default_visibility = ["//visibility:public"])
 
-poo_flow_bundle_v1(
+agentic_ai_lab_bundle_v1(
     name = "human_capability_bundle",
     src = "examples/human-capability.ss",
     arena_out = "human-capability.arena.bin",
@@ -15,7 +15,7 @@ poo_flow_bundle_v1(
     descriptor_out = "human-capability.descriptor.bin",
 )
 
-poo_flow_bundle_v1(
+agentic_ai_lab_bundle_v1(
     name = "human_capability_bundle_determinism",
     src = "examples/human-capability.ss",
     arena_out = "human-capability.determinism.arena.bin",

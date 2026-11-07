@@ -3,44 +3,44 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :poo-flow/modules/temporal-causality/interface)
+        :agentic-ai-lab/modules/temporal-causality/interface)
 (export temporal-truth-maintenance-test)
 
 (def (derived id subjects conclusions)
-  (poo-flow-temporal-derivation
+  (agentic-ai-lab-temporal-derivation
    id "cut-1" "projection-1" "policy-1" subjects conclusions))
 
 (def (instant id position)
-  (poo-flow-temporal-instant id "txn" position "ledger" 'observed))
+  (agentic-ai-lab-temporal-instant id "txn" position "ledger" 'observed))
 
 (def (validity)
-  (poo-flow-temporal-interval
+  (agentic-ai-lab-temporal-interval
    "validity"
-   (poo-flow-temporal-instant "start" "valid" 1 "ledger" 'observed)
-   (poo-flow-temporal-instant "end" "valid" 10 "ledger" 'observed)
+   (agentic-ai-lab-temporal-instant "start" "valid" 1 "ledger" 'observed)
+   (agentic-ai-lab-temporal-instant "end" "valid" 10 "ledger" 'observed)
    #t #f))
 
 (def temporal-truth-maintenance-test
   (test-suite "temporal reverse dependency planning"
-    (poo-flow-test-case "changed evidence reaches downstream conclusions only"
-      (let* ((index (poo-flow-temporal-dependency-index
+    (yuanxu-test-case "changed evidence reaches downstream conclusions only"
+      (let* ((index (agentic-ai-lab-temporal-dependency-index
                      "index-1" "cut-1" "projection-1" #t
                      (list (derived "dose" '("prescription") '())
                            (derived "alert" '() '("dose"))
                            (derived "audit" '() '("alert"))
                            (derived "release" '("deployment") '()))))
-             (reordered (poo-flow-temporal-dependency-index
+             (reordered (agentic-ai-lab-temporal-dependency-index
                          "index-1" "cut-1" "projection-1" #t
                          (list (derived "release" '("deployment") '())
                                (derived "audit" '() '("alert"))
                                (derived "dose" '("prescription") '())
                                (derived "alert" '() '("dose")))))
-             (plan (poo-flow-temporal-reverse-dependency-plan
+             (plan (agentic-ai-lab-temporal-reverse-dependency-plan
                     index "cut-2" "projection-2" '("prescription"))))
-        (check (poo-flow-temporal-invalidation-plan? plan) => #t)
+        (check (agentic-ai-lab-temporal-invalidation-plan? plan) => #t)
         (check (.ref plan 'affected-conclusion-identities)
                => '("alert" "audit" "dose"))
         (check (.ref plan 'scheduled-for-reevaluation-identities)
@@ -52,47 +52,47 @@
         (check (.ref plan 'trigger) => 'premise-delta)
         (check (.ref plan 'runtime-executed?) => #f)))
 
-    (poo-flow-test-case "cycles terminate and partial inventory does not certify absence"
-      (let* ((index (poo-flow-temporal-dependency-index
+    (yuanxu-test-case "cycles terminate and partial inventory does not certify absence"
+      (let* ((index (agentic-ai-lab-temporal-dependency-index
                      "partial" "cut-1" "projection-1" #f
                      (list (derived "a" '("event") '("b"))
                            (derived "b" '() '("a")))))
-             (hit (poo-flow-temporal-reverse-dependency-plan
+             (hit (agentic-ai-lab-temporal-reverse-dependency-plan
                    index "cut-2" "projection-2" '("event")))
-             (miss (poo-flow-temporal-reverse-dependency-plan
+             (miss (agentic-ai-lab-temporal-reverse-dependency-plan
                     index "cut-2" "projection-2" '("unindexed"))))
         (check (.ref hit 'affected-conclusion-identities) => '("a" "b"))
         (check (.ref miss 'affected-conclusion-identities) => '())
         (check (.ref miss 'status) => 'partial)))
 
-    (poo-flow-test-case "journal cuts supply changed subjects to the index"
-      (let* ((first (poo-flow-temporal-evidence-revision
+    (yuanxu-test-case "journal cuts supply changed subjects to the index"
+      (let* ((first (agentic-ai-lab-temporal-evidence-revision
                      "r1" "subject" 'assert #f (instant "admit-1" 10)
                      (validity) "old"))
-             (other (poo-flow-temporal-evidence-revision
+             (other (agentic-ai-lab-temporal-evidence-revision
                      "o1" "other" 'assert #f (instant "admit-o" 10)
                      (validity) "unrelated"))
-             (fixed (poo-flow-temporal-evidence-revision
+             (fixed (agentic-ai-lab-temporal-evidence-revision
                      "r2" "subject" 'correct "r1" (instant "admit-2" 20)
                      (validity) "new"))
-             (journal (poo-flow-temporal-evidence-journal
+             (journal (agentic-ai-lab-temporal-evidence-journal
                        "journal" "txn" (list fixed other first)))
-             (before (poo-flow-temporal-evidence-as-of
+             (before (agentic-ai-lab-temporal-evidence-as-of
                       journal (instant "cut-15" 15) #f))
-             (after (poo-flow-temporal-evidence-as-of
+             (after (agentic-ai-lab-temporal-evidence-as-of
                      journal (instant "cut-25" 25) #f))
-             (index (poo-flow-temporal-dependency-index
+             (index (agentic-ai-lab-temporal-dependency-index
                      "index" (.ref before 'cut-digest)
                      (.ref before 'projection-digest) #t
-                     (list (poo-flow-temporal-derivation
+                     (list (agentic-ai-lab-temporal-derivation
                             "dependent" (.ref before 'cut-digest)
                             (.ref before 'projection-digest) "policy"
                             '("subject") '())
-                           (poo-flow-temporal-derivation
+                           (agentic-ai-lab-temporal-derivation
                             "independent" (.ref before 'cut-digest)
                             (.ref before 'projection-digest) "policy"
                             '("other") '()))))
-             (plan (poo-flow-temporal-reverse-dependency-plan-from-cuts
+             (plan (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
                     index journal (instant "cut-15" 15)
                     (instant "cut-25" 25) #f)))
         (check (.ref plan 'changed-subject-identities) => '("subject"))
@@ -104,40 +104,40 @@
         (check (.ref plan 'revised-projection-digest)
                => (.ref after 'projection-digest))
         (check-exception
-         (poo-flow-temporal-reverse-dependency-plan-from-cuts
+         (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
           index journal (instant "cut-25" 25)
           (instant "cut-15" 15) #f) true)
         (check-exception
-         (poo-flow-temporal-reverse-dependency-plan-from-cuts
+         (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
           index journal before after #f) true)))
 
-    (poo-flow-test-case "valid-time change reprojects every indexed derivation"
-      (let* ((journal (poo-flow-temporal-evidence-journal
+    (yuanxu-test-case "valid-time change reprojects every indexed derivation"
+      (let* ((journal (agentic-ai-lab-temporal-evidence-journal
                        "journal" "txn"
-                       (list (poo-flow-temporal-evidence-revision
+                       (list (agentic-ai-lab-temporal-evidence-revision
                               "r1" "subject" 'assert #f
                               (instant "admit-1" 10) (validity) "content"))))
              (cut (instant "cut" 15))
-             (valid-3 (poo-flow-temporal-instant
+             (valid-3 (agentic-ai-lab-temporal-instant
                        "valid-same-id" "valid" 3 "ledger" 'observed))
-             (valid-4 (poo-flow-temporal-instant
+             (valid-4 (agentic-ai-lab-temporal-instant
                        "valid-same-id" "valid" 4 "ledger" 'observed))
-             (prior (poo-flow-temporal-evidence-as-of
+             (prior (agentic-ai-lab-temporal-evidence-as-of
                      journal cut valid-3))
-             (revised (poo-flow-temporal-evidence-as-of
+             (revised (agentic-ai-lab-temporal-evidence-as-of
                        journal cut valid-4))
-             (index (poo-flow-temporal-dependency-index
+             (index (agentic-ai-lab-temporal-dependency-index
                      "index" (.ref prior 'cut-digest)
                      (.ref prior 'projection-digest) #t
-                     (list (poo-flow-temporal-derivation
+                     (list (agentic-ai-lab-temporal-derivation
                             "direct" (.ref prior 'cut-digest)
                             (.ref prior 'projection-digest) "policy"
                             '("subject") '())
-                           (poo-flow-temporal-derivation
+                           (agentic-ai-lab-temporal-derivation
                             "parameter-only" (.ref prior 'cut-digest)
                             (.ref prior 'projection-digest) "policy"
                             '() '()))))
-             (plan (poo-flow-temporal-reverse-dependency-plan-from-projections
+             (plan (agentic-ai-lab-temporal-reverse-dependency-plan-from-projections
                     index journal cut valid-3 valid-4)))
         (check (.ref prior 'active-revision-identities)
                => (.ref revised 'active-revision-identities))
@@ -147,39 +147,39 @@
                => '("direct" "parameter-only"))
         (check (.ref plan 'trigger) => 'valid-time-reprojection)
         (check-exception
-         (poo-flow-temporal-reverse-dependency-plan-from-projections
+         (agentic-ai-lab-temporal-reverse-dependency-plan-from-projections
           index journal cut valid-3 valid-3) true)
         (check-exception
-         (poo-flow-temporal-reverse-dependency-plan-from-projections
+         (agentic-ai-lab-temporal-reverse-dependency-plan-from-projections
           index journal cut valid-4 valid-3) true)
         (check-exception
-         (poo-flow-temporal-reverse-dependency-plan-from-projections
+         (agentic-ai-lab-temporal-reverse-dependency-plan-from-projections
           index journal prior revised valid-4) true)))
 
-    (poo-flow-test-case "cut and premise inventories are validated"
+    (yuanxu-test-case "cut and premise inventories are validated"
       (check-exception
-       (poo-flow-temporal-dependency-index
+       (agentic-ai-lab-temporal-dependency-index
         "bad-cut" "cut-1" "projection-1" #t
-        (list (poo-flow-temporal-derivation
+        (list (agentic-ai-lab-temporal-derivation
                "a" "cut-other" "projection-1" "policy"
                '("event") '()))) true)
       (check-exception
-       (poo-flow-temporal-dependency-index
+       (agentic-ai-lab-temporal-dependency-index
         "bad-projection" "cut-1" "projection-1" #t
-        (list (poo-flow-temporal-derivation
+        (list (agentic-ai-lab-temporal-derivation
                "a" "cut-1" "projection-other" "policy"
                '("event") '()))) true)
       (check-exception
-       (poo-flow-temporal-dependency-index
+       (agentic-ai-lab-temporal-dependency-index
         "missing-parent" "cut-1" "projection-1" #t
         (list (derived "a" '() '("unknown")))) true)
       (check-exception
-       (poo-flow-temporal-dependency-index
+       (agentic-ai-lab-temporal-dependency-index
         "duplicate" "cut-1" "projection-1" #t
         (list (derived "a" '() '()) (derived "a" '() '()))) true)
       (check-exception
-       (poo-flow-temporal-reverse-dependency-plan
-        (poo-flow-temporal-dependency-index
+       (agentic-ai-lab-temporal-reverse-dependency-plan
+        (agentic-ai-lab-temporal-dependency-index
          "valid" "cut-1" "projection-1" #t
          (list (derived "a" '("event") '())))
         "cut-1" "projection-1" '("event")) true))))

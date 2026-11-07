@@ -6,13 +6,13 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/impact/types
-                 poo-flow-temporal-intervention-window-audit?))
-(export PooFlowTemporalImpactScope PooFlowTemporalImpactScopeAudit
-        poo-flow-temporal-impact-scope?
-        poo-flow-temporal-impact-scope-audit?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/types
+                 agentic-ai-lab-temporal-intervention-window-audit?))
+(export AgenticAILabTemporalImpactScope AgenticAILabTemporalImpactScopeAudit
+        agentic-ai-lab-temporal-impact-scope?
+        agentic-ai-lab-temporal-impact-scope-audit?)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (slots? value names)
@@ -24,22 +24,22 @@
                              source-projection-digest time-domain-identity
                              onset end direct-target-outcomes
                              protected-outcomes))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.impact-scope)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.impact-scope)
        (every text? (map (lambda (slot) (.ref value slot))
                          '(identity semantic-digest intervention-identity
                            subject-identity source-cut-digest
                            source-projection-digest time-domain-identity)))
-       (poo-flow-temporal-instant? (.ref value 'onset))
-       (poo-flow-temporal-instant? (.ref value 'end))
+       (agentic-ai-lab-temporal-instant? (.ref value 'onset))
+       (agentic-ai-lab-temporal-instant? (.ref value 'end))
        (list? (.ref value 'direct-target-outcomes))
        (pair? (.ref value 'direct-target-outcomes))
        (every text? (.ref value 'direct-target-outcomes))
        (list? (.ref value 'protected-outcomes))
        (every text? (.ref value 'protected-outcomes))))
-(define-type (PooFlowTemporalImpactScope @ Type.)
+(define-type (AgenticAILabTemporalImpactScope @ Type.)
   .element?: scope-shape?)
-(def (poo-flow-temporal-impact-scope? value)
-  (element? PooFlowTemporalImpactScope value))
+(def (agentic-ai-lab-temporal-impact-scope? value)
+  (element? AgenticAILabTemporalImpactScope value))
 
 (def (scope-audit-shape? value)
   (and (slots? value '(kind identity semantic-digest scope-digest
@@ -49,7 +49,7 @@
                              status causal-impact-admitted?
                              runtime-executed?))
        (eq? (.ref value 'kind)
-            'poo-flow.temporal-causality.impact-scope-audit)
+            'agentic-ai-lab.temporal-causality.impact-scope-audit)
        (every text? (map (lambda (slot) (.ref value slot))
                          '(identity semantic-digest scope-digest
                            candidate-scenario-identity
@@ -60,7 +60,7 @@
        (list? (.ref value 'window-audits))
        (= (length (.ref value 'audited-outcomes))
           (length (.ref value 'window-audits)))
-       (every poo-flow-temporal-intervention-window-audit?
+       (every agentic-ai-lab-temporal-intervention-window-audit?
               (.ref value 'window-audits))
        (memq (.ref value 'prefix-status)
              '(consistent diverged unobserved))
@@ -70,7 +70,7 @@
              '(consistent-with-declaration violated unknown))
        (eq? (.ref value 'causal-impact-admitted?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
-(define-type (PooFlowTemporalImpactScopeAudit @ Type.)
+(define-type (AgenticAILabTemporalImpactScopeAudit @ Type.)
   .element?: scope-audit-shape?)
-(def (poo-flow-temporal-impact-scope-audit? value)
-  (element? PooFlowTemporalImpactScopeAudit value))
+(def (agentic-ai-lab-temporal-impact-scope-audit? value)
+  (element? AgenticAILabTemporalImpactScopeAudit value))

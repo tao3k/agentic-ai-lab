@@ -2,13 +2,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     RuntimeGraphBuilder,
     RuntimeGraphRuntime,
     RuntimeGraphStreamProjection,
 )
-from poo_flow_runtime.checkpoints import MemoryRuntimeGraphCheckpointer
-from poo_flow_runtime.messages import ai_message
+from agentic_ai_lab_runtime.checkpoints import MemoryRuntimeGraphCheckpointer
+from agentic_ai_lab_runtime.messages import ai_message
 
 
 def test_executor_stream_projection_splits_typed_iterators():

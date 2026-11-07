@@ -6,11 +6,11 @@
 ;;; Boundary: inert agent harness/session/run object family tests.
 ;;; Invariant: projections distinguish workflow runs, sessions, and dispatches.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/core/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 (export agent-harness-object-test)
 
@@ -25,9 +25,9 @@
 ;; : TestSuite
 (def agent-harness-object-test
   (test-suite "agent harness object families"
-    (poo-flow-test-case "projects inert profile harness session and operation facts"
+    (yuanxu-test-case "projects inert profile harness session and operation facts"
       (let* ((profile
-              (make-poo-flow-agent-profile
+              (make-yuanxu-agent-profile
                'reviewer
                'anthropic/claude-sonnet-4-6
                "Review proposed changes and return structured findings."
@@ -40,7 +40,7 @@
                '((sink . events))
                '((owner . user))))
              (harness
-              (make-poo-flow-agent-harness
+              (make-yuanxu-agent-harness
                'harness/reviewer
                'reviewer
                'agent/nono
@@ -52,7 +52,7 @@
                #f
                '((case . cicd-review))))
              (session
-              (make-poo-flow-agent-session
+              (make-yuanxu-agent-session
                'review-session
                'harness/reviewer
                'running
@@ -62,7 +62,7 @@
                '(op/setup op/review)
                '((workflow-run? . #f))))
              (operation
-              (make-poo-flow-agent-operation
+              (make-yuanxu-agent-operation
                'op/review
                'task
                'review-session
@@ -73,29 +73,29 @@
                'running
                #f
                '((agent . reviewer))))
-             (profile-row (poo-flow-agent-profile->alist profile))
-             (harness-row (poo-flow-agent-harness->alist harness))
-             (session-row (poo-flow-agent-session->alist session))
-             (operation-row (poo-flow-agent-operation->alist operation))
+             (profile-row (yuanxu-agent-profile->alist profile))
+             (harness-row (yuanxu-agent-harness->alist harness))
+             (session-row (yuanxu-agent-session->alist session))
+             (operation-row (yuanxu-agent-operation->alist operation))
              (session-snapshot
-              (poo-flow-runtime-snapshot->alist
-               (poo-flow-agent-session->snapshot session))))
-        (check-equal? (poo-flow-agent-profile? profile) #t)
+              (yuanxu-runtime-snapshot->alist
+               (yuanxu-agent-session->snapshot session))))
+        (check-equal? (yuanxu-agent-profile? profile) #t)
         (check-equal? (test-ref profile-row 'kind) 'agent-profile)
         (check-equal? (test-ref profile-row 'runtime-executed) #f)
         (check-equal? (test-ref harness-row 'kind) 'agent-harness)
         (check-equal? (test-ref harness-row 'runtime-executed) #f)
         (check-equal? (test-ref session-row 'kind) 'agent-session)
         (check-equal? (test-ref session-row 'workflow-run?) #f)
-        (check-equal? (poo-flow-agent-operation-kind? 'task) #t)
-        (check-equal? (poo-flow-agent-operation-kind? 'workflow-run) #f)
+        (check-equal? (yuanxu-agent-operation-kind? 'task) #t)
+        (check-equal? (yuanxu-agent-operation-kind? 'workflow-run) #f)
         (check-equal? (test-ref operation-row 'delegated-task?) #t)
         (check-equal? (test-ref session-snapshot 'subject-kind) 'agent-session)
         (check-equal? (test-ref session-snapshot 'subject-id) 'review-session)
         (check-equal? (test-ref session-snapshot 'last-event-index) 2)))
-    (poo-flow-test-case "keeps workflow runs and dispatch receipts separate"
+    (yuanxu-test-case "keeps workflow runs and dispatch receipts separate"
       (let* ((run
-              (make-poo-flow-workflow-run
+              (make-yuanxu-workflow-run
                'run_1
                'workflow/cicd
                'payload/ref
@@ -108,7 +108,7 @@
                'receipt/ref
                '((last-event-index . 7))))
              (dispatch
-              (make-poo-flow-dispatch-receipt
+              (make-yuanxu-dispatch-receipt
                'dispatch_1
                'reviewer
                'agent-instance-1
@@ -118,14 +118,14 @@
                'admitted
                '((queue . durable))
                '((source . test))))
-             (run-row (poo-flow-workflow-run->alist run))
-             (dispatch-row (poo-flow-dispatch-receipt->alist dispatch))
+             (run-row (yuanxu-workflow-run->alist run))
+             (dispatch-row (yuanxu-dispatch-receipt->alist dispatch))
              (run-snapshot
-              (poo-flow-runtime-snapshot->alist
-               (poo-flow-workflow-run->snapshot run)))
+              (yuanxu-runtime-snapshot->alist
+               (yuanxu-workflow-run->snapshot run)))
              (dispatch-snapshot
-              (poo-flow-runtime-snapshot->alist
-               (poo-flow-dispatch-receipt->snapshot dispatch))))
+              (yuanxu-runtime-snapshot->alist
+               (yuanxu-dispatch-receipt->snapshot dispatch))))
         (check-equal? (test-ref run-row 'kind) 'workflow-run)
         (check-equal? (test-ref run-row 'run-id) 'run_1)
         (check-equal? (test-ref dispatch-row 'kind) 'dispatch-receipt)
@@ -137,9 +137,9 @@
         (check-equal? (test-ref dispatch-snapshot 'subject-kind)
                       'dispatch-receipt)
         (check-equal? (test-ref dispatch-snapshot 'status) 'admitted)
-        (check-equal? (poo-flow-runtime-snapshot-status? 'admitted) #t)
-        (check-equal? (poo-flow-runtime-snapshot-status? 'finished) #f)))
-    (poo-flow-test-case "projects runner receipts into workflow run objects"
+        (check-equal? (yuanxu-runtime-snapshot-status? 'admitted) #t)
+        (check-equal? (yuanxu-runtime-snapshot-status? 'finished) #f)))
+    (yuanxu-test-case "projects runner receipts into workflow run objects"
       (let* ((receipt
               (make-receipt
                'demo-flow
@@ -158,11 +158,11 @@
                'ok
                #f
                '()))
-             (run (poo-flow-receipt->workflow-run receipt 'run_from_receipt))
-             (run-row (poo-flow-workflow-run->alist run))
+             (run (yuanxu-receipt->workflow-run receipt 'run_from_receipt))
+             (run-row (yuanxu-workflow-run->alist run))
              (snapshot
-              (poo-flow-runtime-snapshot->alist
-               (poo-flow-workflow-run->snapshot run)))
+              (yuanxu-runtime-snapshot->alist
+               (yuanxu-workflow-run->snapshot run)))
              (metadata (test-ref run-row 'metadata)))
         (check-equal? (test-ref run-row 'kind) 'workflow-run)
         (check-equal? (test-ref run-row 'run-id) 'run_from_receipt)

@@ -15,11 +15,11 @@
 ;;; Policy evidence:
 ;;; - Profile and bridge tests assert both valid requests and failure codes.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/request-field)
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/request-field)
 
 (export agent-sandbox-request-validation-errors
         agent-sandbox-validate-request

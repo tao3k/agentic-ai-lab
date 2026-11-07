@@ -1,23 +1,20 @@
-;;; -*- Gerbil -*-
-;;; Boundary: included by ../objects.ss.
-;;; This part is loaded through object practice macros, not package compile.
-;;; The fixture proves valid included fragments keep their declared identity.
-
-;;; This object is a valid load! fragment used to prove included object parts
-;;; preserve field contracts and metadata.
-;; : [PooFlowModuleObject]
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import :yuanxu/module-system/schema/interface)
+(export Objects)
+(def Objects
 (list
- (poo-flow-module-object
+ (yuanxu-module-object
   'objects.fixture.loaded
   '()
   (list
-   (poo-flow-module-field-contract
-    'title PooFlowModuleStringType 'override "loaded" '((scope . fixture)))
-   (poo-flow-module-field-contract
+   (yuanxu-module-field-contract
+    'title YuanxuModuleStringType 'override "loaded" '((scope . fixture)))
+   (yuanxu-module-field-contract
     'tags
-    (poo-flow-module-list-type PooFlowModuleSymbolType)
+    (yuanxu-module-list-type YuanxuModuleSymbolType)
     'append
     '()
     '((scope . fixture))))
   '((namespace . objects.fixture)
     (domain . fixture))))
+)

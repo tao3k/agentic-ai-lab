@@ -5,13 +5,13 @@
 from pathlib import Path
 from typing import Sequence
 
-from poo_flow_runtime import build_profile
+from agentic_ai_lab_runtime import build_profile
 
 
 def test_build_profile_parses_compile_debug_rows() -> None:
     output = """
-    |poo-flow-compile-debug (phase: package-stage label: "runtime" status: skipped elapsed-micros: 42)
-    |poo-flow-compile-debug (phase: package-total label: "package" status: completed elapsed-micros: 100)
+    |agentic-ai-lab-compile-debug (phase: package-stage label: "runtime" status: skipped elapsed-micros: 42)
+    |agentic-ai-lab-compile-debug (phase: package-total label: "package" status: completed elapsed-micros: 100)
     """
 
     rows = build_profile.parse_compile_debug_rows(output)
@@ -156,7 +156,7 @@ def test_build_profile_main_fails_when_gate_fails(monkeypatch, tmp_path, capsys)
 
     output = capsys.readouterr().out
     assert exit_code == 1
-    assert "poo-flow.build-profile.v1" in output
+    assert "agentic-ai-lab.build-profile.v1" in output
     assert "status: fail" in output
 
 

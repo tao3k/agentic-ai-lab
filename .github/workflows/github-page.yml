@@ -38,9 +38,9 @@ jobs:
       contents: read
     env:
       ORG_ZHIXING_ROOT: ${{ github.workspace }}/.ci/org-zhixing
-      PAGES_OUTPUT: ${{ github.workspace }}/.ci/poo-flow-pages
+      PAGES_OUTPUT: ${{ github.workspace }}/.ci/agentic-ai-lab-pages
     steps:
-      - name: Checkout POO Flow content
+      - name: Checkout Agentic AI Lab content
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
@@ -93,7 +93,7 @@ jobs:
           npm run pages:build -- \
             --config "$GITHUB_WORKSPACE/org-zhixing.toml" \
             --content "$GITHUB_WORKSPACE/docs" \
-            --base /poo-flow/ \
+            --base /agentic-ai-lab/ \
             --out "$PAGES_OUTPUT"
 
       - name: Save static render cache

@@ -7,7 +7,7 @@
 ;;; Invariant: benchmark thunks exclude gxi startup, package install, Lean
 ;;; execution, Marlin runtime work, and external IO.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -23,7 +23,7 @@
 
 ;; : (-> Alist Void)
 (def (type-contract-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] type-contract-performance ")
+  (display "[agentic-ai-lab-benchmark] type-contract-performance ")
   (write receipt)
   (newline)
   (force-output))
@@ -184,7 +184,7 @@
 ;; : TestSuite
 (def type-contract-performance-test
   (test-suite "type contract performance"
-    (poo-flow-test-case "keeps contract micro operations inside regression budgets"
+    (yuanxu-test-case "keeps contract micro operations inside regression budgets"
       (let (receipt (type-contract-performance-shared-receipt))
         (type-contract-performance-display-receipt receipt)
         (type-contract-performance-check-budget!
@@ -203,13 +203,13 @@
          'lean-facts-ms
          (type-contract-performance-ref receipt 'lean-facts-ms)
          (type-contract-performance-ref receipt 'lean-facts-ms-max-ms))))
-    (poo-flow-test-case "keeps real session contract scenario inside regression budgets"
+    (yuanxu-test-case "keeps real session contract scenario inside regression budgets"
       (let (receipt (type-contract-performance-shared-receipt))
         (type-contract-performance-check-budget!
          'session-policy-ms
          (type-contract-performance-ref receipt 'session-policy-ms)
          (type-contract-performance-ref receipt 'session-policy-ms-max-ms))))
-    (poo-flow-test-case "keeps scaled contract-backed objects bounded"
+    (yuanxu-test-case "keeps scaled contract-backed objects bounded"
       (let (receipt (type-contract-performance-shared-receipt))
         (check-equal?
          (<= (type-contract-performance-ref receipt 'scale-100-ms)
@@ -219,7 +219,7 @@
          'scale-10000-ms
          (type-contract-performance-ref receipt 'scale-10000-ms)
          (type-contract-performance-ref receipt 'scale-10000-ms-max-ms))))
-    (poo-flow-test-case "keeps cached projection reads out of the hot validation path"
+    (yuanxu-test-case "keeps cached projection reads out of the hot validation path"
       (let (receipt (type-contract-performance-shared-receipt))
         (type-contract-performance-check-budget!
          'cached-type-facts-ms

@@ -8,24 +8,24 @@
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every))
 
-(export poo-flow-authorization-provider-kind
-        poo-flow-authorization-capability-kind
-        PooFlowAuthorizationProvider
-        PooFlowAuthorizationCapability
-        poo-flow-authorization-provider?
-        poo-flow-authorization-capability?)
+(export agentic-ai-lab-authorization-provider-kind
+        agentic-ai-lab-authorization-capability-kind
+        AgenticAILabAuthorizationProvider
+        AgenticAILabAuthorizationCapability
+        agentic-ai-lab-authorization-provider?
+        agentic-ai-lab-authorization-capability?)
 
-(def poo-flow-authorization-provider-kind
-  'poo-flow.authorization-provider)
-(def poo-flow-authorization-capability-kind
-  'poo-flow.authorization-capability)
+(def agentic-ai-lab-authorization-provider-kind
+  'agentic-ai-lab.authorization-provider)
+(def agentic-ai-lab-authorization-capability-kind
+  'agentic-ai-lab.authorization-capability)
 
 (def (authorization-provider-shape? value)
   (and (object? value)
        (every (lambda (slot) (.slot? value slot))
               '(kind identity engines arbitration contract-executor runtime-owner
                 runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-authorization-provider-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-authorization-provider-kind)
        (string? (.ref value 'identity))
        (> (string-length (.ref value 'identity)) 0)
        (pair? (.ref value 'engines))
@@ -34,14 +34,14 @@
        (symbol? (.ref value 'runtime-owner))
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowAuthorizationProvider @ Type.)
+(define-type (AgenticAILabAuthorizationProvider @ Type.)
   .element?: authorization-provider-shape?)
 
 (def (authorization-capability-shape? value)
   (and (object? value)
        (every (lambda (slot) (.slot? value slot))
               '(kind identity action event-kind risk runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-authorization-capability-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-authorization-capability-kind)
        (string? (.ref value 'identity))
        (> (string-length (.ref value 'identity)) 0)
        (string? (.ref value 'action))
@@ -51,11 +51,11 @@
        (memq (.ref value 'risk) '(ordinary elevated))
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowAuthorizationCapability @ Type.)
+(define-type (AgenticAILabAuthorizationCapability @ Type.)
   .element?: authorization-capability-shape?)
 
-(def (poo-flow-authorization-provider? value)
-  (element? PooFlowAuthorizationProvider value))
+(def (agentic-ai-lab-authorization-provider? value)
+  (element? AgenticAILabAuthorizationProvider value))
 
-(def (poo-flow-authorization-capability? value)
-  (element? PooFlowAuthorizationCapability value))
+(def (agentic-ai-lab-authorization-capability? value)
+  (element? AgenticAILabAuthorizationCapability value))

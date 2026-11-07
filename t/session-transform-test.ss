@@ -5,13 +5,13 @@
 
 ;;; Boundary: report-only session transforms for agent-flow control-plane work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform)
 
 (export session-transform-test)
 
@@ -29,17 +29,17 @@
 
 ;; : (-> PooSession)
 (def (make-session-transform-root)
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'session-transform/root
-   (list (poo-flow-session-chunk
+   (list (agentic-ai-lab-session-chunk
           'request
           'user
           "Summarize the current repository state."))
-   (poo-flow-session-lineage
+   (agentic-ai-lab-session-lineage
     'session-transform/root
     '()
     'root)
-   (poo-flow-session-placement-resolve
+   (agentic-ai-lab-session-placement-resolve
     'agent/nono
     (list (make-session-transform-test-profile))
     '((case . session-transform)))
@@ -48,7 +48,7 @@
 
 ;; : (-> PooSessionMemoryIntent)
 (def (make-review-memory-intent)
-  (poo-flow-session-memory-intent
+  (agentic-ai-lab-session-memory-intent
    'review-memory
    'session/memory
    'project-workspace
@@ -58,7 +58,7 @@
 
 ;; : (-> PooSessionTransform)
 (def (make-review-transform)
-  (poo-flow-session-transform
+  (agentic-ai-lab-session-transform
    'review-agent
    'review
    "Review a session receipt and derive a follow-up session."
@@ -68,11 +68,11 @@
 
 ;; : (-> PooSessionTransformReceipt)
 (def (make-review-transform-receipt)
-  (poo-flow-session-transform-apply
+  (agentic-ai-lab-session-transform-apply
    (make-review-transform)
    (make-session-transform-root)
    'session-transform/review
-   (list (poo-flow-session-chunk
+   (list (agentic-ai-lab-session-chunk
           'review
           'assistant
           "Review the summarized repository state."))
@@ -81,62 +81,62 @@
 
 ;; : TestSuite
 (def session-transform-test
-  (test-suite "poo-flow report-only session transforms"
-    (poo-flow-test-case "declares transform specs without runtime execution"
+  (test-suite "agentic-ai-lab report-only session transforms"
+    (yuanxu-test-case "declares transform specs without runtime execution"
       (let* ((review-memory-intent (make-review-memory-intent))
              (review-transform (make-review-transform)))
-      (check-equal? (poo-flow-session-transform? review-transform) #t)
-      (check-equal? (poo-flow-session-transform-name review-transform)
+      (check-equal? (agentic-ai-lab-session-transform? review-transform) #t)
+      (check-equal? (agentic-ai-lab-session-transform-name review-transform)
                     'review-agent)
-      (check-equal? (poo-flow-session-transform-intent review-transform)
+      (check-equal? (agentic-ai-lab-session-transform-intent review-transform)
                     'review)
-      (check-equal? (poo-flow-session-transform-capabilities review-transform)
+      (check-equal? (agentic-ai-lab-session-transform-capabilities review-transform)
                     '(+provider-handoff +receipt-only +session-derivation))
-      (check-equal? (poo-flow-session-memory-intent?
+      (check-equal? (agentic-ai-lab-session-memory-intent?
                      review-memory-intent)
                     #t)
-      (check-equal? (poo-flow-session-memory-intent-name
+      (check-equal? (agentic-ai-lab-session-memory-intent-name
                      review-memory-intent)
                     'review-memory)
-      (check-equal? (poo-flow-session-memory-intent-store-ref
+      (check-equal? (agentic-ai-lab-session-memory-intent-store-ref
                      review-memory-intent)
                     'session/memory)
-      (check-equal? (poo-flow-session-memory-intent-scope
+      (check-equal? (agentic-ai-lab-session-memory-intent-scope
                      review-memory-intent)
                     'project-workspace)
-      (check-equal? (poo-flow-session-memory-intent-recall
+      (check-equal? (agentic-ai-lab-session-memory-intent-recall
                      review-memory-intent)
                     '(repository-summary review-notes))
-      (check-equal? (poo-flow-session-memory-intent-commit-policy
+      (check-equal? (agentic-ai-lab-session-memory-intent-commit-policy
                      review-memory-intent)
                     'commit-derived-session)
-      (check-equal? (length (poo-flow-session-transform-memory-intents
+      (check-equal? (length (agentic-ai-lab-session-transform-memory-intents
                              review-transform))
                     1)
-      (check-equal? (poo-flow-session-transform-runtime-owner
+      (check-equal? (agentic-ai-lab-session-transform-runtime-owner
                      review-transform)
                     "marlin-agent-core")
       (check-equal? (.ref review-transform 'runtime-executed) #f)))
-    (poo-flow-test-case "applies transforms as derived sessions and receipts"
+    (yuanxu-test-case "applies transforms as derived sessions and receipts"
       (let* ((review-transform-receipt
               (make-review-transform-receipt))
              (derived-session
-              (poo-flow-session-transform-receipt-derived-session
+              (agentic-ai-lab-session-transform-receipt-derived-session
                review-transform-receipt))
              (handoff-intent
-              (poo-flow-session-transform-receipt-handoff-intent
+              (agentic-ai-lab-session-transform-receipt-handoff-intent
                review-transform-receipt))
              (memory-receipts
-              (poo-flow-session-transform-receipt-memory-receipts
+              (agentic-ai-lab-session-transform-receipt-memory-receipts
                review-transform-receipt))
              (memory-receipt
               (car memory-receipts))
              (handoff-memory-intents
-              (poo-flow-session-alist-ref
+              (agentic-ai-lab-session-alist-ref
                handoff-intent
                'memory-intents
                '())))
-        (check-equal? (poo-flow-session-transform-receipt?
+        (check-equal? (agentic-ai-lab-session-transform-receipt?
                        review-transform-receipt)
                       #t)
         (check-equal? (.ref review-transform-receipt 'transform-name)
@@ -153,53 +153,53 @@
                       #f)
         (check-equal? (.ref review-transform-receipt 'runtime-executed)
                       #f)
-        (check-equal? (poo-flow-session? derived-session) #t)
-        (check-equal? (poo-flow-session-id derived-session)
+        (check-equal? (agentic-ai-lab-session? derived-session) #t)
+        (check-equal? (agentic-ai-lab-session-id derived-session)
                       'session-transform/review)
-        (check-equal? (poo-flow-session-lineage-parent-session-ids
-                       (poo-flow-session-value-lineage derived-session))
+        (check-equal? (agentic-ai-lab-session-lineage-parent-session-ids
+                       (agentic-ai-lab-session-value-lineage derived-session))
                       '(session-transform/root))
         (check-equal? (.ref derived-session 'branch-kind) 'transform)
-        (check-equal? (poo-flow-session-placement-profile-ref
-                       (poo-flow-session-value-placement derived-session))
+        (check-equal? (agentic-ai-lab-session-placement-profile-ref
+                       (agentic-ai-lab-session-value-placement derived-session))
                       'agent/nono)
-        (check-equal? (poo-flow-session-alist-ref
-                       (poo-flow-session-metadata derived-session)
+        (check-equal? (agentic-ai-lab-session-alist-ref
+                       (agentic-ai-lab-session-metadata derived-session)
                        'transform-name
                        #f)
                       'review-agent)
-        (check-equal? (poo-flow-session-alist-ref
+        (check-equal? (agentic-ai-lab-session-alist-ref
                        handoff-intent
                        'kind
                        #f)
-                      'poo-flow.session.transform.handoff-intent)
-        (check-equal? (poo-flow-session-alist-ref
+                      'agentic-ai-lab.session.transform.handoff-intent)
+        (check-equal? (agentic-ai-lab-session-alist-ref
                        handoff-intent
                        'runtime-executed
                        #t)
                       #f)
-        (check-equal? (poo-flow-session-alist-ref
+        (check-equal? (agentic-ai-lab-session-alist-ref
                        handoff-intent
                        'memory-intent-count
                        #f)
                       1)
-        (check-equal? (poo-flow-session-alist-ref
+        (check-equal? (agentic-ai-lab-session-alist-ref
                        (car handoff-memory-intents)
                        'store-ref
                        #f)
                       'session/memory)
         (check-equal? (length memory-receipts) 1)
-        (check-equal? (poo-flow-session-memory-receipt?
+        (check-equal? (agentic-ai-lab-session-memory-receipt?
                        memory-receipt)
                       #t)
-        (check-equal? (poo-flow-session-memory-receipt-name
+        (check-equal? (agentic-ai-lab-session-memory-receipt-name
                        memory-receipt)
                       'review-memory)
-        (check-equal? (poo-flow-session-memory-receipt-ref
+        (check-equal? (agentic-ai-lab-session-memory-receipt-ref
                        memory-receipt
                        'runtime-executed)
                       #f)
-        (check-equal? (poo-flow-session-alist-ref
+        (check-equal? (agentic-ai-lab-session-alist-ref
                        handoff-intent
                        'placement-resolved?
                        #f)

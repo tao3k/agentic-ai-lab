@@ -10,22 +10,22 @@
         "types.ss"
         "funs.ss")
 
-(export PooFlowProofModule.
-        poo-flow-proof-module)
+(export AgenticAILabProofModule.
+        agentic-ai-lab-proof-module)
 
-(def PooFlowProofModule.
+(def AgenticAILabProofModule.
   (.o (:: self)
-      kind: +poo-flow-proof-module-kind+
-      identity: "poo-flow/modules/proof"
+      kind: +agentic-ai-lab-proof-module-kind+
+      identity: "agentic-ai-lab/modules/proof"
       required-slots: '(artifacts receipts refinements)
       optional-slots:
       '(documentation presentation-metadata reference-implementation)
       providers: (.o)
-      .admit-assurance: poo-flow-proof-assurance))
+      .admit-assurance: agentic-ai-lab-proof-assurance))
 
-(def (poo-flow-proof-module identity-value provider-values)
+(def (agentic-ai-lab-proof-module identity-value provider-values)
   (validate
-   PooFlowProofModule
-   (.o (:: @ PooFlowProofModule.)
+   AgenticAILabProofModule
+   (.o (:: @ AgenticAILabProofModule.)
        identity: identity-value
        providers: provider-values)))

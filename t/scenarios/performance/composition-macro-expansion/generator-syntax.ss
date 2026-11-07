@@ -5,10 +5,12 @@
 
 ;;; Boundary: declarative fixture generator for composition expansion gates.
 
-(import (only-in :clan/poo/object .def)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        (only-in :core/profile-composition/profile-bundle
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :clan/poo/object .def)
+        :yuanxu/profile-composition/selection-syntax
+
+        (only-in :yuanxu/profile-composition/profile-bundle
                  compose profiles)
         (for-syntax
          (only-in :gerbil/core/expander stx-identifier)))
@@ -25,7 +27,7 @@
          (fx1+ index)
          (cons (stx-identifier template prefix index) out))))))
 
-;;; Emit COUNT real native POO Profile values and one thin user-composition
+;;; Emit COUNT real POO Profile values and one thin user-composition
 ;;; binding.  The benchmark measures the production value-level path, not the
 ;;; removed clause parser.
 (defsyntax (define-composition-expansion-case stx)
@@ -43,5 +45,6 @@
          (with-syntax (((profile-name ...) profile-identifiers))
            #'(begin
                (.def profile-name (identity 'profile-name)) ...
-               (user-composition binding
-                 (compose profiles profile-name ...)))))))))
+               (def binding
+  (.new Scenario name: 'binding
+        config: (compose profiles profile-name ...))))))))))

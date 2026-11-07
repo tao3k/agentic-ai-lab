@@ -5,17 +5,17 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/delta-types
-                 PooFlowTemporalTrajectoryDelta))
-(export poo-flow-temporal-trajectory-delta-value)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-types
+                 AgenticAILabTemporalTrajectoryDelta))
+(export agentic-ai-lab-temporal-trajectory-delta-value)
 
-(def (poo-flow-temporal-trajectory-delta-value
+(def (agentic-ai-lab-temporal-trajectory-delta-value
       identity-value digest-value previous-value revised-value
       previous-digest-value revised-digest-value previous-cut-value
       revised-cut-value previous-projection-value revised-projection-value
       added-value removed-value changed-value status-value)
-  (validate PooFlowTemporalTrajectoryDelta
-    (.o kind: 'poo-flow.temporal-causality.trajectory-delta
+  (validate AgenticAILabTemporalTrajectoryDelta
+    (.o kind: 'agentic-ai-lab.temporal-causality.trajectory-delta
         identity: identity-value semantic-digest: digest-value
         previous-series: previous-value revised-series: revised-value
         previous-series-digest: previous-digest-value

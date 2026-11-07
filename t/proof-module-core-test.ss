@@ -3,78 +3,78 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .cc .o .ref)
-        :poo-flow/modules/proof/interface)
+        :agentic-ai-lab/modules/proof/interface)
 
 (export proof-module-core-test)
 
 (def proof-module-core-test
   (test-suite
    "POO Proof Module core"
-   (poo-flow-test-case "admits exact artifact receipts and refinement bindings"
-     (let* ((tla
-             (poo-flow-proof-artifact
-              "test/tla" 'tlc 'tla-plus "test/model.tla"
-              (poo-flow-proof-digest 'tla-source)
+   (yuanxu-test-case "admits exact artifact receipts and refinement bindings"
+     (let* ((quint
+             (agentic-ai-lab-proof-artifact
+              "test/quint" 'quint 'quint "test/model.qnt"
+              (agentic-ai-lab-proof-digest 'quint-source)
               '(SafetyInvariant) (.o)))
             (lean
-             (poo-flow-proof-artifact
+             (agentic-ai-lab-proof-artifact
               "test/lean" 'lean 'lean "test/Refinement.lean"
-              (poo-flow-proof-digest 'lean-source)
+              (agentic-ai-lab-proof-digest 'lean-source)
               '(safetyRefinement) (.o)))
             (receipt
-             (poo-flow-proof-receipt
+             (agentic-ai-lab-proof-receipt
               "test/lean/receipt" lean 'lean '(safetyRefinement)
-              (poo-flow-proof-digest 'lean-build-receipt) #t))
+              (agentic-ai-lab-proof-digest 'lean-build-receipt) #t))
             (impact
-             (poo-flow-proof-impact-binding
-              "test/tla-to-lean" tla lean
+             (agentic-ai-lab-proof-impact-binding
+              "test/quint-to-lean" quint lean
               (.o SafetyInvariant: '(safetyRefinement))))
             (refinement
-             (poo-flow-proof-refinement-binding
-              "test/refinement" tla lean receipt impact))
+             (agentic-ai-lab-proof-refinement-binding
+              "test/refinement" quint lean receipt impact))
             (assurance
-             ((.ref PooFlowProofModule. '.admit-assurance)
-              "test/assurance" (list tla lean) (list receipt)
+             ((.ref AgenticAILabProofModule. '.admit-assurance)
+              "test/assurance" (list quint lean) (list receipt)
               (list refinement))))
-       (check (poo-flow-proof-module? PooFlowProofModule.) => #t)
-       (check (.ref PooFlowProofModule. 'required-slots)
+       (check (agentic-ai-lab-proof-module? AgenticAILabProofModule.) => #t)
+       (check (.ref AgenticAILabProofModule. 'required-slots)
               => '(artifacts receipts refinements))
-       (check (poo-flow-proof-assurance? assurance) => #t)
+       (check (agentic-ai-lab-proof-assurance? assurance) => #t)
        (check (.ref assurance 'current?) => #t)
        (check (.ref assurance 'admitted?) => #t)
-       (check (hash-get (.ref assurance 'artifact-index) "test/tla")
-              => tla)))
-   (poo-flow-test-case "changed upstream digest invalidates the exact refinement"
-     (let* ((tla
-             (poo-flow-proof-artifact
-              "test/tla" 'tlc 'tla-plus "test/model.tla"
-              (poo-flow-proof-digest 'tla-source)
+       (check (hash-get (.ref assurance 'artifact-index) "test/quint")
+              => quint)))
+   (yuanxu-test-case "changed upstream digest invalidates the exact refinement"
+     (let* ((quint
+             (agentic-ai-lab-proof-artifact
+              "test/quint" 'quint 'quint "test/model.qnt"
+              (agentic-ai-lab-proof-digest 'quint-source)
               '(SafetyInvariant) (.o)))
             (lean
-             (poo-flow-proof-artifact
+             (agentic-ai-lab-proof-artifact
               "test/lean" 'lean 'lean "test/Refinement.lean"
-              (poo-flow-proof-digest 'lean-source)
+              (agentic-ai-lab-proof-digest 'lean-source)
               '(safetyRefinement) (.o)))
             (receipt
-             (poo-flow-proof-receipt
+             (agentic-ai-lab-proof-receipt
               "test/lean/receipt" lean 'lean '(safetyRefinement)
-              (poo-flow-proof-digest 'lean-build-receipt) #t))
+              (agentic-ai-lab-proof-digest 'lean-build-receipt) #t))
             (impact
-             (poo-flow-proof-impact-binding
-              "test/tla-to-lean" tla lean
+             (agentic-ai-lab-proof-impact-binding
+              "test/quint-to-lean" quint lean
               (.o SafetyInvariant: '(safetyRefinement))))
             (refinement
-             (poo-flow-proof-refinement-binding
-              "test/refinement" tla lean receipt impact))
-            (changed-tla
-             (.cc tla 'content-digest
-                  (poo-flow-proof-digest 'changed-tla-source)))
+             (agentic-ai-lab-proof-refinement-binding
+              "test/refinement" quint lean receipt impact))
+            (changed-quint
+             (.cc quint 'content-digest
+                  (agentic-ai-lab-proof-digest 'changed-quint-source)))
             (assurance
-             (poo-flow-proof-assurance
-              "test/stale" (list changed-tla lean) (list receipt)
+             (agentic-ai-lab-proof-assurance
+              "test/stale" (list changed-quint lean) (list receipt)
               (list refinement))))
        (check (.ref assurance 'current?) => #f)
        (check (.ref assurance 'admitted?) => #f)))))

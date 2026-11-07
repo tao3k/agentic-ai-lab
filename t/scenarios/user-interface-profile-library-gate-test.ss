@@ -6,34 +6,34 @@
 ;;; Boundary: user-interface profile library gate tests.
 ;;; Invariant: public reusable profiles must carry test and Lean proof status.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/profile-core
-        :poo-flow/src/user-interface/profile-gate)
+        :yuanxu/module-system/selection/objects
+        :yuanxu/profile-composition/user-profile
+        :yuanxu/profile-composition/gate)
 
 
 (export user-interface-profile-library-gate-test)
 
 ;; : (-> Unit PooUserProfile)
 (def gate-test-user-profile
-  (pooFlowUserProfile
+  (yuanxuUserProfile
    'developer
    '()
-   (poo-flow-settings
-    surface: "poo-flow"
+   (yuanxu-settings
+    surface: "agentic-ai-lab"
     profile: "developer")
    '(surface profile)))
 
 ;; : (-> Unit PooUserProfile)
 (def gate-test-custom-profile
-  (pooFlowUserProfile
+  (yuanxuUserProfile
    'custom-developer
    '()
-   (poo-flow-settings
-    surface: "poo-flow"
+   (yuanxu-settings
+    surface: "agentic-ai-lab"
     profile: "custom-developer")
    '(surface profile)))
 
@@ -47,7 +47,7 @@
 
 ;; : (-> Unit PooUserInterfaceProfileGateReceipt)
 (def accepted-profile-receipt
-  (poo-flow-user-interface-profile-gate-receipt
+  (yuanxu-user-interface-profile-gate-receipt
    'workspace
    #t
    '(scenario-user-interface-profile-library)
@@ -60,7 +60,7 @@
 
 ;; : (-> Unit PooUserInterfaceProfileGateReceipt)
 (def scope-leak-profile-receipt
-  (poo-flow-user-interface-profile-gate-receipt
+  (yuanxu-user-interface-profile-gate-receipt
    'workspace
    #f
    '(scenario-user-interface-profile-library)
@@ -73,7 +73,7 @@
 
 ;; : (-> Unit PooUserInterfaceProfileGate)
 (def accepted-profile-gate
-  (poo-flow-user-interface-profile-gate/receipt
+  (yuanxu-user-interface-profile-gate/receipt
    gate-test-user-profile
    'public
    '(developer-profile-scenario)
@@ -90,7 +90,7 @@
 
 ;; : (-> Unit PooUserInterfaceProfileGate)
 (def scope-leak-profile-gate
-  (poo-flow-user-interface-profile-gate/receipt
+  (yuanxu-user-interface-profile-gate/receipt
    gate-test-custom-profile
    'public
    '(custom-developer-profile-scenario)
@@ -108,7 +108,7 @@
 
 ;; : (-> Unit PooUserInterfaceProfileGate)
 (def experimental-profile-gate
-  (poo-flow-user-interface-profile-gate
+  (yuanxu-user-interface-profile-gate
    gate-test-custom-profile
    'experimental
    '(custom-developer-profile-scenario)
@@ -120,7 +120,7 @@
 
 ;; : (-> Unit PooUserProfileSet)
 (def gate-test-profile-set
-  (pooFlowUserProfileSet 'workspace
+  (yuanxuUserProfileSet 'workspace
                          'developer
                          (list gate-test-user-profile
                                gate-test-custom-profile)))
@@ -132,17 +132,17 @@
 
 ;; : TestSuite
 (def user-interface-profile-library-gate-test
-  (test-suite "poo-flow user-interface profile library gate"
-    (poo-flow-test-case "accepts only tested proof-backed public profiles"
+  (test-suite "agentic-ai-lab user-interface profile library gate"
+    (yuanxu-test-case "accepts only tested proof-backed public profiles"
       (let* ((gate accepted-profile-gate)
-             (facts (poo-flow-user-interface-profile-gate->lean-facts gate)))
-        (check-equal? (poo-flow-user-interface-profile-gate? gate) #t)
-        (check-equal? (poo-flow-user-interface-profile-gate-profile-name gate)
+             (facts (yuanxu-user-interface-profile-gate->lean-facts gate)))
+        (check-equal? (yuanxu-user-interface-profile-gate? gate) #t)
+        (check-equal? (yuanxu-user-interface-profile-gate-profile-name gate)
                       'developer)
-        (check-equal? (poo-flow-user-interface-profile-gate-accepted? gate)
+        (check-equal? (yuanxu-user-interface-profile-gate-accepted? gate)
                       #t)
         (check-equal?
-         (poo-flow-user-interface-profile-lean-fact-contract-complete? facts)
+         (yuanxu-user-interface-profile-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value
                        'ui.profile/reusable-library-surface
@@ -163,24 +163,24 @@
                        'ui.profile/counterexample-rejected
                        facts)
                       #t)))
-    (poo-flow-test-case "binds profile-set library surface to per-profile gates"
+    (yuanxu-test-case "binds profile-set library surface to per-profile gates"
       (let* ((profile-set gate-test-profile-set)
              (gates gate-test-profile-set-gates)
-             (fact-sets (map poo-flow-user-interface-profile-gate->lean-facts
+             (fact-sets (map yuanxu-user-interface-profile-gate->lean-facts
                              gates)))
-        (check-equal? (poo-flow-user-profile-set? profile-set) #t)
-        (check-equal? (poo-flow-user-profile-set-profile-names profile-set)
+        (check-equal? (yuanxu-user-profile-set? profile-set) #t)
+        (check-equal? (yuanxu-user-profile-set-profile-names profile-set)
                       '(developer custom-developer))
-        (check-equal? (poo-flow-user-profile-name
-                       (poo-flow-user-profile-set-default-profile profile-set))
+        (check-equal? (yuanxu-user-profile-name
+                       (yuanxu-user-profile-set-default-profile profile-set))
                       'developer)
-        (check-equal? (map poo-flow-user-interface-profile-gate-profile-name
+        (check-equal? (map yuanxu-user-interface-profile-gate-profile-name
                             gates)
                       '(developer custom-developer))
-        (check-equal? (map poo-flow-user-interface-profile-gate-accepted?
+        (check-equal? (map yuanxu-user-interface-profile-gate-accepted?
                             gates)
                       '(#t #f))
-        (check-equal? (map poo-flow-user-interface-profile-lean-fact-contract-complete?
+        (check-equal? (map yuanxu-user-interface-profile-lean-fact-contract-complete?
                             fact-sets)
                       '(#t #t))
         (check-equal? (map (lambda (facts)
@@ -189,15 +189,15 @@
                               facts))
                            fact-sets)
                       '(#t #f))))
-    (poo-flow-test-case "rejects discharged public gates when scope proof fails"
+    (yuanxu-test-case "rejects discharged public gates when scope proof fails"
       (let* ((gate scope-leak-profile-gate)
-             (facts (poo-flow-user-interface-profile-gate->lean-facts gate)))
-        (check-equal? (poo-flow-user-interface-profile-gate-profile-name gate)
+             (facts (yuanxu-user-interface-profile-gate->lean-facts gate)))
+        (check-equal? (yuanxu-user-interface-profile-gate-profile-name gate)
                       'custom-developer)
-        (check-equal? (poo-flow-user-interface-profile-gate-accepted? gate)
+        (check-equal? (yuanxu-user-interface-profile-gate-accepted? gate)
                       #f)
         (check-equal?
-         (poo-flow-user-interface-profile-lean-fact-contract-complete? facts)
+         (yuanxu-user-interface-profile-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value 'ui.profile/public-profile facts) #t)
         (check-equal? (alist-value
@@ -213,15 +213,15 @@
                        'ui.profile/reusable-library-surface
                        facts)
                       #f)))
-    (poo-flow-test-case "keeps experimental profiles out of public reusable surface"
+    (yuanxu-test-case "keeps experimental profiles out of public reusable surface"
       (let* ((gate experimental-profile-gate)
-             (facts (poo-flow-user-interface-profile-gate->lean-facts gate)))
-        (check-equal? (poo-flow-user-interface-profile-gate-profile-name gate)
+             (facts (yuanxu-user-interface-profile-gate->lean-facts gate)))
+        (check-equal? (yuanxu-user-interface-profile-gate-profile-name gate)
                       'custom-developer)
-        (check-equal? (poo-flow-user-interface-profile-gate-accepted? gate)
+        (check-equal? (yuanxu-user-interface-profile-gate-accepted? gate)
                       #f)
         (check-equal?
-         (poo-flow-user-interface-profile-lean-fact-contract-complete? facts)
+         (yuanxu-user-interface-profile-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value 'ui.profile/experimental facts) #t)
         (check-equal? (alist-value 'ui.profile/public-profile facts) #f)

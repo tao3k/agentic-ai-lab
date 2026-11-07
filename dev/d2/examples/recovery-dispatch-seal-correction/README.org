@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Dispatch seal correction
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-seal-correction][design]] compares the old exact snapshot, the new cut with a gap,
+and a fresh seal that exposes a second dispatch ID. The scene inputs are
+declarative presentation facts and local log objects. The existing D2
+module derives the explanatory composition.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-seal-correction/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-seal-correction/case.ss --evaluate
+#+end_src
+
+The model read the actual PNG. R42 remains visible after A is requalified.
+Only the last B range becomes a gap. In the resealed panel, the new R43
+marker establishes the two-ID alternative. The v3 caption separates its
+historical retention from current selection. The labeled relations describe
+evidence changes for this example. The PNG has 49 visible
+English words and a measured minimum text size of 19.52 px.
+
+PNG SHA-256: =89c5c729d457330df1108c6f923eb77f51f9e4c4f96dec3b12ab8e6380bddca4=.
+
+The [[file:../../output/recovery-dispatch-seal-correction/final-reviewed.json][final ASCENT readback]] exited normally and grounded all three facets for this image.

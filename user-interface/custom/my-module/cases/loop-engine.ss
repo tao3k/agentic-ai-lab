@@ -9,17 +9,17 @@
 ;;; This case configures one concrete loop handoff story: an agent proposes a
 ;;; CI/CD repair, peer agents judge it, and a human node reviews release risk.
 ;; : [PooUserModuleSelection]
-(import :poo-flow/modules/loop-engine/config
-        :poo-flow/modules/session/syntax
-        (only-in :poo-flow/src/loops/spec-evolution
+(import :agentic-ai-lab/modules/loop-engine/config
+        :agentic-ai-lab/modules/session/syntax
+        (only-in :agentic-ai-lab/modules/loop-engine/control/spec-evolution
                  external-feedback-receipt-prototype
                  spec-change-proposal-prototype
                  spec-evolution-review-item-prototype))
 
-(export poo-flow-custom-my-module-loop-engine-case)
+(export agentic-ai-lab-custom-my-module-loop-engine-case)
 
-(def poo-flow-custom-my-module-loop-engine-case
-  (poo-flow-loop-engine-configs
+(def agentic-ai-lab-custom-my-module-loop-engine-case
+  (agentic-ai-lab-loop-engine-configs
   (.def (current-system-build-loop @ loop-engine-use-case
                                    name level mode workflow)
     name: 'current-system-build-loop
@@ -95,11 +95,11 @@
   (.def (current-system-build-result @ loop-engine-result
                                      default auditor verifier governor
                                      human-audit format required-fields)
-    default: 'poo-flow.loop-governor.node-result.v1
-    auditor: 'poo-flow.loop-governor.audit-result.v1
-    verifier: 'poo-flow.loop-governor.review-result.v1
-    governor: 'poo-flow.loop-governor.governor-result.v1
-    human-audit: 'poo-flow.loop-governor.human-audit-decision.v1
+    default: 'agentic-ai-lab.loop-governor.node-result.v1
+    auditor: 'agentic-ai-lab.loop-governor.audit-result.v1
+    verifier: 'agentic-ai-lab.loop-governor.review-result.v1
+    governor: 'agentic-ai-lab.loop-governor.governor-result.v1
+    human-audit: 'agentic-ai-lab.loop-governor.human-audit-decision.v1
     format: 'structured-alist
     required-fields: '(decision summary evidence))
 
@@ -216,13 +216,13 @@
     spec-evolution-review-items: (list current-system-build-spec-review)
     session-selector-receipts:
     (list
-     (poo-flow-session-selector-receipt
+     (agentic-ai-lab-session-selector-receipt
       'selector/current-system-loop-router
       'custom/project
       'incoming-ci-request-session
       'incoming-ci-request-session
       (list
-       (poo-flow-session-selector-candidate
+       (agentic-ai-lab-session-selector-candidate
         'candidate/current-build
         'workflow
         'workflow/current-system-build
@@ -230,7 +230,7 @@
         '(runtime-handoff build-context)
         '((source . loop-engine)
           (use-case . current-system-build-loop)))
-       (poo-flow-session-selector-candidate
+       (agentic-ai-lab-session-selector-candidate
         'candidate/current-recovery
         'transform
         'transform/current-system-recovery
@@ -246,7 +246,7 @@
         (case . current-system-build))))
     session-materialization-receipts:
     (list
-     (poo-flow-session-runtime-materialization-receipt
+     (agentic-ai-lab-session-runtime-materialization-receipt
       'runtime/current-system-build-request
       'custom/project
       'incoming-ci-request-session
@@ -259,7 +259,7 @@
       #f
       '((source . loop-engine)
         (use-case . current-system-build-loop)))
-     (poo-flow-session-runtime-materialization-receipt
+     (agentic-ai-lab-session-runtime-materialization-receipt
       'runtime/current-system-recovery-request
       'custom/project
       'incoming-ci-request-session

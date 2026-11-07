@@ -7,16 +7,16 @@
 ;;; Invariant: user config projects effective policy validation only; Scheme
 ;;; never executes tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
-        :poo-flow/modules/session/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
+        :agentic-ai-lab/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-policy"
-                 poo-flow-custom-my-module-session-policy-case))
+                 agentic-ai-lab-custom-my-module-session-policy-case))
 
 (export user-interface-custom-session-policy-test)
 
@@ -53,28 +53,28 @@
   (find-row rows
             (lambda (row)
               (equal? (test-ref row 'kind)
-                      'poo-flow.session.policy-validation-receipt))))
+                      'agentic-ai-lab.session.policy-validation-receipt))))
 
 ;; : (-> [Alist] MaybeAlist)
 (def (find-tool-catalog-validation-row rows)
   (find-row rows
             (lambda (row)
               (equal? (test-ref row 'kind)
-                      'poo-flow.tool-core.policy-catalog-validation-receipt))))
+                      'agentic-ai-lab.tool-core.policy-catalog-validation-receipt))))
 
 ;; : (-> [Alist] MaybeAlist)
 (def (find-memory-catalog-validation-row rows)
   (find-row rows
             (lambda (row)
               (equal? (test-ref row 'kind)
-                      'poo-flow.memory-core.policy-catalog-validation-receipt))))
+                      'agentic-ai-lab.memory-core.policy-catalog-validation-receipt))))
 
 ;; : (-> [Alist] Symbol MaybeAlist)
 (def (find-communication-row rows relation-kind)
   (find-row rows
             (lambda (row)
               (and (equal? (test-ref row 'kind)
-                           'poo-flow.session.communication-receipt)
+                           'agentic-ai-lab.session.communication-receipt)
                    (equal? (test-ref row 'relation-kind)
                            relation-kind)))))
 
@@ -83,7 +83,7 @@
   (find-row rows
             (lambda (row)
               (and (equal? (test-ref row 'kind)
-                           'poo-flow.session.communication-channel-receipt)
+                           'agentic-ai-lab.session.communication-channel-receipt)
                    (equal? (test-ref row 'channel-id)
                            channel-id)))))
 
@@ -91,18 +91,18 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-policy-test
-  (test-suite "poo-flow custom user-interface session-policy case"
-    (poo-flow-test-case "projects custom effective session-policy validation"
+  (test-suite "agentic-ai-lab custom user-interface session-policy case"
+    (yuanxu-test-case "projects custom effective session-policy validation"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-policy-case))
+              (car agentic-ai-lab-custom-my-module-session-policy-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-policy-case))
+               agentic-ai-lab-custom-my-module-session-policy-case))
              (durable-row (car rows))
              (isolation-row (find-policy-row rows 'session-isolation))
              (isolation-slots (test-ref isolation-row 'policy-slots))
@@ -125,23 +125,23 @@
              (validation (find-validation-row rows))
              (codes (diagnostic-codes
                      (test-ref validation 'diagnostics))))
-        (check-equal? (poo-flow-user-module-selection-key selection)
-                      '(session . session-core))
+        (check-equal? (yuanxu-user-module-selection-key selection)
+                      '(session . session))
         (check-equal? (test-ref durable-row 'runtime-executed) #f)
         (check-equal? (test-ref isolation-row 'schema)
-                      'poo-flow.modules.session.policy.isolation.v1)
+                      'agentic-ai-lab.modules.session.policy.isolation.v1)
         (check-equal? (test-ref isolation-slots 'mode)
                       'child-isolated)
         (check-equal? (test-ref isolation-slots 'sibling-context)
                       'denied)
         (check-equal? (test-ref sandbox-row 'schema)
-                      'poo-flow.modules.session.policy.sandbox.v1)
+                      'agentic-ai-lab.modules.session.policy.sandbox.v1)
         (check-equal? (test-ref sandbox-slots 'profile-ref)
                       'sandbox/nono-build)
         (check-equal? (test-ref sandbox-slots 'sharing-mode)
                       'isolated-filesystem)
         (check-equal? (test-ref sharing-row 'schema)
-                      'poo-flow.modules.session.policy.sharing.v1)
+                      'agentic-ai-lab.modules.session.policy.sharing.v1)
         (check-equal? (test-ref sharing-slots 'memory-refs)
                       '(memory/project))
         (check-equal? (test-ref sharing-slots 'workspace-paths)
@@ -171,7 +171,7 @@
         (check-equal? (test-ref build-audit-communication 'target-session-id)
                       'custom/audit-session)
         (check-equal? (test-ref validation 'kind)
-                      'poo-flow.session.policy-validation-receipt)
+                      'agentic-ai-lab.session.policy-validation-receipt)
         (check-equal? (test-ref validation 'validation-id)
                       'validation/custom-build)
         (check-equal? (test-ref validation 'scope-ref)

@@ -7,19 +7,19 @@
 ;;; Invariant: this is durable job handoff data only; Scheme does not recall,
 ;;; commit, consolidate, persist, or repair memory stores.
 
-(import :poo-flow/modules/session/syntax
-        :poo-flow/modules/memory-core/config)
+(import :agentic-ai-lab/modules/session/syntax
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
-(export poo-flow-custom-my-module-session-memory-durable-case)
+(export agentic-ai-lab-custom-my-module-session-memory-durable-case)
 
-(def poo-flow-custom-my-module-session-memory-durable-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-memory-durable-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-memory-durable-case
     (metadata (source . user-interface)
               (case . session-memory-durable))
     (objects
      (durable-policy
-      (poo-flow-durable-policy
+      (agentic-ai-lab-durable-policy
        'durable/custom-memory
        'objects.shared.memory
        '((journal-owner . runtime/fact-log)
@@ -60,59 +60,59 @@
                               (case . session-memory-durable)))))
      (jobs
       (list
-       (poo-flow-memory-recall-job-receipt
+       (agentic-ai-lab-memory-recall-job-receipt
         'memory-job/custom-parent-summary
         'custom/project
         'custom/root-session
         'custom/audit-session
         'agent/audit
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         parent-summary
         durable-options)
-       (poo-flow-memory-write-job-receipt
+       (agentic-ai-lab-memory-write-job-receipt
         'memory-job/custom-child-write-back
         'custom/project
         'custom/root-session
         'custom/audit-session
         'agent/audit
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         child-write-back
         durable-options)
-       (poo-flow-memory-recall-job-receipt
+       (agentic-ai-lab-memory-recall-job-receipt
         'memory-job/custom-bounded-transcript
         'custom/project
         'custom/root-session
         'custom/audit-session
         'agent/audit
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         bounded-transcript
         durable-options)
-       (poo-flow-memory-consolidation-job-receipt
+       (agentic-ai-lab-memory-consolidation-job-receipt
         'memory-job/custom-consolidate
         'custom/project
         'custom/root-session
         'custom/audit-session
         #f
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         bounded-transcript
         durable-options)
-       (poo-flow-memory-stale-source-job-receipt
+       (agentic-ai-lab-memory-stale-source-job-receipt
         'memory-job/custom-stale-source
         'custom/project
         'custom/root-session
         'custom/audit-session
         #f
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         bounded-transcript
         (cons (cons 'stale-source? #t) durable-options))
-       (poo-flow-memory-repair-job-receipt
+       (agentic-ai-lab-memory-repair-job-receipt
         'memory-job/custom-repair
         'custom/project
         'custom/root-session
         'custom/audit-session
         #f
-        poo-flow-memory-core-default-catalog
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog
         bounded-transcript
         (cons (cons 'job-state 'repair-required) durable-options)))))
     (rows)
-    (row-groups (poo-flow-memory-durable-job-receipts->alists jobs)))))
+    (row-groups (agentic-ai-lab-memory-durable-job-receipts->alists jobs)))))

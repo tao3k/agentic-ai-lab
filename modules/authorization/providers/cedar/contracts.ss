@@ -8,21 +8,21 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/governance/types
-                 poo-flow-governance-profile?
-                 poo-flow-governance-assessment?)
-        :core/poo-clos/interface
-        (only-in :poo-flow/modules/authorization/contracts
+        (only-in :agentic-ai-lab/modules/governance/types
+                 agentic-ai-lab-governance-profile?
+                 agentic-ai-lab-governance-assessment?)
+        :yuanxu/poo-clos/interface
+        (only-in :agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric
-                 poo-flow-authorization-capability-contract/default)
+                 agentic-ai-lab-authorization-capability-contract/default)
         (only-in "config.ss"
                  CedarCapabilityContractExecutor
                  CedarAuthorizationProvider)
-        (only-in "objects.ss" poo-flow-cedar-proof-binding?))
+        (only-in "objects.ss" agentic-ai-lab-cedar-proof-binding?))
 
-(export poo-flow-governance-assessments-digest
-        poo-flow-cedar-governance-contract
+(export agentic-ai-lab-governance-assessments-digest
+        agentic-ai-lab-cedar-governance-contract
         CedarCapabilityContractMethods)
 
 (def CedarCapabilityContractMethod
@@ -33,7 +33,7 @@
     (poo-clos-eql-specializer CedarAuthorizationProvider)
     (poo-clos-any-specializer))
    (lambda (_frame _executor provider capabilities)
-     (poo-flow-authorization-capability-contract/default
+     (agentic-ai-lab-authorization-capability-contract/default
       provider capabilities))))
 
 (.defmethod-bundle CedarCapabilityContractMethods
@@ -62,9 +62,9 @@
         (.ref value 'unresolved-threats)
         (.ref value 'handoff-ready?)))
 
-(def (poo-flow-governance-assessments-digest assessment-values)
+(def (agentic-ai-lab-governance-assessments-digest assessment-values)
   (unless (and (pair? assessment-values)
-               (every poo-flow-governance-assessment? assessment-values))
+               (every agentic-ai-lab-governance-assessment? assessment-values))
     (error "Governance digest requires typed assessments" assessment-values))
   (string-append
    "sha256:"
@@ -75,18 +75,18 @@
        (lambda (port)
          (write (map assessment->canonical assessment-values) port))))))))
 
-(def (poo-flow-cedar-governance-contract
+(def (agentic-ai-lab-cedar-governance-contract
       composition-identity profile-values assessment-values proof-value)
   (unless (and (string? composition-identity)
                (> (string-length composition-identity) 0))
     (error "Cedar governance contract requires a composition identity"
            composition-identity))
   (unless (and (pair? profile-values)
-               (every poo-flow-governance-profile? profile-values))
+               (every agentic-ai-lab-governance-profile? profile-values))
     (error "Cedar governance contract requires admitted Profiles"
            profile-values))
   (unless (and (= (length profile-values) (length assessment-values))
-               (every poo-flow-governance-assessment? assessment-values)
+               (every agentic-ai-lab-governance-assessment? assessment-values)
                (equal? (map (lambda (profile) (.ref profile 'identity))
                             profile-values)
                        (map (lambda (assessment)
@@ -99,7 +99,7 @@
     (error "unresolved Governance threats block Cedar handoff"
            (map (lambda (assessment) (.ref assessment 'unresolved-threats))
                 assessment-values)))
-  (unless (poo-flow-cedar-proof-binding? proof-value)
+  (unless (agentic-ai-lab-cedar-proof-binding? proof-value)
     (error "Cedar governance contract requires a proof binding" proof-value))
   (unless (and (equal? composition-identity (.ref proof-value 'composition))
                (equal? (map (lambda (profile) (.ref profile 'identity))
@@ -107,7 +107,7 @@
                        (.ref proof-value 'profile-identities)))
     (error "Governance composition and Cedar proof identity mismatch"
            composition-identity (.ref proof-value 'composition)))
-  (unless (equal? (poo-flow-governance-assessments-digest assessment-values)
+  (unless (equal? (agentic-ai-lab-governance-assessments-digest assessment-values)
                   (.ref proof-value 'governance-assessment))
     (error "Governance assessment digest does not match Cedar proof binding"
            composition-identity))

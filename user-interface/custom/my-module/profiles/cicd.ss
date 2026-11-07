@@ -6,11 +6,16 @@
 ;;; Boundary: CI/CD downstream sandbox profile declarations.
 ;;; Invariant: standalone module; it does not execute workflows.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
 
-(export poo-flow-custom-my-module-cicd-module)
+(export agentic-ai-lab-custom-my-module-cicd-module)
 
-(def poo-flow-custom-my-module-cicd-module
+(def agentic-ai-lab-custom-my-module-cicd-module
   (let ((check-capabilities
        '(process-run filesystem-read tmpdir))
       (build-capabilities
@@ -34,31 +39,51 @@
          (scope . cicd)
          (stage . promote)
          (artifacts . consume))))
-  (use-module nono-sandbox
-    (binding native-ffi)
-
+  (let ()
     (.def (ci/check @ nono-sandbox-profile)
       network: (deny-network)
       capabilities: check-capabilities
       resources: =>.+ readonly-project-workspace-resources
       metadata: => (lambda (super-metadata)
                      (append super-metadata check-metadata)))
-
     (.def (ci/build @ ci/check)
       network: (allowlisted-network "github.com" "crates.io")
       capabilities: build-capabilities
       resources: =>.+ readwrite-project-workspace-resources
       metadata: => (lambda (super-metadata)
                      (append super-metadata build-metadata)))
-
     (.def (cd/release @ ci/build)
       network: (allowlisted-network "github.com" "ghcr.io")
       resources: =>.+ readwrite-project-workspace-resources
       metadata: => (lambda (super-metadata)
                      (append super-metadata release-metadata)))
-
     (.def (cicd/artifact-promote @ ci/build)
       network: (allowlisted-network "artifact-store.internal" "github.com")
       resources: =>.+ readwrite-project-workspace-resources
       metadata: => (lambda (super-metadata)
-                     (append super-metadata promote-metadata))))))
+                     (append super-metadata promote-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (ci/check ci/check) (ci/build ci/build) (cd/release cd/release) (cicd/artifact-promote cicd/artifact-promote))
+        '((binding ffi)
+(.def (ci/check @ nono-sandbox-profile)
+      network: (deny-network)
+      capabilities: check-capabilities
+      resources: =>.+ readonly-project-workspace-resources
+      metadata: => (lambda (super-metadata)
+                     (append super-metadata check-metadata)))
+(.def (ci/build @ ci/check)
+      network: (allowlisted-network "github.com" "crates.io")
+      capabilities: build-capabilities
+      resources: =>.+ readwrite-project-workspace-resources
+      metadata: => (lambda (super-metadata)
+                     (append super-metadata build-metadata)))
+(.def (cd/release @ ci/build)
+      network: (allowlisted-network "github.com" "ghcr.io")
+      resources: =>.+ readwrite-project-workspace-resources
+      metadata: => (lambda (super-metadata)
+                     (append super-metadata release-metadata)))
+(.def (cicd/artifact-promote @ ci/build)
+      network: (allowlisted-network "artifact-store.internal" "github.com")
+      resources: =>.+ readwrite-project-workspace-resources
+      metadata: => (lambda (super-metadata)
+                     (append super-metadata promote-metadata)))))))))

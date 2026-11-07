@@ -1,0 +1,100 @@
+{
+  "case": "zero-horizon",
+  "raw": "{\"status\":\"partial\",\"rows\":[]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.23311324999986027
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.2331563749999077
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.4080128749999403
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.40804191699999137
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.40806487499980904
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5031541669998205
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5144099589999769
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5144603749999987
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5308231249998698
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5308462089999466
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5308557089999795
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5430819169998813
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5431354589998136
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.5438955839999835
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.5439191250000022
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.5439422919998833
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.5441148749998774
+    }
+  ],
+  "contentGapsSeconds": [
+    0.40806487499980904,
+    0.09508929200001148,
+    0.011255792000156362,
+    5.041600002186897e-05,
+    0.016362749999871085,
+    2.3084000076778466e-05,
+    9.500000032858225e-06,
+    0.012226207999901817,
+    5.354199993234943e-05
+  ],
+  "responseId": "7f2ea4d1-2db3-4d2d-8f0e-ee37d79000c0",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9654,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 9,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9663
+  },
+  "seconds": 0.5441187919998356
+}

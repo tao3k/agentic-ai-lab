@@ -5,30 +5,30 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/impact/types
-                 PooFlowTemporalImpactContrastPoint
-                 PooFlowTemporalImpactContrast
-                 PooFlowTemporalInterventionWindowAudit))
-(export poo-flow-temporal-impact-contrast-point-value
-        poo-flow-temporal-impact-contrast-value
-        poo-flow-temporal-intervention-window-audit-value)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/types
+                 AgenticAILabTemporalImpactContrastPoint
+                 AgenticAILabTemporalImpactContrast
+                 AgenticAILabTemporalInterventionWindowAudit))
+(export agentic-ai-lab-temporal-impact-contrast-point-value
+        agentic-ai-lab-temporal-impact-contrast-value
+        agentic-ai-lab-temporal-intervention-window-audit-value)
 
-(def (poo-flow-temporal-impact-contrast-point-value
+(def (agentic-ai-lab-temporal-impact-contrast-point-value
       coordinate-value left-instant-value right-instant-value
       level-delta-value rate-delta-value)
-  (validate PooFlowTemporalImpactContrastPoint
-    (.o kind: 'poo-flow.temporal-causality.impact-contrast-point
+  (validate AgenticAILabTemporalImpactContrastPoint
+    (.o kind: 'agentic-ai-lab.temporal-causality.impact-contrast-point
         coordinate: coordinate-value
         left-instant-identity: left-instant-value
         right-instant-identity: right-instant-value
         level-delta: level-delta-value rate-delta: rate-delta-value)))
 
-(def (poo-flow-temporal-impact-contrast-value
+(def (agentic-ai-lab-temporal-impact-contrast-value
       identity-value digest-value left-value right-value cut-value
       projection-value subject-value outcome-value unit-value domain-value
       status-value points-value)
-  (validate PooFlowTemporalImpactContrast
-    (.o kind: 'poo-flow.temporal-causality.impact-contrast
+  (validate AgenticAILabTemporalImpactContrast
+    (.o kind: 'agentic-ai-lab.temporal-causality.impact-contrast
         identity: identity-value semantic-digest: digest-value
         left-series-digest: left-value right-series-digest: right-value
         source-cut-digest: cut-value source-projection-digest: projection-value
@@ -37,13 +37,13 @@
         status: status-value points: points-value
         causal-impact-admitted?: #f runtime-executed?: #f)))
 
-(def (poo-flow-temporal-intervention-window-audit-value
+(def (agentic-ai-lab-temporal-intervention-window-audit-value
       identity-value digest-value contrast-value intervention-value
       onset-value end-value cut-value projection-value subject-value
       outcome-value unit-value domain-value prefix-status-value
       prefix-count-value points-value cumulative-value mean-value)
-  (validate PooFlowTemporalInterventionWindowAudit
-    (.o kind: 'poo-flow.temporal-causality.intervention-window-audit
+  (validate AgenticAILabTemporalInterventionWindowAudit
+    (.o kind: 'agentic-ai-lab.temporal-causality.intervention-window-audit
         identity: identity-value semantic-digest: digest-value
         contrast-digest: contrast-value
         intervention-identity: intervention-value

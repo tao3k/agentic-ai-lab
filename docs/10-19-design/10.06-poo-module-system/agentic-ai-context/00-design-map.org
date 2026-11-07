@@ -1,0 +1,493 @@
+#+title: Agentic AI Context: Existing Org Design to SysML Allocation
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS source-traceability-for-architecture-review
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and reading rule
+
+This map records inspected repository designs, not new claims of their runtime
+qualification. The user's direction is overall Agent Context management across
+content, interaction history and short-/long-term knowledge, while Session
+remains independent. Existing Org contracts supply the architecture; SysML
+organizes their responsibilities and selected lifecycles.
+
+Read explicit ownership/status/supersession sections before treating old paths
+or examples as target architecture. The contracts are overlapping views, not a
+chronological sequence in which every newer file replaces every older file.
+Existing qualification receipts remain scoped to their own cuts and claims;
+they were not rerun by this documentation change.
+
+* Source allocation
+
+| Inspected source and section | Existing decision retained | SysML allocation |
+|------------------------------+----------------------------+------------------|
+| [[file:../../../../core/module-system/design/agentic-ai-context-system-design.org][System design: Decision; System structure; Module and Feature contract]] | Context owns the content/context system; independent Session dependency; optional Memory Feature; no single global mutable head | =ContextModule=, =SessionModule=, =Memory= and external owners in 01 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory contracts: Dependency direction; input boundary; transitions; Memory operations]] | Context imports Session descriptor and owns adapters; Session consumes its own generic input refs and never imports Context implementation; active Session not required for source projection/recall | =SessionBoundaryContracts=, directed composition in 01; Session/Attempt and retention activities in 02 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-implementation-plan.org][Implementation plan: Accepted direction; reuse/migrate]] | Reuse existing module/feature closure and semantic owners; migration inventory is not target ownership | No extra manager Module, resolver, Memory registry or parser |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: Formation/use; reassessment; consolidation; composition boundaries; cross-document composition]] | Context is bounded versioned information/relations for a question; prompt is a selected projection; long-term interpretation binds real outcomes, alternatives and defeaters; consumer-local assessment and grants do not transfer | =GraphContextComposition= and =ContextProjection= in 01; six lifecycle activities and orthogonal assessments in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/09-graph-context-research.org][43.09: Core; Three orders; Topology]] | POO/LeanPOO C3/C4 composition; composition precedence, revision provenance and prompt order differ | =GraphContextComposition=, =DistinctGraphRelations= in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org][43.11: Decision; Owners and windows; Query/composition distinction]] | Unified POO Query/GQL; ORG Elements is the content window, including explicit external-artifact references; C3/C4 is not retrieval | =Query=, =Content= and graph/projection separation in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/12-git-project-context-model.org][43.12: Fundamental distinction]] | Git source, Context composition and consumer graphs differ; Worktree is a situated Project derivation, not a Session-owned store | Relation roles and Project/Worktree/domain/task scope in 01 |
+| [[file:../../../../core/module-system/design/166-session-memory-orgize-boundary.org][166: Opening status; Org-runtime source and selection; Scope]] | Preserve Orgize source identity, Query admission and cross-Worktree constraints; old memory-core/store ownership is historical | Source-qualified Content and current-use requirements in 01 |
+| [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: Status; Three axes; Pure contract; Short observation to durable insight]] | Evidence, revisit and retention are independent; long-term is not age/storage/read count; consolidation creates new scoped versioned claims/procedures; revisit uses actual outcomes | Memory parts in 01; orthogonal enums, =RevisitLifecycle= and =Consolidate= in 02 |
+| [[file:../../../../core/module-system/design/session-org-id-subagent-scheduling-design.org][Session IDs: Decision; Identity vocabulary; Org association]] | Session owns interaction identity/scheduling; Context owns many-to-many source bindings and participant projections | Independent Session and history integration in 01 |
+| [[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Scheduling granularity: Decision; Units; Context granularity]] | Task/Attempt/Turn differ; retry does not implicitly create child Session; transcript is an optional bounded input; Context edits require fresh admission | Session contract notes in 01; Attempt lifecycle and fresh-retry boundary in 02 |
+| [[file:../../../../core/module-system/design/context-delta-lean-quint-model-design.org][Context Delta: Decision; Initial restrictions; Pure reference semantics]] | Exact immutable base/target bindings; incomplete coverage requires full reconstruction/refusal; delta success is not permission | Projection revision notes in 01/02; full Delta algorithm stays with its existing owner |
+| [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context/Temporal lifecycle: Orthogonal axes; ASCENT architecture; Strategy composition; Joint envelope; Transitions]] | Separate source/projection/evidence/strategy/Session/Attempt/effect/head/Memory states; original proof/applicability and dependency-directed invalidation; exact current-envelope dispatch, result and publication fences | External semantic owners in 01; selected state axes and owner-event preconditions in 02; remaining axes explicitly referenced |
+| [[file:../../../../core/module-system/design/45-127-higher-order-capability-materialization-poo-lifecycle-object-and-runtime-policy-prototype-algebra.org][45-127: Scope; Central decision]] | Immutable POO lifecycle values, pure policy proposals, adapter-owned handles, actual reconciliation and conditional head publication | Host boundary in 01; recovery/closure receipt requirements in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery-rfc.org][RFC 43: Opening ownership/status corrections]] | Historical store/session-first examples do not define Context; generic lifecycle and Org source contracts supply the corrected direction | No store-first or Session-owned Context model |
+
+* Corrections to the first discussion draft
+
+The first draft incorrectly presented static dependency direction as an open
+choice for an additional upper manager. Session owns its descriptor and
+scheduling. Context's Session host imports the scheduling operations it uses.
+The Context module can publish its profile independently. Session consumes
+an opaque input reference through its own data contract.
+
+* Context Memory selection
+
+[[file:../../../../modules/ai-agentic-context/interface.ss][The Context Interface]]
+owns the =memory= Feature. A downstream init selects it through the same
+window as the base module.
+
+#+begin_src scheme
+(yuanxu!
+  :load-modules "./modules" mode: explicit
+  (ai-agentic-context +memory))
+#+end_src
+
+The Module System composes and admits the selected scope. Consumers read
+its =profile= slot for Context projections. The base profile contains only
+=ai-agentic-context/core=. The Memory refinement adds
+=ai-agentic-context/memory=, and the Feature contract checks the final profile.
+Both identities remain part of the stored projection format. Checkpoint
+recovery decodes the recorded profile and revalidates the projection against
+its source. Feature selection acquires no Memory store or Session host.
+
+The first draft also underrepresented the already designed Graph Context,
+ORG-only Query window, consumer-local interpretation and short-to-long
+consolidation. They are restored here as inherited design, not newly invented
+features. The user's clarification emphasizes the overall system meaning of
+Context and the short-/long-term knowledge distinction within it.
+
+** Downstream build attribution
+
+Run =just test-file t/yuanxu-context-memory-downstream-test.ss= with
+the compiled Core prerequisites. The gate exercises fresh base,
+=+memory= and =-memory= builds, independent first reads, hot reuse,
+withdrawn cleanup and the Feature refusal. Its aggregate deadline is
+120 seconds. The OpenTofu runtime gate uses a different selected graph.
+
+For process attribution, record =time->seconds= of =current-time= before
+and after the fixture's existing Ops call. Compare those timestamps with
+the =BUILD-STAGE main enter= and =main return= epoch fields. Record the
+Feature's =library-spec= projection, the actual =... compile= targets,
+and the first =.get= in each independent runtime. Use the same commands,
+source checks and deadlines on fresh output prefixes.
+
+Compare the full sets of compiler target identities. The base and
+withdrawn sets must match. The enabled delta can include same-package
+imports owned outside the Memory directory. Treat a hot Make result
+with zero compiled targets as a separate observation from how much
+Interface projection and source admission still ran in that process.
+Use =BUILD-EXPANSION= and =BUILD-ACCOUNT= to compare the Interface
+projection and Make in each new process. The expansion count measures
+new Gerbil contexts, including those supplied by installed
+dependencies. It does not count compiler invocations or prove that a
+source file was expanded twice.
+
+Package windows read the native Gerbil checkout tree under =gerbil-path=.
+The source reader has no reason to initialize the package manager or to
+create directories. Installation, checkout placement, pinning, and compiled
+library resolution remain Gerbil's responsibilities. Compare any package
+root experiment outside the Graph and report its loader IDs separately
+from Gerbil Contexts and native Make targets.
+
+The runtime reader uses its own native Context as the root of its
+source-authentication closure. The Core source bootstrap retains its
+build entry roots. Both use Gerbil's import identities and the same
+Context traversal for the shared role languages and value libraries.
+
+An installed Context can remain a Gerbil prerequisite while an explicit
+selected source owner has a separate byte obligation for the same Module
+ID. The reader retains authenticated owner observations in its existing
+currentness guards. The installed Context adds no Make target. Core's
+=t/module-reader-tool-context-test.ss= exercises the distinction using a
+relocated source checkout: an unrelated edit is allowed, an admitted
+owner edit or removal is refused, and the installed prerequisite stays
+out of the compiler inputs.
+To check the boundary, compare the first compiled consumer read and the
+withdrawn build and clean against the original native target set. Run
+the wrong-Context and changed-source controls separately.
+
+The Base control removes the package manager and its network imports
+from the runtime loader inventory while preserving the registered
+projection Context count and exact compiler target set. Compare wall
+times only with paired host conditions and keep the standalone control
+separate from the full Memory gate.
+
+The owner-currentness control preserved the exact cold target sets in
+all three modes: 12 base, 46 enabled, and 12 withdrawn. Of the 34 enabled
+additions, 23 are in the Memory Feature and 11 are imported Lab libraries.
+All three independent first reads completed. The aggregate watchdog then
+terminated the hot enabled build, which had started at 113.81 seconds
+on the Harness clock. This run establishes cold target and first-read
+coverage only. The hot compilation count, clean, refusal, and three
+complete in-budget runs remain separate acceptance obligations.
+
+Memory now imports the Session helpers and intent accessors from their
+defining modules. The same cold fixture drops exactly five targets:
+=session/objects=, =session/objects-attempt=, =session/objects-graph=,
+=session/objects-handoff=, and =session/transform=. Base and withdrawn
+still compile the same 12 targets. Enabled compiles 41, with 246 projection
+Contexts instead of 251. Native Make's expansion census still reports
+394, so the target reduction does not establish a wall-time improvement.
+The full run reached all three first reads and returned from the hot
+build with zero compilation. The aggregate watchdog interrupted
+withdrawn clean after its child logged =main return=, before the parent
+reported completion. That run does not qualify as acceptance.
+
+With parent action epochs enabled, the base build took 4.93 seconds to
+enter =main=, 6.72 seconds inside =main=, and 2.80 seconds from its return
+to parent completion. Withdrawn clean spent 6.40 seconds inside =main=
+and another 8.50 seconds before parent completion. The clean output
+removal itself took about 20 milliseconds. This run completed the hot
+build and clean, then exhausted the aggregate budget after launching
+the refusal process. The post-main interval includes both child
+teardown and parent collection. A separate native sample identified
+Gambit's dynamic-module cleanup in the child, without attributing the
+entire interval to that stack.
+
+A separate base-only diagnostic followed the child process tree through
+the existing action watchdog. It observed the build =gxi= exit about
+2.06 seconds after =main= returned and the parent action complete at
+2.61 seconds. Process polling bounds the observation resolution. The
+diagnostic locates most of this interval before the build interpreter
+exits and is separate from the aggregate acceptance run.
+
+An independent base first-read diagnostic observed seven native
+compiler demand roots. Traversing their native Contexts reached 295
+of the 343 Contexts in the reader catalogue. Neither Funflow's Flow
+and Scenario roots nor the JSON Schema receipt and validation roots
+were in that demand closure. This measures one base input. The
+catalogue still authenticates the canonical Context before publication
+callbacks, and other modules can demand these roots.
+
+Memory's Org selection uses seven bindings from Orgize's Element Types,
+values, and query modules. Each binding is the same native procedure as
+the corresponding Lab facade export. Keep the facade for clients that
+use its Org Contract and syntax APIs. The independent import census
+reported 171 newly loaded module IDs for the defining modules and 179
+for the facade. In the complete cold build phase the enabled target set
+lost only =modules/query/semantic/orgize-interface=, leaving 40 targets.
+Projection Contexts moved from 246 to 240, and Make Contexts from 394 to
+389. Base and withdrawn retained their exact target sets. These counts
+establish work reduction; the runs had different host load.
+The Org selection suite passed against products from a separate
+40-target build. The aggregate run under higher host load finished all
+three first reads, started the hot build at 118.99 seconds, and timed
+out without an acceptance receipt.
+
+On the same inputs a later enabled build again compiled 40 targets and
+registered 389 Make Contexts. Its main-process CPU was 9.16 seconds
+versus 9.12 seconds in the first run, while the parent action increased
+from 28.62 to 46.72 seconds. The main-return-to-parent interval grew
+from 3.67 to 10.65 seconds. Main-process CPU excludes compiler
+children, so this comparison distinguishes unchanged counted work
+from elapsed delay without assigning all of that delay to scheduling.
+That later aggregate run was stopped after the withdrawn build logged
+=main return= and before its parent action reported completion.
+
+The Memory Interface no longer imports and reexports its empty
+=types.ss= and =funs.ss= placeholders. The files publish no bindings
+and contain no initializers. The native cold enabled build now contains
+38 targets. Its difference from the preceding 40-target build consists
+of exactly those two files. The module projection census dropped from
+240 to 238; Make reported 389 Contexts in both builds. Memory Core and
+Org selection passed using the newly compiled products. The existing Memory configuration,
+Org selection and Session selection exports still determine the
+public dependency closure.
+
+For withdrawal, compare the entire =gerbil clean= action with its
+=clean-outputs= span and the nested =gerbil-clean= and
+=clean-product-residue= spans. Use a fresh withdrawn build with
+products present and confirm that the admitted products disappear.
+Run the existing Feature refusal from its own source prefix so its
+startup and termination can be attributed independently of cleaning.
+
+On macOS, pair an uninstrumented base build with a fresh base build in
+which =sample= attaches to the descendant running =gxi build.ss
+compile= immediately after =BUILD-STAGE main return=. The =main= return
+does not end the command. The sample can distinguish time in Gambit's
+=___cleanup_dyn_module= and dyld's =dlclose= from time in the parent
+supervisor. Keep the sample and host load with the local logs. A sample
+is evidence for the sampled interval only.
+To isolate hot projection, build an enabled fixture from empty outputs,
+then build again in a new process against those outputs. Attach the
+sampler during the second =library-spec= span of that hot build. The
+first span belongs to the consumer library; the second follows the
+Feature Interface. Separate samples in Gambit's dynamic loading and
+GC from the wall time of the entire span.
+
+To attribute loaded code to its owner, capture Gerbil's =list-modules=
+immediately before and after the existing =std-make-spec= call in a
+diagnostic copy of the consumer build script. Compare the sets of
+module IDs and product paths for fresh base and enabled prefixes.
+Keep phase-suffixed module IDs distinct and compare the native compiler
+target sets separately. The Orgize facade imports both runtime query
+values and authoring syntax. Inspect the installed interfaces of those
+imports to identify their preludes and distinguish the Parser phase
+closure from the Lab targets that must be compiled.
+
+The two Orgize syntax modules can compile with =:gerbil/core= and
+preserve their generated import and export declarations. This change
+alone leaves the observed phase-module set unchanged. Import
+=:gerbil-parser/graph-query-support= and
+=:gerbil-parser/graph-projection-support= separately through Gerbil's
+=core-import-module=, taking a fresh inventory after each import. The
+second facade imports the projection generator along with the POO graph
+values. The Orgize =graph-shape= and =value-types= modules use only
+bindings from the graph value owner. An isolated build that resolves
+those bindings from their defining module preserves the Lab compiler
+target set and avoids loading the generator's Parser phase closure.
+The isolated build still uses the normal scope and Make boundaries.
+Package integration requires a maintained upstream binding surface
+and a complete downstream gate against the pinned products.
+
+Use the full unmodified gate for qualification. A successful single
+build, first-read control, or resumed compilation cannot establish a
+cold pass. Record failed rounds alongside successful ones.
+
+* Connected process
+
+[[file:03-information-to-recall.org][Information to recall]] maps these existing contracts into a connected activity
+with typed inputs/products and explicit independent Session handoffs. Its
+[[file:03-information-to-recall.sysml][SysML model]] retains the historical-result and no-generalization branches,
+then reenters working Context formation under an independently supplied new
+Demand. It adds architectural control/data flows, not new semantic owners.
+
+* Executable refinement
+
+[[file:04-executable-scenarios.org][Executable admission/handoff scenarios]] refine the four selected crossings
+using the same linked Org owners. Explicit verification verdicts and literal
+expected outputs distinguish current acceptance, refusal, preserved history,
+pending recovery and failed unsafe controls. [[file:run-scenarios.py][The runner]] executes the SysML
+model rather than interpreting the domain policy in Python.
+
+* Evidence-driven concurrent refinement
+
+[[file:05-concurrent-evidence-lifecycle.org][Concurrent evidence lifecycle]] follows the ASCENT-centered joint design,
+registered original proof/current support Host and existing SessionAttempt /
+ContextTemporalLifecycle contracts. Its [[file:05-concurrent-evidence-lifecycle.sysml][executable SysML reducer]] binds original
+premises, source/journal and grant invalidation to terminal publication and
+recovery. [[file:run-concurrency.py][The runner]] enumerates all 2,240 linearizations of its declared eight
+events and executes them in SysML, with per-prefix monitors and exact replay.
+This is a finite cross-owner scenario, not a replacement proof/inference owner.
+
+* Runtime correspondence and literature comparison
+
+[[file:06-runtime-proof-support-replay.org][Runtime replay correspondence]] maps original ASCENT proof, current support,
+journal withdrawal and selected Context/Session paths to actual Scheme calls,
+including a real thread join and an explicit old-snapshot bypass counterexample.
+Its initial qualification distinguishes pure intents from publication;
+[[file:08-runtime-owner-cas-publication.org][08]] extends this to the runtime final owner publication boundary.
+[[file:07-context-literature-comparison.org][CLM and related memory research]] compares primary-source mechanisms with the
+intended evidence-governed design, current local evidence and unmeasured claims.
+
+[[file:09-context-research-2026-july-october.org][Research after July 2026]] adds primary-source comparisons and the explicit
+no-lossy-replacement constraint.
+
+* Remaining model scope
+
+01 allocates responsibilities and dependencies. 02 expands projection,
+Session, Attempt and revisit axes and names formation, use, reassessment,
+consolidation, retrieval and revision activities. These are not a single
+mandatory pipeline. Source bootstrap, governed replacement, cross-Session
+competition, full ASCENT proof/support/retraction, strategy algebra, Data
+transactions and external-effect/resource reconciliation remain with their
+linked Org owners; the SysML subset does not replace or qualify them.
+
+* No-compression constraint
+
+Context retains original information, source versions, interaction history and
+proof/support/journal lineage. Working Context is a demand- and admission-bound
+selection/projection with explicit source references. Long-term knowledge
+integration creates a separately scoped derived claim with origins,
+alternatives and counterexamples; it does not replace its source with a summary.
+The research comparison in 09 applies this constraint to each recent method.
+
+* Mechanism-level comparison and executable omissions
+
+[[file:10-scroll-carryon-clm-contract-comparison.org][Scroll / CarryOn / CLM contract comparison]] connects the inherited Org owners
+to 80 executed SysML combinations, four new runtime scenarios and explicitly
+labeled contract ablations. Paper mechanisms and untested paper guarantees are
+kept distinct from actual runtime results.
+
+* Materialized source-driven invalidation
+
+[[file:11-runtime-eager-propagation.org][11]] connects original proof/support reverse plans to runtime Context dependency
+fanout, sticky invalidation and actual Session obligations. It records selective
+unaffected continuation, failed-delivery recovery, scoped concurrency paths and
+the disabled-subscription counterexample.
+
+* Authority event propagation extension
+
+[[file:12-runtime-authority-propagation.org][12: runtime authority/policy/deadline propagation]] extends the retained
+source/support graph to exact grant and policy dependencies of immutable
+Context versions. It preserves Session independence and original proof/journal
+history. Its executed SysML contracts, runtime owner paths, missing-subscription
+counterexamples and qualification commands are documented separately from the
+source-only slice; prior receipts do not qualify this new runtime cut.
+
+
+* Autonomous deadline extension
+
+[[file:13-runtime-background-clock.org][13: own Context lifecycle algorithm and background clock]] adds the runtime
+monotonic timer and serialized owner reactor, live-clock final-use fences,
+old-ticket isolation, original-evidence preservation, real worker result and
+recovery races, and executed SysML contract counterexamples. Its qualification
+is distinct from the manual-owner-event 12-series and from C3/C4 composition.
+
+* Durable recovery and Org Contract binding
+
+[[file:14-runtime-durable-recovery.org][14: durable runtime owner recovery]] binds the original Org Contract/Element
+cut, ASCENT proof/support/source journal, timer calendar, received inputs,
+Context publications and Attempt terminals to a local durable transaction.
+Real process-death gates and retained runtime counterexamples distinguish it
+from the bounded executed SysML contract. Session remains an independent reducer.
+
+[[file:org-durable-declarations.org::#durable-agenda][Durable Agenda]] composes an Org Element Query with a registered
+action. Durable owns the next wake, revalidation and recovery.
+The detailed notification and receipt cases document engine boundaries.
+
+* Unified GQL Provider and maintained Org Contracts
+
+[[file:15-unified-query-provider.org][15: bounded runtime GQL to Context Provider]] connects the unified POO Query
+model to source-qualified Org Elements, actual ASCENT membership proofs,
+versioned support/journal and eager captured-version invalidation. Its maintained
+Org Contract templates keep content IDs separate from Session identity and
+reuse existing receipt references. Executed runtime and SysML evidence is scoped
+separately from full GQL/Org completeness and external source authentication.
+
+[[file:16-query-durable-owner-handoff.org][16: durable Query source handoff]] specifies the remaining named-command
+recovery boundary between Provider source changes and the existing durable
+Context owner, including catalog persistence without a consumer. It reuses
+current identities and journal ownership. Executed SysML interleavings and
+saved unsafe/corrected replays qualify the bounded contract; runtime source
+command and crash integration remain open.
+
+[[file:17-runtime-catalog-root-recovery.org][17: runtime catalog roots and recovery readiness]] separates source retention
+from observation selection within the existing recovery value. It specifies
+owner reopening, rejects mismatched shared source histories and prevents a
+catalog-only root from becoming a consumer observation. Its focused runtime gate
+uses real SQLite and independent process replay; automatic owner integration
+remains a separate obligation.
+
+[[file:18-runtime-durable-source-commands.org][18: runtime durable source commands]] connects source replacement/withdrawal
+to the existing owner transaction, committed catalog reconstruction and pending
+input recovery. It keeps original evidence, shares one Provider across restored
+consumers and checks immutable command bytes before historical ACKs. Runtime
+process-death gates and retained unsafe controls qualify their recorded cuts.
+
+[[file:workspace-recovery.org][Workspace recovery and current readiness]] checks recovery itself
+being killed repeatedly, exact worker obligations and a fresh readiness commit
+per owner epoch. Original source-prefix images remain historical inputs; new
+runtime recovery chains and SysML cut combinations carry separate evidence.
+
+[[file:20-runtime-grant-revocation.org][20: production Scheme grant revocation]] adds a pure retirement proposal,
+immutable named owner command, exact grant-cut CAS and pending-input replay.
+The existing authority dependency graph invalidates A/B while source proof
+support and unrelated C remain intact. Runtime crash/result/control prefixes
+and a separate executed SysML contract qualify their recorded cuts.
+
+* Durable policy transition implementation
+
+[[file:21-runtime-policy-transition.org][21: Runtime durable policy transition]] implements the pure POO command,
+registered generation/digest CAS, runtime Policy Host handoff and original-inbox
+recovery. Its runtime and SysML gates distinguish authority retirement from
+source evidence preservation and retain stale-command/deadline controls.
+
+* Legacy policy migration and interleavings
+
+[[file:22-runtime-policy-migration.org][22: Policy replacement migration]] removes the alternate recovery branch,
+centralizes policy effects in owner dispatch, migrates callers to version CAS,
+and supplies bounded all-order runtime/clock and executable SysML exploration.
+
+* Runtime owner lifetime and unpartitioned capacity
+
+[[file:23-runtime-owner-lifecycle.org][23: Runtime owner lifecycle]] addresses the monolithic watchdog failure with
+explicit teardown and indexed inbox access. Its final gate retains one process
+for all 60 scenarios under the original heap/watchdog, with actual resource
+predicates, negative controls and whole-process replay.
+
+* Runtime Actor runtime costs and historical proof credentials
+
+See [[file:24-runtime-cost.org][24: Actor runtime costs and sealed historical proof credentials]] for the
+user-authorized 2 GiB profile, measured checkpoint replay fix, runtime controls
+and complete-process qualification/replay evidence. Earlier 1 GiB results remain separate.
+Its dual acceptance section records cold reconstruction and long-lived Context
+current-proof use independently, source-bound Org replay costs, and rejected
+experiments. [[file:24-dual-runtime-results.json][The current structured results]] retain receipt and custody hashes.
+
+* Runtime runtime correction and partition contracts
+
+[[file:25-runtime-corrections.org][25]] records measured cold costs, runtime replay sharing, failed-anchor
+rollback/release, stale-writer lock release and Core issuer admission, with the
+original failures kept separate. [[file:26-distributed-runtime.org][26]] allocates the proposed multi-node/shard
+runtime and its QNT owner/authority/publication contract. Local Scheme, complete
+SysML behavior execution, finite QNT verification and distributed implementation
+are separate evidence dimensions; none substitutes for another.
+
+* Bounded Runtime scheduling correspondence
+
+[[file:27-bounded-scheduling.org][27]] refines 26 with a pure POO scheduling contract, executable
+SysML handoffs, finite QNT interleavings and actual ITF-to-Scheme replay.
+The reference Actor adapter verifies reserved admission credits before mailbox
+entry. 28 subsequently integrates local owner ingress; distributed scheduling
+and end-to-end byte/control admission remain separate obligations.
+
+* Scheme authority and Rust runtime ecosystem
+
+[[file:28-hybrid-runtime.org][28]] integrates bounded ingress into the existing local Context owner and
+composes authority, scheduling and foreign-call lifetime in QNT/SysML. The
+Rust consumer reuses gerbil-scheme-rust fixed VM owners and Tokio, preserving
+Scheme semantics and the C/AOT boundary. Runtime Context qualification and the
+upstream-image transport fixture are separate; the production Context AOT
+service export and multi-node runtime remain explicit integration work.
+
+* Runtime Context service and the C ABI boundary
+
+[[file:29-production-service.org][29]] implements the POO service, durable original decisions and
+close-before-work behavior. Scheme retains all lifecycle semantics; Bindings
+retain the existing C ABI responsibilities. Premature Rust integration was
+withdrawn. The new lifecycle service's C export remains explicitly open.
+
+* First observation of an unresolved workspace effect
+
+[[file:33-recovery-first-observation.org][33: First recovery observation]] separates a qualified journal gap, current
+workspace content, original effect history, writer reconciliation and Task
+acceptance. Its [[file:33-recovery-first-observation.sysml][SysML model]] describes knowledge/obligation relations rather
+than a recovery workflow. A bounded pure ASCENT design probe exercises the
+independent axes; it does not implement external exactly-once execution. The
+D2 explanation asks why matching file contents cannot identify the original
+writer or complete the Task, and retains actual image-bound reader feedback.
+
+[[file:34-durable-task-real-source-case.org][34: A real Durable source change]] reads the current source artifact against
+the existing Durable and Task design. Its [[file:34-durable-task-real-source-case.sysml][SysML relations]] distinguish an
+observed patch, retained requirements, open inquiry and Task responsibility.
+This is an architectural reading, not a new crash-test workflow.
+
+* Durable Module extension refinement
+
+[[file:18-runtime-durable-source-commands.org][18: Durable source commands]] now records the proposed independent Durable Module
+and declarative Context Feature extension using the existing Core Feature System.
+[[file:workspace-recovery.org][Workspace recovery]] supplies the existing committed-readiness case; its
+[[file:workspace-recovery.sysml][SysML package]] adds proposed composition parts and object-state explanations.
+These design additions do not requalify historical runtime results or claim a
+completed code migration. Teaching examples separate composition from recovery,
+with ASCENT-inferred layout and actual image-bound model readings.

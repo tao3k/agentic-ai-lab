@@ -1,0 +1,162 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Independent Session implementation boundary
+#+date: [2026-10-30]
+
+* One owner for each contract
+:PROPERTIES:
+:ID: context-independent-session-implementation
+:END:
+
+This implements G1 of [[file:31-design-audit-and-next-delivery.org][the source audit]]. It preserves the boundary in
+[[file:01-system-boundary.sysml][the existing SysML architecture]]: Context composes an independent Session.
+Session preserves opaque producer bindings; it does not interpret Org evidence
+or acquire a Memory store in order to create, select or recover a Session.
+
+| Responsibility | Implementation owner | Downstream use |
+|----------------+----------------------+----------------|
+| Durable policy, resume identity, validation and receipt projection | [[file:../../../../modules/session/durable-policy.ss][Session durable policy]] | Memory store/recovery and Sandbox policy consume the same inert contract |
+| Session identity, Attempt proposals, recovery obligations | [[file:../../../../modules/session/interface.ss][Public Session interface]] | Context composes these values and owns evidence/current-use admission |
+| Org selection plus Memory store and Session intent policy | [[file:../../../../modules/ai-agentic-context/features/memory/session-selection.ss][Context Memory selection adapter]] | Published by the existing [[file:../../../../modules/ai-agentic-context/features/memory/interface.ss][Memory interface]] |
+
+The policy implementation moves once from Memory to Session. Its POO values,
+receipt schemas, predicates and durable diagnostics remain unchanged. Memory,
+Sandbox, examples and tests import that owner directly. The deleted paths have
+no forwarding modules or duplicate declarations.
+
+The Org adapter moves once in the opposite direction. Its existing Session
+intent names/schema remain stable because they describe the receiving intent;
+they no longer imply that Session imports a query engine or Memory backend.
+Policy eligibility still does not authenticate source evidence or publish a
+Memory head. All original refusal predicates remain in this adapter.
+
+* Publication and execution
+
+The existing interfaces close the public surfaces. Session syntax exports its
+own durable policy; Memory's interface exports its own Session selection adapter.
+The existing =init.exports.std-make-spec= and native import closure discover
+these owners. This change adds no build inventory, runner, environment variable,
+package manager, or alternate export protocol.
+
+[[file:../../../../t/session-independent-test.ss][The isolated Session consumer]] imports the entire public interface. It inspects Gerbil's
+actual loaded modules, with a positive Session matcher and a negative Context
+matcher, then exercises public selection, durable policy and real Attempt
+proposal/recovery functions. A descriptor-only check would miss the old reverse
+implementation imports. This gate qualifies independent Session proposals, not
+final Context result publication or external effects. The separate
+[[file:../../../../t/session-attempt-test.ss][Attempt Suite]] imports the same facade and remains reusable inside Context
+without asserting that a combined Context process has no Context modules.
+
+[[file:../../../../t/memory-org-selection-test.ss][The Memory composition consumer]] imports Memory's public interface. It preserves
+source-cut, source-byte, query grant, store scope, inactive Session and stale-head
+refusals. Context's original native suites separately own proof/support/journal,
+active Attempt terminal CAS, invalidation, cancellation/recovery and cross-Session
+consumers. No intent-only test substitutes for those native integration gates.
+
+* Evidence scope
+
+Native validation and CI status are recorded below after each command naturally
+exits. Raw transcripts remain local/CI artifacts rather than tracked source.
+The resource limits and original source/tamper, invalidation and recovery
+controls remain unchanged by this refactor.
+
+PR #34's existing dependency blocker is separately reproduced in its full CI
+artifact: ASCENT's ABI executable compilation attempts to generate C beside a
+read-only POO dependency static Scheme input. It fails with =Permission denied=,
+not a timeout. The existing Core/ASCENT owner is repairing the production build
+entry. Root must consume an admitted revision rather than copy a dependency
+inventory, make sandbox inputs writable, or introduce a private compiler wrapper.
+
+* Native qualification and retained refusals
+
+The official =just build-library= completed successfully. Nine focused test
+files ran serially through =just test-file <path> true=: 45 Cases passed with
+=MODULE-OK=, =HARNESS-OK=, final =OK=, no Harness/Case/Check/heap/stack errors,
+and natural process exit 0. They cover isolated Session (1), reusable Attempt
+routing/recovery (8), Memory Org selection (6), Session policy (8), communication
+(1), custom Session/Memory durable composition (1), durable recovery (3),
+Sandbox policy (6), and Context public composition/source admission (11).
+
+The moved durable policy's body from =export= onward and the moved Org adapter's
+body from =import= onward are identical to their pre-refactor implementations.
+The original invalid-policy, revoked-read, stale-source, forged-graph,
+wrong-Attempt and recovery-obligation assertions were not relaxed.
+
+The separate Nix CI prefix failure has a local regression witness in the existing
+filesystem transport test. A library-only producer has no =bin=. The previous
+launcher made a dangling =bin= symlink; publishing an executable failed with
+=FileExistsError= for both command success/failure controls. The maintained
+launcher now creates its own writable =bin= directory. Both exit paths pass,
+preserve producer contents, and remove the command-owned temporary prefix.
+This transport check does not replace Scheme qualification or remote Nix CI.
+
+The first combined Context attempt retained a genuine Harness refusal: the
+native child exited 0, but its output contained =ERROR CHECK= and =ERROR HARNESS=,
+so the unchanged outer admission rejected it with 70. The new independent
+loader assertion had been placed inside the shared Attempt Suite, whose Context
+consumer deliberately preloads Context. It now lives in its own ordinary
+=-test.ss= file; the shared Attempt Suite retains its original eight Cases and
+the existing Context queue retains its original 99. There is no conditional
+skip or weakened absence assertion.
+
+An earlier launch also refused a missing workspace =GERBIL_PATH=: the Context
+recipe had selected the user's global prefix after preparation used the project
+prefix. The existing recipe now binds the standard project prefix in the same
+way as its sibling test recipes. No environment variable or protocol was added.
+
+The original native Context queue then passed twice: 99 + 99 Cases through
+=just test-context-temporal=, complete Harness markers, no errors, and natural
+exit 0 in both processes. First execution: 9.453 seconds before Harness,
+105.535 seconds in Cases; complete replay: 4.012 seconds before Harness,
+88.648 seconds in Cases. These are Case/startup measurements after separately
+qualified compilation, not cold build timings or a performance improvement claim.
+
+These runs retain the existing original proof/support/journal, source withdrawal,
+authority expiry, delayed/duplicate tickets, policy replacement, final Attempt
+CAS, cancellation/recovery, affected/unaffected consumers and cross-Session recall
+refusals. Existing bounded corpora are not relabeled exhaustive concurrency proof.
+No SysML or QNT engine was rerun for this source-ownership refactor.
+
+The existing =prepare-qualification= command also completed in a fresh native
+Gerbil prefix with real writable =lib= and =bin= directories. It emitted ten
+files including the actual AWS fixture compilation, naturally exited 0, and the
+prefix was retired afterwards. This confirms the standard Make directory path
+locally; remote Bazel/Nix acceptance remains a separate receipt.
+
+Reproduce the Session and Context gates through the maintained entrypoints:
+
+#+begin_src sh
+GERBIL_TEST_MAX_HEAP=3G just test-file t/session-independent-test.ss true
+GERBIL_TEST_MAX_HEAP=3G just test-file t/session-attempt-test.ss true
+GERBIL_TEST_MAX_HEAP=3G just test-file t/memory-org-selection-test.ss true
+GERBIL_TEST_MAX_HEAP=3G just compile-context-temporal-tests
+GERBIL_TEST_MAX_HEAP=3G just test-context-temporal
+GERBIL_TEST_MAX_HEAP=3G just test-context-temporal
+#+end_src
+
+The resource, source-currentness and tamper policies were unchanged. Raw logs,
+retained failed worker output, prefix failure/repair witnesses and the structured
+=session-refactor-receipt.json= receipt live under the local
+=.data/context-ci-20261029/= artifact directory; they are not tracked source.
+
+* C ABI host budget and remaining CI boundary
+
+The old =29c95ff7= Linux Root queue completed all 317 files: 316 accepted and
+one refused =context-c-abi-test.ss=. Its embedded setup Fixture incorrectly
+required the already-running host VM to have the facade's fixed 2 GiB request,
+while the approved CI host budget is 3 GiB. Production =semantic_host.c= still
+requests exactly 2 GiB and one worker. Only the test Fixture now accepts the
+existing local 2 GiB and CI 3 GiB host limits through Gambit's actual heap getter.
+
+The real C caller passed through =just test-file t/context-c-abi-test.ss true=
+under both configured budgets, with complete markers and natural exit 0. A real
+1 GiB process retained the refusal: C setup returned 10, the unchanged Case
+failed, and outer admission returned 70 without heap/stack overflow. This keeps
+an executable non-admitted-host counterexample rather than dropping heap checks.
+On macOS this native journal test needs read access to =kern.bootsessionuuid=;
+the sandbox denial was retained and the real boot identity was used for reruns.
+
+These local receipts do not close exact-head remote Root, package, standalone
+active-service or performance admission. Core/ASCENT's qualified production
+build-entry revision remains an external dependency for PR #34's immutable
+input failure. No unqualified dependency revision was pinned in this change.

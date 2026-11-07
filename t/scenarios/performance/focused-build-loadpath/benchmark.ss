@@ -18,7 +18,7 @@
  (rule . GERBIL-SCHEME-AGENT-R039)
  (feature . focused-build-loadpath)
  (optimizationFocus . "use project package-local .gerbil/lib for focused build commands")
- (inputShape . "single-module focused gxc command assembled by the Poo-flow CLI support layer")
+ (inputShape . "single-module focused gxc command assembled by the Agentic AI Lab CLI support layer")
  (expectedOutcome . "the focused-build-loadpath scenario preserves its declared semantic result under the ASP P95 gate")
  (expectedRepair . "match Gerbil package-local build cache behavior and avoid loading stale user ~/.gerbil/lib artifacts")
  (measurementPhases collect-before policy-before collect-after policy-after assert-time-gate observe-runtime-memory)

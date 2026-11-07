@@ -1,0 +1,28 @@
+#+TITLE: Temporal Quint model correspondence
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Quint source authority and commands are documented in [[file:README.org][the proof inventory]].
+=TemporalFamily.qnt= separates supplied observations, constraints, exclusive
+family completeness and exploration limit. All enabled candidate orders are
+checked. A bounded frontier cannot establish necessity; its mutant must fail
+=TerminalAgreement=. Temporal admissibility alone does not establish causation.
+
+=TemporalRevision.qnt= preserves predecessor admission, concurrent-head
+uncertainty and the historical admission/valid-time cut. No implicit winner
+is selected between r2 and r3.
+
+=TemporalInvalidation.qnt= computes the least reverse-dependency closure by a
+finite fold bounded by conclusion count. =advance= chooses any pending member.
+Scope reprojection schedules all affected conclusions. Its mutation must fail
+=DirectScheduled=. =TemporalConclusionSelection.qnt= assumes an atomic CAS,
+checks one committed proposal and rejects the stale competing proposal. Its
+mutation must fail =AtMostOneCommit=.
+
+Weak-fairness obligations retain the finite terminal reachability assumptions.
+They do not promise termination under an unfair runtime scheduler. Stuttering
+is implicit in the verifier's temporal specification. Public POO values and
+functional APIs are independent of these internal action relations. There is
+no general implementation refinement theorem across Scheme, Rust and Quint.

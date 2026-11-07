@@ -8,11 +8,11 @@
 ;;; Invariant: this declares artifact policy validation data only; Scheme does
 ;;; not store, publish, index, or retain artifacts at runtime.
 
-(import :poo-flow/modules/memory-core/durable/artifact-policy)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy)
 
-(export poo-flow-custom-my-module-durable-artifact-case)
+(export agentic-ai-lab-custom-my-module-durable-artifact-case)
 
-(def poo-flow-custom-my-module-durable-artifact-case
+(def agentic-ai-lab-custom-my-module-durable-artifact-case
   (let* ((custom-artifact-profile
         (artifact-profile custom-report
           :extends report/base
@@ -46,12 +46,12 @@
           :retention project-retained
           :grants (actor/reviewer)))
        (artifact-policy-receipt
-        (poo-flow-durable-artifact-validate
+        (agentic-ai-lab-durable-artifact-validate
          custom-artifact
          custom-artifact-profile
          custom-artifact-database))
        (artifact-manifest-receipt
-        (poo-flow-durable-artifact-manifest
+        (agentic-ai-lab-durable-artifact-manifest
          custom-artifact
          custom-artifact-profile
          custom-artifact-database
@@ -59,24 +59,24 @@
            (metadata . ((source . user-interface)
                         (case . durable-artifact))))))
        (artifact-handoff
-        (poo-flow-durable-artifact-manifest->marlin-handoff
+        (agentic-ai-lab-durable-artifact-manifest->marlin-handoff
          artifact-manifest-receipt)))
   (list
-   (cons 'kind 'poo-flow.custom.durable-artifact)
+   (cons 'kind 'agentic-ai-lab.custom.durable-artifact)
    (cons 'profile
-         (poo-flow-artifact-profile->alist custom-artifact-profile))
+         (agentic-ai-lab-artifact-profile->alist custom-artifact-profile))
    (cons 'database
-         (poo-flow-artifact-database-profile->alist custom-artifact-database))
+         (agentic-ai-lab-artifact-database-profile->alist custom-artifact-database))
    (cons 'artifact
-         (poo-flow-durable-artifact->alist custom-artifact))
+         (agentic-ai-lab-durable-artifact->alist custom-artifact))
    (cons 'policy-receipt
-         (poo-flow-durable-artifact-policy-receipt->alist
+         (agentic-ai-lab-durable-artifact-policy-receipt->alist
           artifact-policy-receipt))
    (cons 'manifest-receipt
-         (poo-flow-durable-artifact-manifest-receipt->alist
+         (agentic-ai-lab-durable-artifact-manifest-receipt->alist
           artifact-manifest-receipt))
    (cons 'marlin-handoff artifact-handoff)
    (cons 'valid?
-         (poo-flow-durable-artifact-policy-receipt-valid?
+         (agentic-ai-lab-durable-artifact-policy-receipt-valid?
           artifact-policy-receipt))
    (cons 'runtime-executed #f))))

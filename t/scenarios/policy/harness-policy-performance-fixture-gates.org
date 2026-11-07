@@ -3,6 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 * Harness Policy Performance Fixture Gates
-This scenario anchors the GSLPH Testing Framework policy suite to POO Flow performance fixtures.
+This scenario anchors the GSLPH Testing Framework policy suite to Agentic AI Lab performance fixtures.
 
 The executable gate is `poo-performance-run-gate`; this file keeps the policy scenario addressable from the testing receipt.

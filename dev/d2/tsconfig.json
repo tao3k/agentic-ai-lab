@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "types": ["bun"],
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true
+  },
+  "include": ["render.ts", "views.ts", "illustration.ts", "evolution.ts", "ascent-view.ts", "build-experiment-art.ts", "session-render.ts", "window-design.ts", "reuse.ts", "teaching-view.ts"]
+}

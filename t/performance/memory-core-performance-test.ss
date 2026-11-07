@@ -7,7 +7,7 @@
 ;;; Invariant: validation resolves POO memory specs and intent refs without
 ;;; runtime recall, commit, or backend startup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,8 +17,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config
-        :poo-flow/modules/memory-core/config)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export memory-core-performance-test)
 
@@ -37,7 +37,7 @@
 
 ;; : (-> Alist Void)
 (def (memory-core-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] memory-core-catalog-policy-validation ")
+  (display "[agentic-ai-lab-benchmark] memory-core-catalog-policy-validation ")
   (write receipt)
   (newline)
   (force-output))
@@ -49,7 +49,7 @@
 
 ;; : (-> Integer PooMemoryStoreSpec)
 (def (memory-core-performance-store index)
-  (poo-flow-memory-store-spec
+  (agentic-ai-lab-memory-store-spec
    (memory-core-performance-symbol "memory/store" index)
    'custom
    'session
@@ -63,7 +63,7 @@
 
 ;; : (-> Integer PooSessionMemoryIntent)
 (def (memory-core-performance-intent index)
-  (poo-flow-session-memory-intent
+  (agentic-ai-lab-session-memory-intent
    (memory-core-performance-symbol "memory/intent" index)
    (memory-core-performance-symbol "memory/store" index)
    'project
@@ -73,21 +73,21 @@
 ;; : (-> Integer Alist)
 (def (memory-core-performance-summary count)
   (let* ((stores
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            memory-core-performance-store))
          (intents
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            memory-core-performance-intent))
-         (catalog (poo-flow-memory-catalog 'memory-core/performance stores))
+         (catalog (agentic-ai-lab-memory-catalog 'memory-core/performance stores))
          (receipt
-          (poo-flow-memory-policy-catalog-validation-receipt
+          (agentic-ai-lab-memory-policy-catalog-validation-receipt
            'validation/memory-core-performance
            catalog
            intents)))
     (list
-     (cons 'store-count (poo-flow-memory-catalog-store-count catalog))
+     (cons 'store-count (agentic-ai-lab-memory-catalog-store-count catalog))
      (cons 'intent-count (.ref receipt 'intent-count))
      (cons 'resolved-store-count (length (.ref receipt 'resolved-store-refs)))
      (cons 'unresolved-store-count
@@ -97,7 +97,7 @@
 
 (def memory-core-performance-test
   (test-suite "memory-core performance"
-    (poo-flow-test-case "keeps catalog policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps catalog policy validation inside benchmark contract"
       (let* ((summary
               (memory-core-performance-summary memory-core-performance-count))
              (receipt

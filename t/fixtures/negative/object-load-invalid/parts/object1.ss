@@ -1,17 +1,14 @@
-;;; -*- Gerbil -*-
-;;; Boundary: included by ../objects.ss.
-;;; This part deliberately declares an invalid TypeSpec.
-;;; The fixture proves included object fragments are validated by the loader.
-
-;;; This object intentionally references an unknown type so validation proves
-;;; load! reports schema errors at the included fragment boundary.
-;; : [PooFlowModuleObject]
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import :yuanxu/module-system/schema/interface)
+(export Objects)
+(def Objects
 (list
- (poo-flow-module-object
+ (yuanxu-module-object
   'objects.fixture.invalid
   '()
   (list
-   (poo-flow-module-field-contract
+   (yuanxu-module-field-contract
     'broken 'Unknown 'override #f '((scope . fixture))))
   '((namespace . objects.fixture)
     (domain . fixture))))
+)

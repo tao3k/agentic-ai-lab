@@ -6,12 +6,12 @@
 ;;; Boundary: downstream loop-engine profile declarations.
 ;;; Invariant: standalone module; it declares workflow loop intent only.
 
-(import :poo-flow/modules/loop-engine/config)
+(import :agentic-ai-lab/modules/loop-engine/config)
 
-(export poo-flow-custom-my-module-loops-module)
+(export agentic-ai-lab-custom-my-module-loops-module)
 
-(def poo-flow-custom-my-module-loops-module
-  (poo-flow-loop-engine-configs
+(def agentic-ai-lab-custom-my-module-loops-module
+  (agentic-ai-lab-loop-engine-configs
   (.def (daily-triage-loop @ loop-engine-use-case
                            name level mode goal)
     name: 'daily-triage
@@ -62,11 +62,11 @@
   (.def (repo-loop-result @ loop-engine-result
                           default auditor verifier governor human-audit
                           format required-fields)
-    default: 'poo-flow.loop-governor.profile-node-result.v1
-    auditor: 'poo-flow.loop-governor.profile-audit-result.v1
-    verifier: 'poo-flow.loop-governor.profile-review-result.v1
-    governor: 'poo-flow.loop-governor.profile-governor-result.v1
-    human-audit: 'poo-flow.loop-governor.profile-human-audit-decision.v1
+    default: 'agentic-ai-lab.loop-governor.profile-node-result.v1
+    auditor: 'agentic-ai-lab.loop-governor.profile-audit-result.v1
+    verifier: 'agentic-ai-lab.loop-governor.profile-review-result.v1
+    governor: 'agentic-ai-lab.loop-governor.profile-governor-result.v1
+    human-audit: 'agentic-ai-lab.loop-governor.profile-human-audit-decision.v1
     format: 'structured-alist
     required-fields: '(decision summary evidence action-items))
 

@@ -1,96 +1,86 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-#
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: User Configuration and Module Publication Contract
+#+language: en
 
-* Purpose
+* One selection authority
 
-** Upstream Kernel Profile
+The repository root [[file:../init.ss][init.ss]] declares module windows through
+=yuanxu!=. There is no nested =user-interface/init.ss=, Profile registry, custom
+=load!=, or product =use-module= dispatcher. =rename: Profiles= names a module
+window; it does not change selection, admission, inheritance or loading rules.
+Native lexical =use-module= for an already acquired semantic value is distinct
+from loading a file or selecting another module graph.
 
-The maintained kernel module implementations are upstream-owned under
-=modules=:
+The root selects user-owned sources with ordinary source rows:
 
-- =modules/funflow/config.ss= owns =(flow funflow +functional +dag +typed-receipts +runtime-manifest)=.
-- =modules/governor/config.ss= owns =(loop governor +strategy +policy)=.
-- =modules/nono-sandbox/config.ss= owns =(sandbox nono-sandbox +nono +doctor)=.
-- =modules/cubeSandbox/config.ss= owns =(sandbox cubeSandbox +cube +doctor)=.
+#+begin_src scheme
+;; In the existing modules window:
+(my-module @ "./user-interface/custom/my-module")
+;; In the existing scenarios window:
+(developer @ "./user-interface/scenarios/developer")
+;; In the existing Profiles window:
+(langgraph @ "./user-interface/profiles/langgraph")
+#+end_src
 
-=user-interface/init.ss= exports enabled category/module/feature rows.
-=user-interface/config.ss= imports the canonical composition constructor and
-directly composes already maintained Profiles and Standards. Reusable Profiles
-and Scenarios remain separately importable modules; the root does not scan or
-re-export them and does not declare a stage, graph, loop, proof, handoff,
-Provider or runtime DSL.
+These are clauses of the one root declaration, not additional declarations or
+manual linking steps. Module identities are unique across windows.
 
-This directory models the downstream repository surface that a POO Flow user
-would maintain. It is intentionally root-level and separate from =src=. POO Flow
-is the brand name. Bare =poo= remains only a Scheme/API prefix for Gerbil POO
-helpers and should not be used as the user-visible product or module group
-identity.
+* Fixed source responsibilities
 
-The downstream surface follows the project invariant: POO Flow is 100% POO-native and functional-first. Users extend upstream-owned objects and functional flow constructors; they do not author a parallel alist/record DSL, expose raw merge code, or maintain direct =(lambda (self super) ...)= compute hooks as normal configuration.
+- =types.ss= owns Types and Contracts.
+- =config.ss= owns ordinary default configuration values.
+- =objects.ss= owns POO prototypes and domain projections over final Config.
+- =func.ss=, when present, owns named functional algorithms.
+- =interface.ss= declares the module's identity, requirements and publication.
 
-The files here stay declarative:
+The existing Yuanxu role wrappers own compiler surroundings and admitted
+lexical bindings. User modules do not add =gerbil.pkg=, loader factories,
+import-prefix registries, runtime workers or test schedulers. Normal package
+imports still express library dependencies inside role implementations.
 
-- =init.ss= lists optional feature patches/custom modules through =poo-flow!= category rows.
-- =config.ss= uses the thin =user-composition= binding and directly composes
-  maintained Profile and Standard values with explicit imports; operational
-  responsibilities remain owned by those values.
-- =custom/<module-name>/{types,objects,funs,config,interface}.ss= is the stable
-  user-maintained module shell; concrete subowners remain precise imports.
-- =profiles/*.ss= contributes stable reusable profile objects.
-- =scenarios/<name>/scenario.ss= contributes reusable Scenario objects over
-  those Profiles.
+Profiles now use =profiles/<name>/{types,config,objects,interface}.ss=. Their
+Config is ordinary data. The reusable =Profile.= prototype reads its bound
+final Config and constructs the existing SemanticModuleContract value. It does
+not capture a parent's already projected profile. The module scope publishes
+=profile= and =defaults= through its declared Record Contract.
 
-The implementation stays upstream:
+* Read published values
 
-- =src/user-interface/root-objects.ss= owns user-interface object contracts.
-- =src/user-interface/root-profile.ss= owns profile/config projection helpers.
-- =src/user-interface/declaration-case.ss= owns declaration case contracts for tools and tests.
-- reusable descriptor and loader mechanisms live in =core/module-system/=; POO Flow descriptors, source policy, activation, and presentation live in =src/authoring/= and =src/user-interface/=, with domain behavior in =modules/=.
+#+begin_src scheme
+(import (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
+(def graph-profile
+  (.get agentic-ai-lab.init.exports modules Profiles langgraph profile))
+#+end_src
 
-* Public Entry Points
+The executable consumers use this exact path. The Module leaf is the configured,
+admitted POO object itself; there is no =scope= facade to unwrap. Tests remain
+on the independent =init.exports.tests= projection. Reading a namespace or test
+metadata must not execute a runtime operation.
 
-The downstream repository has two root entrypoints:
+* Domain behavior is retained
 
-- =init.ss= enables maintained, contributor and private custom module sources;
-- =config.ss= declares the final Scenario composition.
+SandboxProfile, SemanticModule, Scenario Case, pipeline and runtime-intent
+Contracts remain domain boundaries. Domain constructors and inert diagnostic
+projections are not another module-selection protocol. In particular, the
+Developer Scenario's backend intent rows describe its preview inputs; they
+are not the root's selected module graph and cannot activate those backends.
 
-Every custom module exposes =interface.ss=.  Its =config.ss= stays lightweight;
-it must not aggregate every Profile and Scenario implementation into the public
-module entry.
-Reusable scenario fragments are also part of the teaching surface:
-- =profiles/langchain.ss= and =scenarios/langchain/scenario.ss=
-- =profiles/langgraph.ss= and =scenarios/langgraph/scenario.ss=
-- =profiles/crewai.ss= and =scenarios/crewai/scenario.ss=
-- =profiles/tool-calling.ss= and
-  =scenarios/tool-calling-agent-loop/scenario.ss=
+Sandbox configuration uses native POO construction and inheritance; existing
+backend conversion and Contract functions still validate final values.
+Funflow, Session and Loop Engine configuration calls their own APIs directly.
+No central macro recognizes their names and reexports all their libraries.
 
-The presentation surface exposes ownership metadata so agents can inspect the
-config without realizing descriptors or executing runtime hooks. Presentations
-must include =presentation-trace= facts. Trace stages are report-only
-observability data for catching lazy POO projection recursion; they must keep
-=descriptor-realized? = #f= and =runtime-executed = #f=.
+Source observations, requirements, final scope admission and publication stay
+owned by Yuanxu. A changed source epoch requires a fresh selection; an admitted
+snapshot is not silently repurposed. Independent admission boundaries still
+recheck currentness. Native Gerbil loading and POO slot caching own reuse;
+there is no Profile-specific cache or compatibility loader.
 
-* Boundaries
+* Tests and effects
 
-- User-owned: root module selection, final compositions, reusable Profiles,
-  reusable Scenarios and custom module declarations.
-- Module-system-owned: settings, profile projection, profile-set validation, descriptor realization, validation, merge, doctor output.
-- Runtime-owned: backend execution and handler lifecycle in =marlin-agent-core=.
-
-Every downstream presentation must keep =runtime-executed = #f=. Kernel profile
-module groups and presentation fields should expose =poo-flow= as the brand
-identity.
-
-* Doom-Style Init Shape
-
-=init.ss= is intentionally closer to Doom's =init.el= than to an implementation
-module:
-
-- enable required workflow, loop, and sandbox modules through =poo-flow!=;
-- group optional feature patches by category, such as =:workflow= and =:custom=;
-- attach user-toggleable module features with =+feature= flags;
-- keep object contracts, sandbox recipes, settings, and facade exports out of =init.ss=;
-- keep sandbox recipes and non-object configuration out of root =user-interface=;
-- keep object implementations out of root =init.ss= and =config.ss=;
-- keep custom module bodies under =custom= so users have room to write their own modules.
+Use the existing Just entrypoints around the official Gerbil/std/test tool.
+Tests do not load another runner or start a process merely to invoke std/test.
+Execution remains explicit behind Ops or the runtime handoff boundary. Module
+selection, Contract admission and plan preview do not grant effect authority.

@@ -2,10 +2,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Control-plane integration tests pin the Scheme receipt boundary.
 ;;; They exercise policy projection without assuming runtime side effects.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,8 +20,8 @@
         check-true
         test-error
         test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/workflow/store)
+        :yuanxu/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/store)
 
 ;;; Failure capture keeps configured-runner checks on structured values instead
 ;;; of rendered exception text.
@@ -45,10 +49,19 @@
 ;; : TestSuite
 (def pure-flow-test
   (test-suite "pure flow"
-    (poo-flow-test-case "runs pure tasks sequentially and records receipts"
-      (let* ((inc (make-pure-task 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (make-pure-task 'double (lambda (x) (* x 2)) 'number 'number))
-             (flow (flow-compose 'math (list inc double) 'number 'number))
+    (yuanxu-test-case "runs pure tasks sequentially and records receipts"
+      (let* ((inc (make-pure-task
+  'inc
+  (Fun Number <- Number)
+  (lambda (x) (+ x 1))))
+             (double (make-pure-task
+  'double
+  (Fun Number <- Number)
+  (lambda (x) (* x 2))))
+             (flow (flow-compose
+		    'math
+		    (list inc double)
+		    (Fun Number <- Number)))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner flow 3))
@@ -63,9 +76,16 @@
 ;; : TestSuite
 (def adapter-request-test
   (test-suite "adapter request boundary"
-    (poo-flow-test-case "lowers external tasks into adapter requests"
-      (let* ((external (make-external-task 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
-             (flow (flow-compose 'external-demo (list external) 'artifact 'artifact))
+    (yuanxu-test-case "lowers external tasks into adapter requests"
+      (let* ((external (make-external-task
+			'compile
+			'rust-build
+			'((crate . "agentic-ai-lab"))
+			(Fun AdapterResult <- Any)))
+             (flow (flow-compose
+		    'external-demo
+		    (list external)
+		    (Fun Any <- Any)))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner flow 'input-artifact))
@@ -99,25 +119,35 @@
 ;; : TestSuite
 (def funflow-api-test
   (test-suite "funflow-style flow api"
-    (poo-flow-test-case "builds and runs flow-level smart constructors"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
+    (yuanxu-test-case "builds and runs flow-level smart constructors"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
+             (double (scheme-flow
+		      'double
+		      (Fun Number <- Number)
+		      (lambda (x) (* x 2))))
              (pipeline (flow-then 'inc-then-double inc double))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner pipeline 4)))
         (check-equal? (flow-step-count pipeline) 2)
-        (check-equal? (flow-input-contract pipeline) 'number)
-        (check-equal? (flow-output-contract pipeline) 'number)
+        (check-equal? (flow-input-contract pipeline) Number)
+        (check-equal? (flow-output-contract pipeline) Number)
         (check-equal? (run-result-value result) 10)))
-    (poo-flow-test-case "keeps return-flow as identity"
-      (let* ((identity (return-flow 'return-number 'number))
+    (yuanxu-test-case "keeps return-flow as identity"
+      (let* ((identity (return-flow 'return-number Number))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner identity 11)))
         (check-equal? (run-result-value result) 11)))
-    (poo-flow-test-case "lowers external-flow into adapter request"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+    (yuanxu-test-case "lowers external-flow into adapter request"
+      (let* ((compile (external-flow
+		       'compile
+		       'rust-build
+		       '((crate . "agentic-ai-lab"))
+		       (Fun AdapterResult <- Any)))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner compile 'input-artifact))
@@ -138,8 +168,12 @@
 ;; : TestSuite
 (def configured-runner-test
   (test-suite "configured runner"
-    (poo-flow-test-case "runs through request-only config"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+    (yuanxu-test-case "runs through request-only config"
+      (let* ((compile (external-flow
+		       'compile
+		       'rust-build
+		       '((crate . "agentic-ai-lab"))
+		       (Fun AdapterResult <- Any)))
              (config (make-request-only-run-config))
              (result (run-flow-with-config config compile 'input-artifact))
              (adapter-result (run-result-value result))
@@ -148,8 +182,12 @@
         (check-equal? (run-config-runtime-owner config) 'request-only)
         (check-equal? (adapter-result-status adapter-result) 'requested)
         (check-equal? (execution-request-plan-id request) 'compile)))
-    (poo-flow-test-case "submits external requests to rust adapter boundary"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+    (yuanxu-test-case "submits external requests to rust adapter boundary"
+      (let* ((compile (external-flow
+		       'compile
+		       'rust-build
+		       '((crate . "agentic-ai-lab"))
+		       (Fun AdapterResult <- Any)))
              (config (make-rust-run-config))
              (runner (run-config->runner config))
              (result (run-flow-with-config config compile 'input-artifact))
@@ -170,9 +208,17 @@
         (check-equal? (cdr (assoc 'policy envelope))
                       (execution-request-policy request))
         (check-equal? (receipt-adapter-decision child) 'rust)))
-    (poo-flow-test-case "submits branch arms to rust adapter boundary"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
-             (put (store-flow 'put-cache 'put '((path . "target")) 'artifact 'artifact))
+    (yuanxu-test-case "submits branch arms to rust adapter boundary"
+      (let* ((compile (external-flow
+		       'compile
+		       'rust-build
+		       '((crate . "agentic-ai-lab"))
+		       (Fun AdapterResult <- Any)))
+             (put (store-flow
+		   'put-cache
+		   'put
+		   '((path . "target"))
+		   (Fun AdapterResult <- Any)))
              (branch (flow-branch 'runtime-fanout compile put))
              (config (make-store-rust-run-config))
              (result (run-flow-with-config config branch 'input-artifact))
@@ -183,7 +229,7 @@
         (check-equal? (adapter-result-status right-result) 'submitted)
         (check-equal? (adapter-result-request-id left-result) '(rust-request compile external))
         (check-equal? (adapter-result-request-id right-result) '(rust-request put-cache store))))
-    (poo-flow-test-case "threads descriptor registries through configured execution"
+    (yuanxu-test-case "threads descriptor registries through configured execution"
       (let* ((docker (make-task-family-descriptor 'docker
                                                   'external
                                                   'adapter
@@ -197,13 +243,16 @@
              (flow-registry (make-flow-declaration-registry
                              'configured-flow-declarations
                              flow-declaration-descriptors))
-             (task (make-task 'build-image
-                              'docker
-                              '(docker build)
-                              'artifact
-                              'artifact
-                              #f))
-             (flow (flow-compose 'docker-demo (list task) 'artifact 'artifact))
+             (task (make-task
+		    'build-image
+		    'docker
+		    '(docker build)
+		    (Fun Any <- Any)
+		    #f))
+             (flow (flow-compose
+		    'docker-demo
+		    (list task)
+		    (Fun Any <- Any)))
              (config (make-run-config 'configured-extension
                                       (make-local-eager-strategy)
                                       (make-request-only-adapter)
@@ -237,17 +286,17 @@
                       'configured-flow-declarations)
         (check-equal? (receipt-policy child)
                       (execution-request-policy request))))
-    (poo-flow-test-case "fails configured validation when task registry lacks descriptor"
-      (let* ((docker-task (make-task 'build-image
-                                     'docker
-                                     '(docker build)
-                                     'artifact
-                                     'artifact
-                                     #f))
-             (flow (flow-compose 'missing-task-family
-                                 (list docker-task)
-                                 'artifact
-                                 'artifact))
+    (yuanxu-test-case "fails configured validation when task registry lacks descriptor"
+      (let* ((docker-task (make-task
+			   'build-image
+			   'docker
+			   '(docker build)
+			   (Fun Any <- Any)
+			   #f))
+             (flow (flow-compose
+		    'missing-task-family
+		    (list docker-task)
+		    (Fun Any <- Any)))
              (config (make-run-config 'missing-task-registry
                                       (make-local-eager-strategy)
                                       (make-request-only-adapter)
@@ -265,8 +314,11 @@
                       'default-task-families)
         (check-equal? (cdr (assoc 'kind (execution-failure-detail failure)))
                       'docker)))
-    (poo-flow-test-case "fails configured validation when flow registry lacks descriptor"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+    (yuanxu-test-case "fails configured validation when flow registry lacks descriptor"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
              (empty-flow-registry
               (make-flow-declaration-registry 'empty-flow-declarations '()))
              (config (make-run-config 'missing-flow-registry
@@ -293,9 +345,15 @@
 ;; : TestSuite
 (def branch-flow-test
   (test-suite "branch flow"
-    (poo-flow-test-case "runs pure branches locally"
-      (let* ((left (pure-flow 'left (lambda (x) (+ x 1)) 'number 'number))
-             (right (pure-flow 'right (lambda (x) (* x 2)) 'number 'number))
+    (yuanxu-test-case "runs pure branches locally"
+      (let* ((left (pure-flow
+		    'left
+		    (Fun Number <- Number)
+		    (lambda (x) (+ x 1))))
+             (right (pure-flow
+		     'right
+		     (Fun Number <- Number)
+		     (lambda (x) (* x 2))))
              (branch (flow-branch 'local-fanout left right))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
@@ -311,9 +369,15 @@
 ;; : TestSuite
 (def execution-plan-test
   (test-suite "execution plan"
-    (poo-flow-test-case "strategy lowers flows into named plan nodes"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
+    (yuanxu-test-case "strategy lowers flows into named plan nodes"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
+             (double (scheme-flow
+		      'double
+		      (Fun Number <- Number)
+		      (lambda (x) (* x 2))))
              (pipeline (flow-then 'inc-then-double inc double))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
@@ -332,10 +396,19 @@
         (check-equal? (plan-node-name second-node) 'double)
         (check-equal? (plan-node-dependencies second-node)
                       '((node inc-then-double 0 pure inc)))))
-    (poo-flow-test-case "exposes dependency graph inspection helpers"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
-             (label (pure-flow 'label (lambda (x) x) 'number 'number))
+    (yuanxu-test-case "exposes dependency graph inspection helpers"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
+             (double (scheme-flow
+		      'double
+		      (Fun Number <- Number)
+		      (lambda (x) (* x 2))))
+             (label (pure-flow
+		     'label
+		     (Fun Number <- Number)
+		     (lambda (x) x)))
              (pipeline (flow-then 'graph-demo
                                   (flow-then 'inc-then-double inc double)
                                   label))
@@ -367,9 +440,15 @@
         (check-equal? (plan-node-root? second-node) #f)
         (check-equal? (plan-node-depends-on? second-node (plan-node-id first-node)) #t)
         (check-equal? (plan-node-depends-on? third-node (plan-node-id first-node)) #f)))
-    (poo-flow-test-case "lowers branch flows into a DAG"
-      (let* ((left (pure-flow 'left (lambda (x) (+ x 1)) 'number 'number))
-             (right (pure-flow 'right (lambda (x) (* x 2)) 'number 'number))
+    (yuanxu-test-case "lowers branch flows into a DAG"
+      (let* ((left (pure-flow
+		    'left
+		    (Fun Number <- Number)
+		    (lambda (x) (+ x 1))))
+             (right (pure-flow
+		     'right
+		     (Fun Number <- Number)
+		     (lambda (x) (* x 2))))
              (branch (flow-branch 'fanout left right))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
@@ -405,10 +484,19 @@
 ;; : TestSuite
 (def strategy-frontier-test
   (test-suite "strategy frontier policy"
-    (poo-flow-test-case "selects ready nodes from completed dependency ids"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
-             (label (pure-flow 'label (lambda (x) x) 'number 'number))
+    (yuanxu-test-case "selects ready nodes from completed dependency ids"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
+             (double (scheme-flow
+		      'double
+		      (Fun Number <- Number)
+		      (lambda (x) (* x 2))))
+             (label (pure-flow
+		     'label
+		     (Fun Number <- Number)
+		     (lambda (x) x)))
              (pipeline (flow-then 'frontier-demo
                                   (flow-then 'inc-then-double inc double)
                                   label))
@@ -455,10 +543,19 @@
 ;; : TestSuite
 (def receipt-audit-test
   (test-suite "receipt audit summary"
-    (poo-flow-test-case "exports replay events in execution order"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
-             (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
-             (label (pure-flow 'label (lambda (x) x) 'number 'number))
+    (yuanxu-test-case "exports replay events in execution order"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
+             (double (scheme-flow
+		      'double
+		      (Fun Number <- Number)
+		      (lambda (x) (* x 2))))
+             (label (pure-flow
+		     'label
+		     (Fun Number <- Number)
+		     (lambda (x) x)))
              (pipeline (flow-then 'audit-demo
                                   (flow-then 'inc-then-double inc double)
                                   label))
@@ -498,8 +595,12 @@
         (check-equal? (cdr (assoc 'frontier root-event))
                       '((node audit-demo 0 pure inc)))
         (check-equal? (cdr (assoc 'task third-event)) 'label)))
-    (poo-flow-test-case "counts adapter request receipts"
-      (let* ((external (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+    (yuanxu-test-case "counts adapter request receipts"
+      (let* ((external (external-flow
+			'compile
+			'rust-build
+			'((crate . "agentic-ai-lab"))
+			(Fun AdapterResult <- Any)))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (receipt (run-result-receipt (runner-run runner external 'input-artifact)))
@@ -517,16 +618,22 @@
 ;; : TestSuite
 (def strategy-cache-test
   (test-suite "strategy cache policy"
-    (poo-flow-test-case "records cache bypass for no-cache task receipts"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+    (yuanxu-test-case "records cache bypass for no-cache task receipts"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner inc 5))
              (child (car (receipt-children (run-result-receipt result)))))
         (check-equal? (run-result-value result) 6)
         (check-equal? (receipt-cache child) '(cache-bypass inc pure))))
-    (poo-flow-test-case "records cache intent in task receipts"
-      (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+    (yuanxu-test-case "records cache intent in task receipts"
+      (let* ((inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
              (runner (make-runner (make-cached-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner inc 5))
@@ -543,15 +650,27 @@
 ;; : TestSuite
 (def store-cache-semantics-test
   (test-suite "store cache semantics"
-    (poo-flow-test-case "exposes store operation semantics"
-      (let ((put (make-store-task 'put-cache 'put '((path . "target")) 'artifact 'artifact))
-            (get (make-store-task 'get-cache 'get 'cache-handle 'artifact 'artifact)))
+    (yuanxu-test-case "exposes store operation semantics"
+      (let ((put (make-store-task
+		  'put-cache
+		  'put
+		  '((path . "target"))
+		  (Fun AdapterResult <- Any)))
+            (get (make-store-task
+		  'get-cache
+		  'get
+		  'cache-handle
+		  (Fun AdapterResult <- Any))))
         (check-equal? (task-store-operation put) 'put)
         (check-equal? (task-store-payload get) 'cache-handle)
         (check-equal? (task-store-put? put) #t)
         (check-equal? (task-store-get? get) #t)))
-    (poo-flow-test-case "routes store put through the store adapter slot"
-      (let* ((put (store-flow 'put-cache 'put '((path . "target")) 'artifact 'artifact))
+    (yuanxu-test-case "routes store put through the store adapter slot"
+      (let* ((put (store-flow
+		   'put-cache
+		   'put
+		   '((path . "target"))
+		   (Fun AdapterResult <- Any)))
              (result (run-flow-with-config (make-store-run-config)
                                            put
                                            'input-artifact))
@@ -571,8 +690,12 @@
                         requested
                         (request put-cache store)
                         #f))))
-    (poo-flow-test-case "routes store get through the store adapter slot"
-      (let* ((get (store-flow 'get-cache 'get 'cache-handle 'artifact 'artifact))
+    (yuanxu-test-case "routes store get through the store adapter slot"
+      (let* ((get (store-flow
+		   'get-cache
+		   'get
+		   'cache-handle
+		   (Fun AdapterResult <- Any)))
              (result (run-flow-with-config (make-store-run-config)
                                            get
                                            'input-artifact))

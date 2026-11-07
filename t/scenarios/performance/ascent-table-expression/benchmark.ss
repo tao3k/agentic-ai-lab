@@ -1,0 +1,26 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;;
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+((benchmarkKind . scenario-e2e)
+ (max_total . 2000us)
+ (target_total . 950us)
+ (regression_budget . 1050us)
+ (expected_over_input_budget . 1000us)
+ (sampleCount . 20)
+ (targetRationale . "Measure index construction and demanded two-hop relation composition together over 512 source pairs.")
+ (maxRssMb . 256)
+ (memoryMetric . resident-set-size)
+ (memoryUnit . "MB")
+ (unit . "us")
+ (sourcePath . "t/scenarios/performance/ascent-table-expression/benchmark.ss")
+ (rule . GERBIL-SCHEME-AGENT-R031)
+ (feature . ascent-table-expression)
+ (optimizationFocus . "optimized Scheme module with official UIntTrieSet foldl input, local vector adjacency, bounded byte-vector deduplication, and canonical list-sort output")
+ (inputShape . "256 vertices with two outgoing edges each, encoded as 512 bounded binary pairs")
+ (expectedOutcome . "one- and two-hop relation projection has 1024 distinct pairs")
+ (expectedRepair . "preserve the indexed bounded join and POO slot demand; keep source encoding and MRR admission separate")
+ (baseline . "prior optimized persistent SimpleTrie and UIntTrieSet index/compose/union implementation")
+ (candidate . "POO expression with private vector index, bounded byte-vector deduplication, and canonical list output")
+ (measurementPhases baseline-projection candidate-projection assert-semantic-gate assert-time-gate observe-runtime-memory)
+ (tags poo ascent relation stdlib performance big-o))

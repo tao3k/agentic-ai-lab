@@ -5,53 +5,53 @@
 
 ;;; Boundary: agent-scoped tool permission policy.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-agent-tool-policy-test)
 
 ;; : TestSuite
 (def session-agent-tool-policy-test
-  (test-suite "poo-flow session agent tool policy"
-    (poo-flow-test-case "admits only explicitly granted agent tools"
+  (test-suite "agentic-ai-lab session agent tool policy"
+    (yuanxu-test-case "admits only explicitly granted agent tools"
       (let* ((read-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/read
                'read-workspace-file
                '(read)
                '(project-workspace)
                '(agent-turn)))
              (run-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/build
                'run-build-command
                '(run)
                '(project-workspace build-cache)
                '(agent-turn)))
              (policy
-              (poo-flow-session-tool-permission-policy
+              (agentic-ai-lab-session-tool-permission-policy
                'policy/build-agent-tools
                'session/build
                (list read-grant run-grant)
                '(write-workspace-file)
                'deny)))
-        (check-equal? (poo-flow-session-tool-permission-policy-allows?
+        (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                        policy
                        'read-workspace-file
                        'read)
                       #t)
-        (check-equal? (poo-flow-session-tool-permission-policy-allows?
+        (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                        policy
                        'run-build-command
                        'run)
                       #t)
-        (check-equal? (poo-flow-session-tool-permission-policy-allows?
+        (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                        policy
                        'write-workspace-file
                        'write)
                       #f)
-        (check-equal? (poo-flow-session-policy-default-action policy)
+        (check-equal? (agentic-ai-lab-session-policy-default-action policy)
                       'deny)))))

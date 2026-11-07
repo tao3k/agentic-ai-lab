@@ -10,7 +10,9 @@ test --test_output=errors
 
 build:macos --repo_env=BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 build:macos --repo_env=CC=/Library/Developer/CommandLineTools/usr/bin/clang
-build:macos --macos_minimum_os=10.15
+# Current libc++ requires macOS 11; retain strict C++ consumer diagnostics.
+# llvm/llvm-project@2bb98857c2ee971fe7428b577c6e27256bc71450
+build:macos --macos_minimum_os=11.0
 build:macos --copt=-isysroot
 build:macos --copt=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 build:macos --linkopt=-isysroot

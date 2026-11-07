@@ -7,9 +7,9 @@ from __future__ import annotations
 import anyio
 import pytest
 
-from poo_flow_runtime.durable_adapter import RuntimeDurableAdapter
-from poo_flow_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
-from poo_flow_runtime.runtime_graph import (
+from agentic_ai_lab_runtime.durable_adapter import RuntimeDurableAdapter
+from agentic_ai_lab_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
+from agentic_ai_lab_runtime.runtime_graph import (
     END,
     START,
     RuntimeGraphEdge,
@@ -23,7 +23,7 @@ def test_turso_durable_adapter_consumes_scheme_manifest(tmp_path) -> None:
     adapter = RuntimeDurableAdapter.turso(
         tmp_path / "adapter.db",
         policy=(
-            b"policy-id=poo-flow-durable-policy.v1\n"
+            b"policy-id=agentic-ai-lab-durable-policy.v1\n"
             b"owner=scheme\n"
             b"checkpoint-id-strategy=runtime-generated\n"
             b"require-plan-digest-match=true\n"
@@ -38,7 +38,7 @@ def test_turso_durable_adapter_consumes_scheme_manifest(tmp_path) -> None:
     receipt = adapter.receipt()
 
     assert adapter.store.get(("agent",), "state").value == {"value": 1}
-    assert b"poo-flow-durable-adapter.v1" in receipt
+    assert b"agentic-ai-lab-durable-adapter.v1" in receipt
     assert b"owner=scheme" in receipt
     assert b"backend=turso" in receipt
     assert b"driver=turso" in receipt

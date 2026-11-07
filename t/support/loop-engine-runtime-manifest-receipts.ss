@@ -32,7 +32,7 @@
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'lineage-receipt)
                           'contract)
-                'poo-flow.loop-engine.lineage-receipt.v1)
+                'agentic-ai-lab.loop-engine.lineage-receipt.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'lineage-receipt)
                           'parent-session-refs)
@@ -52,7 +52,7 @@
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'selector-receipt)
                           'contract)
-                'poo-flow.loop-engine.selector-receipt.v1)
+                'agentic-ai-lab.loop-engine.selector-receipt.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'selector-receipt)
                           'candidates)
@@ -68,7 +68,7 @@
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'resource-dispatch-receipt)
                           'contract)
-                'poo-flow.loop-engine.resource-dispatch-receipt.v1)
+                'agentic-ai-lab.loop-engine.resource-dispatch-receipt.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'resource-dispatch-receipt)
                           'tool-refs)
@@ -118,7 +118,7 @@
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'compression-receipt)
                           'contract)
-                'poo-flow.loop-engine.compression-receipt.v1)
+                'agentic-ai-lab.loop-engine.compression-receipt.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'compression-receipt)
                           'strategy)
@@ -195,7 +195,7 @@
                  (test-ref runtime-manifest-request
                            'spec-evolution-runtime-manifest-rows)
                  'schema)
-                '(poo-flow.spec-evolution.runtime-manifest-row.v1))
+                '(agentic-ai-lab.spec-evolution.runtime-manifest-row.v1))
   (check-equal? (test-field-values
                  (test-ref runtime-manifest-request
                            'spec-evolution-runtime-manifest-rows)

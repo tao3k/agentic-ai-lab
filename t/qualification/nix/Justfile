@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+# Product adapter roots; dependency traversal belongs to Core, not shell lists.
+set shell := ["bash", "-euo", "pipefail", "-c"]
+root := justfile_directory() + "/../../.."
+# Reuse the existing test VM setting in standalone Nix qualification.
+vm := "-:max-heap=" + env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") + ",debug=q"
+
+build:
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1200s gerbil {{ vm }} interactive t/qualification/nix/build.ss compile
+
+# Nix-specific approval preparation; Core owns the restarted publication worker.
+approved-producer workspace:
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" {{ vm }} approved "{{ workspace }}"
+
+# Fresh Lab-owned tool processes retain the same protocol arguments.
+publication-worker workspace library identity mode record:
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" {{ vm }} worker "{{ workspace }}" "{{ library }}" "{{ identity }}" "{{ mode }}" "{{ record }}"
+
+approved-worker workspace mode:
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" {{ vm }} worker "{{ workspace }}" "approved-{{ mode }}"
+
+store-producer workspace:
+    cd "{{ root }}/core" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" {{ vm }} store "{{ workspace }}"
+
+store-worker workspace library identity mode record selected candidate:
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" {{ vm }} worker "{{ workspace }}" "{{ library }}" "{{ identity }}" "{{ mode }}" "{{ record }}" "{{ selected }}" "{{ candidate }}"
+
+# Read the actual Nix-selected head in an independent bounded process.
+head-reader profile:
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s gxi {{ vm }} t/qualification/build-publication/nix-head-reader.ss "{{ profile }}"

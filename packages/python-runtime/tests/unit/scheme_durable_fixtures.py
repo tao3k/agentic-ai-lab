@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 
-_SCHEME_PAYLOAD_SEPARATOR = b"\n--poo-flow-runtime-envelope--\n"
+_SCHEME_PAYLOAD_SEPARATOR = b"\n--agentic-ai-lab-runtime-envelope--\n"
 
 
 @lru_cache(maxsize=1)
@@ -25,36 +25,38 @@ def _scheme_generated_durable_payloads() -> tuple[bytes, bytes]:
         pytest.skip("package-local Gerbil build output is not available")
 
     env = os.environ.copy()
-    env["GERBIL_LOADPATH"] = ".gerbil/lib"
+    env.setdefault("GERBIL_LOADPATH", ".gerbil/lib")
     result = subprocess.run(
         [
             "gxi",
+            "-:max-heap=1G,debug=q",
             "-e",
             (
                 "(begin "
-                "(import :poo-flow/modules/memory-core/durable/policy "
-                ":poo-flow/modules/memory-core/durable/policy-manifest "
-                ":poo-flow/modules/memory-core/durable/store "
-                ":poo-flow/modules/memory-core/durable/store-backend "
-                ":poo-flow/modules/memory-core/durable/runtime-manifest) "
+                "(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy "
+                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest "
+                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store "
+                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend "
+                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest) "
                 "(define policy "
-                "(poo-flow-durable-policy "
+                "(agentic-ai-lab-durable-policy "
                 "(quote durable/python-runtime-envelope) "
                 "(quote shared))) "
                 "(display "
-                "(poo-flow-durable-policy-runtime-manifest-string policy)) "
-                "(display \"\\n--poo-flow-runtime-envelope--\\n\") "
+                "(agentic-ai-lab-durable-policy-runtime-manifest-string policy)) "
+                "(display \"\\n--agentic-ai-lab-runtime-envelope--\\n\") "
                 "(display "
-                "(poo-flow-durable-runtime-manifest-string "
+                "(agentic-ai-lab-durable-runtime-manifest-string "
                 "policy "
-                "poo-flow-durable-runtime-store-contract/default "
-                "poo-flow-durable-runtime-store-backend/default)))"
+                "agentic-ai-lab-durable-runtime-store-contract/default "
+                "agentic-ai-lab-durable-runtime-store-backend/default)))"
             ),
         ],
         cwd=repo_root,
         env=env,
         check=True,
         capture_output=True,
+        timeout=90,
     )
     policy_manifest, runtime_envelope = result.stdout.split(
         _SCHEME_PAYLOAD_SEPARATOR,

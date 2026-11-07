@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-schema = "poo-flow-proof-case-vector"
+schema = "agentic-ai-lab-proof-case-vector"
 version = 1
 endianness = "little"
 alignment = 8
@@ -10,8 +10,8 @@ total_size = 424
 
 [proof_identity]
 digest_algorithm = "sha256"
-vector_domain = "poo-flow.proof-case-vector.v1"
-theorem_set_domain = "poo-flow.authorized-effect-theorem-set.v1"
+vector_domain = "agentic-ai-lab.proof-case-vector.v1"
+theorem_set_domain = "agentic-ai-lab.authorized-effect-theorem-set.v1"
 theorems = [
   "policy_revision_bound",
   "effect_digest_bound",

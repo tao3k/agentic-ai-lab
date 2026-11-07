@@ -7,7 +7,7 @@ import { randomUUID } from "node:crypto";
 
 import { acquirePublicationLock } from "../scripts/publication-lock.mjs";
 
-const scope = `poo-flow-publication-lock-test:${randomUUID()}`;
+const scope = `agentic-ai-lab-publication-lock-test:${randomUUID()}`;
 let active = 0;
 let maximumActive = 0;
 
@@ -28,7 +28,7 @@ await Promise.all(
 assert.equal(active, 0);
 assert.equal(maximumActive, 1, "publication lock must serialize four writers");
 
-const heldScope = `poo-flow-publication-lock-timeout-test:${randomUUID()}`;
+const heldScope = `agentic-ai-lab-publication-lock-timeout-test:${randomUUID()}`;
 const releaseHeldLock = await acquirePublicationLock(heldScope);
 try {
   await assert.rejects(

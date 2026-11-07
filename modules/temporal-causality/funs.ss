@@ -3,55 +3,57 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: finite structural analysis over one explicit POO Flow Graph.
+;;; Boundary: finite structural analysis over one explicit Agentic AI Lab Graph.
 ;;; Invariant: the result is output-sensitive O(V + E + witness bytes), inert,
 ;;; and never promoted to temporal causality or action authority.
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every filter find delete-duplicates/hash)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/src/graph/types
-                 poo-flow-graph poo-flow-graph-edge poo-flow-graph-node
-                 poo-flow-graph? poo-flow-graph-id poo-flow-graph-nodes
-                 poo-flow-graph-edges poo-flow-graph-node-id
-                 poo-flow-graph-edge-from poo-flow-graph-edge-to
-                 poo-flow-graph-edge-kind)
-        (only-in :poo-flow/modules/temporal-causality/objects
-                 poo-flow-relation-trajectory-witness
-                 poo-flow-structural-impact-receipt
-                 poo-flow-causal-event-graph-value
-                 poo-flow-causal-trajectory-assessment
-                 poo-flow-causal-cut-value
-                 poo-flow-temporal-classification-receipt
-                 poo-flow-temporal-model-value
-                 poo-flow-temporal-model-receipt)
-        (only-in :poo-flow/modules/temporal-causality/types
-                 poo-flow-causal-event? poo-flow-causal-event-graph?
-                 poo-flow-causal-trajectory-contract?
-                 poo-flow-causal-trajectory-assessment?
-                 poo-flow-causal-cut?
-                 poo-flow-temporal-clock-domain?
-                 poo-flow-temporal-model-observation?
-                 poo-flow-temporal-hypothesis?
-                 poo-flow-temporal-model?
-                 poo-flow-temporal-query?))
+        (only-in :yuanxu/graph/types-core
+                 yuanxu-graph yuanxu-graph-edge yuanxu-graph-node
+                 yuanxu-graph? yuanxu-graph-id yuanxu-graph-nodes
+                 yuanxu-graph-edges yuanxu-graph-node-id
+                 yuanxu-graph-edge-from yuanxu-graph-edge-to
+                 yuanxu-graph-edge-kind)
+        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+                 agentic-ai-lab-relation-trajectory-witness
+                 agentic-ai-lab-structural-impact-receipt
+                 agentic-ai-lab-causal-event-graph-value
+                 agentic-ai-lab-causal-trajectory-assessment
+                 agentic-ai-lab-causal-cut-value
+                 agentic-ai-lab-temporal-classification-receipt
+                 agentic-ai-lab-temporal-model-value
+                 agentic-ai-lab-temporal-model-receipt)
+        (only-in :agentic-ai-lab/modules/temporal-causality/types
+                 agentic-ai-lab-causal-event? agentic-ai-lab-causal-event-graph?
+                 agentic-ai-lab-causal-trajectory-contract?
+                 agentic-ai-lab-causal-trajectory-assessment?
+                 agentic-ai-lab-causal-cut?
+                 agentic-ai-lab-temporal-clock-domain?
+                 agentic-ai-lab-temporal-model-observation?
+                 agentic-ai-lab-temporal-hypothesis?
+                 agentic-ai-lab-temporal-model?
+                 agentic-ai-lab-temporal-query?))
 
-(export poo-flow-structural-impact-analyze
-        poo-flow-causal-event-graph
-        poo-flow-causal-trajectory-assess
-        poo-flow-causal-trajectory-assessment-digest
-        poo-flow-causal-cut
-        poo-flow-temporal-causal-classify
-        poo-flow-temporal-model
-        poo-flow-temporal-model-classify)
+(export agentic-ai-lab-structural-impact-analyze
+        agentic-ai-lab-causal-event-graph
+        agentic-ai-lab-causal-trajectory-assess
+        agentic-ai-lab-causal-trajectory-assessment-digest
+        agentic-ai-lab-causal-cut
+        agentic-ai-lab-temporal-causal-classify
+        agentic-ai-lab-temporal-model
+        agentic-ai-lab-temporal-overlapping-model
+        agentic-ai-lab-temporal-model-replay
+        agentic-ai-lab-temporal-model-classify)
 
 (def (temporal-causality-unique? values)
   (= (length values) (length (delete-duplicates/hash values))))
 
-(def (poo-flow-structural-impact-analyze
+(def (agentic-ai-lab-structural-impact-analyze
       graph changed-node-ids selected-relations direction inventory-complete?)
-  (unless (poo-flow-graph? graph)
-    (error "structural Impact requires a POO Flow Graph" graph))
+  (unless (yuanxu-graph? graph)
+    (error "structural Impact requires a Agentic AI Lab Graph" graph))
   (unless (and (list? changed-node-ids) (pair? changed-node-ids)
                (temporal-causality-unique? changed-node-ids)
                (list? selected-relations) (pair? selected-relations)
@@ -64,11 +66,11 @@
         (unresolved '()))
     (for-each
      (lambda (node)
-       (let (id (poo-flow-graph-node-id node))
+       (let (id (yuanxu-graph-node-id node))
          (when (hash-get node-index id)
            (error "duplicate graph node identity" id))
          (hash-put! node-index id node)))
-     (poo-flow-graph-nodes graph))
+     (yuanxu-graph-nodes graph))
     (for-each
      (lambda (changed)
        (unless (hash-get node-index changed)
@@ -76,9 +78,9 @@
      changed-node-ids)
     (for-each
      (lambda (edge)
-       (let ((relation (poo-flow-graph-edge-kind edge))
-             (from (poo-flow-graph-edge-from edge))
-             (to (poo-flow-graph-edge-to edge)))
+       (let ((relation (yuanxu-graph-edge-kind edge))
+             (from (yuanxu-graph-edge-from edge))
+             (to (yuanxu-graph-edge-to edge)))
          (when (memq relation selected-relations)
            (if (and (hash-get node-index from) (hash-get node-index to))
              (let* ((origin (if (eq? direction 'dependents) to from))
@@ -88,13 +90,13 @@
                           (cons (cons destination relation) neighbors)))
              (set! unresolved
                    (cons (list from relation to) unresolved))))))
-     (poo-flow-graph-edges graph))
+     (yuanxu-graph-edges graph))
     (let ((witness-index (make-hash-table))
           (affected-reverse '()))
       (for-each
        (lambda (changed)
          (let (witness
-               (poo-flow-relation-trajectory-witness
+               (agentic-ai-lab-relation-trajectory-witness
                 changed (list changed) '()))
            (hash-put! witness-index changed witness)
            (set! affected-reverse (cons changed affected-reverse))))
@@ -113,7 +115,7 @@
                      (relation (cdr neighbor+relation)))
                  (unless (hash-get witness-index neighbor)
                    (let (witness
-                         (poo-flow-relation-trajectory-witness
+                         (agentic-ai-lab-relation-trajectory-witness
                           neighbor
                           (append (.ref parent 'node-path) (list neighbor))
                           (append (.ref parent 'relation-path)
@@ -135,9 +137,9 @@
                    ((pair? unresolved-edges) 'invalid-inventory)
                    ((not inventory-complete?) 'partial-impact)
                    (else 'snapshot-scoped-impact))))
-            (poo-flow-structural-impact-receipt
+            (agentic-ai-lab-structural-impact-receipt
              status
-             (poo-flow-graph-id graph)
+             (yuanxu-graph-id graph)
              changed-node-ids
              direction
              selected-relations
@@ -153,17 +155,29 @@
      (string->utf8
       (call-with-output-string (lambda (port) (write value port))))))))
 
-;;; A model is one finite, exclusive family of candidate explanations for the
-;;; same effect. Input order does not change its semantic identity.
-(def (poo-flow-temporal-model
+;;; A model is one finite family of candidate explanations for the same
+;;; effect. Input order does not change its semantic identity. Family
+;;; semantics are explicit because a unique surviving candidate only implies
+;;; necessity under an exclusive, complete explanation vocabulary.
+(def (agentic-ai-lab-temporal-model
       identity domains observations hypotheses family-complete?)
+  (temporal-model-build identity domains observations hypotheses
+                        family-complete? 'exclusive-explanations))
+
+(def (agentic-ai-lab-temporal-overlapping-model
+      identity domains observations hypotheses family-complete?)
+  (temporal-model-build identity domains observations hypotheses
+                        family-complete? 'overlapping-mechanisms))
+
+(def (temporal-model-build
+      identity domains observations hypotheses family-complete? semantics)
   (unless (and (string? identity) (> (string-length identity) 0)
                (list? domains) (pair? domains)
-               (every poo-flow-temporal-clock-domain? domains)
+               (every agentic-ai-lab-temporal-clock-domain? domains)
                (list? observations)
-               (every poo-flow-temporal-model-observation? observations)
+               (every agentic-ai-lab-temporal-model-observation? observations)
                (list? hypotheses) (pair? hypotheses)
-               (every poo-flow-temporal-hypothesis? hypotheses)
+               (every agentic-ai-lab-temporal-hypothesis? hypotheses)
                (boolean? family-complete?))
     (error "invalid temporal model inventory" identity))
   (def (identities values)
@@ -199,8 +213,8 @@
                  (list-sort by-id (.ref hypothesis 'constraints)))))
          (digest
           (temporal-causality-digest
-           (list 'poo-flow.temporal-causality.model.v1
-                 identity family-complete?
+           (list 'agentic-ai-lab.temporal-causality.model.v2
+                 identity family-complete? semantics
                  (map (lambda (domain)
                         (list (.ref domain 'identity)
                               (.ref domain 'clock-role)))
@@ -218,12 +232,25 @@
                               (.ref hypothesis 'effect-observation-id)
                               (canonical-constraints hypothesis)))
                       (list-sort by-id hypotheses))))))
-    (poo-flow-temporal-model-value
+    (agentic-ai-lab-temporal-model-value
      identity digest
      (list-sort by-id domains)
      (list-sort by-id observations)
      (list-sort by-id hypotheses)
-     family-complete?)))
+     family-complete? semantics)))
+
+(def (agentic-ai-lab-temporal-model-replay model)
+  (unless (agentic-ai-lab-temporal-model? model)
+    (error "invalid temporal model"))
+  (let (canonical
+        (temporal-model-build
+         (.ref model 'identity) (.ref model 'domains)
+         (.ref model 'observations) (.ref model 'hypotheses)
+         (.ref model 'family-complete?) (.ref model 'family-semantics)))
+    (unless (equal? (.ref canonical 'semantic-digest)
+                    (.ref model 'semantic-digest))
+      (error "temporal model digest mismatch"))
+    canonical))
 
 (def (temporal-model-order-status left-id right-id relation observations)
   (let ((left (hash-get observations left-id))
@@ -259,12 +286,14 @@
           ((memq 'unknown statuses) 'unknown)
           (else 'admitted))))
 
-;;; Classification quantifies over the declared, exclusive candidate worlds.
-;;; Unknown and unexplored worlds prevent a necessary claim.
-(def (poo-flow-temporal-model-classify model query)
-  (unless (and (poo-flow-temporal-model? model)
-               (poo-flow-temporal-query? query))
+;;; Classification evaluates only the declared candidate family. Unknown and
+;;; unexplored members prevent necessity; overlapping mechanisms never imply
+;;; necessity even if just one member survives the finite check.
+(def (agentic-ai-lab-temporal-model-classify model query)
+  (unless (and (agentic-ai-lab-temporal-model? model)
+               (agentic-ai-lab-temporal-query? query))
     (error "temporal model classification requires a model and query"))
+  (agentic-ai-lab-temporal-model-replay model)
   (let* ((hypotheses (.ref model 'hypotheses))
          (target (.ref query 'hypothesis-identity))
          (observations (make-hash-table)))
@@ -290,11 +319,13 @@
                  ((member target admitted)
                   (if (and exhausted?
                            (.ref model 'family-complete?)
+                           (eq? (.ref model 'family-semantics)
+                                'exclusive-explanations)
                            (null? unknown)
                            (= (length admitted) 1))
                     'necessary 'possible))
                  (else 'unknown))))
-          (poo-flow-temporal-model-receipt
+          (agentic-ai-lab-temporal-model-receipt
            model query classification admitted refuted unknown unexplored
            exhausted?))
         (let* ((hypothesis (car remaining))
@@ -336,7 +367,7 @@
 (def (causal-events-analyze subject events)
   (unless (and (string? subject) (> (string-length subject) 0)
                (list? events) (pair? events)
-               (every poo-flow-causal-event? events))
+               (every agentic-ai-lab-causal-event? events))
     (error "invalid causal event subject or inventory" subject))
   (let ((event-index (make-hash-table))
         (missing-index (make-hash-table))
@@ -362,7 +393,9 @@
           (lambda (parent-identity)
             (let (parent (hash-get event-index parent-identity))
               (if parent
-                (when (> (causal-event-position parent) event-position)
+                ;; A causal parent must precede its child. Equal positions
+                ;; also admit same-time cycles, so they cannot be qualified.
+                (when (>= (causal-event-position parent) event-position)
                   (set! violations-reverse
                         (cons (list parent-identity event-identity)
                               violations-reverse)))
@@ -377,15 +410,15 @@
             (reverse missing-reverse)
             (reverse violations-reverse))))
 
-(def (poo-flow-causal-event-graph subject events)
+(def (agentic-ai-lab-causal-event-graph subject events)
   (let-values (((ordered event-index missing violations)
                 (causal-events-analyze subject events)))
     (let (identity
           (temporal-causality-digest
-           (list 'poo-flow.temporal-causality.causal-event-graph.v1
+           (list 'agentic-ai-lab.temporal-causality.causal-event-graph.v1
                  subject
                  (map causal-event-canonical ordered))))
-      (poo-flow-causal-event-graph-value
+      (agentic-ai-lab-causal-event-graph-value
        identity subject ordered event-index missing violations))))
 
 (def (causal-trajectory-diagnostic code identity detail)
@@ -432,10 +465,10 @@
        ((pair? back) (loop (reverse back) '()))
        (else visited)))))
 
-(def (poo-flow-causal-trajectory-assess contract event-graph)
-  (unless (poo-flow-causal-trajectory-contract? contract)
+(def (agentic-ai-lab-causal-trajectory-assess contract event-graph)
+  (unless (agentic-ai-lab-causal-trajectory-contract? contract)
     (error "invalid causal trajectory contract" contract))
-  (unless (poo-flow-causal-event-graph? event-graph)
+  (unless (agentic-ai-lab-causal-event-graph? event-graph)
     (error "causal trajectory requires a causal event graph" event-graph))
   (let* ((event-index (.ref event-graph 'event-index))
          (trigger-id (.ref contract 'trigger-event-id))
@@ -544,20 +577,20 @@
              (reject! 'detached-error-impact identity error-ids)))
          error-impact-ids)))
     (let ((diagnostics (reverse diagnostics-reverse)))
-      (poo-flow-causal-trajectory-assessment
+      (agentic-ai-lab-causal-trajectory-assessment
        (if (null? diagnostics)
          'causal-trajectory-admitted
          'causal-trajectory-rejected)
        contract event-graph diagnostics))))
 
 ;;; Stable cross-engine identity for the exact declarative trajectory and its
-;;; Scheme assessment. TLA+, Lean and Cedar bind this digest; none of them
+;;; Scheme assessment. Quint, Lean and Cedar bind this digest; none of them
 ;;; reconstructs a second trajectory DSL.
-(def (poo-flow-causal-trajectory-assessment-digest assessment)
-  (unless (poo-flow-causal-trajectory-assessment? assessment)
+(def (agentic-ai-lab-causal-trajectory-assessment-digest assessment)
+  (unless (agentic-ai-lab-causal-trajectory-assessment? assessment)
     (error "invalid causal trajectory assessment" assessment))
   (temporal-causality-digest
-   (list 'poo-flow.temporal-causality.causal-trajectory-assessment.v1
+   (list 'agentic-ai-lab.temporal-causality.causal-trajectory-assessment.v1
          (.ref assessment 'status)
          (.ref assessment 'accepted?)
          (.ref assessment 'contract-identity)
@@ -568,8 +601,8 @@
          (.ref assessment 'intended-impact-event-ids)
          (.ref assessment 'error-impact-event-ids))))
 
-(def (poo-flow-causal-cut event-graph as-of-position)
-  (unless (poo-flow-causal-event-graph? event-graph)
+(def (agentic-ai-lab-causal-cut event-graph as-of-position)
+  (unless (agentic-ai-lab-causal-event-graph? event-graph)
     (error "causal cut requires a causal event graph" event-graph))
   (unless (and (exact-integer? as-of-position) (>= as-of-position 0))
     (error "invalid causal cut position" as-of-position))
@@ -586,11 +619,11 @@
                    (.ref event-graph 'subject) committed-events)))
       (let (identity
             (temporal-causality-digest
-             (list 'poo-flow.temporal-causality.causal-cut.v1
+             (list 'agentic-ai-lab.temporal-causality.causal-cut.v1
                    (.ref event-graph 'identity)
                    as-of-position
                    (map (lambda (event) (.ref event 'identity)) ordered))))
-        (poo-flow-causal-cut-value
+        (agentic-ai-lab-causal-cut-value
          identity
          (.ref event-graph 'identity)
          (.ref event-graph 'subject)
@@ -598,10 +631,10 @@
 
 (def (causal-event-graph->graph event-graph)
   (let ((events (.ref event-graph 'events)))
-    (poo-flow-graph
+    (yuanxu-graph
      (list 'causal-event-graph (.ref event-graph 'identity))
      (map (lambda (event)
-            (poo-flow-graph-node
+            (yuanxu-graph-node
              (.ref event 'identity)
              event
              (list (cons 'entity-kind 'causal-event)
@@ -611,7 +644,7 @@
             (map
              (lambda (event)
                (map (lambda (parent)
-                      (poo-flow-graph-edge
+                      (yuanxu-graph-edge
                        parent (.ref event 'identity) 'CAUSAL_PARENT
                        (list (cons 'modality (.ref event 'modality)))))
                     (.ref event 'causal-parent-identities)))
@@ -630,12 +663,12 @@
      (append left right))
     (reverse result-reverse)))
 
-(def (poo-flow-temporal-causal-classify
+(def (agentic-ai-lab-temporal-causal-classify
       event-graph cut trigger-event-id horizon)
-  (unless (poo-flow-causal-event-graph? event-graph)
+  (unless (agentic-ai-lab-causal-event-graph? event-graph)
     (error "temporal classification requires a causal event graph"
            event-graph))
-  (unless (poo-flow-causal-cut? cut)
+  (unless (agentic-ai-lab-causal-cut? cut)
     (error "temporal classification requires a causal cut" cut))
   (unless (equal? (.ref cut 'event-graph-identity)
                   (.ref event-graph 'identity))
@@ -649,7 +682,7 @@
   (let* ((as-of-position (.ref cut 'as-of-position))
          (graph (causal-event-graph->graph event-graph))
          (structural
-          (poo-flow-structural-impact-analyze
+          (agentic-ai-lab-structural-impact-analyze
            graph (list trigger-event-id) '(CAUSAL_PARENT) 'dependencies
            (.ref event-graph 'complete?)))
          (affected-index (make-hash-table))
@@ -693,7 +726,7 @@
                  (pair? (.ref cut 'missing-parent-identities)))
              'partial-temporal-classification)
             (else 'bounded-temporal-classification))))
-      (poo-flow-temporal-classification-receipt
+      (agentic-ai-lab-temporal-classification-receipt
        status
        (.ref event-graph 'identity)
        (.ref cut 'identity)

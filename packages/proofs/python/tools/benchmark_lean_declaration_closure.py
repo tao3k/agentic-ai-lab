@@ -12,26 +12,26 @@ from statistics import median
 import time
 from typing import Mapping
 
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanClosureError,
     LeanDeclarationClosureRequest,
     export_declaration_closures,
 )
 
 
-SCHEMA_ID = "poo-flow.lean-declaration-closure-performance.v1"
+SCHEMA_ID = "agentic-ai-lab.lean-declaration-closure-performance.v1"
 REQUESTS = (
     LeanDeclarationClosureRequest(
-        root_module="PooFlowProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationLifecycleCore",
+        root_module="AgenticAILabProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationLifecycleCore",
         root_declarations=(
-            "PooFlowProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationLifecycleCore.SourceBoundEffectCompletionRecoveryCedarAuthorizationEvidence.Admitted",
+            "AgenticAILabProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationLifecycleCore.SourceBoundEffectCompletionRecoveryCedarAuthorizationEvidence.Admitted",
         ),
         proof_base_imports=("Cedar.Spec",),
     ),
     LeanDeclarationClosureRequest(
-        root_module="PooFlowProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridgeCore",
+        root_module="AgenticAILabProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridgeCore",
         root_declarations=(
-            "PooFlowProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridgeCore.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridge.lifecycleAdmitted",
+            "AgenticAILabProof.Enterprise.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridgeCore.SourceBoundEffectCompletionRecoveryCedarAuthorizationSubjectBridge.lifecycleAdmitted",
         ),
         proof_base_imports=("Cedar.Spec",),
     ),

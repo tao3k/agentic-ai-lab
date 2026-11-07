@@ -5,15 +5,15 @@
 
 ;;; Boundary: end-to-end complexity gate for the shared graph algorithms.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .ref)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/graph/types
-        :poo-flow/src/graph/algorithms)
+        :yuanxu/graph/types
+        :yuanxu/graph/algorithms)
 
 (export graph-algorithm-performance-test)
 
@@ -24,16 +24,16 @@
   (call-with-input-file graph-algorithm-performance-fixture-path read))
 
 (def (graph-algorithm-performance-linear-dag node-count)
-  (poo-flow-graph
+  (yuanxu-graph
    'graph-analysis/performance
-   (map poo-flow-graph-node (iota node-count))
+   (map yuanxu-graph-node (iota node-count))
    (map (lambda (index)
-          (poo-flow-graph-edge index (+ index 1)))
+          (yuanxu-graph-edge index (+ index 1)))
         (iota (- node-count 1)))))
 
 (def (graph-algorithm-performance-summary graph-value)
   (let-values (((receipt loop-receipt)
-                (poo-flow-graph-analysis-receipts graph-value)))
+                (yuanxu-graph-analysis-receipts graph-value)))
     (list (cons 'node-count (.ref receipt 'node-count))
           (cons 'edge-count (.ref receipt 'edge-count))
           (cons 'root-ids (.ref receipt 'root-ids))
@@ -52,14 +52,14 @@
   (cdr (assoc key row)))
 
 (def (graph-algorithm-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] graph-analysis-linear-dag ")
+  (display "[agentic-ai-lab-benchmark] graph-analysis-linear-dag ")
   (write receipt)
   (newline)
   (force-output))
 
 (def graph-algorithm-performance-test
   (test-suite "graph algorithm performance"
-    (poo-flow-test-case "analyzes and condenses a 1000-node linear DAG"
+    (yuanxu-test-case "analyzes and condenses a 1000-node linear DAG"
       (let* ((node-count 1000)
              (graph-value
               (graph-algorithm-performance-linear-dag node-count))

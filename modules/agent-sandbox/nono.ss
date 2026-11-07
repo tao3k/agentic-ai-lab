@@ -5,19 +5,19 @@
 
 ;;; Owner: nono profile alignment lives in this backend module.
 ;;; Boundary: core provides schema, task, envelope, and adapter protocols.
-;;; Import contract: users opt in through =:poo-flow/modules/agent-sandbox/nono= for profile defaults.
+;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox/nono= for profile defaults.
 ;;; Runtime contract: this module emits profile data only.
 ;;; Runtime contract: nono session startup stays behind Marlin runtime commands.
 ;;; Runtime contract: credentials and LLM calls stay out of Scheme.
 ;;; Policy evidence: tests should import this module when they assert nono defaults.
 
-(import :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/nono-profile-candidate)
+(import :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/nono-profile-candidate)
 
 (export make-nono-agent-sandbox-profile-descriptor
         make-nono-agent-sandbox-profile
-        (import: :poo-flow/modules/agent-sandbox/nono-profile-candidate))
+        (import: :agentic-ai-lab/modules/agent-sandbox/nono-profile-candidate))
 
 ;;; nono profile defaults model local zero-setup agent sandboxing. The ordinary
 ;;; helper form keeps backend defaults explicit and avoids macro-only evidence.

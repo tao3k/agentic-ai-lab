@@ -6,8 +6,8 @@
 ;;; Invariant: Scheme manufactures proof facts only; runtime execution stays
 ;;; behind the Marlin handoff boundary.
 (import (only-in :clan/poo/object .o)
-        :poo-flow/modules/loop-engine/session-agent-graph
-        :poo-flow/modules/session/objects-handoff)
+        :agentic-ai-lab/modules/loop-engine/session-agent-graph
+        :agentic-ai-lab/modules/session/objects-handoff)
 
 ;; : (-> Alist Symbol Object)
 (def (fact-ref facts key)
@@ -33,16 +33,16 @@
 ;; : (-> Alist Alist String Void)
 (def (check-lean-fact-contract! contracts facts label)
   (check-equal!
-   (poo-flow-lean-fact-contract-complete? contracts facts)
+   (agentic-ai-lab-lean-fact-contract-complete? contracts facts)
    #t
    label))
 
 ;; : (-> Void)
 (def (check-static-handoff-boundary!)
   (let* ((handoff
-          (.o kind: 'poo-flow.session.handoff
-              schema: 'poo-flow.session.handoff.v1
-              source: 'poo-flow-session-presentation
+          (.o kind: 'agentic-ai-lab.session.handoff
+              schema: 'agentic-ai-lab.session.handoff.v1
+              source: 'agentic-ai-lab-session-presentation
               session-id: "session-1"
               chunk-count: 2
               placement-profile-ref: "profile/default"
@@ -53,13 +53,13 @@
               runtime-executed: #f
               runtime-parses-scheme-source: #f
               scheme-manufactures-runtime-handlers: #f
-              metadata: (poo-flow-session-topology->handoff-metadata
+              metadata: (agentic-ai-lab-session-topology->handoff-metadata
                          (.o agent-registered?: #t
                              subagent-registered?: #t
                              channel-authorized?: #t))))
-         (facts (poo-flow-session-handoff->lean-facts handoff)))
+         (facts (agentic-ai-lab-session-handoff->lean-facts handoff)))
     (check-lean-fact-contract!
-     poo-flow-session-handoff-lean-fact-key-contracts
+     agentic-ai-lab-session-handoff-lean-fact-key-contracts
      facts
      'session-handoff-lean-fact-contract)
     (check-facts!
@@ -95,9 +95,9 @@
 ;; : (-> Void)
 (def (check-missing-profile-diagnostics!)
   (let* ((handoff
-          (.o kind: 'poo-flow.session.handoff
-              schema: 'poo-flow.session.handoff.v1
-              source: 'poo-flow-session-presentation
+          (.o kind: 'agentic-ai-lab.session.handoff
+              schema: 'agentic-ai-lab.session.handoff.v1
+              source: 'agentic-ai-lab-session-presentation
               session-id: "session-2"
               chunk-count: 1
               placement-profile-ref: #f
@@ -109,9 +109,9 @@
               runtime-parses-scheme-source: #f
               scheme-manufactures-runtime-handlers: #f
               metadata: '()))
-         (facts (poo-flow-session-handoff->lean-facts handoff)))
+         (facts (agentic-ai-lab-session-handoff->lean-facts handoff)))
     (check-lean-fact-contract!
-     poo-flow-session-handoff-lean-fact-key-contracts
+     agentic-ai-lab-session-handoff-lean-fact-key-contracts
      facts
      'missing-profile-lean-fact-contract)
     (check-facts!
@@ -126,9 +126,9 @@
 ;; : (-> Void)
 (def (check-topology-channel-denial!)
   (let* ((handoff
-          (.o kind: 'poo-flow.session.handoff
-              schema: 'poo-flow.session.handoff.v1
-              source: 'poo-flow-session-presentation
+          (.o kind: 'agentic-ai-lab.session.handoff
+              schema: 'agentic-ai-lab.session.handoff.v1
+              source: 'agentic-ai-lab-session-presentation
               session-id: "session-3"
               chunk-count: 1
               placement-profile-ref: "profile/default"
@@ -139,13 +139,13 @@
               runtime-executed: #f
               runtime-parses-scheme-source: #f
               scheme-manufactures-runtime-handlers: #f
-              metadata: (poo-flow-session-topology->handoff-metadata
+              metadata: (agentic-ai-lab-session-topology->handoff-metadata
                          (.o agent-registered?: #t
                              subagent-registered?: #t
                              channel-authorized?: #f))))
-         (facts (poo-flow-session-handoff->lean-facts handoff)))
+         (facts (agentic-ai-lab-session-handoff->lean-facts handoff)))
     (check-lean-fact-contract!
-     poo-flow-session-handoff-lean-fact-key-contracts
+     agentic-ai-lab-session-handoff-lean-fact-key-contracts
      facts
      'topology-denial-lean-fact-contract)
     (check-facts!
@@ -160,7 +160,7 @@
 ;; : (-> Void)
 (def (check-ui-scenario-lean-facts!)
   (let* ((facts
-          (poo-flow-ui-scenario->lean-facts
+          (agentic-ai-lab-ui-scenario->lean-facts
            (.o use-case-declared?: #t
                profile-declared?: #t
                governor-configured?: #t
@@ -179,7 +179,7 @@
                scenario-benchmark-done?: #t
                performance-fixture-bound?: #t))))
     (check-lean-fact-contract!
-     poo-flow-ui-scenario-lean-fact-key-contracts
+     agentic-ai-lab-ui-scenario-lean-fact-key-contracts
      facts
      'ui-scenario-lean-fact-contract)
     (check-facts!
@@ -198,7 +198,7 @@
 ;; : (-> Void)
 (def (check-ui-scenario-denial-lean-facts!)
   (let* ((facts
-          (poo-flow-ui-scenario->lean-facts
+          (agentic-ai-lab-ui-scenario->lean-facts
            (.o use-case-declared?: #t
                profile-declared?: #t
                governor-configured?: #t
@@ -217,7 +217,7 @@
                scenario-benchmark-done?: #f
                performance-fixture-bound?: #f))))
     (check-lean-fact-contract!
-     poo-flow-ui-scenario-lean-fact-key-contracts
+     agentic-ai-lab-ui-scenario-lean-fact-key-contracts
      facts
      'ui-denial-lean-fact-contract)
     (check-facts!
@@ -238,7 +238,7 @@
 ;; : (-> Void)
 (def (check-loop-engine-agent-graph-topology-metadata!)
   (let* ((graph
-         (poo-flow-user-loop-engine-intent-session-agent-graph
+         (agentic-ai-lab-user-loop-engine-intent-session-agent-graph
           '((use-case . s11-agent-topology)
             (agent-judges . ((planner . planner-agent)
                              (builder . builder-agent))))))

@@ -10,7 +10,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/list/walist walist)
         (only-in :std/encoding/json json->string)
-        :poo-flow/src/qualification/runtime-symbol-manifest)
+        :agentic-ai-lab/modules/workflow/qualification/runtime-symbol-manifest)
 
 (export main)
 
@@ -33,9 +33,9 @@
   (unless (= (length args) 2)
       (displayln "usage: gxi bindings/runtime-c/t/validate-runtime-v0-symbol-surface.ss MANIFEST.json ACTUAL.txt")
     (exit 64))
-  (let* ((manifest (poo-flow-runtime-symbol-manifest-read-file (car args)))
+  (let* ((manifest (agentic-ai-lab-runtime-symbol-manifest-read-file (car args)))
          (receipt
-          (poo-flow-runtime-symbol-manifest-verify
+          (agentic-ai-lab-runtime-symbol-manifest-verify
            manifest
            (read-lines (cadr args)))))
     (display

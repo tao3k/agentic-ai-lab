@@ -5,14 +5,14 @@
 
 ;;; Boundary: algorithmic performance gate for shared functional utilities.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        (only-in :poo-flow/src/utilities/functional
-                 poo-flow-stable-duplicates))
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-stable-duplicates))
 
 (export utilities-functional-performance-test)
 
@@ -27,21 +27,21 @@
     (and entry (cdr entry))))
 
 (def (functional-performance-summary values)
-  (let (duplicates (poo-flow-stable-duplicates values))
+  (let (duplicates (yuanxu-stable-duplicates values))
     (list (cons 'input-count (length values))
           (cons 'duplicate-count (length duplicates))
           (cons 'first-duplicate (car duplicates))
           (cons 'last-duplicate (car (reverse duplicates))))))
 
 (def (functional-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] functional-stable-duplicates ")
+  (display "[agentic-ai-lab-benchmark] functional-stable-duplicates ")
   (write receipt)
   (newline)
   (force-output))
 
 (def utilities-functional-performance-test
   (test-suite "functional utility algorithms"
-    (poo-flow-test-case "stable duplicate projection remains hash-linear at 20k inputs"
+    (yuanxu-test-case "stable duplicate projection remains hash-linear at 20k inputs"
       (let* ((unique-count 10000)
              (values (append (iota unique-count) (iota unique-count)))
              (summary (functional-performance-summary values))

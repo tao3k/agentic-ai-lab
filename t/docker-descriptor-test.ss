@@ -1,3 +1,6 @@
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -6,7 +9,7 @@
 ;;; Boundary: Docker descriptor tests cover tutorial-shaped request data only.
 ;;; Invariant: Scheme never pulls images, mounts volumes, or executes Docker.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,9 +20,9 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/docker/interface
-        :poo-flow/modules/agent-sandbox/resource)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/docker/interface
+        :agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export docker-descriptor-test)
 
@@ -42,24 +45,24 @@
 ;; : TestSuite
 (def docker-descriptor-test
   (test-suite "docker task descriptor"
-    (poo-flow-test-case "captures CCompilation-style docker payload"
+    (yuanxu-test-case "captures CCompilation-style docker payload"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (runtime-result 15 '(artifact ccompilation-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
-               (flow (docker-flow 'compile-c
-                                  "gcc:9.3.0"
-                                  "gcc"
-                                  '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                                  '(((store-item . example-src)
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+               (flow (docker-flow
+  'compile-c
+  "gcc:9.3.0"
+  "gcc"
+  '("/example/double.c" "/example/main.c" "-o" "/output/main")
+  '(((store-item . example-src)
                                      (mount-path . "/example"))
                                     ((store-item . output-dir)
                                      (mount-path . "/output")))
-                                  'process-handle
-                                  'integer
-                                  'process-handle))
+  'process-handle
+  (Fun AdapterResult <- Integer)))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
                (docker (request-config seen-request)))
@@ -69,7 +72,7 @@
           (check-equal? (cdr (assoc 'image docker)) "gcc:9.3.0")
           (check-equal? (cdr (assoc 'command docker)) "gcc")
           (check-equal? (cdr (assoc 'output-policy docker)) 'process-handle))))
-    (poo-flow-test-case "captures ExternalConfig-style rendered arguments"
+    (yuanxu-test-case "captures ExternalConfig-style rendered arguments"
       (let (seen-request #f)
         (let* ((source (list (cons 'env
                                    (list (cons 'SECOND_GREETING "I'm from an env var!")))
@@ -84,15 +87,15 @@
                           (runtime-result "Hello from the flow.yaml I'm from an env var! hello-from-placeholder"
                                           '(artifact external-config-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
-               (flow (docker-flow 'configured-echo
-                                  "alpine:latest"
-                                  "echo"
-                                  rendered
-                                  '()
-                                  'empty-store-item
-                                  'unit
-                                  'artifact))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+               (flow (docker-flow
+  'configured-echo
+  "alpine:latest"
+  "echo"
+  rendered
+  '()
+  'empty-store-item
+  (Fun AdapterResult <- Unit)))
                (result (run-result-value
                         (run-flow-with-config config flow #!void)))
                (docker (request-config seen-request)))
@@ -105,7 +108,7 @@
                         '("Hello from the flow.yaml"
                           "I'm from an env var!"
                           ((placeholder . par3)))))))
-    (poo-flow-test-case "merges DockerTaskInput with left-biased bindings and args"
+    (yuanxu-test-case "merges DockerTaskInput with left-biased bindings and args"
       (let* ((left (make-docker-task-input
                     (list (make-sandbox-volume-binding 'source-item "/work" 'read)
                           (make-sandbox-volume-binding 'config-item "/config" 'read))
@@ -135,7 +138,7 @@
                       '((message . "hello")
                         (mode . "left")
                         (count . "3")))))
-    (poo-flow-test-case "exposes Funflow dockerFlow-shaped task input boundary"
+    (yuanxu-test-case "exposes Funflow dockerFlow-shaped task input boundary"
       (let* ((flow (docker-task-flow 'parameterized-docker
                                      "alpine:latest"
                                      "echo"
@@ -145,8 +148,8 @@
                      (list (make-sandbox-volume-binding 'script-item "/script" 'read))
                      (list (cons 'message "hello"))))
              (receipt (docker-flow->task-input-receipt flow input)))
-        (check-equal? (task-input-contract task) 'docker-task-input)
-        (check-equal? (task-output-contract task) 'cas-item)
+        (check-equal? (task-input-contract task) DockerTaskInput)
+        (check-equal? (task-output-contract task) AdapterResult)
         (check-equal? (task-docker-volumes task) '())
         (check-equal? (docker-task-input-receipt-schema receipt)
                       +docker-task-input-receipt-schema+)
@@ -169,13 +172,13 @@
                       'cas-item)
         (check-equal? (docker-task-input-receipt-runtime-executed receipt)
                       #f)))
-    (poo-flow-test-case "passes DockerTaskInput through runtime request envelope"
+    (yuanxu-test-case "passes DockerTaskInput through runtime request envelope"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (runtime-result '(cas item out) '(artifact docker-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
                (flow (docker-task-flow 'docker-input-flow
                                        "alpine:latest"
                                        "cat"

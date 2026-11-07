@@ -5,13 +5,13 @@
 
 ;;; Boundary: exclusive complexity gate for DomainCase winner resolution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/feature-system/domain-case/interface)
+        :yuanxu/feature-system/domain-case/interface)
 
 (export domain-case-indexed-resolution-performance-test)
 
@@ -24,13 +24,13 @@
   (string->symbol (string-append prefix (number->string index))))
 
 (def (domain-case-resolution-slot index)
-  (poo-flow-case-slot-contract
+  (yuanxu-case-slot-contract
    (domain-case-resolution-id "slot/" index)
    (domain-case-resolution-id "owner/" index)
    'value 'required 'replace '() #f (lambda (_value) #t)))
 
 (def (domain-case-resolution-method index)
-  (poo-flow-case-method-contract
+  (yuanxu-case-method-contract
    (domain-case-resolution-id "contract/" index)
    (domain-case-resolution-id "owner/" index)
    (domain-case-resolution-id "subject/" index)
@@ -53,7 +53,7 @@
 
 (def domain-case-indexed-resolution-performance-test
   (test-suite "DomainCase indexed resolution performance"
-    (poo-flow-test-case "resolves 2000 slot and method identities"
+    (yuanxu-test-case "resolves 2000 slot and method identities"
       (let* ((count 2000)
              (slots (map domain-case-resolution-slot (iota count)))
              (contracts (map domain-case-resolution-method (iota count)))
@@ -74,7 +74,7 @@
          (domain-case-indexed-resolution-ref summary 'contract-count) count)
         (check-equal?
          (domain-case-indexed-resolution-ref summary 'diagnostic-count) 0)
-        (display "[poo-flow-benchmark] domain-case-indexed-resolution ")
+        (display "[agentic-ai-lab-benchmark] domain-case-indexed-resolution ")
         (write receipt)
         (newline)
         (force-output)

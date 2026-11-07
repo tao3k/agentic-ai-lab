@@ -6,9 +6,9 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/types
-                 poo-flow-temporal-trajectory-series?))
-(export PooFlowTemporalTrajectoryDelta poo-flow-temporal-trajectory-delta?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+                 agentic-ai-lab-temporal-trajectory-series?))
+(export AgenticAILabTemporalTrajectoryDelta agentic-ai-lab-temporal-trajectory-delta?)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (coordinates? value)
@@ -23,14 +23,14 @@
                      previous-projection-digest revised-projection-digest
                      added-coordinates removed-coordinates changed-coordinates
                      status))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.trajectory-delta)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.trajectory-delta)
        (every text? (map (lambda (slot) (.ref value slot))
                          '(identity semantic-digest previous-series-digest
                            revised-series-digest previous-cut-digest
                            revised-cut-digest previous-projection-digest
                            revised-projection-digest)))
-       (poo-flow-temporal-trajectory-series? (.ref value 'previous-series))
-       (poo-flow-temporal-trajectory-series? (.ref value 'revised-series))
+       (agentic-ai-lab-temporal-trajectory-series? (.ref value 'previous-series))
+       (agentic-ai-lab-temporal-trajectory-series? (.ref value 'revised-series))
        (every coordinates?
               (list (.ref value 'added-coordinates)
                     (.ref value 'removed-coordinates)
@@ -38,7 +38,7 @@
        (memq (.ref value 'status)
              '(unchanged identity-only scope-change sample-change
                          sample-and-scope-change))))
-(define-type (PooFlowTemporalTrajectoryDelta @ Type.)
+(define-type (AgenticAILabTemporalTrajectoryDelta @ Type.)
   .element?: delta-shape?)
-(def (poo-flow-temporal-trajectory-delta? value)
-  (element? PooFlowTemporalTrajectoryDelta value))
+(def (agentic-ai-lab-temporal-trajectory-delta? value)
+  (element? AgenticAILabTemporalTrajectoryDelta value))

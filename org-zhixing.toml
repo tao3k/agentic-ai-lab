@@ -8,9 +8,9 @@ theme_variant = "mocha"
 [theme_config]
 
 [site]
-title = "POO Flow Documentation"
+title = "Agentic AI Lab Documentation"
 locale = "en-US"
-base_url = "https://tao3k.github.io/poo-flow/"
+base_url = "https://tao3k.github.io/agentic-ai-lab/"
 
 [content]
 content_dir = "docs"

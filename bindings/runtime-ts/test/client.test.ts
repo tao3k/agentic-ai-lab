@@ -7,7 +7,7 @@ import test from "node:test";
 
 import { RuntimeWorkerClient, type RuntimeWorkerTransport } from "../src/client.ts";
 import type { RuntimeWorkerRequest, RuntimeWorkerResponse } from "../src/protocol.ts";
-import { PFW_WASM_STATUS_INVALID_SLOT, PooFlowRuntimeError } from "../src/runtime.ts";
+import { PFW_WASM_STATUS_INVALID_SLOT, AgenticAILabRuntimeError } from "../src/runtime.ts";
 
 class FakeTransport implements RuntimeWorkerTransport {
   readonly messages: RuntimeWorkerRequest[] = [];
@@ -70,7 +70,7 @@ test("worker client converts runtime error responses", async () => {
   await assert.rejects(
     response,
     (error) =>
-      error instanceof PooFlowRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
+      error instanceof AgenticAILabRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
   );
   client.close();
 });

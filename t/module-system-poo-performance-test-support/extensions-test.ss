@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance extension graph test cases.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,15 +16,15 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
-        :core/module-system/schema/interface
-        :core/extension-graph/interface
-        :core/module-system/schema/validation)
+        :yuanxu/module-system/schema/interface
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/validation)
 
 (export extensions-test)
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-extension-children-case)
-  (poo-flow-test-case "merges extension children through indexed override boundary"
+  (yuanxu-test-case "merges extension children through indexed override boundary"
         (let* ((base-count 500)
                (extra-count 1600)
                (key-span 700)
@@ -33,31 +33,31 @@
                 (poo-performance-extension-node-extend-operations extra-count
                                                                   key-span))
                (contribution
-                (poo-flow-module-extension-contribution 'extension-root
+                (yuanxu-graph-contribution 'extension-root
                                                         operations))
                (merged
-                (poo-flow-module-extension-apply-contribution base
+                (yuanxu-graph-apply-contribution base
                                                               contribution))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-extension-children-merge-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contribution
+                   (yuanxu-graph-apply-contribution
                     base
                     contribution)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (yuanxu-graph-root-children merged))
            key-span)
           (check-equal?
            (cdar
-            (poo-flow-module-extension-node-slots
-             (car (poo-flow-module-extension-node-children merged))))
+            (yuanxu-graph-root-payload
+             (car (yuanxu-graph-root-children merged))))
            3400)
           (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-cross-targeting-case)
-  (poo-flow-test-case "preserves same-pass targeting after cross contribution child creation"
+  (yuanxu-test-case "preserves same-pass targeting after cross contribution child creation"
         (let* ((child-count 900)
                (target
                 (poo-performance-cross-contribution-child-name 640))
@@ -67,31 +67,31 @@
                  child-count
                  target))
                (merged
-                (poo-flow-module-extension-apply-contributions base
+                (yuanxu-graph-apply-contributions base
                                                                contributions))
                (target-child
-                (poo-flow-module-extension-child-ref
-                 (poo-flow-module-extension-node-children merged)
+                (yuanxu-graph-root-ref
+                 (yuanxu-graph-root-children merged)
                  target))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-cross-contribution-targeting-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contributions
+                   (yuanxu-graph-apply-contributions
                     base
                     contributions)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (yuanxu-graph-root-children merged))
            child-count)
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots target-child)
+            (yuanxu-graph-root-payload target-child)
             'targeted?
             #f)
            #t)
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots target-child)
+            (yuanxu-graph-root-payload target-child)
             'target-phase
             #f)
            'same-pass)
@@ -99,7 +99,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-local-coalescing-case)
-  (poo-flow-test-case "coalesces adjacent local contributions before graph traversal"
+  (yuanxu-test-case "coalesces adjacent local contributions before graph traversal"
         (let* ((child-count 900)
                (contribution-count 900)
                (base (poo-performance-extension-merge-root child-count))
@@ -107,24 +107,24 @@
                 (poo-performance-local-slot-contributions 'extension-root
                                                           contribution-count))
                (merged
-                (poo-flow-module-extension-apply-contributions base
+                (yuanxu-graph-apply-contributions base
                                                                contributions))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-local-contribution-coalescing-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contributions
+                   (yuanxu-graph-apply-contributions
                     base
                     contributions)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (yuanxu-graph-root-children merged))
            child-count)
           (check-equal?
-           (length (poo-flow-module-extension-node-slots merged))
+           (length (yuanxu-graph-root-payload merged))
            (+ contribution-count 1))
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots merged)
+            (yuanxu-graph-root-payload merged)
             'field-640
             #f)
            640)
@@ -132,7 +132,7 @@
 
 ;; : TestSuite
 (def extensions-test
-  (test-suite "poo-flow module system POO extension performance"
+  (test-suite "agentic-ai-lab module system POO extension performance"
     (module-system-poo-performance-extension-children-case)
     (module-system-poo-performance-cross-targeting-case)
     (module-system-poo-performance-local-coalescing-case)))

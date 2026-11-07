@@ -12,7 +12,7 @@
   '((name . construction-profile)
     (weight . 7)
     (scale . 11)
-    (policy . native-poo)
+    (policy . runtime-poo)
     (runtime . control-plane)))
 
 (def (build-report-profile)

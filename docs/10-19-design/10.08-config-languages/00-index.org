@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Agentic AI Lab Configuration Examples and Core Design References
+#+date: [2026-10-16]
+#+property: STATUS product-consumer-router-no-runtime-change
+
+* Core owns the design
+
+The configuration expression, contract/default view, module organization,
+publication/selection, Core/Feature and build-projection design discussion now
+lives in [[file:../../../core/docs/10-19-design/11-configuration-languages/11.01-index.org][agentic-ai-lab-core Config Languages design]]. Shared mechanism protocols are
+owned by [[file:../../../core/module-system/design/README.org][Core Module System design]], and Feature System extraction is specified
+in [[file:../../../core/feature-system/design/README.org][Core Feature System migration design]]. Do not maintain parallel architecture
+in this product chapter.
+
+* Agentic AI Lab owns the application evidence
+
+| Consumer material | Document |
+|-------------------+----------|
+| Actual KCL/Omnibus/HiveBus reference checkouts | [[file:scenarios/README.org][Pinned source submodules]] |
+| Source-to-domain research controls | [[file:10-source-scenario-research.org][Actual scenario research]] |
+| Guestbook source, environment changes and resources | [[file:11-guestbook-source-comparison.org][Guestbook comparison]] |
+| Existing JSON Schema bridge and domain integration | [[file:12-guestbook-schema-profile-plan-chain.org][Schema-to-plan consumer design]] |
+| Consumption of Core directory protocols | [[file:14-directory-module-tree-design.org][Directory design consumer router]] |
+| Complete auto/explicit init and Guestbook config | [[file:../../../core/docs/10-19-design/11-configuration-languages/11.18-guestbook-auto-explicit-init-examples.org][Guestbook init examples]] |
+
+Agentic AI Lab's existing code and the Core submodule pin are unchanged. Migration of
+Feature System implementation is planned separately; moving these documents is
+not implementation, a successful runtime test or a Loader integration.

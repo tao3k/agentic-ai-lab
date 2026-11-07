@@ -6,7 +6,7 @@
 ;;; session runtime receipts materialize message routing.
 ;;; Invariant: channel expansion must preserve explicit session ids so policy
 ;;; can reason about allowed cross-agent communication.
-(import :poo-flow/modules/session/config-session-runtime)
+(import :agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-communication-channel
         session-communication-channel-rows
@@ -31,7 +31,7 @@
       (messages message-kind ...)
       (delivery delivery-policy ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-communication-channel
+   (agentic-ai-lab-session-syntax-communication-channel
     'project-id
     'channel-id
     'relation-kind
@@ -48,7 +48,7 @@
       (agents source-agent-id target-agent-id)
       (messages message-kind ...)
       (delivery delivery-policy ...))
-   (poo-flow-session-syntax-communication-channel
+   (agentic-ai-lab-session-syntax-communication-channel
     'project-id
     'channel-id
     'relation-kind
@@ -69,7 +69,7 @@
 ;;   ;; => communication channel rows object
 ;;   ```
 (def (session-communication-channel-rows . receipts)
-  (poo-flow-session-syntax-communication-channel-rows receipts))
+  (agentic-ai-lab-session-syntax-communication-channel-rows receipts))
 
 ;; session-communication
 ;; : (-> Syntax PooSessionCommunicationReceipt)
@@ -92,7 +92,7 @@
       (message message-kind payload-summary)
       (delivery delivery-policy)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-communication
+   (agentic-ai-lab-session-syntax-communication
     'project-id
     'relation-kind
     'source-root-session-id
@@ -114,7 +114,7 @@
       (channel channel-id)
       (message message-kind payload-summary)
       (delivery delivery-policy))
-   (poo-flow-session-syntax-communication
+   (agentic-ai-lab-session-syntax-communication
     'project-id
     'relation-kind
     'source-root-session-id
@@ -138,4 +138,4 @@
 ;;   ;; => communication rows object
 ;;   ```
 (def (session-communication-rows . receipts)
-  (poo-flow-session-syntax-communication-rows receipts))
+  (agentic-ai-lab-session-syntax-communication-rows receipts))

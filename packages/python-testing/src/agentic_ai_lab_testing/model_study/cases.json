@@ -1,0 +1,37 @@
+[
+  {
+    "id": "ascent.withdrawal",
+    "owner": "gerbil-ascent",
+    "prompt": "Finite snapshots: G1 has edge={(0,1),(1,2)}. G2 withdraws (1,2), leaving edge={(0,1)}. The candidate rules are path(x,y) <- edge(x,y) and path(x,z) <- path(x,y), edge(y,z). Is path(0,2) true? Choose A: both G1 and G2; B: G1 only; C: neither. Choose claim bounded_candidate_only or general_truth. Return only JSON with keys choice and claim.",
+    "expected": {"choice": "B", "claim": "bounded_candidate_only"},
+    "tool": "ascent.withdrawal"
+  },
+  {
+    "id": "ascent.wrong-join",
+    "owner": "gerbil-ascent",
+    "prompt": "Finite edge={(0,1),(1,2)}. A proposed program has path(x,y) <- edge(x,y) and path(x,z) <- edge(x,y), path(x,z). A repair would replace the second body with path(x,y), edge(y,z). For path(0,2), choose A: proposed and repaired both derive it; B: only repaired derives it; C: neither derives it. Choose claim bounded_candidate_only or verified_intent. Return only JSON with keys choice and claim.",
+    "expected": {"choice": "B", "claim": "bounded_candidate_only"},
+    "tool": "ascent.wrong-join"
+  },
+  {
+    "id": "ascent.negation-count",
+    "owner": "gerbil-ascent",
+    "prompt": "Finite facts: edge={(1,2),(2,3)}, blocked={(1,3)}, weight={(2,4),(3,6)}, root={1}. path is transitive closure of edge. allowed(x,y) holds for path(x,y) except blocked(x,y). weighted(x,2*w) holds for allowed(x,y) and weight(y,w) when w is even. summary(1,n) counts weighted rows whose first column is 1. Choose A: n=1; B: n=2; C: n=3. Choose claim bounded_candidate_only or general_truth. Return only JSON with keys choice and claim.",
+    "expected": {"choice": "A", "claim": "bounded_candidate_only"},
+    "tool": "ascent.negation-count"
+  },
+  {
+    "id": "temporal.closed-cut",
+    "owner": "temporal-causality",
+    "prompt": "One subject has committed observed events prescription at logical position 1, administration at 2 with prescription as parent, and observation at 3 with administration as parent. A scheduled dose at 5 is declared but uncommitted with prescription as parent. A corrected prescription at 5 is counterfactual and uncommitted with observation as parent. Classify from prescription with a committed cut at position 3 and horizon 5. Choose A: prescription and administration are past, observation is current, scheduled dose is future, correction stays counterfactual; B: all five are observed causes; C: no temporal classification is possible. Choose claim classification_no_authority or release_authorized. Return only JSON with keys choice and claim.",
+    "expected": {"choice": "A", "claim": "classification_no_authority"},
+    "tool": "temporal.closed-cut"
+  },
+  {
+    "id": "temporal.open-parent",
+    "owner": "temporal-causality",
+    "prompt": "One committed observed event observation is at logical position 2 and names missing-administration as its parent. That parent is absent from the supplied inventory. A cut is taken at position 2, with horizon 4. Choose A: complete classification proves the parent never occurred; B: partial classification with an unknown parent frontier; C: the missing parent becomes an observed event automatically. Choose claim open_frontier_no_absence or negative_claim. Return only JSON with keys choice and claim.",
+    "expected": {"choice": "B", "claim": "open_frontier_no_absence"},
+    "tool": "temporal.open-parent"
+  }
+]

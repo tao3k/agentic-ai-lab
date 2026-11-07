@@ -6,10 +6,10 @@
 ;;; Boundary: runtime and handoff summaries for validated sandbox profiles.
 ;;; Invariant: summaries are inert Scheme receipts for Marlin-owned execution.
 
-(import :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile-data
-        :poo-flow/modules/agent-sandbox/profile-validation)
+(import :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/profile-data
+        :agentic-ai-lab/modules/agent-sandbox/profile-validation)
 
 (export agent-sandbox-profile-runtime-summary
         agent-sandbox-profile-handoff-summary)
@@ -93,7 +93,7 @@
       (agent-sandbox-profile-backend-ref validated-profile))
      (handoff-target "marlin-agent-core")
      (handoff-contract
-      'poo-flow.agent-sandbox-profile.runtime-handoff.v1)
+      'agentic-ai-lab.agent-sandbox-profile.runtime-handoff.v1)
      (profile validated-profile)
      (runtime-summary
       (agent-sandbox-profile-runtime-summary validated-profile))

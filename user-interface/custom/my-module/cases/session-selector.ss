@@ -7,12 +7,12 @@
 ;;; Invariant: selector declarations stay pending receipts; Marlin owns model
 ;;; scoring, workflow dispatch, and selected-result materialization.
 
-(import :poo-flow/modules/session/syntax)
+(import :agentic-ai-lab/modules/session/syntax)
 
-(export poo-flow-custom-my-module-session-selector-case)
+(export agentic-ai-lab-custom-my-module-session-selector-case)
 
-(def poo-flow-custom-my-module-session-selector-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-selector-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-selector-case
     (metadata (source . user-interface)
               (case . session-selector))

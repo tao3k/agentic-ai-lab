@@ -7,14 +7,14 @@
 ;;; Invariant: construct only the profiles required by the real downstream
 ;;; Funflow case; do not import the aggregate custom-profile owner.
 
-(import (only-in :poo-flow/src/user-interface/module-selection
-                 pooFlowUserConfig
-                 poo-flow-settings
-                 poo-flow-user-module-selection)
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile-config)
+(import (only-in :yuanxu/module-system/selection/objects
+                 yuanxuUserConfig
+                 yuanxu-settings
+                 yuanxu-user-module-selection)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile-config)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export user-interface-cicd-runtime-fixture-config)
 
@@ -41,14 +41,14 @@
 ;; : (-> [PooUserModuleSelection])
 (def (user-interface-cicd-runtime-fixture-profile-module)
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list
      (cons
       ':config
       (list
-       (poo-flow-sandbox-profile-config
+       (agentic-ai-lab-sandbox-profile-config
         'ci/check
         (list
          '(backend nono)
@@ -56,7 +56,7 @@
          '(capabilities process-run filesystem-read tmpdir)
          (cons 'resources
                user-interface-cicd-runtime-fixture-readonly-resources)))
-       (poo-flow-sandbox-profile-config
+       (agentic-ai-lab-sandbox-profile-config
         'ci/build
         (list
          '(backend nono)
@@ -68,7 +68,7 @@
 
 ;; : (-> PooUserConfig)
 (def (user-interface-cicd-runtime-fixture-config)
-  (pooFlowUserConfig
+  (yuanxuUserConfig
    (append (user-interface-cicd-runtime-fixture-profile-module)
-           poo-flow-custom-my-module-funflow-cicd-case)
-   (poo-flow-settings)))
+           agentic-ai-lab-custom-my-module-funflow-cicd-case)
+   (yuanxu-settings)))

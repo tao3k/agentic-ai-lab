@@ -6,11 +6,11 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every))
-(export PooFlowTemporalImpactContrastPoint PooFlowTemporalImpactContrast
-        PooFlowTemporalInterventionWindowAudit
-        poo-flow-temporal-impact-contrast-point?
-        poo-flow-temporal-impact-contrast?
-        poo-flow-temporal-intervention-window-audit?)
+(export AgenticAILabTemporalImpactContrastPoint AgenticAILabTemporalImpactContrast
+        AgenticAILabTemporalInterventionWindowAudit
+        agentic-ai-lab-temporal-impact-contrast-point?
+        agentic-ai-lab-temporal-impact-contrast?
+        agentic-ai-lab-temporal-intervention-window-audit?)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (exact-rational? value) (and (rational? value) (exact? value)))
@@ -21,7 +21,7 @@
   (and (slots? value '(kind coordinate left-instant-identity
                              right-instant-identity level-delta rate-delta))
        (eq? (.ref value 'kind)
-            'poo-flow.temporal-causality.impact-contrast-point)
+            'agentic-ai-lab.temporal-causality.impact-contrast-point)
        (exact-integer? (.ref value 'coordinate))
        (>= (.ref value 'coordinate) 0)
        (text? (.ref value 'left-instant-identity))
@@ -29,10 +29,10 @@
        (exact-rational? (.ref value 'level-delta))
        (or (not (.ref value 'rate-delta))
            (exact-rational? (.ref value 'rate-delta)))))
-(define-type (PooFlowTemporalImpactContrastPoint @ Type.)
+(define-type (AgenticAILabTemporalImpactContrastPoint @ Type.)
   .element?: contrast-point-shape?)
-(def (poo-flow-temporal-impact-contrast-point? value)
-  (element? PooFlowTemporalImpactContrastPoint value))
+(def (agentic-ai-lab-temporal-impact-contrast-point? value)
+  (element? AgenticAILabTemporalImpactContrastPoint value))
 
 (def (contrast-shape? value)
   (and (slots? value '(kind identity semantic-digest left-series-digest
@@ -42,7 +42,7 @@
                              status points causal-impact-admitted?
                              runtime-executed?))
        (eq? (.ref value 'kind)
-            'poo-flow.temporal-causality.impact-contrast)
+            'agentic-ai-lab.temporal-causality.impact-contrast)
        (every text? (map (lambda (slot) (.ref value slot))
                          '(identity semantic-digest left-series-digest
                            right-series-digest source-cut-digest
@@ -52,14 +52,14 @@
              '(descriptive-contrast candidate-contrast))
        (list? (.ref value 'points))
        (>= (length (.ref value 'points)) 2)
-       (every poo-flow-temporal-impact-contrast-point?
+       (every agentic-ai-lab-temporal-impact-contrast-point?
               (.ref value 'points))
        (eq? (.ref value 'causal-impact-admitted?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
-(define-type (PooFlowTemporalImpactContrast @ Type.)
+(define-type (AgenticAILabTemporalImpactContrast @ Type.)
   .element?: contrast-shape?)
-(def (poo-flow-temporal-impact-contrast? value)
-  (element? PooFlowTemporalImpactContrast value))
+(def (agentic-ai-lab-temporal-impact-contrast? value)
+  (element? AgenticAILabTemporalImpactContrast value))
 
 (def (window-audit-shape? value)
   (and (slots? value '(kind identity semantic-digest contrast-digest
@@ -71,7 +71,7 @@
                              cumulative-delta mean-delta
                              causal-impact-admitted? runtime-executed?))
        (eq? (.ref value 'kind)
-            'poo-flow.temporal-causality.intervention-window-audit)
+            'agentic-ai-lab.temporal-causality.intervention-window-audit)
        (every text? (map (lambda (slot) (.ref value slot))
                          '(identity semantic-digest contrast-digest
                            intervention-identity onset-instant-identity
@@ -84,13 +84,13 @@
        (>= (.ref value 'prefix-observed-count) 0)
        (list? (.ref value 'window-points))
        (>= (length (.ref value 'window-points)) 2)
-       (every poo-flow-temporal-impact-contrast-point?
+       (every agentic-ai-lab-temporal-impact-contrast-point?
               (.ref value 'window-points))
        (exact-rational? (.ref value 'cumulative-delta))
        (exact-rational? (.ref value 'mean-delta))
        (eq? (.ref value 'causal-impact-admitted?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
-(define-type (PooFlowTemporalInterventionWindowAudit @ Type.)
+(define-type (AgenticAILabTemporalInterventionWindowAudit @ Type.)
   .element?: window-audit-shape?)
-(def (poo-flow-temporal-intervention-window-audit? value)
-  (element? PooFlowTemporalInterventionWindowAudit value))
+(def (agentic-ai-lab-temporal-intervention-window-audit? value)
+  (element? AgenticAILabTemporalInterventionWindowAudit value))

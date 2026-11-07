@@ -42,7 +42,7 @@
   (list
    ;; Class definition, inheritance, slots, and construction.
    (closed-clause 'C43-class-metaobjects 'poo-clos 'classes
-           'native-class-metaobjects 'invalid-class)
+           'runtime-class-metaobjects 'invalid-class)
    (closed-clause 'C432-class-definition 'poo-clos 'syntax
            'defclass-lowering 'duplicate-class-declarations)
    (closed-clause 'C432-slot-options 'poo-clos 'classes
@@ -52,7 +52,7 @@
    (closed-clause 'C434-inheritance 'poo-clos 'classes
            'diamond-inheritance 'duplicate-direct-superclass)
    (closed-clause 'C435-class-precedence 'poo-clos 'classes
-           'native-c4-order 'inconsistent-c4)
+           'runtime-c4-order 'inconsistent-c4)
    (closed-clause 'C436-class-redefinition 'poo-clos 'evolution
            'identity-preserved-generation 'invalid-class-redefinition)
    (closed-clause 'C436-dependent-propagation 'poo-clos 'evolution
@@ -129,7 +129,7 @@
            'sealed-capability-profile 'unadmitted-operation)))
 
 ;;; Evidence identities resolve to exact source-owned std/test suite bindings.
-;;; The ledger test reads these Scheme sources with the native reader and
+;;; The ledger test reads these Scheme sources with the runtime reader and
 ;;; verifies the export, suite definition, case cardinality, and nonzero checks.
 (def (evidence-suite id-value path-value binding-value case-count)
   (.o id: id-value path: path-value binding: binding-value
@@ -138,14 +138,14 @@
 (def poo-clos-evidence-suites
   (list
    (evidence-suite 'dispatch "core/t/poo-clos-dispatch-test.ss"
-                   'poo-clos-dispatch-test 12)
+                   'poo-clos-dispatch-test 19)
    (evidence-suite 'lifecycle "core/t/poo-clos-lifecycle-test.ss"
                    'poo-clos-lifecycle-test 15)
    (evidence-suite 'syntax "core/t/poo-clos-syntax-test.ss"
-                   'poo-clos-syntax-test 10)
+                   'poo-clos-syntax-test 18)
    (evidence-suite 'method-combination
                    "core/t/poo-clos-method-combination-test.ss"
-                   'poo-clos-method-combination-test 13)
+                   'poo-clos-method-combination-test 14)
    (evidence-suite 'evolution "core/t/poo-clos-evolution-test.ss"
                    'poo-clos-evolution-test 8)
    (evidence-suite 'generic-evolution

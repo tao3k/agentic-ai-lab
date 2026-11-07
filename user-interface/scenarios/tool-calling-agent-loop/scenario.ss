@@ -1,14 +1,18 @@
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/profile-composition/profile-bundle
+        (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :poo-flow/user-interface/profiles/tool-calling)
+        :yuanxu/profile-composition/selection-syntax
+        )
+
 (export ToolCallingAgentLoopProfile tool-calling-agent-loop-scenario)
 
 (.def ToolCallingAgentLoopProfile
@@ -31,10 +35,12 @@
                trace-covers-tool-request-call-result: #t)
            handoff: 'python-runtime-tool-plane))))
 
-(user-composition tool-calling-agent-loop-scenario
-  (compose profiles
+(def tool-calling-agent-loop-scenario
+  (.new Scenario name: 'tool-calling-agent-loop-scenario
+        config: (let ((ToolCallingModule (.get agentic-ai-lab.init.exports Profiles tool-calling profile)))
+    (compose profiles
     (use-module ToolCallingModule as tool
       tool-request tool-schema tool-permission sandbox-scope
       argument-validation untrusted-observation tool-cooldown result-contract
       runtime-binding receipt-gate observability)
-    ToolCallingAgentLoopProfile))
+    ToolCallingAgentLoopProfile))))

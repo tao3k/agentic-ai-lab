@@ -10,7 +10,7 @@ on:
       - main
     paths:
       - bindings/runtime-c/**
-      - src/contract/runtime-v0-abi-schema.ss
+      - modules/workflow/contracts/runtime-v0-abi-schema.ss
       - MODULE.bazel
       - MODULE.bazel.lock
       - .github/workflows/runtime-c.yml
@@ -18,7 +18,7 @@ on:
   pull_request:
     paths:
       - bindings/runtime-c/**
-      - src/contract/runtime-v0-abi-schema.ss
+      - modules/workflow/contracts/runtime-v0-abi-schema.ss
       - MODULE.bazel
       - MODULE.bazel.lock
       - .github/workflows/runtime-c.yml
@@ -52,14 +52,20 @@ jobs:
         run: |
           brew install gcc jq openssl pkg-config sqlite zlib
           test -x /opt/homebrew/bin/gcc-16
-          python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/v0.19-2591dcd"
+          python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/runtime-c"
       - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
         with:
           bazelisk-cache: true
           repository-cache: true
       - name: Test portable C ABI
         run: |
-          bazelisk test --test_output=errors \
+          platform_flags=()
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            # This job qualifies the runner ABI; old deployment targets need a
+            # separate SDK compatibility matrix, not the macos-26 system SDK.
+            platform_flags+=("--macos_minimum_os=$(sw_vers -productVersion)")
+          fi
+          bazelisk test "${platform_flags[@]}" --test_output=errors \
             //bindings/runtime-c:runtime_c_tests \
             //bindings/runtime-c/bundle-v1:bundle_v1_tests
       - name: Test Linux sanitizer boundary

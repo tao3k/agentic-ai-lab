@@ -8,83 +8,83 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :poo-flow/src/graph/types poo-flow-graph-id?))
+        (only-in :yuanxu/graph/types-core yuanxu-graph-id?))
 
-(export poo-flow-relation-trajectory-witness-kind
-        poo-flow-structural-impact-receipt-kind
-        poo-flow-temporal-observation-kind
-        poo-flow-causal-event-kind
-        poo-flow-causal-event-graph-kind
-        poo-flow-causal-trajectory-contract-kind
-        poo-flow-causal-trajectory-assessment-kind
-        poo-flow-causal-cut-kind
-        poo-flow-temporal-classification-receipt-kind
-        poo-flow-temporal-clock-domain-kind
-        poo-flow-temporal-model-observation-kind
-        poo-flow-temporal-constraint-kind
-        poo-flow-temporal-hypothesis-kind
-        poo-flow-temporal-model-kind
-        poo-flow-temporal-query-kind
-        poo-flow-temporal-model-receipt-kind
-        PooFlowRelationTrajectoryWitness
-        PooFlowStructuralImpactReceipt
-        PooFlowTemporalObservation
-        PooFlowCausalEvent
-        PooFlowCausalEventGraph
-        PooFlowCausalTrajectoryContract
-        PooFlowCausalTrajectoryAssessment
-        PooFlowCausalCut
-        PooFlowTemporalClassificationReceipt
-        PooFlowTemporalClockDomain
-        PooFlowTemporalModelObservation
-        PooFlowTemporalConstraint
-        PooFlowTemporalHypothesis
-        PooFlowTemporalModel
-        PooFlowTemporalQuery
-        PooFlowTemporalModelReceipt
-        poo-flow-relation-trajectory-witness?
-        poo-flow-structural-impact-receipt?
-        poo-flow-temporal-observation?
-        poo-flow-causal-event?
-        poo-flow-causal-event-graph?
-        poo-flow-causal-trajectory-contract?
-        poo-flow-causal-trajectory-assessment?
-        poo-flow-causal-cut?
-        poo-flow-temporal-classification-receipt?
-        poo-flow-temporal-clock-domain?
-        poo-flow-temporal-model-observation?
-        poo-flow-temporal-constraint?
-        poo-flow-temporal-hypothesis?
-        poo-flow-temporal-model?
-        poo-flow-temporal-query?
-        poo-flow-temporal-model-receipt?)
+(export agentic-ai-lab-relation-trajectory-witness-kind
+        agentic-ai-lab-structural-impact-receipt-kind
+        agentic-ai-lab-temporal-observation-kind
+        agentic-ai-lab-causal-event-kind
+        agentic-ai-lab-causal-event-graph-kind
+        agentic-ai-lab-causal-trajectory-contract-kind
+        agentic-ai-lab-causal-trajectory-assessment-kind
+        agentic-ai-lab-causal-cut-kind
+        agentic-ai-lab-temporal-classification-receipt-kind
+        agentic-ai-lab-temporal-clock-domain-kind
+        agentic-ai-lab-temporal-model-observation-kind
+        agentic-ai-lab-temporal-constraint-kind
+        agentic-ai-lab-temporal-hypothesis-kind
+        agentic-ai-lab-temporal-model-kind
+        agentic-ai-lab-temporal-query-kind
+        agentic-ai-lab-temporal-model-receipt-kind
+        AgenticAILabRelationTrajectoryWitness
+        AgenticAILabStructuralImpactReceipt
+        AgenticAILabTemporalObservation
+        AgenticAILabCausalEvent
+        AgenticAILabCausalEventGraph
+        AgenticAILabCausalTrajectoryContract
+        AgenticAILabCausalTrajectoryAssessment
+        AgenticAILabCausalCut
+        AgenticAILabTemporalClassificationReceipt
+        AgenticAILabTemporalClockDomain
+        AgenticAILabTemporalModelObservation
+        AgenticAILabTemporalConstraint
+        AgenticAILabTemporalHypothesis
+        AgenticAILabTemporalModel
+        AgenticAILabTemporalQuery
+        AgenticAILabTemporalModelReceipt
+        agentic-ai-lab-relation-trajectory-witness?
+        agentic-ai-lab-structural-impact-receipt?
+        agentic-ai-lab-temporal-observation?
+        agentic-ai-lab-causal-event?
+        agentic-ai-lab-causal-event-graph?
+        agentic-ai-lab-causal-trajectory-contract?
+        agentic-ai-lab-causal-trajectory-assessment?
+        agentic-ai-lab-causal-cut?
+        agentic-ai-lab-temporal-classification-receipt?
+        agentic-ai-lab-temporal-clock-domain?
+        agentic-ai-lab-temporal-model-observation?
+        agentic-ai-lab-temporal-constraint?
+        agentic-ai-lab-temporal-hypothesis?
+        agentic-ai-lab-temporal-model?
+        agentic-ai-lab-temporal-query?
+        agentic-ai-lab-temporal-model-receipt?)
 
-(def poo-flow-relation-trajectory-witness-kind
-  'poo-flow.temporal-causality.relation-trajectory-witness)
+(def agentic-ai-lab-relation-trajectory-witness-kind
+  'agentic-ai-lab.temporal-causality.relation-trajectory-witness)
 
-(def poo-flow-structural-impact-receipt-kind
-  'poo-flow.temporal-causality.structural-impact-receipt)
+(def agentic-ai-lab-structural-impact-receipt-kind
+  'agentic-ai-lab.temporal-causality.structural-impact-receipt)
 
-(def poo-flow-temporal-observation-kind
-  'poo-flow.temporal-causality.temporal-observation)
+(def agentic-ai-lab-temporal-observation-kind
+  'agentic-ai-lab.temporal-causality.temporal-observation)
 
-(def poo-flow-causal-event-kind
-  'poo-flow.temporal-causality.causal-event)
+(def agentic-ai-lab-causal-event-kind
+  'agentic-ai-lab.temporal-causality.causal-event)
 
-(def poo-flow-causal-event-graph-kind
-  'poo-flow.temporal-causality.causal-event-graph)
+(def agentic-ai-lab-causal-event-graph-kind
+  'agentic-ai-lab.temporal-causality.causal-event-graph)
 
-(def poo-flow-causal-trajectory-contract-kind
-  'poo-flow.temporal-causality.causal-trajectory-contract)
+(def agentic-ai-lab-causal-trajectory-contract-kind
+  'agentic-ai-lab.temporal-causality.causal-trajectory-contract)
 
-(def poo-flow-causal-trajectory-assessment-kind
-  'poo-flow.temporal-causality.causal-trajectory-assessment)
+(def agentic-ai-lab-causal-trajectory-assessment-kind
+  'agentic-ai-lab.temporal-causality.causal-trajectory-assessment)
 
-(def poo-flow-causal-cut-kind
-  'poo-flow.temporal-causality.causal-cut)
+(def agentic-ai-lab-causal-cut-kind
+  'agentic-ai-lab.temporal-causality.causal-cut)
 
-(def poo-flow-temporal-classification-receipt-kind
-  'poo-flow.temporal-causality.temporal-classification-receipt)
+(def agentic-ai-lab-temporal-classification-receipt-kind
+  'agentic-ai-lab.temporal-causality.temporal-classification-receipt)
 
 (def (temporal-causality-has-slots? value slots)
   (and (object? value)
@@ -93,11 +93,11 @@
 (def (relation-trajectory-witness-shape? value)
   (and (temporal-causality-has-slots?
         value '(kind target-node-id node-path relation-path))
-       (eq? (.ref value 'kind) poo-flow-relation-trajectory-witness-kind)
-       (poo-flow-graph-id? (.ref value 'target-node-id))
+       (eq? (.ref value 'kind) agentic-ai-lab-relation-trajectory-witness-kind)
+       (yuanxu-graph-id? (.ref value 'target-node-id))
        (list? (.ref value 'node-path))
        (pair? (.ref value 'node-path))
-       (every poo-flow-graph-id? (.ref value 'node-path))
+       (every yuanxu-graph-id? (.ref value 'node-path))
        (equal? (.ref value 'target-node-id)
                (car (reverse (.ref value 'node-path))))
        (list? (.ref value 'relation-path))
@@ -105,11 +105,11 @@
        (= (length (.ref value 'relation-path))
           (- (length (.ref value 'node-path)) 1))))
 
-(define-type (PooFlowRelationTrajectoryWitness @ Type.)
+(define-type (AgenticAILabRelationTrajectoryWitness @ Type.)
   .element?: relation-trajectory-witness-shape?)
 
-(def (poo-flow-relation-trajectory-witness? value)
-  (element? PooFlowRelationTrajectoryWitness value))
+(def (agentic-ai-lab-relation-trajectory-witness? value)
+  (element? AgenticAILabRelationTrajectoryWitness value))
 
 (def (structural-impact-receipt-shape? value)
   (and (temporal-causality-has-slots?
@@ -118,33 +118,33 @@
                selected-relations affected-node-ids relation-trajectories
                unresolved-edges temporal-impact-assessed?
                release-authorized? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-structural-impact-receipt-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-structural-impact-receipt-kind)
        (memq (.ref value 'status)
              '(snapshot-scoped-impact partial-impact invalid-inventory))
        (eq? (.ref value 'scope) 'structural-snapshot)
-       (poo-flow-graph-id? (.ref value 'graph-id))
+       (yuanxu-graph-id? (.ref value 'graph-id))
        (list? (.ref value 'changed-node-ids))
        (pair? (.ref value 'changed-node-ids))
-       (every poo-flow-graph-id? (.ref value 'changed-node-ids))
+       (every yuanxu-graph-id? (.ref value 'changed-node-ids))
        (memq (.ref value 'direction) '(dependents dependencies))
        (list? (.ref value 'selected-relations))
        (pair? (.ref value 'selected-relations))
        (every symbol? (.ref value 'selected-relations))
        (list? (.ref value 'affected-node-ids))
-       (every poo-flow-graph-id? (.ref value 'affected-node-ids))
+       (every yuanxu-graph-id? (.ref value 'affected-node-ids))
        (list? (.ref value 'relation-trajectories))
-       (every poo-flow-relation-trajectory-witness?
+       (every agentic-ai-lab-relation-trajectory-witness?
               (.ref value 'relation-trajectories))
        (list? (.ref value 'unresolved-edges))
        (eq? (.ref value 'temporal-impact-assessed?) #f)
        (eq? (.ref value 'release-authorized?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowStructuralImpactReceipt @ Type.)
+(define-type (AgenticAILabStructuralImpactReceipt @ Type.)
   .element?: structural-impact-receipt-shape?)
 
-(def (poo-flow-structural-impact-receipt? value)
-  (element? PooFlowStructuralImpactReceipt value))
+(def (agentic-ai-lab-structural-impact-receipt? value)
+  (element? AgenticAILabStructuralImpactReceipt value))
 
 (def (temporal-causality-text? value)
   (and (string? value) (> (string-length value) 0)))
@@ -160,7 +160,7 @@
         value
         '(kind identity clock-role logical-position provenance-identity
                immutable? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-temporal-observation-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-observation-kind)
        (temporal-causality-text? (.ref value 'identity))
        (memq (.ref value 'clock-role)
              '(wall-clock monotonic logical-version authoritative-service))
@@ -169,11 +169,11 @@
        (eq? (.ref value 'immutable?) #t)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowTemporalObservation @ Type.)
+(define-type (AgenticAILabTemporalObservation @ Type.)
   .element?: temporal-observation-shape?)
 
-(def (poo-flow-temporal-observation? value)
-  (element? PooFlowTemporalObservation value))
+(def (agentic-ai-lab-temporal-observation? value)
+  (element? AgenticAILabTemporalObservation value))
 
 (def (causal-event-shape? value)
   (and (temporal-causality-has-slots?
@@ -181,11 +181,11 @@
         '(kind identity subject event-kind observation payload-identity
                causal-parent-identities modality committed?
                runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-causal-event-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-causal-event-kind)
        (temporal-causality-text? (.ref value 'identity))
        (temporal-causality-text? (.ref value 'subject))
        (symbol? (.ref value 'event-kind))
-       (poo-flow-temporal-observation? (.ref value 'observation))
+       (agentic-ai-lab-temporal-observation? (.ref value 'observation))
        (temporal-causality-text? (.ref value 'payload-identity))
        (list? (.ref value 'causal-parent-identities))
        (every temporal-causality-text?
@@ -203,11 +203,11 @@
          #t)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowCausalEvent @ Type.)
+(define-type (AgenticAILabCausalEvent @ Type.)
   .element?: causal-event-shape?)
 
-(def (poo-flow-causal-event? value)
-  (element? PooFlowCausalEvent value))
+(def (agentic-ai-lab-causal-event? value)
+  (element? AgenticAILabCausalEvent value))
 
 (def (causal-event-inventory-shape? value expected-kind extra-slots)
   (and (temporal-causality-has-slots?
@@ -221,7 +221,7 @@
        (temporal-causality-text? (.ref value 'subject))
        (list? (.ref value 'events))
        (pair? (.ref value 'events))
-       (every poo-flow-causal-event? (.ref value 'events))
+       (every agentic-ai-lab-causal-event? (.ref value 'events))
        (every (lambda (event)
                 (equal? (.ref event 'subject) (.ref value 'subject)))
               (.ref value 'events))
@@ -253,20 +253,20 @@
 
 (def (causal-event-graph-shape? value)
   (causal-event-inventory-shape?
-   value poo-flow-causal-event-graph-kind '()))
+   value agentic-ai-lab-causal-event-graph-kind '()))
 
-(define-type (PooFlowCausalEventGraph @ Type.)
+(define-type (AgenticAILabCausalEventGraph @ Type.)
   .element?: causal-event-graph-shape?)
 
-(def (poo-flow-causal-event-graph? value)
-  (element? PooFlowCausalEventGraph value))
+(def (agentic-ai-lab-causal-event-graph? value)
+  (element? AgenticAILabCausalEventGraph value))
 
 (def (causal-trajectory-contract-shape? value)
   (and (temporal-causality-has-slots?
         value
         '(kind identity trigger-event-id intended-event-ids error-event-paths
                intended-impact-event-ids error-impact-event-ids))
-       (eq? (.ref value 'kind) poo-flow-causal-trajectory-contract-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-causal-trajectory-contract-kind)
        (temporal-causality-text? (.ref value 'identity))
        (temporal-causality-text? (.ref value 'trigger-event-id))
        (let ((intended (.ref value 'intended-event-ids))
@@ -291,11 +291,11 @@
                                   intended-impacts error-impacts)))
                 (temporal-causality-unique? all-identities))))))
 
-(define-type (PooFlowCausalTrajectoryContract @ Type.)
+(define-type (AgenticAILabCausalTrajectoryContract @ Type.)
   .element?: causal-trajectory-contract-shape?)
 
-(def (poo-flow-causal-trajectory-contract? value)
-  (element? PooFlowCausalTrajectoryContract value))
+(def (agentic-ai-lab-causal-trajectory-contract? value)
+  (element? AgenticAILabCausalTrajectoryContract value))
 
 (def (causal-trajectory-assessment-shape? value)
   (and (temporal-causality-has-slots?
@@ -304,7 +304,7 @@
                diagnostics intended-event-ids error-event-paths
                intended-impact-event-ids error-impact-event-ids
                assurance-closed? release-authorized? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-causal-trajectory-assessment-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-causal-trajectory-assessment-kind)
        (memq (.ref value 'status)
              '(causal-trajectory-admitted causal-trajectory-rejected))
        (boolean? (.ref value 'accepted?))
@@ -325,15 +325,15 @@
        (eq? (.ref value 'release-authorized?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowCausalTrajectoryAssessment @ Type.)
+(define-type (AgenticAILabCausalTrajectoryAssessment @ Type.)
   .element?: causal-trajectory-assessment-shape?)
 
-(def (poo-flow-causal-trajectory-assessment? value)
-  (element? PooFlowCausalTrajectoryAssessment value))
+(def (agentic-ai-lab-causal-trajectory-assessment? value)
+  (element? AgenticAILabCausalTrajectoryAssessment value))
 
 (def (causal-cut-shape? value)
   (and (causal-event-inventory-shape?
-        value poo-flow-causal-cut-kind
+        value agentic-ai-lab-causal-cut-kind
         '(event-graph-identity as-of-position))
        (temporal-causality-text? (.ref value 'event-graph-identity))
        (temporal-causality-position? (.ref value 'as-of-position))
@@ -344,11 +344,11 @@
                    (.ref value 'as-of-position))))
         (.ref value 'events))))
 
-(define-type (PooFlowCausalCut @ Type.)
+(define-type (AgenticAILabCausalCut @ Type.)
   .element?: causal-cut-shape?)
 
-(def (poo-flow-causal-cut? value)
-  (element? PooFlowCausalCut value))
+(def (agentic-ai-lab-causal-cut? value)
+  (element? AgenticAILabCausalCut value))
 
 (def (temporal-classification-receipt-shape? value)
   (and (temporal-causality-has-slots?
@@ -361,7 +361,7 @@
                unknown-frontier relation-trajectories structural-impact
                assurance-closed? release-authorized? runtime-executed?))
        (eq? (.ref value 'kind)
-            poo-flow-temporal-classification-receipt-kind)
+            agentic-ai-lab-temporal-classification-receipt-kind)
        (memq (.ref value 'status)
              '(bounded-temporal-classification
                partial-temporal-classification invalid-causal-cut))
@@ -387,36 +387,36 @@
                       outside-horizon-event-ids
                       unknown-frontier))))
        (list? (.ref value 'relation-trajectories))
-       (every poo-flow-relation-trajectory-witness?
+       (every agentic-ai-lab-relation-trajectory-witness?
               (.ref value 'relation-trajectories))
-       (poo-flow-structural-impact-receipt?
+       (agentic-ai-lab-structural-impact-receipt?
         (.ref value 'structural-impact))
        (eq? (.ref value 'assurance-closed?) #f)
        (eq? (.ref value 'release-authorized?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowTemporalClassificationReceipt @ Type.)
+(define-type (AgenticAILabTemporalClassificationReceipt @ Type.)
   .element?: temporal-classification-receipt-shape?)
 
-(def (poo-flow-temporal-classification-receipt? value)
-  (element? PooFlowTemporalClassificationReceipt value))
+(def (agentic-ai-lab-temporal-classification-receipt? value)
+  (element? AgenticAILabTemporalClassificationReceipt value))
 
 ;;; These contracts describe a finite family of candidate explanations. They
 ;;; do not convert temporal order into an observed causal edge.
-(def poo-flow-temporal-clock-domain-kind
-  'poo-flow.temporal-causality.clock-domain)
-(def poo-flow-temporal-model-observation-kind
-  'poo-flow.temporal-causality.model-observation)
-(def poo-flow-temporal-constraint-kind
-  'poo-flow.temporal-causality.constraint)
-(def poo-flow-temporal-hypothesis-kind
-  'poo-flow.temporal-causality.hypothesis)
-(def poo-flow-temporal-model-kind
-  'poo-flow.temporal-causality.model)
-(def poo-flow-temporal-query-kind
-  'poo-flow.temporal-causality.query)
-(def poo-flow-temporal-model-receipt-kind
-  'poo-flow.temporal-causality.model-receipt)
+(def agentic-ai-lab-temporal-clock-domain-kind
+  'agentic-ai-lab.temporal-causality.clock-domain)
+(def agentic-ai-lab-temporal-model-observation-kind
+  'agentic-ai-lab.temporal-causality.model-observation)
+(def agentic-ai-lab-temporal-constraint-kind
+  'agentic-ai-lab.temporal-causality.constraint)
+(def agentic-ai-lab-temporal-hypothesis-kind
+  'agentic-ai-lab.temporal-causality.hypothesis)
+(def agentic-ai-lab-temporal-model-kind
+  'agentic-ai-lab.temporal-causality.model)
+(def agentic-ai-lab-temporal-query-kind
+  'agentic-ai-lab.temporal-causality.query)
+(def agentic-ai-lab-temporal-model-receipt-kind
+  'agentic-ai-lab.temporal-causality.model-receipt)
 
 (def (temporal-model-shape? value kind slots)
   (and (temporal-causality-has-slots? value (cons 'kind slots))
@@ -428,17 +428,17 @@
        (= (length values) (length (delete-duplicates/hash values)))))
 
 (def (temporal-clock-domain-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-clock-domain-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-clock-domain-kind
                               '(identity clock-role))
        (temporal-causality-text? (.ref value 'identity))
        (symbol? (.ref value 'clock-role))))
-(define-type (PooFlowTemporalClockDomain @ Type.)
+(define-type (AgenticAILabTemporalClockDomain @ Type.)
   .element?: temporal-clock-domain-shape?)
-(def (poo-flow-temporal-clock-domain? value)
-  (element? PooFlowTemporalClockDomain value))
+(def (agentic-ai-lab-temporal-clock-domain? value)
+  (element? AgenticAILabTemporalClockDomain value))
 
 (def (temporal-model-observation-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-model-observation-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-model-observation-kind
                               '(identity domain-identity logical-position
                                 provenance-identity modality))
        (temporal-causality-text? (.ref value 'identity))
@@ -446,75 +446,78 @@
        (temporal-causality-position? (.ref value 'logical-position))
        (temporal-causality-text? (.ref value 'provenance-identity))
        (symbol? (.ref value 'modality))))
-(define-type (PooFlowTemporalModelObservation @ Type.)
+(define-type (AgenticAILabTemporalModelObservation @ Type.)
   .element?: temporal-model-observation-shape?)
-(def (poo-flow-temporal-model-observation? value)
-  (element? PooFlowTemporalModelObservation value))
+(def (agentic-ai-lab-temporal-model-observation? value)
+  (element? AgenticAILabTemporalModelObservation value))
 
 (def (temporal-constraint-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-constraint-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-constraint-kind
                               '(identity relation left-observation-id
                                 right-observation-id))
        (temporal-causality-text? (.ref value 'identity))
        (memq (.ref value 'relation) '(before not-after))
        (temporal-causality-text? (.ref value 'left-observation-id))
        (temporal-causality-text? (.ref value 'right-observation-id))))
-(define-type (PooFlowTemporalConstraint @ Type.)
+(define-type (AgenticAILabTemporalConstraint @ Type.)
   .element?: temporal-constraint-shape?)
-(def (poo-flow-temporal-constraint? value)
-  (element? PooFlowTemporalConstraint value))
+(def (agentic-ai-lab-temporal-constraint? value)
+  (element? AgenticAILabTemporalConstraint value))
 
 (def (temporal-hypothesis-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-hypothesis-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-hypothesis-kind
                               '(identity cause-observation-id
                                 effect-observation-id constraints))
        (temporal-causality-text? (.ref value 'identity))
        (temporal-causality-text? (.ref value 'cause-observation-id))
        (temporal-causality-text? (.ref value 'effect-observation-id))
        (list? (.ref value 'constraints))
-       (every poo-flow-temporal-constraint? (.ref value 'constraints))
+       (every agentic-ai-lab-temporal-constraint? (.ref value 'constraints))
        (temporal-model-id-list?
         (map (lambda (constraint) (.ref constraint 'identity))
              (.ref value 'constraints)))))
-(define-type (PooFlowTemporalHypothesis @ Type.)
+(define-type (AgenticAILabTemporalHypothesis @ Type.)
   .element?: temporal-hypothesis-shape?)
-(def (poo-flow-temporal-hypothesis? value)
-  (element? PooFlowTemporalHypothesis value))
+(def (agentic-ai-lab-temporal-hypothesis? value)
+  (element? AgenticAILabTemporalHypothesis value))
 
 (def (temporal-model-value-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-model-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-model-kind
                               '(identity semantic-digest domains observations
-                                hypotheses family-complete?))
+                                hypotheses family-complete? family-semantics))
        (every temporal-causality-text?
               (list (.ref value 'identity) (.ref value 'semantic-digest)))
        (list? (.ref value 'domains))
-       (every poo-flow-temporal-clock-domain? (.ref value 'domains))
+       (every agentic-ai-lab-temporal-clock-domain? (.ref value 'domains))
        (list? (.ref value 'observations))
-       (every poo-flow-temporal-model-observation? (.ref value 'observations))
+       (every agentic-ai-lab-temporal-model-observation? (.ref value 'observations))
        (list? (.ref value 'hypotheses))
        (pair? (.ref value 'hypotheses))
-       (every poo-flow-temporal-hypothesis? (.ref value 'hypotheses))
-       (boolean? (.ref value 'family-complete?))))
-(define-type (PooFlowTemporalModel @ Type.)
+       (every agentic-ai-lab-temporal-hypothesis? (.ref value 'hypotheses))
+       (boolean? (.ref value 'family-complete?))
+       (memq (.ref value 'family-semantics)
+             '(exclusive-explanations overlapping-mechanisms))
+       #t))
+(define-type (AgenticAILabTemporalModel @ Type.)
   .element?: temporal-model-value-shape?)
-(def (poo-flow-temporal-model? value)
-  (element? PooFlowTemporalModel value))
+(def (agentic-ai-lab-temporal-model? value)
+  (element? AgenticAILabTemporalModel value))
 
 (def (temporal-query-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-query-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-query-kind
                               '(identity hypothesis-identity exploration-limit))
        (temporal-causality-text? (.ref value 'identity))
        (temporal-causality-text? (.ref value 'hypothesis-identity))
        (or (not (.ref value 'exploration-limit))
            (and (exact-integer? (.ref value 'exploration-limit))
                 (> (.ref value 'exploration-limit) 0)))))
-(define-type (PooFlowTemporalQuery @ Type.)
+(define-type (AgenticAILabTemporalQuery @ Type.)
   .element?: temporal-query-shape?)
-(def (poo-flow-temporal-query? value)
-  (element? PooFlowTemporalQuery value))
+(def (agentic-ai-lab-temporal-query? value)
+  (element? AgenticAILabTemporalQuery value))
 
 (def (temporal-model-receipt-shape? value)
-  (and (temporal-model-shape? value poo-flow-temporal-model-receipt-kind
+  (and (temporal-model-shape? value agentic-ai-lab-temporal-model-receipt-kind
                               '(model-digest query-identity classification
                                 admissible-hypothesis-ids refuted-hypothesis-ids
                                 unknown-hypothesis-ids unexplored-hypothesis-ids
@@ -529,9 +532,12 @@
                 unknown-hypothesis-ids unexplored-hypothesis-ids))
        (boolean? (.ref value 'exhausted?))
        (boolean? (.ref value 'family-complete?))
-       (eq? (.ref value 'assumption) 'exclusive-explanations)
+       (memq (.ref value 'assumption)
+             '(exclusive-explanations overlapping-mechanisms))
+       (or (not (eq? (.ref value 'classification) 'necessary))
+           (eq? (.ref value 'assumption) 'exclusive-explanations))
        (eq? (.ref value 'runtime-executed?) #f)))
-(define-type (PooFlowTemporalModelReceipt @ Type.)
+(define-type (AgenticAILabTemporalModelReceipt @ Type.)
   .element?: temporal-model-receipt-shape?)
-(def (poo-flow-temporal-model-receipt? value)
-  (element? PooFlowTemporalModelReceipt value))
+(def (agentic-ai-lab-temporal-model-receipt? value)
+  (element? AgenticAILabTemporalModelReceipt value))

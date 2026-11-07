@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: Cedar native qualification boundary
+#+title: Cedar runtime qualification boundary
 
 * Source ownership
 
@@ -10,28 +10,28 @@ The public control-plane model remains Gerbil POO. This crate owns the strict
 runtime authorization projection, signed receipts, and single-use grants. The
 independent Runtime Host owns actual Cedar evaluation. One immutable AOT Host
 artifact contains both evaluator graphs and pins a private copy for each
-isolated worker invocation; this document does not declare native Gerbil
+isolated worker invocation; this document does not declare Gerbil
 authorization qualified.
 
-=packages/proofs/lean/PooFlowProof/Runtime/CedarNative.lean= owns the one Lean
-outcome projection. The diagnostic native probe and the AOT Host call that same
+=packages/proofs/lean/AgenticAILabProof/Runtime/CedarRuntime.lean= owns the one Lean
+outcome projection. The diagnostic runtime probe and the AOT Host call that same
 exported function; it decodes the upstream protobuf and calls
 =Cedar.Spec.isAuthorized=. Rust's existing =wire::evaluate_rust= evaluates
 those exact bytes independently.
 
-* Explicit native FFI gate
+* Explicit runtime FFI gate
 
 Supply the probe as an explicit build artifact input. For example:
 
 #+begin_src sh
-POO_FLOW_CEDAR_NATIVE_PROBE=/nix/store/...-cedar-native-probe/bin/cedarNativeProbe \
+AGENTIC_AI_LAB_CEDAR_RUNTIME_PROBE=/nix/store/...-cedar-runtime-probe/bin/cedarRuntimeProbe \
   cargo test --manifest-path bindings/cedar-gerbil/Cargo.toml \
-  -p poo-flow-cedar-authority \
-  --features native-ffi-qualification --test native_ffi -- --nocapture
+  -p agentic-ai-lab-cedar-authority \
+  --features ffi-qualification --test runtime_ffi -- --nocapture
 #+end_src
 
 This explicit feature requires a real compiled probe; missing artifacts fail,
-never skip. The C host initializes Lean on one native thread, transfers one
+never skip. The C host initializes Lean on one runtime thread, transfers one
 owned ByteArray into each call, borrows the returned String only while its
 Except owner is alive, and releases every call result on that same thread.
 The host uses no runtime subprocess or signal-disposition change. Its process
@@ -41,7 +41,7 @@ lifetime owns Lean initialization; it is not an unload/reinitialize API.
 
 The gate compares allow, default deny, and explicit forbid with the Rust
 authorizer, including determining and erroring policy identities. Each valid
-input is called 128 times inside the same native process. A malformed protobuf
+input is called 128 times inside the same runtime process. A malformed protobuf
 must fail with =cedar-input-invalid= and no success projection. These repetitions
 check stable evaluation and ownership behavior; they are not a leak proof or a
 performance benchmark, and do not establish Gerbil/Lean co-hosting. The probe
@@ -51,7 +51,7 @@ time remains outside that steady-state figure.
 
 The C declarations follow the generated C for pinned Lean 4.31. A different
 upstream =cedar-lean-ffi= revision has a different initializer signature and
-must not be copied without ABI qualification. Lake's module-native object
+must not be copied without ABI qualification. Lake's module-runtime object
 graph owns linking; no hand-maintained Cedar dependency list is introduced.
 
 * Admission properties not relaxed
@@ -64,13 +64,13 @@ digest mismatch becomes a typed failure; neither worker is an external engine
 artifact or a public CLI contract. Receipts bind the one Host artifact digest,
 the Host generation, and the two linked component identities.
 
-An explicit =poo_flow_preflight_only= context field is rejected before either
-engine runs, regardless of its value. A POO-native preflight request is editable
+An explicit =agentic_ai_lab_preflight_only= context field is rejected before either
+engine runs, regardless of its value. A POO preflight request is editable
 input, not Runtime source admission; a permissive Cedar policy cannot promote
 that marked request to a grant. This guard does not attest unmarked requests or
 implement Aitia's source-bound authorization and effect gate.
 
-The administrative POO-native runtime capability also declares
+The administrative POO runtime capability also declares
 =source-admission-required?=. Its Rust projection is mandatory
 =source_admission_required= metadata. For a protected action, ordinary request
 preparation rejects even if a caller removes every preflight context field;
@@ -99,7 +99,7 @@ owner supplies the socket, the expected Host digest, the Rust component
 identity, the Lean component identity, and the hard timeout. The handshake
 binds those identities and the Runtime generation before the first request.
 
-Tests accept =POO_FLOW_CEDAR_RUNTIME_HOST= as an explicit artifact input. No
+Tests accept =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST= as an explicit artifact input. No
 crate derives a repository root or build-cache path. The variable may point to
 a Nix store output, Bazel executable, or another declared build result; absence
 is an explicit qualification failure. A local Lake output is only a developer

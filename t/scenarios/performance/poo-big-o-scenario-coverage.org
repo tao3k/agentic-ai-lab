@@ -24,7 +24,7 @@ performance scenarios. It is scenario guidance, not a design plan.
 - fixed-slot-projection: project fixed slots into stable descriptors.
 - large-profile-projection: read large profile descriptors through vectors.
 - generated-receipt-boundary: project generated receipt accessors at runtime boundary.
-- composition families: keep profile composition POO-native.
+- composition families: keep profile composition POO.
 
 * Newly Added Big-O Families
 
@@ -38,7 +38,7 @@ performance scenarios. It is scenario guidance, not a design plan.
 Each newly added Big-O family must have:
 
 - =input/src/...=: the downstream shape before optimization.
-- =expected/src/...=: the POO-native shape after optimization.
+- =expected/src/...=: the POO shape after optimization.
 - =benchmark.ss= fields =inputPath= and =expectedPath= pointing to those files.
 
 * Unsafe Shape Policy
@@ -56,4 +56,4 @@ The POO benchmark layer must not hide src-level POO problems behind smaller iter
 - tool-calling-control: fact-family objects avoid self-referential slot/value naming and keep fact lookup on a stable index. The tool-calling suite now runs in 0.77s real time with 139 MB max RSS, and the fixture receipt reports 6.638 ms.
 - scenario support: performance fixtures use the real extension constructors instead of redefining local lookalike POO objects.
 - full POO performance suite: 1.90s real time, 166 MB max RSS, all checks passing.
-- composition micro-gates: native large-library reuse and indexed object-list family are 3 us; macro style matrix is 1 us. The outer diagnostic run is 0.40s real time with 106 MB max RSS.
+- composition micro-gates: runtime large-library reuse and indexed object-list family are 3 us; macro style matrix is 1 us. The outer diagnostic run is 0.40s real time with 106 MB max RSS.

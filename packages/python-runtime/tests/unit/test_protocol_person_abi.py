@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_runtime.protocol_person_abi import (
+from agentic_ai_lab_runtime.protocol_person_abi import (
     ABI_MINOR,
     REQUIRED_CAPABILITIES,
     PromotionRequest,

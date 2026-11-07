@@ -6,10 +6,12 @@
 ;;; Example owner: a browser profile remains declarative until a downstream
 ;;; runtime chooses to realize its staged composition.
 
-(import :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
-        (only-in :poo-flow/src/profiles/agentic-research
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        :yuanxu/profile-composition/selection-syntax
+
+        :yuanxu/profile-composition/profile-bundle
+        (only-in :agentic-ai-lab/modules/workflow/profiles/agentic-research
                  AgenticResearchModule
                  BrowserResearchScenarioProfile))
 
@@ -17,8 +19,9 @@
 
 ;;; Composition boundary: this example is a pure declarative value; runtime
 ;;; scheduling and evidence effects remain behind the selected runtime profile.
-(user-composition browser-profile-composition
-  (compose profiles
+(def browser-profile-composition
+  (.new Scenario name: 'browser-profile-composition
+        config: (compose profiles
     (use-module AgenticResearchModule as research
       researcher evidence-curator runtime)
-    BrowserResearchScenarioProfile))
+    BrowserResearchScenarioProfile)))

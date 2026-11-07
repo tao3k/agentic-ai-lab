@@ -7,15 +7,15 @@
 ;;; Invariant: durable memory rows are handoff receipts only; Scheme never
 ;;; recalls, commits, consolidates, persists, or repairs memory stores.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-memory-durable"
-                 poo-flow-custom-my-module-session-memory-durable-case))
+                 agentic-ai-lab-custom-my-module-session-memory-durable-case))
 
 (export user-interface-custom-session-memory-durable-test)
 
@@ -28,7 +28,7 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : (-> [Alist] Symbol [Value])
@@ -40,26 +40,26 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-memory-durable-test
-  (test-suite "poo-flow custom user-interface session-memory-durable case"
-    (poo-flow-test-case "projects durable memory job receipts without runtime work"
+  (test-suite "agentic-ai-lab custom user-interface session-memory-durable case"
+    (yuanxu-test-case "projects durable memory job receipts without runtime work"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-memory-durable-case))
+              (car agentic-ai-lab-custom-my-module-session-memory-durable-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-memory-durable-case))
+               agentic-ai-lab-custom-my-module-session-memory-durable-case))
              (parent-summary (car rows))
              (stale-source (list-ref rows 4))
              (repair (list-ref rows 5)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
-                      '(session . session-core))
+        (check-equal? (yuanxu-user-module-selection-key selection)
+                      '(session . session))
         (check-equal? (length rows) 6)
         (check-equal? (rows-field rows 'kind)
-                      '(poo-flow.memory-core.durable-job-receipt
-                        poo-flow.memory-core.durable-job-receipt
-                        poo-flow.memory-core.durable-job-receipt
-                        poo-flow.memory-core.durable-job-receipt
-                        poo-flow.memory-core.durable-job-receipt
-                        poo-flow.memory-core.durable-job-receipt))
+                      '(agentic-ai-lab.memory-core.durable-job-receipt
+                        agentic-ai-lab.memory-core.durable-job-receipt
+                        agentic-ai-lab.memory-core.durable-job-receipt
+                        agentic-ai-lab.memory-core.durable-job-receipt
+                        agentic-ai-lab.memory-core.durable-job-receipt
+                        agentic-ai-lab.memory-core.durable-job-receipt))
         (check-equal? (rows-field rows 'job-kind)
                       '(recall write recall consolidation stale-source repair))
         (check-equal? (test-ref parent-summary 'project-id) 'custom/project)

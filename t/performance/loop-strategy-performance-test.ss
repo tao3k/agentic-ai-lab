@@ -6,7 +6,7 @@
 ;;; Boundary: loop strategy performance gates cover batched slot projection.
 ;;; Invariant: strategy projection stays local contract data, not runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,9 +15,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/loops/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/src/loops/strategy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan
                  loop-strategy-plan->contract))
 
@@ -37,7 +37,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-strategy-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-strategy-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-strategy-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -71,7 +71,7 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-strategy-performance-patterns count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-strategy-performance-pattern))
 
@@ -100,7 +100,7 @@
 ;; : TestSuite
 (def loop-strategy-performance-test
   (test-suite "loop strategy performance"
-    (poo-flow-test-case "keeps large strategy projection inside benchmark contract"
+    (yuanxu-test-case "keeps large strategy projection inside benchmark contract"
       (let* ((pattern-count 600)
              (plan (loop-strategy-performance-plan pattern-count))
              (summary

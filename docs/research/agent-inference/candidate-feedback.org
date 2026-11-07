@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: candidate execution feedback: Agent-written Datalog needs execution evidence
+#+STATUS: reading of an unreviewed arXiv v1; not gerbil-ascent evidence
+#+DATE: 2026-09-30
+#+FILETAGS: :research:agent:datalog:benchmark:
+
+* Source
+:PROPERTIES:
+:CUSTOM_ID: agent-candidate-execution-feedback
+:SOURCE_PDF: https://arxiv.org/pdf/2609.37233
+:SOURCE_HTML: https://arxiv.org/html/2609.37233v1
+:VERSION: arXiv v1, submitted 2026-09-29
+:END:
+
+Yuan Li, Hanyun Jiang, Guowei Tian, Chengpeng Wang, Peisen Yao,
+/DatalogBench: Evaluating Large Language Models on Text-to-Datalog
+Synthesis/.  This is a very recent preprint, so its observations are
+useful hypotheses, not a settled cross-model benchmark result.
+
+* Evidence ledger
+:PROPERTIES:
+:CUSTOM_ID: agent-candidate-execution-feedback-evidence
+:END:
+
+#+NAME: candidate-execution-feedback-evidence
+| Locator | Paper result | Transfer to our Library | Limit |
+|---------+--------------+-------------------------+-------|
+| Abstract; §§4–5 | 136 tasks, held-out execution grading; oracle checked by mutation analysis | Grade candidate programs on full outputs across input variants | Their dialect is Soufflé, not Gerbil Scheme |
+| §6.1 | Direct prompting peaks at 68.4% exact match; undeclared or mistyped auxiliary predicates cause many compile failures | Return relation-schema and declaration diagnostics | A compile pass is not semantic correctness |
+| §§6.2–6.3 | Two coding agents reach up to 83.8%; most remaining failures are semantic, concentrated in recursive tasks | Add recursive base/step/join counterexamples to feedback | No result here measures our Library or current models |
+| §4.3; Appendix G | Mutants delete rules/atoms or misbind joins; finite test agreement is not a proof | Build independent model and near-miss variants for the first gate | Mutation family cannot cover every wrong rule |
+
+* Design assessment
+
+An Agent can often repair a missing declaration after a compiler error,
+yet a recursive rule with a wrong join can run and produce plausible
+rows.  A Library that only says =accepted= is therefore insufficient.
+It should return typed diagnostics first, then complete relation
+differences or bounded counterexamples under a named finite scenario.
+The paper explicitly separates compile pass from exact output match.
+Its numerical results apply to its Soufflé benchmark, model set and
+prompt configurations; they do not predict Gerbil success rates.
+
+* Discriminator
+
+For one reachability graph, offer a correct proposal, an undeclared
+helper predicate, and a compiling wrong recursive join.  Require the
+Library to reject the helper, execute both admitted programs, and
+show a pair present only under the incorrect rule or missing from it.
+Repeat after source withdrawal; compare all rows with a separate
+finite graph model, not merely a single expected answer.
+
+[[file:index.org][Research index]].
+
+* Execution transfer, 2026-10-09
+
+Re-reading §§4.3, 5.1 and Appendix G sharpens the protocol: freeze a
+candidate before grading held-out variants; demonstration feedback stays
+separate. The paper's mutation families remove rules, remove body atoms
+or rebind joins. They do not exercise negation, aggregate functions or
+grouping scope, so their score cannot establish correctness there.
+
+The [[file:../../features/candidate-feedback/acceptance.org][finite Scheme discriminator]] now implements complete missing/extra feedback
+through the existing reasoning receipt and snapshot binding. It freezes five
+hand-written proposals and compares 320 attempts over 64 finite graphs with
+independent graph walks. A demonstration-pass/held-out-failure control,
+withdrawal, rejected helper and unfinished attempt are included. Lean proves
+the set-difference characterization; Quint checks completion and binding before
+comparison publication. This closes the local discriminator described above;
+model synthesis and running the released Souffle corpus remain open.

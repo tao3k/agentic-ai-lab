@@ -5,42 +5,42 @@
 
 ;;; Owns the validation receipt record and pure admission construction.
 ;;; ABI/report projection is isolated in policy-validation-receipt-projection.ss.
-(import :poo-flow/modules/session/objects
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/session/policy-validation-support
-        :poo-flow/modules/session/policy-validation-communication
-        :poo-flow/modules/session/policy-validation-catalog)
+(import :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/session/policy-validation-support
+        :agentic-ai-lab/modules/session/policy-validation-communication
+        :agentic-ai-lab/modules/session/policy-validation-catalog)
 
-(export (struct-out poo-flow-session-policy-validation-receipt-record)
-        poo-flow-session-policy-validation-receipt
-        poo-flow-session-policy-validation-receipt?
-        poo-flow-session-policy-validation-receipt-validation-id
-        poo-flow-session-policy-validation-receipt-effective-model-ref
-        poo-flow-session-policy-validation-receipt-effective-prompt-session-ref
-        poo-flow-session-policy-validation-receipt-effective-prompt-chunk-refs
-        poo-flow-session-policy-validation-receipt-effective-isolation-mode
-        poo-flow-session-policy-validation-receipt-effective-sandbox-profile-ref
-        poo-flow-session-policy-validation-receipt-tool-catalog-ref
-        poo-flow-session-policy-validation-receipt-tool-catalog-valid?
-        poo-flow-session-policy-validation-receipt-tool-catalog-policy-tool-refs
-        poo-flow-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
-        poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
-        poo-flow-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
-        poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
-        poo-flow-session-policy-validation-receipt-memory-catalog-ref
-        poo-flow-session-policy-validation-receipt-memory-catalog-valid?
-        poo-flow-session-policy-validation-receipt-memory-catalog-resolved-store-refs
-        poo-flow-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
-        poo-flow-session-policy-validation-receipt-allowed-communication-channel-receipts
-        poo-flow-session-policy-validation-receipt-denied-communication-channel-receipts
-        poo-flow-session-policy-validation-receipt-allowed-communication-receipts
-        poo-flow-session-policy-validation-receipt-denied-communication-receipts
-        poo-flow-session-policy-validation-receipt-valid?
-        poo-flow-session-policy-validation-receipt-diagnostic-count
-        poo-flow-session-policy-validation-receipt-diagnostics
-        poo-flow-session-policy-validation-receipt-runtime-executed?)
+(export (struct-out agentic-ai-lab-session-policy-validation-receipt-record)
+        agentic-ai-lab-session-policy-validation-receipt
+        agentic-ai-lab-session-policy-validation-receipt?
+        agentic-ai-lab-session-policy-validation-receipt-validation-id
+        agentic-ai-lab-session-policy-validation-receipt-effective-model-ref
+        agentic-ai-lab-session-policy-validation-receipt-effective-prompt-session-ref
+        agentic-ai-lab-session-policy-validation-receipt-effective-prompt-chunk-refs
+        agentic-ai-lab-session-policy-validation-receipt-effective-isolation-mode
+        agentic-ai-lab-session-policy-validation-receipt-effective-sandbox-profile-ref
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-ref
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-valid?
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-policy-tool-refs
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
+        agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
+        agentic-ai-lab-session-policy-validation-receipt-memory-catalog-ref
+        agentic-ai-lab-session-policy-validation-receipt-memory-catalog-valid?
+        agentic-ai-lab-session-policy-validation-receipt-memory-catalog-resolved-store-refs
+        agentic-ai-lab-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
+        agentic-ai-lab-session-policy-validation-receipt-allowed-communication-channel-receipts
+        agentic-ai-lab-session-policy-validation-receipt-denied-communication-channel-receipts
+        agentic-ai-lab-session-policy-validation-receipt-allowed-communication-receipts
+        agentic-ai-lab-session-policy-validation-receipt-denied-communication-receipts
+        agentic-ai-lab-session-policy-validation-receipt-valid?
+        agentic-ai-lab-session-policy-validation-receipt-diagnostic-count
+        agentic-ai-lab-session-policy-validation-receipt-diagnostics
+        agentic-ai-lab-session-policy-validation-receipt-runtime-executed?)
 
-(defstruct poo-flow-session-policy-validation-receipt-record
+(defstruct agentic-ai-lab-session-policy-validation-receipt-record
   (validation-id
    scope-ref
    valid?
@@ -101,7 +101,7 @@
 ;;; Invariant: construction records runtime ownership but never executes the runtime.
 ;; : (forall (p s a m) (-> Symbol Symbol p p p p p p p p p p p [s] [s] [s] [s] [a] [a] [m] PooSessionPolicyValidationReceipt))
 ;; : (-> Symbol Symbol PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy PooSessionPolicy [Symbol] [Symbol] [Symbol] [Symbol] [PooSessionToolAttempt] [PooSessionToolAttempt] [Alist] PooSessionPolicyValidationReceipt)
-(def (poo-flow-session-policy-validation-receipt validation-id
+(def (agentic-ai-lab-session-policy-validation-receipt validation-id
                                                 scope-ref
                                                 model-policy
                                                 prompt-policy
@@ -121,296 +121,296 @@
                                                 agent-tool-attempts
                                                 hook-tool-attempts
                                                 . maybe-metadata)
-  (poo-flow-session-require "session policy validation id must be a symbol"
+  (agentic-ai-lab-session-require "session policy validation id must be a symbol"
                             (symbol? validation-id)
                             validation-id)
-  (poo-flow-session-require "session policy validation scope must be a symbol"
+  (agentic-ai-lab-session-require "session policy validation scope must be a symbol"
                             (symbol? scope-ref)
                             scope-ref)
-  (poo-flow-session-require "session policy validation model policy required"
-                            (poo-flow-session-policy? model-policy)
+  (agentic-ai-lab-session-require "session policy validation model policy required"
+                            (agentic-ai-lab-session-policy? model-policy)
                             model-policy)
-  (poo-flow-session-require "session policy validation prompt policy required"
-                            (poo-flow-session-policy? prompt-policy)
+  (agentic-ai-lab-session-require "session policy validation prompt policy required"
+                            (agentic-ai-lab-session-policy? prompt-policy)
                             prompt-policy)
-  (poo-flow-session-require "session policy validation isolation policy required"
-                            (poo-flow-session-policy? isolation-policy)
+  (agentic-ai-lab-session-require "session policy validation isolation policy required"
+                            (agentic-ai-lab-session-policy? isolation-policy)
                             isolation-policy)
-  (poo-flow-session-require "session policy validation sandbox policy required"
-                            (poo-flow-session-policy? sandbox-policy)
+  (agentic-ai-lab-session-require "session policy validation sandbox policy required"
+                            (agentic-ai-lab-session-policy? sandbox-policy)
                             sandbox-policy)
-  (poo-flow-session-require "session policy validation context policy required"
-                            (poo-flow-session-policy? context-policy)
+  (agentic-ai-lab-session-require "session policy validation context policy required"
+                            (agentic-ai-lab-session-policy? context-policy)
                             context-policy)
-  (poo-flow-session-require "session policy validation history policy required"
-                            (poo-flow-session-policy? history-policy)
+  (agentic-ai-lab-session-require "session policy validation history policy required"
+                            (agentic-ai-lab-session-policy? history-policy)
                             history-policy)
-  (poo-flow-session-require "session policy validation communication policy required"
-                            (poo-flow-session-policy? communication-policy)
+  (agentic-ai-lab-session-require "session policy validation communication policy required"
+                            (agentic-ai-lab-session-policy? communication-policy)
                             communication-policy)
-  (poo-flow-session-require "session policy validation sharing policy required"
-                            (poo-flow-session-policy? sharing-policy)
+  (agentic-ai-lab-session-require "session policy validation sharing policy required"
+                            (agentic-ai-lab-session-policy? sharing-policy)
                             sharing-policy)
-  (poo-flow-session-require "session policy validation resource policy required"
-                            (poo-flow-session-policy? resource-policy)
+  (agentic-ai-lab-session-require "session policy validation resource policy required"
+                            (agentic-ai-lab-session-policy? resource-policy)
                             resource-policy)
-  (poo-flow-session-require "session policy validation agent tool policy required"
-                            (poo-flow-session-policy? agent-tool-policy)
+  (agentic-ai-lab-session-require "session policy validation agent tool policy required"
+                            (agentic-ai-lab-session-policy? agent-tool-policy)
                             agent-tool-policy)
-  (poo-flow-session-require "session policy validation hook tool policy required"
-                            (poo-flow-session-policy? hook-tool-policy)
+  (agentic-ai-lab-session-require "session policy validation hook tool policy required"
+                            (agentic-ai-lab-session-policy? hook-tool-policy)
                             hook-tool-policy)
-  (poo-flow-session-require "session policy validation agent attempts must be attempts"
-                            (poo-flow-session-every?
-                             poo-flow-session-policy-tool-attempt?
+  (agentic-ai-lab-session-require "session policy validation agent attempts must be attempts"
+                            (agentic-ai-lab-session-every?
+                             agentic-ai-lab-session-policy-tool-attempt?
                              agent-tool-attempts)
                             agent-tool-attempts)
-  (poo-flow-session-require "session policy validation hook attempts must be attempts"
-                            (poo-flow-session-every?
-                             poo-flow-session-policy-tool-attempt?
+  (agentic-ai-lab-session-require "session policy validation hook attempts must be attempts"
+                            (agentic-ai-lab-session-every?
+                             agentic-ai-lab-session-policy-tool-attempt?
                              hook-tool-attempts)
                             hook-tool-attempts)
   (let* ((context-ref-partition
-          (poo-flow-session-policy-partition-refs
+          (agentic-ai-lab-session-policy-partition-refs
            requested-context-refs
-           (poo-flow-session-policy-context-allowed context-policy)))
+           (agentic-ai-lab-session-policy-context-allowed context-policy)))
          (allowed-context-refs
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            context-ref-partition))
          (denied-context-refs
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            context-ref-partition))
          (history-record-partition
-          (poo-flow-session-policy-partition-refs
+          (agentic-ai-lab-session-policy-partition-refs
            requested-history-records
-           (poo-flow-session-policy-history-allowed history-policy)))
+           (agentic-ai-lab-session-policy-history-allowed history-policy)))
          (allowed-history-records
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            history-record-partition))
          (denied-history-records
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            history-record-partition))
          (communication-channel-partition
-          (poo-flow-session-policy-partition-refs
+          (agentic-ai-lab-session-policy-partition-refs
            requested-channel-refs
-           (poo-flow-session-policy-channel-allowed communication-policy)))
+           (agentic-ai-lab-session-policy-channel-allowed communication-policy)))
          (allowed-communication-channels
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            communication-channel-partition))
          (denied-communication-channels
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            communication-channel-partition))
          (resource-ref-partition
-          (poo-flow-session-policy-partition-refs
+          (agentic-ai-lab-session-policy-partition-refs
            requested-resource-refs
-           (poo-flow-session-policy-resource-capabilities resource-policy)))
+           (agentic-ai-lab-session-policy-resource-capabilities resource-policy)))
          (allowed-resource-refs
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            resource-ref-partition))
          (denied-resource-refs
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            resource-ref-partition))
          (agent-tool-attempt-partition
-          (poo-flow-session-validation-partition/with-context
-           poo-flow-session-agent-tool-attempt-allowed?
+          (agentic-ai-lab-session-validation-partition/with-context
+           agentic-ai-lab-session-agent-tool-attempt-allowed?
            agent-tool-policy
            agent-tool-attempts))
          (allowed-agent-tool-attempts
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            agent-tool-attempt-partition))
          (denied-agent-tool-attempts
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            agent-tool-attempt-partition))
          (hook-tool-attempt-partition
-          (poo-flow-session-validation-partition/with-context
-           poo-flow-session-hook-tool-attempt-allowed?
+          (agentic-ai-lab-session-validation-partition/with-context
+           agentic-ai-lab-session-hook-tool-attempt-allowed?
            hook-tool-policy
            hook-tool-attempts))
          (allowed-hook-tool-attempts
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            hook-tool-attempt-partition))
          (denied-hook-tool-attempts
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            hook-tool-attempt-partition))
          (metadata
           (match maybe-metadata
             ([] '())
             ([value . _] value)))
          (communication-channel-receipt-rows
-          (poo-flow-session-policy-communication-channel-receipt-rows
-           (poo-flow-session-policy-communication-channel-receipts metadata)))
+          (agentic-ai-lab-session-policy-communication-channel-receipt-rows
+           (agentic-ai-lab-session-policy-communication-channel-receipts metadata)))
          (communication-channel-receipt-partition
-          (poo-flow-session-validation-partition/with-context
-           poo-flow-session-policy-communication-channel-receipt-allowed?
+          (agentic-ai-lab-session-validation-partition/with-context
+           agentic-ai-lab-session-policy-communication-channel-receipt-allowed?
            communication-policy
            communication-channel-receipt-rows))
          (allowed-communication-channel-receipts
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            communication-channel-receipt-partition))
          (denied-communication-channel-receipts
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            communication-channel-receipt-partition))
          (communication-receipt-rows
-          (poo-flow-session-policy-communication-receipt-rows
-           (poo-flow-session-policy-communication-receipts metadata)))
+          (agentic-ai-lab-session-policy-communication-receipt-rows
+           (agentic-ai-lab-session-policy-communication-receipts metadata)))
          (communication-receipt-partition
-          (poo-flow-session-validation-partition/with-context
-           poo-flow-session-policy-communication-receipt-allowed?
+          (agentic-ai-lab-session-validation-partition/with-context
+           agentic-ai-lab-session-policy-communication-receipt-allowed?
            communication-policy
            communication-receipt-rows))
          (allowed-communication-receipts
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            communication-receipt-partition))
          (denied-communication-receipts
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            communication-receipt-partition))
          (tool-catalog-validation
-          (poo-flow-session-tool-catalog-validation metadata))
+          (agentic-ai-lab-session-tool-catalog-validation metadata))
          (tool-catalog-diagnostics
-          (poo-flow-session-tool-catalog-validation-ref
+          (agentic-ai-lab-session-tool-catalog-validation-ref
            tool-catalog-validation
            'diagnostics
            '()))
          (allowed-attempt-tool-refs
-          (poo-flow-session-policy-attempt-tool-refs
+          (agentic-ai-lab-session-policy-attempt-tool-refs
            allowed-agent-tool-attempts
            allowed-hook-tool-attempts))
          (catalog-attempt-ref-partition
-          (poo-flow-session-policy-catalog-attempt-ref-partition
+          (agentic-ai-lab-session-policy-catalog-attempt-ref-partition
            tool-catalog-validation
            allowed-attempt-tool-refs))
          (tool-catalog-allowed-attempt-tool-refs
-          (poo-flow-session-validation-partition-accepted
+          (agentic-ai-lab-session-validation-partition-accepted
            catalog-attempt-ref-partition))
          (tool-catalog-unresolved-attempt-tool-refs
-          (poo-flow-session-validation-partition-rejected
+          (agentic-ai-lab-session-validation-partition-rejected
            catalog-attempt-ref-partition))
          (memory-catalog-validation
-          (poo-flow-session-memory-catalog-validation metadata))
+          (agentic-ai-lab-session-memory-catalog-validation metadata))
          (memory-catalog-diagnostics
-          (poo-flow-session-memory-catalog-validation-ref
+          (agentic-ai-lab-session-memory-catalog-validation-ref
            memory-catalog-validation
            'diagnostics
            '()))
          (sibling-session-refs
-          (poo-flow-session-validation-alist-ref
+          (agentic-ai-lab-session-validation-alist-ref
            metadata
            'sibling-session-refs
            '()))
          (denied-sibling-context-refs
-          (poo-flow-session-policy-denied-sibling-context-refs
+          (agentic-ai-lab-session-policy-denied-sibling-context-refs
            requested-context-refs
            sibling-session-refs
            isolation-policy))
          (diagnostics
           (let* ((diagnostics0
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'context-session-not-granted
                    scope-ref
                    denied-context-refs
                    '()))
                  (diagnostics1
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'history-record-not-granted
                    scope-ref
                    denied-history-records
                    diagnostics0))
                  (diagnostics2
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'communication-channel-not-granted
                    scope-ref
                    denied-communication-channels
                    diagnostics1))
                  (diagnostics2channel
-                  (poo-flow-session-communication-channel-receipt-diagnostics/rev
+                  (agentic-ai-lab-session-communication-channel-receipt-diagnostics/rev
                    scope-ref
                    communication-policy
                    communication-channel-receipt-rows
                    diagnostics2))
                  (diagnostics2a
-                  (poo-flow-session-communication-channel-diagnostics/rev
+                  (agentic-ai-lab-session-communication-channel-diagnostics/rev
                    scope-ref
                    communication-policy
                    communication-receipt-rows
                    diagnostics2channel))
                  (diagnostics2b
-                  (poo-flow-session-communication-target-diagnostics/rev
+                  (agentic-ai-lab-session-communication-target-diagnostics/rev
                    scope-ref
                    communication-policy
                    communication-receipt-rows
                    diagnostics2a))
                  (diagnostics3
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'resource-capability-not-granted
                    scope-ref
                    denied-resource-refs
                    diagnostics2b))
                  (diagnostics4
-                  (poo-flow-session-tool-attempt-diagnostics/rev
+                  (agentic-ai-lab-session-tool-attempt-diagnostics/rev
                    'agent-tool-attempt-not-granted
                    denied-agent-tool-attempts
                    diagnostics3))
                  (diagnostics5
-                  (poo-flow-session-tool-attempt-diagnostics/rev
+                  (agentic-ai-lab-session-tool-attempt-diagnostics/rev
                    'hook-tool-attempt-not-granted
                    denied-hook-tool-attempts
                    diagnostics4))
                  (diagnostics6
-                  (poo-flow-session-hook-inheritance-diagnostics/rev
+                  (agentic-ai-lab-session-hook-inheritance-diagnostics/rev
                    agent-tool-policy
                    denied-hook-tool-attempts
                    diagnostics5))
                  (diagnostics7
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'sibling-context-not-granted
                    scope-ref
                    denied-sibling-context-refs
                    diagnostics6))
                  (diagnostics8
-                  (if (poo-flow-session-resource-policy-accounted?
+                  (if (agentic-ai-lab-session-resource-policy-accounted?
                        sharing-policy)
                     diagnostics7
-                    (cons (poo-flow-session-policy-diagnostic
+                    (cons (agentic-ai-lab-session-policy-diagnostic
                            'resource-sharing-missing-accounting-owner
                            scope-ref
-                           (poo-flow-session-policy-resource-grants
+                           (agentic-ai-lab-session-policy-resource-grants
                             sharing-policy))
                           diagnostics7)))
                  (diagnostics9
-                  (poo-flow-session-validation-reverse-onto
+                  (agentic-ai-lab-session-validation-reverse-onto
                    tool-catalog-diagnostics
                    diagnostics8))
                  (diagnostics9a
-                  (poo-flow-session-denied-ref-diagnostics/rev
+                  (agentic-ai-lab-session-denied-ref-diagnostics/rev
                    'tool-attempt-not-in-catalog
                    scope-ref
                    tool-catalog-unresolved-attempt-tool-refs
                    diagnostics9))
                  (diagnostics10
-                  (poo-flow-session-validation-reverse-onto
+                  (agentic-ai-lab-session-validation-reverse-onto
                    memory-catalog-diagnostics
                    diagnostics9a)))
             (reverse diagnostics10))))
-    (make-poo-flow-session-policy-validation-receipt-record
+    (make-agentic-ai-lab-session-policy-validation-receipt-record
      validation-id
      scope-ref
      (null? diagnostics)
-     (poo-flow-session-policy-slot-value model-policy 'model-ref #f)
-     (poo-flow-session-policy-slot-value
+     (agentic-ai-lab-session-policy-slot-value model-policy 'model-ref #f)
+     (agentic-ai-lab-session-policy-slot-value
       prompt-policy
       'prompt-session-ref
       #f)
-     (poo-flow-session-policy-slot-value
+     (agentic-ai-lab-session-policy-slot-value
       prompt-policy
       'prompt-chunk-refs
       '())
-     (poo-flow-session-policy-isolation-mode isolation-policy)
-     (poo-flow-session-policy-isolation-sibling-context isolation-policy)
-     (poo-flow-session-policy-isolation-parent-write isolation-policy)
-     (poo-flow-session-policy-isolation-peer-communication isolation-policy)
-     (poo-flow-session-policy-sandbox-profile-ref sandbox-policy)
-     (poo-flow-session-policy-sandbox-inheritance-mode sandbox-policy)
-     (poo-flow-session-policy-sandbox-sharing-mode sandbox-policy)
+     (agentic-ai-lab-session-policy-isolation-mode isolation-policy)
+     (agentic-ai-lab-session-policy-isolation-sibling-context isolation-policy)
+     (agentic-ai-lab-session-policy-isolation-parent-write isolation-policy)
+     (agentic-ai-lab-session-policy-isolation-peer-communication isolation-policy)
+     (agentic-ai-lab-session-policy-sandbox-profile-ref sandbox-policy)
+     (agentic-ai-lab-session-policy-sandbox-inheritance-mode sandbox-policy)
+     (agentic-ai-lab-session-policy-sandbox-sharing-mode sandbox-policy)
      allowed-context-refs
      denied-context-refs
      allowed-history-records
@@ -427,77 +427,77 @@
      denied-agent-tool-attempts
      allowed-hook-tool-attempts
      denied-hook-tool-attempts
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'validation-id
       #f)
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'catalog-ref
       #f)
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'valid?
       #f)
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'policy-tool-refs
       '())
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'resolved-tool-refs
       '())
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'unresolved-tool-refs
       '())
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'sandbox-required-tool-refs
       '())
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'action-mismatch-grants
       '())
      tool-catalog-allowed-attempt-tool-refs
      tool-catalog-unresolved-attempt-tool-refs
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'validation-id
       #f)
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'catalog-ref
       #f)
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'valid?
       #f)
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'catalog-store-count
       0)
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'catalog-store-refs
       '())
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'intent-count
       0)
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'intent-store-refs
       '())
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'resolved-store-refs
       '())
-     (poo-flow-session-memory-catalog-validation-ref
+     (agentic-ai-lab-session-memory-catalog-validation-ref
       memory-catalog-validation
       'unresolved-store-refs
       '())
-     (poo-flow-session-policy-resource-grants sharing-policy)
+     (agentic-ai-lab-session-policy-resource-grants sharing-policy)
      (length diagnostics)
      diagnostics
      "marlin-agent-core"
@@ -505,141 +505,141 @@
      metadata)))
 
 ;; : (-> Datum Boolean)
-(def (poo-flow-session-policy-validation-receipt? value)
-  (poo-flow-session-policy-validation-receipt-record? value))
+(def (agentic-ai-lab-session-policy-validation-receipt? value)
+  (agentic-ai-lab-session-policy-validation-receipt-record? value))
 
 ;;; Keep these as named definitions so policy reports attach diagnostics to
 ;;; stable runtime bindings rather than a top-level accessor macro call.
 ;; : (-> PooSessionPolicyValidationReceipt Symbol)
-(def (poo-flow-session-policy-validation-receipt-validation-id receipt)
-  (poo-flow-session-policy-validation-receipt-record-validation-id receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-validation-id receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-validation-id receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-effective-model-ref receipt)
-  (poo-flow-session-policy-validation-receipt-record-effective-model-ref
+(def (agentic-ai-lab-session-policy-validation-receipt-effective-model-ref receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-effective-model-ref
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-effective-prompt-session-ref
+(def (agentic-ai-lab-session-policy-validation-receipt-effective-prompt-session-ref
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-effective-prompt-session-ref
+  (agentic-ai-lab-session-policy-validation-receipt-record-effective-prompt-session-ref
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-effective-prompt-chunk-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-effective-prompt-chunk-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-effective-prompt-chunk-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-effective-prompt-chunk-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-effective-isolation-mode
+(def (agentic-ai-lab-session-policy-validation-receipt-effective-isolation-mode
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-effective-isolation-mode
+  (agentic-ai-lab-session-policy-validation-receipt-record-effective-isolation-mode
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-effective-sandbox-profile-ref
+(def (agentic-ai-lab-session-policy-validation-receipt-effective-sandbox-profile-ref
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-effective-sandbox-profile-ref
+  (agentic-ai-lab-session-policy-validation-receipt-record-effective-sandbox-profile-ref
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-ref receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-ref receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-ref receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-ref receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Boolean)
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-valid? receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-valid?
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-valid? receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-valid?
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-policy-tool-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-policy-tool-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-policy-tool-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-policy-tool-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-resolved-tool-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-resolved-tool-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-unresolved-tool-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-unresolved-tool-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-allowed-attempt-tool-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-allowed-attempt-tool-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
+(def (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
       receipt)
-  (poo-flow-session-policy-validation-receipt-record-tool-catalog-unresolved-attempt-tool-refs
+  (agentic-ai-lab-session-policy-validation-receipt-record-tool-catalog-unresolved-attempt-tool-refs
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Object)
-(def (poo-flow-session-policy-validation-receipt-memory-catalog-ref receipt)
-  (poo-flow-session-policy-validation-receipt-record-memory-catalog-ref
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt Boolean)
-(def (poo-flow-session-policy-validation-receipt-memory-catalog-valid? receipt)
-  (poo-flow-session-policy-validation-receipt-record-memory-catalog-valid?
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-memory-catalog-resolved-store-refs
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-memory-catalog-resolved-store-refs
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Symbol])
-(def (poo-flow-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-memory-catalog-unresolved-store-refs
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Alist])
-(def (poo-flow-session-policy-validation-receipt-allowed-communication-channel-receipts
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-allowed-communication-channel-receipts
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Alist])
-(def (poo-flow-session-policy-validation-receipt-denied-communication-channel-receipts
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-denied-communication-channel-receipts
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Alist])
-(def (poo-flow-session-policy-validation-receipt-allowed-communication-receipts
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-allowed-communication-receipts
-   receipt))
-
-;; : (-> PooSessionPolicyValidationReceipt [Alist])
-(def (poo-flow-session-policy-validation-receipt-denied-communication-receipts
-      receipt)
-  (poo-flow-session-policy-validation-receipt-record-denied-communication-receipts
+(def (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-ref receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-memory-catalog-ref
    receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Boolean)
-(def (poo-flow-session-policy-validation-receipt-valid? receipt)
-  (poo-flow-session-policy-validation-receipt-record-valid? receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-valid? receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-memory-catalog-valid?
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Symbol])
+(def (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-resolved-store-refs
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-memory-catalog-resolved-store-refs
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Symbol])
+(def (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-memory-catalog-unresolved-store-refs
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Alist])
+(def (agentic-ai-lab-session-policy-validation-receipt-allowed-communication-channel-receipts
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-allowed-communication-channel-receipts
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Alist])
+(def (agentic-ai-lab-session-policy-validation-receipt-denied-communication-channel-receipts
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-denied-communication-channel-receipts
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Alist])
+(def (agentic-ai-lab-session-policy-validation-receipt-allowed-communication-receipts
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-allowed-communication-receipts
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt [Alist])
+(def (agentic-ai-lab-session-policy-validation-receipt-denied-communication-receipts
+      receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-denied-communication-receipts
+   receipt))
+
+;; : (-> PooSessionPolicyValidationReceipt Boolean)
+(def (agentic-ai-lab-session-policy-validation-receipt-valid? receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-valid? receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Integer)
-(def (poo-flow-session-policy-validation-receipt-diagnostic-count receipt)
-  (poo-flow-session-policy-validation-receipt-record-diagnostic-count receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-diagnostic-count receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-diagnostic-count receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt [Alist])
-(def (poo-flow-session-policy-validation-receipt-diagnostics receipt)
-  (poo-flow-session-policy-validation-receipt-record-diagnostics receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-diagnostics receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-diagnostics receipt))
 
 ;; : (-> PooSessionPolicyValidationReceipt Boolean)
-(def (poo-flow-session-policy-validation-receipt-runtime-executed? receipt)
-  (poo-flow-session-policy-validation-receipt-record-runtime-executed? receipt))
+(def (agentic-ai-lab-session-policy-validation-receipt-runtime-executed? receipt)
+  (agentic-ai-lab-session-policy-validation-receipt-record-runtime-executed? receipt))

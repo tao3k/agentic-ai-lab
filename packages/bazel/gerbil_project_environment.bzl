@@ -52,11 +52,12 @@ def _gerbil_project_environment_impl(ctx):
     project_dependency_roots = project.dependency_roots.to_list()
 
     declaration = {
-        "schema": "poo-flow.gerbil-project-environment-declaration.v1",
+        "schema": "agentic-ai-lab.gerbil-project-environment-declaration.v1",
         "label": str(ctx.label),
         "project": str(ctx.attr.project.label),
-        "nativeAbi": toolchain.native_abi_fingerprint,
+        "runtimeAbi": toolchain.native_abi_fingerprint,
         "workingDirectory": ctx.attr.working_directory,
+        "runtimeDirectory": ctx.attr.runtime_directory,
         "loadPathOrder": [
             "project",
             "project-dependencies",
@@ -83,19 +84,20 @@ set -euo pipefail
 workspace=${{BUILD_WORKSPACE_DIRECTORY:?run this target with bazel run}}
 runner=$(rlocation {runner_key})
 gxi=$(rlocation {gxi_key})
-native_scheme_env=$(rlocation {native_scheme_env_key})
+runtime_scheme_env=$(rlocation {runtime_scheme_env_key})
 project_root=$(rlocation {project_root_key})
 project_receipt=$(rlocation {project_receipt_key})
 dependency_root_marker=$(rlocation {dependency_root_key})
 declaration_receipt=$(rlocation {receipt_key})
 arguments=(
   --gxi "$gxi"
-  --native-scheme-env "$native_scheme_env"
+  --runtime-scheme-env "$runtime_scheme_env"
   --project-root "$project_root"
   --project-receipt "$project_receipt"
   --dependency-root-marker "$dependency_root_marker"
   --workspace "$workspace"
   --working-directory {working_directory}
+  --runtime-directory {runtime_directory}
   --declaration-receipt "$declaration_receipt"
 )
 {dependency_arguments}
@@ -104,13 +106,14 @@ exec "$runner" "${{arguments[@]}}" -- "$@"
             dependency_arguments = dependency_arguments,
             dependency_root_key = repr(_runfile_key(ctx, toolchain.dependency_library_root)),
             gxi_key = repr(_runfile_key(ctx, toolchain.gxi.executable)),
-            native_scheme_env_key = repr(_runfile_key(ctx, toolchain.native_scheme_env.executable)),
+            runtime_scheme_env_key = repr(_runfile_key(ctx, toolchain.native_scheme_env.executable)),
             project_receipt_key = repr(_runfile_key(ctx, project.receipt)),
             project_root_key = repr(_runfile_key(ctx, project.project_root)),
             receipt_key = repr(_runfile_key(ctx, receipt)),
             runfiles_init = _runfiles_init(),
             runner_key = repr(_runfile_key(ctx, runner.executable)),
             working_directory = repr(ctx.attr.working_directory),
+            runtime_directory = repr(ctx.attr.runtime_directory),
         ),
     )
 
@@ -152,6 +155,9 @@ gerbil_project_environment = rule(
             providers = [GerbilProjectInfo],
         ),
         "working_directory": attr.string(),
+        # Optional command-owned writable prefix; compiled project outputs
+        # remain immutable library inputs and are never modified by tests.
+        "runtime_directory": attr.string(),
         "_runner": attr.label(
             cfg = "exec",
             default = Label("//packages/bazel:gerbil_project_environment_tool"),

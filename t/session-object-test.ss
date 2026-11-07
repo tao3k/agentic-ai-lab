@@ -6,14 +6,14 @@
 ;;; Boundary: report-only session objects inspired by OpenRath's session-first
 ;;; model.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-default-sandbox-profiles)
-        :poo-flow/modules/session/config)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-default-sandbox-profiles)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-object-test)
 
@@ -21,34 +21,34 @@
 ;;; while letting session tests assert report-only catalog linkage.
 ;; : PooSessionPlacement
 (def session-placement
-  (poo-flow-session-placement-resolve
+  (agentic-ai-lab-session-placement-resolve
    'agent/nono
-   poo-flow-default-sandbox-profiles
+   agentic-ai-lab-default-sandbox-profiles
    '((source . session-object-test))))
 
 ;; : PooSessionPlacement
 (def session-missing-placement
-  (poo-flow-session-placement-resolve
+  (agentic-ai-lab-session-placement-resolve
    'agent/missing
-   poo-flow-default-sandbox-profiles))
+   agentic-ai-lab-default-sandbox-profiles))
 
 ;;; Root and child fixtures model a forkable session tree without invoking a
 ;;; runtime harness; they are stable inputs for graph and handoff projection.
 ;; : PooSession
 (def session-root
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'root
-   (list (poo-flow-session-chunk 'request 'user "Build the project."))
-   (poo-flow-session-lineage 'root '() 'root)
+   (list (agentic-ai-lab-session-chunk 'request 'user "Build the project."))
+   (agentic-ai-lab-session-lineage 'root '() 'root)
    session-placement
    '((intent . package-check))))
 
 ;; : PooSession
 (def session-child
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'child
-   (list (poo-flow-session-chunk 'review 'assistant "Review the build receipt."))
-   (poo-flow-session-lineage 'child '(root) 'fork)
+   (list (agentic-ai-lab-session-chunk 'review 'assistant "Review the build receipt."))
+   (agentic-ai-lab-session-lineage 'child '(root) 'fork)
    session-placement
    '((intent . build-review))))
 
@@ -75,54 +75,54 @@
 ;;; presenter reports acyclicity instead of throwing during construction.
 ;; : PooSession
 (def session-cycle-root
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'cycle-root
-   (list (poo-flow-session-chunk 'cycle 'user "Cycle root."))
-   (poo-flow-session-lineage 'cycle-root '(cycle-child) 'fork)
+   (list (agentic-ai-lab-session-chunk 'cycle 'user "Cycle root."))
+   (agentic-ai-lab-session-lineage 'cycle-root '(cycle-child) 'fork)
    session-placement))
 
 ;; : PooSession
 (def session-cycle-child
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'cycle-child
-   (list (poo-flow-session-chunk 'cycle-child 'assistant "Cycle child."))
-   (poo-flow-session-lineage 'cycle-child '(cycle-root) 'fork)
+   (list (agentic-ai-lab-session-chunk 'cycle-child 'assistant "Cycle child."))
+   (agentic-ai-lab-session-lineage 'cycle-child '(cycle-root) 'fork)
    session-placement))
 
 ;;; The suite keeps constructor, handoff, graph, and cycle checks together so
 ;;; public session names remain consistent across the facade.
 ;; : TestSuite
 (def session-object-test
-  (test-suite "poo-flow report-only session objects"
-    (poo-flow-test-case "builds chunks, lineage, placement, and handoff receipts"
-      (let* ((handoff (poo-flow-session-handoff session-child))
-             (handoff-alist (poo-flow-session-handoff->alist handoff)))
-        (check-equal? (poo-flow-session? session-root) #t)
-        (check-equal? (poo-flow-session-chunk-role
-                       (car (poo-flow-session-chunks session-root)))
+  (test-suite "agentic-ai-lab report-only session objects"
+    (yuanxu-test-case "builds chunks, lineage, placement, and handoff receipts"
+      (let* ((handoff (agentic-ai-lab-session-handoff session-child))
+             (handoff-alist (agentic-ai-lab-session-handoff->alist handoff)))
+        (check-equal? (agentic-ai-lab-session? session-root) #t)
+        (check-equal? (agentic-ai-lab-session-chunk-role
+                       (car (agentic-ai-lab-session-chunks session-root)))
                       'user)
-        (check-equal? (poo-flow-session-lineage-parent-session-ids
-                       (poo-flow-session-value-lineage session-child))
+        (check-equal? (agentic-ai-lab-session-lineage-parent-session-ids
+                       (agentic-ai-lab-session-value-lineage session-child))
                       '(root))
-        (check-equal? (poo-flow-session-placement-profile-ref
-                       (poo-flow-session-value-placement session-child))
+        (check-equal? (agentic-ai-lab-session-placement-profile-ref
+                       (agentic-ai-lab-session-value-placement session-child))
                       'agent/nono)
-        (check-equal? (poo-flow-session-placement-resolved?
-                       (poo-flow-session-value-placement session-child))
+        (check-equal? (agentic-ai-lab-session-placement-resolved?
+                       (agentic-ai-lab-session-value-placement session-child))
                       #t)
-        (check-equal? (poo-flow-session-alist-ref
-                       (poo-flow-session-placement-runtime-summary
-                        (poo-flow-session-value-placement session-child))
+        (check-equal? (agentic-ai-lab-session-alist-ref
+                       (agentic-ai-lab-session-placement-runtime-summary
+                        (agentic-ai-lab-session-value-placement session-child))
                        'profile-name
                        #f)
                       'agent/nono)
-        (check-equal? (poo-flow-session-alist-ref handoff-alist 'session-id #f) 'child)
-        (check-equal? (poo-flow-session-alist-ref handoff-alist 'placement-resolved? #f) #t)
-        (check-equal? (poo-flow-session-alist-ref handoff-alist 'runtime-owner #f) "marlin-agent-core")
-        (check-equal? (poo-flow-session-alist-ref handoff-alist 'runtime-executed #t) #f)))
-    (poo-flow-test-case "presents session graph without runtime execution"
+        (check-equal? (agentic-ai-lab-session-alist-ref handoff-alist 'session-id #f) 'child)
+        (check-equal? (agentic-ai-lab-session-alist-ref handoff-alist 'placement-resolved? #f) #t)
+        (check-equal? (agentic-ai-lab-session-alist-ref handoff-alist 'runtime-owner #f) "marlin-agent-core")
+        (check-equal? (agentic-ai-lab-session-alist-ref handoff-alist 'runtime-executed #t) #f)))
+    (yuanxu-test-case "presents session graph without runtime execution"
       (let (presentation
-            (pooFlowSessionGraphPresentation
+            (agenticAiLabSessionGraphPresentation
              (list session-root session-child)))
         (check-equal? (.ref presentation 'session-count) 2)
         (check-equal? (.ref presentation 'session-ids) '(root child))
@@ -136,47 +136,47 @@
         (check-equal? (.ref presentation 'acyclic?) #t)
         (check-equal? (.ref presentation 'runtime-executed) #f)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)))
-    (poo-flow-test-case "detects cyclic lineage as structured validation data"
+    (yuanxu-test-case "detects cyclic lineage as structured validation data"
       (let (presentation
-            (pooFlowSessionGraphPresentation
+            (agenticAiLabSessionGraphPresentation
              (list session-cycle-root session-cycle-child)))
         (check-equal? (.ref presentation 'acyclic?) #f)
         (check-equal? (.ref presentation 'lineage-edge-pairs)
                       '((cycle-child . cycle-root)
                         (cycle-root . cycle-child)))))
-    (poo-flow-test-case "reports missing placement profiles without runtime execution"
+    (yuanxu-test-case "reports missing placement profiles without runtime execution"
       (let (diagnostic
-            (car (poo-flow-session-placement-diagnostics
+            (car (agentic-ai-lab-session-placement-diagnostics
                   session-missing-placement)))
-        (check-equal? (poo-flow-session-placement-profile-ref
+        (check-equal? (agentic-ai-lab-session-placement-profile-ref
                        session-missing-placement)
                       'agent/missing)
-        (check-equal? (poo-flow-session-placement-resolved?
+        (check-equal? (agentic-ai-lab-session-placement-resolved?
                        session-missing-placement)
                       #f)
-        (check-equal? (poo-flow-session-alist-ref diagnostic 'status #f)
+        (check-equal? (agentic-ai-lab-session-alist-ref diagnostic 'status #f)
                       'missing-profile)
-        (check-equal? (poo-flow-session-placement-runtime-summary
+        (check-equal? (agentic-ai-lab-session-placement-runtime-summary
                        session-missing-placement)
                       '())))
-    (poo-flow-test-case "declares sessions through compact user syntax"
+    (yuanxu-test-case "declares sessions through compact user syntax"
       (let ((presentation
              (session-graph session-macro-root session-macro-child))
             (child-placement
-             (poo-flow-session-value-placement session-macro-child)))
-        (check-equal? (poo-flow-session-id session-macro-root)
+             (agentic-ai-lab-session-value-placement session-macro-child)))
+        (check-equal? (agentic-ai-lab-session-id session-macro-root)
                       'macro/root)
-        (check-equal? (poo-flow-session-lineage-parent-session-ids
-                       (poo-flow-session-value-lineage session-macro-child))
+        (check-equal? (agentic-ai-lab-session-lineage-parent-session-ids
+                       (agentic-ai-lab-session-value-lineage session-macro-child))
                       '(macro/root))
-        (check-equal? (poo-flow-session-alist-ref
-                       (poo-flow-session-metadata session-macro-child)
+        (check-equal? (agentic-ai-lab-session-alist-ref
+                       (agentic-ai-lab-session-metadata session-macro-child)
                        'branch
                        #f)
                       'review)
-        (check-equal? (poo-flow-session-placement-profile-ref child-placement)
+        (check-equal? (agentic-ai-lab-session-placement-profile-ref child-placement)
                       'agent/nono)
-        (check-equal? (poo-flow-session-placement-resolved? child-placement)
+        (check-equal? (agentic-ai-lab-session-placement-resolved? child-placement)
                       #t)
         (check-equal? (.ref presentation 'session-ids)
                       '(macro/root macro/child))

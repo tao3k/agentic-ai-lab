@@ -7,14 +7,14 @@
 ;;; Invariant: user config projects operation receipts and handoff data only;
 ;;; Marlin owns runtime store execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/modules/memory-core/durable/store-operation
-                 +poo-flow-durable-runtime-store-operation-specs+)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+                 +agentic-ai-lab-durable-runtime-store-operation-specs+)
         (only-in "../user-interface/custom/my-module/cases/durable-runtime-store-operations"
-                 poo-flow-custom-my-module-durable-runtime-store-operations-case))
+                 agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case))
 
 (export user-interface-custom-durable-runtime-store-operations-test)
 
@@ -25,22 +25,22 @@
 
 ;; : TestSuite
 (def user-interface-custom-durable-runtime-store-operations-test
-  (test-suite "poo-flow custom durable runtime store operation case"
-    (poo-flow-test-case "projects operation receipts and Marlin handoff"
+  (test-suite "agentic-ai-lab custom durable runtime store operation case"
+    (yuanxu-test-case "projects operation receipts and Marlin handoff"
       (let* ((negotiation-row
-              (car poo-flow-custom-my-module-durable-runtime-store-operations-case))
+              (car agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case))
              (operation-rows
-              (cadr poo-flow-custom-my-module-durable-runtime-store-operations-case))
+              (cadr agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case))
              (handoff-row
-              (caddr poo-flow-custom-my-module-durable-runtime-store-operations-case))
+              (caddr agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case))
              (manifest (test-ref handoff-row 'runtime-command-manifest)))
         (check-equal? (test-ref negotiation-row 'handoff-ready?) #t)
         (check-equal? (length operation-rows)
-                      (length +poo-flow-durable-runtime-store-operation-specs+))
+                      (length +agentic-ai-lab-durable-runtime-store-operation-specs+))
         (check-equal? (map (lambda (row) (test-ref row 'operation-kind))
                            operation-rows)
                       (map car
-                           +poo-flow-durable-runtime-store-operation-specs+))
+                           +agentic-ai-lab-durable-runtime-store-operation-specs+))
         (check-equal? (map (lambda (row) (test-ref row 'valid?))
                            operation-rows)
                       '(#t #t #t #t #t #t #t #t))
@@ -50,10 +50,10 @@
         (check-equal? (test-ref (car operation-rows) 'ledger-kind)
                       'fact-log)
         (check-equal? (test-ref handoff-row 'kind)
-                      'poo-flow.durable.runtime-store.operation-handoff)
+                      'agentic-ai-lab.durable.runtime-store.operation-handoff)
         (check-equal? (test-ref handoff-row 'handoff-ready?) #t)
         (check-equal? (test-ref handoff-row 'operation-count)
-                      (length +poo-flow-durable-runtime-store-operation-specs+))
+                      (length +agentic-ai-lab-durable-runtime-store-operation-specs+))
         (check-equal? (test-ref manifest 'argv)
                       '("marlin-runtime-store"
                         "durable-runtime-store"

@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Source, fixture and execution artifact boundaries
+
+* What belongs in Git
+
+Library sources belong in their language modules. Native Scheme tests and
+executable benchmark cases belong in =t/=. Rust integration tests and benchmarks
+belong in each crate's =tests/= and =benches/=. Python consumers and experiment
+orchestration belong in the independent =workbench/= project.
+
+Keep reviewed reports in =docs/=. Keep fixed test inputs and expected answers in
+fixtures, including =t/fixtures/paper-inputs/=. A fixture is an input to a test,
+not a receipt produced by running it. Do not relocate or regenerate golden
+answers to make a failing test pass.
+
+* What belongs in the cache
+
+Logs, stdout/stderr, timings, qualification receipts, model responses, generated
+question/answer transcripts and span annotations (including Markdown/Org), run source
+snapshots, compressed run archives and native binaries belong in =.cache/ascent/=.
+New generated research reports are staged under
+=.cache/ascent/research-reports/=; reviewed narrative reports may then be
+published in =docs/=. CI execution records belong in CI logs/artifact storage.
+
+On 2026-10-16, historical files were moved byte-for-byte to
+=.cache/ascent/archived-runs/<original repository path>=. The local relocation
+manifest is =.cache/ascent/repository-cleanup/relocation.json= and records each
+original path, SHA-256, size and destination. It preserves failed and censored
+runs as well as successful ones. New runs must not overwrite this archive.
+These cache links are local archive references, not files shipped by Git.
+The original blobs remain recoverable from commit
+=4712878ed7d28a228b81e690e53cc3357d01cbbf= with =git show COMMIT:PATH=.
+Relocation does not requalify a historical result against current source.
+
+The earlier Rust archives remain under =.cache/ascent/rust-benchmarks/=
+and =.cache/ascent/rust-tests/=, with their separate relocation manifests.
+
+* Why the boundary failed, and its executable replacement
+
+The previous policy explicitly admitted experimental raw data into documentation,
+report writers copied results there automatically, and the only CI rejection
+matched =*.log=. Consequently JSON receipts, raw streams, archives and shared
+libraries passed that check. Ignore rules alone cannot remove tracked files or
+prevent forced additions.
+
+The repository policy now checks every tracked path, rejects build/cache paths,
+raw streams and binary/archive suffixes, and enforces documentation and benchmark
+directory roles. It runs as an early CI job before the expensive qualification
+jobs. Workbench benchmark output arguments reject destinations outside =.cache/=
+before creating directories, including symlink escapes. Regression tests cover
+rejected outputs and retained golden fixtures. Research writers stage results
+in the cache instead of publishing them directly into documentation.
+
+Run the same checks locally:
+#+begin_src sh
+PYTHONPATH=workbench/src python3 -m ascent_workbench.repository_policy
+PYTHONPATH=workbench/src python3 -m unittest discover -s workbench/tests -p test_repository_policy.py
+#+end_src

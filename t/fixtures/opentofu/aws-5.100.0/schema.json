@@ -1,0 +1,198 @@
+{
+  "format_version": "1.0",
+  "provider_schemas": {
+    "registry.terraform.io/hashicorp/aws": {
+      "resource_schemas": {
+        "aws_iam_group_membership": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "group": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "users": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "aws_security_group": {
+          "version": 1,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "egress": {
+                "type": [
+                  "set",
+                  [
+                    "object",
+                    {
+                      "cidr_blocks": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "string",
+                      "from_port": "number",
+                      "ipv6_cidr_blocks": [
+                        "list",
+                        "string"
+                      ],
+                      "prefix_list_ids": [
+                        "list",
+                        "string"
+                      ],
+                      "protocol": "string",
+                      "security_groups": [
+                        "set",
+                        "string"
+                      ],
+                      "self": "bool",
+                      "to_port": "number"
+                    }
+                  ]
+                ],
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "ingress": {
+                "type": [
+                  "set",
+                  [
+                    "object",
+                    {
+                      "cidr_blocks": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "string",
+                      "from_port": "number",
+                      "ipv6_cidr_blocks": [
+                        "list",
+                        "string"
+                      ],
+                      "prefix_list_ids": [
+                        "list",
+                        "string"
+                      ],
+                      "protocol": "string",
+                      "security_groups": [
+                        "set",
+                        "string"
+                      ],
+                      "self": "bool",
+                      "to_port": "number"
+                    }
+                  ]
+                ],
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name_prefix": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "owner_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "revoke_rules_on_delete": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "tags": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true
+              },
+              "tags_all": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "vpc_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    }
+  }
+}

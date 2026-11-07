@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: One replay-count question
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-count-mvp][replay-count design]] keeps one question across evidence changes. The
+case supplies object art and evidence relations to the existing D2 ASCENT
+module. The figure shows three different effects on the same question.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-count-mvp/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-count-mvp/case.ss --evaluate
+#+end_src
+
+The first PNG showed the three evidence conditions converging on the
+same question. Reading it revealed that opposing signs beside R43 and
+R44 could look like arithmetic cancellation. The revised artwork names
+the two observations and labels their evidence directly: one was a copy,
+the other a distinct replay. The review preserves the first finding.
+
+The revised PNG was viewed again. Its labels distinguish the two changes
+without arithmetic symbols. All three relations converge on the same
+question. ASCENT grounded 11 anchors across the four facets in the
+[[file:../../output/recovery-dispatch-count-mvp/review.json][final evaluation]].
+
+PNG SHA-256: =ad9ad4082d8edd71f75cc8a8ea3843e31194131c3de7a8f288762a5b5a66fe83=.

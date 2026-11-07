@@ -3,11 +3,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: public POO-native Docker sandbox profile super object.
+;;; Boundary: public POO Docker sandbox profile super object.
 ;;; Invariant: container execution remains a runtime handoff concern.
 
 (import (only-in :clan/poo/object .o)
-        :poo-flow/modules/sandbox-core/profile-interface)
+        :agentic-ai-lab/modules/sandbox-core/profile-interface)
 
 (export docker-sandbox-profile)
 

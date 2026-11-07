@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Replay audit and recovery summary revision
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-summary-audit-refutation][recovery design]] owns the claim, scope and admission definitions.
+The case declares POO presentation facts, local object art and a native SysML
+view. The existing =modules/d2= ASCENT implementation chooses the explanatory
+relations and layout constraints. The generic renderer exports the result.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-audit-refutation/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-audit-refutation/case.ss --evaluate
+#+end_src
+
+The first reading identified two unlabeled numbers, a possible false exactness
+in the replay witness, and an implicit rewrite condition. ASCENT independently
+reported =unbound-number= on both counts and measured three captions below
+the intended reader size. The refinements bind the two numbers to different
+visible units, label the replay as an observation, and show the coverage
+condition. The number marks are presentation facts with meaning and source
+references, and the graphics depict local objects only.
+
+The final PNG was read with the storage and dispatch units, the struck
+zero-replay assertion, the separate B and v2 sheets, and the coverage condition.
+It has 39 visible English words. The minimum measured text
+size was 19.05 px. The refined
+reading uses the actual image digest and its visible anchors.
+
+The revised wrapper exported the PNG and SVG before its post-export review
+subprocess returned nonzero. A separate review emitted the expected answer
+and reached the existing timeout during exit. With the same capture and
+limits, a review with the key reading anchors exited successfully and
+produced [[file:../../output/recovery-audit-refutation/final-reviewed.json][the final ASCENT readback]].
+It grounds all three facets, with an answer basis bound to this PNG. The
+first export receipt is retained under its own name.
+
+Final PNG SHA-256: =035f2554e042f91ceb78a3d11d7aa6870c1b5edb2d3ffd3e5002d42574640d2e=.

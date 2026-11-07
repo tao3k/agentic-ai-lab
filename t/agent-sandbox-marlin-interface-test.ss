@@ -3,10 +3,12 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Marlin interface tests cover backend dispatch envelopes.
 ;;; Invariant: tests do not execute nono, Cube, or Marlin runtime code.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,11 +19,11 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/cube
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/cube
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export agent-sandbox-marlin-interface-test)
 
@@ -33,7 +35,7 @@
 ;;; Rust runtime to run in unit tests.
 (def agent-sandbox-marlin-interface-test
   (test-suite "agent sandbox Marlin interface"
-    (poo-flow-test-case "dispatches nono requests to C binding handoff manifests"
+    (yuanxu-test-case "dispatches nono requests to C binding handoff manifests"
       (let* ((request (agent-sandbox-request
                        (make-nono-agent-sandbox-profile
                         'always-further/opencode)
@@ -59,7 +61,7 @@
         (check-equal? (test-ref (car (test-ref handoff 'capability-plan))
                                 'function)
                       'nono_capability_set_new)))
-    (poo-flow-test-case "dispatches Cube requests to lifecycle handoff manifests"
+    (yuanxu-test-case "dispatches Cube requests to lifecycle handoff manifests"
       (let* ((request (agent-sandbox-request
                        (make-cube-agent-sandbox-profile 'python-template)
                        (command "python")
@@ -85,20 +87,19 @@
                       'cube.template.resolve)
         (check-equal? (test-ref (list-ref lifecycle 4) 'operation)
                       'cube.process.exec)))
-    (poo-flow-test-case "projects execution requests into Marlin admission envelopes"
+    (yuanxu-test-case "projects execution requests into Marlin admission envelopes"
       (let* ((task (make-profiled-agent-sandbox-task
-                    'marlin-cube-admission
-                    (make-cube-agent-sandbox-profile 'python-template)
-                    "python"
-                    '("-c" "print('admit')")
-                    '((PYTHONUNBUFFERED . "1"))
-                    "/workspace"
-                    '(((path . "/workspace")
+		    'marlin-cube-admission
+		    (make-cube-agent-sandbox-profile 'python-template)
+		    "python"
+		    '("-c" "print('admit')")
+		    '((PYTHONUNBUFFERED . "1"))
+		    "/workspace"
+		    '(((path . "/workspace")
                        (mode . read-write)))
-                    'artifact
-                    'unit
-                    'artifact
-                    '((metadata . ((purpose . marlin-admission))))))
+		    'artifact
+		    (Fun AdapterResult <- Unit)
+		    '((metadata . ((purpose . marlin-admission))))))
              (request (task-adapter-request
                        task
                        'input
@@ -141,7 +142,7 @@
                       +agent-sandbox-runtime-manifest-schema+)
         (check-equal? (test-ref marlin-interface 'handoff) handoff)
         (check-equal? (test-ref handoff 'schema) +cube-interface-schema+)))
-    (poo-flow-test-case "rejects invalid Marlin admission envelopes"
+    (yuanxu-test-case "rejects invalid Marlin admission envelopes"
       (let (failure
             (with-catch (lambda (failure) failure)
                         (lambda ()
@@ -150,7 +151,7 @@
         (check-equal? (execution-failure? failure) #t)
         (check-equal? (execution-failure-code failure)
                       'invalid-agent-sandbox-marlin-admission-envelope)))
-    (poo-flow-test-case "rejects unsupported Marlin backend dispatch"
+    (yuanxu-test-case "rejects unsupported Marlin backend dispatch"
       (let* ((runtime-manifest
               (list (cons 'schema +agent-sandbox-runtime-manifest-schema+)
                     (cons 'backend

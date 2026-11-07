@@ -20,7 +20,7 @@
  (optimizationFocus . "tool-call plan and runtime receipt proof over stable POO object lists")
  (inputShape . "prebuilt plan/receipt pairs with shared trace obligations")
  (expectedOutcome . "the tool-calling-object-list-control scenario preserves its declared semantic result under the ASP P95 gate")
- (expectedRepair . "keep tool-call control data POO-native and reuse one combined validation/proof projection")
+ (expectedRepair . "keep tool-call control data POO and reuse one combined validation/proof projection")
  (pooFormEvidence . (.o .def defpoo))
  (pooUsageCallEvidence . (.ref .get .mix .o .def .putdefault! .setslot! setslots! .all-slots))
  (measurementPhases collect-before policy-before collect-after policy-after assert-time-gate observe-runtime-memory)

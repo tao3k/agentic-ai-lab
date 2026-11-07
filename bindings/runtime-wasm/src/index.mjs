@@ -16,7 +16,7 @@ const utf8 = new TextDecoder();
 
 const resolveDefaultWasmUrl = () => {
   const url = new URL(import.meta.url);
-  url.pathname = url.pathname.replace(/[^/]*$/, "poo_flow_runtime.wasm");
+  url.pathname = url.pathname.replace(/[^/]*$/, "agentic_ai_lab_runtime.wasm");
   return url;
 };
 
@@ -125,7 +125,7 @@ class WorkflowCursorSession {
   }
 }
 
-export class PooFlowTopology {
+export class AgenticAILabTopology {
   #exports;
   #handle;
   #released = false;
@@ -275,7 +275,7 @@ export class PooFlowTopology {
   }
 }
 
-export class PooFlowWasmRuntime {
+export class AgenticAILabWasmRuntime {
   #exports;
 
   constructor(exports) {
@@ -314,7 +314,7 @@ export class PooFlowWasmRuntime {
         "topology open",
       );
       const handle = new Uint32Array(this.#exports.memory.buffer, handlePointer, 1)[0];
-      return new PooFlowTopology(this.#exports, handle);
+      return new AgenticAILabTopology(this.#exports, handle);
     } finally {
       this.#exports.free(handlePointer);
       this.#exports.free(arenaPointer);
@@ -323,7 +323,7 @@ export class PooFlowWasmRuntime {
   }
 }
 
-export const loadPooFlowWasmRuntime = async (options) => {
+export const loadAgenticAILabWasmRuntime = async (options) => {
   const instantiated = await instantiate(options);
-  return new PooFlowWasmRuntime(instantiated.instance.exports);
+  return new AgenticAILabWasmRuntime(instantiated.instance.exports);
 };

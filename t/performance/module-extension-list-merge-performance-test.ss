@@ -6,7 +6,7 @@
 ;;; Boundary: module extension performance gates cover List slot operation merge.
 ;;; Invariant: extension operations stay graph data and never execute runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,13 +15,13 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/extension-graph/interface
-                 poo-flow-module-extension-contribution
-                 poo-flow-module-extension-resolve
-                 poo-flow-module-extension-node
-                 poo-flow-module-extension-node-slots
-                 poo-flow-module-extension-result-root
-                 poo-flow-module-extension-slot-append))
+        (only-in :yuanxu/graph/interface
+                 yuanxu-graph-contribution
+                 yuanxu-graph-resolve
+                 yuanxu-graph-rooted
+                 yuanxu-graph-root-payload
+                 yuanxu-graph-result-root
+                 yuanxu-graph-slot-append))
 
 (export module-extension-list-merge-performance-test)
 
@@ -33,9 +33,9 @@
 (def module-extension-list-merge-fixture
   (call-with-input-file module-extension-list-merge-fixture-path read))
 
-;; : PooModuleExtensionNode
+;; : YuanxuGraph
 (def module-extension-list-merge-root
-  (poo-flow-module-extension-node
+  (yuanxu-graph-rooted
    'extension.root
    '((capabilities . ()))
    '()))
@@ -46,24 +46,24 @@
 
 ;; : (-> Alist Void)
 (def (module-extension-list-merge-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-extension-list-merge ")
+  (display "[agentic-ai-lab-benchmark] module-extension-list-merge ")
   (write receipt)
   (newline)
   (force-output))
 
 ;; : (-> Integer Integer Integer [Integer])
 (def (module-extension-list-merge-batch start size step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    size
    (lambda (index)
      (+ start (* index step)))))
 
-;; : (-> Integer Integer Integer [PooModuleExtensionOperation])
+;; : (-> Integer Integer Integer [PooGraphOperation])
 (def (module-extension-list-merge-operations batch-count batch-size overlap-step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    batch-count
    (lambda (batch-index)
-     (poo-flow-module-extension-slot-append
+     (yuanxu-graph-slot-append
       'capabilities
       (module-extension-list-merge-batch
        (* batch-index overlap-step)
@@ -76,17 +76,17 @@
     (car values)
     (module-extension-list-merge-last (cdr values))))
 
-;; : (-> [PooModuleExtensionOperation] Alist)
+;; : (-> [PooGraphOperation] Alist)
 (def (module-extension-list-merge-summary/from-operations operations)
   (let* ((result
-          (poo-flow-module-extension-resolve
+          (yuanxu-graph-resolve
            module-extension-list-merge-root
            (list
-            (poo-flow-module-extension-contribution
+            (yuanxu-graph-contribution
              'extension.root
              operations))))
-         (node (poo-flow-module-extension-result-root result))
-         (slots (poo-flow-module-extension-node-slots node))
+         (node (yuanxu-graph-result-root result))
+         (slots (yuanxu-graph-root-payload node))
          (capabilities
           (module-extension-list-merge-ref slots 'capabilities)))
     (list (cons 'capability-count (length capabilities))
@@ -97,7 +97,7 @@
 ;; : TestSuite
 (def module-extension-list-merge-performance-test
   (test-suite "module extension list merge performance"
-    (poo-flow-test-case "keeps repeated extension list appends inside benchmark contract"
+    (yuanxu-test-case "keeps repeated extension list appends inside benchmark contract"
       (let* ((batch-count 180)
              (batch-size 48)
              (overlap-step 24)

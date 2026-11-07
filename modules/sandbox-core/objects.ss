@@ -6,11 +6,11 @@
 ;;; Boundary: sandbox-core object aggregate.
 ;;; Invariant: sandbox-core is a developer-owned object namespace, not a module row.
 
-(import :poo-flow/modules/sandbox-core/profile)
+(import :agentic-ai-lab/modules/sandbox-core/profile)
 
-(export (import: :poo-flow/modules/sandbox-core/profile)
-        poo-flow-sandbox-core-module-objects)
+(export (import: :agentic-ai-lab/modules/sandbox-core/profile)
+        agentic-ai-lab-sandbox-core-module-objects)
 
 ;; : [PooModuleObject]
-(def poo-flow-sandbox-core-module-objects
-  (list poo-flow-sandbox-core-profile-object))
+(def agentic-ai-lab-sandbox-core-module-objects
+  (list agentic-ai-lab-sandbox-core-profile-object))

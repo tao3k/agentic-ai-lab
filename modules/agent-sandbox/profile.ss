@@ -6,10 +6,10 @@
 ;;; Owner: agent-sandbox profile descriptor facade.
 ;;; Boundary: public import target for data, descriptor, validation, and projection owners.
 
-(import :poo-flow/modules/agent-sandbox/profile-data
-        :poo-flow/modules/agent-sandbox/profile-validation
-        :poo-flow/modules/agent-sandbox/profile-descriptor
-        :poo-flow/modules/agent-sandbox/profile-projection)
+(import :agentic-ai-lab/modules/agent-sandbox/profile-data
+        :agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :agentic-ai-lab/modules/agent-sandbox/profile-descriptor
+        :agentic-ai-lab/modules/agent-sandbox/profile-projection)
 
 (export +agent-sandbox-profile-schema+
         +agent-sandbox-profile-runtime-summary-schema+

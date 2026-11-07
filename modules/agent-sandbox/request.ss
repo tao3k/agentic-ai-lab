@@ -13,14 +13,14 @@
 ;;; Policy evidence:
 ;;; - Agent-sandbox descriptor, bridge, and profile tests import this facade.
 
-(import :poo-flow/modules/agent-sandbox/request-field
-        :poo-flow/modules/agent-sandbox/request-validation
-        :poo-flow/modules/agent-sandbox/request-builder
-        :poo-flow/modules/agent-sandbox/request-macro
-        :poo-flow/modules/agent-sandbox/request-accessor)
+(import :agentic-ai-lab/modules/agent-sandbox/request-field
+        :agentic-ai-lab/modules/agent-sandbox/request-validation
+        :agentic-ai-lab/modules/agent-sandbox/request-builder
+        :agentic-ai-lab/modules/agent-sandbox/request-macro
+        :agentic-ai-lab/modules/agent-sandbox/request-accessor)
 
-(export (import: :poo-flow/modules/agent-sandbox/request-field)
-        (import: :poo-flow/modules/agent-sandbox/request-validation)
-        (import: :poo-flow/modules/agent-sandbox/request-builder)
-        (import: :poo-flow/modules/agent-sandbox/request-macro)
-        (import: :poo-flow/modules/agent-sandbox/request-accessor))
+(export (import: :agentic-ai-lab/modules/agent-sandbox/request-field)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-validation)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-builder)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-macro)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-accessor))

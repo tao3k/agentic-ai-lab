@@ -1,4 +1,7 @@
 ;;; Inert negative fixture: meta imports belong to an owned extension module.
-(import (only-in :clan/poo/mop validate))
-(user-composition raw-mop
-  (compose profiles MaintainedHealthcareProfile))
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :clan/poo/mop validate))
+(def raw-mop
+  (.new Scenario name: 'raw-mop
+        config: (compose profiles MaintainedHealthcareProfile)))

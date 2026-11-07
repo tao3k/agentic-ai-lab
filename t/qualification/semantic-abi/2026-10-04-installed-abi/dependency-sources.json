@@ -1,0 +1,30 @@
+{
+  "gerbilAscentPin": "0176c061877ff364e0037ce56d7d085848a9ad60",
+  "sourceSha256": {
+    "table/trrel.ss": "a1217d489e3c6725596471596918e3f73944b0302a6c59cb826c55b3735a47b6",
+    "table/eqrel.ss": "8b34af47ee851dd88f513d8531b6337e32d5db3556996b5c4d2b70d74fdc0f9e",
+    "table/storage.ss": "e695f3df8c5229aec2d5814eb505220d63288a895a638f9c9974a0b491c0e9ef",
+    "table/funs.ss": "5a7bc246087de98fcb5fe6df5252ea4e9905687df0e0098f9683d7f4983f2ff4",
+    "table/provider.ss": "f4447ac97f7b2d07070c2342c459c0980db366c2ec04a41b326b59eee1dd8b06",
+    "program/funs.ss": "1f266e56a7eb39aba22936ce97ba09060b34a320f85e00c23143cfd3d2a6abbc",
+    "program/analysis.ss": "1a5c0216db986c29f260a118ac895ebfd9de49a2276864bc26860152f5e15e99",
+    "program/types.ss": "5c4d00038c5b4c58c0f10aaa25999ebf05e67e138ee25b5f53fb84657855b523",
+    "program/objects.ss": "03dec21cdf29629b5c12495ff2d399152c79e0c726b2be06e4af20a584e998d6",
+    "program/planning.ss": "a1bf619c6f4937cf98de11c2f87084780d2ec8fc42c87a6e677bd3b90bd8d6b8",
+    "program/evaluate.ss": "9994bf826d8d73c708a3ea03890ec06da69fe71b19cbeba354f9fa4fa794d24c",
+    "program/session.ss": "f6ddeb6f2a0337ff60760ee18dd1f97033a38024e47e8881234c4b59c8a17e3c",
+    "program/aggregators.ss": "397717ef7aa985dbabfba3c39058209ecb19c6c915b29ca67d9a438d1f936e3d",
+    "program/scheme-checked.ss": "d3bf04aa3ca37eb00fcf907fd40de7d05bdab92290d9d0b4fbfef4dde4d30923",
+    "program/scheme-admission.ss": "16b6ccc074dc9d472d885679e8a863483aa21f7cb436590d1fd6b83acc6f1302",
+    "candidate/types.ss": "2262a14cbd17ed9130485e172df8e56d9b97662dde5db364b4a8c194e9078867",
+    "candidate/program.ss": "c02e857409b54f5a872b0147f1c423fc1df49f7bfcbf857a410e470cf22ca274",
+    "candidate/funs.ss": "7d18c1c8641e17b1138ba05f92476bf80241f588cbf4a102c7c7f2a61147efd5",
+    "candidate/finite-evidence.ss": "0c39b89f3df3cbf88e42fce75f826408083e241372dc027d614bba15f0984094",
+    "candidate/stratified-proof.ss": "ec23c7966869acb2c5bc8f36bf97080aa5c9388cb86ade2e2328f5d1d51a6436",
+    "candidate/stratified-producer.ss": "773a69d24400fed07a18af1c12d86cb36ff56d091f8eb97ae7667acf4835023e",
+    "candidate/provenance.ss": "a4a310dde63545bf271356924923cbea3c724cad62153cb3f28bc60b069ab7e6",
+    "candidate/nonmembership.ss": "87d559d0c1c09df6cb6c4b85d4df55a9da33d187cf7426b9ff171cf70215f229",
+    "candidate/reasoning.ss": "8b715288b10fefaaf8f58c7676217b9b87e69571c9677d6cad2c85183deb4a6d",
+    "temporal/lens.ss": "0230ac68b8010344d5f14d1e97f9da5a88da78987bfc89c842c0da80b0344d59"
+  }
+}

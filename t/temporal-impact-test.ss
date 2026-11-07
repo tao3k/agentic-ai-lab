@@ -3,36 +3,36 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :poo-flow/modules/temporal-causality/interface)
+        :agentic-ai-lab/modules/temporal-causality/interface)
 (export temporal-impact-test)
 
 (def (sample id coordinate outcome)
-  (poo-flow-temporal-trajectory-sample
-   (poo-flow-temporal-instant id "study-time" coordinate
+  (agentic-ai-lab-temporal-trajectory-sample
+   (agentic-ai-lab-temporal-instant id "study-time" coordinate
                              "schedule-1" 'observed)
    outcome))
 
 (def (series id scenario modality values)
-  (poo-flow-temporal-trajectory-series
+  (agentic-ai-lab-temporal-trajectory-series
    id "subject-1" scenario "outcome-1" "unit-1"
    "cut-1" "projection-1" modality values))
 
 (def (series-for id scenario outcome modality values)
-  (poo-flow-temporal-trajectory-series
+  (agentic-ai-lab-temporal-trajectory-series
    id "subject-1" scenario outcome "unit-1"
    "cut-1" "projection-1" modality values))
 
 (def (versioned-series id scenario modality cut projection values)
-  (poo-flow-temporal-trajectory-series
+  (agentic-ai-lab-temporal-trajectory-series
    id "subject-1" scenario "outcome-1" "unit-1"
    cut projection modality values))
 
 (def temporal-impact-test
   (test-suite "exact dynamic trajectory contrasts"
-    (poo-flow-test-case "irregular intervals yield exact level and rate contrasts"
+    (yuanxu-test-case "irregular intervals yield exact level and rate contrasts"
       (let* ((left (series "left" "policy-a" 'observed
                            (list (sample "l5" 5 10)
                                  (sample "l0" 0 0)
@@ -45,7 +45,7 @@
                             (list (sample "r0" 0 0)
                                   (sample "r2" 2 2)
                                   (sample "r5" 5 8))))
-             (contrast (poo-flow-temporal-impact-contrast
+             (contrast (agentic-ai-lab-temporal-impact-contrast
                         "contrast" left right))
              (points (.ref contrast 'points)))
         (check (.ref left 'semantic-digest)
@@ -59,14 +59,14 @@
         (check (.ref contrast 'status) => 'descriptive-contrast)
         (check (.ref contrast 'causal-impact-admitted?) => #f)))
 
-    (poo-flow-test-case "counterfactual values stay candidates"
+    (yuanxu-test-case "counterfactual values stay candidates"
       (let* ((baseline (series "baseline" "actual" 'observed
                                (list (sample "a0" 0 1)
                                      (sample "a2" 2 3))))
              (alternative (series "alternative" "proposal" 'counterfactual
                                   (list (sample "b0" 0 2)
                                         (sample "b2" 2 4))))
-             (contrast (poo-flow-temporal-impact-contrast
+             (contrast (agentic-ai-lab-temporal-impact-contrast
                         "candidate" alternative baseline)))
         (check (.ref contrast 'status) => 'candidate-contrast)
         (check (map (lambda (point) (.ref point 'level-delta))
@@ -74,7 +74,7 @@
         (check (.ref (cadr (.ref contrast 'points)) 'rate-delta) => 0)
         (check (.ref contrast 'causal-impact-admitted?) => #f)))
 
-    (poo-flow-test-case "intervention window audits prefix and exact irregular area"
+    (yuanxu-test-case "intervention window audits prefix and exact irregular area"
       (let* ((baseline (series "baseline-window" "actual" 'observed
                                (list (sample "b0" 0 0)
                                      (sample "b2" 2 2)
@@ -83,19 +83,19 @@
                                 (list (sample "c0" 0 0)
                                       (sample "c2" 2 4)
                                       (sample "c5" 5 10))))
-             (onset (poo-flow-temporal-instant
+             (onset (agentic-ai-lab-temporal-instant
                      "onset-2" "study-time" 2 "policy-a" 'proposed))
-             (end (poo-flow-temporal-instant
+             (end (agentic-ai-lab-temporal-instant
                    "end-5" "study-time" 5 "policy-a" 'proposed))
-             (audit (poo-flow-temporal-intervention-window-audit
+             (audit (agentic-ai-lab-temporal-intervention-window-audit
                      "audit" "intervention-a" candidate baseline onset end)))
-        (check (poo-flow-temporal-intervention-window-audit? audit) => #t)
+        (check (agentic-ai-lab-temporal-intervention-window-audit? audit) => #t)
         (check (.ref audit 'prefix-status) => 'consistent)
         (check (.ref audit 'prefix-observed-count) => 1)
         (check (.ref audit 'cumulative-delta) => 6)
         (check (.ref audit 'mean-delta) => 2)
         (check (.ref audit 'causal-impact-admitted?) => #f)
-        (check (.ref (poo-flow-temporal-intervention-window-audit
+        (check (.ref (agentic-ai-lab-temporal-intervention-window-audit
                       "audit-diverged" "intervention-a"
                       (series "diverged" "policy-a" 'counterfactual
                               (list (sample "d0" 0 1)
@@ -104,22 +104,22 @@
                       baseline onset end)
                      'prefix-status) => 'diverged)
         (check-exception
-         (poo-flow-temporal-intervention-window-audit
+         (agentic-ai-lab-temporal-intervention-window-audit
           "audit-off-grid" "intervention-a" candidate baseline
-          (poo-flow-temporal-instant
+          (agentic-ai-lab-temporal-instant
            "onset-3" "study-time" 3 "policy-a" 'proposed)
           end) true)
         (check-exception
-         (poo-flow-temporal-intervention-window-audit
+         (agentic-ai-lab-temporal-intervention-window-audit
           "audit-unobserved-baseline" "intervention-a" baseline candidate
           onset end) true)))
 
-    (poo-flow-test-case "scoped candidate audit checks declared negative controls"
-      (let* ((onset (poo-flow-temporal-instant
+    (yuanxu-test-case "scoped candidate audit checks declared negative controls"
+      (let* ((onset (agentic-ai-lab-temporal-instant
                      "onset-2" "study-time" 2 "policy-a" 'proposed))
-             (end (poo-flow-temporal-instant
+             (end (agentic-ai-lab-temporal-instant
                    "end-5" "study-time" 5 "policy-a" 'proposed))
-             (scope (poo-flow-temporal-impact-scope
+             (scope (agentic-ai-lab-temporal-impact-scope
                      "scope" "intervention-a" "subject-1" "cut-1"
                      "projection-1" onset end '("outcome-1") '("outcome-2")))
              (baseline-target
@@ -139,7 +139,7 @@
                           (list (sample "m0" 0 5) (sample "m2" 2 6)
                                 (sample "m5" 5 7))))
              (audit
-              (poo-flow-temporal-impact-scope-audit
+              (agentic-ai-lab-temporal-impact-scope-audit
                "scope-audit" scope
                (list candidate-control candidate-target)
                (list baseline-target baseline-control))))
@@ -150,7 +150,7 @@
         (check (.ref audit 'causal-impact-admitted?) => #f)
         (check
          (.ref
-          (poo-flow-temporal-impact-scope-audit
+          (agentic-ai-lab-temporal-impact-scope-audit
            "unprotected-descendant" scope
            (list candidate-target candidate-control
                  (series-for "descendant-c" "proposal" "outcome-3"
@@ -165,7 +165,7 @@
                                    (sample "db2" 2 3)
                                    (sample "db5" 5 7)))))
           'status) => 'consistent-with-declaration)
-        (check (.ref (poo-flow-temporal-impact-scope-audit
+        (check (.ref (agentic-ai-lab-temporal-impact-scope-audit
                       "violation" scope
                       (list candidate-target
                             (series-for "changed" "proposal" "outcome-2"
@@ -176,11 +176,11 @@
                       (list baseline-target baseline-control))
                      'status) => 'violated)
         (check-exception
-         (poo-flow-temporal-impact-scope-audit
+         (agentic-ai-lab-temporal-impact-scope-audit
           "missing-control" scope (list candidate-target)
           (list baseline-target)) true)
         (check-exception
-         (poo-flow-temporal-impact-scope-audit
+         (agentic-ai-lab-temporal-impact-scope-audit
           "same-scenario" scope
           (list (series-for "same-ct" "actual" "outcome-1"
                             'counterfactual
@@ -192,11 +192,11 @@
                                   (sample "m5" 5 7))))
           (list baseline-target baseline-control)) true)
         (check-exception
-         (poo-flow-temporal-impact-scope
+         (agentic-ai-lab-temporal-impact-scope
           "overlap" "intervention-a" "subject-1" "cut-1"
           "projection-1" onset end '("outcome-1") '("outcome-1")) true)))
 
-    (poo-flow-test-case "revised trajectories reissue or block Impact"
+    (yuanxu-test-case "revised trajectories reissue or block Impact"
       (let* ((old-left
               (versioned-series "left-v1" "proposal" 'counterfactual
                                 "cut-1" "projection-1"
@@ -217,13 +217,13 @@
                                 "cut-2" "projection-2"
                                 (list (sample "r0" 0 0)
                                       (sample "r2" 2 2))))
-             (old (poo-flow-temporal-impact-contrast
+             (old (agentic-ai-lab-temporal-impact-contrast
                    "old-impact" old-left old-right))
-             (left-delta (poo-flow-temporal-trajectory-delta
+             (left-delta (agentic-ai-lab-temporal-trajectory-delta
                           "left-delta" old-left new-left))
-             (right-delta (poo-flow-temporal-trajectory-delta
+             (right-delta (agentic-ai-lab-temporal-trajectory-delta
                            "right-delta" old-right new-right))
-             (refresh (poo-flow-temporal-impact-refresh
+             (refresh (agentic-ai-lab-temporal-impact-refresh
                        "refresh" old left-delta right-delta)))
         (check (.ref refresh 'action) => 'recomputed)
         (check (.ref refresh 'reason) => 'source-version)
@@ -232,30 +232,30 @@
         (check (map (lambda (point) (.ref point 'level-delta))
                     (.ref (.ref refresh 'revised-contrast) 'points))
                => '(0 3))
-        (check (.ref (poo-flow-temporal-impact-refresh
+        (check (.ref (agentic-ai-lab-temporal-impact-refresh
                       "reuse" old
-                      (poo-flow-temporal-trajectory-delta
+                      (agentic-ai-lab-temporal-trajectory-delta
                        "same-left" old-left old-left)
-                      (poo-flow-temporal-trajectory-delta
+                      (agentic-ai-lab-temporal-trajectory-delta
                        "same-right" old-right old-right))
                      'action) => 'reused)
         (check
          (.ref
-          (poo-flow-temporal-impact-refresh
+          (agentic-ai-lab-temporal-impact-refresh
            "scope-only" old
-           (poo-flow-temporal-trajectory-delta
+           (agentic-ai-lab-temporal-trajectory-delta
             "left-scope" old-left
             (versioned-series "left-scope-v2" "proposal" 'counterfactual
                               "cut-2" "projection-2"
                               (list (sample "l0" 0 0)
                                     (sample "l2" 2 4))))
-           (poo-flow-temporal-trajectory-delta
+           (agentic-ai-lab-temporal-trajectory-delta
             "right-scope" old-right new-right))
           'action) => 'recomputed)
         (let (blocked
-              (poo-flow-temporal-impact-refresh
+              (agentic-ai-lab-temporal-impact-refresh
                "blocked" old left-delta
-               (poo-flow-temporal-trajectory-delta
+               (agentic-ai-lab-temporal-trajectory-delta
                 "mismatched-right" old-right
                 (versioned-series "right-v3" "actual" 'observed
                                   "cut-3" "projection-2"
@@ -264,9 +264,9 @@
           (check (.ref blocked 'action) => 'blocked)
           (check (.ref blocked 'reason) => 'scope-mismatch)
           (check (.ref blocked 'revised-contrast) => #f))
-        (check (.ref (poo-flow-temporal-impact-refresh
+        (check (.ref (agentic-ai-lab-temporal-impact-refresh
                       "bad-grid" old left-delta
-                      (poo-flow-temporal-trajectory-delta
+                      (agentic-ai-lab-temporal-trajectory-delta
                        "shifted-right" old-right
                        (versioned-series "right-v4" "actual" 'observed
                                          "cut-2" "projection-2"
@@ -274,18 +274,18 @@
                                                (sample "r3" 3 2)))))
                      'reason) => 'grid-mismatch)))
 
-    (poo-flow-test-case "grid and evidence-scope mismatch fail closed"
+    (yuanxu-test-case "grid and evidence-scope mismatch fail closed"
       (let ((left (series "left" "a" 'observed
                           (list (sample "a0" 0 1) (sample "a2" 2 3)))))
         (check-exception
-         (poo-flow-temporal-impact-contrast
+         (agentic-ai-lab-temporal-impact-contrast
           "bad-grid" left
           (series "right" "b" 'observed
                   (list (sample "b0" 0 1) (sample "b3" 3 3)))) true)
         (check-exception
-         (poo-flow-temporal-impact-contrast
+         (agentic-ai-lab-temporal-impact-contrast
           "bad-cut" left
-          (poo-flow-temporal-trajectory-series
+          (agentic-ai-lab-temporal-trajectory-series
            "right" "subject-1" "b" "outcome-1" "unit-1"
            "cut-2" "projection-1" 'observed
            (list (sample "b0" 0 1) (sample "b2" 2 3)))) true)
@@ -293,9 +293,9 @@
          (series "duplicate" "b" 'observed
                  (list (sample "a" 0 1) (sample "b" 0 2))) true)
         (check-exception
-         (poo-flow-temporal-impact-contrast
+         (agentic-ai-lab-temporal-impact-contrast
           "forged" left
-          (poo-flow-temporal-trajectory-series-value
+          (agentic-ai-lab-temporal-trajectory-series-value
            "right" "sha256:wrong" "subject-1" "b" "outcome-1"
            "unit-1" "cut-1" "projection-1" "study-time" 'observed
            (list (sample "b0" 0 1) (sample "b2" 2 3)))) true)

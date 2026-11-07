@@ -5,41 +5,41 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/revisions/types
-                 poo-flow-temporal-evidence-revision-kind
-                 poo-flow-temporal-evidence-journal-kind
-                 poo-flow-temporal-evidence-snapshot-kind
-                 PooFlowTemporalEvidenceRevision PooFlowTemporalEvidenceJournal
-                 PooFlowTemporalEvidenceSnapshot))
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/types
+                 agentic-ai-lab-temporal-evidence-revision-kind
+                 agentic-ai-lab-temporal-evidence-journal-kind
+                 agentic-ai-lab-temporal-evidence-snapshot-kind
+                 AgenticAILabTemporalEvidenceRevision AgenticAILabTemporalEvidenceJournal
+                 AgenticAILabTemporalEvidenceSnapshot))
 
-(export poo-flow-temporal-evidence-revision
-        poo-flow-temporal-evidence-journal-value
-        poo-flow-temporal-evidence-snapshot-value)
+(export agentic-ai-lab-temporal-evidence-revision
+        agentic-ai-lab-temporal-evidence-journal-value
+        agentic-ai-lab-temporal-evidence-snapshot-value)
 
-(def (poo-flow-temporal-evidence-revision
+(def (agentic-ai-lab-temporal-evidence-revision
       identity-value subject-value operation-value predecessor-value
       admission-value valid-value content-value)
-  (validate PooFlowTemporalEvidenceRevision
-    (.o kind: poo-flow-temporal-evidence-revision-kind
+  (validate AgenticAILabTemporalEvidenceRevision
+    (.o kind: agentic-ai-lab-temporal-evidence-revision-kind
         identity: identity-value subject-identity: subject-value
         operation: operation-value predecessor-identity: predecessor-value
         admission-instant: admission-value valid-interval: valid-value
         content-identity: content-value)))
 
-(def (poo-flow-temporal-evidence-journal-value
+(def (agentic-ai-lab-temporal-evidence-journal-value
       identity-value digest-value domain-value revisions-value)
-  (validate PooFlowTemporalEvidenceJournal
-    (.o kind: poo-flow-temporal-evidence-journal-kind
+  (validate AgenticAILabTemporalEvidenceJournal
+    (.o kind: agentic-ai-lab-temporal-evidence-journal-kind
         identity: identity-value semantic-digest: digest-value
         admission-domain-identity: domain-value revisions: revisions-value)))
 
-(def (poo-flow-temporal-evidence-snapshot-value
+(def (agentic-ai-lab-temporal-evidence-snapshot-value
       journal-digest-value cut-digest-value projection-digest-value
       as-of-value valid-at-value valid-at-digest-value
       active-value retracted-value conflicted-value outside-value
       uncertain-value incomparable-value visible-value future-value)
-  (validate PooFlowTemporalEvidenceSnapshot
-    (.o kind: poo-flow-temporal-evidence-snapshot-kind
+  (validate AgenticAILabTemporalEvidenceSnapshot
+    (.o kind: agentic-ai-lab-temporal-evidence-snapshot-kind
         journal-digest: journal-digest-value cut-digest: cut-digest-value
         projection-digest: projection-digest-value
         as-of-instant-identity: as-of-value

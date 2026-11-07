@@ -11,11 +11,11 @@
 ;;; Policy evidence: tests validate contracts without invoking nono or CubeSandbox.
 
 (import (only-in :clan/poo/object .@ object?)
-        (only-in :poo-flow/src/core/roles execution-policy-role)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile)
+        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :yuanxu/object-family/role-syntax
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/profile)
 
 (export +agent-sandbox-profile-candidate-schema+
         +agent-sandbox-profile-candidate-patch-schema+
@@ -60,19 +60,19 @@
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-candidate-schema+
-  'poo-flow.agent-sandbox-profile-candidate.v1)
+  'agentic-ai-lab.agent-sandbox-profile-candidate.v1)
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-candidate-patch-schema+
-  'poo-flow.agent-sandbox-profile-candidate-patch.v1)
+  'agentic-ai-lab.agent-sandbox-profile-candidate-patch.v1)
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-promotion-request-schema+
-  'poo-flow.agent-sandbox-profile-promotion-request.v1)
+  'agentic-ai-lab.agent-sandbox-profile-promotion-request.v1)
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-promotion-receipt-schema+
-  'poo-flow.agent-sandbox-profile-promotion-receipt.v1)
+  'agentic-ai-lab.agent-sandbox-profile-promotion-receipt.v1)
 
 ;; : (-> Unit (List Symbol))
 (def +agent-sandbox-profile-candidate-choice-actions+

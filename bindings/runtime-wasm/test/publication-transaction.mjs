@@ -20,7 +20,7 @@ import {
 } from "../scripts/publication-transaction.mjs";
 
 function fixture() {
-  const root = mkdtempSync(join(tmpdir(), "poo-flow-publication-"));
+  const root = mkdtempSync(join(tmpdir(), "agentic-ai-lab-publication-"));
   const descriptor = join(root, "human-capability.descriptor.bin");
   const arena = join(root, "human-capability.arena.bin");
   const paths = {
@@ -55,7 +55,7 @@ function entries(paths) {
 
 function journal(paths, state) {
   return {
-    schema: "poo-flow.runtime-wasm-publication.v1",
+    schema: "agentic-ai-lab.runtime-wasm-publication.v1",
     generation: "test-generation",
     state,
     entries: [

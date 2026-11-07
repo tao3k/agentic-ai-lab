@@ -7,15 +7,15 @@
 ;;; Invariant: materialization receipts are handoff state only; Scheme never
 ;;; waits on futures, opens sandboxes, or replays IO.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-materialization"
-                 poo-flow-custom-my-module-session-materialization-case))
+                 agentic-ai-lab-custom-my-module-session-materialization-case))
 
 (export user-interface-custom-session-materialization-test)
 
@@ -28,24 +28,24 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-materialization-test
-  (test-suite "poo-flow custom user-interface session-materialization case"
-    (poo-flow-test-case "projects custom materialization receipts without runtime work"
+  (test-suite "agentic-ai-lab custom user-interface session-materialization case"
+    (yuanxu-test-case "projects custom materialization receipts without runtime work"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-materialization-case))
+              (car agentic-ai-lab-custom-my-module-session-materialization-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-materialization-case))
+               agentic-ai-lab-custom-my-module-session-materialization-case))
              (pending (car rows))
              (failed (cadr rows)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
-                      '(session . session-core))
+        (check-equal? (yuanxu-user-module-selection-key selection)
+                      '(session . session))
         (check-equal? (test-ref pending 'kind)
-                      'poo-flow.session.materialization-receipt)
+                      'agentic-ai-lab.session.materialization-receipt)
         (check-equal? (test-ref pending 'request-id)
                       'runtime/custom-build-request)
         (check-equal? (test-ref pending 'materialization-state) 'pending)

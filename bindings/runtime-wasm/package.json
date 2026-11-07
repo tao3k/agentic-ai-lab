@@ -1,14 +1,14 @@
 {
-  "name": "@poo-flow/runtime-wasm",
+  "name": "@agentic-ai-lab/runtime-wasm",
   "version": "0.1.0",
-  "description": "Browser WebAssembly runtime for canonical POO Flow Bundle v1 topologies",
+  "description": "Browser WebAssembly runtime for canonical Agentic AI Lab Bundle v1 topologies",
   "license": "Apache-2.0 AND LGPL-2.1-or-later",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tao3k/poo-flow.git",
+    "url": "git+https://github.com/tao3k/agentic-ai-lab.git",
     "directory": "bindings/runtime-wasm"
   },
-  "homepage": "https://github.com/tao3k/poo-flow/tree/main/bindings/runtime-wasm#readme",
+  "homepage": "https://github.com/tao3k/agentic-ai-lab/tree/main/bindings/runtime-wasm#readme",
   "engines": {
     "node": ">=20"
   },
@@ -25,7 +25,7 @@
     },
     "./workflows/human-capability/descriptor": "./workflows/human-capability.descriptor.bin",
     "./workflows/human-capability/arena": "./workflows/human-capability.arena.bin",
-    "./wasm": "./dist/poo_flow_runtime.wasm"
+    "./wasm": "./dist/agentic_ai_lab_runtime.wasm"
   },
   "files": [
     "dist",
@@ -36,13 +36,13 @@
   ],
   "scripts": {
     "generate": "node scripts/materialize-human-capability-bundle.mjs",
-    "build:wasm": "mkdir -p dist && emcc -O2 -std=c11 -I../runtime-c/include -I../runtime-c/bundle-v1/include -Iinclude src/runtime_wasm_shim.c src/workflow_cursor.c ../runtime-c/src/runtime_v0.c ../runtime-c/bundle-v1/src/bundle_v1.c -o dist/poo_flow_runtime.wasm -sSTANDALONE_WASM=1 -Wl,--no-entry -sERROR_ON_UNDEFINED_SYMBOLS=1 -sALLOW_MEMORY_GROWTH=1 -sEXPORTED_FUNCTIONS=@exports.json && cp src/index.mjs dist/index.mjs && cp src/index.d.ts dist/index.d.ts",
+    "build:wasm": "mkdir -p dist && emcc -O2 -std=c11 -I../runtime-c/include -I../runtime-c/bundle-v1/include -Iinclude src/runtime_wasm_shim.c src/workflow_cursor.c ../runtime-c/src/runtime_v0.c ../runtime-c/bundle-v1/src/bundle_v1.c -o dist/agentic_ai_lab_runtime.wasm -sSTANDALONE_WASM=1 -Wl,--no-entry -sERROR_ON_UNDEFINED_SYMBOLS=1 -sALLOW_MEMORY_GROWTH=1 -sEXPORTED_FUNCTIONS=@exports.json && cp src/index.mjs dist/index.mjs && cp src/index.d.ts dist/index.d.ts",
     "build": "npm run generate && npm run build:wasm",
     "test:bazel-selection": "node test/bazel-selection.mjs",
     "test:publication-lock": "node test/publication-lock.mjs",
     "test:publication-transaction": "node test/publication-transaction.mjs",
     "test:generate-determinism": "node test/generator-determinism.mjs",
-    "test": "npm run build && npm run test:bazel-selection && npm run test:publication-lock && npm run test:publication-transaction && npm run test:generate-determinism && wasm-opt -O --enable-bulk-memory-opt dist/poo_flow_runtime.wasm -o /dev/null && node --test test/*.test.mjs",
+    "test": "npm run build && npm run test:bazel-selection && npm run test:publication-lock && npm run test:publication-transaction && npm run test:generate-determinism && wasm-opt -O --enable-bulk-memory-opt dist/agentic_ai_lab_runtime.wasm -o /dev/null && node --test test/*.test.mjs",
     "prepack": "npm test"
   }
 }

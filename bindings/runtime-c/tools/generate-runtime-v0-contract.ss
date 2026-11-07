@@ -6,11 +6,11 @@
 ;;; together or replaced together through this single command boundary.
 
 (import (only-in :std/misc/ports read-file-string write-file-string)
-        :poo-flow/src/contract/runtime-v0-abi-schema)
+        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
 ;; : Path
 (def header-path
-  "bindings/runtime-c/include/poo_flow/runtime_v0_contract.h")
+  "bindings/runtime-c/include/agentic_ai_lab/runtime_v0_contract.h")
 ;; : Path
 (def vector-path
   "bindings/runtime-c/tests/vectors/runtime_v0_contract.txt")
@@ -38,16 +38,16 @@
 
 ;; : RuntimeV0Header
 (def header
-  (poo-flow-runtime-v0-abi-schema->c-header
-   +poo-flow-runtime-v0-abi-schema+))
+  (agentic-ai-lab-runtime-v0-abi-schema->c-header
+   +agentic-ai-lab-runtime-v0-abi-schema+))
 ;; : RuntimeV0Vector
 (def vector
-  (poo-flow-runtime-v0-abi-schema->vector
-   +poo-flow-runtime-v0-abi-schema+))
+  (agentic-ai-lab-runtime-v0-abi-schema->vector
+   +agentic-ai-lab-runtime-v0-abi-schema+))
 ;; : RuntimeV0EventVector
 (def event-vector
-  (poo-flow-runtime-v0-abi-schema->event-vector
-   +poo-flow-runtime-v0-abi-schema+))
+  (agentic-ai-lab-runtime-v0-abi-schema->event-vector
+   +agentic-ai-lab-runtime-v0-abi-schema+))
 ;; : Path
 (def selected-header-path
   (command-line-option "--header-output" header-path))

@@ -6,39 +6,39 @@
 ;;; Boundary: core cases exercise the thin declarative user-interface surface.
 ;;; These checks intentionally stop before sandbox realization or runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :poo-flow/src/user-interface/profile-core
-                 pooFlowUserConfigFromProfile
-                 poo-flow-user-profile?
-                 poo-flow-user-profile-name
-                 poo-flow-user-profile-module-bundles)
-        (only-in :poo-flow/testing-api
-                 +poo-flow-testing-interface+
-                 poo-flow-testing-admit-user-profile!)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-config?
-                 poo-flow-user-config-modules
-                 poo-flow-user-config-module-keys
-                 poo-flow-user-config-feature-facts
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flags
-                 poo-flow-user-module-selection-entrypoint
-                 poo-flow-user-module-selection-source-ref)
-        (only-in :core/module-system/source/objects
-                 poo-flow-module-source-ref-kind
-                 poo-flow-module-source-ref-value))
+        (only-in :yuanxu/profile-composition/user-profile
+                 yuanxuUserConfigFromProfile
+                 yuanxu-user-profile?
+                 yuanxu-user-profile-name
+                 yuanxu-user-profile-module-bundles)
+        (only-in :agentic-ai-lab/dev/testing-api
+                 +agentic-ai-lab-testing-interface+
+                 agentic-ai-lab-testing-admit-user-profile!)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-config?
+                 yuanxu-user-config-modules
+                 yuanxu-user-config-module-keys
+                 yuanxu-user-config-feature-facts
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flags
+                 yuanxu-user-module-selection-entrypoint
+                 yuanxu-user-module-selection-source-ref)
+        (only-in :yuanxu/module-system/source/objects
+                 yuanxu-module-source-ref-kind
+                 yuanxu-module-source-ref-value))
 
 (export user-interface-config-core-case-test)
 
 ;; : (-> Unit [Pair])
-(def expected-poo-flow-core-module-keys
+(def expected-agentic-ai-lab-core-module-keys
   '((flow . funflow)
-    (session . session-core)
+    (session . session)
     (loop . governor)
     (sandbox . nono-sandbox)
     (sandbox . cubeSandbox)
@@ -49,7 +49,7 @@
 (def (module-selection-by-key modules key)
   (cond
    ((null? modules) #f)
-   ((equal? (poo-flow-user-module-selection-key (car modules)) key)
+   ((equal? (yuanxu-user-module-selection-key (car modules)) key)
     (car modules))
    (else
     (module-selection-by-key (cdr modules) key))))
@@ -67,41 +67,41 @@
 ;;; This suite guards the core user config case as the minimal declarative
 ;;; surface exposed to downstream users.
 (def user-interface-config-core-case-test
-  (test-suite "poo-flow user interface core config"
-    (poo-flow-test-case "keeps user practice config thin and inspectable"
-      (check-equal? (poo-flow-user-profile? test-poo-flow-user-profile) #t)
-      (check-equal? (poo-flow-user-profile-name test-poo-flow-user-profile)
+  (test-suite "agentic-ai-lab user interface core config"
+    (yuanxu-test-case "keeps user practice config thin and inspectable"
+      (check-equal? (yuanxu-user-profile? test-agentic-ai-lab-user-profile) #t)
+      (check-equal? (yuanxu-user-profile-name test-agentic-ai-lab-user-profile)
                     'developer)
-      (check-equal? (length (poo-flow-user-profile-module-bundles
-                             test-poo-flow-user-profile))
+      (check-equal? (length (yuanxu-user-profile-module-bundles
+                             test-agentic-ai-lab-user-profile))
                     7)
-      (check-equal? (poo-flow-user-config? test-poo-flow-user-config) #t)
-      (check-equal? (poo-flow-user-config-module-keys test-poo-flow-user-config)
-                    expected-poo-flow-core-module-keys))
-    (poo-flow-test-case "loads custom module bundles through init-style declarations"
+      (check-equal? (yuanxu-user-config? test-agentic-ai-lab-user-config) #t)
+      (check-equal? (yuanxu-user-config-module-keys test-agentic-ai-lab-user-config)
+                    expected-agentic-ai-lab-core-module-keys))
+    (yuanxu-test-case "loads custom module bundles through init-style declarations"
       (let* ((custom-config
-              (pooFlowUserConfigFromProfile test-poo-flow-user-custom-profile))
+              (yuanxuUserConfigFromProfile test-agentic-ai-lab-user-custom-profile))
              (custom-modules
-              (poo-flow-user-config-modules custom-config))
+              (yuanxu-user-config-modules custom-config))
              (custom-module
               (module-selection-by-key custom-modules
                                        '(custom . my-module)))
              (custom-facts
-              (poo-flow-user-config-feature-facts custom-config))
+              (yuanxu-user-config-feature-facts custom-config))
              (custom-fact
               (feature-fact-by-key custom-facts
                                    '(custom . my-module)))
              (custom-source
-              (poo-flow-user-module-selection-source-ref custom-module)))
+              (yuanxu-user-module-selection-source-ref custom-module)))
         (check-equal? (length custom-modules) 7)
-        (check-equal? (poo-flow-user-module-selection-key custom-module)
+        (check-equal? (yuanxu-user-module-selection-key custom-module)
                       '(custom . my-module))
-        (check-equal? (poo-flow-user-module-selection-flags custom-module)
+        (check-equal? (yuanxu-user-module-selection-flags custom-module)
                       '(+private +doctor))
-        (check-equal? (poo-flow-user-module-selection-entrypoint custom-module)
+        (check-equal? (yuanxu-user-module-selection-entrypoint custom-module)
                       "./custom/my-module/interface.ss")
-        (check-equal? (poo-flow-module-source-ref-kind custom-source) 'local)
-        (check-equal? (poo-flow-module-source-ref-value custom-source)
+        (check-equal? (yuanxu-module-source-ref-kind custom-source) 'local)
+        (check-equal? (yuanxu-module-source-ref-value custom-source)
                       "./custom/my-module/interface.ss")
         (check-equal? (alist-value 'entrypoint custom-fact)
                       "./custom/my-module/interface.ss")
@@ -114,8 +114,8 @@
         (check-equal? (alist-value 'loader-executed? custom-fact)
                       #f)
         (check-equal?
-         (.ref (poo-flow-testing-admit-user-profile!
-                +poo-flow-testing-interface+
-                test-poo-flow-user-custom-profile)
+         (.ref (agentic-ai-lab-testing-admit-user-profile!
+                +agentic-ai-lab-testing-interface+
+                test-agentic-ai-lab-user-custom-profile)
                'admitted?)
          #t)))))

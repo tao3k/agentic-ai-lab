@@ -25,6 +25,7 @@ py_test(
     data = [
         ":owner-contract-test.ss",
         ":ownership.bzl",
+        ":rfc45_04_sources",
         "//:gerbil_package_sources",
         "//:t/module-system-observability-test.ss",
         "//:t/profile-binding-syntax-test.ss",

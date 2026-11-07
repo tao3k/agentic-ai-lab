@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+classes: {
+  title: {shape: text; style: {font-size: 32; bold: true; font-color: "#14273A"}}
+  note: {shape: text; style: {font-size: 16; font-color: "#415668"}}
+  changed: {style: {fill: "#FBE8CD"; stroke: "#B76D33"; font-size: 16; border-radius: 8}}
+  retained: {style: {fill: "#D8EFE3"; stroke: "#4F876A"; font-size: 16; border-radius: 8}}
+  response: {width: 385; style: {fill: "#EAF0F6"; stroke-width: 0; font-size: 16; border-radius: 8}}
+}
+
+figure: {
+  label: ""
+  grid-rows: 6
+  vertical-gap: 9
+  style: {fill: transparent; stroke-width: 0}
+
+  title: "A separate record can rely on the same attribution" {class: title}
+  premise: "The same interrupted write. R2 says receipt R1 belongs to another Attempt." {class: note}
+
+  lineage: {
+    label: ""
+    direction: right
+    style: {fill: transparent; stroke-width: 0}
+
+    r1_claim: "R1 attribution\nCorrected by R2" {class: changed}
+    r1_use: "R1 receipt use" {class: changed}
+    lookup: "Attempt crosswalk\nUses R1 attribution" {class: changed}
+    w1_claim: "W1 attribution\nUses the crosswalk" {class: changed}
+    raw: "W1 raw write record\nRetained" {class: retained}
+    w1_use: "W1 as success support\nNeeds record and binding" {class: changed}
+    outcome: "B outcome\nSucceeded on R1 or W1" {class: changed}
+    summary: "B recovery summary\nCites the outcome" {class: changed}
+
+    r1_claim -> r1_use
+    r1_claim -> lookup
+    lookup -> w1_claim
+    w1_claim -> w1_use
+    raw -> w1_use: {style.stroke: "#4F876A"}
+    r1_use -> outcome
+    w1_use -> outcome
+    outcome -> summary
+  }
+
+  legend: "Arrows show premise dependencies. Amber marks affected nodes. Green marks the retained raw record." {class: note}
+
+  review: {
+    label: ""
+    grid-rows: 1
+    horizontal-gap: 12
+    style: {fill: transparent; stroke-width: 0}
+
+    context: "CONTEXT AT C\nThe write outcome is unknown.\nThe success and summary at B stay in history." {class: response}
+    ascent: "ASCENT RESPONSIBILITIES\nReopen the original outcome question.\nCheck W1 attribution and review the B summary." {class: response}
+    model: "MODEL INQUIRY OPTIONS\nInspect the crosswalk source, verify a direct\nbinding, or seek another write record." {class: response}
+  }
+
+  caution: "If the attribution path is missing from an incomplete record, W1 stays pending until its binding can be checked." {class: note}
+}

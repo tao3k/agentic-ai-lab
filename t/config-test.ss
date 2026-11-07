@@ -3,10 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: config tests cover preflight policy without reading real secrets.
 ;;; Invariant: failure details expose missing key identity, never config values.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +21,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 (export config-test)
 
@@ -33,7 +37,7 @@
 ;; : TestSuite
 (def config-test
   (test-suite "external config policy"
-    (poo-flow-test-case "reports missing keys without secret values"
+    (yuanxu-test-case "reports missing keys without secret values"
       (let* ((requirement (make-config-requirement 'env 'TOKEN #t))
              (config (make-run-config
                       'needs-token
@@ -47,7 +51,7 @@
         (check-equal? (cdr (assoc 'source missing-shape)) 'env)
         (check-equal? (cdr (assoc 'key missing-shape)) 'TOKEN)
         (check-equal? (assoc 'value missing-shape) #f)))
-    (poo-flow-test-case "runs when required source keys are present"
+    (yuanxu-test-case "runs when required source keys are present"
       (let* ((requirement (make-config-requirement 'env 'TOKEN #t))
              (options (list (cons 'config-requirements (list requirement))
                             (cons 'config-source
@@ -57,18 +61,25 @@
                                       (make-local-eager-strategy)
                                       (make-request-only-adapter)
                                       options))
-             (flow (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+             (flow (pure-flow
+		    'inc
+		    (Fun Number <- Number)
+		    (lambda (x) (+ x 1))))
              (result (run-flow-with-config config flow 1)))
         (check-equal? (config-preflight-ok? (run-config-preflight config)) #t)
         (check-equal? (run-result-value result) 2)))
-    (poo-flow-test-case "raises typed failure before runtime submission when missing"
+    (yuanxu-test-case "raises typed failure before runtime submission when missing"
       (let* ((requirement (make-config-requirement 'env 'TOKEN #t))
              (config (make-run-config
                       'missing-token
                       (make-local-eager-strategy)
                       (make-request-only-adapter)
                       (list (cons 'config-requirements (list requirement)))))
-             (flow (external-flow 'remote 'submit '((payload . value)) 'value 'value))
+             (flow (external-flow
+		    'remote
+		    'submit
+		    '((payload . value))
+		    (Fun AdapterResult <- Any)))
              (failure (capture-config-failure
                        (lambda ()
                          (run-flow-with-config config flow 'input))))
@@ -78,7 +89,7 @@
         (check-equal? (execution-failure-owner failure) 'config)
         (check-equal? (execution-failure-code failure) 'missing-config-keys)
         (check-equal? (cdr (assoc 'key (car missing))) 'TOKEN)))
-    (poo-flow-test-case "derives requirements from configurable arguments"
+    (yuanxu-test-case "derives requirements from configurable arguments"
       (let* ((arguments (list (make-config-argument 'literal "--threads" #f)
                               (make-config-argument 'env 'TOKEN #t)
                               (make-config-argument 'file 'CONFIG #f)
@@ -87,7 +98,7 @@
         (check-equal? (length requirements) 2)
         (check-equal? (config-requirement-source (car requirements)) 'env)
         (check-equal? (config-requirement-key (cadr requirements)) 'CONFIG)))
-    (poo-flow-test-case "renders configurable arguments without leaking secrets"
+    (yuanxu-test-case "renders configurable arguments without leaking secrets"
       (let* ((source (list (cons 'env
                                  (list (cons 'TOKEN "secret")
                                        (cons 'MODE "release")))

@@ -12,39 +12,39 @@
         "funs.ss"
         "loader.ss")
 
-(export poo-flow-standard-default-budget
-        poo-flow-standard-empty-catalog
-        PooFlowStandardGovernanceInterface.
-        PooFlowStandardMigrationGovernanceInterface.
-        PooFlowStandardFeatureModule.
-        PooFlowStandardMigrationFeatureModule.
-        PooFlowStandardsModule.
-        poo-flow-standards-module)
+(export agentic-ai-lab-standard-default-budget
+        agentic-ai-lab-standard-empty-catalog
+        AgenticAILabStandardGovernanceInterface.
+        AgenticAILabStandardMigrationGovernanceInterface.
+        AgenticAILabStandardFeatureModule.
+        AgenticAILabStandardMigrationFeatureModule.
+        AgenticAILabStandardsModule.
+        agentic-ai-lab-standards-module)
 
-(def poo-flow-standard-default-budget
-  (poo-flow-standard-budget 64 4096 64 (* 64 1024 1024) 100000))
+(def agentic-ai-lab-standard-default-budget
+  (agentic-ai-lab-standard-budget 64 4096 64 (* 64 1024 1024) 100000))
 
-(def poo-flow-standard-empty-catalog
-  (poo-flow-standard-catalog "poo-flow/standard/empty" '() '()))
+(def agentic-ai-lab-standard-empty-catalog
+  (agentic-ai-lab-standard-catalog "agentic-ai-lab/standard/empty" '() '()))
 
 ;;; Feature modules are composable children of the Standards module.  Core
 ;;; declares stable extension points; vertical owners add fixtures and methods.
-(def PooFlowStandardGovernanceInterface.
-  (poo-flow-standard-governance-interface
-   "poo-flow/modules/standards/governance/base"
+(def AgenticAILabStandardGovernanceInterface.
+  (agentic-ai-lab-standard-governance-interface
+   "agentic-ai-lab/modules/standards/governance/base"
    '() '(documentation presentation-metadata reference-implementation)
    (.o declaration: (.o))
    (.o)
    (lambda (_binding) #t)))
 
-(def PooFlowStandardFeatureModule.
-  (poo-flow-standard-feature-module
-   "poo-flow/modules/standards/features/base" 'base '() (.o)
-   PooFlowStandardGovernanceInterface. '()))
+(def AgenticAILabStandardFeatureModule.
+  (agentic-ai-lab-standard-feature-module
+   "agentic-ai-lab/modules/standards/features/base" 'base '() (.o)
+   AgenticAILabStandardGovernanceInterface. '()))
 
-(def PooFlowStandardMigrationGovernanceInterface.
-  (poo-flow-standard-governance-interface
-   "poo-flow/modules/standards/features/migration/governance"
+(def AgenticAILabStandardMigrationGovernanceInterface.
+  (agentic-ai-lab-standard-governance-interface
+   "agentic-ai-lab/modules/standards/features/migration/governance"
    '(authority-provider human-authorization proof-assurance conformance
      audit-receipt)
    '(documentation presentation-metadata reference-implementation
@@ -68,47 +68,47 @@
    (.o)
    (lambda (_binding) #t)))
 
-(def PooFlowStandardMigrationFeatureModule.
-  (poo-flow-standard-feature-module
-   "poo-flow/modules/standards/features/migration" 'migration
+(def AgenticAILabStandardMigrationFeatureModule.
+  (agentic-ai-lab-standard-feature-module
+   "agentic-ai-lab/modules/standards/features/migration" 'migration
    '(source-adapter mapping-proposal human-review conformance admission
      governance fixture)
-   (.o) PooFlowStandardMigrationGovernanceInterface.
-   '((owner . poo-flow-standards))))
+   (.o) AgenticAILabStandardMigrationGovernanceInterface.
+   '((owner . agentic-ai-lab-standards))))
 
-;;; This is the Lego stud exposed by POO Flow.  Vertical contributors derive a
+;;; This is the Lego stud exposed by Agentic AI Lab.  Vertical contributors derive a
 ;;; module object and replace only catalog, budget and Provider slots.
-(def PooFlowStandardsModule.
+(def AgenticAILabStandardsModule.
   (.o (:: self)
-      kind: +poo-flow-standards-module-kind+
-      identity: "poo-flow/modules/standards"
-      catalog: poo-flow-standard-empty-catalog
-      budget: poo-flow-standard-default-budget
+      kind: +agentic-ai-lab-standards-module-kind+
+      identity: "agentic-ai-lab/modules/standards"
+      catalog: agentic-ai-lab-standard-empty-catalog
+      budget: agentic-ai-lab-standard-default-budget
       providers: (.o)
-      features: (.o migration: PooFlowStandardMigrationFeatureModule.)
+      features: (.o migration: AgenticAILabStandardMigrationFeatureModule.)
       .resolve:
       (lambda (root-identities terminology-snapshot-digest)
-        (poo-flow-standard-resolve
+        (agentic-ai-lab-standard-resolve
          catalog root-identities budget terminology-snapshot-digest))
       .materialization-context:
       (lambda (identity bundle)
-        (poo-flow-standard-materialization-context
+        (agentic-ai-lab-standard-materialization-context
          identity (.ref bundle 'artifacts)))
       .make-validation-closure:
       (lambda (identity bundle provider-identity subject-kind
                         subject-snapshot-digest constraints)
-        (poo-flow-standard-make-validation-closure
+        (agentic-ai-lab-standard-make-validation-closure
          identity bundle provider-identity subject-kind
          subject-snapshot-digest constraints))))
 
-(def (poo-flow-standards-module identity-value catalog-value budget-value
+(def (agentic-ai-lab-standards-module identity-value catalog-value budget-value
                                 provider-values
                                 (feature-values
                                  (.o migration:
-                                     PooFlowStandardMigrationFeatureModule.)))
+                                     AgenticAILabStandardMigrationFeatureModule.)))
   (validate
-   PooFlowStandardsModule
-   (.o (:: @ PooFlowStandardsModule.)
+   AgenticAILabStandardsModule
+   (.o (:: @ AgenticAILabStandardsModule.)
        identity: identity-value
        catalog: catalog-value
        budget: budget-value

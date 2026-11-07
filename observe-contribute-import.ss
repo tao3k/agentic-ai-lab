@@ -7,13 +7,13 @@
 ;;; Boundary: bounded, phase-attributed import observation for one contribution test.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :core/observability/debug
-                 PooFlowDebugMemoryAnomaly?
-                 PooFlowDebugMemoryAnomaly-receipt
-                 poo-flow-debug-memory-policy
-                 poo-flow-debug-memory-receipt-sexp
-                 poo-flow-debug-memory-snapshot
-                 call-with-poo-flow-debug-memory-monitor))
+        (only-in :yuanxu/observability/debug
+                 YuanxuDebugMemoryAnomaly?
+                 YuanxuDebugMemoryAnomaly-receipt
+                 yuanxu-debug-memory-policy
+                 yuanxu-debug-memory-receipt-sexp
+                 yuanxu-debug-memory-snapshot
+                 call-with-agentic-ai-lab-debug-memory-monitor))
 
 (def (elapsed-milliseconds started)
   (quotient (* (- (current-jiffy) started) 1000)
@@ -26,10 +26,10 @@
                  (string=? (substring path (- length 3) length) ".ss"))
       (error "contribution test import requires an .ss file" path))
     (string->symbol
-     (string-append ":poo-flow/" (substring path 0 (- length 3))))))
+     (string-append ":agentic-ai-lab/" (substring path 0 (- length 3))))))
 
 (def (emit-import-event phase owner module test-file module-id . fields)
-  (display "[poo-flow-observability] phase=")
+  (display "[agentic-ai-lab-observability] phase=")
   (display phase)
   (display " owner=")
   (display owner)
@@ -51,11 +51,11 @@
 (def (observe-contribution-test-import contribution module test-file)
   (let* ((module-id (test-path->module-id contribution module test-file))
          (started (current-jiffy))
-         (initial (poo-flow-debug-memory-snapshot 'test-import))
+         (initial (yuanxu-debug-memory-snapshot 'test-import))
          ;; A unit-test import must stay small. This catches the lazy POO slot
          ;; cycle that previously grew gxi into gigabytes before wall timeout.
          (policy
-          (poo-flow-debug-memory-policy
+          (yuanxu-debug-memory-policy
            'contribution-test-import
            heap-limit-bytes: (+ (.ref initial 'heap-size-bytes) 268435456)
            live-growth-limit-bytes: 67108864
@@ -64,12 +64,12 @@
     (emit-import-event 'import-start contribution module test-file module-id)
     (with-catch
      (lambda (failure)
-       (if (PooFlowDebugMemoryAnomaly? failure)
+       (if (YuanxuDebugMemoryAnomaly? failure)
          (begin
-           (display "[poo-flow-observability] phase=import-memory-rejected receipt=")
+           (display "[agentic-ai-lab-observability] phase=import-memory-rejected receipt=")
            (write
-            (poo-flow-debug-memory-receipt-sexp
-             (PooFlowDebugMemoryAnomaly-receipt failure)))
+            (yuanxu-debug-memory-receipt-sexp
+             (YuanxuDebugMemoryAnomaly-receipt failure)))
            (newline)
            (force-output)
            (exit 3))
@@ -77,7 +77,7 @@
      (lambda ()
        (call-with-values
         (lambda ()
-          (call-with-poo-flow-debug-memory-monitor
+          (call-with-agentic-ai-lab-debug-memory-monitor
            policy
            'test-import
            (lambda () (eval `(import ,module-id)))))

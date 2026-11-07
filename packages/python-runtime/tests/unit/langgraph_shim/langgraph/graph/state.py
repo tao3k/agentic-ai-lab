@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Test-only LangGraph graph.state module backed by POO Flow compat."""
+"""Test-only LangGraph graph.state module backed by Agentic AI Lab compat."""
 
-from poo_flow_runtime.compat.langgraph.state import StateGraph, StateSnapshot
+from agentic_ai_lab_runtime.compat.langgraph.state import StateGraph, StateSnapshot
 
 __all__ = ["StateGraph", "StateSnapshot"]

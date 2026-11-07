@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
         "../scenarios/performance/composition-macro-expansion/benchmark.ss")
@@ -14,7 +14,7 @@
 (def profile-composition-performance-test
   (test-suite
    "profile composition expansion performance"
-   (poo-flow-test-case
+   (yuanxu-test-case
     "1000 and 5000 profile expansion remain bounded"
     (let* ((receipt (run-composition-macro-expansion-benchmark))
            (case-1000 (.ref receipt 'case-1000))

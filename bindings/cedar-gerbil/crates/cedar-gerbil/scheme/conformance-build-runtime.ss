@@ -18,7 +18,7 @@
 
 ;;; The nested build.ss owns only the declarative package projection and its
 ;;; script entrypoint.  This runtime boundary owns the temporary Cargo stage,
-;;; Gerbil load path, std/make execution, and native program materialization.
+;;; Gerbil load path, std/make execution, and runtime program materialization.
 ;; : (-> BuildSpec Path Void)
 (def (cedar-conformance-build! build-spec output-dir)
   (let* ((root (path-normalize

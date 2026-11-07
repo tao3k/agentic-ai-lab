@@ -34,7 +34,7 @@ py_binary(
     srcs = ["gerbil_environment.py", "scheme_projection_artifact_tool.py"],
     main = "scheme_projection_artifact_tool.py",
     python_version = "3.12",
-    deps = ["//packages/python-runtime/src/poo_flow_runtime:scheme_datum_tool"],
+    deps = ["//packages/python-runtime/src/agentic_ai_lab_runtime:scheme_datum_tool"],
 )
 
 py_test(
@@ -46,5 +46,5 @@ py_test(
     ],
     main = "scheme_projection_artifact_tool_test.py",
     python_version = "3.12",
-    deps = ["//packages/python-runtime/src/poo_flow_runtime:scheme_datum_tool"],
+    deps = ["//packages/python-runtime/src/agentic_ai_lab_runtime:scheme_datum_tool"],
 )

@@ -6,12 +6,12 @@
 ;;; Boundary: downstream session transform case.
 ;;; Invariant: importing this module derives session receipts only.
 
-(import :poo-flow/modules/session/syntax)
+(import :agentic-ai-lab/modules/session/syntax)
 
-(export poo-flow-custom-my-module-session-transform-case)
+(export agentic-ai-lab-custom-my-module-session-transform-case)
 
-(def poo-flow-custom-my-module-session-transform-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-transform-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-transform-case
     (metadata (source . user-interface)
               (case . session-transform))

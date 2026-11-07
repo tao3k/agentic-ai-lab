@@ -1,0 +1,1953 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Agentic AI Lab Nix C API Binding Qualification
+#+language: en
+
+* Boundary
+
+The C binding and process bootstrap belong to Agentic AI Lab, never Yuanxu.
+=call-with-flake-session= parses a reference, strictly checks its lock and
+selects an output function using =libflake-c=. =session-query= calls that
+function in the same EvalState. Scope/lifetime are explicit; no evaluation
+session is created by a Scheme declaration.
+
+The opt-in product adapter =call-with-flake-evaluator= instead owns a lazy POO
+handle used by =NixFlakeSource. evaluator:=. Each independent query strictly
+relocks and reselects in one Store/EvalState; it does not authenticate a later
+source generation with a cached output thunk. It closes at the functional
+scope boundary and refuses escaped use. Details, fallback limits and actual
+product controls are in [[file:../../docs/10-19-design/10.08-config-languages/20-nix-flake-source-c-api.org][20 Product Flake Source C API]].
+
+Compatibility requires numeric =(major, minor) >= (2, 34)= and actual header,
+linker and runtime probes. =dependencies.nix= selects the CLI and C libraries
+from the caller's Nix package set. The qualification reads the resulting
+toolchain through its executable and pkg-config paths. Nix owns artifact reuse.
+
+* Direct embedding and startup ownership
+
+The default test uses the installed Gerbil executable and preloads
+=libnixflakec.dylib= before Gambit initialization. This is direct in-process
+FFI: no evaluator worker or Nix CLI is launched for an API query.
+
+This ordering matters on macOS. Loading libstore with =dlopen= after Gambit
+initialization runs =Settings::getDefaultExtraPlatforms()=, which invokes
+=arch -arch x86_64 /usr/bin/true=. The recorded abort backtrace goes through
+=Pid::wait=, =runProgram= and the library's global initializer. Gambit's
+SIGCHLD reaper can consume that child first. Early runtime-library loading
+avoids that particular initialization race without replacing signal handlers.
+The launcher targets the actual installed =current/bin/gxtest=, because a
+system-interpreter wrapper may discard =DYLD_INSERT_LIBRARIES=.
+
+Preloading itself runs Nix's runtime initializers, including its platform
+probe; it is an explicit process-startup action, not inert module discovery.
+The successful qualification does not prove that every Nix feature that
+spawns subprocesses can coexist with Gambit's child reaper. Realization,
+remote builders and arbitrary execution remain separate qualifications.
+
+* Read-only expression currentness
+
+Expression currentness can reuse a Store connection across an execution while
+creating a fresh EvalState for each query. Reusing an EvalState can retain an
+import after its file changes. Each pre-effect and post-effect guard still
+evaluates the expression and compares its derivation with the admitted path.
+
+The pinned Nix version selects the derivation write path using the process-wide
+Store setting. The public EvalState builder alone does not establish CLI
+read-only behavior. Qualify any replacement with a new derivation that remains
+unregistered, an atomically replaced indirect import that is rejected, and an
+unchanged real Provider whose original derivation is returned. A process that
+owns this global setting must also own startup, cancellation and shutdown.
+Include those costs in the execution comparison.
+See [[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/primops.cc#L1690-L1695][the derivation write boundary in Nix 2.34.4]].
+
+For an in-process expression adapter, pass names and string values directly
+through the C ABI. Qualification must exercise a long-running pure Nix
+expression under a short deadline, require cancellation before it returns a
+value, and verify that a following query still works. Both the Scheme watchdog
+and the Nix thread-local interruption predicate allowed the tight fold probe
+to finish. The subprocess boundary still owns the production timeout and
+cleanup guarantees.
+
+The expression worker package keeps one read-only Nix Store connection and
+creates a fresh EvalState for each query. Its pipe uses Nix's length-prefixed
+serialization for argument names and values. The worker uses Nix's own
+configuration parser before and after evaluation to reject changed settings,
+including Store routing and nested config includes. The package also exposes
+the matching =nix-instantiate= for the ordinary CLI path.
+
+For an OpenTofu expression Source, set the existing Nix Config =instantiate=
+to =bin/nix-instantiate= in this Nix output. The admitted baseline carries
+that selection into OpenTofu's explicit =.run=. Ops supervises one evaluator
+after the execution task graph passes preflight. The existing per-query
+watchdog remains active. The final currentness check runs after the
+evaluator exits. Commands
+without the paired executable and Flake Sources use their existing paths.
+Source observation, environment changes and working-directory changes keep
+individual queries on the configured CLI.
+
+Set =GERBIL_PATH= to the retained B output prefix and keep the same
+compiler prerequisite load path for all three invocations. Prepare the
+locked package set and paired tool before starting the qualification.
+
+#+begin_src sh
+nixpkgs=$(nix eval --impure --raw --expr '(import ./t/fixtures/nixpkgs.nix).outPath')
+export NIX_PATH="nixpkgs=$nixpkgs"
+tools=$(nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-out-link)
+cli=$(readlink "$tools/bin/nix-instantiate")
+b_execution="$GERBIL_PATH/lib/agentic-ai-lab/modules/services/opentofu/execution~0.o1"
+shasum -a 256 "$b_execution"
+PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+PATH="$(dirname "$cli"):$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+shasum -a 256 "$b_execution"
+#+end_src
+
+Compare the loaded execution digest and admitted Provider path in every
+=OPENTOFU-RUNTIME-INPUT= row before comparing timings. The three timed
+calls start after preparation and the first =.get=. Each checks all 14
+Nix queries and the six OpenTofu commands.
+The source-accounting round is separate from the timing gate. Qualification
+leaves the open source observer off during selection because the observer
+changes the guards retained by that selection. The ordinary mutation tests
+retain their source observation. Dispatch controls use the same six-step job
+shape with in-process Scheme receipts and then real Ops child processes.
+The source spans are inclusive. A file read inside a link guard contributes
+to both spans, so their times cannot be added.
+
+On the local arm64 macOS qualification with Nix 2.34.7+1 and Null
+Provider 3.2.4, both modes loaded the same compiled execution module and
+selected the same Provider output. The three timed calls measured:
+
+| Mode                 | Complete .run (s)  | Fourteen Nix checks (s) |
+|----------------------+--------------------+--------------------------|
+| Paired evaluator     | 2.866, 2.494, 2.489 | 0.148, 0.135, 0.129     |
+| Matching standalone  | 3.549, 3.836, 3.558 | 1.234, 1.460, 1.255     |
+
+The dispatch-only control measured 122–194 ms over the six-step job. A
+separate first run of the paired fixture exceeded the three-second gate
+at 3.48 s, including 0.57 s in =tofu destroy=. The gate covers every timed
+round and remains sensitive to the external command tail.
+
+An isolated =init= trace used the selected OpenTofu 1.11.5 binary, its
+packaged mirror, and the same 20-second watchdog. All 16 fresh directories
+produced identical lock bytes. The median was 53.7 ms and the slowest
+trial took 257.7 ms, with 243.7 ms before the first OpenTofu trace entry.
+No trial logged registry discovery. This control did not reproduce the
+1.96-second =init= in the full runtime qualification, so it leaves that
+event unattributed.
+
+To inspect this boundary separately, use the Provider directory printed by
+the qualification and run from a fresh directory containing the rendered
+Null configuration:
+
+#+begin_src sh
+TF_LOG=TRACE TF_LOG_PATH="$PWD/init.trace" TF_IN_AUTOMATION=1 CHECKPOINT_DISABLE=1 \
+  "$provider/watchdog/timeout" --verbose --signal=TERM --kill-after=5s 20s \
+  "$provider/engine/bin/tofu" init -backend=false -input=false -no-color
+#+end_src
+
+The independent source-accounting round in both modes made 3,246 reads
+and 5,910 source comparisons across 45 read windows. In a second paired
+run, metadata replay accounted for 147 inclusive calls and 1.47 s. File
+reads accounted for 0.31 s. The evaluator reduces process work while
+leaving this Scheme-side guard workload in place.
+
+** Rebased Core and the directory reader
+
+The run with Yuanxu =3b8e539= and Lab =f863631= plus the runtime candidate
+used the selected Gerbil build for =nix= and =services/opentofu=. Both
+measurements loaded the same compiled =execution~0.o1= (SHA-256
+=d96acdba44fdb7cce5b64d59590f3200d58f49870ea38fc0dd645aca3d064593=)
+and admitted the same Null Provider 3.2.4 from the same nixpkgs input.
+The worker and standalone CLI both came from Nix 2.34.7+1.
+
+Use the standard directory reader in the service fixture. The custom
+publication-reader fixture caused 16,959 physical source reads and 2,782
+full reader checks per timed diagnostic run. The directory reader kept the
+2,782 link checks and reduced the underlying work to 3,291 source reads,
+96 reader checks, and 147 native metadata replays. Each completed timed
+round still issued 14 Nix checks and executed all six OpenTofu commands.
+
+| Directory reader, arm64 macOS | Complete .run (s)  | Fourteen Nix checks (s) |
+|-------------------------------+--------------------+--------------------------|
+| Paired evaluator              | 3.327, 2.750, 2.718 | 0.450, 0.178, 0.138      |
+| Standalone CLI                | 4.620, 3.911, 3.528 | 1.285, 1.168, 1.031      |
+
+The evaluator cohort still failed the three-second gate on its first round.
+The six physical commands took 0.908 s in that round and 0.591–0.629 s in
+the subsequent rounds. The completed CLI cohort came from a separate
+invocation after the earlier CLI invocation refused an incomplete Nix check.
+The paired invocation immediately after that CLI cohort took 7.402, 6.094,
+and 6.326 s. It retained the same 3,291 source reads and 298,343 metadata
+visits, while its diagnostic metadata replay time rose from 1.52 to 4.36 s.
+The timing gate is still open. Keep the failure and invocation order with
+the benchmark evidence.
+
+A later invocation of the same compiled artifact took 3.257, 4.214 and
+3.444 s. Nix checks took 0.158, 0.336 and 0.194 s, and the six
+OpenTofu processes took 0.985, 1.099 and 0.791 s in total. The six-task
+dispatch controls took 146–194 ms without children and 252–342 ms with
+real Ops launches of =true=. These controls measure the scheduler and
+process boundary separately from OpenTofu work.
+
+In the separate accounting round, 79 =graph-current/build-admit-before=
+reader checks accounted for 2,880 of 3,291 physical reads. The 147 native
+replays visited 298,343 records and took 2.675 s inclusive of checkpoints.
+They used 2.033 s of process CPU, with two collections (0.192 s wall),
+244 minor faults and zero major faults. The 0.642 s wall-minus-CPU
+residual is unclassified. The replay and checkpoint times are nested and
+must not be added. Use the callback-free accounting round emitted by
+=just test-file t/qualification/opentofu/runtime-qualification.ss= to
+reproduce this breakdown.
+
+An independent deployment run using the physical Core source tree passed
+the A/B build, zero-compile B reuse, A cleanup isolation and first B
+=.get= checks in 80.54 s. Keep this end-to-end gate separate from =.run=.
+With the same compiled execution artifact, the subsequent runtime rounds
+took 4.030, 2.871 and 2.926 s. Its diagnostic round confirmed 79
+=prepared-batch-closed= calls and 79 =native-configuration-request=
+calls, with no open or observed fallback. The inner 2,765 protected
+checkpoint calls took 0.115 s in total. All 147 metadata replays took
+1.666 s inclusive, including the 79 protected checkpoints. The
+configuration request already takes the closed route; the number of
+inner checkpoints alone does not explain the elapsed replay cost.
+
+The existing [[file:../../core/dev/proofs/lean/YuanxuProof/Admission/ReturnWindows.lean][Lean read-window laws]]
+allow sharing bytes only in one stable world and still compare each
+expectation. In =core/dev/proofs/quint=, the finite pure control passed
+1,000 traces at a 24-step bound. Replaying the open control with seed
+=0x3f8c6ac4db5d9b35= reproduced a false acceptance under =FinalSources=.
+
+#+begin_src sh
+quint run ReturnWindows_pure.qnt --invariant safety --max-steps 24 --max-samples 1000
+quint run ReturnWindows_crossReplay.qnt --invariant FinalSources --max-steps 24 \
+  --seed=0x3f8c6ac4db5d9b35 --backend=rust
+#+end_src
+
+The first boundary-attribution probe rebuilt Core in an isolated prefix,
+then reused the checksum-verified B execution binary with the same
+qualification. Both invocations stopped at the unchanged 60 s idle limit
+during Harness import, before fixture preparation. A three-second sample
+of the second startup recorded 224 of 253 main-thread samples in
+=dyld Loader::mapSegments= through =__fcntl=. These failures belong to
+diagnostic startup and contribute no =.run= samples. The probe did not
+establish which publication phases can share a protected frame.
+
+The follow-up kept both the original Core artifacts and the same B
+binary. Three ordinary runs took 3.402, 2.945 and 2.725 s. Their
+14 Nix checks took 0.504, 0.416 and 0.159 s, and the six OpenTofu
+children took 0.885, 0.596 and 0.649 s in total.
+
+The separate boundary-accounting round wraps existing guards on a
+derived diagnostic receiver. Each wrapper counts the original
+guard's inclusive work without installing a source observer.
+
+| Boundary                       | Calls | Native config checks | Metadata replays | Physical reads | Wall (s) |
+|--------------------------------+-------+----------------------+------------------+----------------+----------|
+| Admission Context              |    16 |                   48 |              112 |          1,184 |    0.960 |
+| Publication package guard      |     2 |                    4 |                4 |            284 |    0.185 |
+| Execution package guard        |    12 |                   24 |               24 |          1,704 |    0.753 |
+
+The unwrapped accounting control recorded 79 configuration checks,
+147 replays and 3,246 physical reads. The wrapper table attributes
+76 checks, 140 replays and 3,172 reads inside the named guards;
+it is not a complete instruction trace. The Context runs the build
+Graph guard before and after its own source and Schema checks, then
+the contribution guard runs the realized selection's source tail.
+The package guard's paired checks span Nix evaluation and must
+remain independent. The next candidate boundary is the Context's
+inner sequence, with a verified callback-free route and a fallback
+for replaced guards, cold getters and observers.
+
+** Context protection-frame candidate
+
+The candidate joins the two build Graph checks around the fixed Context
+source and Schema checks in one issuer-protected frame. Both Graph checks
+still run. The frame is available only for the original Graph and guard,
+with native cached identity fields and no active observer or open route.
+The native issuer authenticates the same read support before and after
+the joined segment. The existing contribution tail and package checks
+on either side of Nix still run in their own boundaries.
+
+An isolated native Core build completed. Its full library prefix hit
+the unchanged idle guard during macOS dynamic loading. A focused
+diagnostic compiled only the two changed Core modules with =gxc= and
+verified that both were loaded over the original Core prerequisites.
+It kept the exact B execution binary, Provider and inputs. This focused
+run does not qualify the full deployment build.
+
+| Fixed B comparison                  | Round 1 | Round 2 | Round 3 |
+|-------------------------------------+---------+---------+---------|
+| Baseline .run (s)                   |   3.402 |   2.945 |   2.725 |
+| Candidate .run (s)                  |   2.856 |   2.572 |   2.494 |
+| Candidate fourteen Nix checks (s)   |   0.118 |   0.123 |   0.110 |
+| Candidate six OpenTofu children (s) |   0.877 |   0.631 |   0.601 |
+
+The diagnostic round retained 79 configuration checks and 3,246 physical
+reads. Reader checks and protected batches fell by 17, and metadata
+replays fell from 147 to 130. Within the 16 Context calls the read count
+stayed at 1,184, while replays fell from 112 to 96. The measured wall
+difference includes variation in Nix and child process costs. The detached
+Task and post-destroy source mutation controls still refused.
+
+A fresh process repeated the same candidate and returned 3.079, 2.719
+and 2.938 s. It reproduced 130 replays, 79 configuration checks and
+3,246 physical reads. Its first round took 0.122 s for Nix and 0.997 s
+for the six children. The first round in the earlier candidate process
+used 0.118 s and 0.877 s respectively. The first-round CPU also rose
+from 1.779 to 1.883 s. These overlapping measurements describe the two
+runs; their totals are not a disjoint wall-clock decomposition. Both
+rejection controls passed in the repeat. The three-second gate failed
+on its first round.
+
+Core's existing =admission-publication-test.ss= and
+=module-configuration-source-test.ss= passed through =just test-file=
+with the focused candidate products. The
+[[file:../../core/dev/proofs/lean/YuanxuProof/ModuleSystem/Graph/SourceClosureWork.lean][frame equivalence law]]
+keeps first failure identical when authentication remains stable through
+the joined sequence.
+
+The complete candidate Core build passed its four build-input mutation
+controls, including the admission and order suites before and after the
+faults. The independent Lab deployment gate passed in 88.20 s with the
+complete Core library and a physical Core source tree. It compiled both
+A and B from source, kept B unchanged while cleaning A, compiled zero
+targets in the B hot round and passed B's first compiled consumer
+=.get=. Source projection built zero business scopes. That gate does
+not measure the fixed-artifact =.run= or the separate Context Memory
+enable/withdrawal scenario. Core's Feature Interface regression also
+passed in 9.61 s, including receiver-local withdrawal, refusal on a
+changed tracked source, and the absence of effects before explicit run.
+The strict Flake test passed in 15.40 s with the same complete Core
+library and the real AWS/Null inputs produced by =t/fixtures/opentofu/ci.nix=.
+An earlier invocation lacked the declared Provider fixture and stopped
+before evaluating any Flake.
+
+The subsequent fixed B benchmark used the complete Core library.
+It verified the same B execution SHA-256 again and measured the
+worker and final CLI separately. Each row contains 13 worker
+queries and one independent CLI query.
+
+| Process / round | Complete .run (s) | Scheme CPU (s) | Worker (ms) | Final CLI (ms) | Six children (s) |
+|-----------------+-------------------+----------------+-------------+----------------+------------------|
+| P1 / 1          |             2.681 |          1.637 |          32 |             79 |            0.872 |
+| P1 / 2          |             2.438 |          1.703 |          35 |             71 |            0.576 |
+| P1 / 3          |             2.463 |          1.670 |          55 |             73 |            0.587 |
+| P2 / 1          |             2.380 |          1.638 |          33 |             72 |            0.584 |
+| P2 / 2          |             2.455 |          1.700 |          35 |             69 |            0.594 |
+| P2 / 3          |             2.398 |          1.643 |          35 |             70 |            0.592 |
+
+Both new processes passed the three-second gate with the complete
+candidate library. The earlier focused-overlay failure and the Actor
+diagnostic still describe separate runs. In the complete candidate's
+separate accounting sample, the 130 inclusive metadata replays took
+1.288 s, including 0.535 s inside 62 checkpoints. The 3,246 physical
+source reads took 0.249 s. These spans overlap.
+
+The immediately following CLI-only process loaded the same B and
+complete Core with the standalone Nix executable from the same
+2.34.7+1 build. It took 3.368, 3.605 and 3.683 s. Its 14 independent
+Nix CLI calls took 1.074, 1.108 and 1.150 s, versus 0.105 s per
+round in P2. No worker query ran in this control. The gap isolates
+most of the observed difference in the Nix call path while leaving
+variation in Scheme CPU and OpenTofu children visible.
+
+** Rebase follow-up
+
+The =6b9377af= rebase retained the callback-based test reader. With Yuanxu
+=4d6c681=, the same B execution digest and the same Null output, its paired
+invocations took 3.611, 3.310 and 3.236 s, then 3.382, 3.276 and 3.207 s.
+The matching CLI invocation between them took 4.394, 4.105 and 4.159 s.
+All nine runs performed 14 Nix checks and six OpenTofu commands. The
+paired evaluator and final CLI check together took 0.108–0.135 s per
+round. The independent source-accounting rounds each recorded 16,722
+physical reads, 2,782 reader checks and 254 open guard batches. Both
+paired invocations failed the unchanged three-second assertion.
+
+After restoring the standard directory reader, a paired/CLI/paired
+comparison reused that B binary, Null output and Nix build. All three
+processes exited naturally. The timed rounds excluded test startup,
+artifact preparation and the first =.get=.
+
+| Process        | Complete .run (s)  | Nix checks (s)     | Six OpenTofu processes (s) |
+|----------------+--------------------+--------------------+-----------------------------|
+| Paired         | 2.903, 2.370, 2.406 | 0.443, 0.113, 0.153 | 0.579, 0.575, 0.586         |
+| Standalone CLI | 3.504, 3.735, 3.521 | 1.148, 1.339, 1.197 | 0.612, 0.645, 0.645         |
+| Paired repeat  | 2.402, 2.323, 2.342 | 0.107, 0.106, 0.109 | 0.572, 0.565, 0.573         |
+
+Both paired processes passed preflight refusal and return currentness.
+The 13 worker queries took 32–55 ms per ordinary round, with a 371 ms
+first-round exception. The separate final CLI query took 72–98 ms.
+Scheme CPU was 1.601–1.722 s in paired rounds. The six-task Scheme
+dispatch controls took 190–197 ms and real Ops launches took 175–237 ms.
+Each paired accounting round kept all 2,782 link checks while reducing
+reader checks to 79 and physical reads to 3,246. Its 130 native metadata
+replays took 1.340–1.393 s inclusive. The replay and file-read timings
+overlap.
+
+The independent deployment gate also passed with the same Core source.
+Each cold build compiled 46 targets, including the derivation session;
+the hot B build compiled zero. The B test process verified the first
+business read from B's compiled products. Cleaning A preserved B's
+digests. These build and deployment checks are outside the timing rows.
+
+** Fixed B rerun
+
+The rerun used Lab =3b710f85=, Yuanxu =4d6c681=, gerbil-poo =v0.1.3=,
+and Gerbil =1cfb032= on Gambit =ea114fc=. The initial B build timed out
+after starting compilation. A separate 44.54-second invocation completed
+the remaining targets through =gerbil build=. The execution digest
+=becbf742f6605335307a00ad4ddfecd89675be77f0bde56c86af198eb982fbdd=
+matched before and after each invocation below. All rows used Null 3.2.4
+from the same store output and the same locked Nix package set.
+
+| Process        | Complete .run (s)  | Nix checks (s)     | Six OpenTofu processes (s) |
+|----------------+--------------------+--------------------+----------------------------|
+| Paired         | 5.701, 3.241, 3.356 | 0.340, 0.151, 0.243 | 1.179, 1.009, 0.768         |
+| Standalone CLI | 3.135, 3.384, 3.601 | 1.007, 1.105, 1.051 | 0.543, 0.585, 0.802         |
+| Paired repeat  | 3.318, 2.885, 2.678 | 0.266, 0.123, 0.130 | 0.805, 0.628, 0.579         |
+
+Both paired processes failed the three-second gate and passed preflight
+and return-currentness controls. Every timed row performed 14 Nix
+checks. The paired path used 13 fresh EvalStates on the worker's Store
+and a final CLI check. Scheme CPU in paired rounds was 1.769–2.067 s.
+The six-task Scheme dispatch took 120–200 ms across the three processes,
+and real Ops launches took 220–253 ms. Each accounting round recorded
+3,246 source reads, 2,782 link checks and 130 metadata replays. The
+paired replay spans took 1.492–1.715 s inclusive of their checkpoints.
+
+The ordinary service regression now uses the default source reader without
+installing a source observer. Its watchdog records completed Nix queries
+through the existing completion hook. Explicit tracing can still install a
+source observer. The success, source-expiry cleanup and command-failure
+cases passed individually against this B with the original watchdog limits.
+The separate Flake case also passed with real AWS and Null inputs. It
+rejected a changed transitive input and an implicit lock update, preserved
+the lock bytes, and left the parent's provider cache isolated. The
+downstream deployment case passed both fresh builds, zero-compilation
+reuse, cleanup isolation and the first business read in its independent
+B process. That case observed 45 selected targets with its installed
+prerequisites; its Scheme assertions compare the exact target identities
+with both output directories.
+
+The pinned POO release already reuses the issued traversal and receiver set.
+Its public =reobserve-slot-reads!= still authenticates the traversal before
+work, checks each record after the work callback, and authenticates the
+traversal again at return. Yuanxu's protected source checkpoint uses this
+entry with observation suppressed. Moving the checkpoint to a replay visitor
+would start it before the complete live traversal check. Any reduction in
+those passes needs a POO operation that preserves full preflight, receiver
+protection, diagnostic order and the final authentication.
+
+An isolated native probe used the pinned release's private
+=call-with-issued-reads= to compare the existing observer-suppressed
+delivery with one checkpoint between full live preflight and the native
+return pass. Both paths rejected stale records before work, rejected a
+receiver write before it changed either the child or parent, and caught
+a checker replacement before return. The empty traversal ran the
+checkpoint once. An enclosing observer received no records. With
+1,024 authentic roots and 40 iterations per sample, control/candidate/
+control took 452/301/390 ms of CPU. This synthetic comparison measures
+the replay operation only. The private entry remains confined to the
+probe and the Lab runtime still uses the released public API.
+
+The same candidate was then compiled as an isolated Yuanxu observations
+module and compared with a separately compiled control of the same module.
+The qualification printed the loaded observations digest and the same
+OpenTofu execution digest in every process. All three processes used the
+paired worker and the same admitted provider. Only the observations module
+changed between processes.
+
+| Module variant | Complete .run (s)  | Scheme CPU (s)     | Replay span (s) |
+|----------------+--------------------+--------------------+-----------------|
+| Control        | 3.366, 3.017, 3.014 | 1.854, 1.988, 1.989 |           1.495 |
+| Candidate      | 2.466, 2.292, 2.415 | 1.633, 1.512, 1.594 |           1.169 |
+| Control repeat | 2.395, 2.496, 2.434 | 1.637, 1.715, 1.663 |           1.340 |
+
+All three processes retained the preflight and return-currentness controls,
+14 Nix checks and six OpenTofu commands per timed round. Each diagnostic
+round retained 3,246 physical source reads, 130 metadata replays, and
+255,083 visits to their signed traversals. The candidate lowered measured
+replay CPU from 1.335–1.473 s to 1.164 s. The final control was also below
+three seconds in every round, with overlapping wall times. This establishes
+less replay work in the experiment and leaves the production timing gate
+open.
+
+A second isolated build exported =call-with-current-slot-reads= from the
+pinned POO source, through its existing Object and MOP modules. It calls
+the checkpoint once after full preflight and leaves return verification
+to the same native frame. It delivers no observations. The public probe
+preserved multiple return values, the original raised condition, and
+write protection across the checkpoint. All 25 existing POO issued-read
+cases passed with the candidate library. A separately compiled Yuanxu
+consumer imports only this public entry for ordinary checkpoint work.
+Its accounting path retains the released visitor so existing counts
+remain comparable. That consumer passed a fixed-B product invocation at
+2.751, 2.270 and 2.260 seconds. All rounds kept 14 Nix checks and six
+OpenTofu commands. The same process passed preflight refusal and return
+currentness. These builds live outside the package pins.
+
+A follow-up ran three new processes on the released POO and Yuanxu
+libraries, with no experiment overlay. Every process loaded the same
+OpenTofu execution digest and the released Yuanxu observations digest
+=77304672ed2000ef58598abe8c4a423b5634a1ac8792e19989c80ba221a6f2aa=.
+The complete runtimes were 2.665/2.391/2.513, 2.478/2.404/2.851 and
+3.156/2.789/2.639 s. The first two processes passed, and the third failed
+the unchanged three-second assertion on its first round. That round
+spent 1.853 s of Scheme CPU, 0.189 s in Nix checks and 0.912 s across
+the six OpenTofu children. Each process passed both refusal controls.
+
+A separate diagnostic process measured source accounting on the very
+first =.run= and again on its next invocation. Both ran 130 metadata
+replays, visited 255,083 signed records and performed 3,246 physical
+source reads across 45 windows. Replay CPU was 1.429 s on the first
+invocation and 1.328 s on the second. Complete wall times were 3.377 s
+and 2.560 s, with 1.222 s and 0.631 s inside the same six OpenTofu
+commands. The extra child time was concentrated in =init= and
+=validate=. These are instrumented timings. The three-second gate
+still uses its separate, uninstrumented rounds.
+
+The isolated public checkpoint was also retested in three new processes
+using the same fixed B and the paired worker. Each process loaded the
+candidate Yuanxu observations digest
+=6cf19311f23217cfc023cd4f6e336d2b38f4ee766c3297dece595c76357c7396=.
+
+| Process | Complete .run (s)  | Scheme CPU (s)     | Nix checks (s)     | Six OpenTofu children (s) |
+|---------+--------------------+--------------------+--------------------+--------------------------|
+|       1 | 3.064, 2.792, 2.740 | 1.571, 1.538, 1.554 | 0.294, 0.276, 0.176 |      1.067, 0.842, 0.752 |
+|       2 | 2.526, 2.365, 2.551 | 1.566, 1.473, 1.509 | 0.274, 0.149, 0.140 |      0.606, 0.637, 0.753 |
+|       3 | 2.574, 2.493, 2.733 | 1.581, 1.592, 1.550 | 0.264, 0.234, 0.197 |      0.597, 0.615, 0.799 |
+
+Every timed round performed 14 Nix checks and ran the same six OpenTofu
+commands. All three processes passed the preflight and return-currentness
+controls. The first process failed the timing assertion. Compared with
+the other two process-first rounds, its Scheme CPU and Nix totals were
+similar, while the OpenTofu child total rose by about 0.46 s. This repeat
+therefore leaves the three-second runtime gate open even for the isolated
+candidate.
+
+** Physical OpenTofu child control
+
+Capture =main.tf.json= from the completed workspace inside the existing
+runtime qualification fixture, after =measure= returns and before the
+fixture removes it. The fixed-B input SHA-256 was
+=ddc752ff8b6e64ee5004be4a39cdaf74f22fc2c1bff8e88e688b35c22f7d61ed=.
+In a fresh workspace per group, run the same six commands and arguments
+from =modules/services/opentofu/execution.ss=. Use the admitted artifact's
+=watchdog/timeout= with =--verbose --signal=TERM --kill-after=5s 20s= and
+the same =TF_IN_AUTOMATION= and =CHECKPOINT_DISABLE= settings. Measure each
+command with macOS =/usr/bin/time -l=. The direct control reads the exact
+binary and =NIX_TERRAFORM_PLUGIN_DIR= from the immutable wrapper and passes
+that same mirror to the binary. Verify the output string, empty state
+after destroy, and unchanged input for every group.
+
+| Order | Entrypoint | Six children wall (s) | User + system CPU (s) |
+|-------+------------+-----------------------+-----------------------|
+|     1 | Wrapper    |                  0.63 |                  0.59 |
+|     2 | Binary     |                  0.75 |                  0.54 |
+|     3 | Binary     |                  0.53 |                  0.51 |
+|     4 | Wrapper    |                  0.64 |                  0.56 |
+|     5 | Wrapper    |                  0.57 |                  0.53 |
+|     6 | Binary     |                  0.53 |                  0.53 |
+
+These are sums of the six printed values, rounded to centiseconds per
+command. The control isolates external work from Scheme admission and Nix
+queries. It produced overlapping wall ranges, so it does not justify
+changing the artifact-owned wrapper.
+
+A separate six-group physical control used the same wrapper, input and
+20-second watchdog with Go's standard =GOMAXPROCS= setting. The order was
+default, one, one, default, default, one. Every group checked all six
+commands, output, empty state and unchanged input. Median six-child wall
+time was 0.58 s for both settings. Median child CPU was 0.56 s with the
+default and 0.47 s with one processor. The first default group took
+0.86 s wall. This control provides no wall-time reduction to apply to
+the recipe. The setting controls Go execution parallelism as documented
+in [[https://pkg.go.dev/runtime#hdr-Environment_Variables][the Go runtime reference]].
+
+*** CLI startup and Provider handshake
+
+Repeat the physical control with the artifact-owned wrapper throughout.
+Alternate tracing in the order off, on, on, off, off, on. For the trace
+groups, set =TF_LOG=TRACE= for the diagnostic child only and capture
+stderr separately for each command. Keep the same fresh workspaces,
+watchdog, commands, and output, state, and input checks. At a host load
+of 13.53–17.26, the three untraced groups took 1.11, 0.99 and 1.17 s
+across the six commands. The traced groups took 1.12, 1.09 and 1.13 s.
+Keep traced durations separate from the fixed-B runtime acceptance.
+
+Pair the =starting plugin=, =plugin started= and =plugin address= events
+in each command's trace. The six commands launched the following number
+of Null 3.2.4 plugin processes in every traced group.
+
+| Command  | init | validate | plan | apply | output | destroy |
+|----------+------+----------+------+-------+--------+---------|
+| Children |    0 |        2 |    3 |     2 |      0 |       5 |
+
+To locate work before the first CLI trace record, use
+=zmodload zsh/datetime= and record =$EPOCHREALTIME= immediately before
+and after each existing =/usr/bin/time -l= invocation. Compare those
+two values with the first and last timestamped stderr records. The
+initial interval includes the watchdog, the artifact wrapper, CLI
+startup and any wait before the first record. The final interval
+includes work after the last record and child collection.
+
+A separate run of twelve traced groups at a one-minute host load of
+46.04–47.90 saw 144 plugin starts. The launch request to PID interval
+was 1–39 ms with a median of 3.5 ms. The PID to published RPC address
+interval was 20–180 ms with a median of 30 ms. In the slowest =init=,
+500 of 526 ms elapsed before the first trace record and 20 ms elapsed
+between the first and last records. That command launched no plugin.
+Another =output= call spent 571 of 618 ms before its first record,
+also with no plugin. The slow =init= recorded 3,288 page faults and
+1,950 involuntary context switches, compared with 909–914 faults and
+368–825 switches in the other =init= samples. The resource counts
+cannot distinguish filesystem latency from scheduling. This control
+locates a CLI startup tail as well as separate plugin handshakes.
+
+*** Two independent workspaces
+
+Use the same physical control and create two fresh workspaces per group.
+Each workspace keeps its own Terraform directory, plan and state. Run
+all six commands in their existing order within each workspace. Time
+both complete lanes as one batch, either by waiting for the first lane
+before starting the second, or by starting both and waiting for both
+statuses. Keep the watchdog on each command, verify both outputs, check
+both destroyed states and compare both input files with the original.
+Use the order serial, concurrent, concurrent, serial, serial,
+concurrent, concurrent, serial to limit order bias.
+
+| Mode | Four batch wall times (s) | Median batch wall (s) | Median one-workspace wall (s) |
+|------+---------------------------+-----------------------+-------------------------------|
+| Serial | 3.396, 2.853, 3.450, 2.868 | 3.132 | 1.499 |
+| Concurrent | 1.935, 2.646, 1.333, 1.751 | 1.843 | 1.788 |
+
+All sixteen workspaces passed the output, state and input checks.
+The one-minute host load was 40.44–41.87. The two-lane batch finished
+earlier in this physical control, while median one-workspace latency
+increased. This measures external throughput. The full Scheme
+admission, Nix checks and individual =.run= acceptance are outside
+the control. The six same-workspace commands remain ordered.
+
+The separate Gerbil control declares two =Ops.prototypes.Script=
+objects. Each child writes its own marker and waits for the other's
+marker before it can return. Start the two existing =.run= calls on
+Gerbil threads and join both. Both returned status zero and their
+distinct output under the existing per-Script watchdog. The barrier
+demonstrates overlap in the native child processes, rather than
+inferring overlap from elapsed time. The threads supervise children;
+the commands execute in separate OS processes.
+
+Core's =Ops.prototypes.ScriptBatch= owns the declared concurrency limit,
+joins the existing Script invocations and returns receipts or failures in
+declaration order. It stops queued work and joins the active workers on
+cancellation. A dependency graph determines which nodes may run together.
+The caller still owns workspace and log isolation. The OpenTofu recipe
+continues to execute the six effects in one workspace in dependency order.
+
+With the compiled Ops changes and rebuilt configuration-bound worker,
+the ordinary fixed-B fixture completed these three calls in the order
+shown. Both refusal controls passed and the execution digest remained
+unchanged. The first two samples failed the timing assertion. All
+intervals are in seconds.
+
+| Interval | First | Second | Third |
+|----------+-------+--------+-------|
+| Complete =.run= | 5.599 | 3.927 | 2.678 |
+| Scheme process CPU | 2.238 | 1.980 | 1.607 |
+| Thirteen C evaluator queries | 0.092 | 0.203 | 0.035 |
+| Final Nix CLI query | 0.158 | 0.210 | 0.078 |
+| tofu =init= | 0.488 | 0.097 | 0.034 |
+| tofu =validate= | 0.284 | 0.358 | 0.094 |
+| tofu =plan= | 0.291 | 0.146 | 0.130 |
+| tofu =apply= | 0.333 | 0.150 | 0.200 |
+| tofu =output= | 0.085 | 0.045 | 0.035 |
+| tofu =destroy= | 0.367 | 0.228 | 0.200 |
+| Six tofu commands combined | 1.848 | 1.024 | 0.694 |
+| Wall outside measured Nix and tofu intervals | 3.501 | 2.489 | 1.872 |
+
+The second call took 1.248 s more than the third. Nix accounted for
+0.301 s and the tofu commands for 0.331 s of that wall difference,
+with =validate= contributing 0.264 s. The first call took another
+1.672 s. The tofu commands took 0.824 s longer and Nix took 0.163 s
+less. The largest tofu increases were =init= (0.391 s), =apply=
+(0.183 s), =plan= (0.145 s), and =destroy= (0.139 s). The remaining
+wall intervals include Scheme work, waits and boundaries outside the
+tool timers. Process CPU is a separate measure and overlaps those
+wall intervals. Subtracting it does not identify scheduler wait or
+GC. The separate source-accounting call used 1.147 s of replay CPU
+with zero collections. That diagnostic alone cannot attribute GC in
+the three ordinary calls.
+
+For the per-call VM control, wrap only the existing observed =.run=
+body in Gambit's =##exec-stats=. Keep the fixture, numbered assertions,
+both refusal controls and B digest unchanged. Record =nb-gcs=,
+=gc-real-time= and faults from the returned statistics after the
+timer stops. A separate three-call process measured 3.116, 3.094 and
+2.801 s with two, three and two collections respectively. GC wall was
+0.150, 0.252 and 0.147 s. The first and third calls differed by 0.315 s
+with only 0.003 s difference in GC time. These diagnostic samples
+also failed the wall gate and do not assign GC to the earlier
+uninstrumented calls.
+
+*** Ops preparation before spawn
+
+The fixed-B diagnostic compiled an isolated =yuanxu/ops/func= with wall
+and CPU probes around =preview-script= and environment materialization.
+It used the same child commands, output pump, process-group watchdog,
+and exit checks. The probe records only a fixed operation name and the
+durations. The numbers below sum the preparation and environment times
+over the six tofu commands in each numbered call.
+
+| Round | Preview wall (ms) | Environment wall (ms) | Six commands with watchdog (s) | .run (s) |
+|-------+-------------------+-----------------------+--------------------------------+----------|
+|     1 |              2.87 |                  7.71 |                          1.002 |    2.705 |
+|     2 |              2.78 |                  6.68 |                          0.723 |    2.453 |
+|     3 |              2.91 |                 69.19 |                          0.636 |    2.379 |
+
+One environment preparation for =validate= used 63 ms of process CPU
+in round three. The ordinary preparation was about 10 ms over all six
+commands. Both refusal controls passed. This instrumented run separates
+Ops preparation from the physical command lane. It supports keeping the
+existing environment contracts and process supervision.
+
+** Source comparison payload on the released POO runtime
+
+Yuanxu's existing source-read window holds the first successfully
+checked expected-text identity directly. It allocates an identity table
+only when that same path has another successful expected identity.
+Independent checks, collector enrollment, observer order, and callback
+invalidation use the existing source window. Distinct text objects with
+equal bytes are still checked separately. Missing paths retain a valid
+checked absence, and a conflicting expectation keeps its own error.
+
+Compile =core/module-system/source/observations.ss= with =gerbil compile
+-O= against the same released POO library for both revisions. Put only
+that compiled Yuanxu module ahead of the original prerequisite paths
+and run the fixed-B qualification as above. Check the printed
+=OPENTOFU-RUNTIME-OBSERVATIONS= digest in each process. The measured
+order was control, candidate, candidate, control.
+
+| Process | Variant   | Complete .run (s)  | Scheme CPU (s)     |
+|---------+-----------+--------------------+--------------------|
+|       1 | Control   | 8.445, 7.230, 6.523 | 2.196, 2.125, 2.024 |
+|       2 | Candidate | 2.417, 2.326, 2.346 | 1.684, 1.602, 1.593 |
+|       3 | Candidate | 2.574, 2.527, 2.384 | 1.700, 1.725, 1.627 |
+|       4 | Control   | 2.831, 2.738, 2.466 | 1.841, 1.808, 1.681 |
+
+Every process retained 14 Nix checks and six OpenTofu commands per
+round, and passed both refusal controls. The accounting round held
+45 read windows, 3,246 physical reads, 5,910 new comparisons and 2,620
+comparison hits in each process. The first control coincided with
+host contention and is retained as a failed gate. A separate focused
+control repeated the same 64 sources twice per window, for 256 fresh
+windows per sample. Median Scheme CPU across six samples per variant
+fell from 475 to 401 ms. The focused result isolates the payload change;
+the full wall difference also includes process and GC variation.
+
+Recompiling from the tracked Yuanxu source gave 4.186, 5.587 and 5.024 s
+in the first new process and 3.702, 5.447 and 7.736 s in the second.
+Both completed the refusal controls. The third process exhausted the
+60-second idle limit in selection preparation, before producing a timed
+=.run= row. These failures are retained and leave the production gate
+open. The maintained fixture reports completed Nix preparation work
+through its existing progress callback and records the loaded POO Object
+and read-route digests before timing. The timed rounds keep their own
+observer and the existing budgets.
+
+** Submitted-source runtime comparison
+
+Run the three commands in the qualification example in their declared
+order, using the compiled observations from Yuanxu =2e8ae25= and the
+released POO =v0.1.3=. Keep the B prefix and prerequisite paths constant.
+Each command starts a fresh Harness. Only the three =OPENTOFU-RUNTIME=
+numbered rows measure =.run=, after selection and preparation have
+completed. The separate accounting and dispatch rows retain their own
+labels and do not substitute for those samples.
+
+| Process | Evaluator | Three complete .run samples (s) | Scheme CPU (s)     | Fourteen Nix checks (s) |
+|---------+-----------+--------------------------------+--------------------+------------------------|
+|       1 | C session |            2.919, 2.530, 2.779 | 1.756, 1.745, 1.743 |    0.140, 0.132, 0.116 |
+|       2 | CLI       |            3.385, 3.359, 3.530 | 1.674, 1.724, 1.739 |    1.074, 1.071, 1.167 |
+|       3 | C session |            2.720, 2.845, 2.461 | 1.721, 1.823, 1.611 |    0.155, 0.173, 0.105 |
+|       4 | C session |            3.403, 2.951, 3.307 | 1.852, 1.757, 1.891 |    0.190, 0.260, 0.225 |
+
+The first three processes returned =MODULE-OK=, =HARNESS-OK= and =OK=.
+The fourth completed both refusal controls and failed the three-second
+assertion. All C-session processes passed preflight-before-evaluator and
+return-currentness refusal. Every sample checked the same admitted
+Null Provider =3.2.4=, fourteen Nix queries, all six OpenTofu receipts,
+the output string and empty state after destroy. The six physical
+children took 0.585–1.164 s in the C-session samples. Scheme-only
+six-step dispatch took 133–192 ms in the first process.
+
+The C-session accounting rounds still visited 255,083 signed records
+through 130 metadata replays and read 3,246 sources. Replay CPU was
+1.323–1.693 s. This remains the largest measured runtime cost. The
+paired CLI comparison isolates about one second of Nix process work,
+while the Actor control below provides no dispatch improvement.
+Seven of nine C-session samples met the gate. The fourth process
+coincided with another live deployment compiler on the host, and its
+diagnostic replay had 0.772 s of wall-minus-CPU time. This does not
+isolate the reason for the regression. The gate remains open, alongside
+the earlier failed source confirmations.
+
+The execution product digest stayed
+=becbf742f6605335307a00ad4ddfecd89675be77f0bde56c86af198eb982fbdd=.
+The observations digest was
+=afc549a05f1b5398c34a57be4601785e9f6a9a4b3456cc0cd41654637681b293=,
+the POO Object digest was
+=a16a8aca92ad6ba0e86f71a71322f1b5a34e99410e86103b3f0c89f81fb9a7da=,
+and the read-route digest was
+=4170b4e79d6fb7772c208d1c298d86d3de4c77056626af63eea2046f1895c6e8=.
+The fixture prints these loaded-product digests before timing so that
+each independent process can verify the same inputs.
+
+The integration prefix was separately aligned through =just clean-core=
+and =just build-core= with the original 120-second limit. The cold build
+completed 275 targets. The current-source Feature scope test passed via
+=just test-core-file t/module-feature-scope-test.ss=. The Memory gate
+completed all three independent first reads but reached its 120-second
+aggregate during the hot build. The deployment gate completed cold A/B,
+A cleanup, zero-compile B reuse and the independent B first read; its
+child reported =OK= at 118.997 s and the parent reached 120 s before its
+remaining acceptance tail. A subsequent deployment invocation, sampled
+with macOS =sample= during specification, returned naturally with all
+acceptance checks. Its specification used 7.357 s wall and 5.969 s CPU;
+the final prerequisite check completed at 66.732 s. The samples include
+native =dlopen=, Gerbil expansion and MOP authentication. Sampling can
+change dyld notifications and does not explain the earlier unsampled
+wait. The Memory aggregate remains incomplete.
+Run them through =just test-file t/yuanxu-context-memory-downstream-test.ss=
+and =just test-file t/yuanxu-deployment-downstream-test.ss=. Neither result
+changes the boundaries of the numbered runtime samples above.
+
+** Checkpoint accounting on the same execution path
+
+The earlier checkpoint prototype used native checkpoint work only when
+operation accounting was disabled. Accounting selected its original
+delivery loop. A separate candidate closes that measurement gap by
+passing the authenticated native traversal's cardinality to the action.
+The value is an integer derived from the issuer's private traversal.
+Core receives no mutable traversal or receiver-protection table.
+
+#+begin_src scheme
+(def (call-with-current-slot-reads roots action)
+  (unless (procedure? action)
+    (error "expected a slot-read checkpoint procedure"))
+  (without-observation
+    (lambda ()
+      (call-with-issued-reads roots
+        (lambda (reads current! _receivers)
+          (for-each current! reads)
+          (action (length reads)))
+        #t))))
+#+end_src
+
+The existing issuer owns cached topology, entry authentication, the
+protected frame and return authentication. Core uses the same call with
+and without accounting, records the supplied cardinality once, and runs
+its ordinary checkpoint. Shared nodes and repeated roots were compared
+against native replay. The 25 issued-read cases, six source-observation
+cases, eleven Gitea/PostgreSQL cases and Core metadata-index suite passed.
+
+Three new processes used this same compiled candidate and fixed B.
+
+| Process | Three complete .run samples (s) | Scheme CPU (s)     | Fourteen Nix checks (s) |
+|---------+--------------------------------+--------------------+------------------------|
+|       1 |            2.572, 2.446, 2.318 | 1.446, 1.482, 1.510 |    0.107, 0.124, 0.113 |
+|       2 |            6.518, 5.809, 4.599 | 1.829, 1.801, 1.711 |    1.019, 1.066, 0.498 |
+|       3 |            2.378, 2.210, 2.342 | 1.456, 1.439, 1.482 |    0.134, 0.113, 0.144 |
+
+Each sample retained fourteen Nix checks and six OpenTofu commands.
+All three processes completed both refusal controls. The middle process
+failed the time assertion. Its measured host load reached 27.6 on the
+12-core machine, and its replay accounting had 1.584 s of wall-minus-CPU
+time. The three accounting rounds each visited 255,083 records through
+130 replays and retained 3,246 physical source reads. Replay CPU was
+1.273, 1.445 and 1.233 s. The first accounting round included 0.185 s of
+GC wall across three collections. These are nested spans. The six
+successful samples do not close the nine-sample stability gate.
+
+The complete Memory acceptance was also run with this candidate through
+its original =just test-file= entry and 120-second aggregate. All three
+compiled first reads and the zero-compile hot build completed. The hot
+build returned at 111.518 s; the aggregate expired during withdrawal
+cleanup. The clean and final refusal tail therefore remain unverified
+in that invocation. This result preserves the failure and does not
+substitute the three successful runtime reads for full acceptance.
+
+Those measurements used the isolated candidate, not the subsequent
+published revision. The checkpoint is now published on the existing
+gerbil-poo branch at
+[[https://github.com/tao3k/gerbil-poo/commit/cd4de644385a591b879e3de5795418b5b7e9d767][cd4de644385a591b879e3de5795418b5b7e9d767]].
+Its actual source passed all 29 issued-read cases and the complete native
+property suite. Yuanxu temporarily pins that revision and calls the same
+public checkpoint with or without accounting. The released v0.1.3 API does
+not export this entry. The release pin can resume once a release includes it.
+
+*** Published checkpoint qualification
+
+The pinned POO dependency was linked and prepared through Gerbil's package
+manager, then Core was built through =just build-core=. The first runtime qualification
+refused the incremental observations product: it loaded =.o2=, while this
+qualification expects the clean =.o1= cohort. The existing =just clean-core=
+and =just build-core= produced that cohort. The runtime assertions and the
+fixed B execution product were unchanged. Use the same commands and frozen
+Nix inputs shown above for the runtime comparison.
+
+| Process | Numbered .run wall (s) | Result |
+|---------+------------------------+--------|
+| Paired C API 1 | no samples | 60-second import idle refusal before .run |
+| CLI control | 3.692, 3.513, 3.614 | completed |
+| Paired C API 2 | 2.697, 2.576, 2.459 | completed below 3 seconds |
+| Paired C API 3 | 5.258, 3.380, 3.496 | completed effects and refusal controls; failed time assertion |
+
+All numbered samples kept fourteen Nix checks and six real tofu commands.
+Both completed paired processes rejected the invalid task before opening
+the evaluator and rejected the changed source after destroy. The accounting
+case retained 130 replays, 255,083 original read visits and 3,246 physical
+source reads. Numbered paired runs used 1.525–1.840 s of Scheme CPU,
+0.130–0.418 s for Nix checks and 0.633–1.496 s summed over tofu commands.
+These spans do not add up to wall time. The import failure and the second
+completed paired process prevent a stable sub-three-second claim.
+
+The pinned Core build and its metadata, Feature receiver, and eleven-case
+Gitea/PostgreSQL regressions passed. A separate source-observation import
+timeout was sampled before its test body: 352 of 361 main-thread samples
+were in =dlopen= segment mapping at =fcntl=. That evidence concerns import
+waiting, not timed execution or a failed source assertion. The same source
+suite passed in the clean product cohort through its standard test entry.
+
+** Fused preflight experiment
+
+The issued projection currently verifies the entire cached traversal's
+births before checking its live routes. A native experiment checks each
+birth and live route together on a cached checkpoint, with the action
+still fenced behind the complete preflight. An earlier live failure
+does not hide a later malformed birth. The cold DFS and post-action
+authentication are unchanged. A Lean probe checked diagnostic priority
+on a fixed sequence. The native probe exercised a later forged record
+and an earlier stale record, plus receiver protection, stale refusal,
+multiple values, and an exception from the action.
+
+| Process         | Complete .run (s)  | Scheme CPU (s)     | Nix checks (s)     | Six OpenTofu children (s) |
+|-----------------+--------------------+--------------------+--------------------+--------------------------|
+| Checkpoint      | 2.608, 2.322, 2.277 | 1.520, 1.504, 1.478 | 0.116, 0.129, 0.126 |      0.816, 0.632, 0.579 |
+| Fused preflight | 2.327, 2.353, 2.231 | 1.422, 1.494, 1.447 | 0.114, 0.114, 0.112 |      0.697, 0.673, 0.610 |
+| Checkpoint      | 2.389, 2.286, 2.137 | 1.487, 1.472, 1.415 | 0.111, 0.138, 0.117 |      0.713, 0.570, 0.551 |
+
+The fixed execution and Yuanxu observations digests stayed identical.
+The compiled POO Object digest changed only in the middle process.
+All nine runs retained 14 Nix checks and six OpenTofu commands, and all
+processes passed both refusal controls. The fused variant's separate
+accounting round had two collections and 0.126 s of replay GC wall time.
+The two controls had no replay collections in that round. The physical
+reads and replay counts were the same. The timing ranges overlap.
+This variant remains isolated. Its diagnostic-priority probe assumes a
+read-only native traversal. The prototype catches a general exception
+while inspecting live routes, so production would also need to keep
+asynchronous cancellation outside the deferred diagnostic path.
+
+The follow-up carries only the first explicit native route or freshness
+refusal as a value. A later failed birth still takes precedence. It does
+not catch an unrelated exception during traversal. The native control
+delivered an asynchronous interrupt during the protected action, observed
+the exact cancellation condition, and then wrote the receiver after the
+frame unwound. The stale/forged order and parent isolation controls also
+passed. A separately instrumented binary paused after the first native
+refusal, before authenticating the remaining records. An asynchronous
+interrupt at that pause kept its exact identity, even with a forged
+record later in the sequence. The timed binary has no such probe hook.
+
+| Process | Variant          | Complete .run (s)  | Scheme CPU (s)     |
+|---------+------------------+--------------------+--------------------|
+|       1 | Released         | 3.448, 2.562, 3.271 | 1.740, 1.713, 1.838 |
+|       2 | Explicit refusal | 2.900, 2.451, 2.325 | 1.527, 1.536, 1.485 |
+|       3 | Explicit refusal | 2.335, 2.146, 2.166 | 1.451, 1.416, 1.418 |
+|       4 | Released         | 2.419, 2.529, 2.437 | 1.594, 1.584, 1.580 |
+|       5 | Explicit refusal | 2.475, 2.260, 2.202 | 1.434, 1.403, 1.397 |
+
+The execution digest, admitted Provider and paired Nix worker stayed fixed.
+Each row retained 14 Nix checks, six real OpenTofu commands, and both
+refusal controls. The released first process exceeded three seconds on
+two calls. All three isolated processes passed. This comparison measures
+the combined checkpoint and fused-preflight changes against the release.
+It does not isolate their individual gains or qualify a published pin.
+
+** Read-record layout experiment
+
+The published checkpoint at =cd4de644= still resolves the issuer's record
+fields through the Gerbil MOP. The local control holds 1,024 authentic
+roots, warms the traversal, and takes five CPU samples of 40 calls to
+=call-with-current-slot-reads=. Only the compiled producer modules change.
+Replacing the private issuer's HashTable wrapper with the underlying weak
+table produced no consistent saving. Generated accessors reduced median
+CPU from 170–178 ms in the two controls to 136 ms, but changed admission.
+
+To reproduce the distinction, capture an issued read with
+=call-with-slot-read-observer=. Obtain its class's symbolic slot table with
+=class-type-slot-table= and save the =birth= offset. In a =dynamic-wind=,
+set the symbolic =birth= offset to the current =current?= offset and invoke
+a checkpoint with the original read. Restore the saved offset on exit.
+The published code rejects before the action with =unissued slot dependency=.
+The fixed-accessor experiment ran the action once. Looking up the live
+offset on each read preserved the refusal, with a 169 ms median for the
+checked lookup and 172 ms for the inlined lookup.
+
+The traversal-scoped candidate selects a private verifier after comparing
+the live field map with the generated layout. It selects again for the
+return sweep and retains the original reflective verifier when the map
+differs. A separate control remaps =birth= inside the action and requires
+refusal at return. The first prototype failed full runtime import because
+its =names= check compared against the pre-copy value. The corrected
+variant compares against the issuer's copied value and passes the 29
+producer-owned issued-read tests and both layout controls. Its verifier
+travels as a local procedure rather than a dynamic mode visible to an
+exception handler. The control leaves general replay delivery and callbacks
+on the regular per-record verifier.
+
+Run =just test-file t/qualification/opentofu/runtime-qualification.ss=
+with the same fixed B, worker, Provider, and Core prerequisites. For each
+candidate process, prepend the isolated compiled =object= and =read-route=
+products to =GERBIL_LOADPATH=. The timed calls start after import and first
+demand. The corrected variant and the published products gave:
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+----------------------|
+| Scoped verifier A | 4.531, 4.405, 5.439 | 2.006, 2.196, 2.612 | 0.269, 0.239, 0.318 | 1.460, 1.273, 1.846 |
+| Published | 2.552, 2.368, 2.393 | 1.477, 1.488, 1.514 | 0.135, 0.148, 0.144 | 0.855, 0.640, 0.655 |
+| Scoped verifier B | 7.571, 2.499, 2.401 | 1.937, 1.506, 1.459 | 1.271, 0.146, 0.129 | 1.686, 0.706, 0.650 |
+
+All three completed both refusal controls. Each accounting case retained
+255,083 record visits and 3,246 physical source reads. The published
+process passed the time assertion and both candidate processes failed it.
+The candidate's two faster calls overlap the published range. The observed
+variation spans Scheme CPU and both external lanes. This experiment did not
+qualify the change for adoption.
+
+*** Consecutive issuance checks
+
+A separate candidate retains reflective record and route lookups. On a
+cached checkpoint the native traversal authenticates every birth before
+any live route is inspected. The live pass reuses that result within the
+same native segment. Cold traversal, observer delivery, and the complete
+authentication after the action use the original checks. No successful
+result is shared across callbacks or invocations.
+
+Build the original and candidate =object.ss= with
+=gxc -O -cc-options -O2= against the same installed prerequisites.
+Keep the same =read-route= product in both processes. The warm checkpoint
+microbenchmark gave median CPU of 191, 164, and 183 ms in the order
+original, candidate, original. The candidate passed the 29 issued-read
+tests and the layout refusal controls. A focused test confirmed reuse of
+the cached traversal, then checked that a later forged birth still takes
+priority over an earlier stale read and that a birth changed by the action
+is refused at return. The local Lean check gives the same first refusal
+when both passes see the same issuance state. Its counterexample shows
+why the post-action sweep must authenticate births again.
+
+Use the fixed-B command above, swapping only the isolated compiled
+=object= product. Run the processes in the order shown:
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+----------------------|
+| Matched original A | 3.048, 2.580, 2.880 | 1.621, 1.545, 1.708 | 0.127, 0.124, 0.133 | 1.051, 0.789, 0.706 |
+| Consecutive checks A | 2.204, 2.344, 3.608 | 1.451, 1.464, 1.555 | 0.112, 0.161, 0.384 | 0.581, 0.659, 0.979 |
+| Consecutive checks B | 2.470, 2.268, 2.360 | 1.540, 1.456, 1.482 | 0.144, 0.119, 0.110 | 0.673, 0.632, 0.640 |
+| Matched original B | 2.260, 2.230, 2.329 | 1.497, 1.470, 1.504 | 0.114, 0.175, 0.122 | 0.587, 0.590, 0.633 |
+
+The B binary hash matched before and after. All four processes passed the
+detached Task and post-destroy source refusal controls. Accounting retained
+255,083 record visits and 3,246 source reads per process. Median Scheme CPU
+was 1.524 s in the six original calls and 1.473 s in the six candidate calls.
+Each variant had five calls below three seconds. The 3.608 s candidate call
+spent 0.384 s in Nix and 0.979 s across the six tofu commands. The candidate
+remains an isolated experiment pending a stable time gate.
+
+*** Route validation within one native sweep
+
+The consecutive-check candidate can also reuse a successful metadata
+route check while successive table-requiring reads visit the same
+receiver and both of its table identities stay the same. The native
+sweep still checks every record's key grammar and live value. A
+bootstrap read does not establish table validity. The action runs
+between separate sweeps. Its return starts with an empty route state
+and authenticates every birth again. Ordinary observer delivery uses
+its existing checks.
+
+The three-slot microbenchmark selected 2,048 records with 1,536
+adjacent visits to the same receiver. For 40 warmed checkpoints the
+consecutive-check control used median CPU of 158 ms. The first route
+candidate used 108–115 ms in two processes. It passed the 29 issued-read
+cases, the hot refusal-order control, and a return control that replaces
+a live table method in the action. The latter refuses before invoking
+the replacement. The local Lean check preserves the first refusal for
+a stable route during one native sweep and gives a counterexample when
+a previously admitted route is reused after a change.
+
+The first candidate changed =object= and =read-route=. The smaller
+candidate changes only =object=. On a reused route it calls the existing
+=require-read-route!= with the same key and absent table arguments, so
+key validation still runs. Compile the candidate =object.ss= with
+=gxc -O -cc-options -O2= against the installed published =read-route=.
+Prepend that single compiled module to the fixed-B load path and run
+the standard qualification command in two fresh processes. The
+fixture prints the loaded Object, ReadRoute, Core and B digests.
+
+| Variant and process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------------------+-------------------+----------------+-------------------+----------------------|
+| Matched published A | 2.517, 2.752, 2.311 | 1.511, 1.574, 1.498 | 0.112, 0.127, 0.118 | 0.831, 0.910, 0.619 |
+| Two-module candidate A | 2.151, 2.198, 2.309 | 1.369, 1.387, 1.445 | 0.111, 0.142, 0.108 | 0.593, 0.574, 0.691 |
+| Two-module candidate B | 2.155, 2.259, 2.229 | 1.399, 1.408, 1.455 | 0.108, 0.163, 0.115 | 0.572, 0.620, 0.580 |
+| Matched published B | 2.298, 2.254, 2.553 | 1.495, 1.478, 1.519 | 0.145, 0.115, 0.109 | 0.567, 0.591, 0.679 |
+| Object only A | 2.296, 2.495, 2.429 | 1.430, 1.455, 1.437 | 0.111, 0.166, 0.124 | 0.699, 0.754, 0.702 |
+| Object only with CLI | 3.046, 2.954, 3.145 | 1.422, 1.354, 1.352 | 1.014, 1.067, 1.114 | 0.628, 0.551, 0.586 |
+| Object only B | 2.329, 2.429, 2.088 | 1.363, 1.447, 1.338 | 0.179, 0.144, 0.111 | 0.714, 0.626, 0.581 |
+
+All paired processes passed both refusal controls. Each accounting case
+retained 255,083 record visits and 3,246 physical source reads. The
+matched four-process comparison reduced median Scheme CPU from 1.505
+to 1.404 s. The single-module follow-up recorded a median of 1.434 s
+and passed all six numbered calls. Its CLI control used the same
+candidate and Nix distribution, with fourteen independent CLI queries
+in place of thirteen worker queries and one CLI query. These are
+qualification results for isolated producer artifacts.
+
+The single-module candidate passed the four Core build-input mutations
+and the surrounding positive checks, Feature receiver scope, and the
+real strict Flake test. The Flake test rejected source changes and
+implicit lock updates and checked the original lock bytes. The Lab
+deployment suite passed in 84.81 s, including zero scope projection,
+both cold builds, cleanup isolation, zero hot compilation, and first
+use in the independent B process.
+
+The separate downstream Memory suite passed first use in the base,
+=+memory=, and =-memory= processes. It spent 66.69 s across the three
+cold builds and 41.38 s across the three consumer actions. The hot
+enabled build started at 113.12 s and was terminated by the original
+120 s aggregate limit, before the remaining checks. Those setup and
+consumer timings are outside the fixed-B =.run= benchmark. The
+downstream Memory and remote release gates remain open.
+
+On the same enabled consumer product, an A/B/A startup control changed
+only the direct import of the operation counter from =source/admission=
+to its defining =source/observations= module. The actions took 16.81,
+8.95, and 9.07 s, respectively. The two original-import actions differ
+by 7.74 s, so this control gives no reason to change the import. In a
+separate callback-free staged run, the first =.get= took 3.43 s. It
+included 1.42 s in directory context creation, 1.05 s in candidate
+reads, 0.65 s in reader bootstrap, and 0.066 s in metadata replay.
+These are inclusive stage measurements. For reproduction, use the
+enabled product from the Memory fixture and run its unchanged =use.ss=
+in a new process before and after the import-only variant. Use
+=accounting?: 'stages= on a separate run for attribution. Keep the
+ordinary first-read owner check and the independent compiled entry
+check in each run.
+
+The unchanged full Memory gate with the same producer candidate
+reached the hot enabled build at 111.87 s. Its three cold build
+actions took 61.24 s total. The three independent consumer actions
+took 46.59 s total and each reached its Feature success marker. The
+original 120 s aggregate watchdog terminated the hot build, so the
+subsequent clean and refusal checks remain unqualified. The failed
+run exited with status 124.
+
+The cold states compiled 12, 46, and 12 distinct targets. The enabled
+state's 34 additional targets include 23 Memory and eight session
+modules. Native =std/make= took 3.41, 10.25, and 4.20 s, respectively.
+These are distinct targets in the Feature's import closure. The
+runtime comparison below keeps the enabled consumer's compiled
+product fixed.
+
+Yuanxu now resolves the public Gerbil =pkg-root-dir= binding through
+its existing selective module import. The package manager continues
+to decide where installed checkouts live. In two independent
+consumer-product cohorts, only the compiled Yuanxu =source/init=
+module changed between variants. Each child verified its loaded
+artifact and passed the existing owner-scoped first-read checks.
+
+| Order | Variant | First .get (s) | Consumer action (s) |
+|-------+---------+----------------+---------------------|
+| A/B/A | Whole module / public binding / whole module | 4.15, 2.66, 3.09 | 12.29, 7.47, 9.27 |
+| B/A/A/B | Public binding / whole module / whole module / public binding | 3.18, 3.83, 3.29, 2.32 | 10.23, 10.09, 9.62, 7.48 |
+
+The first-read medians were 3.56 s for whole-module entry and 2.66 s
+for public binding. The consumer action ranges overlap. This
+comparison measures independent first access and excludes it from
+the fixed-B =.run= result.
+
+With the production source change compiled, the Core package/window
+tests and the four build-input mutation controls passed. In the full
+Memory gate the three consumers completed in 39.38 s combined, with
+all Feature success markers. The three cold builds took 74.87 s, so
+the hot build began at 119.48 s and the original aggregate watchdog
+still ended the run with status 124. This full run does not establish
+an aggregate speedup.
+
+In the deployment gate, parallel compiler output split a Make target
+line around a worker-job line. The transcript parser now reconstructs
+that target and still compares the exact cold target set and the empty
+hot compile set. The corrected run reported all 45 cold targets in A
+and B, isolated cleanup, zero hot compilation and independent B
+product use. The outer watchdog returned status 124 after the final
+Harness marker at 120.83 s wall, so this invocation remains a failed
+deployment qualification.
+
+The next deployment run sampled the exact child and parent process
+tree after the child printed =OK=. All 204 child main-thread samples
+were in Gambit's =___cleanup_dyn_module= calling macOS =dlclose=.
+The parent spent 202 of 206 samples waiting in =select=. The child
+had already emitted its B product and Harness markers. The original
+watchdogs ended the run at 120.90 s before the parent's test call
+returned. This locates the sampled interval in native module teardown.
+Sampling can affect dyld's debugger notifications, so use the
+unsampled run for elapsed-time comparisons. Keep the natural process
+exit and source-return checks in the gate. Reproduce through the
+existing deployment =just test-file= command, sampling its own child and parent immediately after
+=LAB-DEPLOYMENT-STAGE child-ok=.
+
+An isolated Memory tail diagnostic used the same three cold states,
+then measured the enabled hot build and the withdrawn clean without
+the three independent first-use actions. The hot build compiled zero
+targets and returned in 14.28 s. Clean returned in 10.98 s, and the
+withdrawn artifacts were absent. The refusal child began at 114.72 s
+and the original process fence terminated the diagnostic before it
+returned. This measures 25.27 s for the first two tail actions in that
+process. The original mutated-source refusal succeeded in a separate
+diagnostic, with an 8.61 s child and natural exit. These split results
+leave the full Memory gate unqualified.
+
+The same frozen B product and admitted Null Provider were also checked
+after the package-binding change, using the same single-module POO
+candidate. The B hash matched before and after. All six OpenTofu
+commands and 14 Nix checks completed in each round, and both refusal
+controls ran before the final wall-time assertion.
+
+| Round | .run wall (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|-------+---------------+----------------+-------------------+-----------------------|
+|     1 |         3.664 |          1.612 |             0.280 |                 1.360 |
+|     2 |         5.349 |          2.199 |             0.370 |                 1.697 |
+|     3 |         4.468 |          2.346 |             0.217 |                 1.173 |
+
+Scheme-only six-task dispatch took 182–255 ms. The separate accounting
+call visited 255,083 records, read 3,246 sources, and used 1.680 s of
+metadata replay CPU. This process failed the three-second assertion
+and exited with status 70. The earlier six sub-three-second candidate
+rounds and this failed process both belong in the qualification record.
+
+*** Fixed-layout birth field control
+
+An isolated =read-route= variant replaced five named field reads in
+the issuer with the generated fixed-layout accessors. It retained the
+same record class, registered birth identity and captured fields. The
+2,048-record microbenchmark fell from 114.3 to 86.2 ms median CPU for
+40 checks. The 29 issued-read cases and warm checkpoint control passed.
+
+The fixed B comparison ran in A/B/B/A order with only =read-route=
+swapped. A used the prior isolated Object sweep and original issuer.
+B used the same sweep and the fixed-layout issuer. All four processes
+kept the same B hash, Provider, 14 queries, six OpenTofu commands and
+refusal controls.
+
+| Process | Complete .run (s) | Replay CPU (s) |
+|---------+-------------------+----------------|
+| A       | 2.377, 2.050, 1.999 |          1.069 |
+| B       | 2.782, 3.605, 2.630 |          1.168 |
+| B       | 3.503, 2.742, 2.541 |          1.210 |
+| A       | 2.335, 2.223, 2.194 |          1.144 |
+
+The B processes both failed the timing assertion. They also spent
+more time in the physical tools, so this comparison cannot assign
+the wall-time difference to issuer changes.
+
+A focused negative control minted a read for a symbol slot, changed
+the record class's reflected =key= offset to its =value= offset, then
+asked =object-read-issued?= before restoring the class mapping. A
+returned false during the mutation and true after restoration. B
+returned true during the mutation. Keep the issuer's current named
+lookup on this evidence. Any future direct-access path must preserve
+the reflection rejection as well as the existing payload and route
+controls.
+
+A second issuer variant retained every named record lookup and removed
+only the =HashTable= wrapper around the private weak identity registry,
+using =table-ref= and =table-set!=. It passed the issued-read suite and
+the reflection negative control. The same four-process microbenchmark
+put both variants at about 100 ms median CPU, so the wrapper change
+was left out.
+
+*** Published artifact follow-up
+
+Two fresh processes used the checkpoint artifact pinned by Yuanxu
+=27a666e=, with neither issuer variant nor the isolated Object sweep.
+The fixed B execution hash matched before and after. Both Harnesses
+returned naturally, with 14 queries, six commands and both refusal
+controls per process.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+|       1 | 2.833, 2.246, 2.264 | 1.476, 1.460, 1.452 | 0.115, 0.116, 0.130 | 1.138, 0.614, 0.620 |
+|       2 | 2.407, 2.447, 2.578 | 1.566, 1.567, 1.681 | 0.119, 0.163, 0.146 | 0.642, 0.636, 0.671 |
+
+Scheme-only dispatch took 124–253 ms, and separate replay accounting
+reported 1.169 and 1.284 s CPU. All six numbered calls passed the
+three-second gate in this cohort. The earlier failed cohorts remain
+part of the stability evidence.
+
+*** Realized package callback boundary
+
+A realized package object can replace its =sources-current= procedure
+without changing its selected Graph identity. In the fixed B fixture,
+bind a derived package object through the ordinary =.with-packages=,
+warm its contribution Context, then edit the selected =config.ss= from
+the replacement procedure before calling the original source guard.
+The original linker returned successfully because both guards consumed
+the enclosing window's earlier file bytes.
+
+Yuanxu =6ebf37d= closes that window around the package getter and
+callback and validates the selected sources again before returning.
+The real OpenTofu probe refuses the edit. The Core regression also
+refuses a callback that edits the source and returns without invoking
+the original guard. Run that regression with
+=just test-file t/module-build-graph-test.ss= from Yuanxu.
+
+In one paired fixed B comparison using the standard qualification
+above, the original linker took 2.294, 2.183 and 2.233 s. The revised
+linker took 2.428, 2.417 and 2.410 s. Both cohorts retained the B
+execution digest, fourteen Nix checks and six OpenTofu commands.
+The independent accounting round recorded 3,246 and 5,524 file reads
+respectively. This is a currentness correction with an observed cost.
+The three measured calls do not establish a stable three-second bound.
+
+*** Owned source continuation
+
+The package producer constructs its source-only continuation from the
+selected Build Graph and the observed, generated and entry source rows.
+The linker can reuse the current read window only when the warm
+procedure and Graph guard match those original bindings, with ordinary
+read routes and no active source or slot observer. If the Graph falls
+back to an open request, the callback clears the current window and
+the linker rechecks the selected sources before returning. A replaced
+=sources-current= always takes the independent callback path.
+
+The compiled candidate and =6ebf37d= control used the same B execution
+digest and Null provider through
+=just test-file t/qualification/opentofu/runtime-qualification.ss=.
+The table excludes import, first =.get= and producer preparation.
+
+| Linker | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|--------+-------------------+----------------+-------------------+-----------------------|
+| Control, first pair | 2.559, 2.475, 2.444 | 1.754, 1.688, 1.677 | 0.118, 0.119, 0.125 | 0.592, 0.585, 0.554 |
+| Owned continuation, first pair | 2.728, 2.304, 2.287 | 1.652, 1.501, 1.464 | 0.126, 0.116, 0.140 | 0.808, 0.628, 0.615 |
+| Control, reversed order | 2.541, 2.631, 3.296 | 1.665, 1.720, 1.920 | 0.136, 0.170, 0.224 | 0.656, 0.620, 0.836 |
+| Owned continuation, reversed order | 2.786, 2.316, 2.359 | 1.625, 1.471, 1.503 | 0.329, 0.149, 0.161 | 0.651, 0.623, 0.573 |
+| Owned continuation, guarded warmup | 2.616, 2.398, 2.389 | 1.512, 1.557, 1.501 | 0.259, 0.161, 0.177 | 0.740, 0.604, 0.630 |
+
+The separate accounting round reduced physical source reads from 5,524
+to 3,246 and Reader currentness calls from 96 to 79. Both paths still
+performed 2,782 link currentness calls, 130 metadata replays and
+255,083 issued-read visits. The candidate replay pass accounted for
+1.198 s of CPU. The separate Scheme dispatch probe took 124–190 ms.
+The fixed B replacement callback still ran once and the linker refused
+its source edit. The first candidate sample spent 216 ms more in the six
+tofu commands than the first control, despite lower Scheme CPU. In the
+reversed pair, the control completed the effects but failed the unchanged
+three-second assertion on the third call. The candidate used less Scheme
+CPU in every matching sample, and all six candidate calls passed the
+time assertion. The sample still leaves wall-clock stability open.
+Restricting the producer's warmup to ordinary construction with no
+active observer preserved the 3,246 reads and the refusal control.
+
+Two new processes repeated that last build without changing the compiled
+prerequisites or B digest. The standard fixture checks the invalid Task
+before evaluator startup and refuses a source edit after destroy.
+
+| Guarded warmup repeat | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|-----------------------+-------------------+----------------+-------------------+-----------------------|
+| First new process | 2.853, 2.669, 2.453 | 1.599, 1.528, 1.523 | 0.252, 0.188, 0.162 | 0.814, 0.831, 0.670 |
+| Second new process | 2.331, 2.334, 2.314 | 1.485, 1.508, 1.468 | 0.161, 0.163, 0.155 | 0.570, 0.581, 0.629 |
+
+All nine samples on the guarded-warmup build passed the time assertion.
+Both new processes reported 3,246 file reads and about 1.20 s of
+inclusive replay CPU in their separate accounting rounds.
+
+A separate diagnostic build timed the existing native replay branches
+and the checkpoint body using the same private operation counters. It
+retained 3,246 file reads and 255,083 issued-read visits. The 68 ordinary
+replays used 0.229 s of CPU. The 62 protected replays used 1.033 s
+inclusive, of which 0.661 s was inside their checkpoint bodies. The
+remaining 0.372 s is the surrounding protected replay and accounting,
+including native entry and return authentication. The protected calls
+were attributed to 17 =link-current= phases and 45 =source= phases.
+These values come from the diagnostic build only. Its additional nested
+timers make the sums unsuitable for comparison with the uninstrumented
+runtime samples.
+To reproduce the split, wrap the two branches of
+=module-source-measure-replay= in =module-source-measure-operation= spans
+named =metadata-plain= and =metadata-guarded=. Add those names and
+=metadata-checkpoints= to the detailed accounting set in
+=measure-source-operation=. Read each span's user plus system CPU from
+the fixture's =source-accounting= invocation. Run the same fixed B test
+with the diagnostic observations product ahead of the ordinary one.
+
+**** Ordinary replay without a visitor
+
+For an isolated comparison, replace only the no-accounting branch's
+fixed void visitor in =module-source-measure-replay= with
+=(call-with-current-slot-reads reads void)=. Build both observation
+products with the same Gerbil compiler options and run the fixed B
+fixture with their library prefixes in A/B/B/A order. The diagnostic
+visitor stays in place for accounting, including partial counts on
+failure.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| A | 2.271, 2.214, 2.264 | 1.483, 1.462, 1.466 | 0.115, 0.136, 0.108 | 0.607, 0.561, 0.631 |
+| B | 2.320, 2.556, 2.219 | 1.478, 1.521, 1.452 | 0.114, 0.148, 0.110 | 0.661, 0.682, 0.594 |
+| B | 2.257, 2.352, 2.322 | 1.469, 1.515, 1.477 | 0.110, 0.112, 0.186 | 0.627, 0.666, 0.593 |
+| A | 2.186, 2.157, 2.264 | 1.445, 1.426, 1.464 | 0.132, 0.109, 0.115 | 0.555, 0.563, 0.624 |
+
+Every process passed the same qualification, retaining 3,246 file reads
+and 255,083 issued-read visits in the accounting round. Median Scheme CPU
+was 1.463 s for A and 1.477 s for B. A separate issued-read control
+confirmed equal stale and forged diagnostics, with forged issuance
+refused before an earlier stale record. Neither path delivered reads
+to the outer observer or forced the unrelated slot. The replacement
+stayed isolated. With the two A processes, the retained build has
+15 numbered samples between 2.157 and 2.853 s across five processes.
+
+**** Funflow dispatch attribution
+
+Run the same fixed B fixture with diagnostic =cpu-time= spans around
+=job-graph=, =job-flow=, =runner-run= and the actual =TaskRun= call in
+=run-job=. Refine the Runner span around =admit-flow=, input validation,
+=runner-plan=, plan-node validation, node execution and output validation.
+Keep these diagnostics outside the wall-clock qualification comparison.
+
+The six-step in-process control spent 1–2 ms on the Job graph and
+about 25 ms constructing its typed Flow. In one of the Runner passes
+without a visible timing spike, the first Flow admission used 34 ms,
+planning 49 ms, and node execution 13 ms. Input, output and plan-node
+validation together took less than 1 ms in that pass. The planning span
+includes the Strategy planner's checked Function input and graph lowering.
+In the first three full =.run= samples with the outer dispatch probes,
+Runner CPU was 0.97–1.00 s inclusive. The task calls accounted for
+0.81–0.84 s, including the real source guards and process supervision.
+
+The Runner admits the Flow before it calls the input Type validator.
+The planner's checked Function then admits the Flow at the planner
+boundary. A control built a =pure-flow= with a custom input validator
+and replaced the shared Function signature's =outputs= with the empty
+list during that validator. The planner rejected with =TypeError?=,
+after one input validation and before the task body ran. Replacing
+the original Flow's =steps= in the first control did not affect the
+normalized Flow. Neither control changes the production checks.
+
+The original candidate passed the Core build Graph, publication,
+testing-source admission and four mutation controls. Lab's deployment
+gate completed with zero source-projection scopes and independent B
+first reads. The separate Memory Feature gate completed all three
+compiled first reads, the zero-compile hot build and withdrawal
+cleanup. It entered the final refusal process at 115.91 s and hit
+the unchanged 120 s aggregate before that process returned.
+On the guarded-warmup build, the full deployment gate and the four
+Core mutation controls passed again. The Memory refusal scenario also
+passed separately with its normal child invocation in 9.18 s. This
+isolated result does not close the full 120 s Memory gate.
+
+A full guarded-warmup rerun used the same installed package prefix and
+ordinary Memory test. It completed all three independent first reads
+and the enabled zero-compile build. The withdrawn clean entered at
+118.63 s and the aggregate expired. The three cold builds accounted
+for 59.84 s, the three runtime checks for 40.02 s, and the hot build
+for 14.68 s before clean.
+
+To locate the outer build overhead, use the Memory fixture's withdrawn
+state and its existing Ops action to run one cold =gerbil build=.
+Then run =gerbil build=, =./build.ss compile=, and =gerbil build= on
+that same state with verbosity 2. Compare the caller's wall epoch to
+the existing =BUILD-STAGE main return= epoch, and check zero compiles
+and identical product digests after every warm call. This diagnostic
+does not replace any invocation in the acceptance test.
+
+| Warm invocation | Child wall (s) | Before main (s) | Inside build main (s) | After main return (s) |
+|-----------------+----------------+-----------------+-----------------------+-----------------------|
+| gerbil build | 11.954 | 3.835 | 3.975 | 4.144 |
+| ./build.ss compile | 9.379 | 2.091 | 3.758 | 3.530 |
+| gerbil build | 12.081 | 4.141 | 3.929 | 4.011 |
+
+The native package CLI adds about 2.6 s to this warm comparison.
+The direct build script still spends 3.53 s between its main return
+and the supervising action's return. That interval includes process
+shutdown and the caller's result handling, so it is outside
+=std/make= and the selected-source checks. No entrypoint or deadline
+changed in the full qualification.
+
+**** Complete Core product qualification
+
+Copy the tracked Core files with the candidate source changes into an
+isolated checkout. Start with an output prefix containing only the
+compiled POO pin =cd4de644= and its Gerbil package manifest. Use Core's
+ordinary =just build= with that prefix as =GERBIL_PATH= and its =lib=
+as =GERBIL_LOADPATH=. The empty Core output build returned in 110.38 s
+under the unchanged 120 s deadline and 2 GiB Gerbil heap cap. The build
+reported 275 compile targets.
+
+For downstream checks, put the resulting library before the existing
+fixed B prerequisites. The first OpenTofu qualification reached
+Gerbil's load of =module-system/building/products~0= and hit the
+60 s idle deadline before any numbered =.run= sample. The same Core
+product then rejected a selected-source edit from the replaced package
+callback and passed the Feature receiver test. In the input mutation
+gate, the positive build-role baseline hit its idle deadline before
+the fault cases on the first attempt. Repeating
+=just test-build-input-context-mutations <artifact-dir>= against the
+same complete Core products passed the order and admission controls
+before and after all four rejected faults. The gate reported unchanged
+checkout sources.
+Lab's complete deployment gate passed with the same product. It
+reported 45 targets, clean isolation, zero-compile B reuse, and the
+independent B runtime checks. The fixed B execution digest remained
+unchanged throughout this sequence.
+
+Run the separate Feature consumer through
+=just test-file t/yuanxu-context-memory-downstream-test.ss=. With the
+complete Core product it compiled 12 base, 46 enabled, and 12
+withdrawn targets, and all three independent first reads passed. The
+enabled rebuild began at 110.86 s and reached native =std/make=
+6.77 s after its start. The outer 120 s deadline interrupted it before
+it could report a compile count. This run leaves the hot build, clean
+and refusal actions of the complete Memory gate open.
+
+After the Ops batch change, a frozen tracked Core source snapshot
+started with only the previously qualified POO dependency in its
+output prefix. The native =just build= logged 249 target starts before
+the unchanged 120 s deadline, then exited 124. Compiler jobs were
+still running near the deadline. This is a failed empty-output build.
+The separate downstream run used the complete baseline Core library
+and only the newly compiled Ops modules ahead of it. It passed the
+base, enabled and withdrawn independent first-read controls. The hot
+enabled build started at 118.26 s and was interrupted at the 120 s
+deadline. This leaves the full Memory gate open for the new Ops
+revision. The fixed B digest remained unchanged.
+
+In the earlier runtime series, three processes used the complete
+baseline Core library and the same fixed B execution digest. The observations binary
+reported by the fixture came from that complete library in each
+process. The first two passed both refusal controls and exited
+naturally. The third completed all numbered calls and the source
+accounting round, then exceeded the aggregate deadline and exited
+137 during the remaining qualification.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| 1 | 2.976, 2.233, 2.252 | 1.452, 1.432, 1.442 | 0.525, 0.152, 0.157 | 0.885, 0.594, 0.570 |
+| 2 | 2.651, 2.339, 2.566 | 1.498, 1.514, 1.577 | 0.164, 0.114, 0.134 | 0.708, 0.628, 0.658 |
+| 3 | 11.006, 9.562, 12.422 | 2.031, 1.984, 1.975 | 0.592, 0.761, 1.073 | 1.973, 1.647, 1.406 |
+
+The three accounting rounds retained 3,246 physical source reads
+and 255,083 issued-read visits. The third process began at a
+one-minute host load of 11.62. During the numbered calls, a host
+snapshot recorded 41.07 and six concurrent Gambit stress processes.
+This records the concurrent work and timing split. It leaves the
+unattributed wall interval open and the complete-product stability
+gate unclosed.
+
+**** First call versus subsequent calls
+
+Repeat =just test-file t/qualification/opentofu/runtime-qualification.ss=
+in three serial processes with the same complete Core library, B
+execution digest, admitted Null 3.2.4 provider and paired Nix binary.
+The one-minute host load at launch was 12.77–15.98. The timed region
+still excludes fixture preparation, Harness startup and the first =.get=.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| 1 | 3.163, 2.735, 2.657 | 1.640, 1.645, 1.600 | 0.129, 0.147, 0.157 | 1.229, 0.798, 0.820 |
+| 2 | 3.310, 2.577, 2.626 | 1.678, 1.596, 1.637 | 0.124, 0.152, 0.150 | 1.072, 0.683, 0.692 |
+| 3 | 3.034, 2.302, 2.748 | 1.565, 1.473, 1.583 | 0.205, 0.113, 0.185 | 1.175, 0.628, 0.804 |
+
+All three failed the unchanged three-second assertion on their first
+call and passed the invalid-task and after-destroy source refusal
+controls. Relative to each process's second call, the first call
+spent an additional 0.389–0.547 s in the six tofu commands and
+changed Scheme CPU by -0.005 to +0.092 s. The command-level increase
+varied across processes, including =init=, =validate=, =plan= and
+=destroy=. The summed command intervals explain part of the wall
+difference. They do not attribute the remainder to cache misses,
+filesystem latency or scheduling.
+
+**** Native route candidate with the complete Core product
+
+Keep the complete Core product and B execution digest from the previous
+section. Use the Object-only adjacent-route candidate described above
+against the same pinned ReadRoute binary. Run the standard fixed-B
+qualification in A/B/B/A order, placing only the candidate Object product
+ahead of the complete Core library in B. Confirm the loaded Object and
+ReadRoute digests in the fixture output.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| A1 | 4.105, 3.205, 3.042 | 1.777, 1.753, 1.725 | 0.201, 0.154, 0.202 | 1.418, 0.938, 0.928 |
+| B1 | 2.342, 2.580, 2.496 | 1.472, 1.415, 1.453 | 0.117, 0.136, 0.137 | 0.653, 0.889, 0.728 |
+| B2 | 3.047, 2.501, 2.402 | 1.458, 1.417, 1.357 | 0.132, 0.221, 0.124 | 1.100, 0.715, 0.811 |
+| A2 | 2.724, 2.249, 2.462 | 1.523, 1.471, 1.531 | 0.107, 0.136, 0.132 | 0.985, 0.572, 0.627 |
+
+The pooled median Scheme CPU was 1.628 s for A and 1.435 s for B.
+The last A process used 1.471–1.531 s per sample, so the pooled change
+includes substantial variation between the two control processes.
+The separate replay-accounting rounds recorded 1.439 and 1.246 s of
+CPU for A and 1.074 and 1.131 s for B. Each process retained 130
+replays, 255,083 issued-read visits and 3,246 source reads. Every
+process passed the pre-evaluator and after-destroy refusal controls.
+A1 and B2 failed the unchanged timing assertion. The candidate remains
+isolated.
+
+With the same candidate loaded, the native route replacement control
+refused before dispatching the substituted table method. The real
+OpenTofu realized-package control invoked the replacement callback once
+and refused its source edit. Both focused Harnesses exited normally.
+
+The Lean adjacent-route law assumes a stable route within the native
+sweep and gives a counterexample across a state change. The existing
+Quint route model keeps that boundary separate from the two requirement
+checks. With seed =0x41= and an eight-step bound,
+=MetadataRoute_acceptance.qnt= passed 1,000 traces for =safety= and
+=MetadataRoute_endpoint.qnt= violated =NoForeignCalls=. This checks the
+effect of opening the modeled interval. Concurrent reflective writes
+remain outside the serial route law.
+
+**** Replay ownership within the selected OpenTofu graph
+
+Read =module-order= and =feature-order= from the admitted recipe's
+=publication.context.selected-graph= after fixture preparation, outside
+the numbered timer. In the fixed B control the graph contained the
+package-qualified JsonSchema, Nix, Funflow and fixture OpenTofu Interface
+identities, in that order. The Feature list was empty and =list-modules=
+had no AI Context images. Ops enters through ordinary Gerbil imports.
+The separate Memory test explicitly selects =ai-agentic-context +memory=
+and exercises its own consumer package.
+
+Keep the fixed B and compile only a diagnostic =source/observations=
+module ahead of the same Core products. In
+=module-source-measure-replay= record the current source phase, replay
+mode, root-list length and native visit count in the existing operation
+table. Emit those counters only from the independent source-accounting
+call. The numbered calls remain ordinary.
+
+| Phase | Mode | Replay calls | Presented roots | Issued-read visits |
+|-------+------+--------------+-----------------+--------------------|
+| source | protected checkpoint | 45 | 91,755 | 115,020 |
+| link-current | protected checkpoint | 17 | 34,663 | 43,452 |
+| link-current | plain replay | 68 | 34,663 | 96,611 |
+
+The 17 linker checkpoint calls and 68 plain linker calls presented
+the same aggregate number of roots, but the plain replay visited
+2.22 times as many signed records. These counters locate work in
+the Module System's linker and reader path. They do not establish
+that differently placed calls may share authentication across a
+callback or that all root spines are identical. The protected and
+plain paths retain their individual refusal and currentness checks.
+
+*** Build and selection gate follow-up
+
+On Yuanxu =27a666e=, the observer-free 10,000-owner Linux Case timed
+out in first Graph selection. The interrupted stack was in the
+Gerbil expander. The separate observed declaration Case reached
+1,500 completions and 2.12 GB of heap before the same 180 s limit.
+The bootstrap job hit its existing idle watchdog inside the native
+=gerbil pkg deps --install= action for the thousand-owner fixture.
+
+Use Core's =just test-file t/module-runtime-attribution-1000-test.ss=
+to attribute the same reader path without an open observer. It
+returned normally under the original budget. Declaration admission
+took 103.45 s, with 1,000 Interface imports taking 56.77 s inclusive,
+2,000 compile/evaluation entries, and 1,000 Contract admission spans
+taking 9.85 s. Independent Graph currentness took 0.53 s. The first
+scope after admission took 9.50 s. The spans overlap. Reducing warm
+replay alone cannot close the dense-selection budget.
+
+On Lab =eb613826=, the external Linux Bazel lock and qualification
+logic passed. The full build completed the POO and Yuanxu actions,
+then reached the existing 12-minute step limit while Parser and its
+parallel work were still running. The failed run saved its disk cache
+afterward. That cache is not evidence of a successful cold build.
+
+The root Linux package job also timed out during dependency builds,
+after Ascent completed and while Parser was still running. The
+Darwin source-build job completed POO just before the step budget and
+had only reached Yuanxu preparation. Neither job reached the Lab
+runtime. Separately, the frozen local B passed the existing
+=opentofu-service-cleanup-test.ss= and =opentofu-service-failure-test.ss=
+through =just test-file=, with natural Harness exit and the original
+source-expiry and failed-command cleanup checks.
+
+The external qualification now carries the repository's =.bazelversion=
+into its generated consumer workspace. Bazelisk previously selected
+9.3.2 in the external CI job while the repository pinned 9.2.0.
+The native analysis and missing-override control passed using 9.2.0
+without a version environment override.
+
+To compare dependency identity, run =aquery --output=jsonproto= for
+=mnemonic("GerbilProjectCompile", deps(...))= on the root's
+=//:dependency_packages= and the external consumer's
+=//:agentic_ai_lab_compile=, with the same Bazel version. In the
+Darwin control all six dependency actions had matching native ABI
+fingerprints and distinct action keys. The external repository owner
+changes the output path and the producer label passed to the receipt
+writer. Dependent packages also receive different
+=GERBIL_BAZEL_PROJECT_DEPENDENCY_ROOTS=. Sharing a disk-cache location
+does not make these actions interchangeable. This analysis executed
+zero compile actions.
+
+In the bootstrap failure, the native Gerbil =pkg-retag= path invokes
+=gxtags= through =run-process= with its default stdout capture.
+The tagger's per-file =TAG= lines therefore do not reach the parent
+Ops progress reader during that call. The fixture still requires
+the actual generated TAGS index and natural exit.
+With the same dependency pin, a local run of Core's
+=just test-file t/package-install-test.ss= also hit the existing idle
+watchdog in the thousand-owner checkout. The destination TAGS file
+stayed empty while sampled. This reproduces the timeout without
+establishing that the tagger was making progress.
+
+** Native Nix configuration replay control
+
+The Nix 2.34.7 C API moves the builder's evaluator and fetch settings into
+each new state. Its standard loader parses the configuration independently
+for both settings objects. The isolated worker instead applies the native
+parser's ordered setting updates and override-reset position to each
+fresh builder. It still reads the configuration before and after each
+query, retains one Store connection, and constructs a fresh EvalState.
+See the [[https://github.com/NixOS/nix/blob/2.34.7/src/libexpr-c/nix_api_expr.cc#L139-L176][pinned C API implementation]].
+
+Both workers matched the CLI derivation for an expression with a relative
+import, observed an atomic replacement of that import, and left both
+derivations unregistered. Editing an included Nix configuration file
+caused both workers to refuse the next query. A fresh session with the
+included =restrict-eval= setting then refused the same path, as did the
+matching CLI, confirming the replay reaches the effective evaluator.
+
+| Process | Worker | Complete .run (s)  | All Nix checks (s) |
+|---------+--------+--------------------+--------------------|
+|       1 | Stock  | 5.296, 6.792, 7.747 | 1.783, 1.971, 1.527 |
+|       2 | Replay | 2.388, 2.408, 2.432 | 0.326, 0.315, 0.210 |
+|       3 | Replay | 2.483, 2.389, 2.280 | 0.419, 0.328, 0.204 |
+|       4 | Stock  | 2.869, 2.656, 2.440 | 0.501, 0.534, 0.245 |
+
+All four used fixed B, the same isolated POO binary and the same CLI
+target. Every round retained 14 Nix checks and six OpenTofu commands.
+Both refusal controls passed in each process. In the first process,
+even the independent CLI check and OpenTofu children took longer than
+their later counterparts. The host was running other builds. These
+measurements therefore do not isolate the cost of configuration replay.
+
+In one Gerbil process, alternating the two workers over 128 fresh states
+per sample gave stock groups of 141, 221, 136 and 144 ms and replay groups
+of 107, 70, 159 and 87 ms. The median difference corresponds to roughly
+5 ms across 13 queries on this small expression. This isolates the
+configuration lane enough to rule out attributing the seconds in the
+first stock process to the two additional parses.
+
+*** Bind the admitted settings to evaluation
+
+The worker now applies the captured Nix configuration to both settings
+objects of a fresh builder. The same Nix parser reads the live
+configuration before evaluation and again before returning a
+successful derivation path. The evaluator itself consumes the admitted
+updates and their override boundary. It still constructs a fresh
+EvalState and keeps only the existing Store connection.
+
+Build through the ordinary =dependencies.nix= derivation-worker target.
+Compare with the original worker from the same Nix package set. For the
+configuration interleaving control, make a temporary user =nix.conf=
+that includes a FIFO. Start the worker under the admitted watchdog.
+For each of its startup opens, serve =restrict-eval = true=. Wait for the
+native ready word, then send a read-only request for a derivation at an
+absolute temporary path using the existing length-prefixed protocol.
+For the original worker's query opens, serve =true=, =false=, =false=,
+=true= in that order. Close the writer between opens. The two middle
+opens correspond to loading evaluator and fetch settings. In the
+constant control, serve =true= for every open. Stop the worker through
+the normal close request after recording the reply.
+
+| Worker | Constant configuration | Transient configuration at builder load |
+|--------+------------------------+-----------------------------------------|
+| Original | Restricted path refused | Returned a derivation path |
+| Admitted settings | Restricted path refused | Restricted path refused |
+
+The rebuilt worker had no builder-time FIFO opens. This reproduces a
+per-query evaluator settings gap without altering the system
+configuration. The control does not make Store startup or concurrent
+filesystem reads atomic. Configuration changes that survive to an
+observation boundary still refuse the query.
+
+The rebuilt worker also passed the CLI equivalence, relative import
+replacement, unregistered derivation and included-config refusal
+controls. A separate full-Core fixed-B comparison changed only the
+worker prefix in the order original, rebuilt, rebuilt, original. The
+underlying CLI executable was identical. Both binaries retained the
+thirteen C evaluator queries, one CLI query and six tofu commands in
+every sample.
+
+| Process | Complete .run (s) | All Nix checks (s) |
+|---------+-------------------+--------------------|
+| Original 1 | 3.849, 3.739, 3.012 | 0.269, 0.183, 0.210 |
+| Rebuilt 1 | 3.585, 2.675, 3.048 | 0.234, 0.150, 0.205 |
+| Rebuilt 2 | 3.727, 2.713, 2.808 | 0.154, 0.142, 0.157 |
+| Original 2 | 3.404, 3.132, 3.555 | 0.235, 0.290, 0.192 |
+
+All four processes passed the preflight and post-destroy refusal
+controls and failed the three-second wall assertion. Median time
+inside the thirteen evaluator queries was 61 ms for the original
+and 55 ms for the rebuilt worker. The one-minute host load at process
+launch ranged from 15.90 to 50.73. The difference is consistent with
+the focused configuration control, while this comparison does not
+isolate a wall-clock speedup.
+
+** Local Actor control
+
+The same fixed B and focused Core products ran the same Null recipe
+in this order: direct, Actor, Actor, direct, direct, Actor. The actor was
+a Gerbil local mailbox thread. Start it before timing, send the ordinary
+=.run= closure, then wait for its return inside the timed interval. The
+closure installs the original Nix observer in the executing thread.
+Neither route moves individual provider effects out of their order.
+
+| Route and round | Complete .run (s) | Scheme process CPU (s) | Nix (s) | Six OpenTofu children (s) |
+|-----------------+-------------------+------------------------+---------+---------------------------|
+| Direct 1        |             2.755 |                  1.751 |   0.109 |                     0.838 |
+| Actor 1         |             2.504 |                  1.744 |   0.110 |                     0.595 |
+| Actor 2         |             2.607 |                  1.821 |   0.112 |                     0.620 |
+| Direct 2        |             4.685 |                  1.971 |   0.913 |                     0.995 |
+| Direct 3        |             6.881 |                  2.163 |   1.944 |                     1.012 |
+| Actor 3         |             7.551 |                  2.418 |   1.559 |                     1.058 |
+
+All six runs preserved the 14 Nix checks, six process receipts and
+the final cleanup. The diagnostic retains the large wall-time variation
+and does not act as the three-second gate. The first pair differs
+primarily in the child durations. The later pairs include substantially
+different external timings, so their wall times cannot isolate Actor cost.
+
+Repeat the six-task =measure-dispatch= workload with and without the
+mailbox, reversing the order on even samples. The worker is created
+outside each sample, and both routes invoke the same =run-job= and
+check the same six receipts. Six samples per route gave these medians:
+
+| Dispatch control   | Direct wall (ms) | Actor wall (ms) | Direct CPU (ms) | Actor CPU (ms) |
+|--------------------+------------------+-----------------+-----------------+----------------|
+| Scheme receipts    |            173.0 |           176.0 |           172.4 |          173.6 |
+| Six Ops true calls |            221.1 |           226.0 |           177.1 |          180.1 |
+
+The local mailbox comparison uses Gerbil's existing primitives:
+
+#+begin_src scheme
+(def worker (thread-start! (make-thread (lambda () ((thread-receive))))))
+;; Begin timing here, as for a direct (run-job job workspace).
+(thread-send worker (lambda () (run-job job workspace)))
+(def result (thread-join! worker))
+#+end_src
+
+The control provides no dispatch saving to apply to this serial
+workflow. The production route remains direct.
+
+Use Nix's attribute traversal, argument binding and raw coercion for expression
+queries. Directly applying the argument object changes how extra and default
+arguments are handled. The evaluator's private settings must apply the native
+=NIX_PATH= parser and its precedence over configured =nix-path=. A worker
+inherits its environment at spawn. Each use must match that environment and
+working directory or take the existing CLI path with current inputs.
+
+* Files
+
+- =session.h=: private reference-counted expression/Flake bridge.
+- =binding.ss=: explicit functional session and query interface.
+- =qualify.ss=: product preparation and installed-binary bootstrap; Core Ops
+  and TestingScript retain execution, failure, source and timeout gates.
+- =tests/flake-cases.ss=: runtime Flake/CLI comparison, real AWS and Null
+  Contracts, strict lock/override negatives, receiver and source controls.
+- =tests/cases.ss=: shared real-provider fixture and expression controls.
+- =worker.c= and =session.ss=: retained expression-worker comparison, not the
+  final Flake implementation or the default test path.
+
+* Run
+
+Use an installed, compiled Yuanxu/gerbil-poo dependency closure in
+=GERBIL_PATH= / =GERBIL_LOADPATH= and run serially:
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile dependencies
+nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-out-link
+just --justfile bindings/nix-c-api/Justfile test
+#+end_src
+
+The real product suite has matched =product-runtime= and =product-cli= modes in
+the same Just entrypoint. Supply the existing real Provider fixture's
+=AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT= and =AGENTIC_AI_LAB_NIX_TEST_TOOLS=. These modes use
+pure evaluation and the same startup libraries. The CLI control includes the
+strict root-lock preflight required when an override would enable virtual
+locking. Unsupported runtime override shapes use that same strict CLI path;
+fallbacks cannot be reported as zero-process runtime queries.
+
+Preparation and Harness execution retain separate 120-second limits, the
+Harness retains its 60-second idle limit, and Scheme processes have a 2 GiB
+pre-import heap fence. Four actual Cases and the final strict-lock assertion
+are required, in addition to MODULE-OK / HARNESS-OK / OK and no failure markers.
+Real AWS/Null schema artifacts must already exist; no synthetic replacement
+is made and package acquisition is excluded from evaluation timings.
+
+=just --justfile bindings/nix-c-api/Justfile test worker= retains the three
+expression comparison Cases. =test embedded= is the late-loading negative
+control; its abort is a failure, never a successful receipt.
+
+* Locking and source boundaries
+
+The bridge always selects =nix_flake_lock_flags_set_mode_check=. It never
+writes or virtually updates a lock. Input overrides must be locked references;
+adding one preserves check mode. Lock creation in the test is explicit fixture
+preparation performed by the CLI, outside measured evaluation.
+
+The existing source-currentness consumer runs before and after a query and
+before returning a cached POO preview. The bounded fixture explicitly records
+its complete known file closure. This is not automatic general-purpose Flake
+source discovery. Neither a warm EvalState nor a locked input authorizes
+returning a stale configuration. The parent plan and derived child plan have
+separate POO receiver caches; adding Null never changes the cached AWS parent.
+
+See [[file:../../docs/10-19-design/10.08-config-languages/15-nix-c-api-qualification.org][the design report]] for measurements, failed controls and limits.
+
+* First-demand profiling
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile test profile
+#+end_src
+
+This uses the same bounded Ops/TestingScript entry, with one real Case. It
+reports runtime wall/CPU/call counts, first-process lazy force points and three
+matched AWS-to-Null rounds. Both backends receive the same fresh cache root
+before startup. Impure CLI eval-cache on/off controls create no eval database;
+a pure scalar positive control does create one. A preparation-produced Store
+reference removes repeated source resolution without adding a global cache.
+The prepared path is not a new Flake path input and is not proven to improve
+cold latency. See [[file:../../docs/10-19-design/10.08-config-languages/16-nix-c-api-first-demand.org][the first-demand report]] for measurements and limits.
+
+The profile backend additionally records thread CPU, Nix GC allocation/time
+and process rusage counters. These counters are disabled in ordinary runs.
+Use =AGENTIC_AI_LAB_NIX_PROFILE_LOG=/absolute/local/path= to retain the partial
+Harness transcript through existing Ops logging. Completed query timings are
+flushed; stalled calls retain the same idle deadline. See
+[[file:../../docs/10-19-design/10.08-config-languages/17-nix-c-api-wait-attribution.org][the wait-attribution report]] for host-contention controls and measurement limits.
+
+The existing profile Case also compares adding Null in the retained session
+with the identical candidate in a fresh EvalState. Both receipts must match;
+this quantifies unnecessary state reconstruction without adding a cache.
+See [[file:../../docs/10-19-design/10.08-config-languages/18-nix-session-reuse-validation.org][the stable-host session-reuse validation]] for the three-round results,
+completed runtime regressions and separate sampling limits.
+
+The profile additionally demonstrates why unchanged Flake headers alone are
+insufficient: an imported file changes, a warm state retains its old value,
+and a fresh evaluation sees the new one. Full observations still reject before
+the runtime call. See [[file:../../docs/10-19-design/10.08-config-languages/19-nix-callchain-and-reuse-boundary.org][the actual-call-chain audit]]; product Sources currently
+use the CLI, and this qualification is not a completed product integration.

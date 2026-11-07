@@ -9,15 +9,15 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list any every delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/candidates/types
-                 poo-flow-candidate-scope?
-                 poo-flow-candidate-receipt? poo-flow-candidate-check?)
-        (only-in :poo-flow/modules/temporal-causality/candidates/objects
-                 poo-flow-candidate-scope-value
-                 poo-flow-candidate-receipt-value poo-flow-candidate-check-value
-                 poo-flow-candidate-exchange-value))
-(export poo-flow-candidate-scope poo-flow-candidate-receipt
-        poo-flow-candidate-check poo-flow-candidate-exchange)
+        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+                 agentic-ai-lab-candidate-scope?
+                 agentic-ai-lab-candidate-receipt? agentic-ai-lab-candidate-check?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/objects
+                 agentic-ai-lab-candidate-scope-value
+                 agentic-ai-lab-candidate-receipt-value agentic-ai-lab-candidate-check-value
+                 agentic-ai-lab-candidate-exchange-value))
+(export agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-receipt
+        agentic-ai-lab-candidate-check agentic-ai-lab-candidate-exchange)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (unique? values)
@@ -35,7 +35,7 @@
    (hex-encode (sha256 (string->utf8
     (call-with-output-string (lambda (port) (write datum port))))))))
 
-(def (poo-flow-candidate-scope id cut generation coverage providers)
+(def (agentic-ai-lab-candidate-scope id cut generation coverage providers)
   (unless (and (text? id) (text? cut)
                (exact-integer? generation) (>= generation 0)
                (or (eq? coverage #f) (text? coverage))
@@ -43,16 +43,16 @@
                (every symbol? providers) (unique? providers))
     (error "invalid candidate scope"))
   (let (providers (sorted-symbols providers))
-    (poo-flow-candidate-scope-value
-     id (digest (list 'poo-flow.candidate-scope.v1 id cut generation
+    (agentic-ai-lab-candidate-scope-value
+     id (digest (list 'agentic-ai-lab.candidate-scope.v1 id cut generation
                       coverage providers))
      cut generation coverage providers)))
 
 (def (replay-scope scope)
-  (unless (poo-flow-candidate-scope? scope)
+  (unless (agentic-ai-lab-candidate-scope? scope)
     (error "invalid candidate scope object"))
   (let (replayed
-        (poo-flow-candidate-scope
+        (agentic-ai-lab-candidate-scope
          (.ref scope 'identity) (.ref scope 'evidence-cut-digest)
          (.ref scope 'generation) (.ref scope 'source-coverage-digest)
          (.ref scope 'required-providers)))
@@ -67,19 +67,19 @@
                (symbol? provider) (exact-integer? count) (>= count 0)
                (boolean? complete?))
     (error "invalid candidate receipt"))
-  (poo-flow-candidate-receipt-value
-   id (digest (list 'poo-flow.candidate-receipt.v1 id candidate scope-digest
+  (agentic-ai-lab-candidate-receipt-value
+   id (digest (list 'agentic-ai-lab.candidate-receipt.v1 id candidate scope-digest
                     provider request source result count complete?))
    candidate scope-digest provider request source result count complete?))
 
-(def (poo-flow-candidate-receipt id candidate scope provider request source result
+(def (agentic-ai-lab-candidate-receipt id candidate scope provider request source result
                                  count complete?)
   (let (scope (replay-scope scope))
     (receipt-value id candidate (.ref scope 'semantic-digest) provider
                    request source result count complete?)))
 
 (def (replay-receipt receipt)
-  (unless (poo-flow-candidate-receipt? receipt)
+  (unless (agentic-ai-lab-candidate-receipt? receipt)
     (error "invalid candidate receipt object"))
   (let (replayed
         (receipt-value
@@ -97,18 +97,18 @@
   (unless (and (every text? (list id receipt-id receipt-digest verifier basis))
                (memq verdict '(valid invalid unknown)))
     (error "invalid candidate check"))
-  (poo-flow-candidate-check-value
-   id (digest (list 'poo-flow.candidate-check.v1 id receipt-id receipt-digest
+  (agentic-ai-lab-candidate-check-value
+   id (digest (list 'agentic-ai-lab.candidate-check.v1 id receipt-id receipt-digest
                     verifier verdict basis))
    receipt-id receipt-digest verifier verdict basis))
 
-(def (poo-flow-candidate-check id receipt verifier verdict basis)
+(def (agentic-ai-lab-candidate-check id receipt verifier verdict basis)
   (let (receipt (replay-receipt receipt))
     (check-value id (.ref receipt 'identity) (.ref receipt 'semantic-digest)
                  verifier verdict basis)))
 
 (def (replay-check check receipts-by-id)
-  (unless (poo-flow-candidate-check? check)
+  (unless (agentic-ai-lab-candidate-check? check)
     (error "invalid candidate check object"))
   (let (receipt (hash-get receipts-by-id (.ref check 'receipt-identity)))
     (unless (and receipt
@@ -125,7 +125,7 @@
         (error "candidate check digest mismatch"))
       replayed)))
 
-(def (poo-flow-candidate-exchange id candidate scope receipts checks)
+(def (agentic-ai-lab-candidate-exchange id candidate scope receipts checks)
   (unless (and (text? id) (text? candidate)
                (list? receipts) (list? checks))
     (error "invalid candidate exchange input"))
@@ -210,7 +210,7 @@
                            (pair? unchecked)) 'pending)
                       (else 'reviewable)))
                (semantic-digest
-                (digest (list 'poo-flow.candidate-exchange.v1 id candidate
+                (digest (list 'agentic-ai-lab.candidate-exchange.v1 id candidate
                               (.ref scope 'semantic-digest)
                               (map (lambda (item) (.ref item 'semantic-digest))
                                    receipts)
@@ -218,6 +218,6 @@
                                    checks)
                               missing stale incomplete unchecked invalid
                               contested status))))
-          (poo-flow-candidate-exchange-value
+          (agentic-ai-lab-candidate-exchange-value
            id semantic-digest candidate scope receipts checks
            missing stale incomplete unchecked invalid contested status))))))

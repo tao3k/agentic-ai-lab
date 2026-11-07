@@ -7,12 +7,12 @@
 ;;; Invariant: user config bridges durable rows to operation receipts only;
 ;;; Marlin owns runtime store execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in "../user-interface/custom/my-module/cases/durable-operation-bridge"
-                 poo-flow-custom-my-module-durable-operation-bridge-case))
+                 agentic-ai-lab-custom-my-module-durable-operation-bridge-case))
 
 (export user-interface-custom-durable-operation-bridge-test)
 
@@ -23,14 +23,14 @@
 
 ;; : TestSuite
 (def user-interface-custom-durable-operation-bridge-test
-  (test-suite "poo-flow custom durable operation bridge case"
-    (poo-flow-test-case "bridges downstream rows to runtime store operations"
+  (test-suite "agentic-ai-lab custom durable operation bridge case"
+    (yuanxu-test-case "bridges downstream rows to runtime store operations"
       (let* ((negotiation-row
-              (car poo-flow-custom-my-module-durable-operation-bridge-case))
+              (car agentic-ai-lab-custom-my-module-durable-operation-bridge-case))
              (operation-rows
-              (cadr poo-flow-custom-my-module-durable-operation-bridge-case))
+              (cadr agentic-ai-lab-custom-my-module-durable-operation-bridge-case))
              (handoff-row
-              (caddr poo-flow-custom-my-module-durable-operation-bridge-case)))
+              (caddr agentic-ai-lab-custom-my-module-durable-operation-bridge-case)))
         (check-equal? (test-ref negotiation-row 'handoff-ready?) #t)
         (check-equal? (length operation-rows) 7)
         (check-equal? (map (lambda (row) (test-ref row 'operation-kind))

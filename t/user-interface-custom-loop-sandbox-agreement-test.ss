@@ -6,22 +6,22 @@
 ;;; Boundary: focused tests for loop-engine sandbox handoff agreement receipts.
 ;;; Invariant: sandbox agreement projection is report-only and never starts runtime.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 pooFlowUserConfig
-                 poo-flow-settings
-                 poo-flow-user-module-bundles->modules
-                 poo-flow-user-module-selection)
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile-config)
-        (only-in :poo-flow/src/user-interface/presentation-config
-                 pooFlowUserConfigPresentation)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxuUserConfig
+                 yuanxu-settings
+                 yuanxu-user-module-bundles->modules
+                 yuanxu-user-module-selection)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile-config)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         (only-in "../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export user-interface-custom-loop-sandbox-agreement-test)
 
@@ -42,10 +42,10 @@
 ;;; keeps fixture construction separate from the assertions about receipts.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation/bundles module-bundles)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules module-bundles)
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules module-bundles)
+    (yuanxu-settings))))
 
 ;;; The concrete loop case references `ci/build`. These focused fixtures use
 ;;; the public POO profile constructor directly, so agreement qualification
@@ -68,7 +68,7 @@
 
 ;; : (-> PooSandboxProfile)
 (def (custom-loop-sandbox-profile)
-  (poo-flow-sandbox-profile-config
+  (agentic-ai-lab-sandbox-profile-config
    'ci/build
    (list '(backend nono)
          '(network deny-network)
@@ -79,7 +79,7 @@
 ;; : [PooUserModuleSelection]
 (def custom-loop-sandbox-profile-module
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list (cons ':config (list (custom-loop-sandbox-profile)))))))
@@ -99,7 +99,7 @@
 
 ;; : (-> PooSandboxProfile)
 (def (custom-loop-invalid-sandbox-profile)
-  (poo-flow-sandbox-profile-config
+  (agentic-ai-lab-sandbox-profile-config
    'ci/build
    (list '(backend nono)
          '(network deny-network)
@@ -110,7 +110,7 @@
 ;; : [PooUserModuleSelection]
 (def custom-loop-invalid-sandbox-profile-module
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list
@@ -120,11 +120,11 @@
 ;;; intent, runtime manifest, and public presentation slots unchanged.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-sandbox-case)
-  (poo-flow-test-case "resolves sandbox profile summaries into loop-engine manifest"
+  (yuanxu-test-case "resolves sandbox profile summaries into loop-engine manifest"
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-sandbox-profile-module
-                   poo-flow-custom-my-module-loop-engine-case)))
+                   agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
@@ -147,7 +147,7 @@
       (check-equal? (test-ref intent 'sandbox-profile-refs) '(ci/build))
       (check-equal? (test-ref intent 'sandbox-unresolved-profile-refs) '())
       (check-equal? (test-ref sandbox-runtime-summary 'schema)
-                    'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                    'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
       (check-equal? (test-ref sandbox-runtime-summary 'profile-name)
                     'ci/build)
       (check-equal? (test-ref sandbox-runtime-summary 'backend-kind) 'nono)
@@ -155,7 +155,7 @@
       (check-equal? (test-ref sandbox-filesystem 'path-count) 1)
       (check-equal? (test-ref sandbox-filesystem 'scope) 'project-workspace)
       (check-equal? (test-ref sandbox-handoff-summary 'schema)
-                    'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+                    'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
       (check-equal? (test-ref sandbox-handoff-summary 'profile-name)
                     'ci/build)
       (check-equal? (test-ref sandbox-agreement 'valid?) #t)
@@ -187,11 +187,11 @@
 ;;; sandbox shapes without throwing from the handoff summary path.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-sandbox-case)
-  (poo-flow-test-case "diagnoses invalid sandbox profile agreement"
+  (yuanxu-test-case "diagnoses invalid sandbox profile agreement"
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-invalid-sandbox-profile-module
-                   poo-flow-custom-my-module-loop-engine-case)))
+                   agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
@@ -228,6 +228,6 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-sandbox-agreement-test
-  (test-suite "poo-flow custom user-interface loop sandbox agreement"
+  (test-suite "agentic-ai-lab custom user-interface loop sandbox agreement"
     (user-interface-custom-loop-engine-sandbox-case)
     (user-interface-custom-loop-engine-invalid-sandbox-case)))

@@ -3,21 +3,25 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: composed workflow builders for Docker, Store, Tensorflow, and makefile examples.
 ;;; Invariant: builders produce descriptors and runtime command manifests only.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  execution-request-request execution-request-plan-id)
-        (only-in :poo-flow/src/core/strategy make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter make-rust-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :yuanxu/modules/funflow/control-plane/strategy make-local-eager-strategy)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-rust-adapter)
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry external-flow flow-then)
-        (only-in :poo-flow/src/core/runtime-command-descriptor
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  make-stdout-runtime-command-descriptor)
-        :poo-flow/src/core/projection-syntax
-        :poo-flow/modules/docker/funs
-        :poo-flow/modules/workflow/store)
+        :yuanxu/modules/funflow/control-plane/projection-syntax
+        :agentic-ai-lab/modules/docker/funs
+        :yuanxu/modules/funflow/store)
 
 (export make-docker-store-run-config
         make-ccompilation-flow
@@ -98,7 +102,7 @@
       (docker-enable-strategy (make-local-eager-strategy)))
      (make-store-enabled-adapter
       (make-docker-enabled-adapter (make-rust-adapter command)))
-     (poo-flow-product-field-rows/tail
+     (yuanxu-product-field-rows/tail
       options
       (runtime 'rust)
       (extensions '(docker store)))
@@ -111,21 +115,21 @@
 ;;; process handles; this constructor owns the tutorial's stable request shape.
 ;; : (-> Symbol Flow)
 (def (make-ccompilation-flow name)
-  (docker-flow name
-               "gcc:9.3.0"
-               "gcc"
-               '("/example/double.c"
-                 "/example/square.c"
-                 "/example/main.c"
-                 "-o"
-                 "/output/main")
-               '(((store-item . ccompilation-src)
-                  (mount-path . "/example"))
-                 ((store-item . ccompilation-output)
-                  (mount-path . "/output")))
-               'process-handle
-               'integer
-               'process-handle))
+  (docker-flow
+   name
+   "gcc:9.3.0"
+   "gcc"
+   '("/example/double.c"
+     "/example/square.c"
+     "/example/main.c"
+     "-o"
+     "/output/main")
+   '(((store-item . ccompilation-src)
+      (mount-path . "/example"))
+     ((store-item . ccompilation-output)
+      (mount-path . "/output")))
+   'process-handle
+   (Fun AdapterResult <- Integer)))
 
 ;;; The store handoff mirrors the tutorial's post-compile artifact boundary:
 ;;; Docker produces a process/artifact result, Store records a durable manifest.
@@ -133,44 +137,44 @@
 (def (make-ccompilation-store-workflow name)
   (flow-then name
              (make-ccompilation-flow 'compile-c)
-             (store-flow 'store-c-binary
-                         'put
-                         '((store-item . c-binary)
-                           (path . "/output/main"))
-                         'process-handle
-                         'artifact-manifest)))
+             (store-flow
+	      'store-c-binary
+	      'put
+	      '((store-item . c-binary)
+                (path . "/output/main"))
+	      (Fun AdapterResult <- Any))))
 
 ;; : (-> Symbol Flow)
 (def (make-tensorflow-train-flow name)
-  (docker-flow name
-               "tensorflow/tensorflow:2.3.0"
-               "bash"
-               '("-c"
-                 "pip install -r /tensorflow-example/requirements.txt && python /tensorflow-example/train_mnist.py --n_epochs 10 ./model")
-               '(((store-item . tensorflow-example)
-                  (mount-path . "/tensorflow-example"))
-                 ((store-item . trained-model-output)
-                  (mount-path . "/model-output")))
-               'trained-model
-               'unit
-               'trained-model))
+  (docker-flow
+   name
+   "tensorflow/tensorflow:2.3.0"
+   "bash"
+   '("-c"
+     "pip install -r /tensorflow-example/requirements.txt && python /tensorflow-example/train_mnist.py --n_epochs 10 ./model")
+   '(((store-item . tensorflow-example)
+      (mount-path . "/tensorflow-example"))
+     ((store-item . trained-model-output)
+      (mount-path . "/model-output")))
+   'trained-model
+   (Fun AdapterResult <- Unit)))
 
 ;; : (-> Symbol Flow)
 (def (make-tensorflow-inference-flow name)
-  (docker-flow name
-               "tensorflow/tensorflow:2.3.0"
-               "bash"
-               '("-c"
-                 "pip install -r /tensorflow-example/requirements.txt && python /tensorflow-example/inference_mnist.py /trained/model /tensorflow-example/demo-images ./summary.png")
-               '(((store-item . tensorflow-example)
-                  (mount-path . "/tensorflow-example"))
-                 ((store-item . trained-model)
-                  (mount-path . "/trained"))
-                 ((store-item . tensorflow-summary-output)
-                  (mount-path . "/summary-output")))
-               'summary-image
-               'trained-model
-               'summary-image))
+  (docker-flow
+   name
+   "tensorflow/tensorflow:2.3.0"
+   "bash"
+   '("-c"
+     "pip install -r /tensorflow-example/requirements.txt && python /tensorflow-example/inference_mnist.py /trained/model /tensorflow-example/demo-images ./summary.png")
+   '(((store-item . tensorflow-example)
+      (mount-path . "/tensorflow-example"))
+     ((store-item . trained-model)
+      (mount-path . "/trained"))
+     ((store-item . tensorflow-summary-output)
+      (mount-path . "/summary-output")))
+   'summary-image
+   (Fun AdapterResult <- AdapterResult)))
 
 ;;; TensorflowDocker is represented as a two-step external workflow. It keeps
 ;;; the visible training/inference milestones inspectable while leaving model
@@ -186,26 +190,26 @@
 ;;; - Scheme owns only the tutorial-visible project descriptor.
 ;; : (-> Symbol Flow)
 (def (make-makefile-tool-parse-flow name)
-  (external-flow name
-                 'makefile-tool-parse
-                 '((makefile . "Makefile")
-                   (working-directory . "funflow-examples/makefile-tool/test")
-                   (sources . ("main.cpp" "hello.cpp" "factorial.cpp")))
-                 'makefile-project
-                 'makefile-plan))
+  (external-flow
+   name
+   'makefile-tool-parse
+   '((makefile . "Makefile")
+     (working-directory . "funflow-examples/makefile-tool/test")
+     (sources . ("main.cpp" "hello.cpp" "factorial.cpp")))
+   (Fun AdapterResult <- Any)))
 
 ;;; Boundary:
 ;;; - makefile-tool execution is a runtime-owned external task.
 ;;; - The output contract models the notebook's process-output result.
 ;; : (-> Symbol Flow)
 (def (make-makefile-tool-run-flow name)
-  (external-flow name
-                 'makefile-tool-run
-                 '((target . "hello")
-                   (binary . "./hello")
-                   (expected-output . process-output))
-                 'makefile-plan
-                 'process-output))
+  (external-flow
+   name
+   'makefile-tool-run
+   '((target . "hello")
+     (binary . "./hello")
+     (expected-output . process-output))
+   (Fun AdapterResult <- Any)))
 
 ;;; Boundary:
 ;;; - This workflow preserves the tutorial's parse-then-run milestone shape.
@@ -295,7 +299,7 @@
                      options
                      'arguments
                      (make-makefile-tool-runtime-arguments options)))
-         (metadata (poo-flow-product-field-rows/tail
+         (metadata (yuanxu-product-field-rows/tail
                     (workflow-options-without options 'arguments)
                     (workflow 'makefile-tool)
                     (runtime 'rust-cli-compatible))))

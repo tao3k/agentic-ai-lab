@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-use poo_flow_cedar_authority::runtime::{HOST_READY_SCHEMA, RuntimeReady};
+use agentic_ai_lab_cedar_authority::runtime::{HOST_READY_SCHEMA, RuntimeReady};
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::process::Child;

@@ -7,8 +7,8 @@ from __future__ import annotations
 import anyio
 import pytest
 
-from poo_flow_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
-from poo_flow_runtime.runtime_graph import (
+from agentic_ai_lab_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
+from agentic_ai_lab_runtime.runtime_graph import (
     END,
     START,
     RuntimeGraphConditionalEdge,

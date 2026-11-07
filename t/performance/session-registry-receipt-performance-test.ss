@@ -7,7 +7,7 @@
 ;;; Invariant: registry projection is a bounded address-space receipt, not a
 ;;; live runtime store.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,7 +16,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-registry-receipt-performance-test)
 
@@ -35,7 +35,7 @@
 
 ;; : (-> Alist Void)
 (def (registry-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-registry-receipt ")
+  (display "[agentic-ai-lab-benchmark] session-registry-receipt ")
   (write receipt)
   (newline)
   (force-output))
@@ -51,21 +51,21 @@
          (parent-ids (if (= index 0)
                        '()
                        '(session/0))))
-    (poo-flow-session-value
+    (agentic-ai-lab-session-value
      session-id
-     (list (poo-flow-session-chunk
+     (list (agentic-ai-lab-session-chunk
             (registry-performance-symbol "chunk" index)
             'assistant
             "session registry performance node"))
-     (poo-flow-session-lineage
+     (agentic-ai-lab-session-lineage
       session-id
       parent-ids
       (if (= index 0) 'root 'child-agent))
-     (poo-flow-session-placement 'agent/nono))))
+     (agentic-ai-lab-session-placement 'agent/nono))))
 
 ;; : (-> Integer PooSessionRegistryEntry)
 (def (registry-performance-entry index)
-  (poo-flow-session-registry-entry
+  (agentic-ai-lab-session-registry-entry
    (registry-performance-session index)
    (registry-performance-symbol "agent" index)
    (list (registry-performance-symbol "channel" index))
@@ -83,20 +83,20 @@
 ;; : (-> Integer Alist)
 (def (registry-performance-summary count)
   (let* ((entries
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            registry-performance-entry))
          (child-session-ids
-          (map poo-flow-session-registry-entry-session-id (cdr entries)))
+          (map agentic-ai-lab-session-registry-entry-session-id (cdr entries)))
          (receipt
-          (poo-flow-session-registry-receipt
+          (agentic-ai-lab-session-registry-receipt
            'project/performance
            '(session/0)
            child-session-ids
            'session/0
            entries))
          (receipt-row
-          (poo-flow-session-registry-receipt->alist receipt)))
+          (agentic-ai-lab-session-registry-receipt->alist receipt)))
     (list
      (cons 'entry-count (registry-performance-ref receipt-row 'entry-count))
      (cons 'session-count
@@ -104,9 +104,9 @@
      (cons 'child-session-count
            (length (registry-performance-ref receipt-row 'child-session-ids)))
      (cons 'first-session
-           (poo-flow-session-registry-entry-session-id (car entries)))
+           (agentic-ai-lab-session-registry-entry-session-id (car entries)))
      (cons 'last-session
-           (poo-flow-session-registry-entry-session-id
+           (agentic-ai-lab-session-registry-entry-session-id
             (list-ref entries (- count 1))))
      (cons 'runtime-executed
            (registry-performance-ref receipt-row 'runtime-executed)))))
@@ -114,7 +114,7 @@
 ;; : TestSuite
 (def session-registry-receipt-performance-test
   (test-suite "session registry receipt performance"
-    (poo-flow-test-case "keeps registry receipt projection inside benchmark contract"
+    (yuanxu-test-case "keeps registry receipt projection inside benchmark contract"
       (let* ((entry-count 240)
              (summary (registry-performance-summary entry-count))
              (receipt

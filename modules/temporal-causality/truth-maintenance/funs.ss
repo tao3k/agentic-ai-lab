@@ -9,21 +9,21 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/revisions/types
-                 poo-flow-temporal-evidence-journal?)
-        (only-in :poo-flow/modules/temporal-causality/revisions/funs
-                 poo-flow-temporal-evidence-as-of)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/types
-                 poo-flow-temporal-derivation?
-                 poo-flow-temporal-dependency-index?)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/objects
-                 poo-flow-temporal-dependency-index-value
-                 poo-flow-temporal-invalidation-plan-value))
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/types
+                 agentic-ai-lab-temporal-evidence-journal?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs
+                 agentic-ai-lab-temporal-evidence-as-of)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+                 agentic-ai-lab-temporal-derivation?
+                 agentic-ai-lab-temporal-dependency-index?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+                 agentic-ai-lab-temporal-dependency-index-value
+                 agentic-ai-lab-temporal-invalidation-plan-value))
 
-(export poo-flow-temporal-dependency-index
-        poo-flow-temporal-reverse-dependency-plan
-        poo-flow-temporal-reverse-dependency-plan-from-cuts
-        poo-flow-temporal-reverse-dependency-plan-from-projections)
+(export agentic-ai-lab-temporal-dependency-index
+        agentic-ai-lab-temporal-reverse-dependency-plan
+        agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
+        agentic-ai-lab-temporal-reverse-dependency-plan-from-projections)
 
 (def (unique? values)
   (= (length values) (length (delete-duplicates/hash values))))
@@ -37,11 +37,11 @@
      (string->utf8
       (call-with-output-string (lambda (port) (write datum port))))))))
 
-(def (poo-flow-temporal-dependency-index
+(def (agentic-ai-lab-temporal-dependency-index
       identity cut-digest projection-digest complete? derivations)
   (unless (and (text? identity) (text? cut-digest)
                (text? projection-digest) (boolean? complete?)
-               (list? derivations) (every poo-flow-temporal-derivation? derivations))
+               (list? derivations) (every agentic-ai-lab-temporal-derivation? derivations))
     (error "invalid temporal dependency inventory"))
   (let ((known (make-hash-table)))
     (for-each
@@ -74,18 +74,18 @@
                          (list-sort string<? (.ref entry 'subject-premises))
                          (list-sort string<? (.ref entry 'conclusion-premises))))
                  canonical)))
-      (poo-flow-temporal-dependency-index-value
+      (agentic-ai-lab-temporal-dependency-index-value
        identity
-       (digest (list 'poo-flow.temporal-dependency-index.v1
+       (digest (list 'agentic-ai-lab.temporal-dependency-index.v1
                      cut-digest projection-digest complete? rows))
        cut-digest projection-digest complete? canonical))))
 
 ;;; Subject-to-conclusion and conclusion-to-conclusion edges form one reverse
 ;;; graph. Each node is enqueued once, including in cyclic dependency graphs.
-(def (poo-flow-temporal-reverse-dependency-plan
+(def (agentic-ai-lab-temporal-reverse-dependency-plan
       index revised-cut-digest revised-projection-digest
       changed-subject-identities)
-  (unless (and (poo-flow-temporal-dependency-index? index)
+  (unless (and (agentic-ai-lab-temporal-dependency-index? index)
                (text? revised-cut-digest)
                (text? revised-projection-digest)
                (list? changed-subject-identities)
@@ -135,7 +135,7 @@
                                 back))))))
            ((pair? back) (loop (reverse back) '()))
            (else
-            (poo-flow-temporal-invalidation-plan-value
+            (agentic-ai-lab-temporal-invalidation-plan-value
              (.ref index 'identity) (.ref index 'semantic-digest)
              old-cut revised-cut-digest
              old-projection revised-projection-digest
@@ -146,14 +146,14 @@
 ;;; Compare visible immutable revision identities for each subject. This
 ;;; conservatively marks a subject even when its selected head stays the same
 ;;; but a conflicting branch or historical revision becomes visible.
-(def (poo-flow-temporal-reverse-dependency-plan-from-cuts
+(def (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
       index journal previous-as-of revised-as-of valid-at)
-  (unless (and (poo-flow-temporal-dependency-index? index)
-               (poo-flow-temporal-evidence-journal? journal))
+  (unless (and (agentic-ai-lab-temporal-dependency-index? index)
+               (agentic-ai-lab-temporal-evidence-journal? journal))
     (error "invalid temporal evidence journal or index"))
-  (let* ((previous (poo-flow-temporal-evidence-as-of
+  (let* ((previous (agentic-ai-lab-temporal-evidence-as-of
                     journal previous-as-of valid-at))
-         (revised (poo-flow-temporal-evidence-as-of
+         (revised (agentic-ai-lab-temporal-evidence-as-of
                    journal revised-as-of valid-at)))
     (unless (and (equal? (.ref index 'cut-digest)
                          (.ref previous 'cut-digest))
@@ -184,7 +184,7 @@
          ids)))
     (record! previous before)
     (record! revised after)
-    (poo-flow-temporal-reverse-dependency-plan
+    (agentic-ai-lab-temporal-reverse-dependency-plan
      index (.ref revised 'cut-digest) (.ref revised 'projection-digest)
      (filter
       (lambda (subject)
@@ -195,14 +195,14 @@
 ;;; A new valid-time query changes the proof context for every derivation.
 ;;; Without an explicit parameter-independence contract, no old derivation
 ;;; can be carried across that scope change, even if selected buckets match.
-(def (poo-flow-temporal-reverse-dependency-plan-from-projections
+(def (agentic-ai-lab-temporal-reverse-dependency-plan-from-projections
       index journal as-of previous-valid-at revised-valid-at)
-  (unless (and (poo-flow-temporal-dependency-index? index)
-               (poo-flow-temporal-evidence-journal? journal))
+  (unless (and (agentic-ai-lab-temporal-dependency-index? index)
+               (agentic-ai-lab-temporal-evidence-journal? journal))
     (error "invalid temporal evidence journal or index"))
-  (let* ((previous (poo-flow-temporal-evidence-as-of
+  (let* ((previous (agentic-ai-lab-temporal-evidence-as-of
                     journal as-of previous-valid-at))
-         (revised (poo-flow-temporal-evidence-as-of
+         (revised (agentic-ai-lab-temporal-evidence-as-of
                    journal as-of revised-valid-at)))
     (unless (and (equal? (.ref index 'cut-digest)
                          (.ref previous 'cut-digest))
@@ -211,7 +211,7 @@
                  (not (equal? (.ref previous 'valid-at-instant-digest)
                               (.ref revised 'valid-at-instant-digest))))
       (error "invalid temporal valid-time reprojection input"))
-    (poo-flow-temporal-invalidation-plan-value
+    (agentic-ai-lab-temporal-invalidation-plan-value
      (.ref index 'identity) (.ref index 'semantic-digest)
      (.ref previous 'cut-digest) (.ref revised 'cut-digest)
      (.ref previous 'projection-digest) (.ref revised 'projection-digest)

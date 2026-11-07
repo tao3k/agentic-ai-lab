@@ -6,7 +6,7 @@
 ;;; Boundary: session graph performance gates cover indexed lineage traversal.
 ;;; Invariant: graph presentation stays report-only and never executes runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,12 +16,12 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/modules/session/objects
-                 poo-flow-session-chunk
-                 poo-flow-session-lineage
-                 poo-flow-session-placement
-                 poo-flow-session-value
-                 pooFlowSessionGraphPresentation))
+        (only-in :agentic-ai-lab/modules/session/objects
+                 agentic-ai-lab-session-chunk
+                 agentic-ai-lab-session-lineage
+                 agentic-ai-lab-session-placement
+                 agentic-ai-lab-session-value
+                 agenticAiLabSessionGraphPresentation))
 
 (export session-graph-performance-test)
 
@@ -45,26 +45,26 @@
          (if (= index 0)
            '()
            (list (session-graph-performance-session-id (- index 1))))))
-    (poo-flow-session-value
+    (agentic-ai-lab-session-value
      session-id
-     (list (poo-flow-session-chunk
+     (list (agentic-ai-lab-session-chunk
             (string->symbol
              (string-append "chunk-" (number->string index)))
             'assistant
             "large session graph performance fixture"))
-     (poo-flow-session-lineage session-id parents 'linear)
-     (poo-flow-session-placement 'agent/nono)
+     (agentic-ai-lab-session-lineage session-id parents 'linear)
+     (agentic-ai-lab-session-placement 'agent/nono)
      (list (cons 'index index)))))
 
 ;; : (-> Integer [PooSession])
 (def (session-graph-performance-sessions count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    session-graph-performance-session))
 
 ;; : (-> [PooSession] Alist)
 (def (session-graph-performance-presentation-summary sessions)
-  (let (presentation (pooFlowSessionGraphPresentation sessions))
+  (let (presentation (agenticAiLabSessionGraphPresentation sessions))
     (list (cons 'session-count (.ref presentation 'session-count))
           (cons 'chunk-count (.ref presentation 'chunk-count))
           (cons 'edge-count
@@ -79,7 +79,7 @@
 ;; : TestSuite
 (def session-graph-performance-test
   (test-suite "session graph performance"
-    (poo-flow-test-case "keeps large lineage presentation inside benchmark contract"
+    (yuanxu-test-case "keeps large lineage presentation inside benchmark contract"
       (let* ((session-count 1200)
              (sessions (session-graph-performance-sessions session-count))
              (summary

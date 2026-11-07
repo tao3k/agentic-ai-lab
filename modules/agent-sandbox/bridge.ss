@@ -11,18 +11,18 @@
 ;;; Runtime contract: real sandbox execution stays behind runtime commands.
 ;;; Policy evidence: runtime command tests should assert this projection surface.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  execution-request? execution-request-kind
                  execution-request-request)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/runtime-adapter rust-request-envelope)
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter rust-request-envelope)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
                  make-adapter-result normalize-runtime-response)
-        (only-in :poo-flow/src/core/runtime-command-invocation
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation
                  runtime-command-call)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/request)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/request)
 
 (export +agent-sandbox-bridge-schema+
         +agent-sandbox-runtime-manifest-schema+
@@ -37,13 +37,13 @@
 ;;; The bridge schema marks extension-aware envelopes without changing the
 ;;; stable core runtime request schema used by existing adapters.
 ;; : (-> Unit Symbol)
-(def +agent-sandbox-bridge-schema+ 'poo-flow.agent-sandbox-bridge.v1)
+(def +agent-sandbox-bridge-schema+ 'agentic-ai-lab.agent-sandbox-bridge.v1)
 
 ;;; Runtime manifests are the bridge-facing request contract for Marlin. They
 ;;; regroup the normalized request without choosing a backend implementation.
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-runtime-manifest-schema+
-  'poo-flow.agent-sandbox-runtime-manifest.v1)
+  'agentic-ai-lab.agent-sandbox-runtime-manifest.v1)
 
 ;;; Execution request projection is intentionally narrow: only agent-sandbox
 ;;; tasks expose the normalized sandbox request to runtime bridge helpers.

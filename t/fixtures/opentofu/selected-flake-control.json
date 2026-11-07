@@ -1,0 +1,663 @@
+{
+  "status": "passed",
+  "requested_rounds": 3,
+  "rounds": [
+    {
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "type-compiles": 0,
+          "realize": 1,
+          "type-reads": 0,
+          "instantiate": 2,
+          "seconds": 2.328817129135132,
+          "phase": "aws-build"
+        },
+        {
+          "phase": "aws-first-admission",
+          "instantiate": 1,
+          "seconds": 0.9184420108795166,
+          "realize": 0,
+          "type-compiles": 1,
+          "type-reads": 1
+        },
+        {
+          "realize": 0,
+          "phase": "aws-hot-slots",
+          "instantiate": 0,
+          "seconds": 4.0531158447265625e-06,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "seconds": 0.9625940322875977,
+          "instantiate": 1,
+          "phase": "aws-explicit-recheck"
+        },
+        {
+          "seconds": 2.1036109924316406,
+          "instantiate": 2,
+          "phase": "aws-null-build",
+          "type-compiles": 0,
+          "realize": 1,
+          "type-reads": 0
+        },
+        {
+          "realize": 0,
+          "type-reads": 2,
+          "type-compiles": 2,
+          "seconds": 1.124295949935913,
+          "instantiate": 1,
+          "phase": "aws-null-first-admission"
+        },
+        {
+          "phase": "aws-null-hot-slots",
+          "seconds": 5.0067901611328125e-06,
+          "instantiate": 0,
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "seconds": 1.2406888008117676,
+          "instantiate": 1,
+          "phase": "aws-null-explicit-recheck",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        }
+      ],
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "round": 1,
+      "assertions": 68
+    },
+    {
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "instantiate": 2,
+          "seconds": 2.117220878601074,
+          "phase": "aws-build",
+          "realize": 1,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "type-reads": 1,
+          "type-compiles": 1,
+          "realize": 0,
+          "phase": "aws-first-admission",
+          "instantiate": 1,
+          "seconds": 0.9786128997802734
+        },
+        {
+          "seconds": 4.0531158447265625e-06,
+          "instantiate": 0,
+          "phase": "aws-hot-slots",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "instantiate": 1,
+          "seconds": 1.0489501953125,
+          "phase": "aws-explicit-recheck"
+        },
+        {
+          "phase": "aws-null-build",
+          "seconds": 2.2089500427246094,
+          "instantiate": 2,
+          "realize": 1,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "seconds": 1.683156967163086,
+          "instantiate": 1,
+          "phase": "aws-null-first-admission",
+          "realize": 0,
+          "type-reads": 2,
+          "type-compiles": 2
+        },
+        {
+          "instantiate": 0,
+          "seconds": 5.0067901611328125e-06,
+          "phase": "aws-null-hot-slots",
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "phase": "aws-null-explicit-recheck",
+          "seconds": 1.5669171810150146,
+          "instantiate": 1,
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        }
+      ],
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "round": 2,
+      "assertions": 68
+    },
+    {
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "phase": "aws-build",
+          "seconds": 5.594887971878052,
+          "instantiate": 2,
+          "type-compiles": 0,
+          "realize": 1,
+          "type-reads": 0
+        },
+        {
+          "realize": 0,
+          "type-reads": 1,
+          "type-compiles": 1,
+          "seconds": 0.8560647964477539,
+          "instantiate": 1,
+          "phase": "aws-first-admission"
+        },
+        {
+          "realize": 0,
+          "phase": "aws-hot-slots",
+          "instantiate": 0,
+          "seconds": 4.0531158447265625e-06,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "instantiate": 1,
+          "seconds": 0.8957779407501221,
+          "phase": "aws-explicit-recheck",
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "phase": "aws-null-build",
+          "seconds": 1.9317350387573242,
+          "instantiate": 2,
+          "type-compiles": 0,
+          "realize": 1,
+          "type-reads": 0
+        },
+        {
+          "phase": "aws-null-first-admission",
+          "instantiate": 1,
+          "seconds": 0.8714659214019775,
+          "realize": 0,
+          "type-compiles": 2,
+          "type-reads": 2
+        },
+        {
+          "instantiate": 0,
+          "seconds": 3.814697265625e-06,
+          "phase": "aws-null-hot-slots",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "seconds": 1.0420269966125488,
+          "instantiate": 1,
+          "phase": "aws-null-explicit-recheck"
+        }
+      ],
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "round": 3,
+      "assertions": 68
+    }
+  ],
+  "flake_rounds": [],
+  "runtime": "default Gerbil; separate heap-fenced process per serial round",
+  "cold": "fresh Scheme process/scope; existing Nix store (not download/build cold)",
+  "hot": "five cached receiver accesses; currentness measured separately",
+  "process_scope": "owned Nix CLI starts, not descendant process totals",
+  "evaluators": {
+    "selected": "nix eval --apply",
+    "flake": "nix eval --raw output.drvPath"
+  },
+  "selected_flake": "/private/tmp/opentofu-selected-flake-20261017-c",
+  "excluded_setup": "fixture construction, explicit flake lock creation, and package-tool lookup; not download cold",
+  "type_scope": "successful indexed type input reads and Contract compilations",
+  "source_sha256": {
+    "core/module-system/source/admission.ss": "cc16202f6626402be0bb04e0dc82ddf56d56b91b542f1bff5bf8a8b35095dd9a",
+    "core/module-system/source/build.ss": "fe70bbe0967108270a5327c08206a28f7748ac20384ae78abf394bfd1bf95f3d",
+    "core/module-system/source/collection.ss": "830fe5b8cea77536ecb67f02e5e7208692586700b05bbdda38dbe202aaa7adc9",
+    "core/module-system/source/declaration.ss": "f94cc65709fb67b8d070d8bbbec1765d9888b378190c3c9965b1b884726ec37b",
+    "core/module-system/source/directory.ss": "6643b09c3543e21258cb7dbaf71e16aa50bcce0d3f40bda5c99539545d18979d",
+    "core/module-system/source/imports.ss": "64a80fb71ce1c9a5bde2c618400bbf1862484e7b9d007308da252bf0d67ebfb9",
+    "core/module-system/source/init.ss": "37daf559a1c2cac81d65ab9cdd04bbbf6478fd396cc4026e90877774ab6976a1",
+    "core/module-system/source/interface.ss": "c90f38e937800acc4db1d1f3c092f1748a64cf4a92e3a833c06c380648cd6bf0",
+    "core/module-system/source/link.ss": "f4f1cfe0ed8ad2a060511a333fcb2e68fba8341473c3d3c52181064b22b49f9c",
+    "core/module-system/source/objects.ss": "049eade9883529993d45c4e791fdf814ef420bb4fa378478cc9e3ef634a3550c",
+    "core/module-system/source/preparation.ss": "f501e1c754971931a32696b4b2a41e04dae90fd754bdfd6c9119440e4e20809e",
+    "core/module-system/source/projection.ss": "c15f786fb4aa9c3c45aa94d87c45125d26b301a1037173592201f6b25762210f",
+    "core/module-system/source/publication.ss": "8372c49da69135b3466f2030c9a9c1b12f41bd7eef3e5d1eafa6ea2c32cedb35",
+    "core/module-system/source/reader.ss": "2b1362d8c50fad9e07830e9990bbf628e3f2dc8766d1114fd58b040dcdef2fa5",
+    "core/module-system/source/selection.ss": "91e39ec654c96cdb6ef7bdbed55958e0eee60bdecd4d7d3081244d61e73c683d",
+    "core/modules/building/bootstrap.ss": "7407be41c2643ec062b9ba2174b8fe568e663f9520547dbda416487bbb7861f9",
+    "core/modules/building/build-projection.ss": "53c848b099b817aaac459b9bd5282d8f15ccd6e1fafd408334c1c112a0eaabaf",
+    "core/modules/building/configuration-source.ss": "3f336d723a5c6628a73f96c4bbcf83d912f022cbccd58b6eb4582c5ae90afa1b",
+    "core/modules/nix/config.ss": "9b6c436dd3d738aff84b6e4579259bb5effe244ac1b77f11f91e5bce32ab5463",
+    "core/modules/nix/func.ss": "e238856fb31551110222f17e30941290ad8845f643e86cc44523b9bdcca3d394",
+    "core/modules/nix/interface.ss": "0dfc03f78ce06e3208954a42c057c9513c75a4296f6028cc4517114b3318ece5",
+    "core/modules/nix/objects.ss": "bea8614fb89adb10b9799b7db73566f0d86064c20f0f11ad5a8fba90b129af29",
+    "core/modules/nix/types.ss": "1e34f1ba11b8a092455afb0ecde4c3c558ea91aa0270934a6fe7ffe43b8a57eb",
+    "core/modules/services/opentofu/aws-hash.ss": "6cbcdfadbf4516cc1dadb49da4ae193068e5effa6317031f5f8d7f2132f6976d",
+    "core/modules/services/opentofu/build.ss": "58db1c081789dfc4557ddb564bc1769eae68111c302ce20cd0cf6fef85dcfada",
+    "core/modules/services/opentofu/collections.ss": "f0e466988014a8f370a9a5bdf84c59e6adfb07bfb5c4fb28de6d8ce747227092",
+    "core/modules/services/opentofu/config.ss": "732dd43b0bf1f228980c49674a5ae6d002dbd552e990b5c0e752a40ef40a9642",
+    "core/modules/services/opentofu/func.ss": "fd96d93832f734df7f0546bb7f1599cd606ef40bb4221e78f8c6e14f1b638350",
+    "core/modules/services/opentofu/interface.ss": "7a838bedfe0fc94b3dafbcf7318e3c3c22bb904dd2cf2aae745d80f7545d0e27",
+    "core/modules/services/opentofu/nix/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+    "core/modules/services/opentofu/nix/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "core/modules/services/opentofu/objects.ss": "ac40a84174664394e35ea8746857ac7d107dad79c86c1fc2810ce66fe50fb704",
+    "core/modules/services/opentofu/source.ss": "11cdc2d0de9853cb5f03398113d851836c6d9b81589ac91e21c6f550bc142826",
+    "core/modules/services/opentofu/types.ss": "f45768956a86d8818bbfebc1ee17da14503fb41f0b6645e51c7b2891842a28f3",
+    "justfile": "459b1dc3121601f1a8cc0446a26efe6e1e1b5d1b8a0939a914fcac368796d7f7",
+    "t/fixtures/opentofu/aws-5.100.0/package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+    "t/fixtures/opentofu/build-selection-checks.nix": "503b3f547e89eeddfad22dd69b36fd2566d69cc646cbf6c85d8a98518c3fd9a4",
+    "t/fixtures/opentofu/family-artifacts.nix": "21a3f908be79674cc449aaf5592edb16d836611df8c61ad0ea93b0f194fa35b0",
+    "t/fixtures/opentofu/family-schemas.nix": "2a047830f93e32858ac28197863e3535fba17cdd77e583c96b3bf6b44b924be1",
+    "t/fixtures/opentofu/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+    "t/fixtures/opentofu/selected-artifacts.nix": "073588db1b5106281a4e01b1df364d05eadafb21a07fa49990e0356fad47f242",
+    "t/fixtures/opentofu/selected-flake/flake.nix.in": "8888937db9c097a6ec8e17c8bb5d78a784b03dae201348a82385dd26ac373582",
+    "t/fixtures/opentofu/selected-flake/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f",
+    "t/fixtures/opentofu/versioned-schemas.nix": "8d916467759520fee9484c7b0921fc0e65ec6e436aa7bdff5923a96244ef59e0",
+    "t/nix-flake-source-test.ss": "4ba86fbdcc72f580673dfecbb6321fd25e961c0287e53c62845b5c510111f9fa",
+    "t/opentofu-selected-graph-test.ss": "68a50bd33a3c2102af0ed58a4f79d04d11d375d3b13a09bff4cf8eb51683b120",
+    "tools/qualification/opentofu-rounds.py": "eceb9c08dd8d4fa49c70efbfa3e882074f76da32264200d34884e7281dc987b2",
+    "tools/qualification/prepare-opentofu-flake.py": "23a3bd1cfb2e6b7119997989ea7b200070838b42e6c55bcc009896753a472f95",
+    "/private/tmp/opentofu-selected-flake-20261017-c/aws-package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+    "/private/tmp/opentofu-selected-flake-20261017-c/flake.lock": "17fe1e2b3113e1402e3870b9fe0de68d670e000a7f498c8ed9f151c0fcc4ccb4",
+    "/private/tmp/opentofu-selected-flake-20261017-c/flake.nix": "7e2efc8a2295b0c76efa85a95bb27431973cf834fdcb64ec0b3cf7f5e85b8631",
+    "/private/tmp/opentofu-selected-flake-20261017-c/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "/private/tmp/opentofu-selected-flake-20261017-c/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f"
+  },
+  "nix_version": "nix (Nix) 2.34.4+1",
+  "nixpkgs": "/nix/store/cx86xlxyvlai8iwr7hkmg3pri4zynbyc-cb2gvzqf4lc8qzlrw1ywwviw7phvjyl5-source",
+  "flake_artifact": null,
+  "aggregate": {
+    "aws-build": {
+      "samples": 3,
+      "seconds": {
+        "min": 2.117220878601074,
+        "median": 2.328817129135132,
+        "max": 5.594887971878052
+      },
+      "instantiate": [
+        2,
+        2,
+        2
+      ],
+      "realize": [
+        1,
+        1,
+        1
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-first-admission": {
+      "samples": 3,
+      "seconds": {
+        "min": 0.8560647964477539,
+        "median": 0.9184420108795166,
+        "max": 0.9786128997802734
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        1,
+        1,
+        1
+      ],
+      "type-compiles": [
+        1,
+        1,
+        1
+      ]
+    },
+    "aws-hot-slots": {
+      "samples": 3,
+      "seconds": {
+        "min": 4.0531158447265625e-06,
+        "median": 4.0531158447265625e-06,
+        "max": 4.0531158447265625e-06
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-explicit-recheck": {
+      "samples": 3,
+      "seconds": {
+        "min": 0.8957779407501221,
+        "median": 0.9625940322875977,
+        "max": 1.0489501953125
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-build": {
+      "samples": 3,
+      "seconds": {
+        "min": 1.9317350387573242,
+        "median": 2.1036109924316406,
+        "max": 2.2089500427246094
+      },
+      "instantiate": [
+        2,
+        2,
+        2
+      ],
+      "realize": [
+        1,
+        1,
+        1
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-first-admission": {
+      "samples": 3,
+      "seconds": {
+        "min": 0.8714659214019775,
+        "median": 1.124295949935913,
+        "max": 1.683156967163086
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        2,
+        2,
+        2
+      ],
+      "type-compiles": [
+        2,
+        2,
+        2
+      ]
+    },
+    "aws-null-hot-slots": {
+      "samples": 3,
+      "seconds": {
+        "min": 3.814697265625e-06,
+        "median": 5.0067901611328125e-06,
+        "max": 5.0067901611328125e-06
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-explicit-recheck": {
+      "samples": 3,
+      "seconds": {
+        "min": 1.0420269966125488,
+        "median": 1.2406888008117676,
+        "max": 1.5669171810150146
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "source_unchanged": true,
+  "purpose": "Automatic final-configuration Provider demand applied to a native FlakeSource through the Core selected build graph; no product Loader.",
+  "schema": "agentic-ai-lab/opentofu-selected-flake-control/v1",
+  "lock_boundary": "Nix 2.34.4+1: --no-update-lock-file alone rejects changed lock graphs; adding --no-write-lock-file allowed in-memory lock changes in the negative control.",
+  "selection_boundary": "Direct collection derivation references include AWS Schema producer only, then AWS and Null; awscc sentinel remains unforced. Not an exhaustive transitive closure benchmark.",
+  "provider_versions": {
+    "aws": "5.100.0",
+    "null": "3.2.4"
+  },
+  "regressions": [
+    {
+      "name": "expression-selected-graph",
+      "status": "passed",
+      "assertions": 60,
+      "log_sha256": "dbe2fc91b78be79bd53c7d74b6799e141c0e3b8c4d3332b6e1a79deed28224fd"
+    },
+    {
+      "name": "standalone-frozen-flake",
+      "status": "passed",
+      "assertions": 32,
+      "log_sha256": "054e07a470b921d73dac588e0f6ef04daa8cb7a8eb54145401d9442a330cc3b6"
+    }
+  ],
+  "retained_failures": [
+    {
+      "route": "large installed Nixpkgs path input",
+      "result": "native timeout; excluded from passing measurements"
+    },
+    {
+      "route": "local archive package input preparation",
+      "result": "stalled import stopped; excluded from runtime measurements"
+    },
+    {
+      "route": "initial lock negative controls",
+      "result": "invalid syntax and unexpected argument rejected before lock policy; replaced, not accepted as evidence"
+    },
+    {
+      "route": "valid unlocked external input with both no-update and no-write flags",
+      "result": "native Nix accepted in-memory lock changes; production flags corrected"
+    },
+    {
+      "route": "rounds-20261017-c",
+      "result": "duration watchdog in recursive closure diagnostic; failed structured summary retained locally"
+    },
+    {
+      "route": "rounds-20261017-d",
+      "result": "duration watchdog in subsequent currentness phase; failed structured summary retained locally; host load recorded at 56.15"
+    }
+  ],
+  "unqualified": [
+    "product Loader",
+    "full Core build",
+    "Provider RPC plan/apply validation",
+    "download-cold costs",
+    "dedicated-host speedup",
+    "remote source authentication",
+    "atomicity against arbitrary change-and-restore filesystem races"
+  ],
+  "selected_flake_lock": {
+    "nodes": {
+      "nixpkgs": {
+        "flake": false,
+        "locked": {
+          "lastModified": 1781454065,
+          "narHash": "sha256-d2xfDjnfRuf/xYGdu9VVRHiav/2w5hDL/5cw2TuVAXw=",
+          "owner": "NixOS",
+          "repo": "nixpkgs",
+          "rev": "9eac87a12312b8f60dd52e1c6e1a265f6fc7f5fc",
+          "type": "github"
+        },
+        "original": {
+          "narHash": "sha256-d2xfDjnfRuf/xYGdu9VVRHiav/2w5hDL/5cw2TuVAXw=",
+          "owner": "NixOS",
+          "repo": "nixpkgs",
+          "rev": "9eac87a12312b8f60dd52e1c6e1a265f6fc7f5fc",
+          "type": "github"
+        }
+      },
+      "root": {
+        "inputs": {
+          "nixpkgs": "nixpkgs"
+        }
+      }
+    },
+    "root": "root",
+    "version": 7
+  },
+  "nixpkgs_environment_note": "The runner records/pins the existing NIX_PATH for the expression lane and tool lookup. The selected flake itself uses the independent locked Git package input recorded in selected_flake_lock."
+}

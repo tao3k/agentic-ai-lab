@@ -23,5 +23,5 @@
  (measurementPhases collect-before policy-before collect-after policy-after assert-time-gate observe-runtime-memory)
  (expectedOutcome
   .
-  "One POO-native catalog validation receipt resolves tool grants without runtime execution.")
+  "One POO catalog validation receipt resolves tool grants without runtime execution.")
  (tags poo tool-core session policy catalog performance))

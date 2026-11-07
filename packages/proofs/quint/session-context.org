@@ -1,0 +1,17 @@
+#+TITLE: Session and Worktree Quint proof cases
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+=ContextSession.qnt= checks the original two-session/two-worker lifecycle with
+one turn, revision cap four and source cuts zero/one. Receipts retain the
+proposal revision, turn, cut and authorization. Closed sessions stay closed.
+
+=WorktreeContext.qnt= checks two worktrees, two sessions/workers and revision
+cap two. Imports retain both cuts, proposal revision, authorizations and
+applicability. Reads retain owner scope and authorization. Both safe instances
+and all ten original broken guard cases are in the shared executable catalog.
+Run =just check-session-context-quint=; =just check-session-proof= also runs the
+separate Lean Session target. These are finite abstract transitions, not a
+proof of every concrete runtime interleaving.

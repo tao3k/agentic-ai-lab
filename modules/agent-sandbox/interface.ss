@@ -5,8 +5,8 @@
 
 ;;; Public agent-sandbox module interface; all internal roles close through this file.
 
-(import "types.ss" "objects.ss" "funs.ss" "config.ss")
+(import "types.ss" "objects.ss" "func.ss" "config.ss")
 (export (import: "types.ss")
         (import: "objects.ss")
-        (import: "funs.ss")
+        (import: "func.ss")
         (import: "config.ss"))

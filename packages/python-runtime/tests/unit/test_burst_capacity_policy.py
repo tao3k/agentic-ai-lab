@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from poo_flow_runtime.benchmarks import _burst_lifecycle_runner as runner
-from poo_flow_runtime.benchmarks import burst_lifecycle as benchmark
+from agentic_ai_lab_runtime.benchmarks import _burst_lifecycle_runner as runner
+from agentic_ai_lab_runtime.benchmarks import burst_lifecycle as benchmark
 
 
 def test_system_available_cpu_selection() -> None:

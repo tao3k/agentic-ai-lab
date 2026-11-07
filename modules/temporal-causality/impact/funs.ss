@@ -7,18 +7,18 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/types
-                 poo-flow-temporal-trajectory-series?)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/funs
-                 poo-flow-temporal-trajectory-replay)
-        (only-in :poo-flow/modules/temporal-causality/impact/objects
-                 poo-flow-temporal-impact-contrast-point-value
-                 poo-flow-temporal-impact-contrast-value
-                 poo-flow-temporal-intervention-window-audit-value))
-(export poo-flow-temporal-impact-contrast
-        poo-flow-temporal-intervention-window-audit)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+                 agentic-ai-lab-temporal-trajectory-series?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/funs
+                 agentic-ai-lab-temporal-trajectory-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/objects
+                 agentic-ai-lab-temporal-impact-contrast-point-value
+                 agentic-ai-lab-temporal-impact-contrast-value
+                 agentic-ai-lab-temporal-intervention-window-audit-value))
+(export agentic-ai-lab-temporal-impact-contrast
+        agentic-ai-lab-temporal-intervention-window-audit)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (digest datum)
@@ -32,18 +32,18 @@
         (.ref instant 'coordinate) (.ref instant 'provenance-identity)
         (.ref instant 'modality)))
 
-(def (poo-flow-temporal-impact-contrast identity left right)
+(def (agentic-ai-lab-temporal-impact-contrast identity left right)
   (unless (and (text? identity)
-               (poo-flow-temporal-trajectory-series? left)
-               (poo-flow-temporal-trajectory-series? right)
+               (agentic-ai-lab-temporal-trajectory-series? left)
+               (agentic-ai-lab-temporal-trajectory-series? right)
                (every (lambda (slot)
                         (equal? (.ref left slot) (.ref right slot)))
                       '(subject-identity outcome-identity unit-identity
                         source-cut-digest source-projection-digest
                         time-domain-identity)))
     (error "trajectory contrast requires one subject, outcome, unit and evidence scope"))
-  (let* ((left (poo-flow-temporal-trajectory-replay left))
-         (right (poo-flow-temporal-trajectory-replay right))
+  (let* ((left (agentic-ai-lab-temporal-trajectory-replay left))
+         (right (agentic-ai-lab-temporal-trajectory-replay right))
          (left-samples (.ref left 'samples))
          (right-samples (.ref right 'samples)))
     (unless (equal? (map sample-coordinate left-samples)
@@ -60,7 +60,7 @@
                   'descriptive-contrast 'candidate-contrast))
                (semantic-digest
                 (digest
-                 (list 'poo-flow.temporal-causality.impact-contrast.v1
+                 (list 'agentic-ai-lab.temporal-causality.impact-contrast.v1
                        identity (.ref left 'semantic-digest)
                        (.ref right 'semantic-digest) status
                        (map (lambda (point)
@@ -70,7 +70,7 @@
                                     (.ref point 'level-delta)
                                     (.ref point 'rate-delta)))
                             points)))))
-          (poo-flow-temporal-impact-contrast-value
+          (agentic-ai-lab-temporal-impact-contrast-value
            identity semantic-digest
            (.ref left 'semantic-digest) (.ref right 'semantic-digest)
            (.ref left 'source-cut-digest)
@@ -88,7 +88,7 @@
                      (/ (- level-delta previous-delta)
                         (- coordinate previous-coordinate))))
                (point
-                (poo-flow-temporal-impact-contrast-point-value
+                (agentic-ai-lab-temporal-impact-contrast-point-value
                  coordinate
                  (.ref (sample-time left-sample) 'identity)
                  (.ref (sample-time right-sample) 'identity)
@@ -100,13 +100,13 @@
 ;;; computes a trapezoidal score from a supplied contrast on its existing
 ;;; grid. It does not identify a causal effect or observed values between grid
 ;;; points.
-(def (poo-flow-temporal-intervention-window-audit
+(def (agentic-ai-lab-temporal-intervention-window-audit
       identity intervention left right onset end)
   (unless (and (text? identity) (text? intervention)
-               (poo-flow-temporal-instant? onset)
-               (poo-flow-temporal-instant? end)
-               (poo-flow-temporal-trajectory-series? left)
-               (poo-flow-temporal-trajectory-series? right)
+               (agentic-ai-lab-temporal-instant? onset)
+               (agentic-ai-lab-temporal-instant? end)
+               (agentic-ai-lab-temporal-trajectory-series? left)
+               (agentic-ai-lab-temporal-trajectory-series? right)
                (memq (.ref left 'modality) '(predicted counterfactual))
                (eq? (.ref right 'modality) 'observed)
                (equal? (.ref onset 'domain-identity)
@@ -115,7 +115,7 @@
                        (.ref left 'time-domain-identity))
                (< (.ref onset 'coordinate) (.ref end 'coordinate)))
     (error "invalid candidate intervention window"))
-  (let* ((contrast (poo-flow-temporal-impact-contrast
+  (let* ((contrast (agentic-ai-lab-temporal-impact-contrast
                     (string-append identity "/contrast") left right))
          (points (.ref contrast 'points))
          (start (.ref onset 'coordinate))
@@ -147,11 +147,11 @@
                                  (.ref previous 'coordinate)))))))))
            (mean (/ area (- finish start)))
            (semantic-digest
-            (digest (list 'poo-flow.temporal-causality.intervention-window.v1
+            (digest (list 'agentic-ai-lab.temporal-causality.intervention-window.v1
                           identity intervention (.ref contrast 'semantic-digest)
                           (instant-row onset) (instant-row end)
                           prefix-status (length prefix) area mean))))
-      (poo-flow-temporal-intervention-window-audit-value
+      (agentic-ai-lab-temporal-intervention-window-audit-value
        identity semantic-digest (.ref contrast 'semantic-digest)
        intervention (.ref onset 'identity) (.ref end 'identity)
        (.ref contrast 'source-cut-digest)

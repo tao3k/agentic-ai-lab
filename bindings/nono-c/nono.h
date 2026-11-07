@@ -3,16 +3,16 @@
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 /*
- * Project-owned nono C ABI contract for POO Flow compile probes.
+ * Project-owned nono C ABI contract for Agentic AI Lab compile probes.
  *
  * This header mirrors the subset of always-further/nono's C ABI that the
  * Scheme control plane describes and the adapter probe compiles against. It is
  * intentionally declarations-only: the real implementation remains in the
- * native nono_ffi library loaded by an external runtime or explicit live test.
+ * runtime nono_ffi library loaded by an external runtime or explicit live test.
  */
 
-#ifndef POO_FLOW_NONO_ABI_H
-#define POO_FLOW_NONO_ABI_H
+#ifndef AGENTIC_AI_LAB_NONO_ABI_H
+#define AGENTIC_AI_LAB_NONO_ABI_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -179,4 +179,4 @@ struct NonoCapabilitySet *nono_sandbox_state_to_caps(
 }
 #endif
 
-#endif /* POO_FLOW_NONO_ABI_H */
+#endif /* AGENTIC_AI_LAB_NONO_ABI_H */

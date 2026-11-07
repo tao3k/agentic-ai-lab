@@ -18,7 +18,7 @@ from packages.bazel import scheme_projection_artifact_tool as projection_tool
 
 
 class SchemeProjectionArtifactToolTest(unittest.TestCase):
-    def test_native_failure_preserves_the_gerbil_diagnostic(self) -> None:
+    def test_runtime_failure_preserves_the_gerbil_diagnostic(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             source = root / "flow.ss"
@@ -33,7 +33,7 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             dependency_root.mkdir()
             fake_gxi.write_text(
                 "#!/bin/sh\n"
-                "printf '%s\\n' 'native projection diagnostic'\n"
+                "printf '%s\\n' 'runtime projection diagnostic'\n"
                 "exit 70\n",
                 encoding="utf-8",
             )
@@ -51,7 +51,7 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
                         project_dependency_roots=(),
                     )
 
-            self.assertIn("native projection diagnostic", diagnostic.getvalue())
+            self.assertIn("runtime projection diagnostic", diagnostic.getvalue())
 
     def test_main_writes_packaged_digest_envelope(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -63,12 +63,12 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             project_dependency_root = root / "package"
             loadpath_capture = root / "loadpath.txt"
             runner_capture = root / "runner.ss"
-            output = root / "flow.ss.poo-flow-projection.sexp"
+            output = root / "flow.ss.agentic-ai-lab-projection.sexp"
             fake_gxi = root / "gxi"
 
             source.write_text("(use-composition smoke)\n", encoding="utf-8")
             projection.write_text(";; projection\n", encoding="utf-8")
-            (compiled_root / "lib" / "poo-flow").mkdir(parents=True)
+            (compiled_root / "lib" / "agentic-ai-lab").mkdir(parents=True)
             dependency_marker.parent.mkdir(parents=True)
             dependency_marker.write_text("dependencies\n", encoding="utf-8")
             (project_dependency_root / ".gerbil" / "lib").mkdir(parents=True)
@@ -135,23 +135,27 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             )
             runner_source = runner_capture.read_text(encoding="utf-8")
             self.assertIn(
-                ":core/profile-composition/selection-syntax",
+                ":yuanxu/profile-composition/selection-syntax",
                 runner_source,
             )
             self.assertIn(
-                ":core/profile-composition/profile-bundle",
+                ":yuanxu/profile-composition/profile-bundle",
                 runner_source,
             )
             self.assertIn(
-                ":poo-flow/src/scenario/profile-root",
+                "(only-in :clan/poo/mop .new)",
                 runner_source,
             )
             self.assertIn(
-                ":poo-flow/modules/funflow/profile-library",
+                "(only-in :yuanxu/modules/funflow/scenario Scenario)",
+                runner_source,
+            )
+            self.assertIn(
+                ":agentic-ai-lab/modules/workflow/profiles/funflow-library",
                 runner_source,
             )
             self.assertNotIn(
-                ":poo-flow/src/user-interface/init-syntax",
+                ":agentic-ai-lab/src/user-interface/init-syntax",
                 runner_source,
             )
 

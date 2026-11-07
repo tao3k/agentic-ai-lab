@@ -6,11 +6,11 @@
 ;;; Boundary: report-only session communication receipts.
 ;;; Invariant: receipts describe routed intent; Scheme never delivers messages.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-communication-receipt-test)
 
@@ -21,10 +21,10 @@
 
 ;; : TestSuite
 (def session-communication-receipt-test
-  (test-suite "poo-flow session communication receipts"
-    (poo-flow-test-case "names parent, child, sibling, and cross-root routing edges"
+  (test-suite "agentic-ai-lab session communication receipts"
+    (yuanxu-test-case "names parent, child, sibling, and cross-root routing edges"
       (let* ((parent-child-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/session
                'channel/root-build
                'parent-child
@@ -35,7 +35,7 @@
                '(request)
                '(receipt-only)))
              (child-parent-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/session
                'channel/build-root
                'child-parent
@@ -46,7 +46,7 @@
                '(result)
                '(receipt-only)))
              (sibling-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/session
                'channel/build-audit
                'sibling
@@ -57,7 +57,7 @@
                '(artifact)
                '(declared-channel-only)))
              (cross-root-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/session
                'channel/audit-release
                'cross-root
@@ -70,13 +70,13 @@
                '((communication-ledger-ref . runtime/communication-ledger)
                  (durable-policy-ref . durable/session-communication))))
              (channel-rows
-              (poo-flow-session-communication-channel-receipts->alists
+              (agentic-ai-lab-session-communication-channel-receipts->alists
                (list parent-child-channel
                      child-parent-channel
                      sibling-channel
                      cross-root-channel)))
              (parent-child
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/session
                'parent-child
                'root/a
@@ -90,7 +90,7 @@
                '((summary . "run build checks"))
                'receipt-only))
              (child-parent
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/session
                'child-parent
                'root/a
@@ -104,7 +104,7 @@
                '((summary . "build completed"))
                'receipt-only))
              (sibling
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/session
                'sibling
                'root/a
@@ -118,7 +118,7 @@
                '((artifact . build-report))
                'declared-channel-only))
              (cross-root
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/session
                'cross-root
                'root/a
@@ -134,24 +134,24 @@
                '((communication-ledger-ref . runtime/communication-ledger)
                  (durable-policy-ref . durable/session-communication))))
              (rows
-              (poo-flow-session-communication-receipts->alists
+              (agentic-ai-lab-session-communication-receipts->alists
                (list parent-child child-parent sibling cross-root)))
              (root-build-channel-row (car channel-rows))
              (cross-root-channel-row (cadddr channel-rows))
              (cross-root-row (cadddr rows)))
-        (check-equal? (poo-flow-session-communication-channel-receipt?
+        (check-equal? (agentic-ai-lab-session-communication-channel-receipt?
                        parent-child-channel)
                       #t)
         (check-equal?
-         (poo-flow-session-communication-channel-receipt-channel-id
+         (agentic-ai-lab-session-communication-channel-receipt-channel-id
           sibling-channel)
          'channel/build-audit)
         (check-equal?
-         (poo-flow-session-communication-channel-receipt-relation-kind
+         (agentic-ai-lab-session-communication-channel-receipt-relation-kind
           cross-root-channel)
          'cross-root)
         (check-equal? (test-ref root-build-channel-row 'kind)
-                      +poo-flow-session-communication-channel-receipt-kind+)
+                      +agentic-ai-lab-session-communication-channel-receipt-kind+)
         (check-equal? (test-ref root-build-channel-row
                                 'allowed-message-kinds)
                       '(request))
@@ -163,32 +163,32 @@
         (check-equal? (test-ref cross-root-channel-row 'durable-policy-ref)
                       'durable/session-communication)
         (check-equal? (test-ref cross-root-channel-row 'open?) #f)
-        (check-equal? (poo-flow-session-communication-receipt?
+        (check-equal? (agentic-ai-lab-session-communication-receipt?
                        parent-child)
                       #t)
         (check-equal?
-         (poo-flow-session-communication-receipt-project-id parent-child)
+         (agentic-ai-lab-session-communication-receipt-project-id parent-child)
          'project/session)
         (check-equal?
-         (poo-flow-session-communication-receipt-relation-kind sibling)
+         (agentic-ai-lab-session-communication-receipt-relation-kind sibling)
          'sibling)
         (check-equal?
-         (poo-flow-session-communication-receipt-channel-id sibling)
+         (agentic-ai-lab-session-communication-receipt-channel-id sibling)
          'channel/build-audit)
         (check-equal?
-         (poo-flow-session-communication-receipt-source-session-id
+         (agentic-ai-lab-session-communication-receipt-source-session-id
           child-parent)
          'session/build)
         (check-equal?
-         (poo-flow-session-communication-receipt-target-session-id
+         (agentic-ai-lab-session-communication-receipt-target-session-id
           cross-root)
          'session/release)
         (check-equal?
-         (poo-flow-session-communication-receipt-target-root-session-id
+         (agentic-ai-lab-session-communication-receipt-target-root-session-id
           cross-root)
          'root/b)
         (check-equal? (test-ref cross-root-row 'kind)
-                      +poo-flow-session-communication-receipt-kind+)
+                      +agentic-ai-lab-session-communication-receipt-kind+)
         (check-equal? (test-ref cross-root-row 'communication-ledger-ref)
                       'runtime/communication-ledger)
         (check-equal? (test-ref cross-root-row 'durable-policy-ref)

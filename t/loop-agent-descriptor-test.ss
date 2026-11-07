@@ -6,7 +6,7 @@
 ;;; Boundary: loop-agent tests cover POO/C4 policy descriptors only.
 ;;; Invariant: scheduling and execution stay out of this test surface.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,8 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/src/loops/agent)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/loop-engine/control/agent)
 
 (export loop-agent-descriptor-test)
 
@@ -39,7 +39,7 @@
 ;; : TestSuite
 (def loop-agent-descriptor-test
   (test-suite "loop-agent POO policy descriptors"
-    (poo-flow-test-case "declares L1 report-only descriptor defaults"
+    (yuanxu-test-case "declares L1 report-only descriptor defaults"
       (let* ((descriptor
               (make-loop-pattern-descriptor
                'daily-triage
@@ -57,7 +57,7 @@
         (check-equal? (test-ref contract 'schema) +loop-pattern-schema+)
         (check-equal? (test-ref contract 'execution-owner)
                       'marlin-agent-core)))
-    (poo-flow-test-case "overrides autonomy, safety, budget, maker, and checker policy"
+    (yuanxu-test-case "overrides autonomy, safety, budget, maker, and checker policy"
       (let* ((overrides
               (list (cons 'level 'l2)
                     (cons 'priority 20)
@@ -91,12 +91,12 @@
         (check-equal? (test-ref (test-ref contract 'maker) 'can-write) #t)
         (check-equal? (test-ref contract 'metadata)
                       '((source . loop-engineering)))))
-    (poo-flow-test-case "compares autonomy levels"
+    (yuanxu-test-case "compares autonomy levels"
       (check-equal? (loop-pattern-level-rank 'l1) 1)
       (check-equal? (loop-pattern-level-rank 'l3) 4)
       (check-equal? (loop-pattern-level<=? 'l2 'l3) #t)
       (check-equal? (loop-pattern-level<=? 'l3 'l2) #f))
-    (poo-flow-test-case "rejects unsupported autonomy levels"
+    (yuanxu-test-case "rejects unsupported autonomy levels"
       (let* ((descriptor
               (make-loop-pattern-descriptor
                'bad-loop

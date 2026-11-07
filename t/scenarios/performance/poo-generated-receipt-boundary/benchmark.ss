@@ -24,7 +24,7 @@
  (expectedRepair . "generate receipt accessors and project to alist only at the runtime boundary")
  (pooFormEvidence .o .def defpoo)
  (pooUsageCallEvidence .ref .get .mix .o .def .putdefault! .setslot! setslots! .all-slots)
- (nativePooPrimary . #t)
+ (runtimePooPrimary . #t)
  (adapterBoundary . "alist projection is a boundary operation, not a control-plane hot path")
  (hotPathExemption . "no repeated object slot traversal for generated receipt projection")
  (hotPathEvidence . "t/scenarios/performance/poo-generated-receipt-boundary/exercise.ss")

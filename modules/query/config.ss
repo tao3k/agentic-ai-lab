@@ -6,36 +6,45 @@
 ;;; One POO entry object exposes the canonical Query surface.
 (import (only-in :clan/poo/object .o)
         (only-in "objects.ss"
-                 PooFlowQuery. PooFlowQueryElementSpace.
-                 PooFlowGqlQueryLanguage.
-                 PooFlowQueryResultContract.)
-        (only-in "funs.ss" poo-flow-query-admit)
-        (only-in "gql.ss" poo-flow-query->gql)
-        (only-in "contracts.ss" poo-flow-query-bind-execution-receipt)
+                 AgenticAILabQuery. AgenticAILabQueryElementSpace.
+                 AgenticAILabGqlQueryLanguage. AgenticAILabSchemeGqlQueryLanguage.
+                 AgenticAILabQueryResultContract.)
+        (only-in "funs.ss" agentic-ai-lab-query-admit)
+        (only-in "gql.ss" agentic-ai-lab-query->gql)
+        (only-in "contracts.ss" agentic-ai-lab-query-bind-execution-receipt)
+        (only-in "scheme-select.ss" agentic-ai-lab-query-select-scheme-nodes)
+        (only-in "orgize-source.ss"
+                 agentic-ai-lab-query-orgize-open-headlines
+                 agentic-ai-lab-query-orgize-open-headlines-replay)
         (only-in "results/objects.ss"
-                 PooFlowQueryResultCell. PooFlowQueryResultRow.
-                 PooFlowQueryResultSet.)
+                 AgenticAILabQueryResultCell. AgenticAILabQueryResultRow.
+                 AgenticAILabQueryResultSet.)
         (only-in "results/funs.ss"
-                 poo-flow-query-result-cell poo-flow-query-result-row
-                 poo-flow-query-result-set))
+                 agentic-ai-lab-query-result-cell agentic-ai-lab-query-result-row
+                 agentic-ai-lab-query-result-set))
 
-(export PooFlowQueryModule.)
+(export AgenticAILabQueryModule.)
 
-(def PooFlowQueryModule.
-  (.o kind: 'poo-flow.query.module
-      identity: 'poo-flow/modules/query
-      query: PooFlowQuery.
+(def AgenticAILabQueryModule.
+  (.o kind: 'agentic-ai-lab.query.module
+      identity: 'agentic-ai-lab/modules/query
+      query: AgenticAILabQuery.
       languages:
-      (.o gql: PooFlowGqlQueryLanguage.)
-      element-space: PooFlowQueryElementSpace.
-      result-contract: PooFlowQueryResultContract.
-      result-cell: PooFlowQueryResultCell.
-      result-row: PooFlowQueryResultRow.
-      result-set: PooFlowQueryResultSet.
+      (.o gql: AgenticAILabGqlQueryLanguage.
+          scheme-gql: AgenticAILabSchemeGqlQueryLanguage.)
+      element-space: AgenticAILabQueryElementSpace.
+      result-contract: AgenticAILabQueryResultContract.
+      result-cell: AgenticAILabQueryResultCell.
+      result-row: AgenticAILabQueryResultRow.
+      result-set: AgenticAILabQueryResultSet.
       providers: (.o)
-      .admit-query: poo-flow-query-admit
-      .project-gql: poo-flow-query->gql
-      .bind-execution-receipt: poo-flow-query-bind-execution-receipt
-      .result-cell: poo-flow-query-result-cell
-      .result-row: poo-flow-query-result-row
-      .result-set: poo-flow-query-result-set))
+      .admit-query: agentic-ai-lab-query-admit
+      .project-gql: agentic-ai-lab-query->gql
+      .bind-execution-receipt: agentic-ai-lab-query-bind-execution-receipt
+      .select-scheme-nodes: agentic-ai-lab-query-select-scheme-nodes
+      .select-orgize-open-headlines: agentic-ai-lab-query-orgize-open-headlines
+      .replay-orgize-open-headlines:
+      agentic-ai-lab-query-orgize-open-headlines-replay
+      .result-cell: agentic-ai-lab-query-result-cell
+      .result-row: agentic-ai-lab-query-result-row
+      .result-set: agentic-ai-lab-query-result-set))

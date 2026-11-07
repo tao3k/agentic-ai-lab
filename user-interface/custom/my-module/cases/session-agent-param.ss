@@ -7,15 +7,15 @@
 ;;; Invariant: this binds session topology to effective policy validation;
 ;;; provider, tool, memory, stream, and sandbox runtime stay behind Marlin.
 
-(import :poo-flow/modules/session/syntax
-        :poo-flow/modules/memory-core/config
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-flag-entry))
+(import :agentic-ai-lab/modules/session/syntax
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry))
 
-(export poo-flow-custom-my-module-session-agent-param-case)
+(export agentic-ai-lab-custom-my-module-session-agent-param-case)
 
-(def poo-flow-custom-my-module-session-agent-param-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-agent-param-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-agent-param-case
     (metadata (source . user-interface)
               (case . session-agent-param))
@@ -54,7 +54,7 @@
               (memory session/memory)
               (sandbox agent/nono)
               (role builder)
-              (result poo-flow.session.agent.build-result.v1)
+              (result agentic-ai-lab.session.agent.build-result.v1)
               (metadata (source . user-interface)
                         (case . session-agent-param))))
            (model-policy
@@ -156,7 +156,7 @@
               ()))
            (memory-selection
             (car
-             (poo-flow-memory-configs
+             (agentic-ai-lab-memory-configs
                (.def (agent-param-memory-store @ memory-store-spec
                                                 store-ref store-kind namespace
                                                 scopes recall-policies
@@ -183,7 +183,7 @@
                              (case . session-agent-param))))))
            (memory-catalog
             (cdr
-             (poo-flow-user-module-selection-flag-entry
+             (yuanxu-user-module-selection-flag-entry
               memory-selection
               ':memory-catalog)))
            (memory-intent

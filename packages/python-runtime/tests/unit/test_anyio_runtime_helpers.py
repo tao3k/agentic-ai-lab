@@ -12,7 +12,7 @@ from typing import Any
 import anyio
 import pytest
 
-from poo_flow_runtime import _anyio_runtime as runtime
+from agentic_ai_lab_runtime import _anyio_runtime as runtime
 
 
 class _CountingTaskGroup:

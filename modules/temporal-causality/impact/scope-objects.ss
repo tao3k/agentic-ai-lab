@@ -5,18 +5,18 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/impact/scope-types
-                 PooFlowTemporalImpactScope
-                 PooFlowTemporalImpactScopeAudit))
-(export poo-flow-temporal-impact-scope-value
-        poo-flow-temporal-impact-scope-audit-value)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-types
+                 AgenticAILabTemporalImpactScope
+                 AgenticAILabTemporalImpactScopeAudit))
+(export agentic-ai-lab-temporal-impact-scope-value
+        agentic-ai-lab-temporal-impact-scope-audit-value)
 
-(def (poo-flow-temporal-impact-scope-value
+(def (agentic-ai-lab-temporal-impact-scope-value
       identity-value digest-value intervention-value subject-value cut-value
       projection-value domain-value onset-value end-value target-value
       protected-value)
-  (validate PooFlowTemporalImpactScope
-    (.o kind: 'poo-flow.temporal-causality.impact-scope
+  (validate AgenticAILabTemporalImpactScope
+    (.o kind: 'agentic-ai-lab.temporal-causality.impact-scope
         identity: identity-value semantic-digest: digest-value
         intervention-identity: intervention-value
         subject-identity: subject-value source-cut-digest: cut-value
@@ -25,11 +25,11 @@
         direct-target-outcomes: target-value
         protected-outcomes: protected-value)))
 
-(def (poo-flow-temporal-impact-scope-audit-value
+(def (agentic-ai-lab-temporal-impact-scope-audit-value
       identity-value digest-value scope-value candidate-value baseline-value
       outcomes-value audits-value prefix-value protected-value status-value)
-  (validate PooFlowTemporalImpactScopeAudit
-    (.o kind: 'poo-flow.temporal-causality.impact-scope-audit
+  (validate AgenticAILabTemporalImpactScopeAudit
+    (.o kind: 'agentic-ai-lab.temporal-causality.impact-scope-audit
         identity: identity-value semantic-digest: digest-value
         scope-digest: scope-value
         candidate-scenario-identity: candidate-value

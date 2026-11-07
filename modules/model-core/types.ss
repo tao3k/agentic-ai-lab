@@ -11,22 +11,22 @@
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every))
 
-(export +poo-flow-model-core-spec-kind+
-        +poo-flow-model-core-catalog-kind+
-        +poo-flow-model-core-selection-policy-kind+
-        +poo-flow-model-core-selection-receipt-kind+
-        PooFlowModelSpec PooFlowModelCatalog
-        PooFlowModelSelectionPolicy PooFlowModelSelectionReceipt
-        poo-flow-model-spec-value? poo-flow-model-catalog-value?
-        poo-flow-model-selection-policy-value?
-        poo-flow-model-selection-receipt-value?)
+(export +agentic-ai-lab-model-core-spec-kind+
+        +agentic-ai-lab-model-core-catalog-kind+
+        +agentic-ai-lab-model-core-selection-policy-kind+
+        +agentic-ai-lab-model-core-selection-receipt-kind+
+        AgenticAILabModelSpec AgenticAILabModelCatalog
+        AgenticAILabModelSelectionPolicy AgenticAILabModelSelectionReceipt
+        agentic-ai-lab-model-spec-value? agentic-ai-lab-model-catalog-value?
+        agentic-ai-lab-model-selection-policy-value?
+        agentic-ai-lab-model-selection-receipt-value?)
 
-(def +poo-flow-model-core-spec-kind+ 'poo-flow-model-core-spec)
-(def +poo-flow-model-core-catalog-kind+ 'poo-flow-model-core-catalog)
-(def +poo-flow-model-core-selection-policy-kind+
-  'poo-flow-model-core-selection-policy)
-(def +poo-flow-model-core-selection-receipt-kind+
-  'poo-flow-model-core-selection-receipt)
+(def +agentic-ai-lab-model-core-spec-kind+ 'agentic-ai-lab-model-core-spec)
+(def +agentic-ai-lab-model-core-catalog-kind+ 'agentic-ai-lab-model-core-catalog)
+(def +agentic-ai-lab-model-core-selection-policy-kind+
+  'agentic-ai-lab-model-core-selection-policy)
+(def +agentic-ai-lab-model-core-selection-receipt-kind+
+  'agentic-ai-lab-model-core-selection-receipt)
 
 (def (model-value-has-slots? value slots)
   (and (object? value)
@@ -39,9 +39,9 @@
 (def (model-symbol-list? value)
   (and (list? value) (every symbol? value)))
 
-(def (poo-flow-model-spec-shape? value)
+(def (agentic-ai-lab-model-spec-shape? value)
   (and (model-value-kind?
-        value +poo-flow-model-core-spec-kind+
+        value +agentic-ai-lab-model-core-spec-kind+
         '(schema model-ref provider model-id capabilities modalities
           context-window max-output-tokens runtime-owner handoff-operation
           runtime-backend runtime-executed metadata))
@@ -59,17 +59,17 @@
        (symbol? (.ref value 'runtime-backend))
        (eq? (.ref value 'runtime-executed) #f)))
 
-(define-type (PooFlowModelSpec @ Type.)
-  .element?: poo-flow-model-spec-shape?)
+(define-type (AgenticAILabModelSpec @ Type.)
+  .element?: agentic-ai-lab-model-spec-shape?)
 
-(def (poo-flow-model-catalog-shape? value)
+(def (agentic-ai-lab-model-catalog-shape? value)
   (and (model-value-kind?
-        value +poo-flow-model-core-catalog-kind+
+        value +agentic-ai-lab-model-core-catalog-kind+
         '(schema catalog-ref models model-refs model-count runtime-owner
           runtime-executed metadata))
        (symbol? (.ref value 'catalog-ref))
        (list? (.ref value 'models))
-       (every (lambda (model) (element? PooFlowModelSpec model))
+       (every (lambda (model) (element? AgenticAILabModelSpec model))
               (.ref value 'models))
        (equal? (.ref value 'model-refs)
                (map (lambda (model) (.ref model 'model-ref))
@@ -77,12 +77,12 @@
        (= (.ref value 'model-count) (length (.ref value 'models)))
        (eq? (.ref value 'runtime-executed) #f)))
 
-(define-type (PooFlowModelCatalog @ Type.)
-  .element?: poo-flow-model-catalog-shape?)
+(define-type (AgenticAILabModelCatalog @ Type.)
+  .element?: agentic-ai-lab-model-catalog-shape?)
 
-(def (poo-flow-model-selection-policy-shape? value)
+(def (agentic-ai-lab-model-selection-policy-shape? value)
   (and (model-value-kind?
-        value +poo-flow-model-core-selection-policy-kind+
+        value +agentic-ai-lab-model-core-selection-policy-kind+
         '(schema policy-ref candidate-model-refs fallback-model-ref
           required-capabilities routing-strategy budget-policy runtime-owner
           runtime-executed metadata))
@@ -96,12 +96,12 @@
        (every pair? (.ref value 'budget-policy))
        (eq? (.ref value 'runtime-executed) #f)))
 
-(define-type (PooFlowModelSelectionPolicy @ Type.)
-  .element?: poo-flow-model-selection-policy-shape?)
+(define-type (AgenticAILabModelSelectionPolicy @ Type.)
+  .element?: agentic-ai-lab-model-selection-policy-shape?)
 
-(def (poo-flow-model-selection-receipt-shape? value)
+(def (agentic-ai-lab-model-selection-receipt-shape? value)
   (and (model-value-kind?
-        value +poo-flow-model-core-selection-receipt-kind+
+        value +agentic-ai-lab-model-core-selection-receipt-kind+
         '(schema policy-ref catalog-ref valid? selected-model-ref
           selected-model diagnostics runtime-executed))
        (boolean? (.ref value 'valid?))
@@ -110,14 +110,14 @@
        (list? (.ref value 'diagnostics))
        (eq? (.ref value 'runtime-executed) #f)))
 
-(define-type (PooFlowModelSelectionReceipt @ Type.)
-  .element?: poo-flow-model-selection-receipt-shape?)
+(define-type (AgenticAILabModelSelectionReceipt @ Type.)
+  .element?: agentic-ai-lab-model-selection-receipt-shape?)
 
-(def (poo-flow-model-spec-value? value)
-  (element? PooFlowModelSpec value))
-(def (poo-flow-model-catalog-value? value)
-  (element? PooFlowModelCatalog value))
-(def (poo-flow-model-selection-policy-value? value)
-  (element? PooFlowModelSelectionPolicy value))
-(def (poo-flow-model-selection-receipt-value? value)
-  (element? PooFlowModelSelectionReceipt value))
+(def (agentic-ai-lab-model-spec-value? value)
+  (element? AgenticAILabModelSpec value))
+(def (agentic-ai-lab-model-catalog-value? value)
+  (element? AgenticAILabModelCatalog value))
+(def (agentic-ai-lab-model-selection-policy-value? value)
+  (element? AgenticAILabModelSelectionPolicy value))
+(def (agentic-ai-lab-model-selection-receipt-value? value)
+  (element? AgenticAILabModelSelectionReceipt value))

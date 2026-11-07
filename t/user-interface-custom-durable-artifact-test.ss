@@ -8,12 +8,12 @@
 ;;; receipts only; runtime artifact storage/indexing/publishing stays outside
 ;;; Scheme.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in "../user-interface/custom/my-module/cases/durable-artifact"
-                 poo-flow-custom-my-module-durable-artifact-case))
+                 agentic-ai-lab-custom-my-module-durable-artifact-case))
 
 (export user-interface-custom-durable-artifact-test)
 
@@ -24,9 +24,9 @@
 
 ;; : TestSuite
 (def user-interface-custom-durable-artifact-test
-  (test-suite "poo-flow custom durable artifact case"
-    (poo-flow-test-case "projects POO artifact policy to bounded receipts"
-      (let* ((row poo-flow-custom-my-module-durable-artifact-case)
+  (test-suite "agentic-ai-lab custom durable artifact case"
+    (yuanxu-test-case "projects POO artifact policy to bounded receipts"
+      (let* ((row agentic-ai-lab-custom-my-module-durable-artifact-case)
              (profile (test-ref row 'profile))
              (database (test-ref row 'database))
              (artifact (test-ref row 'artifact))
@@ -34,14 +34,14 @@
              (manifest-receipt (test-ref row 'manifest-receipt))
              (marlin-handoff (test-ref row 'marlin-handoff)))
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.custom.durable-artifact)
+                      'agentic-ai-lab.custom.durable-artifact)
         (check-equal? (test-ref row 'valid?) #t)
         (check-equal? (test-ref row 'runtime-executed) #f)
         (check-equal? (test-ref profile 'name) 'custom-report)
         (check-equal? (test-ref profile 'runtime-executed) #f)
         (check-equal? (test-ref database 'name) 'turso)
         (check-equal? (test-ref database 'source)
-                      'poo-flow.durable.artifact.database)
+                      'agentic-ai-lab.durable.artifact.database)
         (check-equal? (test-ref artifact 'artifact-id)
                       'artifact/custom-report)
         (check-equal? (test-ref artifact 'lifecycle-state) 'created)
@@ -59,7 +59,7 @@
         (check-equal? (test-ref manifest-receipt 'handoff-required) #t)
         (check-equal? (test-ref manifest-receipt 'runtime-executed) #f)
         (check-equal? (test-ref marlin-handoff 'kind)
-                      'poo-flow.durable.artifact.marlin-handoff)
+                      'agentic-ai-lab.durable.artifact.marlin-handoff)
         (check-equal? (test-ref marlin-handoff 'handoff-ready?) #t)
         (check-equal? (test-ref marlin-handoff 'runtime-executed) #f)
         (check-equal? (test-ref marlin-handoff 'runtime-parses-scheme-source)

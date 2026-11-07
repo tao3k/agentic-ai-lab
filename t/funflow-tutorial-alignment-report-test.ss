@@ -6,20 +6,20 @@
 ;;; Boundary: Funflow tutorial alignment is a POO report, not loose prose.
 ;;; Invariant: heavy Docker/CAS/process work remains runtime-owned.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
                  )
           (only-in :clan/poo/object .ref object?)
-          (only-in :poo-flow/modules/workflow/flows-alignment-report
-                   poo-flow-funflow-tutorial-alignment-report)
-          (only-in :poo-flow/modules/workflow/flows-alignment-specs
-                   poo-flow-funflow-tutorial-alignment-schema
-                   poo-flow-funflow-tutorial-alignment-report-kind
-                   poo-flow-funflow-tutorial-alignment-spec?
-                   poo-flow-funflow-tutorial-alignment-report?
-                   poo-flow-funflow-tutorial-alignment-specs))
+          (only-in :agentic-ai-lab/modules/workflow/flows-alignment-report
+                   agentic-ai-lab-funflow-tutorial-alignment-report)
+          (only-in :agentic-ai-lab/modules/workflow/flows-alignment-specs
+                   agentic-ai-lab-funflow-tutorial-alignment-schema
+                   agentic-ai-lab-funflow-tutorial-alignment-report-kind
+                   agentic-ai-lab-funflow-tutorial-alignment-spec?
+                   agentic-ai-lab-funflow-tutorial-alignment-report?
+                   agentic-ai-lab-funflow-tutorial-alignment-specs))
 
 (export funflow-tutorial-alignment-report-test)
 
@@ -72,8 +72,8 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-report-shape-test
   (test-suite "funflow tutorial alignment report shape"
-    (poo-flow-test-case "projects audited upstream tutorial coverage as a POO report"
-      (let* ((report (poo-flow-funflow-tutorial-alignment-report))
+    (yuanxu-test-case "projects audited upstream tutorial coverage as a POO report"
+      (let* ((report (agentic-ai-lab-funflow-tutorial-alignment-report))
              (spec-snapshots (.ref report 'specs))
              (source-index (.ref report 'source-index))
              (source-proof-index (.ref report 'source-proof-index))
@@ -86,11 +86,11 @@
               (.ref report 'user-interface-handoff-result-gate))
              (counts (.ref report 'status-counts)))
         (check-equal? (object? report) #t)
-        (check-equal? (poo-flow-funflow-tutorial-alignment-report? report) #t)
+        (check-equal? (agentic-ai-lab-funflow-tutorial-alignment-report? report) #t)
 (check-equal? (.ref report 'kind)
-              (poo-flow-funflow-tutorial-alignment-report-kind))
+              (agentic-ai-lab-funflow-tutorial-alignment-report-kind))
 (check-equal? (.ref report 'schema)
-              (poo-flow-funflow-tutorial-alignment-schema))
+              (agentic-ai-lab-funflow-tutorial-alignment-schema))
         (check-equal? (.ref report 'upstream) "tweag/funflow")
         (check-equal? (.ref report 'source-count) 9)
         (check-equal? (length spec-snapshots) 9)
@@ -196,9 +196,9 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-runtime-gap-test
   (test-suite "funflow tutorial alignment runtime gaps"
-    (poo-flow-test-case "keeps runtime-heavy tutorial gaps explicit"
-      (let* ((report (poo-flow-funflow-tutorial-alignment-report))
-             (specs (poo-flow-funflow-tutorial-alignment-specs))
+    (yuanxu-test-case "keeps runtime-heavy tutorial gaps explicit"
+      (let* ((report (agentic-ai-lab-funflow-tutorial-alignment-report))
+             (specs (agentic-ai-lab-funflow-tutorial-alignment-specs))
              (ccompilation (alignment-test-spec-by-id 'ccompilation specs))
              (tensorflow (alignment-test-spec-by-id 'tensorflow-docker specs))
              (makefile (alignment-test-spec-by-id 'makefile-tool specs)))
@@ -233,8 +233,8 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-index-test
   (test-suite "funflow tutorial alignment indexes"
-    (poo-flow-test-case "indexes upstream sources and runtime-owned gaps"
-      (let* ((report (poo-flow-funflow-tutorial-alignment-report))
+    (yuanxu-test-case "indexes upstream sources and runtime-owned gaps"
+      (let* ((report (agentic-ai-lab-funflow-tutorial-alignment-report))
              (source-index (.ref report 'source-index))
              (source-proof-index (.ref report 'source-proof-index))
              (status-source-matrix (.ref report 'status-source-matrix))
@@ -342,13 +342,13 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-proof-test
   (test-suite "funflow tutorial alignment proofs"
-    (poo-flow-test-case "keeps proof receipts attached to result-covered tutorial specs"
-      (let* ((specs (poo-flow-funflow-tutorial-alignment-specs))
+    (yuanxu-test-case "keeps proof receipts attached to result-covered tutorial specs"
+      (let* ((specs (agentic-ai-lab-funflow-tutorial-alignment-specs))
              (tutorial1 (alignment-test-spec-by-id 'tutorial1 specs))
              (word-count (alignment-test-spec-by-id 'word-count specs))
              (external-config (alignment-test-spec-by-id 'external-config
                                                          specs)))
-        (check-equal? (poo-flow-funflow-tutorial-alignment-spec? tutorial1)
+        (check-equal? (agentic-ai-lab-funflow-tutorial-alignment-spec? tutorial1)
                       #t)
         (check-equal? (.ref tutorial1 'status) 'result-covered)
         (check-equal? (.ref tutorial1 'coverage)
@@ -370,8 +370,8 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-gate-test
   (test-suite "funflow tutorial alignment gates"
-    (poo-flow-test-case "keeps late-stage proof gates visible in report metadata"
-      (let* ((report (poo-flow-funflow-tutorial-alignment-report))
+    (yuanxu-test-case "keeps late-stage proof gates visible in report metadata"
+      (let* ((report (agentic-ai-lab-funflow-tutorial-alignment-report))
              (gate-ids (.ref report 'gate-ids))
              (gate-proofs (.ref report 'gate-proofs))
              (stage19 (alignment-test-gate-proof-by-id

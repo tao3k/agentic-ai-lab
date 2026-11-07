@@ -6,12 +6,12 @@
 ;;; Boundary: downstream session dataflow case.
 ;;; Invariant: this standalone module declares report-only objects.
 
-(import :poo-flow/modules/session/syntax)
+(import :agentic-ai-lab/modules/session/syntax)
 
-(export poo-flow-custom-my-module-session-case)
+(export agentic-ai-lab-custom-my-module-session-case)
 
-(def poo-flow-custom-my-module-session-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-case
     (metadata (source . user-interface)
               (case . openrath-session-first))
@@ -19,7 +19,7 @@
      (custom-session-root
       (session custom/session-root
         (chunk request user
-               "Run the POO Flow package checks and keep receipts.")
+               "Run the Agentic AI Lab package checks and keep receipts.")
         (lineage root)
         (placement agent/nono)
         (metadata (source . user-interface)

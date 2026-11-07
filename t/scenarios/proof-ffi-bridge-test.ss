@@ -2,44 +2,46 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/proof-fact-wire
-        :poo-flow/src/proof/proof-ffi-bridge
-        :poo-flow/src/proof/proof-gate-receipts)
+        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :agentic-ai-lab/modules/proof/projections/proof-ffi-bridge
+        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
+
+(export proof-ffi-bridge-test)
 
 (def proof-ffi-bridge-test
   (test-suite "proof FFI bridge"
-    (poo-flow-test-case "projects the accepted proof payload"
+    (yuanxu-test-case "projects the accepted proof payload"
 
 (def (assert-equal label actual expected)
   (unless (equal? actual expected)
     (error "proof ffi bridge mismatch" label actual expected)))
 
 (def payload
-  (poo-flow-langgraph-user-interface-proof-ffi-payload))
+  (agentic-ai-lab-langgraph-user-interface-proof-ffi-payload))
 
 (assert-equal 'payload-schema
-              (poo-flow-proof-fact-ref 'schema payload)
-              'poo-flow.proof.ffi-bridge.payload)
+              (agentic-ai-lab-proof-fact-ref 'schema payload)
+              'agentic-ai-lab.proof.ffi-bridge.payload)
 (assert-equal 'payload-version
-              (poo-flow-proof-fact-ref 'version payload)
+              (agentic-ai-lab-proof-fact-ref 'version payload)
               1)
 (assert-equal 'payload-accepted
-              (poo-flow-proof-fact-ref 'accepted? payload)
+              (agentic-ai-lab-proof-fact-ref 'accepted? payload)
               #t)
 (assert-equal 'composition-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'composition-wire payload))
-              'poo-flow.proof.ffi-wire)
+               (agentic-ai-lab-proof-fact-ref 'composition-wire payload))
+              'agentic-ai-lab.proof.ffi-wire)
 (assert-equal 'scenario-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'scenario-wire payload))
-              'poo-flow.proof.ffi-wire)
+               (agentic-ai-lab-proof-fact-ref 'scenario-wire payload))
+              'agentic-ai-lab.proof.ffi-wire)
 (assert-equal 'handoff-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'handoff-wire payload))
-              'poo-flow.proof.ffi-wire))))
+               (agentic-ai-lab-proof-fact-ref 'handoff-wire payload))
+              'agentic-ai-lab.proof.ffi-wire))))

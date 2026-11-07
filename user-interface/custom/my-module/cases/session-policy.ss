@@ -7,22 +7,22 @@
 ;;; Invariant: declarations describe permissions only and never execute tools,
 ;;; hooks, providers, or sandboxes.
 
-(import :poo-flow/modules/session/syntax
-        :poo-flow/modules/tool-core/config
-        :poo-flow/modules/memory-core/config
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-flag-entry))
+(import :agentic-ai-lab/modules/session/syntax
+        :agentic-ai-lab/modules/tool-core/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry))
 
-(export poo-flow-custom-my-module-session-policy-case)
+(export agentic-ai-lab-custom-my-module-session-policy-case)
 
-(def poo-flow-custom-my-module-session-policy-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-policy-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-policy-case
     (metadata (source . user-interface)
               (case . session-policy))
     (objects
      (custom-durable-default
-          (poo-flow-durable-policy
+          (agentic-ai-lab-durable-policy
            'durable/custom-project
            'custom/session-root
            '((journal-owner . runtime/fact-log)
@@ -75,7 +75,7 @@
              (inherits-agent-tools? . #f))))
          (custom-session-tool-selection
           (car
-           (poo-flow-tool-configs
+           (agentic-ai-lab-tool-configs
              (.def (session-policy-read-tool @ tool-spec
                                               tool-ref tool-kind actions
                                               input-schema output-schema
@@ -127,7 +127,7 @@
                            (case . session-policy))))))
          (custom-session-tool-catalog
           (cdr
-           (poo-flow-user-module-selection-flag-entry
+           (yuanxu-user-module-selection-flag-entry
             custom-session-tool-selection
             ':tool-catalog)))
          (custom-session-tool-catalog-validation-row
@@ -140,7 +140,7 @@
                (case . session-policy)))))
          (custom-session-memory-selection
           (car
-           (poo-flow-memory-configs
+           (agentic-ai-lab-memory-configs
              (.def (session-policy-memory-store @ memory-store-spec
                                                  store-ref store-kind
                                                  namespace scopes
@@ -168,7 +168,7 @@
                            (case . session-policy))))))
          (custom-session-memory-catalog
           (cdr
-           (poo-flow-user-module-selection-flag-entry
+           (yuanxu-user-module-selection-flag-entry
             custom-session-memory-selection
             ':memory-catalog)))
          (custom-session-memory-intent
@@ -379,8 +379,8 @@
                    (list custom-session-build-root-communication
                          custom-session-build-audit-communication))
              (cons 'sibling-session-refs '(custom/audit-session))))))
-    (rows (poo-flow-durable-policy-receipt->alist
-           (poo-flow-durable-policy->receipt
+    (rows (agentic-ai-lab-durable-policy-receipt->alist
+           (agentic-ai-lab-durable-policy->receipt
             custom-durable-default
             '((project-id . custom/project)
               (root-session-id . custom/session-root)
@@ -390,9 +390,9 @@
           (session-policy-row custom-session-main-agent-tool-policy)
           (session-policy-row custom-session-build-agent-tool-policy)
           (session-policy-row custom-session-hook-tool-policy)
-          (poo-flow-tool-catalog->alist custom-session-tool-catalog)
+          (agentic-ai-lab-tool-catalog->alist custom-session-tool-catalog)
           custom-session-tool-catalog-validation-row
-          (poo-flow-memory-catalog->alist custom-session-memory-catalog)
+          (agentic-ai-lab-memory-catalog->alist custom-session-memory-catalog)
           custom-session-memory-catalog-validation-row
           (session-policy-row custom-session-model-policy)
           (session-policy-row custom-session-prompt-policy)

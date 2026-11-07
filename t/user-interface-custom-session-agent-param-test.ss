@@ -7,15 +7,15 @@
 ;;; Invariant: AgentParam rows bind topology to effective policy validation
 ;;; without opening providers, tools, memory stores, streams, or sandboxes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-agent-param"
-                 poo-flow-custom-my-module-session-agent-param-case))
+                 agentic-ai-lab-custom-my-module-session-agent-param-case))
 
 (export user-interface-custom-session-agent-param-test)
 
@@ -28,23 +28,23 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-agent-param-test
-  (test-suite "poo-flow custom user-interface session-agent-param case"
-    (poo-flow-test-case "projects custom AgentParam contract without runtime work"
+  (test-suite "agentic-ai-lab custom user-interface session-agent-param case"
+    (yuanxu-test-case "projects custom AgentParam contract without runtime work"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-agent-param-case))
+              (car agentic-ai-lab-custom-my-module-session-agent-param-case))
              (row
               (car
                (module-config-rows
-                poo-flow-custom-my-module-session-agent-param-case))))
-        (check-equal? (poo-flow-user-module-selection-key selection)
-                      '(session . session-core))
+                agentic-ai-lab-custom-my-module-session-agent-param-case))))
+        (check-equal? (yuanxu-user-module-selection-key selection)
+                      '(session . session))
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.session.agent-param-contract)
+                      'agentic-ai-lab.session.agent-param-contract)
         (check-equal? (test-ref row 'contract-id)
                       'agent-param/custom-build)
         (check-equal? (test-ref row 'agent-id) 'agent/build)

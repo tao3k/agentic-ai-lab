@@ -6,17 +6,20 @@
 ;;; Boundary: tests inspect Funflow CI/CD pipeline run/result presentation.
 ;;; Invariant: pipeline results are handoff-readiness data, not execution output.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+        (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/presentation-config
-        :poo-flow/src/user-interface/init-syntax
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/funflow-config
         (only-in "../user-interface/custom/my-module/cases/cicd-owner"
-                 poo-flow-custom-my-module-cicd-module
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-cicd-module
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export user-interface-cicd-pipeline-run-test)
 
@@ -42,124 +45,115 @@
 ;;; selected beside the Funflow pipeline before presentation is built.
 ;; : (-> Unit PooUserConfig)
 (def (pipeline-run-test-config)
-  (pooFlowUserConfig
-   (append poo-flow-custom-my-module-cicd-module
-           poo-flow-custom-my-module-funflow-cicd-case)
-   (poo-flow-settings)))
+  (yuanxuUserConfig
+   (append agentic-ai-lab-custom-my-module-cicd-module
+           agentic-ai-lab-custom-my-module-funflow-cicd-case)
+   (yuanxu-settings)))
 
 ;;; Invalid pipeline cases use the same user-facing Funflow POO syntax as
 ;;; init.ss; only the check graph/profile facts vary between cases.
 ;; : [PooUserModuleSelection]
 (def pipeline-run-test-duplicate-case
-  (use-module funflow
-    :config
-    (.def (pipeline-run-test/duplicate-build @ funflow-check
-                                             check-name profile-ref
-                                             command-vector result-protocol
-                                             runtime-mode)
+  (let ()
+    (.def (pipeline-run-test/duplicate-build @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/build
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-    (.def (pipeline-run-test/duplicate-check @ funflow-check
-                                             check-name profile-ref
-                                             command-vector result-protocol
-                                             runtime-mode)
+    (.def (pipeline-run-test/duplicate-check @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/check
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-    (.def (pipeline-run-test/duplicate @ funflow-pipeline
-                                       pipeline-name checks)
+    (.def (pipeline-run-test/duplicate @ funflow-pipeline)
       pipeline-name: 'duplicate
       checks: (list pipeline-run-test/duplicate-build
-                    pipeline-run-test/duplicate-check))))
+                    pipeline-run-test/duplicate-check))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map pipeline-run-test/duplicate)
+        (list ':config pipeline-run-test/duplicate)))))
 
 ;; : [PooUserModuleSelection]
 (def pipeline-run-test-missing-dependency-case
-  (use-module funflow
-    :config
-    (.def (pipeline-run-test/missing-test @ funflow-check
-                                          check-name profile-ref
-                                          command-vector result-protocol
-                                          runtime-mode dependency-refs)
+  (let ()
+    (.def (pipeline-run-test/missing-test @ funflow-check)
       check-name: 'test
       profile-ref: 'ci/check
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(missing))
-    (.def (pipeline-run-test/missing-dependency @ funflow-pipeline
-                                                pipeline-name checks)
+    (.def (pipeline-run-test/missing-dependency @ funflow-pipeline)
       pipeline-name: 'missing-dependency
-      checks: (list pipeline-run-test/missing-test))))
+      checks: (list pipeline-run-test/missing-test))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map pipeline-run-test/missing-dependency)
+        (list ':config pipeline-run-test/missing-dependency)))))
 
 ;; : [PooUserModuleSelection]
 (def pipeline-run-test-cycle-case
-  (use-module funflow
-    :config
-    (.def (pipeline-run-test/cycle-build @ funflow-check
-                                         check-name profile-ref command-vector
-                                         result-protocol runtime-mode
-                                         dependency-refs)
+  (let ()
+    (.def (pipeline-run-test/cycle-build @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/build
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(test))
-    (.def (pipeline-run-test/cycle-test @ funflow-check
-                                        check-name profile-ref command-vector
-                                        result-protocol runtime-mode
-                                        dependency-refs)
+    (.def (pipeline-run-test/cycle-test @ funflow-check)
       check-name: 'test
       profile-ref: 'ci/check
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(build))
-    (.def (pipeline-run-test/cycle @ funflow-pipeline
-                                   pipeline-name checks)
+    (.def (pipeline-run-test/cycle @ funflow-pipeline)
       pipeline-name: 'cycle
       checks: (list pipeline-run-test/cycle-build
-                    pipeline-run-test/cycle-test))))
+                    pipeline-run-test/cycle-test))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map pipeline-run-test/cycle)
+        (list ':config pipeline-run-test/cycle)))))
 
 ;; : [PooUserModuleSelection]
 (def pipeline-run-test-unresolved-sandbox-case
-  (use-module funflow
-    :config
-    (.def (pipeline-run-test/unsafe @ funflow-check
-                                    check-name profile-ref command-vector
-                                    result-protocol runtime-mode)
+  (let ()
+    (.def (pipeline-run-test/unsafe @ funflow-check)
       check-name: 'unsafe
       profile-ref: 'ci/missing
       command-vector: '("true")
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-    (.def (pipeline-run-test/unresolved-sandbox @ funflow-pipeline
-                                                pipeline-name checks)
+    (.def (pipeline-run-test/unresolved-sandbox @ funflow-pipeline)
       pipeline-name: 'unresolved-sandbox
-      checks: (list pipeline-run-test/unsafe))))
+      checks: (list pipeline-run-test/unsafe))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map pipeline-run-test/unresolved-sandbox)
+        (list ':config pipeline-run-test/unresolved-sandbox)))))
 
 ;;; Bad-case presentations still include the CI profile module so graph errors
 ;;; and sandbox-profile errors remain distinguishable.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (pipeline-run-test-presentation funflow-case)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (append poo-flow-custom-my-module-cicd-module funflow-case)
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (append agentic-ai-lab-custom-my-module-cicd-module funflow-case)
+    (yuanxu-settings))))
 
 ;;; The assertions bind the user-facing result to both trace accounting and the
 ;;; concrete run rows, preventing future UI changes from reporting fake results.
 ;; : TestSuite
 (def user-interface-cicd-pipeline-run-test
-  (test-suite "poo-flow user interface cicd pipeline run"
-    (poo-flow-test-case "projects Funflow pipeline into handoff-ready run/result"
+  (test-suite "agentic-ai-lab user interface cicd pipeline run"
+    (yuanxu-test-case "projects Funflow pipeline into handoff-ready run/result"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (pipeline-run-test-config)))
              (trace (.ref presentation 'presentation-trace))
              (run-step
@@ -194,7 +188,7 @@
         (check-equal? (pipeline-run-test-ref result 'status) 'handoff-ready)
         (check-equal? (pipeline-run-test-ref result 'valid?) #t)
         (check-equal? (pipeline-run-test-ref result 'runtime-executed) #f)))
-    (poo-flow-test-case "blocks invalid pipelines with stable diagnostics"
+    (yuanxu-test-case "blocks invalid pipelines with stable diagnostics"
       (let* ((duplicate-presentation
               (pipeline-run-test-presentation
                pipeline-run-test-duplicate-case))

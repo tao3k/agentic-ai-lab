@@ -6,7 +6,7 @@
 ;;; Boundary: POO object-family syntax performance gate.
 ;;; Invariant: repeated stable object-family accessors are generated once.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,7 +17,7 @@
         (only-in :clan/poo/object .ref object<-alist)
         (only-in "../support/poo-performance-object-scenarios"
                  poo-performance-build-list)
-        :core/object-family/syntax)
+        :yuanxu/object-family/syntax)
 
 (export object-family-syntax-performance-test)
 
@@ -110,14 +110,14 @@
 
 ;; : (-> Alist Void)
 (def (object-family-syntax-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] poo-object-family-syntax ")
+  (display "[agentic-ai-lab-benchmark] poo-object-family-syntax ")
   (write (object-family-syntax-performance-receipt-summary receipt))
   (newline)
   (force-output))
 
 ;; : (-> Symbol TestingReceipt Void)
 (def (object-family-syntax-performance-display-phase phase receipt)
-  (display "[poo-flow-benchmark-phase] ")
+  (display "[agentic-ai-lab-benchmark-phase] ")
   (write phase)
   (display " ")
   (write (.ref receipt 'details))
@@ -131,7 +131,7 @@
 ;; : TestSuite
 (def object-family-syntax-performance-test
   (test-suite "object family syntax performance"
-    (poo-flow-test-case "keeps generated POO object-family projections inside benchmark contract"
+    (yuanxu-test-case "keeps generated POO object-family projections inside benchmark contract"
       (let-values (((construction-receipt objects construction-phase)
                     (testing-benchmark-run/result
                      'poo-object-family-syntax

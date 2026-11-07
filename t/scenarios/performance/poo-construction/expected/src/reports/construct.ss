@@ -4,14 +4,14 @@
 
 (import (only-in :clan/poo/object .o .ref))
 
-;;; Scenario expected: native POO is constructed once at the boundary and the
+;;; Scenario expected: POO is constructed once at the boundary and the
 ;;; hot loop reuses the materialized object shape.
 
 (def +report-profile+
   (.o (name 'construction-profile)
       (weight 7)
       (scale 11)
-      (policy 'native-poo)
+      (policy 'runtime-poo)
       (runtime 'control-plane)))
 
 (def (build-report-profile)

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-//! Native owner of strict, source-bound Cedar authorization.
+//! Runtime owner of strict, source-bound Cedar authorization.
 //!
 //! The normal public model is Gerbil POO. This crate receives its explicit
 //! runtime projection; it does not own a second composition language.

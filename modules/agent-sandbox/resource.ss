@@ -9,7 +9,7 @@
 ;;; Invariant: this module never starts a sandbox, opens ports, mounts paths, or
 ;;; resolves store items; it only preserves declarative resource intent.
 
-(import :poo-flow/modules/agent-sandbox/projection-syntax)
+(import :agentic-ai-lab/modules/agent-sandbox/projection-syntax)
 
 (export +sandbox-volume-modes+
         +sandbox-port-protocols+
@@ -117,7 +117,7 @@
   (eq? (sandbox-volume-binding-mode binding) 'read))
 
 ;;; Boundary: shared volume request data includes both neutral mode and Docker's
-;;; derived read-only flag so backend adapters can choose their native field.
+;;; derived read-only flag so backend adapters can choose their runtime field.
 ;; : (-> SandboxVolumeBinding Alist)
 (def (sandbox-volume-binding->request binding)
   (agent-sandbox-field-rows

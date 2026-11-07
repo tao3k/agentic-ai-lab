@@ -8,28 +8,28 @@
 
 (import (only-in :clan/poo/object .ref .slot? object?))
 
-(export +poo-flow-user-loop-engine-policy-extension-prototype-kind+
-        poo-flow-user-loop-engine-policy-extension-kind?
-        poo-flow-user-loop-engine-policy-extension-require-slot
-        poo-flow-user-loop-engine-policy-extension-require-alist-slot
-        poo-flow-user-loop-engine-policy-extension-require-symbol-list-slot
-        poo-flow-user-loop-engine-policy-extension-require-string-list-slot
-        poo-flow-user-loop-engine-policy-extension-require-maybe-symbol-slot
-        poo-flow-user-loop-engine-policy-extension-require-maybe-string-slot
-        poo-flow-user-loop-engine-policy-extension-require-maybe-integer-slot)
+(export +agentic-ai-lab-user-loop-engine-policy-extension-prototype-kind+
+        agentic-ai-lab-user-loop-engine-policy-extension-kind?
+        agentic-ai-lab-user-loop-engine-policy-extension-require-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-alist-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-symbol-list-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-string-list-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-symbol-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-string-slot
+        agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-integer-slot)
 
 ;;; The prototype kind is the cross-owner contract anchor shared by public POO
 ;;; prototypes and receipt lowering. Keeping it here prevents core/runtime
 ;;; owners from each defining their own incompatible policy-extension kind.
 ;; : Symbol
-(def +poo-flow-user-loop-engine-policy-extension-prototype-kind+
-  'poo-flow.loop-engine.policy-extension.prototype)
+(def +agentic-ai-lab-user-loop-engine-policy-extension-prototype-kind+
+  'agentic-ai-lab.loop-engine.policy-extension.prototype)
 
 ;;; Slot failure payloads include object, slot, expected contract, and value so
 ;;; downstream diagnostics can point at the POO declaration instead of a runtime
 ;;; manifest row.
 ;; : (-> Symbol Symbol Symbol Boolean Value Unit)
-(def (poo-flow-user-loop-engine-policy-extension-require-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
       object
       slot
       expected
@@ -48,18 +48,18 @@
 ;;; rows. They must stay proper alists so later projection can append them
 ;;; without reinterpreting arbitrary Scheme data.
 ;; : (-> Symbol Symbol Value Unit)
-(def (poo-flow-user-loop-engine-policy-extension-require-alist-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-alist-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    'alist
    (and (list? value) (andmap pair? value))
    value))
 
-;; poo-flow-user-loop-engine-policy-extension-require-symbol-list-slot
+;; agentic-ai-lab-user-loop-engine-policy-extension-require-symbol-list-slot
 ;;   : (-> Symbol Symbol Value Unit)
 ;;   | contract: validates a policy-extension slot whose value must be a proper
 ;;       list of symbols
@@ -69,23 +69,23 @@
 ;;       # Examples
 ;;
 ;;       ```scheme
-;;       (poo-flow-user-loop-engine-policy-extension-require-symbol-list-slot
+;;       (agentic-ai-lab-user-loop-engine-policy-extension-require-symbol-list-slot
 ;;        'loop-engine-policy-extension 'priority '(ci-sweeper))
 ;;       ;; => (void)
 ;;       ```
 ;;     %
-(def (poo-flow-user-loop-engine-policy-extension-require-symbol-list-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-symbol-list-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    '(list symbol)
    (and (list? value) (andmap symbol? value))
    value))
 
-;; poo-flow-user-loop-engine-policy-extension-require-string-list-slot
+;; agentic-ai-lab-user-loop-engine-policy-extension-require-string-list-slot
 ;;   : (-> Symbol Symbol Value Unit)
 ;;   | contract: validates a policy-extension slot whose value must be a proper
 ;;       list of strings
@@ -95,16 +95,16 @@
 ;;       # Examples
 ;;
 ;;       ```scheme
-;;       (poo-flow-user-loop-engine-policy-extension-require-string-list-slot
+;;       (agentic-ai-lab-user-loop-engine-policy-extension-require-string-list-slot
 ;;        'loop-engine-policy-extension 'denylist-paths '(".env"))
 ;;       ;; => (void)
 ;;       ```
 ;;     %
-(def (poo-flow-user-loop-engine-policy-extension-require-string-list-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-string-list-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    '(list string)
@@ -114,11 +114,11 @@
 ;;; Optional scalar slots are policy knobs: absent values mean "no opinion" and
 ;;; present values must remain symbolic so Marlin can match them as enums.
 ;; : (-> Symbol Symbol Value Unit)
-(def (poo-flow-user-loop-engine-policy-extension-require-maybe-symbol-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-symbol-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    '(maybe symbol)
@@ -128,11 +128,11 @@
 ;;; Optional string slots carry runtime-owned paths such as logs or inboxes;
 ;;; Scheme validates shape only and leaves path interpretation to Marlin.
 ;; : (-> Symbol Symbol Value Unit)
-(def (poo-flow-user-loop-engine-policy-extension-require-maybe-string-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-string-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    '(maybe string)
@@ -142,11 +142,11 @@
 ;;; Optional integer slots describe bounded retry or budget facts. The control
 ;;; plane records the number but does not execute scheduling from it.
 ;; : (-> Symbol Symbol Value Unit)
-(def (poo-flow-user-loop-engine-policy-extension-require-maybe-integer-slot
+(def (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-integer-slot
       object
       slot
       value)
-  (poo-flow-user-loop-engine-policy-extension-require-slot
+  (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
    object
    slot
    '(maybe integer)
@@ -156,7 +156,7 @@
 ;;; Prototype-kind matching is the inheritance gate for policy extensions: only
 ;;; POO objects extending the base prototype can become runtime receipts.
 ;; : (-> Value Symbol Boolean)
-(def (poo-flow-user-loop-engine-policy-extension-kind? value kind)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-kind? value kind)
   (and (object? value)
        (.slot? value 'kind)
        (eq? (.ref value 'kind) kind)))

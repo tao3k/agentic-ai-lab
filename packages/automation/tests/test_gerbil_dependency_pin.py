@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib.util
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -37,7 +38,45 @@ class GerbilDependencyPinTest(unittest.TestCase):
     def test_gerbil_package_is_the_direct_revision_authority(self) -> None:
         module = pin_module()
         pins = module.parse_package_pins((ROOT / "gerbil.pkg").read_text(encoding="utf-8"))
-        self.assertGreaterEqual(set(pins), {"asp-gerbil-scheme", "gerbil-parser"})
+        self.assertEqual(
+            list(pins),
+            ["gerbil-parser", "gerbil-scheme-rust", "orgize", "gerbil-ascent"],
+        )
+        self.assertNotIn("gerbil-poo", pins)
+        self.assertNotIn("asp-gerbil-scheme", pins)
+        owners = module.package_pin_owners(ROOT)
+        self.assertEqual(owners["asp-gerbil-scheme"][0], ROOT / "dev" / "gerbil.pkg")
+
+    def test_release_tag_projects_github_archive_prefix(self) -> None:
+        module = pin_module()
+        pins = module.parse_package_pins(
+            '(depend: ("github.com/tao3k/asp-gerbil-scheme@v0.1.2"))'
+        )
+        self.assertEqual(
+            pins["asp-gerbil-scheme"],
+            ("github.com/tao3k/asp-gerbil-scheme", "v0.1.2"),
+        )
+        projection = module.expected_projection(
+            "github.com/tao3k/asp-gerbil-scheme", "asp-gerbil-scheme", "v0.1.2"
+        )
+        self.assertEqual(projection["strip_prefix"], "asp-gerbil-scheme-0.1.2")
+        self.assertEqual(
+            projection["urls"],
+            ["https://github.com/tao3k/asp-gerbil-scheme/archive/v0.1.2.tar.gz"],
+        )
+
+    def test_root_and_dev_cannot_both_own_the_same_pin(self) -> None:
+        module = pin_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dev").mkdir()
+            declaration = '(depend: ("github.com/tao3k/asp-gerbil-scheme@v0.1.2"))'
+            (root / "gerbil.pkg").write_text(declaration, encoding="utf-8")
+            (root / "dev" / "gerbil.pkg").write_text(declaration, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "duplicate dependency authority"):
+                module.package_pin_owners(root)
+
+
 
     def test_repository_dependency_projection_is_closed(self) -> None:
         completed = subprocess.run(

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import tempfile
@@ -15,6 +16,78 @@ from packages.bazel import gerbil_project_environment_tool as environment_tool
 
 
 class GerbilProjectEnvironmentToolTest(unittest.TestCase):
+    def test_writable_runtime_preserves_producer_and_cleans_after_command_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            producer = root / "producer"
+            workspace = root / "workspace"
+            library = producer / ".gerbil" / "lib"
+            library.mkdir(parents=True)
+            # A library-only producer has no bin directory. Qualification must
+            # still be able to publish executables in its own writable prefix.
+            marker = library / "source.marker"
+            marker.write_text("compiled-source")
+            workspace.mkdir()
+            wrapper = root / "native-env"
+            wrapper.write_text('#!/bin/sh\nexec "$@"\n')
+            wrapper.chmod(0o755)
+            capture = root / "capture.json"
+            command = root / "command"
+            command.write_text(
+                '#!/usr/bin/env python3\n'
+                'import json, os\nfrom pathlib import Path\n'
+                'runtime = Path(os.environ["GERBIL_PATH"])\n'
+                '(runtime / "lib" / "scratch").write_text("mutable")\n'
+                'libraries = os.environ["GERBIL_LOADPATH"].split(os.pathsep)\n'
+                'assert (Path(libraries[1]) / "source.marker").read_text() == "compiled-source"\n'
+                '(runtime / "bin").mkdir(exist_ok=True)\n'
+                '(runtime / "bin" / "qualification-tool").write_text("owned")\n'
+                'Path(os.environ["CAPTURE"]).write_text(json.dumps(str(runtime)))\n'
+                'raise SystemExit(int(os.environ["COMMAND_STATUS"]))\n'
+            )
+            command.chmod(0o755)
+            arguments = [
+                "--gxi", str(root / "gxi"), "--runtime-scheme-env", str(wrapper),
+                "--project-root", str(producer), "--project-receipt", str(root / "receipt"),
+                "--dependency-root-marker", str(root / "dependency" / ".root"),
+                "--workspace", str(workspace), "--declaration-receipt", str(root / "declaration"),
+                "--runtime-directory", ".runtimes", "--", str(command),
+            ]
+            for status in (0, 7):
+                with self.subTest(status=status), patch.dict(
+                    os.environ, {"CAPTURE": str(capture), "COMMAND_STATUS": str(status)}
+                ):
+                    self.assertEqual(environment_tool.main(arguments), status)
+                    self.assertFalse(Path(json.loads(capture.read_text())).exists())
+                    self.assertEqual(marker.read_text(), "compiled-source")
+                    self.assertFalse((library / "scratch").exists())
+                    self.assertFalse((producer / ".gerbil" / "bin").exists())
+
+    def test_writable_runtime_includes_producer_programs(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            project = workspace / "producer"
+            program = project / ".gerbil" / "bin" / "build-publication-tools"
+            program.parent.mkdir(parents=True)
+            program.write_bytes(b"native program")
+            program.chmod(0o555)
+            program.parent.chmod(0o555)
+            args = argparse.Namespace(
+                project_root=str(project),
+                workspace=str(workspace),
+                runtime_directory=".runtimes",
+            )
+            try:
+                with environment_tool._runtime_prefix(args) as runtime:
+                    copied = runtime / "bin" / program.name
+                    self.assertEqual(copied.read_bytes(), program.read_bytes())
+                    self.assertTrue(os.access(copied, os.X_OK))
+                    copied.unlink()
+                self.assertTrue(program.is_file())
+                self.assertFalse(runtime.exists())
+            finally:
+                program.parent.chmod(0o755)
+
     def test_main_launches_command_with_declared_project_environment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -25,13 +98,13 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             workspace = root / "workspace"
             working_directory = workspace / "packages" / "python-runtime"
             gxi = root / "toolchain" / "bin" / "gxi"
-            native_scheme_env = root / "native-scheme-env"
+            runtime_scheme_env = root / "runtime-scheme-env"
             capture = root / "environment.json"
             capture_command = root / "capture-environment"
             declaration_receipt = root / "environment.receipt.json"
             project_receipt = root / "project.receipt.json"
 
-            (gerbil_path / "lib" / "poo-flow").mkdir(parents=True)
+            (gerbil_path / "lib" / "agentic-ai-lab").mkdir(parents=True)
             (dependency_project / ".gerbil" / "lib").mkdir(parents=True)
             dependency_marker.parent.mkdir(parents=True)
             dependency_marker.write_text("libraries\n", encoding="utf-8")
@@ -39,8 +112,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             gxi.parent.mkdir(parents=True)
             gxi.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
             gxi.chmod(0o755)
-            native_scheme_env.write_text("#!/bin/sh\nexec \"$@\"\n", encoding="utf-8")
-            native_scheme_env.chmod(0o755)
+            runtime_scheme_env.write_text("#!/bin/sh\nexec \"$@\"\n", encoding="utf-8")
+            runtime_scheme_env.chmod(0o755)
             declaration_receipt.write_text('{"schema":"declaration.v1"}\n')
             project_receipt.write_text('{"schema":"project.v1"}\n')
             capture_command.write_text(
@@ -51,9 +124,9 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                 "  'gerbil_path': os.environ['GERBIL_PATH'],\n"
                 "  'gerbil_loadpath': os.environ['GERBIL_LOADPATH'],\n"
                 "  'path': os.environ['PATH'],\n"
-                "  'declaration': os.environ['POO_FLOW_GERBIL_ENV_RECEIPT'],\n"
-                "  'project': os.environ['POO_FLOW_GERBIL_PROJECT_RECEIPT'],\n"
-                "  'runtime': os.environ['POO_FLOW_GERBIL_ENV_RECEIPT_JSON'],\n"
+                "  'declaration': os.environ['AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT'],\n"
+                "  'project': os.environ['AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT'],\n"
+                "  'runtime': os.environ['AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON'],\n"
                 "  'cwd': os.getcwd(),\n"
                 "}))\n",
                 encoding="utf-8",
@@ -65,8 +138,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                     [
                         "--gxi",
                         str(gxi),
-                        "--native-scheme-env",
-                        str(native_scheme_env),
+                        "--runtime-scheme-env",
+                        str(runtime_scheme_env),
                         "--project-root",
                         str(project_root),
                         "--project-receipt",

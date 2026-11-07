@@ -6,19 +6,16 @@
 ;;; Boundary: module-selection syntax and declaration-contract admission.
 ;;; Invariant: contract qualification does not load profiles or root config.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection
-                 poo-flow-user-module-selection-flags
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection->alist
-                 poo-flow-user-module-when
-                 poo-flow-modules-system-use-module)
-        (only-in :poo-flow/src/user-interface/module-selection-contract
-                 poo-flow-require-use-module-contract!
-                 poo-flow-use-module-contract-validation
-                 poo-flow-use-module-contract-validation-valid?))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection
+                 yuanxu-user-module-selection-flags
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection->alist
+                 yuanxu-user-module-when)
+        (only-in :yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module agentic-ai-lab-product-selection-admit! agentic-ai-lab-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)
 
@@ -27,24 +24,24 @@
     (if entry (cdr entry) #f)))
 
 (def user-interface-config-syntax-contract-test
-  (test-suite "poo-flow user interface config syntax contract"
-    (poo-flow-test-case "builds module selections and conditional gates"
+  (test-suite "agentic-ai-lab user interface config syntax contract"
+    (yuanxu-test-case "builds module selections and conditional gates"
       (let ((nono-selections
-             (poo-flow-modules-system-use-module
+             (agentic-ai-lab-product-use-module
               'nono-sandbox
               '(+nono +doctor)))
             (flow-selection
-             (poo-flow-user-module-selection 'flow 'funflow '(+dag))))
-        (check-equal? (poo-flow-user-module-selection-key
+             (yuanxu-user-module-selection 'flow 'funflow '(+dag))))
+        (check-equal? (yuanxu-user-module-selection-key
                        (car nono-selections))
                       '(sandbox . nono-sandbox))
-        (check-equal? (poo-flow-user-module-selection-flags
+        (check-equal? (yuanxu-user-module-selection-flags
                        (car nono-selections))
                       '(+nono +doctor))
-        (check-equal? (poo-flow-user-module-when #f
+        (check-equal? (yuanxu-user-module-when #f
                        (sandbox cubeSandbox +doctor))
                       '())
-        (check-equal? (poo-flow-user-module-selection->alist flow-selection)
+        (check-equal? (yuanxu-user-module-selection->alist flow-selection)
                       '((group . flow)
                         (module . funflow)
                         (key flow . funflow)
@@ -52,30 +49,30 @@
                         (entrypoint . #f)
                         (flags +dag)
                         (enabled? . #t)))))
-    (poo-flow-test-case "validates use-module declarations before projection"
+    (yuanxu-test-case "validates use-module declarations before projection"
       (let* ((valid-selections
-              (poo-flow-modules-system-use-module
+              (agentic-ai-lab-product-use-module
                'nono-sandbox
                '(+nono +doctor)))
              (valid-validation
-              (poo-flow-use-module-contract-validation
+              (agentic-ai-lab-product-selection-validation
                'nono-sandbox
                valid-selections))
              (invalid-selection
-              (poo-flow-user-module-selection 'custom 'workflow '())))
+              (yuanxu-user-module-selection 'custom 'workflow '())))
         (check-equal? (syntax-contract-alist-ref valid-validation 'valid) #t)
         (check-equal? (syntax-contract-alist-ref valid-validation 'module)
                       'nono-sandbox)
         (check-equal?
          (syntax-contract-alist-ref valid-validation 'selection-count)
          1)
-        (check-equal? (poo-flow-require-use-module-contract!
+        (check-equal? (agentic-ai-lab-product-selection-admit!
                        'nono-sandbox
                        valid-selections)
                       valid-selections)
         (check-equal?
-         (poo-flow-use-module-contract-validation-valid?
-          (poo-flow-use-module-contract-validation
+         (yuanxu-use-module-contract-validation-valid?
+          (agentic-ai-lab-product-selection-validation
            'workflow
            (list invalid-selection)))
          #f)
@@ -83,7 +80,7 @@
          (with-catch
           (lambda (_) #t)
           (lambda ()
-            (poo-flow-require-use-module-contract!
+            (agentic-ai-lab-product-selection-admit!
              'nono-sandbox
              '(not-a-selection))
             #f))

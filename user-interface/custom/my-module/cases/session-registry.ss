@@ -7,12 +7,12 @@
 ;;; Invariant: registry rows describe project/root/child address space only;
 ;;; Scheme does not retain live runtime state.
 
-(import :poo-flow/modules/session/syntax)
+(import :agentic-ai-lab/modules/session/syntax)
 
-(export poo-flow-custom-my-module-session-registry-case)
+(export agentic-ai-lab-custom-my-module-session-registry-case)
 
-(def poo-flow-custom-my-module-session-registry-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-registry-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-registry-case
     (metadata (source . user-interface)
               (case . session-registry))
