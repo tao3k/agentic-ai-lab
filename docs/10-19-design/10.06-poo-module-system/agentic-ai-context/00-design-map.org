@@ -75,6 +75,88 @@ consolidation. They are restored here as inherited design, not newly invented
 features. The user's clarification emphasizes the overall system meaning of
 Context and the short-/long-term knowledge distinction within it.
 
+** Downstream build attribution
+
+Run =just test-file t/yuanxu-context-memory-downstream-test.ss= with
+the compiled Core prerequisites. The gate exercises fresh base,
+=+memory= and =-memory= builds, independent first reads, hot reuse,
+withdrawn cleanup and the Feature refusal. Its aggregate deadline is
+120 seconds. The OpenTofu runtime gate uses a different selected graph.
+
+For process attribution, record =time->seconds= of =current-time= before
+and after the fixture's existing Ops call. Compare those timestamps with
+the =BUILD-STAGE main enter= and =main return= epoch fields. Record the
+Feature's =library-spec= projection, the actual =... compile= targets,
+and the first =.get= in each independent runtime. Use the same commands,
+source checks and deadlines on fresh output prefixes.
+
+Compare the full sets of compiler target identities. The base and
+withdrawn sets must match. The enabled delta can include same-package
+imports owned outside the Memory directory. Treat a hot Make result
+with zero compiled targets as a separate observation from how much
+Interface projection and source admission still ran in that process.
+Use =BUILD-EXPANSION= and =BUILD-ACCOUNT= to compare the Interface
+projection and Make in each new process. The expansion count measures
+new Gerbil contexts, including those supplied by installed
+dependencies. It does not count compiler invocations or prove that a
+source file was expanded twice.
+
+Package windows read the native Gerbil checkout tree under =gerbil-path=.
+The source reader has no reason to initialize the package manager or to
+create directories. Installation, checkout placement, pinning, and compiled
+library resolution remain Gerbil's responsibilities. Compare any package
+root experiment outside the Graph and report its loader IDs separately
+from Gerbil Contexts and native Make targets.
+
+The Base control removes the package manager and its network imports
+from the =std-make-spec= inventory while preserving the registered
+projection Context count and exact compiler target set. Compare wall
+times only with paired host conditions and keep the standalone control
+separate from the full Memory gate.
+
+On macOS, pair an uninstrumented base build with a fresh base build in
+which =sample= attaches to the descendant running =gxi build.ss
+compile= immediately after =BUILD-STAGE main return=. The =main= return
+does not end the command. The sample can distinguish time in Gambit's
+=___cleanup_dyn_module= and dyld's =dlclose= from time in the parent
+supervisor. Keep the sample and host load with the local logs. A sample
+is evidence for the sampled interval only.
+To isolate hot projection, build an enabled fixture from empty outputs,
+then build again in a new process against those outputs. Attach the
+sampler during the second =library-spec= span of that hot build. The
+first span belongs to the consumer library; the second follows the
+Feature Interface. Separate samples in Gambit's dynamic loading and
+GC from the wall time of the entire span.
+
+To attribute loaded code to its owner, capture Gerbil's =list-modules=
+immediately before and after the existing =std-make-spec= call in a
+diagnostic copy of the consumer build script. Compare the sets of
+module IDs and product paths for fresh base and enabled prefixes.
+Keep phase-suffixed module IDs distinct and compare the native compiler
+target sets separately. The Orgize facade imports both runtime query
+values and authoring syntax. Inspect the installed interfaces of those
+imports to identify their preludes and distinguish the Parser phase
+closure from the Lab targets that must be compiled.
+
+The two Orgize syntax modules can compile with =:gerbil/core= and
+preserve their generated import and export declarations. This change
+alone leaves the observed phase-module set unchanged. Import
+=:gerbil-parser/graph-query-support= and
+=:gerbil-parser/graph-projection-support= separately through Gerbil's
+=core-import-module=, taking a fresh inventory after each import. The
+second facade imports the projection generator along with the POO graph
+values. The Orgize =graph-shape= and =value-types= modules use only
+bindings from the graph value owner. An isolated build that resolves
+those bindings from their defining module preserves the Lab compiler
+target set and avoids loading the generator's Parser phase closure.
+The isolated build still uses the normal scope and Make boundaries.
+Package integration requires a maintained upstream binding surface
+and a complete downstream gate against the pinned products.
+
+Use the full unmodified gate for qualification. A successful single
+build, first-read control, or resumed compilation cannot establish a
+cold pass. Record failed rounds alongside successful ones.
+
 * Connected process
 
 [[file:03-information-to-recall.org][Information to recall]] maps these existing contracts into a connected activity
