@@ -141,6 +141,10 @@ def run_external_module(
                 "external Agentic AI Lab export unexpectedly contains .gerbil"
             )
 
+        # Bazelisk resolves its version from the invoking workspace, not from
+        # the dependency's local override. Qualify both roots on the same pin.
+        shutil.copyfile(exported / ".bazelversion", consumer / ".bazelversion")
+
         _write_consumer_module(consumer, exported, include_override=False)
         missing_override = _run_bazel(
             config,

@@ -32,8 +32,12 @@ class ExternalModuleTest(unittest.TestCase):
         root = Path(self.temporary.name)
         self.log = root / "bazel-args.jsonl"
         self.fake_bazel = root / "fake_bazel.py"
+        bazel_version = (REPO_ROOT / ".bazelversion").read_bytes()
         self.fake_bazel.write_text(
-            """import json, os, sys
+            f"""import json, os, sys
+from pathlib import Path
+if Path(".bazelversion").read_bytes() != {bazel_version!r}:
+    raise SystemExit("external consumer did not select the pinned Bazel version")
 with open(os.environ['AGENTIC_AI_LAB_EXTERNAL_BAZEL_ARGS_LOG'], 'a', encoding='utf-8') as stream:
     stream.write(json.dumps(sys.argv[1:]) + '\\n')
 raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:]) else 0)
