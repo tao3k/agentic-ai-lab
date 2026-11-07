@@ -7,13 +7,9 @@
 ;;; Config owns inert policy/contract values shared with authoring. Orgize query
 ;;; execution remains available from this Feature interface and its own owner.
 
-(import "types.ss"
-        "funs.ss"
-        "config.ss"
+(import "config.ss"
         "org-selection.ss"
         "session-selection.ss")
-(export (import: "types.ss")
-        (import: "funs.ss")
-        (import: "config.ss")
+(export (import: "config.ss")
         (import: "org-selection.ss")
         (import: "session-selection.ss"))

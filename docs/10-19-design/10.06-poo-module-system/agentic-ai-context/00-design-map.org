@@ -163,6 +163,21 @@ teardown and parent collection. A separate native sample identified
 Gambit's dynamic-module cleanup in the child, without attributing the
 entire interval to that stack.
 
+A separate base-only diagnostic followed the child process tree through
+the existing action watchdog. It observed the build =gxi= exit about
+2.06 seconds after =main= returned and the parent action complete at
+2.61 seconds. Process polling bounds the observation resolution. The
+diagnostic locates most of this interval before the build interpreter
+exits and is separate from the aggregate acceptance run.
+
+An independent base first-read diagnostic observed seven native
+compiler demand roots. Traversing their native Contexts reached 295
+of the 343 Contexts in the reader catalogue. Neither Funflow's Flow
+and Scenario roots nor the JSON Schema receipt and validation roots
+were in that demand closure. This measures one base input. The
+catalogue still authenticates the canonical Context before publication
+callbacks, and other modules can demand these roots.
+
 Memory's Org selection uses seven bindings from Orgize's Element Types,
 values, and query modules. Each binding is the same native procedure as
 the corresponding Lab facade export. Keep the facade for clients that
@@ -177,6 +192,26 @@ The Org selection suite passed against products from a separate
 40-target build. The aggregate run under higher host load finished all
 three first reads, started the hot build at 118.99 seconds, and timed
 out without an acceptance receipt.
+
+On the same inputs a later enabled build again compiled 40 targets and
+registered 389 Make Contexts. Its main-process CPU was 9.16 seconds
+versus 9.12 seconds in the first run, while the parent action increased
+from 28.62 to 46.72 seconds. The main-return-to-parent interval grew
+from 3.67 to 10.65 seconds. Main-process CPU excludes compiler
+children, so this comparison distinguishes unchanged counted work
+from elapsed delay without assigning all of that delay to scheduling.
+That later aggregate run was stopped after the withdrawn build logged
+=main return= and before its parent action reported completion.
+
+The Memory Interface no longer imports and reexports its empty
+=types.ss= and =funs.ss= placeholders. The files publish no bindings
+and contain no initializers. The native cold enabled build now contains
+38 targets. Its difference from the preceding 40-target build consists
+of exactly those two files. The module projection census dropped from
+240 to 238; Make reported 389 Contexts in both builds. Memory Core and
+Org selection passed using the newly compiled products. The existing Memory configuration,
+Org selection and Session selection exports still determine the
+public dependency closure.
 
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
