@@ -1171,6 +1171,31 @@ reported 1.169 and 1.284 s CPU. All six numbered calls passed the
 three-second gate in this cohort. The earlier failed cohorts remain
 part of the stability evidence.
 
+*** Realized package callback boundary
+
+A realized package object can replace its =sources-current= procedure
+without changing its selected Graph identity. In the fixed B fixture,
+bind a derived package object through the ordinary =.with-packages=,
+warm its contribution Context, then edit the selected =config.ss= from
+the replacement procedure before calling the original source guard.
+The original linker returned successfully because both guards consumed
+the enclosing window's earlier file bytes.
+
+Yuanxu =6ebf37d= closes that window around the package getter and
+callback and validates the selected sources again before returning.
+The real OpenTofu probe refuses the edit. The Core regression also
+refuses a callback that edits the source and returns without invoking
+the original guard. Run that regression with
+=just test-file t/module-build-graph-test.ss= from Yuanxu.
+
+In one paired fixed B comparison using the standard qualification
+above, the original linker took 2.294, 2.183 and 2.233 s. The revised
+linker took 2.428, 2.417 and 2.410 s. Both cohorts retained the B
+execution digest, fourteen Nix checks and six OpenTofu commands.
+The independent accounting round recorded 3,246 and 5,524 file reads
+respectively. This is a currentness correction with an observed cost.
+The three measured calls do not establish a stable three-second bound.
+
 *** Build and selection gate follow-up
 
 On Yuanxu =27a666e=, the observer-free 10,000-owner Linux Case timed
