@@ -64,14 +64,25 @@
             (lambda () (close-input-port reader))))))))
 
 (def (compile-events output)
+  (def worker-prefix "... execute compile job ")
   (call-with-input-string output
     (lambda (port)
-      (let loop ((events '()))
+      (let loop ((events '()) (target-pending? #f))
         (let (line (read-line port))
-          (cond ((eof-object? line) (list-sort string<? events))
+          (cond ((eof-object? line)
+                 (when target-pending? (error "missing target in native Make output"))
+                 (list-sort string<? events))
+                ((string-prefix? worker-prefix line)
+                 (loop events target-pending?))
+                (target-pending? (loop (cons line events) #f))
                 ((string-prefix? "... compile " line)
-                 (loop (cons (substring line 12 (string-length line)) events)))
-                (else (loop events))))))))
+                 (let (target (substring line 12 (string-length line)))
+                   ;; The parallel compiler may print a complete job record
+                   ;; between Make's prefix and its target.
+                   (if (string-prefix? worker-prefix target)
+                     (loop events #t)
+                     (loop (cons target events) #f))))
+                (else (loop events #f))))))))
 (def (interface-products directory (prefix ""))
   (list-sort string<?
     (foldl (lambda (name found)
@@ -87,6 +98,9 @@
 (def yuanxu-deployment-downstream-test
   (test-suite "Independent downstream selects OpenTofu by deployment category"
     (test-case "first business read, selected native build and isolated cleanup"
+      (check-equal? (compile-events
+                      "... compile ... execute compile job (compile-file example.scm)\nexample/target\n")
+                    '("example/target"))
       ;; The native harness has finished importing the suite. Report that
       ;; boundary before beginning a separate source projection phase.
       (execution-progress! 'lab-deployment-suite 1)
