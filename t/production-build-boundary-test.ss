@@ -34,8 +34,12 @@
       (check-equal? (hash-ref counts '(calls candidate-read) 0) 0)
       (check-equal? (hash-ref counts '(calls scope-factory) 0) 0)
       (check-equal? (eq? agentic-ai-lab.build-modules.exports agentic-ai-lab.init.exports) #f))
-    (test-case "init owns selection and is not a library build root"
+    (test-case "init owns selection and Feature Interfaces enter through it"
       (check-equal? (member "init.ss" agentic-ai-lab-public-build-roots) #f)
+      (check-equal?
+        (member "modules/ai-agentic-context/features/memory/interface.ss"
+                agentic-ai-lab-public-build-roots)
+        #f)
       ;; Obtaining the compiler projection remains inert; invoking it belongs
       ;; to the build entry, with the original selected-source admission.
       (check-equal? (procedure? (.get agentic-ai-lab.init.exports std-make-spec)) #t))

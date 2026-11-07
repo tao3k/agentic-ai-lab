@@ -11,13 +11,13 @@
   ;; Retained package-library entries migrate only after selected-owner coverage.
   ;; Nix's Interface/roles/public progress library now come from its selected
   ;; publication and Build role. Core closes native imports without duplicates.
+  ;; Context's Memory Interface is collected by the selected Feature.
   ;; This ordinary public library has a native package root, not a Module
   ;; selection request. Do not initialize the application source registry and
   ;; its collection/policy objects to reconstruct this constant entrypoint.
   ;; Gerbil still discovers every transitive source through the roots below.
   '("modules/workflow/scenario/configuration/declaration-case.ss"
     "modules/agent-sandbox/interface.ss"
-    "modules/ai-agentic-context/features/memory/interface.ss"
     "modules/ai-agentic-context/funs.ss"
     "modules/authorization/interface.ss"
     "modules/authorization/providers/cedar/interface.ss"
