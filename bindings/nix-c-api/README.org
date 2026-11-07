@@ -392,6 +392,122 @@ the hot B build compiled zero. The B test process verified the first
 business read from B's compiled products. Cleaning A preserved B's
 digests. These build and deployment checks are outside the timing rows.
 
+** Fixed B rerun
+
+The rerun used Lab =3b710f85=, Yuanxu =4d6c681=, gerbil-poo =v0.1.3=,
+and Gerbil =1cfb032= on Gambit =ea114fc=. The initial B build timed out
+after starting compilation. A separate 44.54-second invocation completed
+the remaining targets through =gerbil build=. The execution digest
+=becbf742f6605335307a00ad4ddfecd89675be77f0bde56c86af198eb982fbdd=
+matched before and after each invocation below. All rows used Null 3.2.4
+from the same store output and the same locked Nix package set.
+
+| Process        | Complete .run (s)  | Nix checks (s)     | Six OpenTofu processes (s) |
+|----------------+--------------------+--------------------+----------------------------|
+| Paired         | 5.701, 3.241, 3.356 | 0.340, 0.151, 0.243 | 1.179, 1.009, 0.768         |
+| Standalone CLI | 3.135, 3.384, 3.601 | 1.007, 1.105, 1.051 | 0.543, 0.585, 0.802         |
+| Paired repeat  | 3.318, 2.885, 2.678 | 0.266, 0.123, 0.130 | 0.805, 0.628, 0.579         |
+
+Both paired processes failed the three-second gate and passed preflight
+and return-currentness controls. Every timed row performed 14 Nix
+checks. The paired path used 13 fresh EvalStates on the worker's Store
+and a final CLI check. Scheme CPU in paired rounds was 1.769–2.067 s.
+The six-task Scheme dispatch took 120–200 ms across the three processes,
+and real Ops launches took 220–253 ms. Each accounting round recorded
+3,246 source reads, 2,782 link checks and 130 metadata replays. The
+paired replay spans took 1.492–1.715 s inclusive of their checkpoints.
+
+The ordinary service regression now uses the default source reader without
+installing a source observer. Its watchdog records completed Nix queries
+through the existing completion hook. Explicit tracing can still install a
+source observer. The success, source-expiry cleanup and command-failure
+cases passed individually against this B with the original watchdog limits.
+The separate Flake case also passed with real AWS and Null inputs. It
+rejected a changed transitive input and an implicit lock update, preserved
+the lock bytes, and left the parent's provider cache isolated. The
+downstream deployment case passed both fresh builds, zero-compilation
+reuse, cleanup isolation and the first business read in its independent
+B process. That case observed 45 selected targets with its installed
+prerequisites; its Scheme assertions compare the exact target identities
+with both output directories.
+
+The pinned POO release already reuses the issued traversal and receiver set.
+Its public =reobserve-slot-reads!= still authenticates the traversal before
+work, checks each record after the work callback, and authenticates the
+traversal again at return. Yuanxu's protected source checkpoint uses this
+entry with observation suppressed. Moving the checkpoint to a replay visitor
+would start it before the complete live traversal check. Any reduction in
+those passes needs a POO operation that preserves full preflight, receiver
+protection, diagnostic order and the final authentication.
+
+An isolated native probe used the pinned release's private
+=call-with-issued-reads= to compare the existing observer-suppressed
+delivery with one checkpoint between full live preflight and the native
+return pass. Both paths rejected stale records before work, rejected a
+receiver write before it changed either the child or parent, and caught
+a checker replacement before return. The empty traversal ran the
+checkpoint once. An enclosing observer received no records. With
+1,024 authentic roots and 40 iterations per sample, control/candidate/
+control took 452/301/390 ms of CPU. This synthetic comparison measures
+the replay operation only. The private entry remains confined to the
+probe and the Lab runtime still uses the released public API.
+
+The same candidate was then compiled as an isolated Yuanxu observations
+module and compared with a separately compiled control of the same module.
+The qualification printed the loaded observations digest and the same
+OpenTofu execution digest in every process. All three processes used the
+paired worker and the same admitted provider. Only the observations module
+changed between processes.
+
+| Module variant | Complete .run (s)  | Scheme CPU (s)     | Replay span (s) |
+|----------------+--------------------+--------------------+-----------------|
+| Control        | 3.366, 3.017, 3.014 | 1.854, 1.988, 1.989 |           1.495 |
+| Candidate      | 2.466, 2.292, 2.415 | 1.633, 1.512, 1.594 |           1.169 |
+| Control repeat | 2.395, 2.496, 2.434 | 1.637, 1.715, 1.663 |           1.340 |
+
+All three processes retained the preflight and return-currentness controls,
+14 Nix checks and six OpenTofu commands per timed round. Each diagnostic
+round retained 3,246 physical source reads, 130 metadata replays, and
+255,083 visits to their signed traversals. The candidate lowered measured
+replay CPU from 1.335–1.473 s to 1.164 s. The final control was also below
+three seconds in every round, with overlapping wall times. This establishes
+less replay work in the experiment and leaves the production timing gate
+open.
+
+A second isolated build exported =call-with-current-slot-reads= from the
+pinned POO source, through its existing Object and MOP modules. It calls
+the checkpoint once after full preflight and leaves return verification
+to the same native frame. It delivers no observations. The public probe
+preserved multiple return values, the original raised condition, and
+write protection across the checkpoint. All 25 existing POO issued-read
+cases passed with the candidate library. A separately compiled Yuanxu
+consumer imports only this public entry for ordinary checkpoint work.
+Its accounting path retains the released visitor so existing counts
+remain comparable. That consumer passed a fixed-B product invocation at
+2.751, 2.270 and 2.260 seconds. All rounds kept 14 Nix checks and six
+OpenTofu commands. The same process passed preflight refusal and return
+currentness. These builds live outside the package pins.
+
+A follow-up ran three new processes on the released POO and Yuanxu
+libraries, with no experiment overlay. Every process loaded the same
+OpenTofu execution digest and the released Yuanxu observations digest
+=77304672ed2000ef58598abe8c4a423b5634a1ac8792e19989c80ba221a6f2aa=.
+The complete runtimes were 2.665/2.391/2.513, 2.478/2.404/2.851 and
+3.156/2.789/2.639 s. The first two processes passed, and the third failed
+the unchanged three-second assertion on its first round. That round
+spent 1.853 s of Scheme CPU, 0.189 s in Nix checks and 0.912 s across
+the six OpenTofu children. Each process passed both refusal controls.
+
+A separate diagnostic process measured source accounting on the very
+first =.run= and again on its next invocation. Both ran 130 metadata
+replays, visited 255,083 signed records and performed 3,246 physical
+source reads across 45 windows. Replay CPU was 1.429 s on the first
+invocation and 1.328 s on the second. Complete wall times were 3.377 s
+and 2.560 s, with 1.222 s and 0.631 s inside the same six OpenTofu
+commands. The extra child time was concentrated in =init= and
+=validate=. These are instrumented timings. The three-second gate
+still uses its separate, uninstrumented rounds.
+
 ** Local Actor control
 
 The same fixed B and focused Core products ran the same Null recipe

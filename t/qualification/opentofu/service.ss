@@ -9,11 +9,12 @@
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
         (only-in :yuanxu/observability/testing-case yuanxu-test-checkpoint)
         (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/module-system/source/admission module-source-read current-module-source-observer)
+        (only-in :yuanxu/module-system/source/admission module-source-read)
         (only-in :yuanxu/ops/selected-packages SelectedPackages.))
 (export call-with-service write-source rejects? empty-state?)
 
@@ -44,17 +45,17 @@
     (lambda () (action) #f)))
 
 ;; Each fixture has its own completed work, even in a shared Harness.
-(def (make-stage-observer directory)
+(def (make-service-progress-observer directory)
   (def completed 0)
   (def key (cons 'opentofu directory))
-  (lambda (event _amount)
-    (when (and (pair? event)
-               (memq (car event) '(link-stage-start link-stage-end
-                                  package-stage-start package-stage-end)))
-      (when (memq (car event) '(link-stage-end package-stage-end))
-        (set! completed (1+ completed))
-        (execution-progress! key completed))
-      (displayln "PHASE " event " at=" (real-time)) (force-output))))
+  (def caller-observer (current-nix-process-completion-observer))
+  ;; Read-only CLI queries may emit only informational records. Report their
+  ;; actual completion without installing an open Module System observer.
+  (lambda (command seconds completed?)
+    (when caller-observer (caller-observer command seconds completed?))
+    (when completed?
+      (set! completed (1+ completed))
+      (execution-progress! key completed))))
 
 ;; Read real state after destroy; command success alone is not cleanup evidence.
 (def (empty-state? directory)
@@ -67,17 +68,16 @@
 ;; not retain a POO dependency recorder over an entire operational workflow.
 ;; Core's fixture protocol owns cancellation and release of the std/io resource.
 (def (call-with-service action instantiate: (instantiate-command #f)
-                        observe-stages?: (observe-stages? #t))
+                        report-progress?: (report-progress? #t))
   ;; The init declaration owns the same package kernel as the library targets
   ;; published by Nix and OpenTofu. The isolated roles have their own window.
   (call-with-temporary-file-name (path-expand ".opentofu-init-" (current-directory))
-    (cut call-with-service-at action instantiate-command observe-stages? <>)
+    (cut call-with-service-at action instantiate-command report-progress? <>)
     suffix: ".ss"))
 
-(def (call-with-service-at action instantiate-command observe-stages? init-path)
+(def (call-with-service-at action instantiate-command report-progress? init-path)
   (call-with-yuanxu-fixture Workspace
     (lambda (root-dir)
-      (def stage-observer (and observe-stages? (make-stage-observer root-dir)))
       (def project (current-directory))
       (def maintained (path-expand "modules/services/opentofu" project))
       (def service-dir (path-expand "modules/services/opentofu" root-dir))
@@ -122,22 +122,18 @@
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)
       (def selected-view
-        (parameterize ((current-module-source-observer stage-observer))
-          (yuanxu-load-modules init-path
-            module-view: (lambda (owner scope!) (.o identity: owner scope: (scope!))))))
+        (yuanxu-load-modules init-path
+          module-view: (lambda (owner scope!) (.o identity: owner scope: (scope!)))))
       (def original-text (module-source-read config-path))
-      (action
+      (def service
         (.o config: config-path original: original-text
           .source-scope:
-          (lambda ()
-            (parameterize ((current-module-source-observer stage-observer))
-              (.get selected-view modules modules services opentofu scope)))
+          (lambda () (.get selected-view modules modules services opentofu scope))
           .prepare:
           (lambda ()
             (def packages
-              (parameterize ((current-module-source-observer stage-observer))
-                (.call (.cc SelectedPackages. 'selection selected-view
-                            'directory (path-expand "packages" root-dir)) .run)))
+              (.call (.cc SelectedPackages. 'selection selected-view
+                          'directory (path-expand "packages" root-dir)) .run))
             (def ready-view (.call selected-view .with-packages packages))
             (def ready-value (.get ready-view modules modules services opentofu scope))
             (def recipe-value (.get ready-value Null))
@@ -145,4 +141,9 @@
           .workspace:
           (lambda (name)
             (let (directory (path-expand name root-dir))
-              (create-directory directory) directory)))))))
+              (create-directory directory) directory))))
+      (if report-progress?
+        (parameterize
+            ((current-nix-process-completion-observer (make-service-progress-observer root-dir)))
+          (action service))
+        (action service)))))

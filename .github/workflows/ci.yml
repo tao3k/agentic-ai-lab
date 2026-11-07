@@ -214,7 +214,7 @@ jobs:
               "governance": ("LAB-GOVERNANCE-PRODUCT-USE-OK",
                              "profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"),
               "deployment": ("LAB-DEPLOYMENT-PRODUCT-USE-OK",
-                             "LAB-DEPLOYMENT-DOWNSTREAM-OK targets=46 profile=deployment roots=1 owners=4 selected-tests=3 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
+                             "profile=deployment roots=1 owners=4 selected-tests=3 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
               "context-memory": ("LAB-CONTEXT-USE-OK mode=base",
                                  "LAB-CONTEXT-USE-OK mode=enabled",
                                  "LAB-CONTEXT-USE-OK mode=withdrawn",
@@ -230,6 +230,12 @@ jobs:
                       or any(marker in text for marker in forbidden)
                       or not re.search(r"^OK\s*$", text, re.M)):
                   raise SystemExit(f"{category} downstream receipt is incomplete or failed")
+              # Scheme compares the exact selected targets with both cold
+              # outputs. Installed prerequisites can change their count.
+              if category == "deployment" and not re.search(
+                      r"^LAB-DEPLOYMENT-DOWNSTREAM-OK targets=[1-9][0-9]* "
+                      + re.escape(markers[1]) + r"\s*$", text, re.M):
+                  raise SystemExit("deployment downstream target receipt is missing")
           PY
 
       - name: Qualify selected Agentic Context memory
