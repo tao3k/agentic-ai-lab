@@ -65,7 +65,7 @@ test-file path observe="false":
       trace) options=(-D yuanxu-module-test-observation,yuanxu-module-test-trace) ;;
       *) echo 'observe must be false, true, or trace' >&2; exit 64 ;;
     esac
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "${options[@]}" "{{ path }}"
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss ${options[@]+"${options[@]}"} "{{ path }}"
 
 # Run performance Suites serially through the same official test entry.
 [group('test')]
