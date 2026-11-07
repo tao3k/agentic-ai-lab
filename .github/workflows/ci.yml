@@ -176,16 +176,10 @@ jobs:
             .gerbil/bin
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
-      - name: Build the development library
+      - name: Link the Lab source package for downstream qualification
         run: |
           gerbil env gerbil pkg link github.com/tao3k/agentic-ai-lab "$GITHUB_WORKSPACE"
-          GERBIL_BUILD_VERBOSE=1 gerbil env just build-library
-
-      - name: Install optional development policy dependencies
-        run: |
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
-          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
-          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
+          mkdir -p dev/.gerbil/lib
 
       - name: Reject Core build input context regressions
         working-directory: core
@@ -197,6 +191,8 @@ jobs:
           just test-file t/module-publication-test.ss
           just test-file t/module-testing-source-admission-test.ss
 
+      # Downstreams build their own selected products. Run this gate before
+      # the development library can supply precompiled Lab modules.
       - name: Qualify real selected downstreams
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
@@ -238,6 +234,15 @@ jobs:
                       + re.escape(markers[1]) + r"\s*$", text, re.M):
                   raise SystemExit("deployment downstream target receipt is missing")
           PY
+
+      - name: Build the development library
+        run: GERBIL_BUILD_VERBOSE=1 gerbil env just build-library
+
+      - name: Install optional development policy dependencies
+        run: |
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
+          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
 
       - name: Qualify selected Agentic Context memory
         run: gerbil env just test-file t/ai-agentic-context-core-test.ss
