@@ -224,6 +224,74 @@ reached the final refusal action at 114.25 seconds and printed the
 expected refusal marker before the aggregate watchdog interrupted
 output collection. That runner did not complete the Memory gate.
 
+** Process exit and Ops dependency ownership
+
+On macOS the refusal child still ran after its success marker. In a
+one-second sample all 84 main-thread frames were in Gambit dynamic
+module cleanup and dyld =dlclose=. The last process census still saw
+the child alive within 67 milliseconds of the parent action's return.
+The parent continues to wait for the real exit status.
+
+The existing cancellation extent now belongs to =ops/func.ss=. The
+progress module retains counters and streaming. Processes that only
+report progress no longer load Gerbil's =std/os/signal-handler= or its
+logging imports. To reproduce, run the default Memory test in
+independent prefixes. Collect =lsof -nP -a -p PID -d txt -Fn= after
+each child's success marker. Compare distinct =.oN= paths with and
+without the change. Measure natural exit in separate unsampled runs.
+
+| Child | Mapped images before | Mapped images after |
+|-------+----------------------+---------------------|
+| base build | 456 | 443 |
+| base read | 433 | 409 |
+| +memory read | 438 | 393 |
+| -memory read | 436 | 405 |
+| refusal | 424 | 400 |
+
+Each observed child lost all 21 mapped standard logging images and
+both signal-handler images. Other mapped-image differences can reflect
+sampling position and the independent compiled paths. Refusal still
+spent at least 2.23 seconds between the observer seeing its marker
+and the action returning. The candidate's first diagnostic exhausted
+the existing idle budget while loading =slot-origin=. Its repeat
+finished in 89.16 seconds with all markers.
+
+The actual cancellation implementation moved byte for byte. The
+Lean owner projection separates progress from registration and retains
+the order of registration, effect, cleanup and unregistration. The
+existing Quint =TestSourceAdmission= simulation retained =FailureCleanup=
+and its hard-stop control violated it. Native SIGTERM, Ops process and
+TestingScript tests passed. The models do not establish native delivery
+latency.
+
+With Gerbil =1cfb032=, Gambit =ea114fc=, POO =cd4de644=, 12 build
+workers and a 2 GiB heap, three unsampled default runs completed in
+79.31, 77.89 and 80.87 seconds with the existing 120/120/60-second
+limits. The prior three runs used 85.72, 85.73 and 86.55 seconds.
+Both sets used fresh consumer outputs. The 12/27/12 compiler target
+sets and 112/198/112 Module projection expansions matched exactly.
+Fifteen enabled-only targets remain, including eleven within the Memory
+Feature. All three first reads, zero projected scopes, zero hot
+compilations, receiver isolation, clean withdrawal, refusal and
+enabled artifact digests passed.
+
+| Mode | Launch to main (s) | Graph (s) | Make (s) | Main to action return (s) | First =.get= (s) |
+|------+--------------------+-----------+----------+---------------------------+-----------------|
+| base | 3.58 / 3.26 | 0.80 / 0.79 | 3.07 / 2.88 | 2.51 / 2.25 | 1.62 / 1.56 |
+| +memory | 3.65 / 3.37 | 1.57 / 1.51 | 5.58 / 5.02 | 2.78 / 2.49 | 1.66 / 1.56 |
+| -memory | 3.63 / 3.45 | 0.80 / 0.76 | 3.09 / 2.94 | 2.54 / 2.25 | 1.78 / 1.51 |
+
+Each entry compares the original and candidate medians. These sets
+ran serially on one host. The removal of the signal dependency is
+directly observed. Host variation can affect the wall-time delta.
+
+Deployment passed in 102.80 seconds with the same 46 selected
+targets, first read from B, zero hot compilation and clean isolation.
+Its previous local control took 67.36 seconds. Core publication,
+testing-source admission and the four build-input mutation controls
+passed. The order and admission controls passed before and after
+all four rejected mutations.
+
 The Core input-context mutation gate rejected all four injected faults,
 and the publication, test-source admission and Feature Interface suites
 passed. The separate Lab deployment gate reached the B product's first
