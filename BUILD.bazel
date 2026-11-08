@@ -15,7 +15,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "gerbil-dependencies.MODULE.bazel",
-    "core/t/feature-system-bundle-v1-foreign-arena-fixture.ss",
+    "core/t/feature-bundle-v1-foreign-arena-fixture.ss",
     "t/module-system-observability-test.ss",
     "t/profile-binding-syntax-test.ss",
     "t/profile-bundle-test.ss",
