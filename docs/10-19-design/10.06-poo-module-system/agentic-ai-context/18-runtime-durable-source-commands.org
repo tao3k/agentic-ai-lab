@@ -201,10 +201,10 @@ Feature binding is a declaration, not a running owner or permission to replay an
 
 ** Existing Core mechanisms and concrete integration gaps
 
-[[file:../../../../core/feature-system/model.ss][Feature descriptors]] already declare components, policy/strategy contributions,
+[[file:../../../../core/module-system/feature/model.ss][Feature descriptors]] already declare components, policy/strategy contributions,
 adapter requirements, projections, options and Feature dependencies.
-[[file:../../../../core/feature-system/composition.ss][Composition]] preserves resolved contribution order.
-[[file:../../../../core/feature-system/adapter-projection-binding.ss][Adapter binding]] matches capability identity and contract identity/version.
+[[file:../../../../core/module-system/feature/composition.ss][Composition]] preserves resolved contribution order.
+[[file:../../../../core/module-system/feature/adapter-projection-binding.ss][Adapter binding]] matches capability identity and contract identity/version.
 [[file:../../../../core/module-system/design/03-publication-selection.org][Module selection]] owns baseline dependency admission and negative intent.
 These mechanisms remain the single owners. Feature dependency IDs must not be
 used as substitutes for Module dependency declarations.
