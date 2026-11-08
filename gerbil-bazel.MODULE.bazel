@@ -4,8 +4,6 @@
 
 git_override(
     module_name = "gerbil_bazel",
-    commit = "0378dd75dd49e8a87f2249553e844b0b8ce8b66b",
+    commit = "cbf2ba017b741b507eb57387726f56b09bc42911",
     remote = "https://github.com/tao3k/gerbil-bazel.git",
-    patches = ["//packages/bazel/overrides:gerbil-native-budget-handoff.patch"],
-    patch_strip = 1,
 )
