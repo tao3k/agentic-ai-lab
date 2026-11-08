@@ -8,8 +8,8 @@
 ;;; this extension only observes the resulting source set.
 
 (import :gerbil/core
-        (only-in :asp-gerbil-scheme/src/build-api/gerbil-import-closure
-                 asp-gerbil-scheme-prepared-gerbil-import-closure)
+        (only-in :asp-gerbil-scheme/src/build-api/native-import-closure
+                 asp-gerbil-scheme-prepared-native-import-closure)
         (only-in :asp-gerbil-scheme/src/support/time
                  duration-micros monotonic-micros)
         (only-in :clan/poo/object
@@ -94,7 +94,7 @@
     (dynamic-wind
       (lambda () (current-directory root))
       (lambda ()
-        (asp-gerbil-scheme-prepared-gerbil-import-closure root entries))
+        (asp-gerbil-scheme-prepared-native-import-closure root entries))
       (lambda () (current-directory previous-directory)))))
 
 ;;; Fold observations as each file is read.  The admission receipt needs only
