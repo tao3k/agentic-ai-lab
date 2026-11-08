@@ -196,7 +196,7 @@ env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
             library.short_path,
             toolchain.gxc.executable.short_path,
             toolchain.gxi.executable.short_path,
-            toolchain.runtime_scheme_env.executable.short_path,
+            toolchain.native_scheme_env.executable.short_path,
             _shell_quote(toolchain.gerbil_cc),
             _shell_quote(toolchain.gerbil_as),
             _shell_quote(toolchain.gerbil_ld),

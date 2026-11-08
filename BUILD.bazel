@@ -6,7 +6,6 @@ load(
     "@gerbil_bazel//gerbil:defs.bzl",
     "gerbil_project_compile",
     "gerbil_project_dev",
-    "gerbil_project_execution_policy",
 )
 load("//packages/bazel:gerbil_project_environment.bzl", "gerbil_project_environment")
 load("//packages/bazel:gerbil_projection.bzl", "gerbil_project_projection")
@@ -100,13 +99,9 @@ gerbil_project_compile(
     # POO no longer publishes the former library command mode.
     args = ["compile"],
     build_script = "@gerbil_poo_sources//:build_script",
-    # Include the Gerbil frontend and each GSC/C compiler subtree in admission.
-    # Keep the guard's host-derived RSS ceiling; memory pressure reduces Make
-    # concurrency instead of raising the ceiling or fixing a machine core count.
-    execution_policy = gerbil_project_execution_policy(
-        memory_per_core_bytes = 4 * 1024 * 1024 * 1024,
-    ),
-    # Use the shared host-adaptive resource guard. CI owns the aggregate
+    # Use the provider's host-adaptive resource guard. Its default per-core
+    # estimate and unchanged RSS ceiling own native Make concurrency.
+    # CI owns the aggregate
     # dependency deadline; a cold package has no separate three-minute cutoff.
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
