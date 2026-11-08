@@ -37,6 +37,31 @@
   (map (lambda (path) (cons path (sha256 (call-with-input-file path read-all-as-u8vector))))
        (list-sort string<? (artifact-files (map string->symbol targets) library))))
 
+(def base-compile-targets
+  '("agentic-ai-lab/modules/ai-agentic-context/config"
+    "agentic-ai-lab/modules/ai-agentic-context/funs-features"
+    "agentic-ai-lab/modules/ai-agentic-context/interface"
+    "agentic-ai-lab/modules/ai-agentic-context/objects"
+    "agentic-ai-lab/modules/ai-agentic-context/types"
+    "agentic-ai-lab/modules/temporal-causality/time/types"
+    "yuanxu-context-consumer/init"
+    "yuanxu-context-consumer/main"
+    "yuanxu-context-consumer/modules/review/config"
+    "yuanxu-context-consumer/modules/review/interface"
+    "yuanxu-context-consumer/modules/review/objects"
+    "yuanxu-context-consumer/modules/review/types"))
+
+(def memory-compile-targets
+  (append
+    (map (cut string-append "agentic-ai-lab/modules/ai-agentic-context/features/memory/" <>)
+         '("config" "interface" "objects" "objects-builtin" "objects-catalog" "objects-core"
+           "objects-durable" "objects-handoff" "objects-validation" "org-selection"
+           "session-selection"))
+    '("agentic-ai-lab/modules/module-authoring/module-config-syntax"
+      "agentic-ai-lab/modules/session/durable-policy"
+      "agentic-ai-lab/modules/session/objects-core"
+      "agentic-ai-lab/modules/session/transform-support/memory-intent")))
+
 (def yuanxu-context-memory-downstream-test
   (test-suite "Agentic Context Memory in an independent Gerbil package"
     (test-case "selected scope and compiler closure agree through enable, refinement and withdrawal"
@@ -104,9 +129,7 @@
           (def withdrawn (state "withdrawn" " -memory"))
           (def memory-prefix "agentic-ai-lab/modules/ai-agentic-context/features/memory/")
           (def base-targets (build! base))
-          (check-equal?
-            (filter (lambda (target) (string-prefix? memory-prefix target)) base-targets)
-            '())
+          (check-equal? base-targets base-compile-targets)
           (def enabled-targets (build! enabled))
           (check-equal?
             (member "agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy"
@@ -116,11 +139,11 @@
             (filter (cut string-prefix? (string-append memory-prefix "durable/") <>)
                     enabled-targets)
             '())
+          ;; Exact lists also reject duplicate dispatch and equal-count substitutions.
+          (check-equal? enabled-targets
+            (list-sort string<? (append base-compile-targets memory-compile-targets)))
           (def withdrawn-targets (build! withdrawn))
-          (def memory-entry (string-append memory-prefix "interface"))
           (def added (filter (lambda (target) (not (member target base-targets))) enabled-targets))
-          (check-equal? (and (member memory-entry added) #t) #t)
-          (check-equal? (andmap (lambda (target) (member target enabled-targets)) base-targets) #t)
           (check-equal? base-targets withdrawn-targets)
           (check-equal? (artifact-files (map string->symbol added) (.get withdrawn library) #f) '())
           (def enabled-products (product-digests enabled-targets (.get enabled library)))
