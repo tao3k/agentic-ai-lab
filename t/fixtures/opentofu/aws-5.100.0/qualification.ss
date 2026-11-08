@@ -4,7 +4,7 @@
 
 (import :clan/poo/object
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :yuanxu/feature-system/source-lock-feature
+        (only-in :yuanxu/module-system/feature/source-lock-feature
                  sources-lock-value sources-lock? sources-lock-ref
                  source-lock-verify-payload)
         (only-in :std/crypto/digest Digest::sha256 digest-from-reader!)

@@ -11,7 +11,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :yuanxu/feature-system/domain-case/interface)
+        :yuanxu/module-system/feature/domain-case/interface)
 
 (export domain-case-structural-performance-test)
 

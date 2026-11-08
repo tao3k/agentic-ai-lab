@@ -10,7 +10,7 @@
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
       '(:yuanxu/modules/funflow/control-plane/api
-        :yuanxu/feature-system/interface)
+        :yuanxu/module-system/feature/interface)
       package-prefix: ":agentic-ai-lab/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")
       forbidden-projections: '(yuanxu-module-source-collection-interfaces all-gerbil-modules modules)))

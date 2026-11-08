@@ -18,7 +18,7 @@
 
         :yuanxu/profile-composition/profile-bundle
         :yuanxu/modules/funflow/bundle-v1
-        :yuanxu/feature-system/bundle-v1-lowering)
+        :yuanxu/module-system/feature/bundle-v1-lowering)
 
 (.def WriterSourceProfile
   (identity 'source)

@@ -5,7 +5,7 @@
         "./fixtures/opentofu/aws-5.100.0/qualification.ss"
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/feature-system/source-lock-feature sources-lock-value)
+        (only-in :yuanxu/module-system/feature/source-lock-feature sources-lock-value)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-configuration-contract)
         (only-in :agentic-ai-lab/modules/services/opentofu/aws-hash agentic-ai-lab-opentofu-aws-string-hash agentic-ai-lab-opentofu-aws-rule-hash)
         (only-in :agentic-ai-lab/opentofu-contracts ProviderSelectionContract)

@@ -6,8 +6,8 @@
         :gerbil/runtime/gambit
         :clan/poo/object
         :yuanxu/utilities/functional
-        :yuanxu/feature-system/bundle-v1-lowering
-        :yuanxu/feature-system/bundle-v1-foreign-arena)
+        :yuanxu/module-system/feature/bundle-v1-lowering
+        :yuanxu/module-system/feature/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
   'agentic-ai-lab.bundle-v1-foreign-arena.benchmark.v1)

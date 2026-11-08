@@ -14,7 +14,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :yuanxu/feature-system/source-lock-feature)
+        :yuanxu/module-system/feature/source-lock-feature)
 
 (export sources-lock-performance-test)
 

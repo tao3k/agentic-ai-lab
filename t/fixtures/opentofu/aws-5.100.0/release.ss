@@ -5,7 +5,7 @@
 ;;; Maintainer-reviewed, fixed historical release. Regenerate/review together
 ;;; with its executable acquisition control; this is not a provider registry.
 (import :clan/poo/object
-        (only-in :yuanxu/feature-system/source-lock-feature SourceLockEntry.))
+        (only-in :yuanxu/module-system/feature/source-lock-feature SourceLockEntry.))
 (export Aws5100Release)
 
 (.def Aws5100Release
