@@ -183,6 +183,47 @@ The earlier failed rounds remain separate evidence. The 2.60–2.81-second
 base tail is an observation from these runs, with no change to the
 Gerbil process exit path.
 
+The directory ownership predicate now normalizes each operand once per
+comparison. Reproduce the attribution by archiving this Lab source and
+building the original and candidate Yuanxu sources into the same
+prerequisite prefix in turn. Use the same deep Lab source directory,
+Gerbil =1cfb032=, Gambit =ea114fc=, POO =cd4de644=, 12 build workers and a
+2 GiB heap. Run =./build-development.ss spec= in a fresh process for
+each variant. This entry projects the spec without compiling Lab.
+
+| Variant         | Graph seconds | Private closure seconds | System CPU seconds | Wall seconds | Exit |
+|-----------------+---------------+-------------------------+--------------------+--------------+------|
+| Candidate first | 122.20        | 43.91                   | 53.12              | 180.04       | 124  |
+| Original        | 139.87        | 89.23                   | 100.98             | 172.19       | 0    |
+| Candidate again | 98.10         | 49.41                   | 61.21              | 134.61       | 0    |
+
+All three emitted the same ordered 556-target spec byte for byte,
+with 290 Module expansions and 17,444 physical source reads. The
+first candidate returned from =main= but reached the watchdog
+before natural exit. The two candidate positions both reduced private
+closure and system CPU. This diagnostic does not establish a full
+development build or eliminate the macOS teardown tail.
+
+Using the candidate Core products, the default
+=just test-file t/yuanxu-context-memory-downstream-test.ss= completed
+three serial rounds with independent empty outputs in 85.72, 85.73
+and 86.55 seconds. The exact 12/27/12 target sets, three first reads,
+zero hot compilation, zero projection scopes, receiver isolation,
+withdrawal, refusal and enabled artifact digests all passed. The
+Core directory, publication and testing-source-admission suites
+passed, as did all four build-input mutation controls.
+The independent Deployment suite also completed in 67.36 seconds.
+It qualified the first read from B, 46 exact selected targets,
+zero hot compilation and clean isolation.
+
+On Lab =6f10339=, the [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215337][Linux job]]
+passed the Memory step and timed out in the separate development build.
+The [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215516][macOS job]]
+finished the three first reads, hot build and withdrawn clean. It
+reached the final refusal action at 114.25 seconds and printed the
+expected refusal marker before the aggregate watchdog interrupted
+output collection. That runner did not complete the Memory gate.
+
 The Core input-context mutation gate rejected all four injected faults,
 and the publication, test-source admission and Feature Interface suites
 passed. The separate Lab deployment gate reached the B product's first
