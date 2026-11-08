@@ -75,7 +75,12 @@ jobs:
           retention-days: 7
 
       - name: Initialize Core source directory
-        run: git submodule update --init core
+        id: runtime-core-source
+        run: |
+          git submodule update --init core
+          revision="$(git rev-parse HEAD:core)"
+          test "$(git -C core rev-parse HEAD)" = "$revision"
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
@@ -146,7 +151,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Install Gerbil package dependencies
         run: |
@@ -160,9 +165,8 @@ jobs:
             (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
-          # Lab clean includes the Core owners selected by its init. Clean
-          # the shared output before rebuilding the Core prerequisites.
-          gerbil env just clean
+          # The prerequisite cache is saved before Lab is linked or built.
+          # Replace any transitive Core products before expanding Lab.
           gerbil env just clean-core
           gerbil env just build-core
 
@@ -174,7 +178,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Link the Lab source package for downstream qualification
         run: |

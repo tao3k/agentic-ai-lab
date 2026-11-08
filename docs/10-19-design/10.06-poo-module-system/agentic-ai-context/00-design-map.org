@@ -292,6 +292,23 @@ testing-source admission and the four build-input mutation controls
 passed. The order and admission controls passed before and after
 all four rejected mutations.
 
+The Linux Runtime job on Lab =9428753= failed before Memory. Its
+restored prerequisite cache contained older Core products, and
+Lab =clean= expanded the new OpenTofu source against the old
+Ops interface. The same mixed prefix reproduced the unbound
+cancellation binding with exit 70. The package metadata inputs
+of the old cache key were unchanged by the Core gitlink update.
+
+The existing cache now includes the checked-out Core gitlink in
+both its restore and save key. The cache is saved before Lab is
+linked or built. Preparation cleans and builds Core directly,
+before any Lab expansion. The local reproduction of this sequence
+completed =clean-core= and =build-core= in 15.66 and 59.22 seconds.
+A diagnostic =clean= with matching Core products also exceeded
+the 120-second control. That action is redundant before the
+first Lab build. The existing downstream tests still exercise
+withdrawal and isolation in their own fresh output prefixes.
+
 The Core input-context mutation gate rejected all four injected faults,
 and the publication, test-source admission and Feature Interface suites
 passed. The separate Lab deployment gate reached the B product's first
