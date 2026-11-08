@@ -21,6 +21,30 @@ chronological sequence in which every newer file replaces every older file.
 Existing qualification receipts remain scoped to their own cuts and claims;
 they were not rerun by this documentation change.
 
+* Feature component and test ownership
+
+Yuanxu owns Feature composition under =module-system/feature=. Maintained Lab
+adapters import =:yuanxu/module-system/feature/interface= or a specific module
+under that same namespace. Module authors declare their optional contributions
+in their Module Interface; init selects =+memory= or =-memory=.
+Core validates the final receiver against both its Core Type and selected Feature
+Types, while source guards remain active across the declaration and callbacks.
+
+The ordinary Core test inventory discovers =t/feature-*-test.ss=,
+=t/feature-test.ss= and =t/module-feature-*-test.ss=. Lab's writer integration
+uses =t/feature-bundle-v1-composition-writer-test.ss=. Run the existing entries:
+
+#+begin_src sh
+just test-file t/feature-bundle-v1-composition-writer-test.ss
+just test-file t/yuanxu-context-memory-downstream-test.ss
+just test-file t/yuanxu-deployment-downstream-test.ss
+#+end_src
+
+The package gitlink selects the Core revision used for this qualification.
+Gerbil builds that revision and its declared dependencies before the tests.
+Interpreted source tests using older compiled publication Types are a different
+cohort and do not qualify the migrated Interface.
+
 * Source allocation
 
 | Inspected source and section | Existing decision retained | SysML allocation |
