@@ -41,7 +41,17 @@
       (unless (eq? operation pkg-update)
         (operation dependency)))))
 
-(def (main)
+(def (prepare-pinned-source package directory revision)
+  (unless (file-exists? directory)
+    (create-directory* (path-directory directory))
+    (run-process/batch
+      (list "git" "clone" "--no-checkout" (string-append "https://" package ".git") directory)))
+  ;; Leave checkout, tag binding, recursive dependencies and builds to gxpkg.
+  (run-process/batch (list "git" "fetch" "--no-tags" "origin" revision) directory: directory))
+
+(def (main . arguments)
+  (unless (or (null? arguments) (equal? arguments '("--fetch-only")))
+    (error "usage: runtime-dependencies.ss [--fetch-only]" arguments))
   (def properties (call-with-input-file "gerbil.pkg" read))
   (def dependencies (pgetq depend: properties '()))
   (unless (and (list? dependencies) (andmap string? dependencies))
@@ -54,7 +64,10 @@
                (revision (and (pair? (cdr parts)) (cadr parts))))
           ;; Call the native APIs directly: v0.19's deps --update forwards the
           ;; tagged spelling to a directory lookup after updating it.
-          (when (file-exists? directory)
-            (install-pinned pkg-update dependency directory revision))
-          (install-pinned pkg-install dependency directory revision)))
+          (if (pair? arguments)
+            (when revision (prepare-pinned-source (car parts) directory revision))
+            (begin
+              (when (file-exists? directory)
+                (install-pinned pkg-update dependency directory revision))
+              (install-pinned pkg-install dependency directory revision)))))
       dependencies)))
