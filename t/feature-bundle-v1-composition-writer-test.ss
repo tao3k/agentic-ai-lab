@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(export feature-system-bundle-v1-composition-writer-test)
+(export feature-bundle-v1-composition-writer-test)
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
@@ -54,7 +54,7 @@
     (use-module WriterTestModule as writer source target)
     WriterTestScenarioProfile)))
 
-(def feature-system-bundle-v1-composition-writer-test
+(def feature-bundle-v1-composition-writer-test
   (test-suite
    "Bundle v1 composition writer"
 
