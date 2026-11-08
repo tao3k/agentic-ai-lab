@@ -204,9 +204,15 @@ jobs:
         run: |
           set -euo pipefail
           gerbil env gerbil pkg build github.com/tao3k/agentic-ai-lab
-          for category in governance deployment context-memory; do
-            gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log"
+          # Measure Memory before the other independent downstreams use this runner.
+          # Run every gate even if an earlier gate fails, then preserve the failure.
+          downstream_status=0
+          for category in context-memory governance deployment; do
+            gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log" || downstream_status=$?
           done
+          if (( downstream_status != 0 )); then
+            exit "$downstream_status"
+          fi
           python3 - <<'PY'
           import os
           from pathlib import Path

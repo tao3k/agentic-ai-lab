@@ -370,6 +370,180 @@ build took 108.26 seconds to reach its first compiler dispatch.
 The separate 180-second watchdog sent TERM and then KILL while
 compilation was active. The outer Runtime job reported exit 70.
 
+The documentation and test-name revision =61ce384= left the Memory
+fixture, product sources, Core gitlink and workflow unchanged. GitHub
+checked out merge =6798ce0= with the same tree as the branch head.
+Its [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128636953512][Ubuntu job]] passed Memory in 47.46 seconds from =test-entry= to
+the final =OK=. The separate development build again timed out.
+
+The [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128636953383][macOS job]] on that revision used the same Gerbil and Gambit
+releases, three workers and 2 GiB heap as the earlier macOS pass.
+Governance and Deployment passed. Memory finished three cold builds
+with the same 12/27/12 targets and 112/198/112 projection expansions.
+All three independent first reads and the zero-compile hot build passed.
+The fixture entered withdrawn clean at 118.01 seconds and the aggregate
+watchdog terminated it. The recipe exited 124 before a clean receipt
+or the refusal action. Keep this round as failed.
+
+| Cold mode | Launch to main, pass / fail (s) | Spec before Make (s) | Native Make (s) | Main to action return (s) | Child CPU at main return (s) |
+|-----------+--------------------------------+----------------------+-----------------+---------------------------+------------------------------|
+| base | 5.075 / 6.828 | 2.673 / 2.773 | 6.542 / 8.792 | 2.647 / 4.414 | 8.365 / 10.404 |
+| +memory | 3.842 / 7.766 | 3.048 / 5.493 | 11.716 / 16.416 | 2.978 / 4.152 | 9.298 / 14.774 |
+| -memory | 4.375 / 5.064 | 1.930 / 2.544 | 4.763 / 7.250 | 2.458 / 3.638 | 6.877 / 9.108 |
+
+Across the three cold builds, native Make added 9.44 seconds and
+launch plus post-main return added 10.49 seconds. The enabled hot
+projection and Make remained close to the earlier pass. The unchanged
+target and expansion counts rule out additional selected compiler
+targets as an explanation for this pair. CPU also rose in each cold
+build, so the transcripts alone cannot attribute the entire delta to
+scheduler wait. Keep compiler, launch and teardown as separate
+investigation boundaries.
+
+One job-only replay kept =61ce384=, merge =6798ce0=, the Core gitlink,
+the macOS Gerbil release, three workers, the 2 GiB heap and the
+120/120/60-second budgets fixed. The
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128644578761][replay]] returned from all nine native actions. The final =OK= followed
+=test-entry= by 114.87 seconds. The final Memory marker confirms the
+exact target sets, compiled first reads, withdrawal cleanup, refusal,
+zero hot compilations and enabled product digest. The surrounding
+recipe still exited 124, 3.45 seconds after the final =OK=. This round
+fails the natural-exit requirement and does not replace the earlier
+failure during withdrawn clean.
+
+In this replay withdrawn clean took 16.87 seconds. It spent 7.48
+seconds before =main=, 3.68 inside it and 5.71 after its return.
+The selected-output cleanup span was 0.098 seconds, including 0.015
+in native clean and 0.022 removing residual products. Preserve those
+physical output checks. The archived replay has no stack sample of the
+outer Harness, so the local build-child cleanup profile does not
+establish what its remaining exit interval did.
+
+To separate the Memory qualification from preceding downstream activity
+on the same runner, the workflow runs Memory before Governance and
+Deployment. All three still run serially with their existing commands.
+The step retains a nonzero command or pipe result even when a later
+suite succeeds. It still validates the receipt markers after a fully
+successful sequence. In a local control of the exact shell step, all
+three real downstreams passed from their own fresh outputs. A separate
+shell control printed every Memory marker and then returned 124. The
+other two suites ran and the step retained exit 124. Lean checked the
+order-independent success predicate; Quint rejected an update that
+replaced an earlier failure with a later success. The order change
+isolates the measurement from the preceding suites. It does not
+establish a macOS runtime improvement until the native runner reports
+a complete result.
+
+A separate candidate moved the existing compiler progress reader
+from TestingScript to Ops progress without changing its line
+recognition, counter identity or the per-process deadlines.
+TestingScript still exports the same binding for its consumers.
+Lean checked the unchanged progress trace, the Quint progress model
+accepted the original transition and rejected the repeated-refresh
+control, and the focused native TestingScript suite passed.
+The complete Memory pair used the same working source directory,
+three workers, 2 GiB and independently empty consumer outputs.
+Both passed all nine actions and exited naturally. The parent
+Harness had 472 image identities in the reference and 462 in the
+candidate. The ten removed images belong to Yuanxu observability.
+The parent exit interval estimated from final output was 1.81 versus
+1.84 seconds. Total elapsed time was 79.89 versus 91.09 seconds;
+the child-action sums were 75.24 and 86.14 seconds. The image
+reduction establishes a narrower import path, but this pair does
+not establish a natural-exit time improvement. Keep the candidate
+isolated. An earlier pair missing the existing empty development
+library directory refused both variants before compilation and
+does not enter this comparison.
+
+In the reverse order both variants again passed all nine actions
+and exited naturally. The candidate took 82.96 seconds followed by
+87.86 for the reference, reversing the forward pair's total-time
+ordering. The candidate and reference exit intervals were 1.84 and
+1.89 seconds. The same ten image identities were absent in the
+candidate, with no extra identities. The two directions establish
+the import reduction but no repeatable wall-time or exit benefit.
+
+An independent three-worker cold =+memory= compile on the published
+sources dispatched exactly 27 targets and exited 0 in 16.10 seconds.
+The Module projection expanded 198 contexts and native Make took
+7.91 seconds. Process polling, without wrapping the compiler, put
+the largest attributable external compiler CPU lower bounds at 0.70
+seconds for =session/durable-policy=, 0.59 for =memory/objects-handoff=
+and 0.49 for =memory/objects-durable=. Short-lived workers can exit
+between observations and some compiler work runs in the build
+interpreter. This diagnostic identifies observed hotspots; it
+does not assign the complete Make interval to source targets.
+
+A local three-worker diagnostic on the qualified source printed all
+Memory receipts and the final =OK= at 87.40 seconds. The external
+sampler did not identify the build process in that run, and its
+shell failed to save the exit receipt. Keep it separate from the
+three acceptance runs. The base post-main interval in the transcript
+was 2.155 seconds.
+
+Two separate cold base builds used the same compiled prerequisites,
+three workers, the 2 GiB heap, the installed Gerbil release and fresh
+output prefixes. The native =gerbil build= command produced the same
+12 target dispatches and exited 0 in both diagnostics. In the first
+build, all 776 sampled main-thread stacks after =main return= were in
+Gambit's =___cleanup_dyn_module= and macOS =dlclose=. The initial
+launch sample landed in =/usr/bin/env= before that PID replaced itself
+with =gxi=. The second probe waited for that transition. Its one-second
+startup sample counted 473 of 768 main-thread stacks in Gambit
+=___dynamic_load= and macOS =dlopen=, and 35 in =getcwd_long_path=.
+Both loader stacks include macOS image notifications. These are
+sampled local intervals, separate from the unsampled CI timings.
+They give a reason to inspect the images loaded by the required
+Gerbil entry and any removable application imports before changing
+production. The probes did not change the child exit path or the
+parent's collection behavior.
+
+Three further cold base builds used the same working source path
+and three workers, with a fresh output prefix for each build and no
+stack sampler attached. Polling the native process tree bounded the
+=main return= to build =gxi= exit interval independently of the
+outer Gerbil command. All three builds exited 0 with identical
+12-target sets.
+
+| Round | Build total (s) | Main to gxi exit (s) | gxi exit to outer return (s) | gxi CPU after main, lower bound (s) |
+|-------+-----------------+----------------------+------------------------------+-------------------------------------|
+| 1 | 10.703 | 1.548–1.667 | 0.587–0.706 | 1.553 |
+| 2 | 9.918 | 1.517–1.637 | 0.585–0.706 | 1.524 |
+| 3 | 10.115 | 1.681–1.802 | 0.603–0.724 | 1.687 |
+
+The exit bounds are consecutive process observations. The CPU
+estimate subtracts the child CPU reported at =main return= from
+the last CPU observed before exit, at the process tool's displayed
+resolution. This local tail includes substantial child CPU without
+an attached stack sampler. The outer command adds its own distinct
+interval. These base-only runs do not qualify the full Memory test.
+
+The compiled dependency census identified an eager import of
+=:clan/poo/io= in Yuanxu's deferred declaration module. Its
+=module-action= call sites own tags, explicit artifact issuance and
+test observation. An isolated candidate moved the original function
+body to POO's existing support module and retained the original IO
+binding as an alias. The first attempt exposed a Gerbil import
+collision with clients that import both modules. Giving the internal
+binding a distinct name removed the collision. Lean checked equality
+of the action trace, and Quint rejected the control that allows a
+load before admitting the argument row. The focused native test
+confirmed that the public and qualified IO bindings were =eq?= to
+the support procedure, invalid requests failed before opening the
+missing target, and native multiple values were preserved.
+
+With the same base source, three workers and separate fresh outputs,
+both variants compiled 12 targets. The running build interpreter
+had exactly the same 455 dynamic image identities at =std-make= entry
+after normalizing binary generation suffixes. The compiled Type,
+number and table interfaces still import IO for serialization.
+The baseline took 11.00 seconds and the candidate took 62.52 seconds.
+The latter spent about 41 seconds between entering spec preparation
+and entering the selected graph, while total process CPU remained
+close across the pair. This is an unsuccessful optimization control
+with a noisy wall-time comparison. The candidate and its dependency
+changes remain outside the published revisions.
+
 The Core input-context mutation gate rejected all four injected faults,
 and the publication, test-source admission and Feature Interface suites
 passed. The separate Lab deployment gate reached the B product's first
