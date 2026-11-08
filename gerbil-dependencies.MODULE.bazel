@@ -58,11 +58,11 @@ gerbil_dependency_sources.source_package(
     name = "gerbil_scheme_rust_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-scheme-rust",
     package = "gerbil-scheme-rust",
-    revision = "3ccd4ccf6db52f1cac8522a96a0dd510fb69afc7",
-    sha256 = "feb8016494e6b0f172147b863bcdaf2aa0088f1cc163607f9f6c0bf256b62cbb",
-    strip_prefix = "gerbil-scheme-rust-3ccd4ccf6db52f1cac8522a96a0dd510fb69afc7",
+    revision = "d64d86b0114cc49127fa43f128e92685eac9ab8a",
+    sha256 = "a685884e3a79b049730f57457b07b1be199bb3b8d9dba6d517477819952d92d6",
+    strip_prefix = "gerbil-scheme-rust-d64d86b0114cc49127fa43f128e92685eac9ab8a",
     urls = [
-        "https://github.com/tao3k/gerbil-scheme-rust/archive/3ccd4ccf6db52f1cac8522a96a0dd510fb69afc7.tar.gz",
+        "https://github.com/tao3k/gerbil-scheme-rust/archive/d64d86b0114cc49127fa43f128e92685eac9ab8a.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
