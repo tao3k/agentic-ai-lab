@@ -78,8 +78,8 @@
                       (string? action) (< 0 (string-length action) 129))
            (error "Invalid Agenda deployment"))
          (let (service (durable-agenda-start
-                         (.o source: source journal-path: journal offset: offset
-                             authorized?: authorized? action: action query: org-agenda-occurrences)))
+                         (.o (source) journal-path: journal (offset)
+                             (authorized?) (action) query: org-agenda-occurrences)))
            (semantic-context-install! service)
            (hash (scheduled (context-service-agenda! service (lambda (agenda) (.call agenda .refresh! agenda #f))))))))
       ((and (= (hash-length object) 3) (equal? operation "refresh"))

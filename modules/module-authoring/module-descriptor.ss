@@ -126,7 +126,7 @@
       module-imports
       task-registry
       flow-registry
-      options
+      option-values
       interface
       schemas
       config
@@ -153,7 +153,7 @@
         (phase-files) (hooks) (task-registry) (flow-registry)
         (options (if (object? interface)
                    (yuanxu-module-object->alist config)
-                   options))
+                   option-values))
         (config) (schemas) (metadata) (source-ref) (responsibility))))
 
 ;;; Boundary: extended constructor keeps Marlin migration call sites stable.

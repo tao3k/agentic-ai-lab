@@ -22,12 +22,12 @@
   (let ((source (path-expand (.ref config 'source))) (offset (.ref config 'offset))
         (authorized? (.ref config 'authorized?)) (action (.ref config 'action))
         (query (.ref config 'query)) (armed #f) (ready #f))
-    (def (key item)
+    (def (agenda-key item)
       (string-append "agenda:" (journal-hash (journal-pack (list source (.ref item 'identity))))))
     (def (next)
       (let (source-text (call-with-input-file source read-all-as-string))
         (foldl (lambda (item best)
-          (if (and (authorized? item) (not (journal-get journal (key item)))
+          (if (and (authorized? item) (not (journal-get journal (agenda-key item)))
                    (or (not best) (< (.ref item 'due) (.ref best 'due))
                        (and (= (.ref item 'due) (.ref best 'due))
                             (string<? (.ref item 'identity) (.ref best 'identity)))))
@@ -54,8 +54,8 @@
       (let* ((item (next))
              (release (and (same? item ready) (<= (.ref item 'due) (now)))))
         (if release
-          (let ((handoff (.o key: (key item) identity: (.ref item 'identity) due: (.ref item 'due) action: action)))
-            (journal-put! journal (key item) handoff)
+          (let ((handoff (.o key: (agenda-key item) identity: (.ref item 'identity) due: (.ref item 'due) (action))))
+            (journal-put! journal (agenda-key item) handoff)
             (set! armed #f)
             (set! ready #f)
             handoff)
@@ -90,6 +90,6 @@
          (let* ((grants (agentic-ai-lab-context-use-host))
                 (policies (agentic-ai-lab-temporal-support-policy-host))
                 (host (agentic-ai-lab-ai-agentic-context-session-host grants policies #f)))
-           (.o grants: grants policies: policies host: host
+           (.o (grants) (policies) (host)
                recovery: #f proof-resolver: (lambda (registration) #f) query-provider: #f
                agenda: (owner-agenda journal policies config)))))))

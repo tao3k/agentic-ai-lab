@@ -176,7 +176,7 @@
       (bounds 512 4096 8192))))
   (.o context: context-value plan: plan-result
       inspection: inspection-result answers: (inspection-rows 'AnswerBasis)
-      binding: binding reviews: image-reviews inference: work
+      (binding) reviews: image-reviews inference: work
       requests: (map (lambda (row)
         (.o view: (car row) revision: (cadr row) source-cut: (caddr row)
             kind: (list-ref row 3) subject: (list-ref row 4) basis: (list-ref row 5)))
