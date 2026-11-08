@@ -961,6 +961,30 @@ native Make own their complete closure. Original source/product invalidation,
 tampering controls and resource limits are unchanged. POO's separate remote
 180-second cold-build refusal remains open pending a measured fix.
 
+* AITIA consumer qualification on 2026-11-08
+
+Core =bb63bad10538ba0e2d2d29f4f3cfc559c35672eb= separates successful dependency
+initialization reads from Scope-body support at the standard compiler/evaluator
+boundary. The real AITIA GitOps protocol refuses stale support with the repair
+disabled and succeeds with the repair enabled. Business Config imports remain
+ordinary imports; no deferred binding adapter or warm business Scope is used.
+
+Core's original before/after build-input admission and order suites pass; all
+four isolated faults refuse for the expected cause. Publication, source
+admission, effect and failed-read collection gates also pass independently.
+The final serial Lab deployment qualification completes in about 87 seconds,
+including 46 targets, four owners, A/B cold products, selected tests, real
+B-product consumption and clean isolation. It retains the 120-second aggregate
+and action limits and 60-second idle limit.
+
+AITIA's separate 180-second dependency-install guard is still open. A complete
+cold compiled-output experiment, with prefetched locked sources and 12 host
+cores, timed out at 180.028 seconds during Core compilation after POO completed.
+Compiler-policy experiments were not adopted and partial outputs were not
+published as an admitted cache. The broader historical allowances below do not
+change this consumer's frozen limit. These local results do not assert a latest
+head CI pass or close Core's independent capacity gates.
+
 * CI allowance revision after native failure diagnosis
 
 The user explicitly authorized larger CI allowances on 2026-10-29. Earlier
