@@ -77,11 +77,18 @@ Context and the short-/long-term knowledge distinction within it.
 
 ** Downstream build attribution
 
-Run =just test-file t/yuanxu-context-memory-downstream-test.ss= with
-the compiled Core prerequisites. The gate exercises fresh base,
-=+memory= and =-memory= builds, independent first reads, hot reuse,
-withdrawn cleanup and the Feature refusal. Its aggregate deadline is
-120 seconds. The OpenTofu runtime gate uses a different selected graph.
+Use a private Gerbil prefix with the compiled Core prerequisites.
+Link the exact Lab checkout into that prefix with Gerbil's package
+command, as in the Runtime workflow. The fixture checks that the installed
+Lab source and the checkout under test are the same directory. Run
+=just test-file t/yuanxu-context-memory-downstream-test.ss= from that
+checkout. Each run creates fresh base, =+memory= and =-memory= output
+prefixes, performs independent first reads, checks hot reuse and
+withdrawn cleanup, and exercises the Feature refusal. Keep the 120-second
+aggregate, 120-second action and 60-second idle deadlines and the 2 GiB
+test heap. Require natural exit, =LAB-CONTEXT-MEMORY-DOWNSTREAM-OK=,
+=MODULE-OK=, =HARNESS-OK= and a final =OK= without failure markers.
+The OpenTofu runtime gate uses a different selected graph.
 
 For process attribution, record =time->seconds= of =current-time= before
 and after the fixture's existing Ops call. Compare those timestamps with
@@ -308,6 +315,60 @@ A diagnostic =clean= with matching Core products also exceeded
 the 120-second control. That action is redundant before the
 first Lab build. The existing downstream tests still exercise
 withdrawal and isolation in their own fresh output prefixes.
+
+On Lab =66867e93a8f7373b463fe7a1f54b031c26795753= with Core
+=272c46bebb73fff524b62e8eee77fc61befea2af=, the Ubuntu
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/42445816324/job/128624538507][Runtime job]] completed the selected downstream step with Gerbil
+=2591dcd=, Gambit =dcd677c=, POO =cd4de644=, four compiler workers
+and a 2 GiB test heap. The Memory
+transcript spans 53.88 seconds from =test-entry= to the final =OK=.
+Its three cold build actions took 9.52, 16.38 and 9.46 seconds,
+with 12/27/12 exact targets, zero scope projections and zero hot
+compilations. The three independent compiled reads, withdrawal cleanup,
+refusal and final artifact digest checks passed. The broader step
+also ran Governance and Deployment. The subsequent development
+build reached its first compiler dispatch 80.60 seconds after its
+entrypoint and was still compiling when its separate 180-second
+watchdog sent TERM. The child exited 124 and the outer command
+reported exit 70. The Runtime job therefore remains failed overall.
+
+| Mode | Projection expansions | Launch to main (s) | Spec before Make (s) | Native Make (s) | Main to action return (s) | First compiled =.get= (s) |
+|------+-----------------------+--------------------+----------------------+-----------------+---------------------------+--------------------------|
+| base |                   112 |              2.170 |                1.372 |           5.863 |                     0.103 |                    0.793 |
+| +memory |                198 |              2.191 |                2.230 |          11.819 |                     0.122 |                    0.869 |
+| -memory |                112 |              2.150 |                1.365 |           5.820 |                     0.112 |                    0.788 |
+
+The spec interval starts at =build-specification= and ends at
+=std-make= entry. It includes 1.088, 1.928 and 1.085 seconds in
+the selected graph, respectively. The parent and child epoch
+timestamps delimit launch and return; the independent consumer
+reports its own first-read duration. On this Ubuntu run, native
+Make accounts for 5.96 seconds of the 6.86-second enabled build
+increment. The base return tail was 0.10 seconds on this runner
+and 2.25 seconds in the local macOS candidate median. These
+environments use different Gerbil releases and worker counts.
+
+The [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42445816324/job/128624538475][macOS Runtime job]] on the same Lab and Core revisions also
+passed the selected downstream step. It used Gerbil =1cfb032=,
+Gambit =ea114fc=, POO =cd4de644=, three compiler workers and a
+2 GiB test heap. The Memory transcript spans 101.40 seconds from
+=test-entry= to the final =OK=. It checked the same exact 12/27/12
+cold targets, zero projected scopes, three independent reads,
+zero hot compilations, withdrawal, refusal and the enabled product
+digests. The cold actions took 16.95, 21.61 and 13.54 seconds.
+
+| Mode | Projection expansions | Launch to main (s) | Spec before Make (s) | Native Make (s) | Main to action return (s) | First compiled =.get= (s) |
+|------+-----------------------+--------------------+----------------------+-----------------+---------------------------+--------------------------|
+| base |                   112 |              5.075 |                2.673 |           6.542 |                     2.647 |                    1.211 |
+| +memory |                198 |              3.842 |                3.048 |          11.716 |                     2.978 |                    1.297 |
+| -memory |                112 |              4.375 |                1.930 |           4.763 |                     2.458 |                    1.433 |
+
+The corresponding selected graph durations were 1.192, 1.946
+and 0.878 seconds. The macOS post-main intervals remained above
+two seconds in all three modes. The subsequent development
+build took 108.26 seconds to reach its first compiler dispatch.
+The separate 180-second watchdog sent TERM and then KILL while
+compilation was active. The outer Runtime job reported exit 70.
 
 The Core input-context mutation gate rejected all four injected faults,
 and the publication, test-source admission and Feature Interface suites
