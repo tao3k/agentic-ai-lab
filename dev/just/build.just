@@ -11,7 +11,7 @@ build:
 # The default build above still requires Core to build successfully first.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} ./build-development.ss compile
+    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 600s ./build-development.ss compile
 
 # Compile the pinned local Core using Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.

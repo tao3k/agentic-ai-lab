@@ -112,7 +112,8 @@
       (error "production build imports the development-only ASP package" identity))
     (when (and name (string-prefix? "agentic-ai-lab/dev/" name))
       (error "production build imports a development module" identity))))
-(def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots))
+(def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots)
+                                observe-context: (observe-context void))
   (def ffi-options
     (cond-expand (darwin '("-ld-options" "-Wl,-undefined,dynamic_lookup")) (else '())))
   ;; Preserve compiler options for every demanded special target, including a
@@ -128,4 +129,7 @@
          `(gxc: ,target ,@ffi-options))
         (else target)))
     (package-library-spec (current-directory) 'agentic-ai-lab roots
-      admit-context: admit-production-build-context)))
+      admit-context:
+      (lambda (context)
+        (admit-production-build-context context)
+        (observe-context context)))))
