@@ -41,13 +41,17 @@
       (unless (eq? operation pkg-update)
         (operation dependency)))))
 
-(def (prepare-pinned-source package directory revision)
+(def (prepare-pinned-source dependency package directory revision)
   (unless (file-exists? directory)
     (create-directory* (path-directory directory))
     (run-process/batch
       (list "git" "clone" "--no-checkout" (string-append "https://" package ".git") directory)))
-  ;; Leave checkout, tag binding, recursive dependencies and builds to gxpkg.
-  (run-process/batch (list "git" "fetch" "--no-tags" "origin" revision) directory: directory))
+  (run-process/batch (list "git" "fetch" "--no-tags" "origin" revision) directory: directory)
+  ;; A prefetched clone still names its default branch. Bind the declared
+  ;; revision through gxpkg before deps --install chooses an existing tag.
+  ;; pkg-update binds sources without recursively installing or compiling.
+  (unless (pkg-update dependency)
+    (error "cannot bind pinned Gerbil package source" dependency)))
 
 (def (main . arguments)
   (unless (or (null? arguments) (equal? arguments '("--fetch-only")))
@@ -65,7 +69,7 @@
           ;; Call the native APIs directly: v0.19's deps --update forwards the
           ;; tagged spelling to a directory lookup after updating it.
           (if (pair? arguments)
-            (when revision (prepare-pinned-source (car parts) directory revision))
+            (when revision (prepare-pinned-source dependency (car parts) directory revision))
             (begin
               (when (file-exists? directory)
                 (install-pinned pkg-update dependency directory revision))
