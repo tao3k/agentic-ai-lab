@@ -4,14 +4,14 @@
 ;;; Boundary shapes and invariants; no construction or runtime effects.
 (import (only-in :clan/poo/object .ref .slot? object? .cc)
         (only-in :clan/poo/type Record Exactly True Or)
-        (only-in :clan/poo/mop Type. define-type)
+        (only-in :clan/poo/mop Type. define-type Fun)
         (only-in :std/list/list every)
         (only-in :agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?))
 (export ContextScopeContract ContextMemoryScopeContract
         AiAgenticContextTemporalPolicyType agentic-ai-lab-ai-agentic-context-temporal-policy-shape?
         AiAgenticContextOrgAnchorType agentic-ai-lab-ai-agentic-context-org-anchor-shape?
         AiAgenticContextDeltaType agentic-ai-lab-ai-agentic-context-delta-shape?
-        AiAgenticContextScopeType agentic-ai-lab-ai-agentic-context-scope-shape?)
+        AiAgenticContextScopeType AiAgenticContextAdmissionType agentic-ai-lab-ai-agentic-context-scope-shape?)
 (def CoreFeatureIds (Exactly '(ai-agentic-context/core)))
 (def MemoryFeatureIds (Exactly '(ai-agentic-context/core ai-agentic-context/memory)))
 (def ContextScopeContract
@@ -37,6 +37,10 @@
                 (exact-integer? (.ref spec 'turn)) (>= (.ref spec 'turn) 0)))))
 (define-type (AiAgenticContextScopeType @ Type.)
   .element?: agentic-ai-lab-ai-agentic-context-scope-shape?)
+
+;; One library-owned identity survives Module role projection and composition.
+(def AiAgenticContextAdmissionType
+  (Fun AiAgenticContextScopeType <- AiAgenticContextScopeType))
 
 (def (unit? value identity)
   (and (pair? value) (equal? (car value) identity) (list? (cdr value))))

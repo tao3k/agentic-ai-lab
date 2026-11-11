@@ -3,6 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Pure admission, freezing and canonical Scope digest functions.
 (import (only-in :clan/poo/object .o .ref)
+        (only-in :clan/poo/mop validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         "types.ss" "objects.ss")
@@ -11,9 +12,7 @@
 (def (agentic-ai-lab-ai-agentic-context-digest x)
   (string-append "sha256:" (hex-encode (sha256 (string->utf8
     (call-with-output-string (lambda (port) (write x port))))))))
-(def (agentic-ai-lab-ai-agentic-context-scope-admit spec)
-  (unless (agentic-ai-lab-ai-agentic-context-scope-shape? spec)
-    (error "invalid AI Agentic-context Scope"))
+(def (freeze-context-scope spec)
   (let* ((tuple (map (lambda (k) (let (v (.ref spec k)) (if (string? v) (string-copy v) v)))
                     '(bundle organization epoch project worktree source-cut actor task destination session turn)))
          (scope-value (.o (:: @ AiAgenticContextScope.)
@@ -23,3 +22,9 @@
             destination: (list-ref tuple 8) session: (list-ref tuple 9) turn: (list-ref tuple 10)
             semantic-digest: (agentic-ai-lab-ai-agentic-context-digest (cons 'ai-agentic-context/scope-v1 tuple)))))
     scope-value))
+
+;; Public admission is signed once by the library-owned functional contract.
+;; Module publication and consumers reuse that issuance; both arguments and
+;; results still cross Scope validation.
+(def agentic-ai-lab-ai-agentic-context-scope-admit
+  (validate AiAgenticContextAdmissionType freeze-context-scope))
