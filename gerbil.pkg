@@ -6,6 +6,6 @@
  prelude: :tao3k/yuanxu/prelude
  depend: ("github.com/tao3k/gerbil-parser@e5fdd53b33c376dabb927f79b047e4d5cae9f7ac"
           ;; The Orgize build consumes the bridge already owned by Lab.
-          "github.com/tao3k/gerbil-scheme-rust@fe3796edd1bad71df147a21a67f1b421f1bcbf89"
+          "github.com/tao3k/gerbil-scheme-rust@0d92f7bee8c23b373ccd116be6f17701c4c4aac6"
           "github.com/tao3k/orgize@9a9f63d8286fd0ffe68d64fc2de385dab6e57b23"
           "github.com/tao3k/gerbil-ascent@62299efe57c1d6bc5a9b7c08c17962189543a5e0"))
