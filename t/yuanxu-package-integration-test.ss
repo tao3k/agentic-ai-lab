@@ -68,7 +68,7 @@
                                  ((equal? operation "clean") '("gerbil" "pkg" "clean" "."))
                                  ((equal? operation "use") '("gxi" "use.ss"))
                                  ((equal? operation "spec")
-                                  '("./build.ss" "spec" "--modules" "nix"))
+                                  '("./build.ss" "spec"))
                                  (else (list "./build.ss" operation)))
                   directory: consumer timeout: 180 idle-timeout: 60
                   progress: make-compiler-progress-reader

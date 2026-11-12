@@ -36,12 +36,12 @@ pin-gerbil-dependency package revision:
 mod-tidy:
     {{ bazel }} mod tidy --lockfile_mode=update
 
-# Optional ASP policy probes belong to the development package, not the library.
+# Optional ASP source-admission probes belong to the development package.
 [group('dependency')]
 deps-dev:
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/runtime-dependencies.ss
 
-# Compile installed test dependencies against the product's shared library.
+# Compile the installed development probe dependency against the shared library.
 # Dependency acquisition belongs to deps-dev, as production acquisition belongs
 # to deps. The development package owns dependencies, not a second product build.
 # test-root separately requires build-library in the production prefix.

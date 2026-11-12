@@ -11,7 +11,8 @@
 (import (only-in :clan/poo/object .get)
         (only-in :std/source this-source-file)
         (only-in :std/misc/process run-process)
-        (only-in :yuanxu/module-system/building/script defbuild-script)
+        (only-in :std/build-script defbuild-script)
+        (only-in :yuanxu/module-system/building/interface call-with-init-build-spec)
         (only-in :yuanxu/module-system/building/products current-build-module-roots)
         (only-in "./build-modules.ss" agentic-ai-lab.build-modules.exports))
 (export main)
@@ -27,8 +28,38 @@
 
 ;; Installation supplies no Module roots and no package library targets.
 (def modules-spec (.get agentic-ai-lab.build-modules.exports std-make-spec))
-(defbuild-script
-  (let (roots (or (current-build-module-roots) '()))
-    (parameterize ((current-build-module-roots roots))
-      (when (pair? roots) (ensure-core-source!))
-      (modules-spec '()))))
+
+;; The package installation selects no business Modules. An explicit request
+;; narrows the same init-owned projection before the native Make entry runs.
+(def (split-build-modules args)
+  (let scan ((rest args) (native '()) (roots #f))
+    (cond
+     ((null? rest) (values (reverse native) roots))
+     ((string=? (car rest) "--modules")
+      (unless (and (not roots) (pair? args) (member (car args) '("compile" "spec")))
+        (error "--modules may appear once after compile or spec"))
+      (let names ((remaining (cdr rest)) (selected '()))
+        (if (or (null? remaining) (string-prefix? "--" (car remaining)))
+          (begin
+            (when (null? selected) (error "--modules requires one or more module IDs"))
+            (scan remaining native (reverse selected)))
+          (let (id (string->symbol (car remaining)))
+            (when (or (string=? (car remaining) "") (memq id selected))
+              (error "empty or duplicate module ID" (car remaining)))
+            (names (cdr remaining) (cons id selected))))))
+     (else (scan (cdr rest) (cons (car rest) native) roots)))))
+
+(def (main . args)
+  (defvalues (native-args selected) (split-build-modules args))
+  (def roots (or selected '()))
+  (parameterize ((current-build-module-roots roots))
+    (when (pair? roots) (ensure-core-source!))
+    (call-with-init-build-spec
+      (lambda () (modules-spec '()))
+      (lambda (spec arguments (package-prefix #f))
+        (when package-prefix
+          (error "Lab selected build has an unexpected package prefix" package-prefix))
+        (let ()
+          (defbuild-script spec)
+          (apply main arguments)))
+      native-args #f (this-source-file))))

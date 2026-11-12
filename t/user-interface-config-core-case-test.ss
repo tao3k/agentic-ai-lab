@@ -6,7 +6,8 @@
 ;;; Boundary: core cases exercise the thin declarative user-interface surface.
 ;;; These checks intentionally stop before sandbox realization or runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :yuanxu/testing
+                 yuanxu-test-case yuanxu-user-profile-policy-admit)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,9 +18,6 @@
                  yuanxu-user-profile?
                  yuanxu-user-profile-name
                  yuanxu-user-profile-module-bundles)
-        (only-in :agentic-ai-lab/dev/testing-api
-                 +agentic-ai-lab-testing-interface+
-                 agentic-ai-lab-testing-admit-user-profile!)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-config?
                  yuanxu-user-config-modules
@@ -114,8 +112,7 @@
         (check-equal? (alist-value 'loader-executed? custom-fact)
                       #f)
         (check-equal?
-         (.ref (agentic-ai-lab-testing-admit-user-profile!
-                +agentic-ai-lab-testing-interface+
+         (.ref (yuanxu-user-profile-policy-admit
                 test-agentic-ai-lab-user-custom-profile)
                'admitted?)
          #t)))))

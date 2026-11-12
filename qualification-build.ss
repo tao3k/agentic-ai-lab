@@ -21,7 +21,7 @@
         (append paths (list root))))))
 
 (import (only-in :clan/poo/object .get)
-        (only-in :yuanxu/module-system/building/script defbuild-script)
+        (only-in :std/build-script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports))
 ;; Installed libraries have the same priority as the actual test consumer.
 ;; This declaration owns no Case inventory, Harness, policy or result verdict.

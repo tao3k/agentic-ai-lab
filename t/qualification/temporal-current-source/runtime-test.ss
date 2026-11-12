@@ -35,8 +35,7 @@
      :clan/poo/support/base :clan/poo/support/io :clan/poo/support/json
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
-     :asp-gerbil-scheme/testing-api :yuanxu/observability/testing-case
-     :yuanxu/observability/testing-case
+     :yuanxu/testing
      :agentic-ai-lab/modules/temporal-causality/admission/interface
      :agentic-ai-lab/modules/temporal-causality/lifecycle/interface))
   (exit (apply gxtest-main args)))

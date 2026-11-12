@@ -30,15 +30,15 @@ test: build-testing build-test-workers prepare-test-inputs build-library
 [group('test')]
 [positional-arguments]
 test-root +paths="t":
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" python3 packages/automation/gerbil_test_inputs.py --inputs "${AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS:-{{ agentic_ai_lab_gerbil_path }}/test-inputs}" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "$@"
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" python3 packages/automation/gerbil_test_inputs.py --inputs "${AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS:-{{ agentic_ai_lab_gerbil_path }}/test-inputs}" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test "$@"
 
 # Diagnose a long runtime file with the full package's unchanged process budget.
 [group('test')]
 test-package-file path:
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "{{ path }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test "{{ path }}"
 
-# Keep ASP's per-phase test receipts and add process wall/user/system timing.
+# Keep the official Harness receipts and add process wall/user/system timing.
 [group('test')]
 test-profile:
     time just test
@@ -65,12 +65,12 @@ test-file path observe="false":
       trace) options=(-D yuanxu-module-test-observation,yuanxu-module-test-trace) ;;
       *) echo 'observe must be false, true, or trace' >&2; exit 64 ;;
     esac
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss ${options[@]+"${options[@]}"} "{{ path }}"
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
 
 # Run performance Suites serially through the same official test entry.
 [group('test')]
 test-performance:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss 't/performance/...' t/module-system-poo-performance-test-support
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test 't/performance/...' t/module-system-poo-performance-test-support
 
 # Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
 [group('test')]

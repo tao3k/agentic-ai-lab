@@ -36,8 +36,7 @@
      :clan/poo/support/base :clan/poo/support/io :clan/poo/support/json
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
-     :asp-gerbil-scheme/testing-api :yuanxu/observability/testing-case
-     :yuanxu/observability/testing-case
+     :yuanxu/testing
      :gerbil-parser/src/modules/parser/graph-syntax
      :agentic-ai-lab/modules/query/interface
      :agentic-ai-lab/modules/query/orgize-source

@@ -19,8 +19,9 @@
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
-        (only-in :yuanxu/module-system/building/script defbuild-script)
-        (only-in :yuanxu/module-system/building/products current-build-module-roots)
+        (only-in :std/build-script defbuild-script)
+        (only-in :yuanxu/module-system/building/interface call-with-init-build-spec)
+        (only-in :yuanxu/module-system/building/products current-build-module-roots current-build-source-directory)
         (only-in "./init.ss" agentic-ai-lab.init.exports)
         (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
 
@@ -104,19 +105,32 @@
   (call-with-temporary-directory "lab-library-spec-"
     (lambda (directory)
       (def packet-path #f)
-      (defbuild-script
-        (begin
-          (ensure-core-source!)
-          ((.get agentic-ai-lab.init.exports std-make-spec)
-           (if (current-build-module-roots)
-             '()
-             (begin
-               (set! packet-path (path-expand "specification" directory))
-               (run-process (list "gxi" (this-source-file) "--library-specification" packet-path)
-                 directory: (path-directory (this-source-file))
-                 stdin-redirection: #f stdout-redirection: #f)
-               (read-library-specification packet-path))))))
-      (begin0 (apply main args)
+      (def entry-source (this-source-file))
+      (begin0
+        (call-with-init-build-spec
+          (lambda ()
+            (ensure-core-source!)
+            ((.get agentic-ai-lab.init.exports std-make-spec)
+             (if (current-build-module-roots)
+               '()
+               (begin
+                 (set! packet-path (path-expand "specification" directory))
+                 (run-process (list "gxi" entry-source "--library-specification" packet-path)
+                   directory: (path-directory entry-source)
+                   stdin-redirection: #f stdout-redirection: #f)
+                 (read-library-specification packet-path)))))
+          (lambda (spec arguments (package-prefix #f))
+            (when package-prefix
+              (error "Lab development build has an unexpected package prefix" package-prefix))
+            (def (this-source-file)
+              (let (source-directory (current-build-source-directory))
+                (if source-directory
+                  (path-expand (path-strip-directory entry-source) source-directory)
+                  entry-source)))
+            (let ()
+              (defbuild-script spec)
+              (apply main arguments)))
+          args #f entry-source)
         (when packet-path (read-library-specification packet-path))))))
 
 (def (main . args)

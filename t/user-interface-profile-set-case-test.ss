@@ -7,7 +7,8 @@
 
 ;;; Boundary: profile-set cases validate selection through Testing Policy.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :yuanxu/testing
+                 yuanxu-test-case yuanxu-user-profile-set-policy-admit)
          (only-in :std/test
                  check
                  check-eq?
@@ -20,10 +21,6 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :agentic-ai-lab/dev/testing-api
-                 +agentic-ai-lab-testing-interface+
-                 agentic-ai-lab-testing-admit-user-profile-set!
-                 agentic-ai-lab-testing-check-user-profile-set)
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         )
@@ -76,12 +73,10 @@
         (check-equal? (.ref presentation 'runtime-executed) #f)))
     (yuanxu-test-case "admits profile sets through the POO testing policy"
       (let* ((valid-report
-              (agentic-ai-lab-testing-admit-user-profile-set!
-               +agentic-ai-lab-testing-interface+
+              (yuanxu-user-profile-set-policy-admit
                test-agentic-ai-lab-user-profile-set))
              (rejected-receipt
-              (agentic-ai-lab-testing-check-user-profile-set
-               +agentic-ai-lab-testing-interface+
+              (yuanxu-user-profile-set-policy-admit
                test-agentic-ai-lab-user-broken-profile-set))
              (diagnostics (.ref rejected-receipt 'profile-diagnostics)))
         (check-equal? (.ref valid-report 'admitted?) #t)

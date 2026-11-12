@@ -18,8 +18,7 @@ command namespace and root working directory.
 
 * Reuse
 
-=just test-file PATH= calls Core's
-[[file:../../core/dev/test-file.ss][atomic adapter to the installed Gerbil test tool]].
+=just test-file PATH= calls the installed =gerbil test= tool directly.
 It retains the product's pre-import heap fence and 120-second budget. The
 same VM executes native =std/test= through the official tool. It does not
 construct a Script/Process, select init, compile support or start a child
@@ -91,12 +90,14 @@ Passing synthetic receipt controls qualifies admission logic, not a Query,
 Temporal, Rust ABI or full-package run.  Compiled artifact entrypoints still
 require their original producer outputs; absence is a failure, never a skip.
 
-* Development-only policy dependency
+* Development-only source observation dependency
 
-=dev/gerbil.pkg= owns the optional ASP pin. =just deps-dev= installs it;
-=dev/testing-api.ss= composes the policy interface and =dev/unit-tests.ss=
-owns the package test entry. Production =build.ss= uses Core's runtime import
-closure and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
+=dev/gerbil.pkg= owns the optional ASP pin used by the source-admission
+qualification. =just deps-dev= installs it. Yuanxu Core owns the public
+=:yuanxu/testing= module, including Case, Fixture, Script, source observation,
+and profile policy. The =core= Git submodule fixes the Yuanxu revision; Lab's
+=gerbil.pkg= does not declare Yuanxu again. Production =build.ss= uses Core's runtime import closure
+and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
 =asp-gerbil-scheme/= rather than silently building development modules.
 CI installs the optional development dependency after the library build.
 
@@ -114,12 +115,10 @@ failures are retained as historical local failures, not current interfaces.
 =check-production-build= uses runtime =build.ss spec=: =--help= is not a supported
 =std/build-script= operation on this runtime.
 
-The missing-file negative case runs the real ASP batch in a bounded Ops child.
-It asserts exit 70, the missing path, runtime =collect-files= diagnosis,
-=call-raised= and =batch-failed= terminals, and absence of a success terminal.
-Its raw child diagnostics remain in the receipt instead of being written into
-the outer harness's success stream. The strict failure-marker gate is unchanged.
-The repaired policy suite passed with the installed runtime.
+The retired ASP batch extension and its duplicate Lab policy wrapper are no
+longer part of this package. Native Harness failure admission remains covered
+by the bounded Yuanxu Script and the existing =native-progress-admission=
+qualification.
 
 ** Upstream dependency boundary
 

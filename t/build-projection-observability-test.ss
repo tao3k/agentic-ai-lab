@@ -3,17 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case
+(import (only-in :yuanxu/testing
                  yuanxu-test-case yuanxu-default-testing-case-profile)
-        (rename-in
-          (only-in :agentic-ai-lab/testing-api yuanxu-default-testing-case-profile)
-          (yuanxu-default-testing-case-profile product-default-testing-profile))
         (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
         (only-in :gerbil/expander core-import-module module-context-path)
-        "../core/init.ss"
-        "../init.ss"
+        (only-in "../core/init.ss" yuanxu.init.exports)
+        (only-in "../init.ss" agentic-ai-lab.init.exports)
         (only-in :agentic-ai-lab/modules/building/build-config
                  agentic-ai-lab-default-build-observability-policy)
         (only-in :agentic-ai-lab/modules/building/build-projection
@@ -63,7 +60,7 @@
       (let ((source (call-with-input-file "build.ss" read-all-as-string))
             (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
-        (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
+        (check-equal? (contains? source ":std/build-script") #t)
         ;; Core passes its admitted value into the unchanged std/build-script macro.
         (check-equal? (contains? source "agentic-ai-lab.build-modules.exports std-make-spec") #t)
         (check-equal? (contains? source "\"./init.ss\"") #f)
@@ -83,28 +80,27 @@
                                  "srcs = [\":gerbil_package_sources\"]")
                       #t)
         (check-equal? (contains? root-build
-                                 "build_script = \":build.ss\"")
+                                 "build_script = \":build-development.ss\"")
                       #t)))
 
     (yuanxu-test-case "testing uses the official tool without another discovery loop"
-      (def source (call-with-input-file "core/dev/test-file.ss" read-all-as-string))
+      (def source (call-with-input-file "dev/just/testing.just" read-all-as-string))
       (check-equal? (file-exists? "dev/tests.ss") #f)
       (check-equal? (file-exists? "dev/performance-tests.ss") #f)
-      (check-equal? (contains? source ":gerbil/tools/gxtest") #t)
+      (check-equal? (contains? source "gerbil {{ gerbil_test_runtime_options }} test") #t)
+      (check-equal? (file-exists? "core/dev/test-file.ss") #f)
       (check-equal? (contains? source "testing-interface-run-test-files!") #f)
       (check-equal? (contains? source "compile-testing-script") #f))
 
     (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
       (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
             (testing (call-with-input-file "dev/just/testing.just" read-all-as-string))
-            (driver (call-with-input-file "dev/tests.ss" read-all-as-string))
             (adapter (call-with-input-file
                        "dev/modules/testing/native-test-observation.ss" read-all-as-string)))
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"2G\")") #t)
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
         (check-equal? (contains? testing "timeout --signal=TERM --kill-after=5s 1200s") #t)
         (check-equal? (contains? testing "just _test-file") #f)
-        (check-equal? (contains? driver "\"./unit-tests.ss\"") #f)
         (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? testing "rm -rf") #f)))
 

@@ -14,13 +14,9 @@
     :yuanxu/observability/funcs
     :yuanxu/observability/slot-debug
     :yuanxu/observability/debug
-    :yuanxu/observability/testing-case
+    :yuanxu/testing
     :asp-gerbil-scheme/src/build-api/core-capacity
-    :asp-gerbil-scheme/src/testing/import-footprint-reader
-    :asp-gerbil-scheme/src/testing/extension
-    :asp-gerbil-scheme/testing-api
     :yuanxu/observability/output
-    :agentic-ai-lab/dev/modules/testing/testing-extension
     :yuanxu/module-system/schema/relations
     :yuanxu/module-system/types
     :yuanxu/module-system/config
@@ -38,7 +34,7 @@
     :yuanxu/profile-composition/user-profile
     :yuanxu/utilities/functional
     :yuanxu/profile-composition/policy
-    :yuanxu/observability/testing-case
+    :yuanxu/testing
     :agentic-ai-lab/modules/temporal-causality/time/types
     :agentic-ai-lab/modules/temporal-causality/time/objects
     :agentic-ai-lab/modules/temporal-causality/revisions/types
