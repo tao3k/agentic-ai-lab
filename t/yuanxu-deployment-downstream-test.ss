@@ -266,9 +266,18 @@
                      progress: (lambda ()
                                  (make-test-progress-reader
                                    (lambda (line)
-                                     (when (or (string=? line "OK\n") (string=? line "OK"))
+                                     (cond
+                                      ((or (string=? line "OK\n") (string=? line "OK"))
                                        (displayln "LAB-DEPLOYMENT-STAGE child-ok at=" (real-time))
-                                       (force-output)))))
+                                       (force-output))
+                                      ((or (string-prefix? "HARNESS " line)
+                                           (string-prefix? "MODULE " line)
+                                           (string-prefix? "LAB-DEPLOYMENT-USE " line)
+                                           (string-prefix? "LAB-DEPLOYMENT-GET " line))
+                                       ;; Keep real child boundaries visible even if .run is interrupted.
+                                       (display (string-append "LAB-DEPLOYMENT-CHILD at="
+                                                  (number->string (real-time)) " " line))
+                                       (force-output))))))
                      environment: (.o GERBIL_PATH: b GAMBOPT: runtime-options
                        GERBIL_LOADPATH: (string-join (cons b-lib prerequisites) ":"))) .run))
           (check-equal? (.get test-result status) 0)
