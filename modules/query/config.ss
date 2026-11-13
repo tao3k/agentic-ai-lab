@@ -13,6 +13,7 @@
         (only-in "gql.ss" agentic-ai-lab-query->gql)
         (only-in "contracts.ss" agentic-ai-lab-query-bind-execution-receipt)
         (only-in "scheme-select.ss" agentic-ai-lab-query-select-scheme-nodes)
+        (only-in "scheme-graph.ss" agentic-ai-lab-query-select-scheme-graph)
         (only-in "orgize-source.ss"
                  agentic-ai-lab-query-orgize-open-headlines
                  agentic-ai-lab-query-orgize-open-headlines-replay)
@@ -42,6 +43,7 @@
       .project-gql: agentic-ai-lab-query->gql
       .bind-execution-receipt: agentic-ai-lab-query-bind-execution-receipt
       .select-scheme-nodes: agentic-ai-lab-query-select-scheme-nodes
+      .select-scheme-graph: agentic-ai-lab-query-select-scheme-graph
       .select-orgize-open-headlines: agentic-ai-lab-query-orgize-open-headlines
       .replay-orgize-open-headlines:
       agentic-ai-lab-query-orgize-open-headlines-replay

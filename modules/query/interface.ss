@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import "types.ss" "objects.ss" "gql.ss" "funs.ss" "contracts.ss"
-        "scheme-select.ss" "orgize-source.ss"
+        "scheme-select.ss" "scheme-graph.ss" "orgize-source.ss"
         "results/interface.ss"
         "config.ss")
 (export (import: "types.ss")
@@ -13,6 +13,7 @@
         (import: "funs.ss")
         (import: "contracts.ss")
         (import: "scheme-select.ss")
+        (import: "scheme-graph.ss")
         (import: "orgize-source.ss")
         (import: "results/interface.ss")
         (import: "config.ss"))
