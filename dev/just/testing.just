@@ -26,6 +26,11 @@ test: build-testing build-test-workers prepare-test-inputs build-library
     just test-core
     just test-root
 
+# Run the development suites through the standard Scheme test entry.
+[group('test')]
+test-dev:
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test dev.ss
+
 # Keep the root package's runtime entry independently callable during repairs.
 [group('test')]
 [positional-arguments]

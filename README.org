@@ -314,6 +314,10 @@ just test
 gerbil env gerbil interactive t/fixtures/cli-run-smoke.ss 3
 #+end_src
 
+Run the development suites with =gerbil test dev.ss= when the project and
+development dependencies are on the load path. =just test-dev= supplies
+that environment and the existing single-file test budget.
+
 Ordinary =t/= discovery belongs to Gerbil's test tool. =just test-root= passes
 that directory directly; explicit directories and files are native arguments.
 Selected module tests remain published through =init.exports.tests=, without a
