@@ -6,7 +6,7 @@
 ;;; Boundary: profile candidate tests cover Scheme-side dynamic profile data.
 ;;; Invariant: tests do not execute nono promote/apply or runtime sandbox code.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?

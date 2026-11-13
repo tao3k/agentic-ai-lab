@@ -4,7 +4,7 @@
 ;;; Runtime operational coordination; std/test remains the assertion authority.
 (import :clan/poo/object "./objects.ss"
         :std/cli/getopt
-        (only-in :yuanxu/profile-composition/selection-syntax use-module)
+        (only-in :tao3k/yuanxu/profile-composition/selection-syntax use-module)
         (only-in :std/error Error? Error-message)
         (only-in :std/source this-source-file)
         (only-in :std/misc/ports read-all-as-string read-all-as-lines)
@@ -12,9 +12,9 @@
         (only-in :std/string/misc string-trim)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/module-system/source/admission module-source-admit-current!)
-        (only-in :yuanxu/module-system/source/build unique-build-inputs)
-        (only-in :yuanxu/observability/testing-script admit-testing-result)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-admit-current!)
+        (only-in :tao3k/yuanxu/module-system/source/build unique-build-inputs)
+        (only-in :tao3k/yuanxu/observability/testing-script admit-testing-result)
         (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         :std/encoding/json)
 (export main aggregate snapshots publication-observations assert-control)

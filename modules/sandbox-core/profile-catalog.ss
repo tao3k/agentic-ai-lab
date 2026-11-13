@@ -8,7 +8,7 @@
 ;;; Invariant: catalog helpers read user module selections but never resolve runtimes.
 
 (import (only-in :agentic-ai-lab/modules/agent-sandbox/config agentic-ai-lab-default-sandbox-profiles)
-        :yuanxu/module-system/selection/objects)
+        :tao3k/yuanxu/module-system/selection/objects)
 
 (export agentic-ai-lab-user-module-selection-sandbox-profiles
         agentic-ai-lab-sandbox-profile-catalog-defaults

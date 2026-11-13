@@ -5,9 +5,9 @@
 
 ;;; Boundary: reusable POO object scenarios for performance gates.
 
-(import :yuanxu/module-system/schema/interface
-        :yuanxu/graph/interface
-        :yuanxu/module-system/schema/validation)
+(import :tao3k/yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/schema/validation)
 
 (export poo-performance-slot-ref/default
         poo-performance-build-list

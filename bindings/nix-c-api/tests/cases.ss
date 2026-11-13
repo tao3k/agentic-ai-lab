@@ -6,10 +6,10 @@
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :yuanxu/module-system/source/admission
+        (only-in :tao3k/yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         "../compatibility.ss")
 (export nix-api-suite root nix demand field admit provider-expression
         write-input assert rejected? timed checked-query observe-inputs AwsOnly AwsNull

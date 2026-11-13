@@ -3,13 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/testing
+(import (only-in :tao3k/yuanxu/testing
                  yuanxu-test-case yuanxu-default-testing-case-profile)
         (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
         (only-in :gerbil/expander core-import-module module-context-path)
-        (only-in "../core/init.ss" yuanxu.init.exports)
+        (only-in "../core/init.ss" tao3k/yuanxu.init.exports)
         (only-in "../init.ss" agentic-ai-lab.init.exports)
         (only-in :agentic-ai-lab/modules/building/build-config
                  agentic-ai-lab-default-build-observability-policy)
@@ -17,7 +17,7 @@
                  agentic-ai-lab-make-observed-package-spec-projector
                  agentic-ai-lab-observe-build-projection
                  agentic-ai-lab-build-elapsed-milliseconds)
-        (only-in :yuanxu/observability/output
+        (only-in :tao3k/yuanxu/observability/output
                  yuanxu-write-observation-line!))
 
 (export build-projection-observability-test)
@@ -30,12 +30,12 @@
     (yuanxu-test-case "runtime package init entries coexist without forcing either graph"
       (yuanxu-write-observation-line! "init-entry source=%s"
         (module-context-path (core-import-module (path-expand "core/init.ss"))))
-      (check-equal? (eq? yuanxu.init.exports agentic-ai-lab.init.exports) #f)
-      (check-equal? (.ref/cached yuanxu.init.exports 'Modules) #f)
+      (check-equal? (eq? tao3k/yuanxu.init.exports agentic-ai-lab.init.exports) #f)
+      (check-equal? (.ref/cached tao3k/yuanxu.init.exports 'Modules) #f)
       (check-equal? (.ref/cached agentic-ai-lab.init.exports 'Core) #f)
-      (check-exception (.get yuanxu.init.exports std-make-run) NoApplicableMethod?)
+      (check-exception (.get tao3k/yuanxu.init.exports std-make-run) NoApplicableMethod?)
       (check-exception (.get agentic-ai-lab.init.exports std-make-run) NoApplicableMethod?)
-      (check-equal? (.ref/cached (.get yuanxu.init.exports tests) 'selected-graph) #f)
+      (check-equal? (.ref/cached (.get tao3k/yuanxu.init.exports tests) 'selected-graph) #f)
       (check-equal? (.ref/cached (.get agentic-ai-lab.init.exports tests) 'selected-graph) #f))
     (yuanxu-test-case "runtime package catalog reaches the supplied projector unchanged"
       (let ((projected? #f)
@@ -62,7 +62,7 @@
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
         (check-equal? (contains? source ":std/build-script") #t)
         ;; Core passes its admitted value into the unchanged std/build-script macro.
-        (check-equal? (contains? source "agentic-ai-lab.build-modules.exports std-make-spec") #t)
+        (check-equal? (contains? source "\"./build-modules.ss\" std-make-spec") #t)
         (check-equal? (contains? source "\"./init.ss\"") #f)
         (check-equal? (contains? source "std-make-run") #f)
         (check-equal? (contains? projection "package-library-spec") #t)))

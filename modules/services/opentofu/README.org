@@ -29,11 +29,9 @@ Build demand reads the declared =Config= directly. The runtime scope installs
 that same Config when demanded. An inactive service can therefore project its
 library build without loading the OpenTofu runtime prototype.
 
-The owners also declare their ordinary public libraries: Nix contributes
-=agentic-ai-lab/nix-contracts= and OpenTofu contributes
-=agentic-ai-lab/opentofu-contracts= through =library-roots=. The latter's native
-imports bring =services=. These compile contributions remain selected after
-their outputs are installed, so hot builds and clean keep the cold inventory.
+Nix and OpenTofu import their public contract libraries from their type
+roles. Yuanxu follows those imports and OpenTofu's dependency on =services=
+through the Gerbil source graph.
 
 Run =just test-file t/yuanxu-deployment-downstream-test.ss= with built Core
 prerequisites. The gate uses a 120-second aggregate limit, a 120-second action

@@ -10,7 +10,7 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object object<-alist object?)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?))
 
 (def +runtime-batches+ '(1 8 32 128 1024))

@@ -7,14 +7,14 @@
 ;;; Invariant: this owner stores policy data only and never evaluates runtime state.
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :yuanxu/composition/roles role-slot/default)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax
+        (only-in :tao3k/yuanxu/composition/roles role-slot/default)
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax
         (only-in "./strategy.ss"
                  loop-strategy-engine-role
                  loop-strategy-plan?)
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type

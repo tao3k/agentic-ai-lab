@@ -3,18 +3,18 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? check-exception test-suite)
         (only-in :clan/poo/object .all-slots .def .o .ref object?)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/control-plane/graph execution-plan? execution-plan-nodes)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
-        :yuanxu/profile-composition/selection-syntax
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/graph execution-plan? execution-plan-nodes)
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        :tao3k/yuanxu/profile-composition/selection-syntax
 
-        :yuanxu/profile-composition/profile-bundle)
+        :tao3k/yuanxu/profile-composition/profile-bundle)
 
 (export profile-composition-test)
 

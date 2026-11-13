@@ -11,9 +11,9 @@
         (only-in :std/hash/misc hash-key? hash-put!)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/object-family/syntax
+        (only-in :tao3k/yuanxu/object-family/syntax
                  defpoo-object-family)
-        (only-in :yuanxu/utilities/functional yuanxu-all?)
+        (only-in :tao3k/yuanxu/utilities/functional yuanxu-all?)
         "types.ss")
 
 (export agentic-ai-lab-standard-feature-module

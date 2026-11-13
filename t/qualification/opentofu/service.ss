@@ -10,12 +10,12 @@
         (only-in :std/list/walist waref)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
-        (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
-        (only-in :yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-checkpoint)
-        (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/module-system/source/admission module-source-read)
-        (only-in :yuanxu/ops/selected-packages SelectedPackages.))
+        (only-in :tao3k/yuanxu/module-system/source/link yuanxu-load-modules)
+        (only-in :tao3k/yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-checkpoint)
+        (only-in :tao3k/yuanxu/ops/progress execution-progress!)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
+        (only-in :tao3k/yuanxu/ops/selected-packages SelectedPackages.))
 (export call-with-service write-source rejects? empty-state?)
 
 ;; Reuse Core's fixture protocol so nested Ops calls share cancellation

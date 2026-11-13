@@ -6,7 +6,7 @@
 ;;; Boundary: generic module extension tests keep POO resolution semantics out
 ;;; of feature-specific workflow code.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -19,8 +19,8 @@
                  test-suite)
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :yuanxu/graph/interface
-        :yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object
         :agentic-ai-lab/modules/nono-sandbox/objects
         :agentic-ai-lab/modules/cubeSandbox/objects)

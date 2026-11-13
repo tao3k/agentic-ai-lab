@@ -6,7 +6,7 @@
 ;;; Boundary: crash/replay/repair scenario receipts for durable policy.
 ;;; Invariant: tests validate scenario projection only; no runtime recovery runs.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

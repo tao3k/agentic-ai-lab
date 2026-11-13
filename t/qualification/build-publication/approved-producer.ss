@@ -5,14 +5,14 @@
         (only-in "../nix/programs.ss" nix-publication-programs)
         (only-in "../../../core/t/qualification/testing/directory.ss" write-source)
         (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
-        (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
-        (only-in :yuanxu/module-system/building/artifacts
+        (only-in :tao3k/yuanxu/module-system/source/link yuanxu-load-modules)
+        (only-in :tao3k/yuanxu/module-system/building/artifacts
           call-with-build-artifact-issuance run-build-artifact-process build-artifact-handoff)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/encoding/json write-json)
         (only-in "../../../core/t/qualification/build-publication/projection.ss" probe-projection probe-build)
         (only-in "../../../core/t/qualification/build-publication/store.ss" store-add)
-        (only-in :yuanxu/ops/progress call-with-execution-progress execution-progress!))
+        (only-in :tao3k/yuanxu/ops/progress call-with-execution-progress execution-progress!))
 (export main)
 ;; Both the interpreter and the compiled Gerbil executable pass only user arguments.
 (def (main workspace)

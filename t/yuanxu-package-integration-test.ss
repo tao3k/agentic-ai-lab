@@ -7,12 +7,12 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :yuanxu/ops/interface Ops)
-        (only-in :yuanxu/ops/func run-script)
-        (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
-        (only-in :yuanxu/module-system/source/admission module-source-read)
-        (only-in :yuanxu/module-system/building/products artifact-files)
+        (only-in :tao3k/yuanxu/ops/interface Ops)
+        (only-in :tao3k/yuanxu/ops/func run-script)
+        (only-in :tao3k/yuanxu/ops/progress execution-progress!)
+        (only-in :tao3k/yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
+        (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
 (export yuanxu-package-integration-test)
 (def (product-snapshot targets directories)
@@ -32,7 +32,7 @@
 (def yuanxu-package-integration-test
   (test-suite "Lab package consumes Yuanxu public declarations"
     (test-case "the package owns its build projection and native module demand"
-      (check-equal? (procedure? (.get agentic-ai-lab.init.exports std-make-spec)) #t)
+      (check-equal? (list? (.get agentic-ai-lab.init.exports std-make-spec)) #t)
       (def started (real-time))
       (def scope (.get agentic-ai-lab.init.exports modules nix))
       (displayln "lab-business-get seconds=" (- (real-time) started))

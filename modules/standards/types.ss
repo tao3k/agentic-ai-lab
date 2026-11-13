@@ -8,7 +8,7 @@
 ;;; parse, validate, or execute a concrete industry standard.
 (import (only-in :clan/poo/object .all-slots .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-all? yuanxu-any? yuanxu-list-of?))
 
 (export +agentic-ai-lab-standard-family-kind+

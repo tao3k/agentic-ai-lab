@@ -20,11 +20,11 @@
                  yuanxu-module-interface-schema-spec)
         (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
                  agentic-ai-lab-modules)
-        (only-in :yuanxu/module-system/projection/option-objects
+        (only-in :tao3k/yuanxu/module-system/projection/option-objects
                  yuanxu-module-option-schema-value)
         (only-in :agentic-ai-lab/modules/module-authoring/module-option-projection
                  agentic-ai-lab-module-option-schemas)
-        (only-in :yuanxu/module-system/projection/option-validation
+        (only-in :tao3k/yuanxu/module-system/projection/option-validation
                  yuanxu-module-find-schema))
 
 (def +schema-count+ 1000)

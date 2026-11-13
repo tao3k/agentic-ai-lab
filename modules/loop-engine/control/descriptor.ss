@@ -6,11 +6,11 @@
 ;;; Boundary: loop-agent descriptors are policy composition data.
 ;;; Invariant: scheduling, persistence, and execution stay in marlin-agent-core.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o object?)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax)
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax)
 
 (export +loop-pattern-schema+
         +loop-levels+

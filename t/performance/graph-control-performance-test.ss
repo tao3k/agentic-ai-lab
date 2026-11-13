@@ -5,15 +5,15 @@
 
 ;;; Boundary: exclusive end-to-end complexity gate for graph control receipts.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .ref)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :yuanxu/graph/types-core
-        :yuanxu/graph/control-analysis)
+        :tao3k/yuanxu/graph/types-core
+        :tao3k/yuanxu/graph/control-analysis)
 
 (export graph-control-performance-test)
 

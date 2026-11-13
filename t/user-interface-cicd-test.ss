@@ -6,12 +6,12 @@
 ;;; Boundary: tests verify Funflow CI/CD user intent presentation.
 ;;; Invariant: CI/CD facts stay declarative and never execute adapters.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config

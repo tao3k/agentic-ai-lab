@@ -9,11 +9,11 @@
 
 (import (only-in :clan/poo/object
                  object<-alist)
-        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-receipt
                  yuanxu-json-schema->contract-artifact
                  yuanxu-json-schema-contract-artifact-object-contract
                  yuanxu-json-schema-contract-artifact->alist)
-        (only-in :yuanxu/modules/json-schema/json-schema-validate
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validate
                  yuanxu-json-schema-contract-artifact-validate
                  yuanxu-json-schema-object-contract-validation->alist))
 

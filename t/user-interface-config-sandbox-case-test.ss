@@ -1,6 +1,6 @@
 (import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-recipe-portable? agentic-ai-lab-sandbox-profile->descriptor agentic-ai-lab-sandbox-profile-by-name))
-(import (only-in :yuanxu/profile-composition/user-profile yuanxuUserConfigFromProfile))
-(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-config-modules yuanxu-user-config-settings yuanxu-user-module-selection? yuanxu-user-module-selection-key yuanxu-user-module-selection-has-flag? yuanxu-user-module-selection-has-flags? yuanxu-user-module-selection yuanxu-user-config-feature?))
+(import (only-in :tao3k/yuanxu/profile-composition/user-profile yuanxuUserConfigFromProfile))
+(import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-config-modules yuanxu-user-config-settings yuanxu-user-module-selection? yuanxu-user-module-selection-key yuanxu-user-module-selection-has-flag? yuanxu-user-module-selection-has-flags? yuanxu-user-module-selection yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -9,7 +9,7 @@
 ;;; Boundary: sandbox cases prove declarations stay data-only before realization.
 ;;; Backend descriptors are inspected as upstream module facts, not executed here.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?

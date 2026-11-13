@@ -4,7 +4,7 @@
 
 (export protocol-person-promotion-test)
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :agentic-ai-lab/modules/governance/policy/protocol-person-promotion)

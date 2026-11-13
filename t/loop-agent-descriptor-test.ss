@@ -6,7 +6,7 @@
 ;;; Boundary: loop-agent tests cover POO/C4 policy descriptors only.
 ;;; Invariant: scheduling and execution stay out of this test surface.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/loop-engine/control/agent)
 
 (export loop-agent-descriptor-test)

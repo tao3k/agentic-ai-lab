@@ -4,10 +4,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .cc)
-        (only-in :yuanxu/modules/funflow/control-plane/signatures
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit Type. validate)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Docker tutorial alignment lives in this module.
 ;;; Boundary: core provides descriptor, strategy, runner, and adapter protocols.
 ;;; Import contract: users opt in through the module config/interface exports.
@@ -17,22 +17,22 @@
 ;;; Dependency: generic sandbox resources live in =:agentic-ai-lab/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-kind
                  task-request)
-        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        (only-in :yuanxu/modules/funflow/control-plane/strategy
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter)
-        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
-        (only-in :yuanxu/modules/funflow/control-plane/flow
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps)
         (only-in :agentic-ai-lab/modules/agent-sandbox/resource
                  sandbox-volume-bindings->request

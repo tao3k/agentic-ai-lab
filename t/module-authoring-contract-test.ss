@@ -3,31 +3,31 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/type Record)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .cc .o .ref)
         (only-in :clan/poo/mop TypeError? validate)
         (only-in :std/test check-equal? check-exception test-suite)
-        :yuanxu/module-system/authoring/admission
-        (only-in :yuanxu/poo-clos/interface
+        :tao3k/yuanxu/module-system/authoring/admission
+        (only-in :tao3k/yuanxu/poo-clos/interface
                  poo-clos-call
                  poo-clos-compose-method-bundle
                  poo-clos-compute-applicable-methods
                  poo-clos-generic-function
                  .defgeneric .defmethod .defmethod-bundle)
-        (only-in :yuanxu/module-system/observability/presentation
+        (only-in :tao3k/yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-file-observations
                  yuanxu-poo-slot-authoring-diagnostics)
-        (only-in :yuanxu/utilities/algorithms
+        (only-in :tao3k/yuanxu/utilities/algorithms
                  yuanxu-directory-files-recursive)
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface
                  yuanxu-module-interface-authoring
                  yuanxu-module-interface-prototype)
-        (only-in :yuanxu/module-system/source/collection make-yuanxu-module-source-collection make-yuanxu-contribution-module-source yuanxu-module-source-collection-role-entrypoints)
-        (only-in :yuanxu/module-system/authoring/roles ModuleAuthoringExecutor. ModuleSourceRole. ObjectsSourceRole. yuanxu-default-module-authoring-profile)
+        (only-in :tao3k/yuanxu/module-system/source/collection make-yuanxu-module-source-collection make-yuanxu-contribution-module-source yuanxu-module-source-collection-role-entrypoints)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles ModuleAuthoringExecutor. ModuleSourceRole. ObjectsSourceRole. yuanxu-default-module-authoring-profile)
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module agentic-ai-lab-user-root-module-authoring-profile))
 
 (export module-authoring-contract-test)

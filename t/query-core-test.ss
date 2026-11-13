@@ -3,12 +3,12 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
         :agentic-ai-lab/modules/query/interface
-        :yuanxu/poo-clos/interface
+        :tao3k/yuanxu/poo-clos/interface
         (only-in :agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt

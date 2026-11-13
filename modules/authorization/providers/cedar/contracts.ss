@@ -11,7 +11,7 @@
         (only-in :agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assessment?)
-        :yuanxu/poo-clos/interface
+        :tao3k/yuanxu/poo-clos/interface
         (only-in :agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric

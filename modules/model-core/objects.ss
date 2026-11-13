@@ -39,7 +39,7 @@
         agentic-ai-lab-model-selection-receipt->alist)
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :yuanxu/object-family/syntax
+        :tao3k/yuanxu/object-family/syntax
         :agentic-ai-lab/modules/model-core/types
         :agentic-ai-lab/modules/session/policy
         (only-in :agentic-ai-lab/modules/session/objects-core

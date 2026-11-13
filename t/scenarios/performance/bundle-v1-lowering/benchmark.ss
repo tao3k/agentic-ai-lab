@@ -4,8 +4,8 @@
 
 (import (only-in :std/list/list map)
         :clan/poo/object
-        :yuanxu/module-system/feature/bundle-v1-lowering
-        :yuanxu/utilities/functional)
+        :tao3k/yuanxu/module-system/feature/bundle-v1-lowering
+        :tao3k/yuanxu/utilities/functional)
 
 (def +agent-count+ 1000)
 

@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-ref
@@ -14,7 +14,7 @@
                  micro-kernel-receipt-pass?
                  micro-kernel-run/result)
         (only-in :clan/poo/object .o .ref)
-        (only-in :yuanxu/observability/debug
+        (only-in :tao3k/yuanxu/observability/slot-debug
                  YuanxuDebugSlotPolicyContract)
         (only-in "../support/poo-performance"
                  poo-performance-fixture-policy-contract-pass?

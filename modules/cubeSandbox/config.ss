@@ -8,8 +8,8 @@
 
 (import :agentic-ai-lab/modules/cubeSandbox/objects
         :agentic-ai-lab/modules/sandbox-core/objects
-        :yuanxu/module-system/selection/objects
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-cubeSandbox-module-bundles
         agentic-ai-lab-cubeSandbox-config-flags

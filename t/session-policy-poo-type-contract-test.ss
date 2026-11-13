@@ -5,7 +5,7 @@
 
 ;;; Contract: session policy and tool grants expose POO Contracts.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> AgenticAILabSessionPolicyExpr AgenticAILabSessionPolicyValue)

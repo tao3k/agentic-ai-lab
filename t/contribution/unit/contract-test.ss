@@ -2,11 +2,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .o .ref)
-        :yuanxu/contribution/objects
-        (only-in :yuanxu/profile-composition/profile-bundle
+        :tao3k/yuanxu/contribution/objects
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  compose profiles))
 (export contract-test)
 

@@ -2,21 +2,21 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract agentic-ai-lab-opentofu-normalize-block)
         (only-in :agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-cty->schema)
-        (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
-        (only-in :yuanxu/modules/json-schema/json-schema-receipt yuanxu-json-schema->contract-artifact yuanxu-json-schema-contract-artifact-normalization)
-        (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-contract-artifact-validate)
-        (only-in :yuanxu/modules/json-schema/json-schema-valid yuanxu-json-schema-node-valid?)
-        (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-node-validate yuanxu-json-schema-object-contract-validation-valid?)
-        (only-in :yuanxu/modules/json-schema/json-schema-ir yuanxu-json-schema-normalization-schema)
-        (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-receipt yuanxu-json-schema->contract-artifact yuanxu-json-schema-contract-artifact-normalization)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-contract-artifact-validate)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-valid yuanxu-json-schema-node-valid?)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-node-validate yuanxu-json-schema-object-contract-validation-valid?)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-ir yuanxu-json-schema-normalization-schema)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-diagnostics
                  yuanxu-json-schema-validation-diagnostic-metadata)
-        (only-in :yuanxu/modules/json-schema/json-schema-ir
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-ir
                  yuanxu-json-schema-normalization-schema)
-        :yuanxu/object-types/contracts
+        :tao3k/yuanxu/object-types/contracts
         :clan/poo/object)
 (export opentofu-schema-test)
 (def opentofu-schema-test

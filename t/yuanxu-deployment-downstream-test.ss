@@ -8,12 +8,12 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :yuanxu/ops/progress current-execution-progress execution-progress! make-test-progress-reader)
-        (only-in :yuanxu/observability/testing-script TestingScript. make-compiler-progress-reader)
-        (only-in :yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
-        (only-in :yuanxu/module-system/building/products artifact-files)
-        (only-in :yuanxu/module-system/building/products current-build-output-directory)
-        (only-in :yuanxu/module-system/source/admission module-source-read
+        (only-in :tao3k/yuanxu/ops/progress current-execution-progress execution-progress! make-test-progress-reader)
+        (only-in :tao3k/yuanxu/observability/testing-script TestingScript. make-compiler-progress-reader)
+        (only-in :tao3k/yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
+        (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
+        (only-in :tao3k/yuanxu/module-system/building/products current-build-output-directory)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read
                  call-with-module-source-operation-measurement call-with-module-source-read-cache)
         (only-in "./qualification/yuanxu-build-events.ss" compile-events)
         (only-in "./qualification/yuanxu-deployment-consumer/init.ss" yuanxu-deployment-consumer.init.exports)
@@ -182,7 +182,7 @@
                                  yuanxu/modules/funflow/interface
                                  agentic-ai-lab/modules/services/opentofu/interface))
           (def owner-prefixes '("agentic-ai-lab/modules/nix/" "agentic-ai-lab/modules/services/opentofu/"
-                                "yuanxu/modules/json-schema/" "yuanxu/modules/funflow/"))
+                                "tao3k/yuanxu/modules/json-schema/" "tao3k/yuanxu/modules/funflow/"))
           (def (selected-target? target) (ormap (cut string-prefix? <> target) owner-prefixes))
           (def selected-tests (.get yuanxu-deployment-consumer.init.exports tests))
           (def test-files (measure-phase 'test-discovery (lambda () (.get selected-tests spec))))
@@ -224,7 +224,7 @@
                                 (and (string-prefix? "agentic-ai-lab/modules/" target)
                                      (not (selected-target? target)))) targets) '())
           (check-equal? (filter (lambda (target)
-                                (and (string-prefix? "yuanxu/" target)
+                                (and (string-prefix? "tao3k/yuanxu/" target)
                                      (not (selected-target? target)))) targets) '())
           (def identities (map string->symbol targets))
           (def (installed-products)
@@ -237,7 +237,7 @@
                               (cond
                                ((string-prefix? "agentic-ai-lab/" target)
                                 (path-expand (string-append (substring target 15 (string-length target)) ".ss") root))
-                               ((string-prefix? "yuanxu/" target)
+                               ((string-prefix? "tao3k/yuanxu/" target)
                                 (path-expand (string-append "core/" (substring target 7 (string-length target)) ".ss") root))
                                (else #f))) targets))))
           (def source-before (map module-source-read inputs))

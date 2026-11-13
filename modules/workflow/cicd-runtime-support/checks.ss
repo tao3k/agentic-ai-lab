@@ -7,16 +7,16 @@
 ;;; projection helpers for CI/CD runtime handoff.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :yuanxu/modules/funflow/func
+        (only-in :tao3k/yuanxu/modules/funflow/func
                  runtime-command-fields->manifest)
-        :yuanxu/modules/funflow/check-types
-        :yuanxu/modules/funflow/check-objects
-        :yuanxu/modules/funflow/check-funs
-        :yuanxu/modules/funflow/projection-syntax
+        :tao3k/yuanxu/modules/funflow/check-types
+        :tao3k/yuanxu/modules/funflow/check-objects
+        :tao3k/yuanxu/modules/funflow/check-funs
+        :tao3k/yuanxu/modules/funflow/projection-syntax
         :agentic-ai-lab/modules/workflow/cicd-sandbox
-        :yuanxu/modules/funflow/dependency-graph)
+        :tao3k/yuanxu/modules/funflow/dependency-graph)
 
 (export agentic-ai-lab-cicd-check-artifact-provenance
         agentic-ai-lab-cicd-check-durable-fields

@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Agentic AI Lab maintained source roots and precedence, not collection mechanics.
 (import (only-in :clan/poo/object .o)
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/source-policy
                  AgenticAILabModuleStylePolicy))
 (export agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories agentic-ai-lab-default-module-load-path

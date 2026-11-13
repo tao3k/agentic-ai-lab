@@ -7,7 +7,7 @@
 
 (import (only-in :clan/poo/object .ref)
         "./performance"
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxuUserConfig)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config

@@ -6,12 +6,12 @@
 ;;; Boundary: focused user-interface loop-engine result contract diagnostics.
 ;;; Invariant: invalid result contracts are reported, never executed.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :agentic-ai-lab/modules/loop-engine/config

@@ -5,7 +5,7 @@
 
 ;;; Minimal runtime gxtest fixture for the Agentic AI Lab operation-observation lane.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 (export runtime-batch-test)

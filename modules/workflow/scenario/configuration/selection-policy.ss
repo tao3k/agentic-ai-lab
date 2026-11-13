@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product module routing is an input to Core selection admission.
 (import (only-in :clan/poo/object .o object<-alist)
-        (only-in :yuanxu/module-system/selection/objects current-module-selection-policy)
-        (rename-in (only-in :yuanxu/module-system/selection/contract
+        (only-in :tao3k/yuanxu/module-system/selection/objects current-module-selection-policy)
+        (rename-in (only-in :tao3k/yuanxu/module-system/selection/contract
                             yuanxu-use-module-contract-validation
                             yuanxu-require-use-module-contract!
                             yuanxu-modules-system-use-module/contract)

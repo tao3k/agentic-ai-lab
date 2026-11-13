@@ -8,7 +8,7 @@
 (export #t)
 
 (import (only-in :clan/poo/object .ref)
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/role-syntax
         (only-in :std/list/list fold fold-right))
 
 (def +agentic-ai-lab-versioned-capability-slots+ '(schema-id schema-version))

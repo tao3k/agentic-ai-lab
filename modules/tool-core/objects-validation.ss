@@ -10,7 +10,7 @@
         :agentic-ai-lab/modules/tool-core/objects-catalog
         :agentic-ai-lab/modules/tool-core/objects-policy-refs
         :agentic-ai-lab/modules/tool-core/objects-spec
-        :yuanxu/utilities/functional)
+        :tao3k/yuanxu/utilities/functional)
 
 (export agentic-ai-lab-tool-action-mismatch-bundle
         agentic-ai-lab-tool-policy-catalog-validation-summary)

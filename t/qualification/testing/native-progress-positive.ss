@@ -1,11 +1,11 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (for-syntax (only-in :yuanxu/observability/testing-source install-test-source-observation!)))
+(import (for-syntax (only-in :tao3k/yuanxu/observability/testing-source install-test-source-observation!)))
 (begin-syntax (install-test-source-observation!))
 (import :std/test
         (only-in :gerbil/expander current-expander-module-import
                  core-resolve-identifier core-context-root feature-binding?)
-        (only-in :yuanxu/observability/testing-source
+        (only-in :tao3k/yuanxu/observability/testing-source
                  test-source-observation-active? stop-test-source-observation!))
 (export progress-test)
 (def progress-test

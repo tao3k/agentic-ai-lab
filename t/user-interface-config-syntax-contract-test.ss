@@ -6,15 +6,15 @@
 ;;; Boundary: module-selection syntax and declaration-contract admission.
 ;;; Invariant: contract qualification does not load profiles or root config.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection->alist
                  yuanxu-user-module-when)
-        (only-in :yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
+        (only-in :tao3k/yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module agentic-ai-lab-product-selection-admit! agentic-ai-lab-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)

@@ -5,7 +5,7 @@
 
 ;;; Boundary: shared sandbox object owned by the sandbox module family.
 
-(import :yuanxu/module-system/schema/interface)
+(import :tao3k/yuanxu/module-system/schema/interface)
 
 (export agentic-ai-lab-shared-sandbox-object
         agentic-ai-lab-shared-module-objects)

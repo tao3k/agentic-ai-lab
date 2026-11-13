@@ -9,7 +9,7 @@
         :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/session/policy-syntax
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type

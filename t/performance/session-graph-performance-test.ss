@@ -6,7 +6,7 @@
 ;;; Boundary: session graph performance gates cover indexed lineage traversal.
 ;;; Invariant: graph presentation stays report-only and never executes runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

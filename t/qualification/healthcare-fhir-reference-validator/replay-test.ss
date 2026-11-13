@@ -5,7 +5,7 @@
 
 ;;; External qualification only: replay the pinned HL7 FHIR Validator and
 ;;; compare the decoded JSON evidence.  Normal Lambda tests remain inert.
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :gerbil/runtime/gambit getenv)
         (only-in :std/crypto/digest sha256)

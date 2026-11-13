@@ -3,16 +3,16 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .all-slots .o .ref .slot?)
-        (only-in :yuanxu/observability/slot-presentation
+        (only-in :tao3k/yuanxu/observability/slot-presentation
                  yuanxu-slot-presentation)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
-        :yuanxu/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        :tao3k/yuanxu/profile-composition/profile-bundle
         (only-in :clan/poo/mop make-instance)
-        (only-in :yuanxu/modules/funflow/scenario Scenario))
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario))
 
 (export profile-bundle-test)
 

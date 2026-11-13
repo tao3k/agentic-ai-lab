@@ -6,16 +6,16 @@
 ;;; Boundary: downstream-shaped Funflow POO config lowers to readiness facts.
 
 (import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
-        (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :agentic-ai-lab/modules/workflow/funflow-config
         :agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map-name)
+        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map-name)
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness))
 
 (export funflow-config-pipeline-downstream-test)

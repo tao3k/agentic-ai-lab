@@ -7,7 +7,7 @@
 ;;; Invariant: validation resolves POO tool specs and policy refs without
 ;;; runtime execution or backend startup.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

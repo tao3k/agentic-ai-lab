@@ -6,13 +6,13 @@
 ;;; Boundary: user-interface profile library gate tests.
 ;;; Invariant: public reusable profiles must carry test and Lean proof status.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :yuanxu/module-system/selection/objects
-        :yuanxu/profile-composition/user-profile
-        :yuanxu/profile-composition/gate)
+        :tao3k/yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/profile-composition/user-profile
+        :tao3k/yuanxu/profile-composition/gate)
 
 
 (export user-interface-profile-library-gate-test)

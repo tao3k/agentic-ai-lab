@@ -10,8 +10,8 @@
         :agentic-ai-lab/modules/query/semantic/context-restriction
         :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
         :std/test (only-in :clan/poo/object .o .ref object?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-case/with yuanxu-selected-testing-case-profile)
-        (only-in :yuanxu/ops/progress execution-progress!)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-case/with yuanxu-selected-testing-case-profile)
+        (only-in :tao3k/yuanxu/ops/progress execution-progress!)
         (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
                  reasoning-receipt-rows reasoning-receipt-bound?)

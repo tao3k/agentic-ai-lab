@@ -6,11 +6,11 @@
 ;;; Example owner: a browser profile remains declarative until a downstream
 ;;; runtime chooses to realize its staged composition.
 
-(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        :yuanxu/profile-composition/selection-syntax
+        :tao3k/yuanxu/profile-composition/selection-syntax
 
-        :yuanxu/profile-composition/profile-bundle
+        :tao3k/yuanxu/profile-composition/profile-bundle
         (only-in :agentic-ai-lab/modules/workflow/profiles/agentic-research
                  AgenticResearchModule
                  BrowserResearchScenarioProfile))

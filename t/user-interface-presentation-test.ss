@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify user-interface presentation receipts.
 ;;; Invariant: presentations stay report-only and never realize descriptors.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,11 +14,11 @@
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  agentic-ai-lab-brand-group
                  agentic-ai-lab-brand-name)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
-        (only-in :yuanxu/profile-composition/user-profile
+        (only-in :tao3k/yuanxu/profile-composition/user-profile
                  yuanxu-user-profile-presentation-kind)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config
                  agenticAiLabUserProfilePresentation)

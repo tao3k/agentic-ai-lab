@@ -49,7 +49,7 @@
 
 (def (main (output "dev/d2/output"))
   ;; Prepare the init-owned source closure without running a build/compiler.
-  ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '())
+  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (def input (context-evolution-example))
   (def result ((.get Profile evaluate) input))
   (def snapshots

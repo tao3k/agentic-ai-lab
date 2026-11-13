@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance contract and API-evidence test cases.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,11 +15,11 @@
                  benchmark-receipt-pass?)
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
-        :yuanxu/object-family/indexed
-        :yuanxu/modules/funflow/control-plane/runtime-protocol
-        :yuanxu/module-system/schema/interface
-        :yuanxu/graph/interface
-        :yuanxu/module-system/schema/validation)
+        :tao3k/yuanxu/object-family/indexed
+        :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
+        :tao3k/yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/schema/validation)
 
 (export contracts-test)
 

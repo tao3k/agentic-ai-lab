@@ -6,7 +6,7 @@
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/encoding/json json->string read-json JSONReadOptions)
-        (only-in :yuanxu/module-system/source/admission module-source-read))
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read))
 (export flake-api-suite)
 
 (def (cli-run arguments)

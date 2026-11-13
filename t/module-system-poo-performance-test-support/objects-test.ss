@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance object and object-catalog test cases.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test
                  check-equal?
@@ -17,9 +17,9 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
-        :yuanxu/module-system/schema/interface
-        :yuanxu/graph/interface
-        :yuanxu/module-system/schema/validation)
+        :tao3k/yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/schema/validation)
 
 (export objects-test)
 

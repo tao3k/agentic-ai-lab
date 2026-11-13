@@ -6,19 +6,19 @@
 ;;; Boundary: core cases exercise the thin declarative user-interface surface.
 ;;; These checks intentionally stop before sandbox realization or runtime work.
 
-(import (only-in :yuanxu/testing
+(import (only-in :tao3k/yuanxu/testing
                  yuanxu-test-case yuanxu-user-profile-policy-admit)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :yuanxu/profile-composition/user-profile
+        (only-in :tao3k/yuanxu/profile-composition/user-profile
                  yuanxuUserConfigFromProfile
                  yuanxu-user-profile?
                  yuanxu-user-profile-name
                  yuanxu-user-profile-module-bundles)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config?
                  yuanxu-user-config-modules
                  yuanxu-user-config-module-keys
@@ -27,7 +27,7 @@
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-entrypoint
                  yuanxu-user-module-selection-source-ref)
-        (only-in :yuanxu/module-system/source/objects
+        (only-in :tao3k/yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-kind
                  yuanxu-module-source-ref-value))
 

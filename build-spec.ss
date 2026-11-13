@@ -5,7 +5,7 @@
 ;;; Explicit library callers own their requested roots. Package installation
 ;;; supplies an empty library specification.
 (import (only-in :gerbil/expander expander-context-id)
-        (only-in :yuanxu/module-system/building/source-closure package-library-spec))
+        (only-in :tao3k/yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
 (def agentic-ai-lab-public-build-roots
   ;; Retained package-library entries migrate only after selected-owner coverage.

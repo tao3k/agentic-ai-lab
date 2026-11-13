@@ -8,7 +8,7 @@
 (export main)
 
 (def (main (output "core/dev/d2/20-module-loading"))
-  ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '())
+  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (def d2 (.get agentic-ai-lab/dev/d2.init.exports modules d2))
   ;; ASCENT owns endpoint validation, reachability and selected visual rows.
   ;; Core declares facts only; the published serializer consumes derived rows.

@@ -7,7 +7,7 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object
         :agentic-ai-lab/modules/agent-sandbox/config
         (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation

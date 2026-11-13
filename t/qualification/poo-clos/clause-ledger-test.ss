@@ -5,10 +5,10 @@
 
 ;;; Clause ledger completeness and profile-separation checks.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check)
         (only-in :clan/poo/object .o .ref)
-        (only-in :yuanxu/module-system/observability/presentation
+        (only-in :tao3k/yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-datum-observations
                  yuanxu-poo-slot-authoring-file-observations
                  yuanxu-poo-slot-authoring-diagnostics)

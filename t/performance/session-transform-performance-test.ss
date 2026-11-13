@@ -5,7 +5,7 @@
 
 ;;; Boundary: performance gates for session transform POO row boundaries.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

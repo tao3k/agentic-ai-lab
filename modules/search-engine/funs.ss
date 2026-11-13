@@ -3,18 +3,18 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/search-engine/objects
-        (only-in :yuanxu/modules/funflow/control-plane/flow
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  external-flow flow-fanout flow-input-contract
                  flow-output-contract flow-then)
-        (only-in :yuanxu/modules/funflow/control-plane/graph flow->dag-receipt)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/graph flow->dag-receipt)
         (only-in :agentic-ai-lab/modules/temporal-causality/objects
                  agentic-ai-lab-causal-event agentic-ai-lab-temporal-observation))
 

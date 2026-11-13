@@ -15,8 +15,8 @@
         :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         "core.ss"
         "runtime-base.ss"
-        :yuanxu/utilities/runtime-receipt-syntax
-        :yuanxu/utilities/functional)
+        :tao3k/yuanxu/utilities/runtime-receipt-syntax
+        :tao3k/yuanxu/utilities/functional)
 
 (export make-loop-engine-capability-receipt
         loop-engine-capability-receipt?

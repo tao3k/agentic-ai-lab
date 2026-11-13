@@ -6,9 +6,9 @@
 ;;; Boundary: maintained human/AI capability Profiles and Scenario graph.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
-        (only-in :yuanxu/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  yuanxu-module-profiles
                  yuanxu-profile-export))
 

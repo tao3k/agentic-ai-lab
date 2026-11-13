@@ -5,7 +5,7 @@
 
 ;;; Contract: JSON Schema emits and validates POO Contracts directly.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/encoding/json JSONReadOptions string->json)
         :std/test)
 
@@ -19,8 +19,8 @@
     (yuanxu-test-case "validates the runtime contract"
       (eval '(import "./core/modules/json-schema/json-schema-receipt.ss"))
       (eval '(import "./core/modules/json-schema/json-schema-validate.ss"))
-      (eval '(import :yuanxu/module-system/schema/slot-contracts))
-      (eval '(import :yuanxu/object-types/facts))
+      (eval '(import :tao3k/yuanxu/module-system/schema/slot-contracts))
+      (eval '(import :tao3k/yuanxu/object-types/facts))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (json-schema-gerbil-eval
  '(def +json-schema-host-artifact+

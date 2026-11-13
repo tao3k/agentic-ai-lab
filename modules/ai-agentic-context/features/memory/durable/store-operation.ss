@@ -7,11 +7,11 @@
 ;;; Invariant: Scheme projects operation intent only; Rust/Marlin owns append,
 ;;; fsync, checkpoint IO, index rebuild, leases, and repair side effects.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/utilities/final-projection-syntax
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 
 (export +agentic-ai-lab-durable-runtime-store-operation-receipt-kind+

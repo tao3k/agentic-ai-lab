@@ -6,9 +6,9 @@
 ;;; Boundary: minimal kernel profile data for root profile projection.
 ;;; Invariant: no init syntax, doctor, or presentation owners are imported here.
 
-(import (only-in :yuanxu/module-system/selection/objects
+(import (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-settings)
-        (only-in :yuanxu/profile-composition/user-profile
+        (only-in :tao3k/yuanxu/profile-composition/user-profile
                  yuanxuUserProfile
                  yuanxuUserProfileSet
                  yuanxu-user-profile-modules)

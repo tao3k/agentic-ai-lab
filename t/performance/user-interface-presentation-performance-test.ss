@@ -7,7 +7,7 @@
 ;;; Invariant: public authoring remains POO; generated runtime receipts
 ;;; are fixed structs until Marlin ABI handoff serialization.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,7 +17,7 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref .slot? object?)
         "../support/performance"
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules
                  yuanxuUserConfig)

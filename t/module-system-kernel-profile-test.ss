@@ -6,11 +6,11 @@
 ;;; Boundary: kernel profile and user-interface fixture integration checks.
 ;;; Invariant: descriptor activation unit tests do not load kernel profile rows.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?)
-        (only-in :yuanxu/profile-composition/user-profile
+        (only-in :tao3k/yuanxu/profile-composition/user-profile
                  yuanxu-user-profile-name
                  yuanxu-user-profile-set-name
                  yuanxu-user-profile-set-default-profile-name

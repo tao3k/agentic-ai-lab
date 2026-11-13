@@ -4,9 +4,9 @@
 (import :std/test :clan/poo/object
         (only-in :clan/poo/mop element? validate)
         :clan/poo/object-contract
-        :yuanxu/modules/json-schema/contracts
-        (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
+        :tao3k/yuanxu/modules/json-schema/contracts
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-block->schema))
 (export json-schema-aws-value-contract-test)
 

@@ -7,11 +7,11 @@
 ;;; Invariant: user config projects effective policy validation only; Scheme
 ;;; never executes tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         :agentic-ai-lab/modules/session/config

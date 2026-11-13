@@ -5,9 +5,9 @@
 (import (only-in :std/list/list map)
         :gerbil/runtime/gambit
         :clan/poo/object
-        :yuanxu/utilities/functional
-        :yuanxu/module-system/feature/bundle-v1-lowering
-        :yuanxu/module-system/feature/bundle-v1-foreign-arena)
+        :tao3k/yuanxu/utilities/functional
+        :tao3k/yuanxu/module-system/feature/bundle-v1-lowering
+        :tao3k/yuanxu/module-system/feature/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
   'agentic-ai-lab.bundle-v1-foreign-arena.benchmark.v1)

@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :yuanxu/graph/types-core yuanxu-graph-id?))
+        (only-in :tao3k/yuanxu/graph/types-core yuanxu-graph-id?))
 
 (export agentic-ai-lab-relation-trajectory-witness-kind
         agentic-ai-lab-structural-impact-receipt-kind

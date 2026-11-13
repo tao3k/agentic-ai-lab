@@ -9,9 +9,9 @@
 ;;; Policy evidence: Cube interface tests assert descriptor override and gates.
 
 (import (only-in :clan/poo/object .ref object?)
-        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
-        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        :yuanxu/object-family/role-syntax
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/agent-sandbox/alist
         :agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :agentic-ai-lab/modules/agent-sandbox/profile

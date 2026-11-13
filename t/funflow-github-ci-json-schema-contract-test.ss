@@ -5,7 +5,7 @@
 
 ;;; Funflow: GitHub CI profile contract backed by JSON Schema projection.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,12 +14,12 @@
         (only-in :std/encoding/json
                  JSONReadOptions
                  string->json)
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot-name
                  yuanxu-object-contract-slots)
-        (only-in :yuanxu/modules/json-schema/json-schema-source
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source
                  yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-receipt
                  yuanxu-json-schema->contract-artifact
                  yuanxu-json-schema-contract-artifact-object-contract
                  yuanxu-json-schema-contract-artifact->alist)

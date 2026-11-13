@@ -9,7 +9,7 @@
 
 (import :agentic-ai-lab/modules/session/syntax
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/spec
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry))
 
 (export agentic-ai-lab-custom-my-module-session-agent-param-case)

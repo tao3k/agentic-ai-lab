@@ -4,10 +4,10 @@
 (import :std/test :clan/poo/object "./qualification/opentofu/objects.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/error Error? Error-message)
-        (only-in :yuanxu/module-system/source/admission module-source-read module-source-admit-current!)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read module-source-admit-current!)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract))
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-predicate-contract))
 (export ops-selected-packages-test)
 (def SelectedPackages. (.get Ops prototypes SelectedPackages))
 (def ObjectContract (yuanxu-predicate-contract 'ops/test-object object? (lambda (_v _c) '())))

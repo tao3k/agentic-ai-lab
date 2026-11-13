@@ -6,7 +6,7 @@
 ;;; Boundary: runtime manifest tests cover durable CLI handoff consumption.
 ;;; Invariant: manifests remain request-bound so Rust can run the same argv.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api)
+        :tao3k/yuanxu/modules/funflow/control-plane/api)
 
 (export runtime-manifest-test)
 

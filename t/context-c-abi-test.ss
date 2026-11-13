@@ -4,7 +4,7 @@
 ;;; Real C facade -> exported Scheme entry -> runtime owner -> Session CAS.
 (import (only-in :std/test test-suite)
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/t/qualification/context-temporal/c-abi-caller c-roundtrip)
         (only-in :clan/poo/object .ref)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/runtime-service

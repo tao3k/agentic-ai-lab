@@ -6,7 +6,7 @@
 ;;; Boundary: POO runtime handoff manifest projections.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/utilities/final-projection-syntax
         :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/tool-core/objects-spec
         :agentic-ai-lab/modules/tool-core/objects-support)

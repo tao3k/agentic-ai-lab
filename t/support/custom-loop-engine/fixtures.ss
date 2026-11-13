@@ -6,7 +6,7 @@
 ;;; Shared fixtures for custom loop-engine user-interface tests.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in :agentic-ai-lab/modules/loop-engine/runtime

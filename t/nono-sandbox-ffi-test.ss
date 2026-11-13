@@ -6,7 +6,7 @@
 ;;; Boundary: runtime nono FFI tests call the C ABI through Gambit, not the CLI.
 ;;; Invariant: irreversible sandbox apply is never performed by this test.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/agent-sandbox/api
         :agentic-ai-lab/modules/agent-sandbox/nono
         :agentic-ai-lab/modules/nono-sandbox/c-binding)

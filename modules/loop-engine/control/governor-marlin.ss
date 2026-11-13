@@ -9,7 +9,7 @@
 ;;; Responsibility: publish L1 report receipts with no write effects.
 ;;; Responsibility: publish runtime discovery manifests for Marlin.
 ;;; Import boundary: this module may depend on =:agentic-ai-lab/modules/loop-engine/control/governor=.
-;;; Import boundary: this module may depend on =:yuanxu/modules/funflow/control-plane/failure=.
+;;; Import boundary: this module may depend on =:tao3k/yuanxu/modules/funflow/control-plane/failure=.
 ;;; Import boundary: the core governor must not import Marlin wrappers.
 ;;; Export boundary: =:agentic-ai-lab/modules/loop-engine/control/agent= re-exports this owner for callers.
 ;;; Runtime boundary: this module never polls or schedules loops.
@@ -18,7 +18,7 @@
 ;;; Parser evidence: owner-items expose schemas and projection functions here.
 ;;; Policy evidence: tests assert schemas, envelopes, receipts, and manifests.
 
-(import :yuanxu/modules/funflow/control-plane/failure
+(import :tao3k/yuanxu/modules/funflow/control-plane/failure
         (only-in :agentic-ai-lab/modules/loop-engine/core
                  +agentic-ai-lab-user-loop-engine-handoff-contracts+
                  +agentic-ai-lab-user-loop-engine-receipt-contracts+

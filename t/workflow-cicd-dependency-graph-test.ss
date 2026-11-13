@@ -6,13 +6,13 @@
 ;;; Boundary: workflow CI/CD dependency graphs report topology only.
 ;;; Invariant: tests inspect graph diagnostics without scheduling work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
                  )
-        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
-        (only-in :yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
+        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :tao3k/yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-dependency-graph-test)
 

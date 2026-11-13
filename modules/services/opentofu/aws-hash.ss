@@ -5,8 +5,8 @@
 ;;; Pure correspondence to AWS 5.100.0 and SDK 2.36.1, on darwin_arm64.
 (import (only-in :std/list/list delete-duplicates/hash)
         :std/text/pregexp
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        (only-in :yuanxu/modules/json-schema/json-schema-validation-core
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows))
 (export agentic-ai-lab-opentofu-aws-string-hash agentic-ai-lab-opentofu-aws-string-set
         agentic-ai-lab-opentofu-aws-rule-hash agentic-ai-lab-opentofu-aws-rule-key

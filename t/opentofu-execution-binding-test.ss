@@ -3,7 +3,7 @@
 ;;; Pure Task preflight must precede publication and protect checked receivers.
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/services/opentofu/execution NullExecution.))
 (export opentofu-execution-binding-test)
 

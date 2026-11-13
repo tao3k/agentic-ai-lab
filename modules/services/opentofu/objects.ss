@@ -5,16 +5,16 @@
 (import :clan/poo/object
         (only-in :std/list/list-builder with-list-builder)
         (only-in "./execution.ss" OpenTofuExecution. NullExecution. opentofu-execution)
-        (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence
+        (only-in :tao3k/yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence
                  yuanxu-classification-evidence-accepted? yuanxu-validation-evidence-accepted?)
         (only-in :std/text/pregexp pregexp-match)
-        (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
         "./func.ss" "./collections.ss" "./types.ss" "./config.ss" "./source.ss"
-        (only-in :yuanxu/module-system/source/objects make-yuanxu-module-source-ref)
+        (only-in :tao3k/yuanxu/module-system/source/objects make-yuanxu-module-source-ref)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref
                  yuanxu-contract-key->symbol yuanxu-contract-json-array->list)
-        (only-in :yuanxu/modules/json-schema/json-schema-validation-core
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows
                  yuanxu-json-schema-candidate-slot))
 (export agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract

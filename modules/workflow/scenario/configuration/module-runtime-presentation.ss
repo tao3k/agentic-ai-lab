@@ -7,12 +7,12 @@
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
 (import (only-in :clan/poo/object .@ .get .o .ref)
-        (only-in :yuanxu/modules/funflow/objects FunflowModule.)
+        (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule.)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/module-system/funs
-        :yuanxu/module-system/projection/option-objects
-        :yuanxu/module-system/catalog/values
+        :tao3k/yuanxu/module-system/funs
+        :tao3k/yuanxu/module-system/projection/option-objects
+        :tao3k/yuanxu/module-system/catalog/values
         :agentic-ai-lab/modules/module-authoring/module-option-projection)
 
 (export agentic-ai-lab-module-runtime-import

@@ -1,7 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Observe the Gerbil test command without replacing its dispatcher.
-(import (only-in :yuanxu/ops/progress make-test-progress-reader))
+(import (only-in :tao3k/yuanxu/ops/progress make-test-progress-reader))
 (export native-test-command make-native-test-progress-reader)
 
 (def (native-test-command inherited vm)

@@ -7,7 +7,7 @@
 ;;; Invariant: Scheme validates and projects memory jobs only; it never recalls,
 ;;; commits, consolidates, persists, or repairs memory stores.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

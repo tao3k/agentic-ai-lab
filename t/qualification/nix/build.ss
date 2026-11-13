@@ -5,7 +5,7 @@
 ;;; Standard Make owns library compilation and the existing Lab test tool.
 (import (for-syntax
           (only-in :std/source this-source-file)
-          (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
+          (only-in :tao3k/yuanxu/module-system/building/source-package register-module-build-source!)))
 (begin-syntax
   ;; Reuse the package source gateway before native import discovery. The
   ;; adapter package must work before any Root library has been installed.
@@ -15,17 +15,17 @@
         :std/make
         (only-in :clan/poo/object .o)
         (only-in :std/source this-source-file)
-        (only-in :yuanxu/module-system/building/source-package register-module-build-source! register-yuanxu-build-source!)
-        (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
-        (only-in :yuanxu/module-system/source/static-inputs module-static-compiler-inputs)
-        (only-in :yuanxu/module-system/building/artifacts call-with-static-compiler-inputs))
+        (only-in :tao3k/yuanxu/module-system/building/source-package register-module-build-source!)
+        (only-in :tao3k/yuanxu/module-system/building/source-closure for-each-build-module)
+        (only-in :tao3k/yuanxu/module-system/source/static-inputs module-static-compiler-inputs)
+        (only-in :tao3k/yuanxu/module-system/building/artifacts call-with-static-compiler-inputs))
 ;; The compiler resolves public application imports through its package prefix.
 ;; Register application sources, while keeping Core and the SDK compiled.
 (def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
 (register-module-build-source! root 'agentic-ai-lab)
 ;; The adapter consumes Core's test support as source-owned prerequisites.
 ;; These are deliberately absent from the installed production library.
-(register-yuanxu-build-source! (path-expand "core" root))
+(register-module-build-source! (path-expand "core" root) (quote tao3k/yuanxu))
 (def output (path-expand "lib" (getenv "GERBIL_PATH")))
 (def seen (make-hash-table-eq))
 ;; The existing Core traversal selects roots; std/make owns all compilation.
@@ -46,9 +46,9 @@
               (string-prefix? "agentic-ai-lab/t/qualification/build-publication/" name))
           (string-append
             (substring name (string-length "agentic-ai-lab/") (string-length name)) ".ss"))
-         ((or (string-prefix? "yuanxu/t/qualification/service-publication/" name)
-              (string-prefix? "yuanxu/t/qualification/testing/" name)
-              (string-prefix? "yuanxu/t/qualification/build-publication/" name))
+         ((or (string-prefix? "tao3k/yuanxu/t/qualification/service-publication/" name)
+              (string-prefix? "tao3k/yuanxu/t/qualification/testing/" name)
+              (string-prefix? "tao3k/yuanxu/t/qualification/build-publication/" name))
           (string-append "core/" (substring name 7 (string-length name)) ".ss"))
          (else #f))))))
 (def owned-identities '())

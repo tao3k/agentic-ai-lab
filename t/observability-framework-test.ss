@@ -8,19 +8,19 @@
         (only-in :std/test/base current-test-case)
         (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
         (only-in :clan/poo/mop element? validate TypeError?)
-        :yuanxu/observability/debug
-        (only-in :yuanxu/observability/testing-case
+        :tao3k/yuanxu/observability/debug
+        (only-in :tao3k/yuanxu/observability/testing-case
                  yuanxu-test-case
                  yuanxu-test-case/with
                  yuanxu-testing-case-profile-prototype
                  yuanxu-testing-case-profile?
                  yuanxu-default-testing-case-profile)
-        (only-in :yuanxu/observability/types
+        (only-in :tao3k/yuanxu/observability/types
                  YuanxuObservationContract
                  YuanxuAdmissionObservationContract
                  YuanxuObservabilityDiagnosticContract
                  YuanxuDebugDurationReceiptContract)
-        (only-in :yuanxu/observability/objects
+        (only-in :tao3k/yuanxu/observability/objects
                  yuanxu-observation-identity
                  yuanxu-observation-provenance
                  yuanxu-observation-context
@@ -29,13 +29,13 @@
                  yuanxu-observation-explain
                  yuanxu-observation-summary
                  yuanxu-observability-diagnostic-record)
-        (only-in :yuanxu/object-types/contracts
+        (only-in :tao3k/yuanxu/object-types/contracts
                  yuanxu-contract-admit yuanxu-predicate-contract)
-        (only-in :yuanxu/module-system/schema/relations
+        (only-in :tao3k/yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity
                  yuanxu-empty-imports yuanxu-empty-capabilities
                  yuanxu-empty-profiles)
-        :yuanxu/module-system/authoring/roles
+        :tao3k/yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export observability-framework-test)
 

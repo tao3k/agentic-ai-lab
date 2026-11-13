@@ -6,7 +6,7 @@
 ;;; Boundary: focused tests for loop-engine POO policy extensions.
 ;;; Invariant: extension receipts are report-only and runtime-owned by Marlin.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

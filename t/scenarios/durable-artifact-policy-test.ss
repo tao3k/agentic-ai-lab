@@ -3,19 +3,19 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/mop .new)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        :yuanxu/module-system/authoring/roles
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :tao3k/yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
-        :yuanxu/profile-composition/selection-syntax
+        :tao3k/yuanxu/profile-composition/selection-syntax
 
-        :yuanxu/profile-composition/profile-bundle
+        :tao3k/yuanxu/profile-composition/profile-bundle
 
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/scenario Scenario))
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario))
 
 
 (def (profile-id profile)

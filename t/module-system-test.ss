@@ -6,7 +6,7 @@
 ;;; Boundary: module-system tests cover descriptor activation, not loading.
 
 (import (only-in :clan/poo/mop make-instance element?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,13 +17,13 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :yuanxu/module-system/catalog/objects)
+        :tao3k/yuanxu/module-system/catalog/objects)
 
 (export module-system-test)
 

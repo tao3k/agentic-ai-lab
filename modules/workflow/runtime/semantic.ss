@@ -24,9 +24,9 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :gerbil/core call-with-output-string display-exception)
-        (only-in :yuanxu/graph/types-core
+        (only-in :tao3k/yuanxu/graph/types-core
                  yuanxu-graph yuanxu-graph-node yuanxu-graph-edge)
-        (only-in :yuanxu/graph/algorithms yuanxu-graph-outgoing-ids)
+        (only-in :tao3k/yuanxu/graph/algorithms yuanxu-graph-outgoing-ids)
         (only-in :gerbil-ascent/temporal/lens
                  temporal-lens temporal-source temporal-solve temporal-status
                  temporal-rows temporal-frontier temporal-projection

@@ -7,13 +7,13 @@
 ;;; Invariant: tests validate backend selection and ABI projection only; no
 ;;; runtime store process is started.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :yuanxu/modules/funflow/control-plane/runtime-protocol
-        :yuanxu/modules/funflow/control-plane/runtime-adapter
+        :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
+        :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter
         :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)

@@ -7,7 +7,7 @@
 ;;; Invariant: capability backends name registry backend-kind values, never
 ;;; runtime owners.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,7 +16,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?

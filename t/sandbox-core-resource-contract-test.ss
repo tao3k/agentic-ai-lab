@@ -5,7 +5,7 @@
 
 ;;; Boundary: sandbox resource POO prototypes use runtime typed contracts.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .def .o .ref object?)
         (only-in :std/test
                  check-equal?

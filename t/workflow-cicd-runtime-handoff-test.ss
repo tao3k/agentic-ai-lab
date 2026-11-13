@@ -6,17 +6,17 @@
 ;;; Boundary: CI/CD runtime handoff stays inert Scheme control-plane data.
 ;;; Invariant: manifest and ABI projections never execute sandbox work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
                  )
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-command-descriptor-schema+
                  +runtime-request-schema+)
         :agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :yuanxu/modules/funflow/check-types +yuanxu-cicd-runtime-manifest-readiness-schema+ +yuanxu-cicd-marlin-runtime-handoff-abi-schema+)
-        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :tao3k/yuanxu/modules/funflow/check-types +yuanxu-cicd-runtime-manifest-readiness-schema+ +yuanxu-cicd-marlin-runtime-handoff-abi-schema+)
+        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests agentic-ai-lab-cicd-check-map->marlin-runtime-handoff-abi))
 
 (export workflow-cicd-runtime-handoff-test)

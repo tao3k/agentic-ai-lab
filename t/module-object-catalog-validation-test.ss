@@ -6,13 +6,13 @@
 ;;; Boundary: real module object catalog validation stays out of the unit root.
 ;;; Invariant: catalog checks load backend object sets but never realize runtime.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test
                  test-suite
                  check-equal?)
-        :yuanxu/module-system/schema/interface
-        :yuanxu/module-system/schema/validation
+        :tao3k/yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/module-system/schema/validation
         :agentic-ai-lab/modules/sandbox-core/shared-object
         :agentic-ai-lab/modules/sandbox-core/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/root-objects

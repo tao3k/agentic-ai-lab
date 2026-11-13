@@ -6,10 +6,10 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import (only-in :yuanxu/module-system/interface yuanxu-load-modules) (only-in :clan/poo/object .get .call)
+(import (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules) (only-in :clan/poo/object .get .call)
         (only-in :clan/poo/mop make-instance)
-        :yuanxu/module-system/source/projection
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        :tao3k/yuanxu/module-system/source/projection
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -23,16 +23,16 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :yuanxu/modules/funflow/control-plane/failure
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
-        (only-in :yuanxu/module-system/selection/syntax yuanxu-modules!)
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
+        (only-in :tao3k/yuanxu/module-system/selection/syntax yuanxu-modules!)
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/graph/interface
-        :yuanxu/module-system/loader/objects
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/loader/objects
+        :tao3k/yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories)
         :agentic-ai-lab/modules/building/official-contributions
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection

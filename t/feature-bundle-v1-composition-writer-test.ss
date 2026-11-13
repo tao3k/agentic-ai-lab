@@ -4,21 +4,21 @@
 
 (export feature-bundle-v1-composition-writer-test)
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         (only-in :clan/poo/mop .new TypeError?)
         (only-in :clan/poo/type Record Symbol)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
-        :yuanxu/modules/funflow/control-plane/graph
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        :yuanxu/module-system/authoring/roles
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        :tao3k/yuanxu/modules/funflow/control-plane/graph
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :tao3k/yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
-        :yuanxu/profile-composition/selection-syntax
+        :tao3k/yuanxu/profile-composition/selection-syntax
 
-        :yuanxu/profile-composition/profile-bundle
-        :yuanxu/modules/funflow/bundle-v1
-        :yuanxu/module-system/feature/bundle-v1-lowering)
+        :tao3k/yuanxu/profile-composition/profile-bundle
+        :tao3k/yuanxu/modules/funflow/bundle-v1
+        :tao3k/yuanxu/module-system/feature/bundle-v1-lowering)
 
 (.def WriterSourceProfile
   (identity 'source)

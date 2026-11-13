@@ -3,15 +3,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
-(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit Union)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: tutorial feature batch tests public APIs, not test-local helpers.
 ;;; Invariant: each case maps to a visible Funflow notebook result or descriptor.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -22,12 +22,12 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/custom-task/interface
         :agentic-ai-lab/modules/docker/interface
         :agentic-ai-lab/modules/text/interface
         (only-in :agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config make-ccompilation-flow make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
-        :yuanxu/modules/funflow/store)
+        :tao3k/yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)
 (def (configured-run config flow input)

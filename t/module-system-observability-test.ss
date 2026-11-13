@@ -7,7 +7,7 @@
 ;;; Invariant: trace construction never dereferences POO slots.
 
 (import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .ref object?)
         (only-in :std/test
@@ -19,10 +19,10 @@
                  check-output
                  test-error
                  test-suite)
-        :yuanxu/module-system/observability/presentation
-        :yuanxu/module-system/authoring/observation
-        :yuanxu/module-system/authoring/projection
-        (only-in :yuanxu/observability/funcs
+        :tao3k/yuanxu/module-system/observability/presentation
+        :tao3k/yuanxu/module-system/authoring/observation
+        :tao3k/yuanxu/module-system/authoring/projection
+        (only-in :tao3k/yuanxu/observability/funcs
                  yuanxu-debug-memory-policy
                  yuanxu-debug-memory-sample
                  yuanxu-debug-memory-receipt))
@@ -71,11 +71,11 @@
               (yuanxu-authoring-owner-import-port-observations
                'modules/example/funs.ss
                (open-input-string
-                "(import :yuanxu/modules/funflow/control-plane/api)") AgenticAILabSourcePolicy))
+                "(import :tao3k/yuanxu/modules/funflow/control-plane/api)") AgenticAILabSourcePolicy))
              (observation (car observations)))
         (check-equal? (length observations) 1)
         (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
-        (check-equal? (.ref observation 'owner) ':yuanxu/modules/funflow/control-plane/api)
+        (check-equal? (.ref observation 'owner) ':tao3k/yuanxu/modules/funflow/control-plane/api)
         (check-equal? (.ref observation 'phase) 'module-admission)
         (check-equal? (.ref observation 'status) 'aggregate-owner-import)
         (check-equal? (.ref observation 'code)
@@ -88,19 +88,19 @@
          (yuanxu-authoring-owner-import-port-observations
           'modules/example/funs.ss
          (open-input-string
-           "(import (only-in :yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy)
+           "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy)
          '())
         (let* ((contribution-observations
                 (yuanxu-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :yuanxu/modules/funflow/control-plane/api make-task))") AgenticAILabSourcePolicy))
+                  "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
           (check-equal?
            (.ref contribution-observation 'owner)
-           ':yuanxu/modules/funflow/control-plane/api)
+           ':tao3k/yuanxu/modules/funflow/control-plane/api)
           (check-equal? (.ref contribution-observation 'accepted?) #f))))
     (yuanxu-test-case "all maintained module sources import precise owners"
       (let* ((paths (module-observability-source-files "modules"))

@@ -6,7 +6,7 @@
 ;;; Boundary: loop governor performance gates cover one-pass policy projection.
 ;;; Invariant: governor projection consumes state facts without runtime mutation.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

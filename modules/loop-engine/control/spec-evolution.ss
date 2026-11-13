@@ -6,11 +6,11 @@
 ;;; Boundary: spec evolution proposals are review-only control-plane facts.
 ;;; Invariant: this module never mutates config, schedules loops, or executes runtime work.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o object?)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax
         (only-in :agentic-ai-lab/modules/loop-engine/control/human-audit
                  +loop-human-audit-decisions+))
 

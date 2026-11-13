@@ -6,7 +6,7 @@
 ;;; Boundary: durable memory job validation and receipts.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/utilities/final-projection-syntax
         :agentic-ai-lab/modules/session/durable-policy
         (only-in :agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-require)

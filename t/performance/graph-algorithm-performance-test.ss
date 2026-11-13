@@ -5,15 +5,15 @@
 
 ;;; Boundary: end-to-end complexity gate for the shared graph algorithms.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .ref)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :yuanxu/graph/types
-        :yuanxu/graph/algorithms)
+        :tao3k/yuanxu/graph/types
+        :tao3k/yuanxu/graph/algorithms)
 
 (export graph-algorithm-performance-test)
 

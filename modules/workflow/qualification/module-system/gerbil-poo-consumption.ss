@@ -9,7 +9,7 @@
                  .@
                  .ref
                  object?)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?))
 
 (export +agentic-ai-lab-gerbil-poo-provider-label+

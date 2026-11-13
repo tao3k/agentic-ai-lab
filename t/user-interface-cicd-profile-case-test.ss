@@ -1,5 +1,5 @@
 (import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata agentic-ai-lab-sandbox-profile-by-name))
-(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-module-selection-flag-entry))
+(import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-module-selection-flag-entry))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -8,7 +8,7 @@
 ;;; Boundary: CI/CD downstream sandbox profile cases live here.
 ;;; Invariant: cases stay declarative and do not execute release workflows.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -19,7 +19,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  agentic-ai-lab-custom-my-module-cicd-module)
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints

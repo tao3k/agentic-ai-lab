@@ -6,7 +6,7 @@
 ;;; Boundary: loop governor kernel module selection.
 ;;; Invariant: profile owners compose this row; user-interface does not.
 
-(import :yuanxu/module-system/selection/objects)
+(import :tao3k/yuanxu/module-system/selection/objects)
 
 (export agentic-ai-lab-loop-governor-module-bundles)
 

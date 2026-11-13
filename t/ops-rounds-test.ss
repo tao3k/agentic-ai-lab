@@ -5,7 +5,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/source this-source-file)
         (only-in "../init.ss" agentic-ai-lab.init.exports)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
 (export ops-rounds-test)
 (def ops-rounds-test

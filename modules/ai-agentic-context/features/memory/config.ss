@@ -8,7 +8,7 @@
 
 (import
         (only-in :clan/poo/object .ref)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-config-syntax
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects
         :agentic-ai-lab/modules/session/durable-policy)

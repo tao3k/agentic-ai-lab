@@ -21,7 +21,7 @@
 (def (wire-rows objects slots)
   (map (lambda (value) (map (lambda (slot) (s (.ref value slot))) slots)) objects))
 (def (main (mode "describe"))
-  ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '())
+  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (if (equal? mode "describe")
     (emit (wire-object
       (cons (cons "intro" (if (.slot? DesignCase 'intro) (.ref DesignCase 'intro) ""))

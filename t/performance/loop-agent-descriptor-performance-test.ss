@@ -6,7 +6,7 @@
 ;;; Boundary: loop descriptor performance gates cover POO slot projection.
 ;;; Invariant: descriptor contract projection stays data-only and bounded.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

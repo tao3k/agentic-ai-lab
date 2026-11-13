@@ -6,12 +6,12 @@
 ;;; Boundary: executable contracts for the public module/profile macro surface.
 ;;; Invariant: syntax lowers to ordinary POO objects and pure projection values.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/utilities/final-projection-syntax
+        (only-in :tao3k/yuanxu/utilities/final-projection-syntax
                  yuanxu-product-field-rows/tail)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
                  artifact-module

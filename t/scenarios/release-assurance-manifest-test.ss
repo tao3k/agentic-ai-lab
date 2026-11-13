@@ -2,13 +2,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 

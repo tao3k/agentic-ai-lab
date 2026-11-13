@@ -6,12 +6,12 @@
 ;;; Boundary: sandbox backend object-family macro contracts.
 ;;; Invariant: generated backend objects stay POO and runtime-free.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-eq?
                  check-equal?
                  test-suite)
-        :yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/objects
         :agentic-ai-lab/modules/sandbox-core/profile-support/policy
         :agentic-ai-lab/modules/nono-sandbox/objects

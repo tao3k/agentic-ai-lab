@@ -9,14 +9,14 @@
 
 (import (only-in "./performance.ss"
                  agentic-ai-lab-performance-build-list)
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
                  yuanxu-object-contract
                  yuanxu-object-contract->alist
                  yuanxu-object-contract-slots)
-        (only-in :yuanxu/object-types/facts
+        (only-in :tao3k/yuanxu/object-types/facts
                  yuanxu-object-contract->type-facts
                  yuanxu-object-contract->lean-fact-contracts)
         (only-in :agentic-ai-lab/modules/session/policy

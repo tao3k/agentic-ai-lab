@@ -3,8 +3,8 @@
 ;;; Restore from a governed Nix Source, never a candidate-selected release pin.
 (import :clan/poo/object
         (only-in "./func.ss" agentic-ai-lab-nix-verify-store)
-        (only-in :yuanxu/module-system/source/admission module-source-type module-source-admit-current!)
-        (only-in :yuanxu/module-system/building/artifacts
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-type module-source-admit-current!)
+        (only-in :tao3k/yuanxu/module-system/building/artifacts
           accept-build-artifact-handoff! read-build-artifact-handoff
           admit-build-artifacts! invalidate-build-artifacts!))
 (export agentic-ai-lab-nix-restore-build-publication!)

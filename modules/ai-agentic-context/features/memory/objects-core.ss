@@ -6,7 +6,7 @@
 ;;; Boundary: memory store spec primitives shared by memory-core modules.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/utilities/final-projection-syntax
         (only-in :agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-require
                  agentic-ai-lab-session-every?))

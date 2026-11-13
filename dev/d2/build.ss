@@ -4,4 +4,4 @@
 ;;; Standard development consumer; init owns the selected Module source closure.
 (import :std/build-script :clan/poo/object
         (only-in "./init.ss" agentic-ai-lab/dev/d2.init.exports))
-(defbuild-script ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '()))
+(defbuild-script (.get agentic-ai-lab/dev/d2.init.exports std-make-spec))

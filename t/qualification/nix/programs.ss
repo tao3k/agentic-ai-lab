@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Lab owns its qualification executable; Core issues only candidate libraries.
 (import (only-in :clan/poo/object .o .cc)
-        (only-in :yuanxu/ops/config Config))
+        (only-in :tao3k/yuanxu/ops/config Config))
 (export nix-publication-programs)
 (def (nix-publication-programs root-value)
   (def vm-options

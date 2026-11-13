@@ -6,23 +6,23 @@
 ;;; Boundary: Agentic AI Lab module descriptors and import closure validation.
 ;;; Invariant: descriptors are POO values and never load module sources.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/type Record)
         (only-in :clan/poo/object .o .@ .ref .mix .slot? .all-slots object? object<-alist)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax
-        :yuanxu/modules/funflow/control-plane/task
-        :yuanxu/modules/funflow/control-plane/flow
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/modules/funflow/control-plane/task
+        :tao3k/yuanxu/modules/funflow/control-plane/flow
         :agentic-ai-lab/modules/module-authoring/module-interface
-        (only-in :yuanxu/module-system/graph/funs
+        (only-in :tao3k/yuanxu/module-system/graph/funs
                  module-closure module-missing-imports)
-        (only-in :yuanxu/module-system/funs
+        (only-in :tao3k/yuanxu/module-system/funs
                  yuanxu-module-flags-enabled?)
-        (only-in :yuanxu/object-family/syntax
+        (only-in :tao3k/yuanxu/object-family/syntax
                  defpoo-object-family)
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects)
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects)
 
 (export agentic-ai-lab-module-role
         agentic-ai-lab-module-descriptor-prototype

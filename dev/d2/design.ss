@@ -13,7 +13,7 @@
 (def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
 (def Context. (.get Scope prototypes AuthoringContext))
 (def (main)
-  ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '())
+  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (def view-value (.ref DesignCapture 'view))
   (def graph-view ((.get Scope infer) (.ref DesignCapture 'diagram)))
   (for-each (lambda (render-value)

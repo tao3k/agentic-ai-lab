@@ -6,7 +6,7 @@
 ;;; One semantic sample for ASP's runtime P95 benchmark runner.
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :yuanxu/observability/debug
+        (only-in :tao3k/yuanxu/observability/slot-debug
                  YuanxuDebugSlotPolicyContract
                  yuanxu-debug-poo
                  yuanxu-debug-poos

@@ -6,8 +6,8 @@
         (only-in :std/test/base test-suite! TestResult-result)
         (only-in :std/list/list every)
         (only-in :clan/poo/slot-observation without-observation slot-read-dependencies)
-        (only-in :yuanxu/observability/memory yuanxu-debug-memory-snapshot)
-        (only-in :yuanxu/module-system/source/admission current-module-source-phase)
+        (only-in :tao3k/yuanxu/observability/memory yuanxu-debug-memory-snapshot)
+        (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-phase)
         (only-in :agentic-ai-lab/t/qualification/module-preview/process-accounting
                  process-accounting-sample)
         (only-in :agentic-ai-lab/t/module-preview-cost-test module-preview-cost-test))

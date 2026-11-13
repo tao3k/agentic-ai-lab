@@ -10,7 +10,7 @@
 ;;; Marlin owns fact logs, checkpoints, indexes, leases, replay, and repair.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export +agentic-ai-lab-durable-policy-kind+
         +agentic-ai-lab-durable-policy-schema+

@@ -7,11 +7,11 @@
         (only-in :clan/poo/object .def .get .call .cc .slot? .ref/cached object?)
         (only-in :clan/poo/mop call-with-slot-read-observer validate TypeError?)
         (only-in :clan/poo/object object-protocol-set! .o)
-        (only-in :yuanxu/module-system/source/admission module-source-operation-resume)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-operation-resume)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/module-system/interface yuanxu-load-modules))
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules))
 (export module-nix-publication-test)
 (def module-nix-publication-test
   (test-suite "Nix is a declarative Core Module, not a global facade"

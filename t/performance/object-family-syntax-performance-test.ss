@@ -6,7 +6,7 @@
 ;;; Boundary: POO object-family syntax performance gate.
 ;;; Invariant: repeated stable object-family accessors are generated once.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,7 +17,7 @@
         (only-in :clan/poo/object .ref object<-alist)
         (only-in "../support/poo-performance-object-scenarios"
                  poo-performance-build-list)
-        :yuanxu/object-family/syntax)
+        :tao3k/yuanxu/object-family/syntax)
 
 (export object-family-syntax-performance-test)
 

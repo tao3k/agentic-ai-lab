@@ -8,12 +8,12 @@
         (only-in :clan/poo/object-contract ObjectContract.)
         (only-in :clan/poo/type String Symbol OrFalse Union)
         (only-in :agentic-ai-lab/services Services)
-        (only-in :yuanxu/modules/json-schema/contracts ProjectionContract.)
-        (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-predicate-contract yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/modules/json-schema/contracts ProjectionContract.)
+        (only-in :tao3k/yuanxu/object-types/contracts YuanxuContract. yuanxu-predicate-contract yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/nix-contracts NixSourceContract NixFlakeSourceContract NixScopeContract)
-        (only-in :yuanxu/modules/json-schema/types JsonSchemaScopeContract)
-        (only-in :yuanxu/modules/funflow/types FunflowScopeContract)
-        (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract))
+        (only-in :tao3k/yuanxu/modules/json-schema/types JsonSchemaScopeContract)
+        (only-in :tao3k/yuanxu/modules/funflow/types FunflowScopeContract)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract))
 (export ProviderArtifactContract ProviderTypeIndexContract ProviderSelectionContract ConfigurationEnvelopeContract
         NullContract OpenTofuContract ServicesContract
         execution-admission CollectionAuthorityType CollectionReceiptType OpenTofuConfigContract OpenTofuScopeContract

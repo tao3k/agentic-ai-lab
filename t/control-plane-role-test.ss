@@ -5,12 +5,12 @@
 
 ;;; Boundary: POO role descriptors are control-plane metadata, not runtime work.
 
-(import :yuanxu/composition/roles
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import :tao3k/yuanxu/composition/roles
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api)
+        :tao3k/yuanxu/modules/funflow/control-plane/api)
 
 (export control-plane-role-test)
 

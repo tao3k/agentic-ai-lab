@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Backend-neutral Search role objects and immutable declaration prototypes.
-(import :yuanxu/object-family/role-syntax
+(import :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/search-engine/types)
 
 (export agentic-ai-lab-search-framework-role

@@ -4,12 +4,12 @@
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message)
         (only-in :std/encoding/json read-json write-json)
-        (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
+        (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
-        (only-in :yuanxu/module-system/source/admission current-module-source-observer current-module-source-phase)
-        (only-in :yuanxu/observability/debug YuanxuDebugMemoryAnomaly? YuanxuDebugMemoryAnomaly-receipt
+        (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer current-module-source-phase)
+        (only-in :tao3k/yuanxu/observability/debug YuanxuDebugMemoryAnomaly? YuanxuDebugMemoryAnomaly-receipt
                  yuanxu-debug-memory-snapshot)
-        (only-in :yuanxu/admission/publication AdmissionPublication.)
+        (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.)
         (only-in "./scenarios/aws/fixtures.ss"
                  Workspace prepare-aws-selection! realize-aws-selection))
 (export aws-publication-cost-test)

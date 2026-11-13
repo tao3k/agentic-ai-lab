@@ -6,7 +6,7 @@
 ;;; Boundary: module-system POO objects for downstream user declarations.
 ;;; Invariant: root user-interface files never own object contracts.
 
-(import :yuanxu/module-system/schema/interface
+(import :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object)
 
 (export agentic-ai-lab-user-interface-shared-sandbox-object

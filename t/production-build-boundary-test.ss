@@ -4,14 +4,14 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/error Error? Error-message)
         (only-in :gerbil/expander core-import-module expander-context-id)
-        (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
-        (only-in :yuanxu/module-system/source/objects
+        (only-in :tao3k/yuanxu/module-system/building/source-closure for-each-build-module)
+        (only-in :tao3k/yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-value yuanxu-module-source-ref-metadata)
         (only-in :agentic-ai-lab/modules/module-authoring/source-registry
                  agentic-ai-lab-module-system-source-refs)
         (only-in "../build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots)
         (only-in :clan/poo/object .get)
-        (only-in :yuanxu/module-system/source/admission call-with-module-source-operation-measurement)
+        (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement)
         (rename-in (only-in "../build.ss" main) (main package-build-main))
         (only-in "../build-modules.ss" agentic-ai-lab.build-modules.exports)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
@@ -42,7 +42,7 @@
         #f)
       ;; Obtaining the compiler projection remains inert; invoking it belongs
       ;; to the build entry, with the original selected-source admission.
-      (check-equal? (procedure? (.get agentic-ai-lab.init.exports std-make-spec)) #t))
+      (check-equal? (list? (.get agentic-ai-lab.init.exports std-make-spec)) #t))
     (test-case "library roots preserve the real front end without bootstrapping application selection"
       ;; Derive the old query from the REAL publisher, not a copied registry.
       ;; This test imports it; the production build-spec no longer does.
@@ -75,7 +75,7 @@
                      (name (and (symbol? id) (symbol->string id))))
                 (when name
                   (check-equal? (string-prefix? "asp-gerbil-scheme/" name) #f))))))
-        '(:yuanxu/observability/testing-case "build-spec.ss"))
+        '(:tao3k/yuanxu/observability/testing-case "build-spec.ss"))
       (check-equal? (> visited 0) #t))
     (test-case "runtime dependency DFS rejects a development namespace before producing targets"
       (call-with-temporary-directory "build-boundary-"

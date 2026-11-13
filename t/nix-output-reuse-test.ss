@@ -5,7 +5,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :agentic-ai-lab/modules/nix/func
                  agentic-ai-lab-nix-realize current-nix-process-observer))

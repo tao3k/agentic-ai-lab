@@ -6,7 +6,7 @@
 ;;; Boundary: AI agent lifecycle proof gate scenario tests.
 ;;; Invariant: lifecycle gates reject unsafe session/sandbox/loop/subagent policy.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

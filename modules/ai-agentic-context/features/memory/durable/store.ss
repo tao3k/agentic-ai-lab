@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
         :agentic-ai-lab/modules/session/durable-policy
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export +agentic-ai-lab-durable-runtime-store-contract-kind+
         +agentic-ai-lab-durable-runtime-store-contract-schema+

@@ -15,7 +15,7 @@
                  $constant-slot-spec)
         (only-in :agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-sandbox-profile-by-name)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry))
 
 (export agenticAiLabModuleSystemLiveCase

@@ -6,7 +6,7 @@
 ;;; Boundary: direct behavior qualification for RFC45 source owners that do not
 ;;; already have a narrower production test owner.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,7 +18,7 @@
         (only-in :clan/poo/object .ref)
         :agentic-ai-lab/modules/workflow/qualification/module-system/g0
         :agentic-ai-lab/modules/session/runtime-context-recovery
-        :yuanxu/composition/lineage
+        :tao3k/yuanxu/composition/lineage
         :agentic-ai-lab/modules/workflow/qualification/module-system/gerbil-poo-consumption)
 
 (export owner-contract-test)

@@ -3,16 +3,16 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :yuanxu/module-system/feature/source-lock-feature
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/module-system/feature/source-lock-feature
                  sources-lock-value sources-lock? sources-lock-ref
                  source-lock-verify-payload)
         (only-in :std/crypto/digest Digest::sha256 digest-from-reader!)
         (only-in :std/io/file call-with-file-reader)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
-        (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         :agentic-ai-lab/opentofu-contracts "./release.ss"
         :agentic-ai-lab/modules/services/opentofu/collections :agentic-ai-lab/modules/services/opentofu/objects
         "./request-types.ss")

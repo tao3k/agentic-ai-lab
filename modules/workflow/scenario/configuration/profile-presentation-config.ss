@@ -8,13 +8,13 @@
 
 (import (only-in :clan/poo/object .ref object<-alist)
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/sandbox-core/profile-catalog
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
-        :yuanxu/utilities/final-projection-syntax
-        :yuanxu/profile-composition/user-profile)
+        :tao3k/yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/profile-composition/user-profile)
 
 (export agenticAiLabUserProfilePresentation
         agenticAiLabUserProfileSetPresentation)

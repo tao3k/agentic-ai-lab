@@ -13,9 +13,9 @@
         (only-in :agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-config-cicd-intents agentic-ai-lab-user-module-selection-workflow-cicd-check-map agentic-ai-lab-user-config-workflow-cicd-functional-dag-rows agentic-ai-lab-user-config-workflow-cicd-runtime-projection agentic-ai-lab-user-alist-ref)
         (only-in :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config agentic-ai-lab-user-config-workflow-cicd-pipeline-runs agentic-ai-lab-user-config-workflow-cicd-pipeline-results)
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :yuanxu/module-system/observability/presentation
+        :tao3k/yuanxu/module-system/observability/presentation
         :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         :agentic-ai-lab/modules/workflow/cicd-config
         :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config

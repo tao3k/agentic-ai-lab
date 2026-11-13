@@ -7,10 +7,10 @@
 ;;; Invariant: refinements retain inherited declarations and never mutate their
 ;;; parent objects.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-exception check-equal? test-suite)
         (only-in :clan/poo/object .all-slots .def .get .o)
-        (only-in :yuanxu/observability/slot-presentation
+        (only-in :tao3k/yuanxu/observability/slot-presentation
                  yuanxu-slot-view
                  yuanxu-slot-presentation))
 

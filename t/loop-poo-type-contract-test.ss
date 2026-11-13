@@ -5,7 +5,7 @@
 
 ;;; Contract: loop governor and human audit expose POO Contracts.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 (def (loop-contract-eval expr)

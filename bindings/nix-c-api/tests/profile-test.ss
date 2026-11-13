@@ -8,7 +8,7 @@
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/string/misc string-trim)
         (only-in :std/encoding/json json->string)
-        (only-in :yuanxu/module-system/source/admission module-source-read))
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read))
 (export profile-test)
 
 (def (cli arguments cache)

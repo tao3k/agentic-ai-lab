@@ -5,7 +5,7 @@
 
 ;;; Contract: sandbox resources expose POO Type/Contract descriptors.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> AgenticAILabSandboxResourceExpr AgenticAILabSandboxResourceValue)

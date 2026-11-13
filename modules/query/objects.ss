@@ -33,7 +33,7 @@
                  AgenticAILabQueryProvider
                  AgenticAILabQueryExecutionCandidate
                  AgenticAILabSourceQueryReceipt)
-        (only-in :yuanxu/poo-clos/classes poo-clos-class))
+        (only-in :tao3k/yuanxu/poo-clos/classes poo-clos-class))
 
 (export AgenticAILabQuery.
         AgenticAILabQueryLanguage.

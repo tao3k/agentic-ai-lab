@@ -5,15 +5,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
-        (only-in :yuanxu/module-system/source/objects
+        (only-in :tao3k/yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-value)
 
         (only-in :agentic-ai-lab/user-interface/scenarios/langchain/scenario

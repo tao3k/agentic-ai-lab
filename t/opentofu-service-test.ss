@@ -2,9 +2,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Declared configuration -> one selected product -> real Null execution.
 (import :std/test :clan/poo/object
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/mop TypeError?)
-        (only-in :yuanxu/module-system/source/admission admit-module-configuration!)
+        (only-in :tao3k/yuanxu/module-system/source/admission admit-module-configuration!)
         (only-in "./qualification/opentofu/service.ss" call-with-service rejects? empty-state?))
 (export opentofu-service-test)
 

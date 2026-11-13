@@ -15,17 +15,17 @@
 ;;; Parser policy should treat this file as the resolver/activation owner.
 
 (import (only-in :clan/poo/object .get)
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/modules/funflow/control-plane/task
-        :yuanxu/modules/funflow/control-plane/flow
-        :yuanxu/modules/funflow/control-plane/config
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/modules/funflow/control-plane/task
+        :tao3k/yuanxu/modules/funflow/control-plane/flow
+        :tao3k/yuanxu/modules/funflow/control-plane/config
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
-        :yuanxu/module-system/catalog/objects
+        :tao3k/yuanxu/module-system/catalog/objects
         (prefix-in "./module-composition.ss" composition.)
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export resolve-agentic-ai-lab-module-source
         resolve-agentic-ai-lab-module-sources

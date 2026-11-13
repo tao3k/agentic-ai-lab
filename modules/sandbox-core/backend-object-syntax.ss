@@ -6,7 +6,7 @@
 ;;; Boundary: hygienic macros for repeated sandbox backend module object families.
 ;;; Invariant: macros expand to ordinary POO module objects and field contracts.
 
-(import :yuanxu/module-system/schema/interface
+(import :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object
         :agentic-ai-lab/modules/sandbox-core/objects)
 

@@ -13,8 +13,8 @@
         (only-in :clan/poo/object .o .all-slots .ref .slot?)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/module-system/projection/option-objects
-        :yuanxu/module-system/projection/option-validation)
+        :tao3k/yuanxu/module-system/projection/option-objects
+        :tao3k/yuanxu/module-system/projection/option-validation)
 
 (export agentic-ai-lab-module-option-configs
         agentic-ai-lab-module-option-schemas

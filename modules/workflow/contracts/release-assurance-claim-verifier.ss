@@ -7,7 +7,7 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?)
         :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest)
 

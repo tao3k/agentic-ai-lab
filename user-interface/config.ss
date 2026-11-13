@@ -1,4 +1,4 @@
-(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
@@ -8,9 +8,9 @@
 
 ;;; Final User Composition: one thin binding over maintained Profiles.
 
-(import (only-in :yuanxu/profile-composition/profile-bundle
+(import (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :yuanxu/profile-composition/selection-syntax
+        :tao3k/yuanxu/profile-composition/selection-syntax
 
         :agentic-ai-lab/modules/workflow/scenario/configuration/default-agent-control-plane-profile
         )

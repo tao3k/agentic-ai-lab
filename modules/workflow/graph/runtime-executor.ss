@@ -7,7 +7,7 @@
 ;;; Invariant: this executor records graph semantics; it never calls tools/models.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :yuanxu/graph/types-core)
+        :tao3k/yuanxu/graph/types-core)
 
 (export +agentic-ai-lab-graph-branch-choice-kind+
         +agentic-ai-lab-graph-runtime-policy-kind+

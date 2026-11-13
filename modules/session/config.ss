@@ -7,7 +7,7 @@
 ;;; Invariant: configuration composes the module-owned syntax surface only.
 
 (import "syntax.ss" "descriptor.ss"
-        :yuanxu/module-system/selection/objects)
+        :tao3k/yuanxu/module-system/selection/objects)
 (export (import: "syntax.ss") (import: "descriptor.ss")
         agentic-ai-lab-session-module-bundles)
 

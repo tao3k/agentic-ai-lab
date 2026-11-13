@@ -7,12 +7,12 @@
 ;;; Invariant: fixtures are constructed before timing; samples measure only
 ;;; Scheme control-plane graph analysis and never execute workflow commands.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-elapsed-us)
         "../support/performance"
-        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
-        (only-in :yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
+        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :tao3k/yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-graph-performance-test)
 

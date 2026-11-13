@@ -4,13 +4,13 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :std/test test-suite check-equal?)
-        (only-in :yuanxu/observability/testing-case
+        (only-in :tao3k/yuanxu/observability/testing-case
                  yuanxu-test-case)
-        (only-in :yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
-        (only-in :yuanxu/modules/funflow/objects FunflowModule. Job. Task.)
+        (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule. Job. Task.)
         (only-in :clan/poo/object object?)
-        (only-in :yuanxu/poo-clos/interface
+        (only-in :tao3k/yuanxu/poo-clos/interface
                  poo-clos-generic-function))
 
 (export funflow-public-module-test)

@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        :yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/object-types/contracts :clan/poo/object)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        :tao3k/yuanxu/profile-composition/selection-syntax
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :tao3k/yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-artifact-collection-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))

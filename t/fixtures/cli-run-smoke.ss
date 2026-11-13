@@ -1,11 +1,11 @@
 ;;; -*- Gerbil -*-
 ;;; Smoke file executed by `agentic-ai-lab run` for functional flow validation.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
-(import :yuanxu/modules/funflow/control-plane/api)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+(import :tao3k/yuanxu/modules/funflow/control-plane/api)
 
 ;;; CLI smoke arguments are parsed locally so `agentic-ai-lab run` can validate the
 ;;; compiled command path without depending on test harness state.

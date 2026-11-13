@@ -6,7 +6,7 @@
 ;;; Boundary: report-only session objects inspired by OpenRath's session-first
 ;;; model.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

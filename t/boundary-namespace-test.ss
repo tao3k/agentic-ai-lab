@@ -5,7 +5,7 @@
 
 ;;; Contract: scenario test for P0 boundary namespace validation.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> AgenticAILabBoundaryNamespaceExpr AgenticAILabBoundaryNamespaceValue)

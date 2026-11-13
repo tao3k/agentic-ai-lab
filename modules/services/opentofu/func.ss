@@ -6,13 +6,13 @@
 ;;; public results and diagnostics are POO objects. No process or Loader.
 (import :clan/poo/object
         (only-in "./types.ss" OpenTofuConfigContract)
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         :std/text/pregexp
         (only-in :std/list/list delete-duplicates/hash)
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref yuanxu-contract-key->symbol)
-        (only-in :yuanxu/modules/json-schema/json-schema-validation-core
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref yuanxu-contract-key->symbol)
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows)
-        (only-in :yuanxu/modules/json-schema/json-schema-values yuanxu-json-schema-null?))
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-values yuanxu-json-schema-null?))
 (export agentic-ai-lab-opentofu-cty->schema agentic-ai-lab-opentofu-block->schema
         agentic-ai-lab-opentofu-block-normalization agentic-ai-lab-opentofu-block-obligations
         opentofu-service-configuration)

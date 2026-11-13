@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/type Record String List)
         (only-in :clan/poo/mop make-instance Function)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -21,25 +21,25 @@
                  test-suite)
         (only-in :clan/poo/object .o .def .ref .slot? .get)
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree
         :agentic-ai-lab/modules/module-authoring/module-option-projection
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
-        :yuanxu/module-system/catalog/values
-        :yuanxu/module-system/loader/objects
-        :yuanxu/module-system/projection/option-objects
-        :yuanxu/module-system/projection/option-validation
+        :tao3k/yuanxu/module-system/catalog/values
+        :tao3k/yuanxu/module-system/loader/objects
+        :tao3k/yuanxu/module-system/projection/option-objects
+        :tao3k/yuanxu/module-system/projection/option-validation
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
-        :yuanxu/module-system/funs
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/funs
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :yuanxu/module-system/catalog/objects
-        :yuanxu/module-system/authoring/syntax)
+        :tao3k/yuanxu/module-system/catalog/objects
+        :tao3k/yuanxu/module-system/authoring/syntax)
 
 (export module-system-user-interface-test)
 

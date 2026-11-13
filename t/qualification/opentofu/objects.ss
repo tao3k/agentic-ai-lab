@@ -2,11 +2,11 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (rename-in (only-in :yuanxu/ops/interface Ops) (Ops OpsScope))
-        (only-in :yuanxu/profile-composition/selection-syntax use-module)
-        (only-in :yuanxu/module-system/interface yuanxu-load-modules)
-        (only-in :yuanxu/module-system/source/reader module-publication-reader)
-        (only-in :yuanxu/module-system/source/directory module-directory-context))
+        (rename-in (only-in :tao3k/yuanxu/ops/interface Ops) (Ops OpsScope))
+        (only-in :tao3k/yuanxu/profile-composition/selection-syntax use-module)
+        (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules)
+        (only-in :tao3k/yuanxu/module-system/source/reader module-publication-reader)
+        (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context))
 (export Ops configured-opentofu-modules)
 ;; One admitted scope from the built-in Core library; no operation starts here.
 (def Ops

@@ -6,7 +6,7 @@
 ;;; Boundary: module object validation gates cover inheritance chain projection.
 ;;; Invariant: validation metadata projection stays descriptor-only.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,9 +15,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :yuanxu/module-system/schema/interface
+        (only-in :tao3k/yuanxu/module-system/schema/interface
                  yuanxu-module-object)
-        (only-in :yuanxu/module-system/schema/validation
+        (only-in :tao3k/yuanxu/module-system/schema/validation
                  yuanxu-module-object-inheritance-chain))
 
 (export module-object-inheritance-chain-performance-test)

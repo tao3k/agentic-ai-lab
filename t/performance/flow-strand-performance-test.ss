@@ -6,7 +6,7 @@
 ;;; Boundary: flow strand performance gates cover batch registry extension.
 ;;; Invariant: strand registries stay descriptor data, not runtime execution.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :yuanxu/modules/funflow/control-plane/flow-strand
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow-strand
                  default-flow-strand-registry
                  flow-strand-for-kind-in
                  flow-strand-registry-descriptors

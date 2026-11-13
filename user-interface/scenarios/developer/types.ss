@@ -3,7 +3,7 @@
 (import (only-in :clan/poo/object .cc .ref object?)
         (only-in :clan/poo/mop Type.)
         (only-in :clan/poo/type Record)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config? yuanxu-user-config-modules
                  yuanxu-user-config-settings yuanxu-user-module-selection?))
 (export DeveloperConfigContract DeveloperScopeContract)

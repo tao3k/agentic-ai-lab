@@ -4,25 +4,24 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (for-syntax
           (only-in :std/source this-source-file)
-          (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
+          (only-in :tao3k/yuanxu/module-system/building/source-package register-module-build-source!)))
 (begin-syntax
   (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
 
 (import (only-in :clan/poo/object .get)
         (only-in :gerbil/expander module-context-path)
-        (only-in :yuanxu/module-system/source/admission
+        (only-in :tao3k/yuanxu/module-system/source/admission
                  call-with-module-source-read-cache
                  module-source-admit-current! module-source-read
                  module-compiler-interface-source)
-        (only-in :yuanxu/module-system/source/preparation
+        (only-in :tao3k/yuanxu/module-system/source/preparation
                  yuanxu-prepare-module-retained-source)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/build-script defbuild-script)
-        (only-in :yuanxu/module-system/building/interface call-with-init-build-spec)
-        (only-in :yuanxu/module-system/building/products current-build-module-roots current-build-source-directory)
-        (only-in "./init.ss" agentic-ai-lab.init.exports)
+        (only-in :tao3k/yuanxu/module-system/building/products current-build-module-roots)
+        (only-in "./init.ss" std-make-spec)
         (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
 
 ;; Runtime package clones acquire the declared Core gitlink before source lowering.
@@ -102,35 +101,20 @@
 ;; The private directory carries only the current invocation's handoff.
 ;; The init still owns selected Module projection, Make and output checks.
 (def (run-development-build args)
+  (ensure-core-source!)
   (call-with-temporary-directory "lab-library-spec-"
     (lambda (directory)
-      (def packet-path #f)
-      (def entry-source (this-source-file))
-      (begin0
-        (call-with-init-build-spec
-          (lambda ()
-            (ensure-core-source!)
-            ((.get agentic-ai-lab.init.exports std-make-spec)
-             (if (current-build-module-roots)
-               '()
-               (begin
-                 (set! packet-path (path-expand "specification" directory))
-                 (run-process (list "gxi" entry-source "--library-specification" packet-path)
-                   directory: (path-directory entry-source)
-                   stdin-redirection: #f stdout-redirection: #f)
-                 (read-library-specification packet-path)))))
-          (lambda (spec arguments (package-prefix #f))
-            (when package-prefix
-              (error "Lab development build has an unexpected package prefix" package-prefix))
-            (def (this-source-file)
-              (let (source-directory (current-build-source-directory))
-                (if source-directory
-                  (path-expand (path-strip-directory entry-source) source-directory)
-                  entry-source)))
-            (let ()
-              (defbuild-script spec)
-              (apply main arguments)))
-          args #f entry-source)
+      (def packet-path
+        (and (not (current-build-module-roots))
+             (path-expand "specification" directory)))
+      (when packet-path
+        (run-process (list "gxi" (this-source-file) "--library-specification" packet-path)
+          directory: (path-directory (this-source-file))
+          stdin-redirection: #f stdout-redirection: #f))
+      (def spec (append std-make-spec
+                       (if packet-path (read-library-specification packet-path) '())))
+      (defbuild-script spec)
+      (begin0 (apply main args)
         (when packet-path (read-library-specification packet-path))))))
 
 (def (main . args)

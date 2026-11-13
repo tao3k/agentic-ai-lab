@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; A command failure retains its primary exception after real destroy.
 (import :std/test :clan/poo/object
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-checkpoint)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-checkpoint)
         (only-in "./qualification/opentofu/service.ss" call-with-service rejects? empty-state?))
 (export opentofu-service-failure-test)
 

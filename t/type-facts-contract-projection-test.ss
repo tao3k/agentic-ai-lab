@@ -5,7 +5,7 @@
 
 ;;; Contract: POO Contracts project into type-fact proof rows.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> AgenticAILabTypeFactsProjectionExpr AgenticAILabTypeFactsProjectionValue)
@@ -22,8 +22,8 @@
 (def type-facts-contract-projection-test
   (test-suite "type-facts-contract-projection-test"
     (yuanxu-test-case "validates the runtime contract"
-      (eval '(import :yuanxu/module-system/schema/slot-contracts))
-      (eval '(import :yuanxu/object-types/facts))
+      (eval '(import :tao3k/yuanxu/module-system/schema/slot-contracts))
+      (eval '(import :tao3k/yuanxu/object-types/facts))
       (eval '(import :clan/poo/object :clan/poo/mop))
       (type-facts-projection-eval
  '(begin

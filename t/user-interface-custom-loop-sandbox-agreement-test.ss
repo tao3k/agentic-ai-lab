@@ -6,12 +6,12 @@
 ;;; Boundary: focused tests for loop-engine sandbox handoff agreement receipts.
 ;;; Invariant: sandbox agreement projection is report-only and never starts runtime.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxuUserConfig
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules

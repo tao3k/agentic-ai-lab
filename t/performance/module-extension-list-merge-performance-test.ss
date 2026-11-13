@@ -6,7 +6,7 @@
 ;;; Boundary: module extension performance gates cover List slot operation merge.
 ;;; Invariant: extension operations stay graph data and never execute runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,13 +15,12 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :yuanxu/graph/interface
+        (only-in :tao3k/yuanxu/graph/interface
                  yuanxu-graph-contribution
                  yuanxu-graph-resolve
-                 yuanxu-graph-rooted
-                 yuanxu-graph-root-payload
                  yuanxu-graph-result-root
-                 yuanxu-graph-slot-append))
+                 yuanxu-graph-slot-append)
+        (only-in :tao3k/yuanxu/graph/rooted yuanxu-graph-rooted yuanxu-graph-root-payload))
 
 (export module-extension-list-merge-performance-test)
 

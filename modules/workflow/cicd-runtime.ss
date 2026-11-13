@@ -15,7 +15,7 @@
                  agentic-ai-lab-cicd-check-map->receipts
                  agentic-ai-lab-cicd-check-map->runtime-manifest-readiness
                  agentic-ai-lab-cicd-check-map->runtime-command-manifests)
-        (only-in :yuanxu/modules/funflow/dependency-graph
+        (only-in :tao3k/yuanxu/modules/funflow/dependency-graph
                  yuanxu-cicd-check-map->dependency-graph)
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-support/pipeline
                  agentic-ai-lab-cicd-check->pipeline-run-step

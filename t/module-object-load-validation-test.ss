@@ -6,13 +6,13 @@
 ;;; Boundary: Imported fixture module objects are integration validation cases.
 ;;; Invariant: unit receipt-shape tests do not import fixture packages.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test
                  test-suite
                  check-equal?)
-        :yuanxu/module-system/schema/interface
-        :yuanxu/module-system/schema/validation
+        :tao3k/yuanxu/module-system/schema/interface
+        :tao3k/yuanxu/module-system/schema/validation
         "./fixtures/object-load-valid/objects")
 
 (export module-object-load-validation-test)

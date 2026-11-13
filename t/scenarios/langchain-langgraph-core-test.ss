@@ -8,21 +8,21 @@
 
 ;;; Scenario: user-interface LangChain and LangGraph composition instances.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .def .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
-        :yuanxu/graph/types
-        :yuanxu/graph/algorithms
-        :yuanxu/graph/control-analysis
+        :tao3k/yuanxu/graph/types
+        :tao3k/yuanxu/graph/algorithms
+        :tao3k/yuanxu/graph/control-analysis
         :agentic-ai-lab/modules/workflow/graph/runtime-executor
-        :yuanxu/profile-composition/profile-bundle
+        :tao3k/yuanxu/profile-composition/profile-bundle
         (rename-in
-         (only-in :yuanxu/profile-composition/selection-syntax
+         (only-in :tao3k/yuanxu/profile-composition/selection-syntax
                   use-module)
          (use-module use-profile-module))
 
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
 
         :agentic-ai-lab/user-interface/scenarios/langchain/scenario

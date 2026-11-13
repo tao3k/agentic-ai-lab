@@ -5,15 +5,15 @@
 ;;; Package input: manifest -> kind index -> one hashed Contract input.
 ;;; schema.json is an audit export, never a runtime input. No legacy fallback.
 (import :clan/poo/object
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
-        (only-in :yuanxu/modules/json-schema/json-schema-source
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source
                  yuanxu-json-schema-source->json-like yuanxu-json-schema-read-port)
-        (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
+        (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         "./types.ss")
 (export agentic-ai-lab-opentofu-read-provider-artifact)
 

@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref .o)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         :agentic-ai-lab/modules/temporal-causality/time/objects
         :agentic-ai-lab/modules/temporal-causality/revisions/interface
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface)

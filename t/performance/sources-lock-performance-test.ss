@@ -7,14 +7,14 @@
 ;;; Invariant: admitted entries are fixture data; the measurement owns
 ;;; canonical lock construction, digest construction, indexing and lookup.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :yuanxu/module-system/feature/source-lock-feature)
+        :tao3k/yuanxu/module-system/feature/source-lock-feature)
 
 (export sources-lock-performance-test)
 

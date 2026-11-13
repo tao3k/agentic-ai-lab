@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Doctor is an Observability projection, not a separate UI/module package.
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test test-suite check-equal?)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
                  agentic-ai-lab-module-doctor

@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in "./qualification/context-memory-init.ss" agentic-ai-lab/t/qualification.context-memory-init.exports)
         (only-in :clan/poo/object .o .get .ref)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)

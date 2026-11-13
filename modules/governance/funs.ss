@@ -7,10 +7,10 @@
 ;;; Invariant: this projection remains inert and grants no runtime authority.
 (import (only-in :clan/poo/object .ref .slot?)
         (only-in :std/list/list every)
-        (only-in :yuanxu/contribution/objects
+        (only-in :tao3k/yuanxu/contribution/objects
                  make-contribution
                  contribution?)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection?
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)

@@ -7,11 +7,11 @@
 
 (import (only-in :clan/poo/type Record String List)
         (only-in :clan/poo/object-contract diagnose)
-        (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
+        (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in "../core/t/qualification/testing/directory.ss" write-source)
         (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture refused)
-        (only-in :yuanxu/module-system/source/admission module-source-read)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -23,23 +23,23 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .def .cc .ref .get .call object-slots $constant-slot-spec? $self-slot-spec?)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/module-system/authoring/syntax
+        :tao3k/yuanxu/module-system/authoring/syntax
         :agentic-ai-lab/modules/module-authoring/module-option-projection
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
                  agenticAiLabModuleDoctorPresentation)
-        :yuanxu/module-system/catalog/values
-        :yuanxu/module-system/projection/option-objects
-        :yuanxu/module-system/projection/option-validation
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
-        :yuanxu/module-system/funs
+        :tao3k/yuanxu/module-system/catalog/values
+        :tao3k/yuanxu/module-system/projection/option-objects
+        :tao3k/yuanxu/module-system/projection/option-validation
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/funs
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :yuanxu/module-system/catalog/objects)
+        :tao3k/yuanxu/module-system/catalog/objects)
 
 (export module-system-owner-contract-test)
 
@@ -76,12 +76,12 @@
           (source-port-has-module-prefix?
            port
            ":agentic-ai-lab/modules/"
-           ":yuanxu/")))
+           ":tao3k/yuanxu/")))
        #f)
       (check-equal?
        (source-datum-has-module-prefix?
         '(import :agentic-ai-lab/modules/workflow/cicd-runtime)
-        ":agentic-ai-lab/modules/" ":yuanxu/")
+        ":agentic-ai-lab/modules/" ":tao3k/yuanxu/")
        #t))
     (yuanxu-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface

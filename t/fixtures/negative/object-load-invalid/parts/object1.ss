@@ -1,5 +1,5 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :yuanxu/module-system/schema/interface)
+(import :tao3k/yuanxu/module-system/schema/interface)
 (export Objects)
 (def Objects
 (list

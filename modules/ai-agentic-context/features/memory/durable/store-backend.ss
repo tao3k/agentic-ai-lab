@@ -8,11 +8,11 @@
 ;;; owns append, fsync, leases, checkpoint IO, index rebuild, and repair jobs.
 
 (import (only-in :clan/poo/object .ref .slot? object? object<-alist)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/utilities/final-projection-syntax
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
 (export +agentic-ai-lab-durable-runtime-store-backend-kind+

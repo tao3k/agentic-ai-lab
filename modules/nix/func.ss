@@ -4,11 +4,11 @@
 (import (only-in "./progress.ss" make-nix-progress-reader) :clan/poo/object
         (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session query-derivation-session)
         (only-in :std/misc/process run-process)
-        (only-in :yuanxu/ops/func run-script)
-        (only-in :yuanxu/ops/progress execution-idle-seconds execution-total-seconds)
+        (only-in :tao3k/yuanxu/ops/func run-script)
+        (only-in :tao3k/yuanxu/ops/progress execution-idle-seconds execution-total-seconds)
         (only-in :std/string/misc string-subst)
         (only-in :std/encoding/json write-json)
-        (only-in :yuanxu/module-system/source/admission module-source-type module-source-read
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-type module-source-read
                  current-module-source-observer current-module-process-trace-budget)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode))

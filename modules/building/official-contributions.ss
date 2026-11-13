@@ -8,7 +8,7 @@
 ;;; this module only exposes the packages root for identity-driven discovery.
 
 (import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabModuleStylePolicy)
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/module-system/source/collection
         :agentic-ai-lab/modules/module-authoring/module-source-collection)
 
 (export agentic-ai-lab-official-contribution-sources

@@ -11,7 +11,7 @@
 
 ;;; Runtime nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
-(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :agentic-ai-lab/modules/agent-sandbox/alist
         :agentic-ai-lab/modules/agent-sandbox/profile
         :agentic-ai-lab/modules/agent-sandbox/bridge

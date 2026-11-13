@@ -6,10 +6,10 @@
 ;;; User Interface reusable Profile library: LangChain-style linear chain.
 
 (import (only-in :clan/poo/object .def .o .ref)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles
                  yuanxu-semantic-module)
-        (only-in :yuanxu/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  yuanxu-profile-export
                  yuanxu-module-profiles))
 

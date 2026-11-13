@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Agent sandbox facade and task/flow opt-in live here.
 ;;; Boundary: profile, request, and bridge contracts live in leaf modules.
 ;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox= exports.
@@ -14,20 +14,20 @@
 ;;; Runtime contract: LLM calls, API/R surfaces, and C bindings stay out of Scheme.
 ;;; Policy evidence: tests should validate this facade plus leaf contracts.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task)
-        (only-in :yuanxu/modules/funflow/control-plane/strategy
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter adapter-submit)
-        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
-        (only-in :yuanxu/modules/funflow/control-plane/flow
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow)
         :agentic-ai-lab/modules/agent-sandbox/alist
         :agentic-ai-lab/modules/agent-sandbox/profile

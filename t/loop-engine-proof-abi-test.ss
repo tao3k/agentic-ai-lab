@@ -6,7 +6,7 @@
 ;;; Boundary: proof ABI tests pin the Scheme-to-Lean proof-case vector shape.
 ;;; Invariant: these tests do not execute runtime work or call the proof checker.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-eq?
                  check-equal?

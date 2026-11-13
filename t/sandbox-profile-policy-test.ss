@@ -6,7 +6,7 @@
 ;;; Boundary: sandbox profile policy tests stay projection-only.
 ;;; Invariant: backend capability checks never execute sandbox runtimes.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

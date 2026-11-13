@@ -7,7 +7,7 @@
 ;;; Invariant: Scheme composes bounded handoff rows only; Rust/Marlin owns
 ;;; event persistence, replay, repair jobs, leases, and side effects.
 
-(import :yuanxu/utilities/final-projection-syntax
+(import :tao3k/yuanxu/utilities/final-projection-syntax
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-support)
 
 (export +agentic-ai-lab-durable-recovery-scenario-kind+

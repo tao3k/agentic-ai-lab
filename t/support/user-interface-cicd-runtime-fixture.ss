@@ -7,7 +7,7 @@
 ;;; Invariant: construct only the profiles required by the real downstream
 ;;; Funflow case; do not import the aggregate custom-profile owner.
 
-(import (only-in :yuanxu/module-system/selection/objects
+(import (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxuUserConfig
                  yuanxu-settings
                  yuanxu-user-module-selection)

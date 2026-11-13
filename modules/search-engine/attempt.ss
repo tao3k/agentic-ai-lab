@@ -4,7 +4,7 @@
 ;;; Pure per-stage temporal attempt and predecessor admission. No physical execution.
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every ormap)
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/role-syntax
         (only-in :agentic-ai-lab/modules/search-engine/funs agentic-ai-lab-search-stage?))
 (export agentic-ai-lab-search-attempt-state agentic-ai-lab-search-attempt-issue
         agentic-ai-lab-search-attempt-settle agentic-ai-lab-search-attempt-revise

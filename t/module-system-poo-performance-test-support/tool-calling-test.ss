@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance cases for tool-calling control-plane objects.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

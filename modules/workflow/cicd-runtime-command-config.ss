@@ -7,12 +7,12 @@
 ;;; Invariant: manifest summaries preserve declaration order and record only
 ;;; policy data, while Marlin owns execution, process lifecycle, and retries.
 
-(import :yuanxu/module-system/selection/objects
+(import :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/sandbox-core/profile-catalog
-        :yuanxu/modules/funflow/graph-projection
-        :yuanxu/modules/funflow/check-types
-        :yuanxu/modules/funflow/check-objects
-        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map?)
+        :tao3k/yuanxu/modules/funflow/graph-projection
+        :tao3k/yuanxu/modules/funflow/check-types
+        :tao3k/yuanxu/modules/funflow/check-objects
+        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map?)
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests)
         )
 

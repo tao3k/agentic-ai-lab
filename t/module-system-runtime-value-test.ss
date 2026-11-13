@@ -9,19 +9,19 @@
 
 (import (only-in :clan/poo/type Record)
         (only-in :clan/poo/mop Bool make-instance element?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref object?)
         (only-in :std/test check-equal? test-suite)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
                  make-agentic-ai-lab-module-diagnostic)
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
-        :yuanxu/module-system/loader/objects
-        :yuanxu/module-system/catalog/objects
-        :yuanxu/module-system/projection/option-objects)
+        :tao3k/yuanxu/module-system/loader/objects
+        :tao3k/yuanxu/module-system/catalog/objects
+        :tao3k/yuanxu/module-system/projection/option-objects)
 
 (export module-system-runtime-value-test)
 

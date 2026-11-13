@@ -11,7 +11,7 @@
         (only-in :std/list/list every filter-map)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?))
 
 (export agentic-ai-lab-agent-action-evidence-envelope

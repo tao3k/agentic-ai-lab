@@ -9,15 +9,15 @@
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot
                  yuanxu-contract-slot-name
                  yuanxu-contract-slot-type
                  yuanxu-contract-value-type
                  yuanxu-object-contract
                  yuanxu-object-contract->alist)
-        :yuanxu/utilities/final-projection-syntax
-        :yuanxu/object-types/facts)
+        :tao3k/yuanxu/utilities/final-projection-syntax
+        :tao3k/yuanxu/object-types/facts)
 
 (export agentic-ai-lab-runtime-filesystem-prototype
         agentic-ai-lab-runtime-volume-filesystem-prototype

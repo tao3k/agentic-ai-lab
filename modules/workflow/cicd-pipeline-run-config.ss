@@ -6,7 +6,7 @@
 ;;; Boundary: workflow CI/CD pipeline run/result projection for user config.
 ;;; Invariant: this owner emits handoff-readiness data and never executes CI.
 
-(import :yuanxu/module-system/selection/objects
+(import :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/sandbox-core/profile-catalog
         :agentic-ai-lab/modules/workflow/cicd-config
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->pipeline-run agentic-ai-lab-cicd-check-map->pipeline-result))

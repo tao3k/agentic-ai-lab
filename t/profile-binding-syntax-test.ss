@@ -3,18 +3,18 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate TypeError? define-type Type. .new)
         (only-in :clan/poo/type Record)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
-        (only-in :yuanxu/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  profiles compose yuanxu-profile-export
                  yuanxu-module-profiles)
-        :yuanxu/profile-composition/selection-syntax
+        :tao3k/yuanxu/profile-composition/selection-syntax
         )
 
 (export profile-binding-syntax-test)

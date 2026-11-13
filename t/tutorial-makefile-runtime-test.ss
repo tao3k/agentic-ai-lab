@@ -6,7 +6,7 @@
 ;;; Boundary: makefile-tool runtime stages prove descriptor handoff behavior.
 ;;; Invariant: tests emulate runtime responses without executing Makefile work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         (only-in :agentic-ai-lab/modules/workflow/flows-builders make-makefile-tool-workflow make-makefile-tool-runtime-command-descriptor))
 
 (export tutorial-makefile-runtime-test)

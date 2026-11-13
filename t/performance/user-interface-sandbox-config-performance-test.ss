@@ -1,5 +1,5 @@
 (import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-by-name))
-(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-config-feature?))
+(import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -9,7 +9,7 @@
 ;;; Invariant: benchmark payloads live under t/; user-interface declarations
 ;;; stay POO and never realize sandbox descriptors.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

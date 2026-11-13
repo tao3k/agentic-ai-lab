@@ -8,10 +8,10 @@
         (only-in :clan/poo/object-contract diagnose)
         (only-in :clan/poo/slot-observation %call-with-recorded-slot-reads
                  call-with-slot-read-observer slot-read-dependencies slot-read-receiver slot-read-key)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in :yuanxu/observability/memory yuanxu-debug-memory-snapshot)
-        (only-in :yuanxu/module-system/source/admission current-module-source-observer module-source-read
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
+        (only-in :tao3k/yuanxu/observability/memory yuanxu-debug-memory-snapshot)
+        (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer module-source-read
                  current-module-source-phase call-with-module-source-operation-measurement)
         (only-in "../core/t/qualification/testing/directory.ss" write-source)
         (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture refused)
@@ -20,7 +20,7 @@
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
                  agenticAiLabModuleDoctorPresentation)
-        :yuanxu/module-system/catalog/values)
+        :tao3k/yuanxu/module-system/catalog/values)
 (export module-preview-cost-test)
 
 ;; Walk original records, preserving all edge occurrences. Identity sets are

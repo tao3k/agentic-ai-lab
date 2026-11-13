@@ -12,7 +12,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :yuanxu/module-system/authoring/observation
+        (only-in :tao3k/yuanxu/module-system/authoring/observation
                  yuanxu-scheme-lexical-call-shadow-datum-observations))
 
 (def +nesting-depth+ 300)

@@ -9,10 +9,10 @@
 
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :yuanxu/modules/funflow/control-plane/projection-syntax
+        :tao3k/yuanxu/modules/funflow/control-plane/projection-syntax
         
-        :yuanxu/modules/funflow/check-types
-        :yuanxu/modules/funflow/check-objects)
+        :tao3k/yuanxu/modules/funflow/check-types
+        :tao3k/yuanxu/modules/funflow/check-objects)
 
 (export agentic-ai-lab-cicd-check-profile-refs
         agentic-ai-lab-cicd-check-sandbox-runtime-summaries

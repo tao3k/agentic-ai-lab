@@ -5,11 +5,11 @@
 
 ;;; Scenario: user-interface CrewAI-style composition instance.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
         :agentic-ai-lab/user-interface/scenarios/crewai/scenario)
 

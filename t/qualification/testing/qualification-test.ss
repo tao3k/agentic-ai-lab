@@ -3,7 +3,7 @@
 ;;; Receipt controls use explicit synthetic output; real gates run separately.
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message Error-irritants)
-        (only-in :yuanxu/observability/testing-script TestingScript.))
+        (only-in :tao3k/yuanxu/observability/testing-script TestingScript.))
 (export qualification-test)
 (def files '("specialized-fixture-test.ss"))
 (def (output count)

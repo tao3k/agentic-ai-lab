@@ -7,7 +7,7 @@
 ;;; Invariant: graph construction is declarative; Scheme does not run agents or
 ;;; deliver messages.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

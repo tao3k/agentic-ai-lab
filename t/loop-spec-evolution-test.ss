@@ -6,11 +6,11 @@
 ;;; Boundary: spec evolution proposals are Human Audit review inputs.
 ;;; Invariant: proposals never mutate config or execute runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
         :agentic-ai-lab/modules/loop-engine/control/spec-evolution)
 
 (export loop-spec-evolution-test)

@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit validate)
-        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Tutorial2 custom task alignment lives in this module.
 ;;; Boundary: core provides descriptor, strategy, runner, and adapter protocols.
 ;;; Import contract: users opt in through the module config/interface exports.
@@ -15,19 +15,19 @@
 ;;; Runtime contract: scheduler and plan semantics stay out of this extension.
 ;;; Policy evidence: tests should assert registry, task shape, and interpreter result.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task TaskContract task-kind
                  task-request-operation task-request-payload)
-        (only-in :yuanxu/modules/funflow/control-plane/strategy
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
-        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
-        (only-in :yuanxu/modules/funflow/control-plane/flow
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry FlowContract task-flow)
-        :yuanxu/modules/funflow/control-plane/projection-syntax)
+        :tao3k/yuanxu/modules/funflow/control-plane/projection-syntax)
 
 (export custom-task-family-descriptor
         make-custom-task-family-registry

@@ -6,7 +6,7 @@
 
 ;;; POO prototype admission for backend-owned Sandbox Profiles.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         :agentic-ai-lab/modules/nono-sandbox/objects
         :agentic-ai-lab/modules/agent-sandbox/config

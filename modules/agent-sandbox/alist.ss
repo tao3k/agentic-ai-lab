@@ -9,7 +9,7 @@
 ;;; Policy evidence: larger extension owners should import these helpers.
 
 (import (only-in :std/list/list filter-map append-map)
-        :yuanxu/utilities/functional)
+        :tao3k/yuanxu/utilities/functional)
 
 (export agent-sandbox-option
         agent-sandbox-alist-ref

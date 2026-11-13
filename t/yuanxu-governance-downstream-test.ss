@@ -6,12 +6,12 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :yuanxu/ops/interface Ops)
-        (only-in :yuanxu/ops/func run-script)
-        (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
-        (only-in :yuanxu/module-system/building/products artifact-files)
-        (only-in :yuanxu/module-system/source/admission module-source-read
+        (only-in :tao3k/yuanxu/ops/interface Ops)
+        (only-in :tao3k/yuanxu/ops/func run-script)
+        (only-in :tao3k/yuanxu/ops/progress execution-progress!)
+        (only-in :tao3k/yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
+        (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
+        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read
                  call-with-module-source-operation-measurement)
         (only-in "./qualification/yuanxu-governance-consumer/init.ss" yuanxu-governance-consumer.init.exports)
         (rename-in (only-in "./qualification/yuanxu-governance-consumer/build.ss" main)

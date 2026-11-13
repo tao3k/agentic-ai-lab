@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify maintained root declaration cases.
 ;;; Invariant: cases are downstream declarations and report data, never runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .get .ref)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind
                  yuanxu-user-config?)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/declaration-case

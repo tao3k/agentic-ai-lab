@@ -6,7 +6,7 @@
 
 ;;; Scale gate for inert Sandbox Profile construction and explicit list policy.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         :agentic-ai-lab/modules/nono-sandbox/config
         :agentic-ai-lab/modules/agent-sandbox/config)

@@ -6,7 +6,7 @@
 ;;; Qualification boundary: a mechanism-only Case composes Profiles from two
 ;;; independently owned industries.  It proves composition and diagnostics but
 ;;; makes no claim that either Standard applies to the other's industry.
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :agentic-ai-lab/modules/standards/interface

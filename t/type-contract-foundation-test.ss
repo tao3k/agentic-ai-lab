@@ -4,11 +4,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: executable admission of project Type and Contract refinement.
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .o .cc .ref .mix)
         (only-in :clan/poo/mop element? validate TypeError? define-type)
-        :yuanxu/object-types/contracts)
+        :tao3k/yuanxu/object-types/contracts)
 (export type-contract-foundation-test)
 
 (define-type (NamedContract @ YuanxuObjectContract.)

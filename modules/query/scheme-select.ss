@@ -6,7 +6,7 @@
 ;;; POO nodes and executes MATCH, optional property equality, and RETURN.
 ;;; Path joins and external source admission are outside this small API.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-all?)
         (only-in :std/list/list filter-map map)
         (only-in "types.ss" agentic-ai-lab-query?)

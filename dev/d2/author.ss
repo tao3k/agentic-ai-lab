@@ -23,7 +23,7 @@
   (for-each (lambda (observation-value) (verify-artifact observation-value 'image-ref 'image-sha))
             (.ref context-value 'observations)))
 (def (main (revision-name "r1") (output "dev/d2/output/authoring"))
-  ((.get agentic-ai-lab/dev/d2.init.exports std-make-spec) '())
+  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (def revision-id (string->symbol revision-name))
   (def context-input (illustration-context Scope revision-id))
   (verify-context-artifacts context-input)

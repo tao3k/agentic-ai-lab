@@ -7,11 +7,11 @@
 ;;; Invariant: fixtures are declarative data and never realize descriptors.
 
 (import (only-in :clan/poo/object .o .ref)
-        :yuanxu/module-system/selection/objects
-        (only-in :yuanxu/module-system/selection/syntax
+        :tao3k/yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/syntax
                  yuanxu-modules!)
         :agentic-ai-lab/modules/loop-engine/config
-        :yuanxu/profile-composition/user-profile
+        :tao3k/yuanxu/profile-composition/user-profile
         :agentic-ai-lab/modules/workflow/profiles/kernel/interface)
 
 (export test-yuanxu-user-module-bundles

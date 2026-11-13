@@ -6,10 +6,10 @@
         (only-in :std/encoding/json write-json)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
+        (only-in :tao3k/yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
         ;; Build-tool runtime owners, not a second runtime facade or Loader.
         (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
 ;; The runtime outer module slot keeps source/config refinements receiver-local.
 (.def Build

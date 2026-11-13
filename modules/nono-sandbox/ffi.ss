@@ -12,7 +12,7 @@
 (import :gerbil/core
         :agentic-ai-lab/modules/agent-sandbox/alist
         :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         (only-in ./_nono
                  nono_ffi_apply_null
                  nono_ffi_capability_roundtrip

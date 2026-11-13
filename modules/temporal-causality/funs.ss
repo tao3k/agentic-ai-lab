@@ -10,7 +10,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every filter find delete-duplicates/hash)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/graph/types-core
+        (only-in :tao3k/yuanxu/graph/types-core
                  yuanxu-graph yuanxu-graph-edge yuanxu-graph-node
                  yuanxu-graph? yuanxu-graph-id yuanxu-graph-nodes
                  yuanxu-graph-edges yuanxu-graph-node-id

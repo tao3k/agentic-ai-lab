@@ -1,7 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Domain inputs for an inert control-plane preview. Module loading is init's job.
-(import (only-in :yuanxu/module-system/selection/objects
+(import (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxuUserConfig yuanxu-settings yuanxu-user-module-selection
                  yuanxu-user-custom-module-selection yuanxu-user-module-bundles-extend
                  yuanxu-user-module-bundles->modules)

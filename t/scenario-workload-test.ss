@@ -5,8 +5,8 @@
 
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        :yuanxu/modules/funflow/workload)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        :tao3k/yuanxu/modules/funflow/workload)
 
 (export scenario-workload-test)
 

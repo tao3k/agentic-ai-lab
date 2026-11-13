@@ -8,15 +8,15 @@
 (import :clan/poo/object
         ;; Only declaration syntax is required. Reflection, class evolution and
         ;; load-form publication are not collection-evidence dependencies.
-        (only-in :yuanxu/poo-clos/generic-syntax .defgeneric .defmethod)
+        (only-in :tao3k/yuanxu/poo-clos/generic-syntax .defgeneric .defmethod)
         (only-in :clan/poo/mop element?)
         "./types.ss" "./aws-hash.ss"
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/modules/json-schema/functional
+        (only-in :tao3k/yuanxu/modules/json-schema/functional
                  yuanxu-contract-json-object? yuanxu-contract-key->string
                  yuanxu-contract-object-ref yuanxu-contract-key->symbol)
-        (only-in :yuanxu/modules/json-schema/json-schema-validation-core
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows))
 (export agentic-ai-lab-opentofu-string-set-authority
         agentic-ai-lab-opentofu-value-digest

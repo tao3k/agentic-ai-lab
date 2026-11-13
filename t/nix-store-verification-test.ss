@@ -2,8 +2,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Current native store verification, never a cached registration claim.
 (import :std/test
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/module-system/source/admission current-module-source-observer)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer)
         (rename-in (only-in "../core/t/qualification/build-publication/store.ss" store-verify)
                    (store-verify verify-store))
         (only-in :agentic-ai-lab/modules/nix/func

@@ -9,7 +9,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-all?)
         (only-in :std/list/list map)
         "types.ss"

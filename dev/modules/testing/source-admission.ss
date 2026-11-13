@@ -14,9 +14,9 @@
                  duration-micros monotonic-micros)
         (only-in :clan/poo/object
                  .o .ref .slot? object? make-object $constant-slot-spec)
-        (only-in :yuanxu/observability/output
+        (only-in :tao3k/yuanxu/observability/output
                  yuanxu-write-observation-line!)
-        (only-in :yuanxu/module-system/observability/presentation
+        (only-in :tao3k/yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-file-observations
                  yuanxu-poo-slot-authoring-observation-ok?))
 

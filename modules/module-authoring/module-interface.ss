@@ -5,12 +5,12 @@
 
 ;;; Agentic AI Lab identity and default authoring policy for the Core Module Interface.
 ;;; Schema indexing, option vocabulary, and runtime construction live in Core.
-(import (rename-in (only-in :yuanxu/module-system/source/interface
+(import (rename-in (only-in :tao3k/yuanxu/module-system/source/interface
                             yuanxu-module-interface-prototype)
                    (yuanxu-module-interface-prototype ModuleInterface.))
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :yuanxu/module-system/config
-        (only-in :yuanxu/module-system/authoring/roles
+        :tao3k/yuanxu/module-system/config
+        (only-in :tao3k/yuanxu/module-system/authoring/roles
                  make-default-module-authoring-profile))
 
 (export agentic-ai-lab-modules-kind
@@ -26,7 +26,7 @@
         yuanxu-module-interface-prototype
         yuanxu-module-interface
         yuanxu-module-interface?
-        (import: :yuanxu/module-system/config))
+        (import: :tao3k/yuanxu/module-system/config))
 
 (def agentic-ai-lab-brand-name "agentic-ai-lab")
 (def agentic-ai-lab-brand-group 'agentic-ai-lab)

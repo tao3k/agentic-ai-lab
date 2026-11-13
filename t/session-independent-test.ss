@@ -5,7 +5,7 @@
 ;;; combined native Suite deliberately reuses session-attempt-test instead:
 ;;; its process has already loaded Context and cannot witness this boundary.
 (import :std/test
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         (only-in :gerbil/runtime/loader list-modules)
         :agentic-ai-lab/modules/session/interface)

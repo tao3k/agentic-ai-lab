@@ -6,19 +6,19 @@
 ;;; Boundary: human audit loops project review decisions over loop facts.
 ;;; Invariant: this module never edits config, schedules loops, or executes runtime work.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax
-        :yuanxu/modules/funflow/control-plane/agent-harness
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/modules/funflow/control-plane/agent-harness
         (only-in "./governor.ss"
                  loop-governor?
                  loop-governor->contract/validated
                  loop-governor-human-node-role
                  loop-governor-node->contract
                  loop-governor-validation-errors)
-        (only-in :yuanxu/module-system/schema/slot-contracts
+        (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type

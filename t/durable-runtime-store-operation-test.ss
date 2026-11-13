@@ -6,7 +6,7 @@
 ;;; Boundary: durable runtime store operation receipts for Marlin handoff.
 ;;; Invariant: tests validate receipt projection only; no durable store runs.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

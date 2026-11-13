@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object object<-fun)
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation

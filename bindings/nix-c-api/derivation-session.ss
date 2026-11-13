@@ -1,8 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (only-in :yuanxu/ops/process-script ProcessScript.)
-        (only-in :yuanxu/ops/progress call-with-execution-watchdog
+        (only-in :tao3k/yuanxu/ops/process-script ProcessScript.)
+        (only-in :tao3k/yuanxu/ops/progress call-with-execution-watchdog
                  execution-idle-seconds execution-total-seconds execution-progress!))
 (export call-with-derivation-session query-derivation-session)
 

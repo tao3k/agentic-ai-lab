@@ -7,7 +7,7 @@
 ;;; Invariant: recovery rows describe crash/replay/repair handoff data only;
 ;;; Scheme never replays logs, claims leases, repairs state, or runs workflow.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

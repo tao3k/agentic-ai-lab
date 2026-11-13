@@ -26,7 +26,7 @@ YUANXU_BUNDLE_V1_CORE_SOURCE=$(dirname "$core_package")
 export YUANXU_BUNDLE_V1_CORE_SOURCE
 
 "$gxi" -:max-heap=1G,debug=q \
-  -e '(import (only-in :yuanxu/module-system/building/source-package register-yuanxu-build-source!))' \
-  -e '(register-yuanxu-build-source! (getenv "YUANXU_BUNDLE_V1_CORE_SOURCE"))' \
+  -e '(import (only-in :tao3k/yuanxu/module-system/building/source-package register-module-build-source!))' \
+  -e '(register-module-build-source! (getenv "YUANXU_BUNDLE_V1_CORE_SOURCE") (quote tao3k/yuanxu))' \
   "$fixture" < /dev/null
 "$harness" "$descriptor" "$arena"

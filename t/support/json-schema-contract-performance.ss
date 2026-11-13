@@ -12,11 +12,11 @@
                  list->hash-table)
         (only-in "./performance.ss"
                  agentic-ai-lab-performance-build-list)
-        (only-in :yuanxu/modules/json-schema/json-schema-ir
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-ir
                  yuanxu-json-schema-normalization-schema)
-        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-receipt
                  yuanxu-json-schema-contract-artifact-normalization)
-        (only-in :yuanxu/modules/json-schema/json-schema-valid
+        (only-in :tao3k/yuanxu/modules/json-schema/json-schema-valid
                  yuanxu-json-schema-node-valid?)
         (only-in :agentic-ai-lab/modules/workflow/profiles/github-ci-contract
                  agentic-ai-lab-funflow-github-ci-contract-artifact

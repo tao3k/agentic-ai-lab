@@ -2,7 +2,7 @@
 (import (only-in "./main.ss" selected-governance)
         (only-in "./init.ss" yuanxu-governance-consumer.init.exports)
         (only-in :clan/poo/object .get .all-slots .ref/cached .cc .o)
-        (only-in :yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
+        (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
 (export verify-governance-use)
 (def (verify-governance-use)
   (defvalues (modules namespace-times)

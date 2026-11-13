@@ -5,7 +5,7 @@
 
 ;;; Boundary: executable POO best-practice guard for module object layering.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :std/test
                  check
@@ -19,8 +19,8 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        :yuanxu/graph/interface
-        :yuanxu/module-system/schema/interface)
+        :tao3k/yuanxu/graph/interface
+        :tao3k/yuanxu/module-system/schema/interface)
 
 (export module-object-practice-test)
 

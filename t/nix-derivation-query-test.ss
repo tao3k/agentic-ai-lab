@@ -4,9 +4,9 @@
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message)
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource. agentic-ai-lab-nix-admit-generation)
-        (only-in :yuanxu/module-system/source/admission current-module-source-observer
+        (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer
                  current-module-process-trace-budget)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
 (export nix-derivation-query-test test-cleanup!)

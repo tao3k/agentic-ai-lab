@@ -7,7 +7,7 @@
 ;;; Invariant: benchmark thunks exclude gxi startup, package install, schema
 ;;; download, Python execution, GitHub Actions execution, and external IO.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

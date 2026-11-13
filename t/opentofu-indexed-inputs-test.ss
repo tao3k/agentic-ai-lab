@@ -8,9 +8,9 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/misc/ports read-all-as-u8vector)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-provider-from-directory agentic-ai-lab-opentofu-block-contract) (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        :yuanxu/object-types/contracts :clan/poo/object)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-provider-from-directory agentic-ai-lab-opentofu-block-contract) (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
+        :tao3k/yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-indexed-inputs-test)
 
 (def (assert label value)

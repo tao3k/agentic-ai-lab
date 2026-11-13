@@ -3,15 +3,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/contribution/objects
+        (only-in :tao3k/yuanxu/contribution/objects
                  admit-contributions)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection)
-        (only-in :yuanxu/poo-clos/interface
+        (only-in :tao3k/yuanxu/poo-clos/interface
                  poo-clos-generic-methods
                  poo-clos-make-instance)
         :agentic-ai-lab/modules/governance/interface

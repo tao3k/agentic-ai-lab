@@ -8,8 +8,8 @@
 (export #t)
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :yuanxu/object-family/role-syntax
-        :yuanxu/object-family/syntax
+        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/syntax
         :agentic-ai-lab/modules/workflow/qualification/capability-prototypes
         (only-in :agentic-ai-lab/modules/query/semantic/organization-bundle
                  +agentic-ai-lab-organization-bundle-schema+)

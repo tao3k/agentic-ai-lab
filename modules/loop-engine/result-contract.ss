@@ -8,7 +8,7 @@
 ;;; runtime model output or executes reviewer operations.
 
 (import "core.ss"
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-user-loop-engine-intent-result-contract
         agentic-ai-lab-user-loop-engine-result-contract-valid?

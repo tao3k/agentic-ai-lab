@@ -6,7 +6,7 @@
 ;;; Boundary: Cube interface tests cover Marlin-facing lifecycle manifests.
 ;;; Invariant: tests do not call Cube APIs or create remote sandboxes.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api
+        :tao3k/yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/agent-sandbox/api
         :agentic-ai-lab/modules/agent-sandbox/cube
         :agentic-ai-lab/modules/agent-sandbox/nono)

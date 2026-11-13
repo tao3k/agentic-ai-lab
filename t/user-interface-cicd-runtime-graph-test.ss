@@ -6,7 +6,7 @@
 ;;; Boundary: tests inspect the user-facing Funflow CI/CD dependency graph.
 ;;; Invariant: graph projection stays declarative and runtime-free.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

@@ -5,7 +5,7 @@
 
 ;;; Boundary: Docker sandbox module objects.
 
-(import :yuanxu/module-system/schema/interface
+(import :tao3k/yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object
         :agentic-ai-lab/modules/sandbox-core/backend-object-syntax
         :agentic-ai-lab/modules/sandbox-core/objects

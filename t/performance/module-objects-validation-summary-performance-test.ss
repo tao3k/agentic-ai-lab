@@ -6,7 +6,7 @@
 ;;; Boundary: module object validation gates cover catalog summary aggregation.
 ;;; Invariant: summary aggregation stays report-only and never realizes runtime descriptors.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .o .ref object?)
         (only-in :std/test
@@ -17,7 +17,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :yuanxu/module-system/schema/validation
+        (only-in :tao3k/yuanxu/module-system/schema/validation
                  yuanxu-module-objects-validation-summary))
 
 (export module-objects-validation-summary-performance-test)

@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         "./fixtures/opentofu/aws-5.100.0/qualification.ss"
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-         :yuanxu/object-types/contracts :clan/poo/object)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+         :tao3k/yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-aws-binary-test)
 
 (def opentofu-aws-binary-test

@@ -6,16 +6,16 @@
 ;;; Run: gerbil env gerbil interactive t/scenarios/observability-admission-demo.ss
 ;;; A synthetic real Module error; no runtime resources or secrets are involved.
 (import (only-in :clan/poo/object .cc .ref)
-        (only-in :yuanxu/observability/objects
+        (only-in :tao3k/yuanxu/observability/objects
                  yuanxu-observation-identity
                  yuanxu-observation-context
                  yuanxu-observation-provenance
                  yuanxu-observe-contract-admission
                  yuanxu-observation-explain)
-        (only-in :yuanxu/observability/debug
+        (only-in :tao3k/yuanxu/observability/debug
                  yuanxu-observation-debug)
-        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
-        (only-in :yuanxu/module-system/authoring/roles SemanticModuleContract yuanxu-semantic-module))
+        (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles SemanticModuleContract yuanxu-semantic-module))
 
 (export main)
 

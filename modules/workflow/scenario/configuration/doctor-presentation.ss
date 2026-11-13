@@ -10,14 +10,14 @@
 
 (import (only-in :clan/poo/object .o .ref .get)
         :agentic-ai-lab/modules/module-authoring/module-interface
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
                  agentic-ai-lab-module-evaluate
                  agentic-ai-lab-module-value-catalog-root)
-        :yuanxu/module-system/loader/objects)
+        :tao3k/yuanxu/module-system/loader/objects)
 
 (export agentic-ai-lab-module-doctor-presentation-kind
         agentic-ai-lab-module-source-doctor-presentation-kind

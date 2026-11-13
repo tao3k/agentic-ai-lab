@@ -3,10 +3,10 @@
 ;;; Small structural controls; real AWS Schema is exercised by the Ops gate.
 (import :std/test :clan/poo/object :clan/poo/object-contract
         (only-in :clan/poo/mop validate TypeError?)
-        (only-in :yuanxu/modules/json-schema/contracts schema-value-contract)
-        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/module-system/source/publication module-publication?)
+        (only-in :tao3k/yuanxu/modules/json-schema/contracts schema-value-contract)
+        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/module-system/source/publication module-publication?)
         (only-in :agentic-ai-lab/scenarios/aws/types AWSProfileContract.
           AWSInterfaceContract aws-scenario-contract))
 (export aws-scenario-contract-test)

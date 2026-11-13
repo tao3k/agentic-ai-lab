@@ -6,11 +6,11 @@
 ;;; Boundary: inert agent harness/session/run object family tests.
 ;;; Invariant: projections distinguish workflow runs, sessions, and dispatches.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :yuanxu/modules/funflow/control-plane/api)
+        :tao3k/yuanxu/modules/funflow/control-plane/api)
 
 (export agent-harness-object-test)
 

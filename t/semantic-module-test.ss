@@ -3,14 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .o .cc .ref .all-slots)
         (only-in :clan/poo/mop element? validate TypeError?)
-        (only-in :yuanxu/module-system/schema/relations
+        (only-in :tao3k/yuanxu/module-system/schema/relations
                  yuanxu-semantic-identity yuanxu-empty-imports
                  SemanticImports. ModuleImportsContract)
-        :yuanxu/module-system/authoring/roles
+        :tao3k/yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export semantic-module-test)
 (def semantic-module-test

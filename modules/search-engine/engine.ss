@@ -4,7 +4,7 @@
 ;;; Pure Search control decisions; physical execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every filter ormap)
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/search-engine/funs
         :agentic-ai-lab/modules/search-engine/attempt
         (only-in :agentic-ai-lab/modules/temporal-causality/types agentic-ai-lab-causal-event?)

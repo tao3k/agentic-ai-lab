@@ -7,13 +7,13 @@
 ;;; Boundary: bounded, phase-attributed import observation for one contribution test.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :yuanxu/observability/debug
+        (only-in :tao3k/yuanxu/observability/debug
                  YuanxuDebugMemoryAnomaly?
                  YuanxuDebugMemoryAnomaly-receipt
                  yuanxu-debug-memory-policy
                  yuanxu-debug-memory-receipt-sexp
                  yuanxu-debug-memory-snapshot
-                 call-with-agentic-ai-lab-debug-memory-monitor))
+                 call-with-yuanxu-debug-memory-monitor))
 
 (def (elapsed-milliseconds started)
   (quotient (* (- (current-jiffy) started) 1000)
@@ -77,7 +77,7 @@
      (lambda ()
        (call-with-values
         (lambda ()
-          (call-with-agentic-ai-lab-debug-memory-monitor
+          (call-with-yuanxu-debug-memory-monitor
            policy
            'test-import
            (lambda () (eval `(import ,module-id)))))

@@ -6,7 +6,7 @@
 ;;; Boundary: governor policy projection, validation, and Marlin contract facts.
 ;;; Invariant: runtime snapshots are inputs; this owner never locks or mutates them.
 
-(import :yuanxu/modules/funflow/control-plane/failure
+(import :tao3k/yuanxu/modules/funflow/control-plane/failure
         (only-in "./descriptor.ss"
                  loop-pattern-actionable?
                  loop-pattern-metadata

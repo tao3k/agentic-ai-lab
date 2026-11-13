@@ -7,12 +7,12 @@
 ;;; Boundary: use-module config must be inspectable before runtime.
 ;;; Invariant: presentation is inert; no module descriptors or runtimes execute.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :clan/poo/object
         :agentic-ai-lab/modules/sandbox-core/profile

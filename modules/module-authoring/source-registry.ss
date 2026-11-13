@@ -7,9 +7,9 @@
 ;;; Invariant: maintained modules enter through validated public interfaces.
 
 (import
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
-        (only-in :yuanxu/module-system/source/collection yuanxu-module-source-collection-interfaces)
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
+        (only-in :tao3k/yuanxu/module-system/source/collection yuanxu-module-source-collection-interfaces)
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection
                  agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories))
 

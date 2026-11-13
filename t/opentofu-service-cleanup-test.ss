@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Source expiry, cleanup and source revalidation share one process/scope.
 (import :std/test :clan/poo/object
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-checkpoint)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-checkpoint)
         (only-in "./qualification/opentofu/service.ss"
                  call-with-service write-source rejects? empty-state?))
 (export opentofu-service-cleanup-test)

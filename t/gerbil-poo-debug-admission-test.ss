@@ -5,15 +5,15 @@
 
 ;;; Boundary: direct gerbil-poo debug consumption, never semantic evidence authority.
 ;;; All output uses in-memory ports and synthetic canaries, never real secrets.
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal?)
         (only-in :clan/poo/support/debug traced-function)
         (only-in :clan/poo/debug DDT trace-poo)
         (only-in :clan/poo/object .o .ref .call .all-slots compute-precedence-list!)
         (only-in :clan/poo/mop define-type Type.)
-        (only-in :yuanxu/module-system/schema/relations
+        (only-in :tao3k/yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity)
-        :yuanxu/module-system/authoring/roles
+        :tao3k/yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export gerbil-poo-debug-admission-test)
 

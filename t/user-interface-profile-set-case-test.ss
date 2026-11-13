@@ -1,4 +1,4 @@
-(import (only-in :yuanxu/profile-composition/user-profile yuanxu-user-profile-set-presentation-kind yuanxu-user-profile-set? yuanxu-user-profile-name yuanxu-user-profile-set-name yuanxu-user-profile-set-default-profile-name yuanxu-user-profile-set-profile-names yuanxu-user-profile-set-default-profile)
+(import (only-in :tao3k/yuanxu/profile-composition/user-profile yuanxu-user-profile-set-presentation-kind yuanxu-user-profile-set? yuanxu-user-profile-name yuanxu-user-profile-set-name yuanxu-user-profile-set-default-profile-name yuanxu-user-profile-set-profile-names yuanxu-user-profile-set-default-profile)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config agenticAiLabUserProfileSetPresentation))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -7,7 +7,7 @@
 
 ;;; Boundary: profile-set cases validate selection through Testing Policy.
 
-(import (only-in :yuanxu/testing
+(import (only-in :tao3k/yuanxu/testing
                  yuanxu-test-case yuanxu-user-profile-set-policy-admit)
          (only-in :std/test
                  check

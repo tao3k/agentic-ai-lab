@@ -6,7 +6,7 @@
 ;;; Contract: sandbox profile recipes are admitted by one POO Contract.
 ;;; This root is self-contained; unrelated test sources are not runfile inputs.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 (def (sandbox-profile-contract-eval expression)

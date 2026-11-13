@@ -6,7 +6,7 @@
 ;;; Boundary: runtime materialization receipt performance gate.
 ;;; Invariant: defstruct receipts project to bounded ABI rows in one pass.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

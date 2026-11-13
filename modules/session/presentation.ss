@@ -7,7 +7,7 @@
 ;;; Invariant: this module projects selected session features only; session
 ;;; values and graph receipts stay in modules/session.
 
-(import :yuanxu/module-system/selection/objects)
+(import :tao3k/yuanxu/module-system/selection/objects)
 
 (export agentic-ai-lab-user-module-selection-session?
         agentic-ai-lab-user-module-selection-session-intent

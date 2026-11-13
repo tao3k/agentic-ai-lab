@@ -7,7 +7,7 @@
 ;; discovers imports. The existing gateway verifies gerbil.pkg ownership.
 (import (for-syntax
           (only-in :std/source this-source-file)
-          (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
+          (only-in :tao3k/yuanxu/module-system/building/source-package register-module-build-source!)))
 (begin-syntax
   (let ((root (path-normalize (path-directory (this-source-file))))
         (paths (load-path)))

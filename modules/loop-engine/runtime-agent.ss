@@ -6,7 +6,7 @@
 ;;; Boundary: loop-engine agent/profile/session runtime projection rows.
 ;;; Invariant: projections describe Marlin-owned work and never open sessions.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/agent-harness
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/agent-harness
                  make-yuanxu-agent-operation
                  make-yuanxu-dispatch-receipt
                  make-yuanxu-workflow-run

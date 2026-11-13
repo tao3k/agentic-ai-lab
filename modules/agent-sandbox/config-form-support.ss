@@ -12,7 +12,7 @@
         :agentic-ai-lab/modules/agent-sandbox/profile-contract
         :agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :agentic-ai-lab/modules/sandbox-core/profile-support/policy
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export #t)
 

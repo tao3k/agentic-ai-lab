@@ -4,8 +4,8 @@
 ;;; Product-specific restricted root authoring policy; shared roles live in Core.
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
-        (only-in :yuanxu/module-system/authoring/roles
+        (only-in :tao3k/yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
+        (only-in :tao3k/yuanxu/module-system/authoring/roles
                  ConfigSourceRole. yuanxu-default-module-authoring-profile))
 (export UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
 
@@ -22,7 +22,7 @@
         recursive-root-forms?: #t
         forbidden-imports:
         '(:clan/poo/mop
-          :yuanxu/poo-clos/interface)
+          :tao3k/yuanxu/poo-clos/interface)
         forbidden-forms:
         '(poo-clos-class
           poo-clos-generic-function

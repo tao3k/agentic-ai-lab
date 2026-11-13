@@ -8,7 +8,7 @@
 ;;; Invariant: every module owns its default flags and bundle in config.ss;
 ;;; this profile only composes those module-owned values.
 
-(import (only-in :yuanxu/modules/funflow/graph-projection
+(import (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-cicd-default-payload)
         (only-in :agentic-ai-lab/modules/session/config
                  +agentic-ai-lab-session-default-flags+

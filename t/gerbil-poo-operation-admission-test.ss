@@ -8,7 +8,7 @@
 ;;; examples remain runtime objects and introduce no alternate Agentic AI Lab object,
 ;;; dispatch, precedence, or inherited-computation adapter.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  check-exception

@@ -6,7 +6,7 @@
 ;;; Boundary: loop-engine runtime base facts and policy envelopes.
 ;;; Invariant: base helpers are pure report rows and never realize runtime work.
 
-(import (only-in :yuanxu/modules/funflow/graph-projection
+(import (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
         "core.ss"
         "result-contract.ss")

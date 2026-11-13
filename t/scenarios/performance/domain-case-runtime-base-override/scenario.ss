@@ -6,10 +6,10 @@
 ;;; A/B witness for Gerbil POO three-parent mix versus the direct
 ;;; single-allocation base/override window.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .all-slots .ref .slot?)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-us)
-        (only-in :yuanxu/composition/roles
+        (only-in :tao3k/yuanxu/composition/roles
                  role-compose
                  role-constant-slots
                  role-instance-overlay-defaults

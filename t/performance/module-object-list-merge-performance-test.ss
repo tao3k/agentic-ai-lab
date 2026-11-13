@@ -6,7 +6,7 @@
 ;;; Boundary: module object performance gates cover sparse List slot merging.
 ;;; Invariant: object merges stay descriptor data and never execute runtime work.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,9 +15,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :yuanxu/graph/interface
+        (only-in :tao3k/yuanxu/graph/rooted
                  yuanxu-graph-root-payload)
-        (only-in :yuanxu/module-system/schema/interface
+        (only-in :tao3k/yuanxu/module-system/schema/interface
                  YuanxuModuleListType
                  yuanxu-module-field-resolution-result-root
                  yuanxu-module-field-contract

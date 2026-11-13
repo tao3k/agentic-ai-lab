@@ -10,7 +10,7 @@
 ;;; and std/make retain projection and execution ownership.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :yuanxu/observability/output yuanxu-write-observation-line!))
+        (only-in :tao3k/yuanxu/observability/output yuanxu-write-observation-line!))
 
 (export agentic-ai-lab-build-elapsed-milliseconds
         agentic-ai-lab-make-observed-package-spec-projector

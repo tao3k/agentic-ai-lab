@@ -9,7 +9,7 @@
 
 (import :agentic-ai-lab/modules/session/syntax
         :agentic-ai-lab/modules/tool-core/config
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry
                  yuanxu-user-module-selection->alist))
 

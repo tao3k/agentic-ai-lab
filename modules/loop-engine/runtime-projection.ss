@@ -5,9 +5,9 @@
 ;;; Boundary: projects user loop-engine configuration into runtime-owned inputs.
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
 (import (only-in :std/list/list fold fold-right)
-        (only-in :yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
-        :yuanxu/module-system/selection/objects
+        :tao3k/yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/sandbox-core/profile-catalog
         :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         :agentic-ai-lab/modules/workflow/cicd-config
@@ -26,7 +26,7 @@
         (only-in "runtime-intent-handoff.ss"
                  agentic-ai-lab-user-loop-engine-runtime-handoff-facts/from-request)
         "result-contract.ss"
-        :yuanxu/utilities/functional)
+        :tao3k/yuanxu/utilities/functional)
 
 (export agentic-ai-lab-user-loop-engine-memory-policy-for-use-case
         agentic-ai-lab-user-loop-engine-memory-policy-use-cases/rev

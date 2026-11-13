@@ -6,11 +6,11 @@
 ;;; Boundary: loop strategies compose policy descriptors into inert handoff data.
 ;;; Invariant: local execution here is harness-only validation, never production runtime.
 
-(import :yuanxu/composition/roles
+(import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o object?)
-        :yuanxu/modules/funflow/control-plane/roles
-        :yuanxu/modules/funflow/control-plane/failure
-        :yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/modules/funflow/control-plane/roles
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/loop-engine/control/descriptor)
 
 (export +loop-strategy-plan-schema+

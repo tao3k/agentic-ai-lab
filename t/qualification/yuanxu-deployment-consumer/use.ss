@@ -5,7 +5,7 @@
         (only-in :clan/poo/object .get .all-slots .ref/cached)
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :gerbil/runtime/loader list-modules)
-        (only-in :yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
+        (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
 (export verify-deployment-use verify-deployment-runtime)
 (def (verify-deployment-use)
   (displayln "LAB-DEPLOYMENT-USE enter epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
@@ -57,7 +57,7 @@
       (def loaded (assoc identity (list-modules)))
       (unless (and loaded (string? (cdr loaded)) (string-prefix? library (path-normalize (cdr loaded))))
         (error "runtime did not initialize the selected downstream product" identity loaded)))
-    '("yuanxu/modules/json-schema/json-schema-contract~0" "yuanxu/modules/funflow/objects~0"))
+    '("tao3k/yuanxu/modules/json-schema/json-schema-contract~0" "tao3k/yuanxu/modules/funflow/objects~0"))
   (displayln "LAB-DEPLOYMENT-PRODUCT-USE-OK"))
 
 (def (main) (verify-deployment-runtime))

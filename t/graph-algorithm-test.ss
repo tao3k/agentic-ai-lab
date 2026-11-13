@@ -6,13 +6,13 @@
 ;;; Boundary: shared graph algorithms remain report-only POO projections.
 ;;; Invariant: graph tests must not schedule, run adapters, or write state.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .def .o .ref .slot?)
-        :yuanxu/graph/types
-        :yuanxu/graph/algorithms)
+        :tao3k/yuanxu/graph/types
+        :tao3k/yuanxu/graph/algorithms)
 
 (export graph-algorithm-test)
 

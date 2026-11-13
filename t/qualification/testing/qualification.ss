@@ -4,8 +4,8 @@
 (import :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/list/list delete-duplicates/hash)
-        (only-in :yuanxu/observability/testing-script TestingScript.)
-        (only-in :yuanxu/module-system/source/admission
+        (only-in :tao3k/yuanxu/observability/testing-script TestingScript.)
+        (only-in :tao3k/yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!))
 (export qualification-source qualification-script)
 

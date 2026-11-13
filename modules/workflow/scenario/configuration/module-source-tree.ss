@@ -9,23 +9,23 @@
 (import (only-in :clan/poo/type Record)
         (only-in :clan/poo/mop make-instance)
         (only-in :clan/poo/object .o .get)
-        :yuanxu/modules/funflow/control-plane/failure
+        :tao3k/yuanxu/modules/funflow/control-plane/failure
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface)
-        (only-in :yuanxu/module-system/authoring/admission
+        (only-in :tao3k/yuanxu/module-system/authoring/admission
                  yuanxu-module-authoring-admit-port
                  yuanxu-module-authoring-admission-accepted?
                  yuanxu-module-authoring-admission-diagnostics)
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module agentic-ai-lab-user-root-module-authoring-profile)
-        :yuanxu/module-system/source/imports
-        :yuanxu/module-system/source/objects
-        :yuanxu/module-system/source/collection
+        :tao3k/yuanxu/module-system/source/imports
+        :tao3k/yuanxu/module-system/source/objects
+        :tao3k/yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :yuanxu/module-system/catalog/objects
-        :yuanxu/module-system/source/projection
-        :yuanxu/module-system/loader/objects
+        :tao3k/yuanxu/module-system/catalog/objects
+        :tao3k/yuanxu/module-system/source/projection
+        :tao3k/yuanxu/module-system/loader/objects
         :agentic-ai-lab/modules/module-authoring/source-registry)
 
 (export (import: :agentic-ai-lab/modules/module-authoring/source-registry)

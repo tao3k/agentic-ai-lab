@@ -2,11 +2,11 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :agentic-ai-lab/modules/nix/progress make-nix-progress-reader) (rename-in (only-in :agentic-ai-lab/modules/nix/progress make-nix-test-progress-reader) (make-nix-test-progress-reader make-test-progress-reader)) :std/test :clan/poo/object
-        (except-in :yuanxu/ops/progress make-test-progress-reader)
-        (only-in :yuanxu/ops/process-script ProcessScript.)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case
+        (except-in :tao3k/yuanxu/ops/progress make-test-progress-reader)
+        (only-in :tao3k/yuanxu/ops/process-script ProcessScript.)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case
                  yuanxu-default-testing-case-profile)
-        (only-in :yuanxu/observability/memory
+        (only-in :tao3k/yuanxu/observability/memory
                  YuanxuDebugDurationAnomaly? YuanxuDebugDurationAnomaly-receipt)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/os/signal kill)

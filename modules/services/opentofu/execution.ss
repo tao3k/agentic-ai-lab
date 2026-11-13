@@ -5,10 +5,10 @@
         (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session call-with-derivation-session)
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/string/misc string-subst)
-        (only-in :yuanxu/ops/func run-script call-with-execution-cancellation)
-        (only-in :yuanxu/modules/funflow/objects Task. Job.)
-        (only-in :yuanxu/modules/funflow/func run-job job-graph)
-        (only-in :yuanxu/admission/publication AdmissionPublication.))
+        (only-in :tao3k/yuanxu/ops/func run-script call-with-execution-cancellation)
+        (only-in :tao3k/yuanxu/modules/funflow/objects Task. Job.)
+        (only-in :tao3k/yuanxu/modules/funflow/func run-job job-graph)
+        (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.))
 (export OpenTofuExecution. NullExecution. opentofu-execution)
 
 ;; POO is the public model; hashes exist only at the JSON output boundary.

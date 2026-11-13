@@ -9,12 +9,12 @@
 ;;; Funflow module boundary.
 
 (import (only-in :clan/poo/object .all-slots .ref .slot? object? object<-alist)
-        (only-in :yuanxu/module-system/selection/objects
+        (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
         (only-in :clan/poo/mop element?)
-        (only-in :yuanxu/modules/funflow/scenario Scenario)
-        (only-in :yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  funflow-plan
                  yuanxu-funflow-plan->runtime-projection))
 

@@ -8,7 +8,7 @@
 ;;; append logs, claim leases, retain artifacts, or attach sandbox handles.
 
 (import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-durable-runtime-store-operations-from-rows
         agentic-ai-lab-durable-runtime-store-rows->marlin-handoff)

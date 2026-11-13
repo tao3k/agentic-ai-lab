@@ -7,15 +7,15 @@
 ;;; Invariant: diagnostics never change activation behavior.
 
 (import (only-in :std/list/list append-map)
-        :yuanxu/modules/funflow/control-plane/task
-        :yuanxu/modules/funflow/control-plane/flow
+        :tao3k/yuanxu/modules/funflow/control-plane/task
+        :tao3k/yuanxu/modules/funflow/control-plane/flow
         :agentic-ai-lab/modules/module-authoring/module-descriptor
-        (only-in :yuanxu/utilities/functional
+        (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-stable-duplicates)
-        (rename-in :yuanxu/module-system/observability/diagnostics
+        (rename-in :tao3k/yuanxu/module-system/observability/diagnostics
           (make-yuanxu-module-diagnostic make-agentic-ai-lab-module-diagnostic)
           (make-yuanxu-module-doctor-report make-agentic-ai-lab-module-doctor-report))
-        :yuanxu/utilities/final-projection-syntax)
+        :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export yuanxu-module-diagnostic-prototype
         make-agentic-ai-lab-module-diagnostic
