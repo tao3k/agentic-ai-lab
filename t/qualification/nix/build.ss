@@ -49,7 +49,7 @@
          ((or (string-prefix? "tao3k/yuanxu/t/qualification/service-publication/" name)
               (string-prefix? "tao3k/yuanxu/t/qualification/testing/" name)
               (string-prefix? "tao3k/yuanxu/t/qualification/build-publication/" name))
-          (string-append "core/" (substring name 7 (string-length name)) ".ss"))
+          (string-append "core/" (substring name (string-length "tao3k/yuanxu/") (string-length name)) ".ss"))
          (else #f))))))
 (def owned-identities '())
 (def (collect-source context)
