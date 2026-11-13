@@ -8,7 +8,7 @@
 (begin-syntax
   (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
 
-(import (only-in :clan/poo/object .get)
+(import (only-in :clan/poo/object .get .call)
         (only-in :gerbil/expander module-context-path)
         (only-in :tao3k/yuanxu/module-system/source/admission
                  call-with-module-source-read-cache
@@ -20,8 +20,9 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/build-script defbuild-script)
-        (only-in :tao3k/yuanxu/module-system/building/products current-build-module-roots)
-        (only-in "./init.ss" std-make-spec)
+        (only-in :tao3k/yuanxu/module-system/building/build-projection yuanxu-project-source-spec)
+        (only-in :tao3k/yuanxu/module-system/building/products
+                 current-build-module-roots current-build-source-directory)
         (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
 
 ;; Runtime package clones acquire the declared Core gitlink before source lowering.
@@ -111,10 +112,26 @@
         (run-process (list "gxi" (this-source-file) "--library-specification" packet-path)
           directory: (path-directory (this-source-file))
           stdin-redirection: #f stdout-redirection: #f))
-      (def spec (append std-make-spec
-                       (if packet-path (read-library-specification packet-path) '())))
-      (defbuild-script spec)
-      (begin0 (apply main args)
+      (def entry-source (this-source-file))
+      (def root (path-directory entry-source))
+      (def retained (if packet-path (read-library-specification packet-path) '()))
+      (def projection
+        (yuanxu-project-source-spec (path-expand "init.ss" root) retained root entry-source))
+      (def spec (.get projection spec))
+      (def (run-make)
+        (def (this-source-file)
+          (let (directory (current-build-source-directory))
+            (if directory
+                (path-expand (path-strip-directory entry-source) directory)
+                entry-source)))
+        (defbuild-script spec)
+        (apply main args))
+      (begin0
+        (match args
+          (["clean"] (.call projection .with-clean-outputs run-make))
+          (["meta"] (run-make))
+          (["spec"] (run-make))
+          (else (.call projection .with-compiler-inputs run-make)))
         (when packet-path (read-library-specification packet-path))))))
 
 (def (main . args)
