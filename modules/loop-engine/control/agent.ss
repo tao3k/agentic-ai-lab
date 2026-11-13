@@ -6,16 +6,16 @@
 ;;; Boundary: public loop-agent facade.
 ;;; Invariant: this facade exports policy descriptors only, not execution.
 
-(import :agentic-ai-lab/modules/loop-engine/control/descriptor
-        :agentic-ai-lab/modules/loop-engine/control/strategy
-        :agentic-ai-lab/modules/loop-engine/control/governor
-        :agentic-ai-lab/modules/loop-engine/control/governor-marlin
-        :agentic-ai-lab/modules/loop-engine/control/human-audit
-        :agentic-ai-lab/modules/loop-engine/control/spec-evolution)
+(import :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/strategy
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/governor
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-marlin
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/spec-evolution)
 
-(export (import: :agentic-ai-lab/modules/loop-engine/control/descriptor)
-        (import: :agentic-ai-lab/modules/loop-engine/control/strategy)
-        (import: :agentic-ai-lab/modules/loop-engine/control/governor)
-        (import: :agentic-ai-lab/modules/loop-engine/control/governor-marlin)
-        (import: :agentic-ai-lab/modules/loop-engine/control/human-audit)
-        (import: :agentic-ai-lab/modules/loop-engine/control/spec-evolution))
+(export (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor)
+        (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/strategy)
+        (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/governor)
+        (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-marlin)
+        (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit)
+        (import: :tao3k/agentic-ai-lab/modules/loop-engine/control/spec-evolution))

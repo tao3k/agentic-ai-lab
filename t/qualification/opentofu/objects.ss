@@ -24,7 +24,7 @@
               (.o (:: @ Script)
                 command: '("/usr/bin/time" "-p" "just"
                            "--justfile" "t/qualification/nix/Justfile"
-                           "test" "t/nix-flake-source-test.ss")
+                           "test" "t/yanxu/modules/nix/flake-source-test.ss")
                 timeout: 145 check-status: #f))
           tools:
           (.o PackageSet:
@@ -39,32 +39,32 @@
 ;; Upstream package configuration is a runtime derivation of the one real
 ;; publication. The existing source-context hook retains its reader observations.
 ;; No alternative declaration, copied module implementation or runtime Loader.
-(def (configured-opentofu-modules init configure (standalone-projection #f))
+(def (configured-opentofu-modules init configure (configuration-owner #f))
   (def reader (module-publication-reader))
   (def (read-publication source)
     (let* ((published (.call reader read source))
            (baseline (.get published core)))
-      (if (not (eq? (.get published identity) 'services/opentofu)) published
-        (.cc published 'core
-          (.o (:: @ baseline)
-            projections:
-            (let (projections (.get baseline projections))
-              (if (not standalone-projection) projections
-                (let* ((configured-scope (configure (.get baseline scope)))
-                       (build (.get baseline configuration-build)))
-                  (append projections
-                    (list (.cc build 'module configured-scope
-                                 'configuration-projection
-                                 (lambda (_)
-                                   (standalone-projection (.get configured-scope config)))))))))
-            link: (lambda (dependencies) (configure (.call baseline link dependencies)))
-            configuration-build:
-            (let (build (.get baseline configuration-build))
-              (.cc build 'module (configure (.get build module)))))))))
+      (case (.get published identity)
+        ((services/opentofu)
+         (.cc published 'core
+           (.o (:: @ baseline)
+             exports: (configure (.get baseline exports))
+             package-build: (lambda () (.cc (.call baseline package-build)
+                                         'module (configure (.get baseline exports)))))))
+        ((app/infrastructure)
+         (if (not configuration-owner) published
+           (.cc published 'core
+             (.o (:: @ baseline)
+               projections:
+               (let* ((upstream (.call reader read
+                                 (.call context locate 'services/opentofu)))
+                      (build (.call (.get upstream core) package-build)))
+                 (list (.cc build 'module (configure (.get build module)))))))))
+        (else published))))
   (def context (module-directory-context init read-publication))
   (yuanxu-load-modules
     (.cc context
-      'publication-inputs (.get reader inputs)
+      'import-owners (.get reader import-owners) 'publication-inputs (.get reader inputs)
       'publication-preparation (.get reader preparation)
       'current? (lambda (generation)
                   (.call reader admit-current)

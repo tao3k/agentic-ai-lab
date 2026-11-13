@@ -7,7 +7,7 @@
 ;;; Invariant: runtime nono execution remains outside profile authoring.
 
 (import (only-in :clan/poo/object .o)
-        :agentic-ai-lab/modules/sandbox-core/profile-interface)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-interface)
 
 (export nono-sandbox-profile)
 

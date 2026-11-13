@@ -15,7 +15,7 @@
         :tao3k/yuanxu/modules/funflow/check-objects
         :tao3k/yuanxu/modules/funflow/check-funs
         :tao3k/yuanxu/modules/funflow/projection-syntax
-        :agentic-ai-lab/modules/workflow/cicd-sandbox
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-sandbox
         :tao3k/yuanxu/modules/funflow/dependency-graph)
 
 (export agentic-ai-lab-cicd-check-artifact-provenance

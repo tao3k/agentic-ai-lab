@@ -7,8 +7,8 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle
-        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle-kernel
         (only-in ./runtime-v0-abi-schema
                  +agentic-ai-lab-runtime-v0-abi-schema+))
 

@@ -8,7 +8,7 @@
 ;;; event persistence, replay, repair jobs, leases, and side effects.
 
 (import :tao3k/yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-support)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-support)
 
 (export +agentic-ai-lab-durable-recovery-scenario-kind+
         +agentic-ai-lab-durable-recovery-scenario-schema+

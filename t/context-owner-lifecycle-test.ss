@@ -2,20 +2,20 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Runtime teardown boundaries: exact leases, closed handles and durable rollback.
 (import (only-in :clan/poo/object .o .ref .call object? .alist/sort)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context push-row at
                  policy)
-        (prefix-in :agentic-ai-lab/t/context-durable-owner old.)
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/temporal-causality/evaluator/derivation
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host agentic-ai-lab-temporal-proof-host-retained-digest agentic-ai-lab-temporal-proof-host-current)
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/change-feed
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
+        (prefix-in :tao3k/agentic-ai-lab/t/context-durable-owner old.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/derivation
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/proof-host agentic-ai-lab-temporal-proof-host-retained-digest agentic-ai-lab-temporal-proof-host-current)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/change-feed
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
 (export owner-lifecycle-unit)
 (def (ensure value message) (unless value (error message)))
 (def (rejected? fun) (with-catch (lambda (e) #t) (lambda () (fun) #f)))

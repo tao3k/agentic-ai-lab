@@ -16,7 +16,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :agentic-ai-lab/modules/session/objects
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects
                  agentic-ai-lab-session-chunk
                  agentic-ai-lab-session-lineage
                  agentic-ai-lab-session-placement

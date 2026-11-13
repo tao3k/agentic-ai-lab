@@ -21,7 +21,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind
                  yuanxu-user-config?)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/declaration-case
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/declaration-case
                  agenticAiLabRootDeveloperDeclarationCase
                  agentic-ai-lab-declaration-case?
                  agentic-ai-lab-declaration-case-name
@@ -37,13 +37,13 @@
                  agentic-ai-lab-declaration-case-trace-stages
                  agentic-ai-lab-declaration-case-trace-safe?
                  agentic-ai-lab-declaration-case-presentation-matches?)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports))
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports))
 
 (export declaration-case-test)
 
 ;; : (-> UserInterfaceEntry Alist MaybeValue)
 ;; : (-> Unit POOObject)
-(def (root-developer-case) (.get agentic-ai-lab.init.exports scenarios developer declaration))
+(def (root-developer-case) (.get tao3k/agentic-ai-lab.init.exports scenarios developer declaration))
 
 ;; : (-> [Alist] Pair MaybeAlist)
 (def (agentic-ai-lab-declaration-case-find-entry entries key)

@@ -13,7 +13,7 @@
                  object?
                  make-object
                  $constant-slot-spec)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-sandbox-profile-by-name)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry))

@@ -5,8 +5,8 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token
-        :agentic-ai-lab/modules/proof/projections/proof-case-projection)
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-case-projection)
 
 (export proof-case-projection-test)
 

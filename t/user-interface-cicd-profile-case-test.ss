@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata agentic-ai-lab-sandbox-profile-by-name))
 (import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-module-selection-flag-entry))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -22,15 +22,15 @@
         :tao3k/yuanxu/modules/funflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  agentic-ai-lab-custom-my-module-cicd-module)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :clan/poo/object
-        :agentic-ai-lab/modules/sandbox-core/profile
-        :agentic-ai-lab/modules/sandbox-core/profile-interface
-        :agentic-ai-lab/modules/nono-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/profile-interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
-        :agentic-ai-lab/modules/agent-sandbox/config)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-interface
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config)
 
 (export user-interface-cicd-profile-case-test)
 

@@ -3,7 +3,6 @@
 (.def (Sandbox @ [] config)
   identity: 'sandbox
   config: Config
-  core: (.o requires: (.o)
-            scope-contract: SandboxProfilesScopeContract
+  core: (.o scope-contract: SandboxProfilesScopeContract
             exports: (.cc SandboxProfiles. 'config config))
   features: (.o))

@@ -6,10 +6,10 @@
 (import (only-in :std/test check check-exception test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
                  agentic-ai-lab-ascent-table-expression-prototype)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle
-        :agentic-ai-lab/user-interface/scenarios/crewai/ascent-hypothesis-program)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/user-interface/scenarios/crewai/ascent-hypothesis-program)
 
 (export ascent-hypothesis-program-test)
 

@@ -10,12 +10,12 @@
 (import (only-in :clan/poo/object .ref object<-alist)
         :tao3k/yuanxu/object-family/role-syntax
         :tao3k/yuanxu/object-family/syntax
-        :agentic-ai-lab/modules/workflow/qualification/capability-prototypes
-        (only-in :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
                  +agentic-ai-lab-organization-bundle-schema+)
-        (only-in :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema
                  +agentic-ai-lab-runtime-v0-abi-schema+)
-        (only-in :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
                  +agentic-ai-lab-release-assurance-manifest-schema+))
 
 (def +agentic-ai-lab-release-version-matrix-kind+

@@ -3,14 +3,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/objects
-        :agentic-ai-lab/modules/ai-agentic-context/funs-features
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
-        :agentic-ai-lab/modules/query/semantic/context-restriction)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction)
 (export ai-agentic-context-session-host-test)
 (def (at n) (agentic-ai-lab-temporal-instant "time" "clock" n "host" 'observed))
 (def policy (agentic-ai-lab-temporal-support-policy "policy" "revision" (at 0) (at 8)))

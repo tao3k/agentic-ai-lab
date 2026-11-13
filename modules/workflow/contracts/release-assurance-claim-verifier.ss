@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?)
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest)
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest)
 
 (def +agentic-ai-lab-assurance-levels+
   '(l0-interface l1-conformant l2-evidenced l3-mediated

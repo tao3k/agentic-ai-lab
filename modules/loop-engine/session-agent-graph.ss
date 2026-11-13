@@ -7,21 +7,21 @@
 ;;; Invariant: this owner builds report-only graph rows without importing the
 ;;; full runtime handoff stack or user config facades.
 
-(import (only-in :agentic-ai-lab/modules/session/agent
+(import (only-in :tao3k/agentic-ai-lab/modules/session/agent
                  agentic-ai-lab-session-agent-graph
                  agentic-ai-lab-session-agent-graph->alist
                  agentic-ai-lab-session-agent-node
                  agentic-ai-lab-session-agent-node->alist)
-        (only-in :agentic-ai-lab/modules/session/communication
+        (only-in :tao3k/agentic-ai-lab/modules/session/communication
                  agentic-ai-lab-session-communication-channel-receipt
                  agentic-ai-lab-session-communication-receipt)
-        (only-in :agentic-ai-lab/modules/session/objects
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects
                  agentic-ai-lab-session-alist-ref
                  agentic-ai-lab-session-chunk
                  agentic-ai-lab-session-lineage
                  agentic-ai-lab-session-placement
                  agentic-ai-lab-session-value)
-        (only-in :agentic-ai-lab/modules/session/registry
+        (only-in :tao3k/agentic-ai-lab/modules/session/registry
                  agentic-ai-lab-session-registry-entry
                  agentic-ai-lab-session-registry-receipt)
         "intent-utils.ss")

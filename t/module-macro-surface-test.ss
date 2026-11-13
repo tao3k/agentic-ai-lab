@@ -13,15 +13,15 @@
         (only-in :clan/poo/object .ref)
         (only-in :tao3k/yuanxu/utilities/final-projection-syntax
                  yuanxu-product-field-rows/tail)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
                  artifact-module
                  database-module
                  agentic-ai-lab-artifact-profile?
                  agentic-ai-lab-artifact-database-profile?)
-        :agentic-ai-lab/modules/cubeSandbox/config
-        :agentic-ai-lab/modules/docker-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/config
-        (only-in :agentic-ai-lab/modules/sandbox-core/profile
+        :tao3k/agentic-ai-lab/modules/cubeSandbox/config
+        :tao3k/agentic-ai-lab/modules/docker-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile
                  agentic-ai-lab-sandbox-profile-backend-kind
                  agentic-ai-lab-sandbox-profile-name))
 

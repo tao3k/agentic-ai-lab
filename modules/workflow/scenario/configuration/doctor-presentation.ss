@@ -9,12 +9,12 @@
 ;;; Parser policy should treat this file as the module-system observation edge.
 
 (import (only-in :clan/poo/object .o .ref .get)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
                  agentic-ai-lab-module-evaluate
                  agentic-ai-lab-module-value-catalog-root)
         :tao3k/yuanxu/module-system/loader/objects)

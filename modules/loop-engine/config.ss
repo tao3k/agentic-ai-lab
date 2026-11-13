@@ -7,7 +7,7 @@
 ;;; Invariant: interface.ss is the sole public module entrypoint; this role
 ;;; never imports outward through interface.ss.
 
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
                  agentic-ai-lab-module-configs)
         "core.ss"
         "policy-extension.ss"

@@ -2,9 +2,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in "../dev/d2/init.ss" agentic-ai-lab/dev/d2.init.exports))
+        (only-in "../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
 (export d2-scene-test)
-(def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
+(def Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def (node name ref) (.o identity: name source-ref: ref kind: 'source label: ref))
 (def native (.o nodes: (list (node 'a "root") (node 'b "root/hidden") (node 'c "root/hidden/subject") (node 'd "root/other"))
                parents: '((b a) (c b) (d a))))

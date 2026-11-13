@@ -2,13 +2,13 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Bounded compiler unit; register the unchanged native Cases in order.
-(import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/session/funs-attempt
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/session/funs-attempt
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
         :std/test (only-in :clan/poo/object .o .ref object?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-case/with yuanxu-selected-testing-case-profile)
         (only-in :tao3k/yuanxu/ops/progress execution-progress!)
@@ -16,12 +16,12 @@
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
                  reasoning-receipt-rows reasoning-receipt-bound?)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-status positive-proof-nodes positive-proof-roots proof-node-id proof-node-kind proof-node-row proof-node-relation proof-node-inputs)
-        :agentic-ai-lab/modules/temporal-causality/evaluator/interface
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/revisions/interface
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
-(import :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
+(import :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures)
 (export register-evaluator-cases-6!)
 
 (def (register-evaluator-cases-6!)

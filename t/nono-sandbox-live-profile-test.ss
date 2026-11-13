@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o)
-        :agentic-ai-lab/modules/agent-sandbox/api
-        :agentic-ai-lab/modules/agent-sandbox/nono
-        :agentic-ai-lab/modules/nono-sandbox/c-binding)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-live-profile-test
         make-custom-cicd-ci-check-profile

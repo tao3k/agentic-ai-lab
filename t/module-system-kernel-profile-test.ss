@@ -16,7 +16,7 @@
                  yuanxu-user-profile-set-default-profile-name
                  yuanxu-user-profile-module-bundles
                  yuanxu-user-profile-modules)
-        (only-in :agentic-ai-lab/modules/workflow/profiles/kernel/interface
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/kernel/interface
                  agentic-ai-lab-kernel-module-bundles
                  agentic-ai-lab-kernel-profile-module-bundles
                  agentic-ai-lab-kernel-profile

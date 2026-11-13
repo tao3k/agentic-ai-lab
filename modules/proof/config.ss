@@ -16,7 +16,7 @@
 (def AgenticAILabProofModule.
   (.o (:: self)
       kind: +agentic-ai-lab-proof-module-kind+
-      identity: "agentic-ai-lab/modules/proof"
+      identity: "tao3k/agentic-ai-lab/modules/proof"
       required-slots: '(artifacts receipts refinements)
       optional-slots:
       '(documentation presentation-metadata reference-implementation)

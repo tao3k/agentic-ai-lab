@@ -5,7 +5,7 @@
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         :tao3k/yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-configuration-from-types)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-configuration-from-types)
         :tao3k/yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-configuration-families-test)
 

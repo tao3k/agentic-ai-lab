@@ -2,21 +2,21 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Actual Context/Session/journal decisions through the production service.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context push-join! context-source
                  context-scope clock-check-originals!)
-        (prefix-in :agentic-ai-lab/t/context-durable-owner originals.)
-        :agentic-ai-lab/modules/ai-agentic-context/runtime-service
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/ai-agentic-context/funs-projection
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features
+        (prefix-in :tao3k/agentic-ai-lab/t/context-durable-owner originals.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/runtime-service
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-projection
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
                  ContextCoreProfile)
-        (only-in :agentic-ai-lab/modules/query/semantic/context-restriction
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
                  agentic-ai-lab-context-restriction)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/session-host
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
                  agentic-ai-lab-ai-agentic-context-session-host-propagations))
 (export service-probe service-fixture service-fixture-close! service-fixture-grant-digest)
 (def (ensure value message) (unless value (error message)))

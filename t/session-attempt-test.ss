@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/session/interface)
+        :tao3k/agentic-ai-lab/modules/session/interface)
 (export session-attempt-test)
 (def input-ref (.o (:: @ SessionInputRef.) producer: "context" contract: "v1" identity: "projection"
   digest: "content" scope-digest: "scope" source-vector-digest: "source" query-digest: "query"

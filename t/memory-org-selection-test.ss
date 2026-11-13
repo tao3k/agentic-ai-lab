@@ -6,11 +6,11 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .o .ref)
-        (only-in :agentic-ai-lab/modules/query/semantic/orgize-interface
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-interface
                  make-org-element-graph-view org-element-query
                  org-elements property descendant-of)
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/interface)
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/interface)
 
 (export memory-org-selection-test)
 

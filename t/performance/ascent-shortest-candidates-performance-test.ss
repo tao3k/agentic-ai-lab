@@ -10,7 +10,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
                  agentic-ai-lab-ascent-closure-candidates))
 
 (export ascent-shortest-candidates-performance-test)

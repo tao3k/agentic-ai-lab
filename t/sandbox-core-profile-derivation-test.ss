@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -11,10 +11,10 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/sandbox-core/profile)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile)
 
 ;;; Fixture alist reads stay local to the derivation receipt assertions so the
 ;;; test does not depend on profile projection internals for metadata lookup.

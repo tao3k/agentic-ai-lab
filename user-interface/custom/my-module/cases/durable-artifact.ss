@@ -8,7 +8,7 @@
 ;;; Invariant: this declares artifact policy validation data only; Scheme does
 ;;; not store, publish, index, or retain artifacts at runtime.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy)
+(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy)
 
 (export agentic-ai-lab-custom-my-module-durable-artifact-case)
 

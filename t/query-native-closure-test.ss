@@ -21,8 +21,8 @@
     (yuanxu-test-case "Query binding and Context Provider retain bounded CLOS owners"
       ;; The compiler follows runtime and syntax imports, including Parser.
       ;; A source-only grep would miss the transitive aggregate dependency.
-      (check (imports-aggregate-clos? ':agentic-ai-lab/modules/query/contracts) => #f)
-      (check (imports-aggregate-clos? ':agentic-ai-lab/modules/ai-agentic-context/query-provider) => #f))
+      (check (imports-aggregate-clos? ':tao3k/agentic-ai-lab/modules/query/contracts) => #f)
+      (check (imports-aggregate-clos? ':tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider) => #f))
     (yuanxu-test-case "the native closure control detects an aggregate import"
       ;; Keep the full facade available for consumers that actually need it.
       (check (imports-aggregate-clos? ':tao3k/yuanxu/poo-clos/interface) => #t))))

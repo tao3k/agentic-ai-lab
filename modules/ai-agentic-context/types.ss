@@ -6,7 +6,7 @@
         (only-in :clan/poo/type Record Exactly True Or)
         (only-in :clan/poo/mop Type. define-type Fun)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?))
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?))
 (export ContextScopeContract ContextMemoryScopeContract
         AiAgenticContextTemporalPolicyType agentic-ai-lab-ai-agentic-context-temporal-policy-shape?
         AiAgenticContextOrgAnchorType agentic-ai-lab-ai-agentic-context-org-anchor-shape?

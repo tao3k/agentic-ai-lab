@@ -38,7 +38,7 @@
      :clan/poo/mop
      :tao3k/yuanxu/testing
      :gerbil-parser/src/modules/parser/graph-syntax
-     :agentic-ai-lab/modules/query/interface
-     :agentic-ai-lab/modules/query/orgize-source
-     :agentic-ai-lab/modules/evidence-assessment/interface))
+     :tao3k/agentic-ai-lab/modules/query/interface
+     :tao3k/agentic-ai-lab/modules/query/orgize-source
+     :tao3k/agentic-ai-lab/modules/evidence-assessment/interface))
   (exit (apply gxtest-main args)))

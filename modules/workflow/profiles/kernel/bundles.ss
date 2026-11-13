@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-module-bundles))
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-module-bundles))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -10,16 +10,16 @@
 
 (import (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-cicd-default-payload)
-        (only-in :agentic-ai-lab/modules/session/config
+        (only-in :tao3k/agentic-ai-lab/modules/session/config
                  +agentic-ai-lab-session-default-flags+
                  agentic-ai-lab-session-module-bundles)
-        (only-in :agentic-ai-lab/modules/governor/config
+        (only-in :tao3k/agentic-ai-lab/modules/governor/config
                  agentic-ai-lab-loop-governor-module-bundles)
-        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/config
                  agentic-ai-lab-nono-sandbox-module-bundles)
-        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/cubeSandbox/config
                  agentic-ai-lab-cubeSandbox-module-bundles)
-        (only-in :agentic-ai-lab/modules/docker-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/docker-sandbox/config
                  agentic-ai-lab-docker-sandbox-module-bundles))
 
 (export yuanxu-funflow-cicd-default-payload

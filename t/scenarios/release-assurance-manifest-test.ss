@@ -7,9 +7,9 @@
         :clan/poo/object
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 
 (def tcb

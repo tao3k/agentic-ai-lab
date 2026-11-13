@@ -6,9 +6,9 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/watermark-objects
                  agentic-ai-lab-temporal-watermark-value)
-        :agentic-ai-lab/modules/temporal-causality/time/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/interface)
 (export temporal-time-test)
 
 (def (instant id domain coordinate modality)

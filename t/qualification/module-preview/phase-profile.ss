@@ -8,12 +8,12 @@
         (only-in :clan/poo/slot-observation without-observation slot-read-dependencies)
         (only-in :tao3k/yuanxu/observability/memory yuanxu-debug-memory-snapshot)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-phase)
-        (only-in :agentic-ai-lab/t/qualification/module-preview/process-accounting
+        (only-in :tao3k/agentic-ai-lab/t/qualification/module-preview/process-accounting
                  process-accounting-sample)
-        (only-in :agentic-ai-lab/t/module-preview-cost-test module-preview-cost-test))
+        (only-in :tao3k/agentic-ai-lab/t/module-preview-cost-test module-preview-cost-test))
 (extern namespace: clan/poo/object
   current-issued-replay-probe require-object-read-route! object-issued-read-current?)
-(extern namespace: yuanxu/module-system/source/admission current-module-source-operation-times)
+(extern namespace: tao3k/yuanxu/module-system/source/admission current-module-source-operation-times)
 (export replay-phase-profile-test test-cleanup!)
 
 (def root-ids (make-table test: eq? weak-keys: #t))

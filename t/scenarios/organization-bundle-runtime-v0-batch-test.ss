@@ -4,7 +4,7 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :clan/poo/object :std/test
-        :agentic-ai-lab/modules/workflow/contracts/organization-bundle-runtime-v0-batch)
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/organization-bundle-runtime-v0-batch)
 
 
 (def (id high low) (agentic-ai-lab-runtime-v0-compact-id high low))

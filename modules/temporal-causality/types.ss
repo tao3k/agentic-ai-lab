@@ -10,7 +10,8 @@
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :tao3k/yuanxu/graph/types-core yuanxu-graph-id?))
 
-(export agentic-ai-lab-relation-trajectory-witness-kind
+(export TemporalCausalityScopeContract
+        agentic-ai-lab-relation-trajectory-witness-kind
         agentic-ai-lab-structural-impact-receipt-kind
         agentic-ai-lab-temporal-observation-kind
         agentic-ai-lab-causal-event-kind
@@ -541,3 +542,15 @@
   .element?: temporal-model-receipt-shape?)
 (def (agentic-ai-lab-temporal-model-receipt? value)
   (element? AgenticAILabTemporalModelReceipt value))
+
+(define-type (TemporalCausalityScopeContract @ Type.)
+  identity: 'temporal-causality/scope
+  .element?:
+  (lambda (scope)
+    (and (object? scope)
+         (every (lambda (slot)
+                  (and (.slot? scope slot) (procedure? (.ref scope slot))))
+                '(structural-impact-analyze causal-event-graph causal-trajectory-assess
+                  causal-trajectory-assessment-digest causal-cut temporal-causal-classify
+                  temporal-model temporal-overlapping-model temporal-model-replay
+                  temporal-model-classify)))))

@@ -9,7 +9,7 @@
 ;;; Policy evidence: request facade re-exports these constants for stable callers.
 
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        :agentic-ai-lab/modules/agent-sandbox/alist)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist)
 
 (export +agent-sandbox-request-schema+
         +agent-sandbox-request-field-names+

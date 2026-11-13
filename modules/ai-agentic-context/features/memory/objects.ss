@@ -5,12 +5,12 @@
 
 ;;; Boundary: stable facade for memory-core POO objects.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-handoff
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-validation
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-durable
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-builtin)
+(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-handoff
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-validation
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-durable
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-builtin)
 
 (export +agentic-ai-lab-ai-agentic-context-memory-store-spec-kind+
         +agentic-ai-lab-ai-agentic-context-memory-catalog-kind+

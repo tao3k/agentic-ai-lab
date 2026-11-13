@@ -14,8 +14,8 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/profile)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile)
 
 (export +agent-sandbox-profile-candidate-schema+
         +agent-sandbox-profile-candidate-patch-schema+

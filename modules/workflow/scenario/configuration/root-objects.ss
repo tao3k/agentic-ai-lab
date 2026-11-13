@@ -7,7 +7,7 @@
 ;;; Invariant: root user-interface files never own object contracts.
 
 (import :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object)
 
 (export agentic-ai-lab-user-interface-shared-sandbox-object
         agentic-ai-lab-user-interface-root-module-objects)

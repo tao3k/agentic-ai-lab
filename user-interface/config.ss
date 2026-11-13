@@ -1,5 +1,5 @@
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -12,7 +12,7 @@
                  profiles compose)
         :tao3k/yuanxu/profile-composition/selection-syntax
 
-        :agentic-ai-lab/modules/workflow/scenario/configuration/default-agent-control-plane-profile
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/default-agent-control-plane-profile
         )
 
 
@@ -20,8 +20,8 @@
 
 (def default-agent-control-plane
   (.new Scenario name: 'default-agent-control-plane
-        config: (let ((LangGraphModule (.get agentic-ai-lab.init.exports Profiles langgraph profile))
-        (ToolCallingModule (.get agentic-ai-lab.init.exports Profiles tool-calling profile)))
+        config: (let ((LangGraphModule (.get tao3k/agentic-ai-lab.init.exports Profiles langgraph profile))
+        (ToolCallingModule (.get tao3k/agentic-ai-lab.init.exports Profiles tool-calling profile)))
     (compose profiles
     (use-module LangGraphModule as control
       session state router agent-node tool-node bounded-loop runtime-handoff)

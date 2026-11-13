@@ -5,8 +5,8 @@
 
 ;;; Public owner for Session policy validation receipts.
 ;;; Construction and ABI projection close through focused dependency owners.
-(import :agentic-ai-lab/modules/session/policy-validation-receipt-core
-        :agentic-ai-lab/modules/session/policy-validation-receipt-projection)
+(import :tao3k/agentic-ai-lab/modules/session/policy-validation-receipt-core
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-receipt-projection)
 
 (export agentic-ai-lab-session-policy-validation-receipt
         agentic-ai-lab-session-policy-validation-receipt?

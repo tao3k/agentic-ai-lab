@@ -7,8 +7,8 @@
 ;;; policy receipts; it does not create runtime manifests or perform handoff.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-object)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-object)
 
 (export agentic-ai-lab-durable-artifact-validate
         agentic-ai-lab-durable-artifact-policy-receipt?

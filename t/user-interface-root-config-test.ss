@@ -8,7 +8,7 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get .ref)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config-modules
@@ -41,7 +41,7 @@
 (def user-interface-root-config-test
   (test-suite "agentic-ai-lab user interface root config"
     (yuanxu-test-case "loads modules directory facade through top-level config"
-      (def root-scenario (.get agentic-ai-lab.init.exports scenarios developer))
+      (def root-scenario (.get tao3k/agentic-ai-lab.init.exports scenarios developer))
       (def root-config (.get root-scenario config))
       (let* ((root-modules (yuanxu-user-config-modules root-config))
              (root-flow-module
@@ -50,8 +50,8 @@
              (root-custom-module
               (root-config-module-selection-by-key root-modules
                                                    '(custom . my-module))))
-        (check-equal? (.get agentic-ai-lab.init.exports modules my-module config identity) 'my-module)
-        (check-equal? (eq? root-scenario (.get agentic-ai-lab.init.exports scenarios developer)) #t)
+        (check-equal? (.get tao3k/agentic-ai-lab.init.exports modules my-module config identity) 'my-module)
+        (check-equal? (eq? root-scenario (.get tao3k/agentic-ai-lab.init.exports scenarios developer)) #t)
         (check-equal? (length root-modules) 8)
         (check-equal? (yuanxu-user-config-module-keys root-config)
                       root-config-expected-module-keys)

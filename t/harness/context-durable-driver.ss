@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :agentic-ai-lab/t/context-durable-owner
+(import :tao3k/agentic-ai-lab/t/context-durable-owner
         (only-in :std/text/pregexp pregexp-match))
 (with-catch
   (lambda (e)

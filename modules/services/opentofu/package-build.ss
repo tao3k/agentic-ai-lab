@@ -1,18 +1,21 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Phase-isolated Build role for the single OpenTofu Module publication.
+;;; External package request factory for the OpenTofu configuration owner.
 (import :clan/poo/object
+        (only-in "./objects.ss" OpenTofuScope.)
+        (only-in "./types.ss" OpenTofuConfigContract)
         (only-in :std/encoding/json write-json)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :tao3k/yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
         ;; Build-tool runtime owners, not a second runtime facade or Loader.
-        (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/contracts NixFlakeSourceContract)
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
+(export OpenTofuPackageBuild.)
 ;; The runtime outer module slot keeps source/config refinements receiver-local.
-(.def Build
+(.def OpenTofuPackageBuild.
   module: OpenTofuScope.
   configuration-projection: (lambda (configuration) configuration)
   kind: 'module/external-package identity: 'opentofu

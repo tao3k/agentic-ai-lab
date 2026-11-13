@@ -31,7 +31,7 @@
 ;;; declares stable extension points; vertical owners add fixtures and methods.
 (def AgenticAILabStandardGovernanceInterface.
   (agentic-ai-lab-standard-governance-interface
-   "agentic-ai-lab/modules/standards/governance/base"
+   "tao3k/agentic-ai-lab/modules/standards/governance/base"
    '() '(documentation presentation-metadata reference-implementation)
    (.o declaration: (.o))
    (.o)
@@ -39,12 +39,12 @@
 
 (def AgenticAILabStandardFeatureModule.
   (agentic-ai-lab-standard-feature-module
-   "agentic-ai-lab/modules/standards/features/base" 'base '() (.o)
+   "tao3k/agentic-ai-lab/modules/standards/features/base" 'base '() (.o)
    AgenticAILabStandardGovernanceInterface. '()))
 
 (def AgenticAILabStandardMigrationGovernanceInterface.
   (agentic-ai-lab-standard-governance-interface
-   "agentic-ai-lab/modules/standards/features/migration/governance"
+   "tao3k/agentic-ai-lab/modules/standards/features/migration/governance"
    '(authority-provider human-authorization proof-assurance conformance
      audit-receipt)
    '(documentation presentation-metadata reference-implementation
@@ -70,7 +70,7 @@
 
 (def AgenticAILabStandardMigrationFeatureModule.
   (agentic-ai-lab-standard-feature-module
-   "agentic-ai-lab/modules/standards/features/migration" 'migration
+   "tao3k/agentic-ai-lab/modules/standards/features/migration" 'migration
    '(source-adapter mapping-proposal human-review conformance admission
      governance fixture)
    (.o) AgenticAILabStandardMigrationGovernanceInterface.
@@ -81,7 +81,7 @@
 (def AgenticAILabStandardsModule.
   (.o (:: self)
       kind: +agentic-ai-lab-standards-module-kind+
-      identity: "agentic-ai-lab/modules/standards"
+      identity: "tao3k/agentic-ai-lab/modules/standards"
       catalog: agentic-ai-lab-standard-empty-catalog
       budget: agentic-ai-lab-standard-default-budget
       providers: (.o)

@@ -4,7 +4,7 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/workflow/graph/scenario-gap-intent)
+        :tao3k/agentic-ai-lab/modules/workflow/graph/scenario-gap-intent)
 
 (import (only-in :std/test test-suite))
 

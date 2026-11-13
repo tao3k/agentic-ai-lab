@@ -8,7 +8,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .all-slots .ref .slot? object?)
-        :agentic-ai-lab/modules/module-authoring/module-config-syntax)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax)
 
 (export module-config-prototype-syntax-test)
 

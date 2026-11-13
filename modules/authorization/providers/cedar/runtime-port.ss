@@ -6,7 +6,7 @@
         :std/encoding/json
         (only-in :std/encoding/hex hex-decode hex-encode)
         (only-in :std/crypto/digest sha256)
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
         "objects.ss")
 (export agentic-ai-lab-cedar-runtime-port)
 

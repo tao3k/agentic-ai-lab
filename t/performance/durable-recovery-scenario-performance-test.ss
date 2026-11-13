@@ -15,11 +15,11 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         "../support/performance"
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
-        :agentic-ai-lab/modules/session/transform
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :tao3k/agentic-ai-lab/modules/session/transform
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
 
 (export durable-recovery-scenario-performance-test)
 

@@ -1,7 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Private version inputs over the existing reader and selected-package owners.
-(import (only-in :agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :clan/poo/object
+(import (only-in :tao3k/agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/encoding/json read-json)
         (only-in :std/io/tempfile make-temporary-file-name clear-temporary-file!)
@@ -10,7 +10,8 @@
         (only-in :tao3k/yuanxu/ops/progress execution-idle-seconds execution-total-seconds)
         (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules)
         (only-in :tao3k/yuanxu/ops/selected-packages SelectedPackages.)
-        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixFlakeSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
         (only-in :tao3k/yuanxu/module-system/source/reader module-publication-reader)
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context))
@@ -22,7 +23,7 @@
   .release: (lambda (root)
               (clear-temporary-file! root)
               (when (file-exists? root) (error "AWS fixture cleanup did not remove its workspace"))))
-(def repository (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
+(def repository (path-normalize (path-expand "../../../.." (path-directory (this-source-file)))))
 (def (write-source path text)
   (create-directory* (path-directory path))
   (call-with-output-file (list path: path truncate: #t) (cut display text <>)))
@@ -154,12 +155,14 @@
     (call-with-output-string
       (lambda (port)
         (write `(yuanxu!
+                  :test-dir "./t"
                   :load-modules ,(path-expand "core/modules" repository)
                   mode: explicit rename: Core (funflow) (json-schema)
                   :load-modules ,(path-expand "modules" repository)
                   mode: explicit rename: Lab
-                  (aws @ ,(path-expand "scenarios/aws" repository))
-                  (nix) :services (opentofu)) port))))
+                  (nix) :services (opentofu)
+                  :load-modules ,(path-expand "scenarios" repository)
+                  mode: explicit rename: scenarios (aws)) port))))
   (.cc (.o) 'project project 'init init 'reader (module-publication-reader)
     'closure-inputs closure-inputs 'package-set canonical-package-set 'system system))
 (def (realize-aws-selection fixture directory (phase void))
@@ -190,19 +193,14 @@
     (.cc scope 'config (.cc (.get scope config) 'source Source 'selection-input 'selection)))
   (def (read-publication source)
     (def published (.call reader read source))
-    (if (not (eq? (.get published identity) 'services/opentofu)) published
-      (let (baseline (.get published core))
-        (.cc published 'core
-          (.o (:: @ baseline)
-            link: (lambda (dependencies) (configure (.call baseline link dependencies)))
-            configuration-build:
-            (let (build (.get baseline configuration-build))
-              (.cc build 'module (configure (.get build module)))))))))
+    (if (eq? (.get published identity) 'aws)
+      (.cc published 'config (.cc (.get published config) 'opentofu (configure OpenTofuScope.)))
+      published))
   (def context (module-directory-context init read-publication))
   (phase 'source-context)
   (def selection
     (yuanxu-load-modules
-      (.cc context 'publication-inputs (.get reader inputs)
+      (.cc context 'import-owners (.get reader import-owners) 'publication-inputs (.get reader inputs)
         'publication-preparation (.get reader preparation)
         'current? (lambda (generation)
                     (.call reader admit-current)

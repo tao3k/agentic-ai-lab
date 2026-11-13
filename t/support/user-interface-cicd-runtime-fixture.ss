@@ -11,7 +11,7 @@
                  yuanxuUserConfig
                  yuanxu-settings
                  yuanxu-user-module-selection)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-sandbox-profile-config)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
                  agentic-ai-lab-custom-my-module-funflow-cicd-case))

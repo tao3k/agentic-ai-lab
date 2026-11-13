@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config agenticAiLabUserConfigPresentation))
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config agenticAiLabUserConfigPresentation))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;

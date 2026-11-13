@@ -8,10 +8,10 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/list/list find delete-duplicates/hash)
-        (only-in "./init.ss" agentic-ai-lab/dev/d2.init.exports)
+        (only-in "./init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports)
         (only-in "./output/reuse-input.ss" NativeCapture DesignCase DesignReadings))
 (export main)
-(def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
+(def Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def Context. (.get Scope prototypes AuthoringContext))
 (def (s value) (if (symbol? value) (symbol->string value) value))
 (def (emit value) (display (json->string value)) (newline) (force-output))
@@ -21,7 +21,7 @@
 (def (wire-rows objects slots)
   (map (lambda (value) (map (lambda (slot) (s (.ref value slot))) slots)) objects))
 (def (main (mode "describe"))
-  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
+  (.get tao3k/agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (if (equal? mode "describe")
     (emit (wire-object
       (cons (cons "intro" (if (.slot? DesignCase 'intro) (.ref DesignCase 'intro) ""))
@@ -86,7 +86,7 @@
         (error "invalid explanatory attachment" (.ref teaching-value 'invalid-attachments)
           (.ref teaching-value 'cyclic-attachments) (.ref teaching-value 'invalid-negations)
           (.ref teaching-value 'invalid-regions)))
-      ((.get agentic-ai-lab/dev/d2.init.exports admit-current))
+      ((.get tao3k/agentic-ai-lab/dev/d2.init.exports admit-current))
       ;; Final process handoff only; the editable source remains POO/SysML.
       (emit (wire-object
         (list (cons "nodes" (wire-rows (.ref scene-value 'nodes) '(identity source-ref label glyph role rationale kind parent)))

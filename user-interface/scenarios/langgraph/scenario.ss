@@ -1,6 +1,6 @@
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -30,7 +30,7 @@
 
 (def langgraph-scenario
   (.new Scenario name: 'langgraph-scenario
-        config: (let ((LangGraphModule (.get agentic-ai-lab.init.exports Profiles langgraph profile)))
+        config: (let ((LangGraphModule (.get tao3k/agentic-ai-lab.init.exports Profiles langgraph profile)))
     (compose profiles
     (use-module LangGraphModule as graph
       session state router agent-node tool-node bounded-loop runtime-handoff)

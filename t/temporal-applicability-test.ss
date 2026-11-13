@@ -4,10 +4,10 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :std/test
-        :agentic-ai-lab/modules/temporal-causality/objects
-        :agentic-ai-lab/modules/temporal-causality/funs
-        :agentic-ai-lab/modules/temporal-causality/admission/interface
-        :agentic-ai-lab/modules/temporal-causality/applicability/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/funs
+        :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/interface)
 (export temporal-applicability-test)
 (def (model position)
   (agentic-ai-lab-temporal-model "family"

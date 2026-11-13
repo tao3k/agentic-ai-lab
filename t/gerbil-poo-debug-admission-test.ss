@@ -14,7 +14,7 @@
         (only-in :tao3k/yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity)
         :tao3k/yuanxu/module-system/authoring/roles
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export gerbil-poo-debug-admission-test)
 
 (define-type (DebugSymbol @ Type.)

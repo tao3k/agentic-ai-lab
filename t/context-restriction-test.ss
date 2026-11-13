@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .cc .ref)
-        :agentic-ai-lab/modules/query/semantic/context-restriction)
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction)
 (export context-restriction-test)
 (def (label readers destinations provenance start end)
   (agentic-ai-lab-context-restriction "declared-scope-clock" readers destinations provenance start end))

@@ -29,14 +29,14 @@
         (only-in :tao3k/yuanxu/module-system/selection/syntax yuanxu-modules!)
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/loader/objects
         :tao3k/yuanxu/module-system/source/collection
-        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories)
-        :agentic-ai-lab/modules/building/official-contributions
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree)
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories)
+        :tao3k/agentic-ai-lab/modules/building/official-contributions
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree)
 
 (export module-system-lazy-loader-test)
 

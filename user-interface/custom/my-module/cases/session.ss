@@ -6,7 +6,7 @@
 ;;; Boundary: downstream session dataflow case.
 ;;; Invariant: this standalone module declares report-only objects.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-case)
 

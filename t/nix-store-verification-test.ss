@@ -6,7 +6,7 @@
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer)
         (rename-in (only-in "../core/t/qualification/build-publication/store.ss" store-verify)
                    (store-verify verify-store))
-        (only-in :agentic-ai-lab/modules/nix/func
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func
                  agentic-ai-lab-nix-verify-store current-nix-process-observer))
 (export nix-store-verification-test)
 

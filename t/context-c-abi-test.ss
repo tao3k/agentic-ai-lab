@@ -5,16 +5,16 @@
 (import (only-in :std/test test-suite)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/c-abi-caller c-roundtrip)
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/c-abi-caller c-roundtrip)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/runtime-service
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/runtime-service
                  context-service-close!)
-        :agentic-ai-lab/modules/workflow/runtime/semantic
-        :agentic-ai-lab/modules/workflow/runtime/context-lifecycle
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/t/context-service-test
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        :tao3k/agentic-ai-lab/modules/workflow/runtime/semantic
+        :tao3k/agentic-ai-lab/modules/workflow/runtime/context-lifecycle
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/t/context-service-test
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  push-join!))
 (export context-c-abi-probe context-c-abi-test)
 (def (context-c-abi-probe path mode)

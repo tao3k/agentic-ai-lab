@@ -6,8 +6,7 @@
   identity: 'nix
   tags: '(package-management)
   core:
-  (.o requires: (.o)
-      scope-contract: NixScopeContract
+  (.o scope-contract: NixScopeContract
       admissions: (.o Config: (.o export-path: '(config) contract-path: '(types Config)))
       exports:
       (.o config: NixConfig

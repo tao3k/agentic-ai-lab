@@ -7,7 +7,7 @@
 ;;; Invariant: graph helpers inspect report-only session objects.
 
 (import (only-in :clan/poo/object object<-alist)
-        :agentic-ai-lab/modules/session/objects-core)
+        :tao3k/agentic-ai-lab/modules/session/objects-core)
 
 (export agentic-ai-lab-session-by-id
         agentic-ai-lab-session-lineage-edge-pairs

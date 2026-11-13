@@ -40,9 +40,9 @@
 
 (import (only-in :clan/poo/object .ref object<-alist)
         :tao3k/yuanxu/object-family/syntax
-        :agentic-ai-lab/modules/model-core/types
-        :agentic-ai-lab/modules/session/policy
-        (only-in :agentic-ai-lab/modules/session/objects-core
+        :tao3k/agentic-ai-lab/modules/model-core/types
+        :tao3k/agentic-ai-lab/modules/session/policy
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-every?
                  agentic-ai-lab-session-require))
 

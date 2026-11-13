@@ -13,9 +13,9 @@
 (.def Governance
   identity: 'governance
   tags: '(governance)
-  core: (.o requires: (.o)
+  core: (.o
             scope-contract: GovernanceScope
-            exports: (.o library: 'agentic-ai-lab/modules/governance/interface
+            exports: (.o library: 'tao3k/agentic-ai-lab/modules/governance/interface
                          Profile: AgenticAILabGovernanceProfile.
                          evaluate: agentic-ai-lab-governance-evaluate))
   features: (.o))

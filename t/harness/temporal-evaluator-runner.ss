@@ -21,14 +21,14 @@
    :tao3k/yuanxu/graph/types-core
    :tao3k/yuanxu/graph/types-contracts
    :tao3k/yuanxu/graph/types
-   :agentic-ai-lab/modules/temporal-causality/types
-   :agentic-ai-lab/modules/temporal-causality/objects
-   :agentic-ai-lab/modules/temporal-causality/funs
-   :agentic-ai-lab/modules/temporal-causality/time/types
-   :agentic-ai-lab/modules/temporal-causality/time/objects
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/table/expression
    :gerbil-ascent/table/funs
@@ -83,28 +83,28 @@
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
-   :agentic-ai-lab/modules/temporal-causality/time/types
-   :agentic-ai-lab/modules/temporal-causality/time/objects
-   :agentic-ai-lab/modules/temporal-causality/time/funs
-   :agentic-ai-lab/modules/temporal-causality/revisions/types
-   :agentic-ai-lab/modules/temporal-causality/revisions/objects
-   :agentic-ai-lab/modules/temporal-causality/revisions/funs
-   :agentic-ai-lab/modules/temporal-causality/revisions/interface
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-   :agentic-ai-lab/modules/temporal-causality/evaluator/positive-proof
-   :agentic-ai-lab/modules/temporal-causality/evaluator/fact
-   :agentic-ai-lab/modules/temporal-causality/evaluator/binding
-   :agentic-ai-lab/modules/temporal-causality/evaluator/rule
-   :agentic-ai-lab/modules/temporal-causality/evaluator/derivation
-   :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
-   :agentic-ai-lab/modules/temporal-causality/evaluator/interface
-   :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-   :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/positive-proof
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/fact
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/binding
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/rule
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/derivation
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
+   :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/interface
+   :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+   :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
    :gerbil/tools/gxtest))
 ;;; Resolve the Context/Orgize closure with the compiler's real dependency order.
 ;;; No timer emits progress and no hand-written parser dependency list is kept.

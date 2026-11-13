@@ -7,8 +7,8 @@
 ;;; Invariant: macros expand to ordinary POO module objects and field contracts.
 
 (import :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/sandbox-core/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects)
 
 (export defpoo-sandbox-backend-object-family)
 

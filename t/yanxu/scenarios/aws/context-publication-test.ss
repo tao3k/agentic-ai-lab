@@ -43,16 +43,16 @@
                        (string-suffix? "/modules/funflow/func.ss" (car input)))
                      (.get selection build-graph source-inputs)) #t) #t)
         ;; No Schema list, descriptor reconstruction or handwritten admission paths.
-        (def publication (.call AdmissionPublication. .for-export selection 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
+        (def publication (.call AdmissionPublication. .for-export selection 'tao3k/agentic-ai-lab/scenarios/aws/interface 'Scenario))
         (phase 'parent-bound)
         (def contract (.get publication contract))
         (def child-contract (.get contract responsibilities profile))
-        (check-equal? (.get selection modules aws provider version) "5.99.0")
-        (check-equal? (eq? contract (.get selection modules aws types Scenario)) #t)
+        (check-equal? (.get selection modules scenarios aws provider version) "5.99.0")
+        (check-equal? (eq? contract (.get selection modules scenarios aws types Scenario)) #t)
         (check-equal? (.get child-contract value-contract) #f)
         (check-equal? (length (.get publication context schema-inputs)) 3)
 
-        (def WebProfile (.get selection modules aws Profiles Web))
+        (def WebProfile (.get selection modules scenarios aws Profiles Web))
         (def Scenario (.get publication value))
         (def parent-cached (.get Scenario resource))
         (check-equal? (.get parent-cached instance_type) "t3.small")
@@ -181,9 +181,9 @@
                 (def fresh-selection
                   (realize-aws-selection fixture (path-expand "packages-new" root) phase))
                 (def fresh-publication
-                  (.call AdmissionPublication. .for-export fresh-selection 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
+                  (.call AdmissionPublication. .for-export fresh-selection 'tao3k/agentic-ai-lab/scenarios/aws/interface 'Scenario))
                 (phase 'fresh-publication-bound)
-                (check-equal? (.get fresh-selection modules aws provider version) "5.100.0")
+                (check-equal? (.get fresh-selection modules scenarios aws provider version) "5.100.0")
                 (check-equal? (eq? (.get fresh-publication contract) contract) #f)
                 (check-equal? (eq? (.get fresh-publication context) (.get publication context)) #f)
                 (def current-binding (.call fresh-publication .bind-evidence accepted))

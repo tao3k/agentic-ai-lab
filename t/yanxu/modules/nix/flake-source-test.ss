@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :std/test :clan/poo/object
+(import (only-in :tao3k/agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :std/test :clan/poo/object
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :tao3k/yuanxu/ops/func run-script)
         (only-in :tao3k/yuanxu/ops/process-script ProcessScript.)
@@ -12,10 +12,10 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
-        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.)
-        (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer)
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixFlakeSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/contracts NixFlakeSourceContract)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read module-source-admit-current!))
@@ -231,7 +231,7 @@
               (rejects? "stale external package derivation"
                 (lambda ()
                   (parameterize ((current-expander-context (make-top-context)))
-                    (eval-syntax '(import :agentic-ai-lab/modules/nix/objects))
+                    (eval-syntax '(import :tao3k/agentic-ai-lab/modules/nix/objects))
                     (for-each eval-syntax (.get child guard-forms))))))
             (write-source providers (string-append "{ artifacts }: " provider-text))
             (assert 'lock-unchanged (equal? lock-text (module-source-read lock)))

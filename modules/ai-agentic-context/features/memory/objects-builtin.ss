@@ -5,8 +5,8 @@
 
 ;;; Boundary: builtin memory stores and default catalog.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog)
+(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog)
 
 (export agentic-ai-lab-ai-agentic-context-memory-local-session-store
         agentic-ai-lab-ai-agentic-context-memory-durable-project-store

@@ -6,8 +6,8 @@
 ;;; Boundary: Docker sandbox kernel module selection.
 ;;; Invariant: Docker task-flow extension remains in the Docker module config.
 
-(import :agentic-ai-lab/modules/docker-sandbox/objects
-        :agentic-ai-lab/modules/sandbox-core/objects
+(import :tao3k/agentic-ai-lab/modules/docker-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/yuanxu/utilities/final-projection-syntax)
 

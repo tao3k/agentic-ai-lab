@@ -9,7 +9,7 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/ops/objects ProcessScript.)
         (only-in :tao3k/yuanxu/ops/func run-script)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in "../core/t/qualification/testing/directory.ss" write-source)

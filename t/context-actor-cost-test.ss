@@ -4,20 +4,20 @@
 ;;; Separate transport, proof and storage costs. Never replace cold qualification.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/sync/channel make-channel)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context policy)
-        (prefix-in :agentic-ai-lab/t/context-durable-owner originals.)
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/objects
-        :agentic-ai-lab/modules/ai-agentic-context/funs-projection
-        :agentic-ai-lab/modules/ai-agentic-context/funs-features
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
+        (prefix-in :tao3k/agentic-ai-lab/t/context-durable-owner originals.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-projection
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+        :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
 (export actor-cost-probe)
 
 (def (require value message) (unless value (error message)))

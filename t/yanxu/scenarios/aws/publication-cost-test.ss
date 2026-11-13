@@ -5,12 +5,12 @@
         (only-in :std/error Error? Error-message)
         (only-in :std/encoding/json read-json write-json)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer current-module-source-phase)
         (only-in :tao3k/yuanxu/observability/debug YuanxuDebugMemoryAnomaly? YuanxuDebugMemoryAnomaly-receipt
                  yuanxu-debug-memory-snapshot)
         (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.)
-        (only-in "./scenarios/aws/fixtures.ss"
+        (only-in "./fixtures.ss"
                  Workspace prepare-aws-selection! realize-aws-selection))
 (export aws-publication-cost-test)
 (def aws-publication-cost-test
@@ -119,7 +119,7 @@
         (source-report)
         (phase 'selected)
         (def selected-queries queries)
-        (def publication (.call AdmissionPublication. .for-export selected 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
+        (def publication (.call AdmissionPublication. .for-export selected 'tao3k/agentic-ai-lab/scenarios/aws/interface 'Scenario))
         (phase 'bound)
         (def bound-queries queries)
         (def Parent (.get publication value))

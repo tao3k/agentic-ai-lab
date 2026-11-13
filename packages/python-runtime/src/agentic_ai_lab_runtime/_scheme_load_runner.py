@@ -62,11 +62,11 @@ def aot_runner_source(module_path: Path, projection_path: Path) -> str:
     source_path = scheme_string(str(module_path))
     projection_source_path = scheme_string(str(projection_path))
     return (
-        "(import :yuanxu/profile-composition/selection-syntax\n"
-        "        :yuanxu/profile-composition/profile-bundle\n"
+        "(import :tao3k/yuanxu/profile-composition/selection-syntax\n"
+        "        :tao3k/yuanxu/profile-composition/profile-bundle\n"
         "        (only-in :clan/poo/mop .new)\n"
-        "        (only-in :yuanxu/modules/funflow/scenario Scenario)\n"
-        "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
+        "        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)\n"
+        "        :tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {projection_source_path})\n"
         "(export main)\n"
         "(def (main . args)\n"

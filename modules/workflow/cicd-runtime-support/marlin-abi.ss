@@ -9,8 +9,8 @@
         :tao3k/yuanxu/modules/funflow/check-objects
         :tao3k/yuanxu/modules/funflow/check-funs
         :tao3k/yuanxu/modules/funflow/projection-syntax
-        :agentic-ai-lab/modules/workflow/cicd-sandbox
-        :agentic-ai-lab/modules/workflow/cicd-runtime-support/checks)
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-sandbox
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/checks)
 
 (export agentic-ai-lab-cicd-runtime-command-manifest-policy-ref
         agentic-ai-lab-cicd-runtime-command-manifest->marlin-handoff-entry

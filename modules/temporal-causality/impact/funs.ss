@@ -7,13 +7,13 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/types
                  agentic-ai-lab-temporal-trajectory-series?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/funs
                  agentic-ai-lab-temporal-trajectory-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/objects
                  agentic-ai-lab-temporal-impact-contrast-point-value
                  agentic-ai-lab-temporal-impact-contrast-value
                  agentic-ai-lab-temporal-intervention-window-audit-value))

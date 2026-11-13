@@ -22,8 +22,8 @@
     :tao3k/yuanxu/module-system/config
     :tao3k/yuanxu/module-system/objects
     :tao3k/yuanxu/module-system/authoring/roles
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
-    :agentic-ai-lab/modules/module-authoring/module-interface
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
+    :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
     :tao3k/yuanxu/object-family/syntax
     :tao3k/yuanxu/utilities/product-syntax
     :tao3k/yuanxu/utilities/final-projection-syntax
@@ -35,18 +35,18 @@
     :tao3k/yuanxu/utilities/functional
     :tao3k/yuanxu/profile-composition/policy
     :tao3k/yuanxu/testing
-    :agentic-ai-lab/modules/temporal-causality/time/types
-    :agentic-ai-lab/modules/temporal-causality/time/objects
-    :agentic-ai-lab/modules/temporal-causality/revisions/types
-    :agentic-ai-lab/modules/temporal-causality/revisions/objects
-    :agentic-ai-lab/modules/temporal-causality/time/funs
-    :agentic-ai-lab/modules/temporal-causality/revisions/funs
-    :agentic-ai-lab/modules/temporal-causality/revisions/interface
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
-    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface
+    :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
+    :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+    :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/types
+    :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/objects
+    :tao3k/agentic-ai-lab/modules/temporal-causality/time/funs
+    :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/funs
+    :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+    :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface
     :gerbil/tools/gxtest))
 (eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/temporal-support-test.ss")))

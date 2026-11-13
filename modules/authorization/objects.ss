@@ -7,7 +7,7 @@
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
         :tao3k/yuanxu/poo-clos/interface
-        (only-in :agentic-ai-lab/modules/authorization/types
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/types
                  agentic-ai-lab-authorization-provider-kind
                  agentic-ai-lab-authorization-capability-kind
                  AgenticAILabAuthorizationProvider

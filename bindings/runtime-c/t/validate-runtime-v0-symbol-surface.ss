@@ -10,7 +10,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/list/walist walist)
         (only-in :std/encoding/json json->string)
-        :agentic-ai-lab/modules/workflow/qualification/runtime-symbol-manifest)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/runtime-symbol-manifest)
 
 (export main)
 

@@ -4,14 +4,14 @@
 ;;; Trusted runtime recovery adapter. Source producers are replayed before restore.
 (import (only-in :std/list/list find)
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
         (only-in "../durable/recovery-decision.ss" durable-recovery-decision)
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token
-        :agentic-ai-lab/modules/governance/policy/strict-mediation
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
+        :tao3k/agentic-ai-lab/modules/governance/policy/strict-mediation
         "session-host.ss" "use-host.ss" "query-provider.ss" "recovery-observation.ss")
 (export context-durable-adapter context-durable-source-command context-durable-revoke-command
         context-durable-policy-command context-durable-workspace-command)

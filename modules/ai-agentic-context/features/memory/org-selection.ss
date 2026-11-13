@@ -8,7 +8,7 @@
 ;;; The caller owns authentication of the graph against its source cut.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        (only-in :agentic-ai-lab/modules/session/objects-core
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-require
                  agentic-ai-lab-session-every?)
         (only-in :orgize/languages/org/modules/org-elements/value-types

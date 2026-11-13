@@ -8,12 +8,12 @@
 
 (import (only-in :clan/poo/object .@ .get .o .ref)
         (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule.)
-        :agentic-ai-lab/modules/module-authoring/module-interface
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/funs
         :tao3k/yuanxu/module-system/projection/option-objects
         :tao3k/yuanxu/module-system/catalog/values
-        :agentic-ai-lab/modules/module-authoring/module-option-projection)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-option-projection)
 
 (export agentic-ai-lab-module-runtime-import
         agentic-ai-lab-module-apply

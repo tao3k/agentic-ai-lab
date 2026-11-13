@@ -8,11 +8,11 @@
 
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        :agentic-ai-lab/modules/workflow/control-plane/plan
+        :tao3k/agentic-ai-lab/modules/workflow/control-plane/plan
         :tao3k/yuanxu/profile-composition/selection-syntax
 
         :tao3k/yuanxu/profile-composition/profile-bundle
-        (only-in :agentic-ai-lab/modules/workflow/profiles/human-ai-capability
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)
         :tao3k/yuanxu/modules/funflow/bundle-v1)

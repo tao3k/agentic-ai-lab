@@ -8,10 +8,10 @@
         (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/sandbox-core/profile-catalog
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        :agentic-ai-lab/modules/workflow/cicd-config
-        :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
         "core.ss"
         "runtime-base.ss"
         "runtime-capability.ss"

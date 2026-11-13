@@ -8,20 +8,20 @@
 (export agentic-ai-lab-user-config-loop-engine-only-presentation)
 
 (import (only-in :clan/poo/object object<-fun)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-valid?
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostic-count
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostics)
-        :agentic-ai-lab/modules/workflow/cicd-config
-        :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
         (only-in "config.ss"
                  agentic-ai-lab-user-config-loop-engine-intents
                  agentic-ai-lab-user-loop-engine-intent-ref)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support)
 
 ;; Engineering note: loop-engine-only presentation uses lazy slots so heavy
 ;; receipt projections are computed only when a downstream caller asks for them.

@@ -18,10 +18,10 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/agent-sandbox/api
-        :agentic-ai-lab/modules/agent-sandbox/nono
-        :agentic-ai-lab/modules/agent-sandbox/cube
-        :agentic-ai-lab/modules/nono-sandbox/c-binding)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/cube
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-c-binding-test)
 
@@ -47,12 +47,12 @@
         (check-equal? (test-ref contract 'adapter-header)
                       "agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'adapter-include-ref)
-                      "bindings/nono-c/agentic_ai_lab_nono_binding.h")
+                      "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'header) "nono.h")
         (check-equal? (test-ref contract 'include-ref)
-                      "bindings/nono-c/nono.h")
+                      "modules/nono-sandbox/nono-c/nono.h")
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
+                      "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (and (memq 'NonoDiagnosticCode
                                  (test-ref contract 'types))
                            #t)
@@ -85,14 +85,14 @@
                               (cons 'upstream-include-dirs
                                     '("/opt/nono/include"))
                               (cons 'include-dirs
-                                    '("bindings/nono-c"
+                                    '("modules/nono-sandbox/nono-c"
                                       "/opt/nono/include")))))
              (missing-upstream
               (make-nono-c-binding-build
                (list (cons 'upstream-include-dirs
                            '("run/missing-nono-include"))
                      (cons 'include-dirs
-                           '("bindings/nono-c"
+                           '("modules/nono-sandbox/nono-c"
                              "run/missing-nono-include")))))
              (missing-errors
               (nono-c-binding-build-input-validation-errors
@@ -105,13 +105,13 @@
         (check-equal? (test-ref contract 'standard) "c11")
         (check-equal? (test-ref contract 'syntax-only?) #t)
         (check-equal? (test-ref contract 'adapter-include-dirs)
-                      '("bindings/nono-c"))
+                      '("modules/nono-sandbox/nono-c"))
         (check-equal? (test-ref contract 'upstream-include-dirs)
                       '())
         (check-equal? (test-ref contract 'include-dirs)
-                      '("bindings/nono-c"))
+                      '("modules/nono-sandbox/nono-c"))
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
+                      "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (map (lambda (input)
                              (test-ref input 'kind))
                            required-inputs)
@@ -125,8 +125,8 @@
                         "-Wextra"
                         "-Werror"
                         "-fsyntax-only"
-                        "-Ibindings/nono-c"
-                        "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c"))
+                        "-Imodules/nono-sandbox/nono-c"
+                        "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c"))
         (check-equal? (nono-c-binding-build-compiler override) "cc")
         (check-equal? (nono-c-binding-build-upstream-include-dirs override)
                       '("/opt/nono/include"))

@@ -7,7 +7,7 @@
         (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes proof-node-kind
                  proof-node-inputs proof-node-relation proof-node-row)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support)
         "fact.ss" "binding.ss" "rule.ss" "positive-proof.ss"
         (only-in "private/rule-kernel.ss" rule-correspondence-replay/verified)
         (only-in "private/binding-kernel.ss" proof-support-replay/verified))

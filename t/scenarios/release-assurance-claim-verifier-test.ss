@@ -5,8 +5,8 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-claim-verifier)
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-claim-verifier)
 
 (export release-assurance-claim-verifier-test)
 

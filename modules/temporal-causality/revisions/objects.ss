@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/types
                  agentic-ai-lab-temporal-evidence-revision-kind
                  agentic-ai-lab-temporal-evidence-journal-kind
                  agentic-ai-lab-temporal-evidence-snapshot-kind

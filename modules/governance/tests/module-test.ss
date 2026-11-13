@@ -3,7 +3,7 @@
 (import :std/test
         (only-in :clan/poo/object .get .cc .o)
         (only-in :gerbil/runtime/loader list-modules)
-        (only-in :agentic-ai-lab/modules/governance/interface
+        (only-in :tao3k/agentic-ai-lab/modules/governance/interface
                  AgenticAILabGovernanceProfile. agentic-ai-lab-governance-evaluate))
 (export governance-module-test)
 (def governance-module-test
@@ -22,7 +22,7 @@
       ;; Module System .get process evaluates Interface as source configuration.
       (def library (string-append (path-strip-trailing-directory-separator
                                    (path-normalize (path-expand "lib" (gerbil-path)))) "/"))
-      (def loaded (assoc "agentic-ai-lab/modules/governance/interface~0" (list-modules)))
+      (def loaded (assoc "tao3k/agentic-ai-lab/modules/governance/interface~0" (list-modules)))
       (check-equal? (and loaded (string? (cdr loaded))
                         (string-prefix? library (path-normalize (cdr loaded)))) #t)
       (displayln "LAB-GOVERNANCE-PRODUCT-USE-OK"))))

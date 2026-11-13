@@ -8,10 +8,10 @@
 ;;; Responsibility: publish Marlin request envelopes for =govern-loop=.
 ;;; Responsibility: publish L1 report receipts with no write effects.
 ;;; Responsibility: publish runtime discovery manifests for Marlin.
-;;; Import boundary: this module may depend on =:agentic-ai-lab/modules/loop-engine/control/governor=.
+;;; Import boundary: this module may depend on =:tao3k/agentic-ai-lab/modules/loop-engine/control/governor=.
 ;;; Import boundary: this module may depend on =:tao3k/yuanxu/modules/funflow/control-plane/failure=.
 ;;; Import boundary: the core governor must not import Marlin wrappers.
-;;; Export boundary: =:agentic-ai-lab/modules/loop-engine/control/agent= re-exports this owner for callers.
+;;; Export boundary: =:tao3k/agentic-ai-lab/modules/loop-engine/control/agent= re-exports this owner for callers.
 ;;; Runtime boundary: this module never polls or schedules loops.
 ;;; Runtime boundary: this module never locks or writes state.
 ;;; Runtime boundary: this module never executes connectors or starts loops.
@@ -19,7 +19,7 @@
 ;;; Policy evidence: tests assert schemas, envelopes, receipts, and manifests.
 
 (import :tao3k/yuanxu/modules/funflow/control-plane/failure
-        (only-in :agentic-ai-lab/modules/loop-engine/core
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/core
                  +agentic-ai-lab-user-loop-engine-handoff-contracts+
                  +agentic-ai-lab-user-loop-engine-receipt-contracts+
                  +agentic-ai-lab-user-loop-engine-runtime-command-arguments+
@@ -28,7 +28,7 @@
                  +agentic-ai-lab-user-loop-engine-runtime-command-name+
                  +agentic-ai-lab-user-loop-engine-runtime-object-families+
                  +agentic-ai-lab-user-loop-engine-runtime-packet-contracts+)
-        :agentic-ai-lab/modules/loop-engine/control/governor)
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/governor)
 
 (export +loop-governor-marlin-request-schema+
         +loop-governor-marlin-abi-schema+

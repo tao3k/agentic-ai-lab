@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-default-sandbox-profiles)
-        :agentic-ai-lab/modules/session/config)
+        :tao3k/agentic-ai-lab/modules/session/config)
 
 (export session-object-test)
 

@@ -7,8 +7,8 @@
 ;;; Invariant: the registry is a projection, not a live runtime store.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy)
 
 (export agentic-ai-lab-session-registry-entry
         agentic-ai-lab-session-registry-entry?

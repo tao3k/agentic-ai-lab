@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :agentic-ai-lab/modules/temporal-causality/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/interface)
 (export temporal-truth-maintenance-test)
 
 (def (derived id subjects conclusions)

@@ -5,11 +5,11 @@
 (import (only-in :clan/poo/object .o .ref .call object<-alist)
         (only-in :std/sync/channel make-channel channel-put channel-get)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
         ;; The platform primitive is a compiled library. A source-path import
         ;; would ask the interpreter to evaluate its C-declare forms.
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
         "scheduling.ss" "owner-ingress.ss")
 (export policy-clock-owner policy-clock-owner/scheduled policy-clock-call! policy-clock-await-events!
         policy-clock-pause! policy-clock-resume! policy-clock-retry!

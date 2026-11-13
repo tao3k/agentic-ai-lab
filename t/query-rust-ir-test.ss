@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check test-suite)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :agentic-ai-lab/modules/query/rust-ir
+        (only-in :tao3k/agentic-ai-lab/modules/query/rust-ir
                  agentic-ai-lab-query-execution-candidate-transport-diagnostic
                  agentic-ai-lab-query-execution-candidate-transport-ir-json))
 

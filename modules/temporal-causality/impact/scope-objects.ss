@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/scope-types
                  AgenticAILabTemporalImpactScope
                  AgenticAILabTemporalImpactScopeAudit))
 (export agentic-ai-lab-temporal-impact-scope-value

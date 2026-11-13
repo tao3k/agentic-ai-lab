@@ -8,10 +8,10 @@
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/module-system/source/admission admit-module-configuration!)
-        (only-in :agentic-ai-lab/opentofu-contracts
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/contracts
                  NullContract OpenTofuContract ServicesContract OpenTofuConfigContract)
-        (only-in :agentic-ai-lab/modules/services/opentofu/config Config)
-        (only-in :agentic-ai-lab/modules/services/opentofu/func opentofu-service-configuration))
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/config Config)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/func opentofu-service-configuration))
 (export opentofu-service-contract-test)
 
 ;; Exercise the same configuration association used by the actual Module.

@@ -6,7 +6,7 @@
 ;;; Internal support shared by semantic tool-core object owners.
 
 (import (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/session/objects)
+        :tao3k/agentic-ai-lab/modules/session/objects)
 
 (export agentic-ai-lab-tool-field-rows
         agentic-ai-lab-tool-slot

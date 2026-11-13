@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/governance/evidence/batched-merkle)
+        :tao3k/agentic-ai-lab/modules/governance/evidence/batched-merkle)
 
 (export batched-merkle-evidence-test)
 

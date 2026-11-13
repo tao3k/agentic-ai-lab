@@ -12,9 +12,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object object?)
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export memory-durable-job-receipt-test)
 

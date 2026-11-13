@@ -66,7 +66,7 @@
         loop-human-audit->runtime-snapshot
         loop-human-audit->contract)
 
-(import :agentic-ai-lab/modules/loop-engine/control/human-audit-value-support)
+(import :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit-value-support)
 
 ;;; Boundary: schema names the human audit review contract.
 ;; : (-> Unit Symbol)

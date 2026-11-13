@@ -5,16 +5,16 @@
 (import
  (only-in :clan/poo/object .o .ref .call)
  (only-in :std/list/list every find)
- (prefix-in :agentic-ai-lab/t/context-query-provider-test query.)
- (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+ (prefix-in :tao3k/agentic-ai-lab/t/context-query-provider-test query.)
+ (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture)
- :agentic-ai-lab/modules/ai-agentic-context/query-provider
- :agentic-ai-lab/modules/ai-agentic-context/durable-owner
- :agentic-ai-lab/modules/ai-agentic-context/session-host
- :agentic-ai-lab/modules/ai-agentic-context/funs-features
- :agentic-ai-lab/modules/query/semantic/context-restriction
- :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
- :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+ :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
 (export query-durable-driver retain-originals!)
 
 (def (ensure value message)

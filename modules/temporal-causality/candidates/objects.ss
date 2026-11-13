@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/types
                  AgenticAILabCandidateScope AgenticAILabCandidateReceipt
                  AgenticAILabCandidateCheck AgenticAILabCandidateExchange))
 (export agentic-ai-lab-candidate-scope-value agentic-ai-lab-candidate-receipt-value

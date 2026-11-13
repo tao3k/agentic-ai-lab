@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -8,9 +8,9 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
-        :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/sandbox-core/profile-support/resolve)
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/resolve)
 
 (export sandbox-core-profile-runtime-composition-test)
 

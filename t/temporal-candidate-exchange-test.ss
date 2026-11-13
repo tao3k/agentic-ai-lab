@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :agentic-ai-lab/modules/temporal-causality/candidates/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface)
 (export temporal-candidate-exchange-test)
 
 (def (scope generation coverage)

@@ -15,7 +15,7 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
-        :agentic-ai-lab/modules/tool-core/calling-control)
+        :tao3k/agentic-ai-lab/modules/tool-core/calling-control)
 
 (export tool-calling-test)
 

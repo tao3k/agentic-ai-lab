@@ -5,11 +5,11 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token
-        :agentic-ai-lab/modules/authorization/providers/cedar/decision
-        :agentic-ai-lab/modules/governance/policy/strict-mediation
-        :agentic-ai-lab/modules/proof/projections/authorized-effect-evidence
-        :agentic-ai-lab/modules/tool-core/calling-control)
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
+        :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/decision
+        :tao3k/agentic-ai-lab/modules/governance/policy/strict-mediation
+        :tao3k/agentic-ai-lab/modules/proof/projections/authorized-effect-evidence
+        :tao3k/agentic-ai-lab/modules/tool-core/calling-control)
 
 
 (def binding

@@ -10,7 +10,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxuUserConfig)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation))
 
 (export funflow-config-pipeline-scenario-count

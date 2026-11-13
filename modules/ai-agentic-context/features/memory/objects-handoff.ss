@@ -7,9 +7,9 @@
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :tao3k/yuanxu/utilities/final-projection-syntax
-        (only-in :agentic-ai-lab/modules/session/objects-core
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-require)
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core)
 
 (export agentic-ai-lab-memory-handoff-manifest-receipt
         make-agentic-ai-lab-memory-handoff-manifest-receipt

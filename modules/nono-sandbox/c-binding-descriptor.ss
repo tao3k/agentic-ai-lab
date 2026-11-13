@@ -6,15 +6,15 @@
 ;;; Owner: nono-sandbox C binding descriptor contract projection lives here.
 ;;; Boundary: this module emits ABI descriptor data only.
 ;;; Runtime contract: Marlin or another C runtime owns dlopen/FFI execution.
-;;; Source contract: symbols mirror the package-owned bindings/nono-c/nono.h.
+;;; Source contract: symbols mirror the package-owned modules/nono-sandbox/nono-c/nono.h.
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
 (import (only-in :clan/poo/object .ref object?)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/profile)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile)
 
 (export +nono-c-binding-schema+
         +nono-c-binding-access-modes+
@@ -185,12 +185,12 @@
            (library "nono_ffi")
            (adapter-header "agentic_ai_lab_nono_binding.h")
            (adapter-include-ref
-            "bindings/nono-c/agentic_ai_lab_nono_binding.h")
+            "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding.h")
            (header "nono.h")
-           (include-ref "bindings/nono-c/nono.h")
-           (crate-ref "bindings/nono-c")
+           (include-ref "modules/nono-sandbox/nono-c/nono.h")
+           (crate-ref "modules/nono-sandbox/nono-c")
            (probe-ref
-            "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
+            "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c")
            (types +nono-c-binding-types+)
            (functions +nono-c-binding-functions+)
            (access-modes +nono-c-binding-access-modes+)

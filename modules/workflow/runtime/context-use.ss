@@ -3,11 +3,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Strict inert projection into POO-owned Host values; no query-controlled state.
 (import (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host-current)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission temporal-family-current-call))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-admission temporal-family-current-call))
 (export context-use-refresh context-use-observe)
 (def host (agentic-ai-lab-context-use-host))
 (def (field x key)

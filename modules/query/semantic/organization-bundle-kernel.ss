@@ -7,7 +7,7 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle)
 
 (def +agentic-ai-lab-organization-bundle-kernel-state-schema+
   'agentic-ai-lab.organization-bundle-kernel-state.v1)

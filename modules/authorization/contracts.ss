@@ -9,9 +9,9 @@
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
         :tao3k/yuanxu/poo-clos/interface
-        (only-in :agentic-ai-lab/modules/authorization/objects
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
-        (only-in :agentic-ai-lab/modules/authorization/types
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/types
                  agentic-ai-lab-authorization-provider?
                  agentic-ai-lab-authorization-capability?))
 

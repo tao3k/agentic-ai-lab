@@ -11,7 +11,7 @@
         (only-in :std/test test-suite test-case check-equal?)
         (only-in :std/misc/process run-process)
         "./module-system-live-case-object"
-        (only-in :agentic-ai-lab/modules/agent-sandbox/api
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/api
                  agent-sandbox-profile-backend-kind
                  agent-sandbox-profile-metadata
                  agent-sandbox-profile-network-policy
@@ -24,9 +24,9 @@
                  mounts
                  resource-policy
                  workdir)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-sandbox-profile->profile)
-        (only-in :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
                  +nono-c-binding-live-test-receipt-schema+
                  nono-c-binding-dry-run
                  nono-c-binding-live-test))

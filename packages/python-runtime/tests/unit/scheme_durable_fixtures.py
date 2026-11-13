@@ -33,11 +33,11 @@ def _scheme_generated_durable_payloads() -> tuple[bytes, bytes]:
             "-e",
             (
                 "(begin "
-                "(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy "
-                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest "
-                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store "
-                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend "
-                ":agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest) "
+                "(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy "
+                ":tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest "
+                ":tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store "
+                ":tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend "
+                ":tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest) "
                 "(define policy "
                 "(agentic-ai-lab-durable-policy "
                 "(quote durable/python-runtime-envelope) "

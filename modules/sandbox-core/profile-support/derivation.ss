@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-metadata))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -11,15 +11,15 @@
         (only-in :clan/poo/object .def .o .ref .slot? object?)
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
-        :agentic-ai-lab/modules/sandbox-core/resource-contract
-        :agentic-ai-lab/modules/sandbox-core/profile-support/prototype
-        :agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
-        :agentic-ai-lab/modules/sandbox-core/profile-support/authoring)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/prototype
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/authoring)
 
 (export agentic-ai-lab-sandbox-profile-object-option
         agentic-ai-lab-sandbox-profile-object-metadata-key?

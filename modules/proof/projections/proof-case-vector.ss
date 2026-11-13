@@ -8,7 +8,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list iota)
         (only-in :std/encoding/hex hex-decode hex-encode)
-        :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1)
+        :tao3k/agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1)
 
 (export agentic-ai-lab-proof-case-vector-write!
         agentic-ai-lab-proof-case-vector-digest)

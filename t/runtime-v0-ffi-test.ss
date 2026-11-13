@@ -11,16 +11,16 @@
                  JSONReadOptions
                  current-json-read-options
                  string->json)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi
                  contract-abi-version
                  contract-descriptor-payload
                  runtime-query-execution-candidate->json
                  runtime-query-execution-candidate<-json
                  contract-validate-payload
                  runtime-c-round-trip)
-        (only-in :agentic-ai-lab/modules/query/objects
+        (only-in :tao3k/agentic-ai-lab/modules/query/objects
                  agentic-ai-lab-query-execution-candidate)
-        (only-in :agentic-ai-lab/modules/query/types
+        (only-in :tao3k/agentic-ai-lab/modules/query/types
                  agentic-ai-lab-query-execution-candidate?))
 
 (export runtime-v0-ffi-test)

@@ -7,7 +7,7 @@
 ;;; Invariant: communication rows are report-only; Scheme does not deliver
 ;;; messages, mutate sessions, or open runtime channels.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-communication-case)
 

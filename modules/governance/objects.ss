@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
         (only-in :std/list/list filter)
-        (only-in :agentic-ai-lab/modules/governance/types
+        (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile-kind
                  agentic-ai-lab-governance-source-kind
                  agentic-ai-lab-governance-precondition-kind

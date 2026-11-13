@@ -5,7 +5,7 @@
 ;;; acquisition dependency. The legacy activation owner delegates here.
 (import :tao3k/yuanxu/modules/funflow/control-plane/task
         :tao3k/yuanxu/modules/funflow/control-plane/flow
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         (only-in :tao3k/yuanxu/object-family/syntax defpoo-object-family))
 (export agentic-ai-lab-module-activation-prototype
         make-agentic-ai-lab-module-activation

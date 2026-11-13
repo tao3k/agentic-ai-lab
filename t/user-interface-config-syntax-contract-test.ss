@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection->alist
                  yuanxu-user-module-when)
         (only-in :tao3k/yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module agentic-ai-lab-product-selection-admit! agentic-ai-lab-product-selection-validation))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module agentic-ai-lab-product-selection-admit! agentic-ai-lab-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)
 

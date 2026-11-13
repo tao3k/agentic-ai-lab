@@ -7,8 +7,8 @@
 ;;; Invariant: receipts describe runtime state and handoff identity only;
 ;;; Scheme never waits on runtime futures, opens sandbox handles, or replays IO.
 
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/receipt-syntax)
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax)
 
 (export +agentic-ai-lab-session-materialization-states+
         agentic-ai-lab-session-materialization-state?

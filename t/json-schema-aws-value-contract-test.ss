@@ -7,7 +7,7 @@
         :tao3k/yuanxu/modules/json-schema/contracts
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        (only-in :agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-block->schema))
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-block->schema))
 (export json-schema-aws-value-contract-test)
 
 (def (ref value key) (yuanxu-contract-object-ref value key #f))

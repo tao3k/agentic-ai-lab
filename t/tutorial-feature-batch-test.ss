@@ -23,10 +23,10 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/custom-task/interface
-        :agentic-ai-lab/modules/docker/interface
-        :agentic-ai-lab/modules/text/interface
-        (only-in :agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config make-ccompilation-flow make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
+        :tao3k/agentic-ai-lab/modules/custom-task/interface
+        :tao3k/agentic-ai-lab/modules/docker/interface
+        :tao3k/agentic-ai-lab/modules/text/interface
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config make-ccompilation-flow make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
         :tao3k/yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)

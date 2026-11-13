@@ -5,12 +5,12 @@
  (only-in :clan/poo/object .o .ref)
  (only-in :std/list/list find delete-duplicates/hash)
  (only-in
-  :agentic-ai-lab/modules/query/semantic/orgize-source-interface
+  :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface
   parse-org-events
   org-source-headline-elements
   org-source-headline-parser-identity)
  (only-in
-  :agentic-ai-lab/modules/ai-agentic-context/funs-scope
+  :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-scope
   agentic-ai-lab-ai-agentic-context-digest))
 
 (export

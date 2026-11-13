@@ -9,7 +9,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref)
         (only-in :std/test check-equal? test-suite)
-        (only-in :agentic-ai-lab/modules/standards/interface
+        (only-in :tao3k/agentic-ai-lab/modules/standards/interface
                  agentic-ai-lab-standard-budget
                  agentic-ai-lab-standard-catalog
                  agentic-ai-lab-standard-compose-profiles

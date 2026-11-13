@@ -6,10 +6,10 @@
 ;;; Doctor is an Observability projection, not a separate UI/module package.
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test test-suite check-equal?)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
                  agentic-ai-lab-module-doctor
                  yuanxu-module-doctor-report-status)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
                  agentic-ai-lab-module-doctor-presentation-kind))
 
 (export module-doctor-observability-owner-test)

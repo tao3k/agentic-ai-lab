@@ -16,7 +16,7 @@
                  yuanxu-graph-edges yuanxu-graph-node-id
                  yuanxu-graph-edge-from yuanxu-graph-edge-to
                  yuanxu-graph-edge-kind)
-        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/objects
                  agentic-ai-lab-relation-trajectory-witness
                  agentic-ai-lab-structural-impact-receipt
                  agentic-ai-lab-causal-event-graph-value
@@ -25,7 +25,7 @@
                  agentic-ai-lab-temporal-classification-receipt
                  agentic-ai-lab-temporal-model-value
                  agentic-ai-lab-temporal-model-receipt)
-        (only-in :agentic-ai-lab/modules/temporal-causality/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/types
                  agentic-ai-lab-causal-event? agentic-ai-lab-causal-event-graph?
                  agentic-ai-lab-causal-trajectory-contract?
                  agentic-ai-lab-causal-trajectory-assessment?

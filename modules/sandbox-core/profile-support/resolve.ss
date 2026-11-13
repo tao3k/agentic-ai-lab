@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -9,16 +9,16 @@
 (import :gerbil/core
         (only-in :clan/poo/object .o .ref .slot? .extend $constant-slot-spec)
         :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
-        :agentic-ai-lab/modules/sandbox-core/resource-contract
-        :agentic-ai-lab/modules/sandbox-core/profile-support/prototype
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy
-        :agentic-ai-lab/modules/sandbox-core/profile-support/authoring
-        :agentic-ai-lab/modules/sandbox-core/profile-support/derivation)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/prototype
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/authoring
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/derivation)
 
 (export agentic-ai-lab-sandbox-profile-object-slot
         agentic-ai-lab-sandbox-profile-object-base-prototype

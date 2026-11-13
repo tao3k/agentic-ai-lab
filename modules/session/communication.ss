@@ -7,10 +7,10 @@
 ;;; Invariant: communication receipts describe routing intent only; Scheme does
 ;;; not deliver messages or mutate source/target sessions.
 
-(import :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/receipt-syntax
-        :agentic-ai-lab/modules/session/receipt-projection)
+(import :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-projection)
 
 (export +agentic-ai-lab-session-communication-receipt-kind+
         +agentic-ai-lab-session-communication-receipt-schema+

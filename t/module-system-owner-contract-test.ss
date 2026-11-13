@@ -24,13 +24,13 @@
                  test-suite)
         (only-in :clan/poo/object .o .def .cc .ref .get .call object-slots $constant-slot-spec? $self-slot-spec?)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/authoring/syntax
-        :agentic-ai-lab/modules/module-authoring/module-option-projection
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-option-projection
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
                  agenticAiLabModuleDoctorPresentation)
         :tao3k/yuanxu/module-system/catalog/values
         :tao3k/yuanxu/module-system/projection/option-objects
@@ -38,7 +38,7 @@
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
         :tao3k/yuanxu/module-system/funs
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :tao3k/yuanxu/module-system/catalog/objects)
 
 (export module-system-owner-contract-test)
@@ -75,13 +75,13 @@
         (lambda (port)
           (source-port-has-module-prefix?
            port
-           ":agentic-ai-lab/modules/"
+           ":tao3k/agentic-ai-lab/modules/"
            ":tao3k/yuanxu/")))
        #f)
       (check-equal?
        (source-datum-has-module-prefix?
-        '(import :agentic-ai-lab/modules/workflow/cicd-runtime)
-        ":agentic-ai-lab/modules/" ":tao3k/yuanxu/")
+        '(import :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime)
+        ":tao3k/agentic-ai-lab/modules/" ":tao3k/yuanxu/")
        #t))
     (yuanxu-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface
@@ -326,7 +326,7 @@
                (.o id: 'root
                    imports:
                    (yuanxu-imports
-                    (yuanxu-import ":agentic-ai-lab/modules/root#child" child))
+                    (yuanxu-import ":tao3k/agentic-ai-lab/modules/root#child" child))
                    config: (.o surface: "root")
                    flags: '(+root)
                    depth: (cons 10 10)

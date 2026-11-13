@@ -9,7 +9,7 @@
 ;;; stay in separate owner leaves to keep policy repair local to the branch that
 ;;; owns the behavior.
 
-(import (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-support/checks
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/checks
                  agentic-ai-lab-cicd-check->runtime-command-manifest
                  agentic-ai-lab-cicd-check->receipt
                  agentic-ai-lab-cicd-check-map->receipts
@@ -17,12 +17,12 @@
                  agentic-ai-lab-cicd-check-map->runtime-command-manifests)
         (only-in :tao3k/yuanxu/modules/funflow/dependency-graph
                  yuanxu-cicd-check-map->dependency-graph)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-support/pipeline
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/pipeline
                  agentic-ai-lab-cicd-check->pipeline-run-step
                  agentic-ai-lab-cicd-check-map->pipeline-run
                  agentic-ai-lab-cicd-pipeline-run->result
                  agentic-ai-lab-cicd-check-map->pipeline-result)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-support/marlin-abi
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/marlin-abi
                  agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi
                  agentic-ai-lab-cicd-check-map->marlin-runtime-handoff-abi))
 

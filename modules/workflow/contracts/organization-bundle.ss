@@ -7,7 +7,7 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle)
 
 ;; : (-> AgenticAILabOrganizationBundle AgenticAILabOrganizationBundleContract)
 (def (agentic-ai-lab-organization-bundle->contract bundle)

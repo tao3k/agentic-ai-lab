@@ -11,7 +11,7 @@
                  yuanxu-semantic-identity yuanxu-empty-imports
                  SemanticImports. ModuleImportsContract)
         :tao3k/yuanxu/module-system/authoring/roles
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export semantic-module-test)
 (def semantic-module-test
   (test-suite "role-constrained runtime Module"

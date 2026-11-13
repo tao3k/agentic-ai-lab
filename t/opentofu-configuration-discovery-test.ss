@@ -4,7 +4,7 @@
 (import :std/test
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         :tao3k/yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. OpenTofuConfiguration.)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. OpenTofuConfiguration.)
         :tao3k/yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-configuration-discovery-test)
 

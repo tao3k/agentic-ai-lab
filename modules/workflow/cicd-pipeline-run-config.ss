@@ -7,9 +7,9 @@
 ;;; Invariant: this owner emits handoff-readiness data and never executes CI.
 
 (import :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/sandbox-core/profile-catalog
-        :agentic-ai-lab/modules/workflow/cicd-config
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->pipeline-run agentic-ai-lab-cicd-check-map->pipeline-result))
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->pipeline-run agentic-ai-lab-cicd-check-map->pipeline-result))
 
 (export agentic-ai-lab-user-workflow-cicd-pipeline-runs/add
         agentic-ai-lab-user-config-workflow-cicd-pipeline-runs

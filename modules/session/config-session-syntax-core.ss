@@ -6,7 +6,7 @@
 ;;; session module category and its feature-level expansions.
 ;;; Invariant: core expansions must stay deterministic for loader and policy
 ;;; diagnostics.
-(import :agentic-ai-lab/modules/session/config-session-runtime)
+(import :tao3k/agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session
         session-graph

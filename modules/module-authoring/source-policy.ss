@@ -11,7 +11,7 @@
       aggregate-imports:
       '(:tao3k/yuanxu/modules/funflow/control-plane/api
         :tao3k/yuanxu/module-system/feature/interface)
-      package-prefix: ":agentic-ai-lab/"
+      package-prefix: ":tao3k/agentic-ai-lab/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")
       forbidden-projections: '(yuanxu-module-source-collection-interfaces all-gerbil-modules modules)))
 

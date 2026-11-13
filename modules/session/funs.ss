@@ -9,7 +9,7 @@
 (import "funs-attempt.ss" "funs-identity.ss"
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/module-authoring/module-config-syntax)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax)
 
 (export (import: "funs-attempt.ss") (import: "funs-identity.ss") +agentic-ai-lab-session-config-kind+
         session-config

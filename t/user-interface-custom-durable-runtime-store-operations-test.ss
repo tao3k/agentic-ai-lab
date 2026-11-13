@@ -11,7 +11,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
                  +agentic-ai-lab-durable-runtime-store-operation-specs+)
         (only-in "../user-interface/custom/my-module/cases/durable-runtime-store-operations"
                  agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case))

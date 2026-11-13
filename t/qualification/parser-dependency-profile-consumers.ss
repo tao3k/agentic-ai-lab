@@ -5,8 +5,8 @@
 ;;; This fixture is not evidence of a fresh full compilation or CI wall time.
 (import (only-in :gerbil/expander/module core-resolve-library-module-path)
         (rename-in (only-in :orgize/languages/org/event-runtime parse-org-native-events) (parse-org-native-events parse-org-events))
-        :agentic-ai-lab/modules/query/gql
-        :agentic-ai-lab/modules/query/rust-ir)
+        :tao3k/agentic-ai-lab/modules/query/gql
+        :tao3k/agentic-ai-lab/modules/query/rust-ir)
 (export main)
 (def (main selected-root selected-spec)
   (for-each

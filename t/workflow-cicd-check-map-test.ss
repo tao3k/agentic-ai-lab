@@ -12,10 +12,10 @@
                  check-equal?
                  )
         (only-in :clan/poo/object .ref object?)
-        :agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
         (only-in :tao3k/yuanxu/modules/funflow/check-types +yuanxu-cicd-check-receipt-schema+ yuanxu-cicd-check-map-kind)
         (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check? yuanxu-cicd-check-map yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-command yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts))
 
 (export workflow-cicd-check-map-test)
 

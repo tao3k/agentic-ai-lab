@@ -12,9 +12,9 @@
                  check-equal?
                  )
           (only-in :clan/poo/object .ref object?)
-          (only-in :agentic-ai-lab/modules/workflow/flows-alignment-report
+          (only-in :tao3k/agentic-ai-lab/modules/workflow/flows-alignment-report
                    agentic-ai-lab-funflow-tutorial-alignment-report)
-          (only-in :agentic-ai-lab/modules/workflow/flows-alignment-specs
+          (only-in :tao3k/agentic-ai-lab/modules/workflow/flows-alignment-specs
                    agentic-ai-lab-funflow-tutorial-alignment-schema
                    agentic-ai-lab-funflow-tutorial-alignment-report-kind
                    agentic-ai-lab-funflow-tutorial-alignment-spec?

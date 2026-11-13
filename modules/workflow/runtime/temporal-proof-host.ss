@@ -3,10 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Strict owner wire projections of the runtime Library proof Host.
 (import (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-context-input temporal-rule-program-input)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-journal-input temporal-support-result))
+        :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-context-input temporal-rule-program-input)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-journal-input temporal-support-result))
 (export temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
 (def host (agentic-ai-lab-temporal-proof-host (temporal-policy-host-host)))
 (def (field x k)

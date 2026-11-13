@@ -20,7 +20,7 @@
                  yuanxu-contract-value-type
                  yuanxu-object-contract
                  yuanxu-object-contract->alist)
-        :agentic-ai-lab/modules/loop-engine/control/governor-core-slot-rows)
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-core-slot-rows)
 
 (export +loop-governor-schema+
         +loop-governor-node-schema+

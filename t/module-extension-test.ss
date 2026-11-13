@@ -17,13 +17,13 @@
                  check-true
                  test-error
                  test-suite)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/cubeSandbox/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/cubeSandbox/objects)
 
 (export module-extension-test)
 

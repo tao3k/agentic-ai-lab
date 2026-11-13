@@ -56,8 +56,8 @@ ORIGINALS = {
 }
 INPUTS = tuple(dict.fromkeys([
     *(m + '.ss' for m in MODULES), *ORIGINALS.values(),
-    'gerbil.pkg', '.gerbil/pkg/github.com/tao3k/orgize/gerbil.pkg', 'build-spec.ss', 'dev/just/build.just', 'dev/just/runtime-tests.just',
-    't/harness/context-query-driver.ss', 'build.ss',
+    'gerbil.pkg', '.gerbil/pkg/github.com/tao3k/orgize/gerbil.pkg', 'build.ss', 'dev/just/build.just', 'dev/just/runtime-tests.just',
+    't/harness/context-query-driver.ss',
     *[str(p.relative_to(ROOT)) for p in sorted((ROOT / 'modules/ai-agentic-context/org-contract/templates').glob('*.org'))],
     str(Path(__file__).resolve().relative_to(ROOT)),
 ]))

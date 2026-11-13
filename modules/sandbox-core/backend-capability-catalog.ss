@@ -7,7 +7,7 @@
 ;;; Invariant: catalog helpers read user module selections but never probe runtimes.
 
 (import :tao3k/yuanxu/module-system/selection/objects
-        (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
                  agentic-ai-lab-sandbox-backend-capability-registry/sandbox-core
                  agentic-ai-lab-sandbox-backend-capability-registry-merge
                  agentic-ai-lab-sandbox-backend-capability-registry-ref

@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Orgize and canonical Query own selection. This module binds scope and content.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        :agentic-ai-lab/modules/query/orgize-source
-        :agentic-ai-lab/modules/query/semantic/context-restriction
+        :tao3k/agentic-ai-lab/modules/query/orgize-source
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
         "funs-scope.ss" "funs-features.ss")
 (export agentic-ai-lab-ai-agentic-context-org-project-incremental
         agentic-ai-lab-ai-agentic-context-org-project

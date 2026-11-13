@@ -7,12 +7,12 @@
 ;;; Invariant: forms create POO policy, validation, memory, and transform
 ;;; values only; runtime execution remains outside Scheme.
 
-(import :agentic-ai-lab/modules/session/durable-policy
-        (only-in :agentic-ai-lab/modules/session/config-session-syntax
+(import :tao3k/agentic-ai-lab/modules/session/durable-policy
+        (only-in :tao3k/agentic-ai-lab/modules/session/config-session-syntax
                  agentic-ai-lab-session-syntax-chunk)
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/session/policy-validation
-        :agentic-ai-lab/modules/session/transform)
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/session/policy-validation
+        :tao3k/agentic-ai-lab/modules/session/transform)
 
 (export session-tool-grant
         session-tool-policy

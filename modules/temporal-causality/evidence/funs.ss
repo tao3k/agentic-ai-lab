@@ -9,11 +9,11 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/evidence/types
                  agentic-ai-lab-evidence-retrieval? agentic-ai-lab-evidence-use?
                  agentic-ai-lab-evidence-assessment?
                  agentic-ai-lab-evidence-dependency? agentic-ai-lab-evidence-lineage?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/evidence/objects
                  agentic-ai-lab-evidence-retrieval-value agentic-ai-lab-evidence-use-value
                  agentic-ai-lab-evidence-assessment-value
                  agentic-ai-lab-evidence-dependency-value agentic-ai-lab-evidence-lineage-value

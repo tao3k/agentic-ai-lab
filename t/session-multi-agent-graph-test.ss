@@ -12,7 +12,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/session/config)
+        :tao3k/agentic-ai-lab/modules/session/config)
 
 (export session-multi-agent-graph-test)
 

@@ -9,7 +9,7 @@
 
 (import (only-in :gerbil/core fx+)
         (only-in :clan/poo/object .o .ref object? object<-alist)
-        :agentic-ai-lab/modules/session/objects)
+        :tao3k/agentic-ai-lab/modules/session/objects)
 
 
 (export agentic-ai-lab-session-transform
@@ -39,7 +39,7 @@
         agentic-ai-lab-session-memory-receipt?
         agentic-ai-lab-session-memory-receipt-name)
 
-(import :agentic-ai-lab/modules/session/transform-support/memory-intent)
+(import :tao3k/agentic-ai-lab/modules/session/transform-support/memory-intent)
 
 (defstruct agentic-ai-lab-session-memory-receipt-record
   (kind

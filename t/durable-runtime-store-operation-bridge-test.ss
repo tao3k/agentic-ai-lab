@@ -10,11 +10,11 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge)
 
 (export durable-runtime-store-operation-bridge-test)
 

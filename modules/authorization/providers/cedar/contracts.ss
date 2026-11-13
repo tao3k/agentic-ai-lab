@@ -8,11 +8,11 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/governance/types
+        (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assessment?)
         :tao3k/yuanxu/poo-clos/interface
-        (only-in :agentic-ai-lab/modules/authorization/contracts
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric
                  agentic-ai-lab-authorization-capability-contract/default)

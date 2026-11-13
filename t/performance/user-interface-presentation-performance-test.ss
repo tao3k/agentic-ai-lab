@@ -21,9 +21,9 @@
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules
                  yuanxuUserConfig)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
-        (only-in :agentic-ai-lab/modules/loop-engine/runtime
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?)
         (only-in "../../user-interface/custom/my-module/cases/loop-engine-owner"
                  agentic-ai-lab-custom-my-module-loop-engine-case))

@@ -7,14 +7,14 @@
 ;;; Invariant: this bridges user-visible durable rows to Marlin operation
 ;;; receipts only; Scheme does not execute runtime store side effects.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/config)
+(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/config)
 
 (export agentic-ai-lab-custom-my-module-durable-operation-bridge-case)
 

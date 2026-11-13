@@ -1,6 +1,6 @@
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -41,7 +41,7 @@
 
 (def crewai-scenario
   (.new Scenario name: 'crewai-scenario
-        config: (let ((CrewAIModule (.get agentic-ai-lab.init.exports Profiles crewai profile)))
+        config: (let ((CrewAIModule (.get tao3k/agentic-ai-lab.init.exports Profiles crewai profile)))
     (compose profiles
     (use-module CrewAIModule as crew
       agent task crew planning memory knowledge sequential-process flow-state

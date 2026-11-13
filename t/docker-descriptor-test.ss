@@ -21,8 +21,8 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/docker/interface
-        :agentic-ai-lab/modules/agent-sandbox/resource)
+        :tao3k/agentic-ai-lab/modules/docker/interface
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export docker-descriptor-test)
 

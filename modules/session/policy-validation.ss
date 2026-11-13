@@ -7,8 +7,8 @@
 ;;; Implementation lives in policy-validation-* modules so catalog, transport,
 ;;; and receipt projection checks remain independently auditable.
 
-(import :agentic-ai-lab/modules/session/policy-validation-support
-        :agentic-ai-lab/modules/session/policy-validation-receipt)
+(import :tao3k/agentic-ai-lab/modules/session/policy-validation-support
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-receipt)
 
 (export agentic-ai-lab-session-policy-tool-attempt
         agentic-ai-lab-session-policy-tool-attempt?

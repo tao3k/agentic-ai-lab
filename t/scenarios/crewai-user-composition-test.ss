@@ -11,7 +11,7 @@
         (only-in :clan/poo/mop element?)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
-        :agentic-ai-lab/user-interface/scenarios/crewai/scenario)
+        :tao3k/agentic-ai-lab/user-interface/scenarios/crewai/scenario)
 
 
 (def crewai-composition

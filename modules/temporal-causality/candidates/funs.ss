@@ -9,10 +9,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list any every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/types
                  agentic-ai-lab-candidate-scope?
                  agentic-ai-lab-candidate-receipt? agentic-ai-lab-candidate-check?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/objects
                  agentic-ai-lab-candidate-scope-value
                  agentic-ai-lab-candidate-receipt-value agentic-ai-lab-candidate-check-value
                  agentic-ai-lab-candidate-exchange-value))

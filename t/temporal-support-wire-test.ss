@@ -2,8 +2,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        :agentic-ai-lab/modules/workflow/runtime/scheme-wire
-        :agentic-ai-lab/modules/workflow/runtime/temporal-support :agentic-ai-lab/modules/workflow/runtime/temporal-policy)
+        :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire
+        :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-support :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-policy)
 (export temporal-support-wire-test)
 (def (wire x) (scheme-wire-read (scheme-wire-write x)))
 (def (revision id op predecessor n)

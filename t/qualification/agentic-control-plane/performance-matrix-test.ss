@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/workflow/qualification/performance-matrix)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/performance-matrix)
 
 (export performance-matrix-test)
 

@@ -8,11 +8,11 @@
           (only-in :tao3k/yuanxu/observability/testing-source install-test-source-observation!)))
 (begin-syntax (install-test-source-observation!))
 (import (only-in :std/error Error?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/objects agentic-ai-lab-causal-event agentic-ai-lab-temporal-observation)
-        (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph agentic-ai-lab-causal-cut)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs agentic-ai-lab-temporal-bounded-observation)
-        :agentic-ai-lab/modules/temporal-causality/ascent-exchange
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/objects agentic-ai-lab-causal-event agentic-ai-lab-temporal-observation)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph agentic-ai-lab-causal-cut)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs agentic-ai-lab-temporal-bounded-observation)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/ascent-exchange
         (only-in :std/test test-suite test-case check-equal? check-exception)
         (only-in :clan/poo/object object? .o)
         (only-in :gerbil-ascent/temporal/lens

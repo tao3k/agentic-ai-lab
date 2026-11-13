@@ -25,7 +25,7 @@
         "(def Config (.o expression: \"release.nix\"))\n")
       (write-source (path-expand "objects.ss" owner)
         (string-append
-          "(import (only-in :std/source this-source-file) (only-in :agentic-ai-lab/modules/nix/objects NixSource.) (only-in \"./config.ss\" Config))\n(export ReleaseSource)\n"
+          "(import (only-in :std/source this-source-file) (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.) (only-in \"./config.ss\" Config))\n(export ReleaseSource)\n"
           "(.def (ReleaseSource @ NixSource.) expression: "
           "(path-expand (.get Config expression) (path-directory (this-source-file)))\n"
           ;; A publisher bootstraps before its first approved packet exists.
@@ -35,9 +35,9 @@
       (write-source (path-expand "types.ss" owner)
         "(import (only-in :clan/poo/mop Type.))\n(export ScopeContract)\n(def ScopeContract (.cc Type. identity: 'release/scope .element?: (lambda (v) (and (object? v) (.slot? v 'Source)))))\n")
       (write-source (path-expand "interface.ss" owner)
-        "(.def Release identity: 'building/release core: (.o requires: (.o) build-publication: ReleaseSource scope-contract: ScopeContract exports: (.o Source: ReleaseSource)) features: (.o))\n")
+        "(.def Release identity: 'building/release core: (.o build-publication: ReleaseSource scope-contract: ScopeContract exports: (.o Source: ReleaseSource)) features: (.o))\n")
       (write-source (path-expand "init.ss" workspace)
-        "(yuanxu! mode: explicit (closed-package disable: #t) :services (postgresql) (gitea) (unused disable: #t) :applications (gitea-postgresql) :building (release))\n")
+        "(yuanxu! :test-dir \"./t\" mode: explicit (closed-package disable: #t) :services (postgresql) (gitea) (unused disable: #t) :applications (gitea-postgresql) :building (release))\n")
       (write-source (path-expand "probe.ss" workspace) "(export answer) (def answer 42)\n")
       ;; Declare generated package inputs before selecting the source directory.
       ;; Publication must not add directory members to an already observed epoch.

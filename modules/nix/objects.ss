@@ -59,7 +59,7 @@
           ;; entry guard when its caller has immediately run that exact guard.
           ;; Tail checks and all external effect boundaries remain unchanged.
           admit-current: (module-source-operation-procedure %source-operation)
-          guard-imports: '(:agentic-ai-lab/modules/nix/objects)
+          guard-imports: '(:tao3k/agentic-ai-lab/modules/nix/objects)
           guard-forms:
           (list (.call source-value .guard-form derivation)))))
   .build:

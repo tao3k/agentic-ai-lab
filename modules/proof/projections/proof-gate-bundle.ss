@@ -4,10 +4,10 @@
 
 ;;; Proof gate bundle construction and validation.
 ;;; - Keep composition, scenario, and handoff proof wires joined at one bounded gate boundary.
-(import :agentic-ai-lab/modules/proof/projections/proof-fact-wire
-        :agentic-ai-lab/modules/proof/projections/composition-facts
-        :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
-        :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
+(import :tao3k/agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :tao3k/agentic-ai-lab/modules/proof/projections/composition-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
 
 (export agentic-ai-lab-proof-wire-field-ref
         agentic-ai-lab-proof-gate-bundle

@@ -7,7 +7,7 @@
 ;;; Invariant: selector declarations stay pending receipts; Marlin owns model
 ;;; scoring, workflow dispatch, and selected-result materialization.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-selector-case)
 

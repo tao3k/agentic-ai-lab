@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/types
                  AgenticAILabTemporalFamilyRevision AgenticAILabTemporalFamilyArchive))
 (export agentic-ai-lab-temporal-family-revision-value agentic-ai-lab-temporal-family-archive-value)
 (def (agentic-ai-lab-temporal-family-revision-value

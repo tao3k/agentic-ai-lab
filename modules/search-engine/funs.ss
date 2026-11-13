@@ -10,12 +10,12 @@
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/search-engine/objects
+        :tao3k/agentic-ai-lab/modules/search-engine/objects
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  external-flow flow-fanout flow-input-contract
                  flow-output-contract flow-then)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/graph flow->dag-receipt)
-        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/objects
                  agentic-ai-lab-causal-event agentic-ai-lab-temporal-observation))
 
 (export agentic-ai-lab-search-stage

@@ -7,10 +7,10 @@
 ;;; Invariant: this declares operation receipts only; Marlin owns all durable
 ;;; store side effects.
 
-(import :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation)
+(import :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation)
 
 (export agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case)
 

@@ -22,7 +22,7 @@
 ;; The compiler resolves public application imports through its package prefix.
 ;; Register application sources, while keeping Core and the SDK compiled.
 (def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
-(register-module-build-source! root 'agentic-ai-lab)
+(register-module-build-source! root 'tao3k/agentic-ai-lab)
 ;; The adapter consumes Core's test support as source-owned prerequisites.
 ;; These are deliberately absent from the installed production library.
 (register-module-build-source! (path-expand "core" root) (quote tao3k/yuanxu))
@@ -35,17 +35,15 @@
     (and (symbol? identity)
       (let (name (symbol->string identity))
         (cond
-         ((string=? "agentic-ai-lab/services" name) "services.ss")
-         ((string=? "agentic-ai-lab/nix-contracts" name) "nix-contracts.ss")
-         ((string=? "agentic-ai-lab/opentofu-contracts" name) "opentofu-contracts.ss")
-         ((string=? "agentic-ai-lab/bindings/nix-c-api/derivation-session" name)
+         ((string=? "tao3k/agentic-ai-lab/services" name) "services.ss")
+         ((string=? "tao3k/agentic-ai-lab/bindings/nix-c-api/derivation-session" name)
           "bindings/nix-c-api/derivation-session.ss")
-         ((or (string-prefix? "agentic-ai-lab/modules/nix/" name)
-              (string-prefix? "agentic-ai-lab/modules/services/" name)
-              (string-prefix? "agentic-ai-lab/t/qualification/nix/" name)
-              (string-prefix? "agentic-ai-lab/t/qualification/build-publication/" name))
+         ((or (string-prefix? "tao3k/agentic-ai-lab/modules/nix/" name)
+              (string-prefix? "tao3k/agentic-ai-lab/modules/services/" name)
+              (string-prefix? "tao3k/agentic-ai-lab/t/qualification/nix/" name)
+              (string-prefix? "tao3k/agentic-ai-lab/t/qualification/build-publication/" name))
           (string-append
-            (substring name (string-length "agentic-ai-lab/") (string-length name)) ".ss"))
+            (substring name (string-length "tao3k/agentic-ai-lab/") (string-length name)) ".ss"))
          ((or (string-prefix? "tao3k/yuanxu/t/qualification/service-publication/" name)
               (string-prefix? "tao3k/yuanxu/t/qualification/testing/" name)
               (string-prefix? "tao3k/yuanxu/t/qualification/build-publication/" name))
@@ -81,11 +79,11 @@
            (filter (cut string-prefix? "core/" <>) ordered-sources))
   srcdir: (path-expand "core" root) libdir: output prefix: "yuanxu")
 (make (filter (lambda (source) (not (string-prefix? "core/" source))) ordered-sources)
-  srcdir: root libdir: output prefix: "agentic-ai-lab")
+  srcdir: root libdir: output prefix: "tao3k/agentic-ai-lab")
 (def link-inputs (module-static-compiler-inputs (reverse tool-contexts) owned-identities))
 (call-with-static-compiler-inputs (.o static-inputs: link-inputs)
   (lambda ()
     (make (list (list exe: "t/qualification/nix/tools" bin: "build-publication-tools"
                       "-ld-options" (pkg-config-libs "libcrypto" "libssl")))
-      srcdir: root libdir: output prefix: "agentic-ai-lab")))
+      srcdir: root libdir: output prefix: "tao3k/agentic-ai-lab")))
 (displayln "NIX-ADAPTER-BUILD-OK")

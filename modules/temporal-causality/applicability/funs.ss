@@ -2,10 +2,10 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
                  agentic-ai-lab-temporal-family-admission-replay
                  agentic-ai-lab-temporal-source-snapshot-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/applicability/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/objects
                  agentic-ai-lab-temporal-family-applicability-value))
 (export agentic-ai-lab-temporal-family-applicability)
 ;;; Pure comparison with an independently selected host snapshot. This does not

@@ -28,7 +28,7 @@
 
 (def AgenticAILabQueryModule.
   (.o kind: 'agentic-ai-lab.query.module
-      identity: 'agentic-ai-lab/modules/query
+      identity: 'tao3k/agentic-ai-lab/modules/query
       query: AgenticAILabQuery.
       languages:
       (.o gql: AgenticAILabGqlQueryLanguage.

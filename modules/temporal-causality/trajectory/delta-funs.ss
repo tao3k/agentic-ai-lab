@@ -8,11 +8,11 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/types
                  agentic-ai-lab-temporal-trajectory-series?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/funs
                  agentic-ai-lab-temporal-trajectory-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/delta-objects
                  agentic-ai-lab-temporal-trajectory-delta-value))
 (export agentic-ai-lab-temporal-trajectory-delta)
 

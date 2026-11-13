@@ -3,23 +3,23 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; AOT semantic projection: inert Scheme data enters existing Scheme owners.
-(import (only-in :agentic-ai-lab/modules/workflow/runtime/context-use context-use-refresh context-use-observe)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/context-lifecycle
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/context-use context-use-refresh context-use-observe)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/context-lifecycle
                  context-lifecycle-command context-lifecycle-inspect context-lifecycle-shutdown)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/context-restriction context-restriction-compose-call context-flow-evaluate-call)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof-host temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
-        (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/fact agentic-ai-lab-temporal-mrr-fact-content)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/context-restriction context-restriction-compose-call context-flow-evaluate-call)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-proof-host temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/fact agentic-ai-lab-temporal-mrr-fact-content)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-call temporal-support-revise-call)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-admit)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-refresh temporal-policy-guard-call temporal-policy-claim-call)
-        :std/ffi (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-call temporal-support-revise-call)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-admit)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-refresh temporal-policy-guard-call temporal-policy-claim-call)
+        :std/ffi (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-admission
                  temporal-source-register temporal-family-admit-call temporal-family-current-call
                  temporal-family-revision-root-call temporal-family-revision-change-call temporal-family-journal-call)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-archive
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-archive
                  temporal-family-archive-export-call temporal-family-archive-replay-call)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-family
                  temporal-family-call temporal-family-observe)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
@@ -365,6 +365,6 @@ C
   "agentic_ai_lab_semantic_evaluate" "extern"
   (with-exception-catcher
    (lambda (exception)
-     (agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 4 (string->utf8
-                    (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-error exception))))
-   (lambda () (agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 0 (string->utf8 (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call operation payload)))))))
+     (tao3k/agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 4 (string->utf8
+                    (tao3k/agentic-ai-lab/modules/workflow/runtime/semantic#semantic-error exception))))
+   (lambda () (tao3k/agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 0 (string->utf8 (tao3k/agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call operation payload)))))))

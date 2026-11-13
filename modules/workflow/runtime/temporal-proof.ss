@@ -6,8 +6,8 @@
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot reasoning-attempt reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes positive-proof-roots
                  proof-node-id proof-node-row proof-node-relation)
-        :agentic-ai-lab/modules/temporal-causality/evaluator/interface
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-journal-input))
+        :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/interface
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-journal-input))
 (export temporal-derivation-admit temporal-derivation-context-input temporal-rule-program-input)
 (def (field x k)
   (unless (and (hash-table? x) (hash-key? x k)) (error "missing derivation field" k)) (hash-ref x k))

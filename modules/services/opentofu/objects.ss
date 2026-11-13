@@ -10,6 +10,7 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
         "./func.ss" "./collections.ss" "./types.ss" "./config.ss" "./source.ss"
+        (only-in :tao3k/yuanxu/modules/json-schema/config JsonSchemaScope)
         (only-in :tao3k/yuanxu/module-system/source/objects make-yuanxu-module-source-ref)
         (only-in :clan/poo/mop element?)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref
@@ -17,7 +18,7 @@
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows
                  yuanxu-json-schema-candidate-slot))
-(export agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract
+(export JsonSchemaScope agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract
         agentic-ai-lab-opentofu-configuration-from-types
         agentic-ai-lab-opentofu-normalize-block
         OpenTofuModule. OpenTofuScope. OpenTofuConfiguration.

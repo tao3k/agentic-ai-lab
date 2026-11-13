@@ -12,7 +12,7 @@
         (only-in :clan/poo/trie UIntTrieSet)
         (only-in :clan/poo/support/base until)
         (only-in :std/list/list filter)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
                  agentic-ai-lab-ascent-relation-closure-bounded))
 
 (export agentic-ai-lab-ascent-binary-relation

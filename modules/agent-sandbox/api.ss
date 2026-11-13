@@ -9,7 +9,7 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Agent sandbox facade and task/flow opt-in live here.
 ;;; Boundary: profile, request, and bridge contracts live in leaf modules.
-;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox= exports.
+;;; Import contract: users opt in through =:tao3k/agentic-ai-lab/modules/agent-sandbox= exports.
 ;;; Runtime contract: Marlin or another runtime owns real sandbox execution.
 ;;; Runtime contract: LLM calls, API/R surfaces, and C bindings stay out of Scheme.
 ;;; Policy evidence: tests should validate this facade plus leaf contracts.
@@ -29,21 +29,21 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/config make-run-config)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow)
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/profile-candidate
-        :agentic-ai-lab/modules/agent-sandbox/request
-        :agentic-ai-lab/modules/agent-sandbox/request-macro
-        :agentic-ai-lab/modules/agent-sandbox/bridge
-        :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-candidate
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-macro
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/marlin-interface)
 
-(export (import: :agentic-ai-lab/modules/agent-sandbox/alist)
-        (import: :agentic-ai-lab/modules/agent-sandbox/profile)
-        (import: :agentic-ai-lab/modules/agent-sandbox/profile-candidate)
-        (import: :agentic-ai-lab/modules/agent-sandbox/request)
-        (import: :agentic-ai-lab/modules/agent-sandbox/request-macro)
-        (import: :agentic-ai-lab/modules/agent-sandbox/bridge)
-        (import: :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
+(export (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/alist)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/profile)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-candidate)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-macro)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/marlin-interface)
         agent-sandbox-task-family-descriptor
         make-agent-sandbox-task-family-registry
         agent-sandbox-enable-strategy

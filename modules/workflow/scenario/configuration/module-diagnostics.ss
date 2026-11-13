@@ -9,7 +9,7 @@
 (import (only-in :std/list/list append-map)
         :tao3k/yuanxu/modules/funflow/control-plane/task
         :tao3k/yuanxu/modules/funflow/control-plane/flow
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-stable-duplicates)
         (rename-in :tao3k/yuanxu/module-system/observability/diagnostics

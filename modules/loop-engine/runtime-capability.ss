@@ -7,12 +7,12 @@
 ;;; Invariant: capability receipts are inert handoff facts; this owner never
 ;;; probes, opens, validates, or executes a runtime backend.
 
-(import (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+(import (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
                  agentic-ai-lab-sandbox-backend-capability?
                  agentic-ai-lab-sandbox-backend-capability/backend-kind
                  agentic-ai-lab-sandbox-backend-capability/capabilities
                  agentic-ai-lab-sandbox-backend-capability-registry-entries)
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         "core.ss"
         "runtime-base.ss"
         :tao3k/yuanxu/utilities/runtime-receipt-syntax

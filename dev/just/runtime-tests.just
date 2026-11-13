@@ -252,7 +252,7 @@ test-context-clock:
 
 [group('test')]
 test-context-clock-primitive:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (monotonic-seconds))'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (monotonic-seconds))'
 
 # Each process is heap fenced before importing the persistent runtime owner.
 [group('test')]

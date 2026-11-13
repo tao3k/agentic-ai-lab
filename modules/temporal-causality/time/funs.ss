@@ -6,7 +6,7 @@
 ;;; Pure partial comparison. Unknown means evidence is declared rather than
 ;;; observed; incomparable means distinct clock domains without conversion.
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant? agentic-ai-lab-temporal-interval?))
 
 (export agentic-ai-lab-temporal-compare agentic-ai-lab-temporal-interval-contains?

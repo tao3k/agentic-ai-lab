@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .cc .o .ref)
-        :agentic-ai-lab/modules/proof/interface)
+        :tao3k/agentic-ai-lab/modules/proof/interface)
 
 (export proof-module-core-test)
 

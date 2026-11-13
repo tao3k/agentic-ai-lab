@@ -5,8 +5,7 @@
   identity: 'ai-agentic-context
   tags: '(context)
   core:
-  (.o requires: (.o)
-      scope-contract: ContextScopeContract
+  (.o scope-contract: ContextScopeContract
       exports: (.o config: Config profile: ContextCoreProfile))
   features:
   (.o memory: (.o refine: EnableMemory contract: ContextMemoryScopeContract)))

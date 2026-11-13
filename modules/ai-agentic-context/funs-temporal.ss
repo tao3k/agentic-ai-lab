@@ -4,10 +4,10 @@
 ;;; Pure Context lifecycle window policy over existing Temporal primitives.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant agentic-ai-lab-temporal-interval)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/funs agentic-ai-lab-temporal-interval-contains?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs agentic-ai-lab-temporal-bounded-observation-replay)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant agentic-ai-lab-temporal-interval)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/funs agentic-ai-lab-temporal-interval-contains?)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs agentic-ai-lab-temporal-bounded-observation-replay)
         "types.ss" "objects.ss" "funs-scope.ss")
 (export agentic-ai-lab-ai-agentic-context-temporal-policy
         agentic-ai-lab-ai-agentic-context-temporal-policy-replay

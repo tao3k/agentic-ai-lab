@@ -12,8 +12,8 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
 
         (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-command yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
         (only-in "../user-interface/custom/my-module/cases/poo-introspection"

@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Phase measurements are qualification projections, not a configuration DSL.
 (import :std/test :clan/poo/object "./cases.ss"
-        :agentic-ai-lab/bindings/nix-c-api/binding
+        :tao3k/agentic-ai-lab/bindings/nix-c-api/binding
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)

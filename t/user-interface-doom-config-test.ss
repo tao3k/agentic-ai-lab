@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+(import (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -12,17 +12,17 @@
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
         :tao3k/yuanxu/module-system/source/collection
-        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         (only-in :tao3k/yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-value)
 
-        (only-in :agentic-ai-lab/user-interface/scenarios/langchain/scenario
+        (only-in :tao3k/agentic-ai-lab/user-interface/scenarios/langchain/scenario
                  langchain-scenario)
-        (only-in :agentic-ai-lab/user-interface/scenarios/tool-calling-agent-loop/scenario
+        (only-in :tao3k/agentic-ai-lab/user-interface/scenarios/tool-calling-agent-loop/scenario
                  tool-calling-agent-loop-scenario)
-        :agentic-ai-lab/user-interface/config)
+        :tao3k/agentic-ai-lab/user-interface/config)
 
-(def (langchain-defaults) (.get agentic-ai-lab.init.exports Profiles langchain defaults))
+(def (langchain-defaults) (.get tao3k/agentic-ai-lab.init.exports Profiles langchain defaults))
 
 (export user-interface-doom-config-test)
 

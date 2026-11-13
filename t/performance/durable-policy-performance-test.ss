@@ -17,7 +17,7 @@
                  benchmark-run)
         (only-in :clan/poo/object object?)
         "../support/performance"
-        :agentic-ai-lab/modules/session/durable-policy)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy)
 
 (export durable-policy-performance-test)
 

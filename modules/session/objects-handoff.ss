@@ -8,7 +8,7 @@
 
 (import (only-in :std/list/list any every)
         (only-in :clan/poo/object .ref object?)
-        :agentic-ai-lab/modules/session/objects-core)
+        :tao3k/agentic-ai-lab/modules/session/objects-core)
 
 (export make-agentic-ai-lab-session-handoff-receipt
         agentic-ai-lab-session-handoff-receipt?

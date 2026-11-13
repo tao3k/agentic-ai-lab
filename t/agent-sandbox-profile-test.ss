@@ -21,9 +21,9 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/agent-sandbox/api
-        :agentic-ai-lab/modules/agent-sandbox/nono
-        :agentic-ai-lab/modules/agent-sandbox/cube)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/cube)
 
 ;;; Fixture result mirrors runtime bridge receipts while keeping the profile
 ;;; tests independent of an actual sandbox backend.

@@ -158,7 +158,8 @@
               (lambda ()
                 (call-with-output-string
                   (lambda (out)
-                    (parameterize ((current-output-port out) (current-directory consumer))
+                    (parameterize ((current-output-port out) (current-directory consumer)
+                                   (current-build-output-directory a-lib))
                       (deployment-build-main "spec"))))) accounting?: 'stages))))
           (report-specification-work spec-times)
           (check-equal? (hash-ref spec-times '(calls scope-factory) 0) 0)
@@ -176,19 +177,21 @@
             (yuanxu-bootstrap-contexts))
           (check-equal? (pair? compiler-contexts) #t)
           (execution-progress! 'lab-deployment-spec 1)
-          (def targets (list-sort string<? (map cadr (call-with-input-string spec read))))
-          (def selected-owners '(agentic-ai-lab/modules/nix/interface
-                                 yuanxu/modules/json-schema/interface
-                                 yuanxu/modules/funflow/interface
-                                 agentic-ai-lab/modules/services/opentofu/interface))
-          (def owner-prefixes '("agentic-ai-lab/modules/nix/" "agentic-ai-lab/modules/services/opentofu/"
+          (def targets (list-sort string<? (map (lambda (row) (if (pair? row) (cadr row) row)) (call-with-input-string spec read))))
+          (def selected-owners '(tao3k/agentic-ai-lab/modules/nix/interface
+                                 tao3k/yuanxu/modules/json-schema/interface
+                                 tao3k/yuanxu/modules/funflow/interface
+                                 tao3k/agentic-ai-lab/modules/services/opentofu/interface))
+          (def owner-prefixes '("tao3k/agentic-ai-lab/modules/nix/" "tao3k/agentic-ai-lab/modules/services/opentofu/"
                                 "tao3k/yuanxu/modules/json-schema/" "tao3k/yuanxu/modules/funflow/"))
           (def (selected-target? target) (ormap (cut string-prefix? <> target) owner-prefixes))
           (def selected-tests (.get yuanxu-deployment-consumer.init.exports tests))
-          (def test-files (measure-phase 'test-discovery (lambda () (.get selected-tests spec))))
+          (def test-files (measure-phase 'test-discovery
+                            (lambda () (.get (.call selected-tests .select) spec))))
           (def qualification-tests (.get selected-tests qualification))
           (def runtime-tests (measure-phase 'qualification-discovery (lambda () (.get qualification-tests spec))))
-          (check-equal? (length runtime-tests) 1)
+          (check-equal? runtime-tests
+            (list (path-expand "t/yanxu/Lab/services/opentofu/runtime-test.ss" consumer)))
           (check-equal? (.get qualification-tests selected-graph module-order) selected-owners)
           (def acceptance-files
             (.call selected-tests .for-files (append runtime-tests test-files)))
@@ -218,10 +221,13 @@
                     owner-prefixes)
           (check-equal? (and (member "yuanxu-deployment-consumer/main" targets) #t) #t)
           (check-equal? (and (member "yuanxu-deployment-consumer/init" targets) #t) #t)
-          ;; Package-kernel libraries (e.g. nix-contracts) may join through native
+          (for-each (lambda (target) (check-equal? (and (member target targets) #t) #t))
+                    '("tao3k/agentic-ai-lab/modules/nix/contracts"
+                      "tao3k/agentic-ai-lab/modules/services/opentofu/contracts"))
+          ;; Package-kernel libraries may join through native
           ;; imports; unrelated managed Module roots may never enter this set.
           (check-equal? (filter (lambda (target)
-                                (and (string-prefix? "agentic-ai-lab/modules/" target)
+                                (and (string-prefix? "tao3k/agentic-ai-lab/modules/" target)
                                      (not (selected-target? target)))) targets) '())
           (check-equal? (filter (lambda (target)
                                 (and (string-prefix? "tao3k/yuanxu/" target)
@@ -235,10 +241,10 @@
               (cons (path-expand "init.ss" consumer)
                 (filter-map (lambda (target)
                               (cond
-                               ((string-prefix? "agentic-ai-lab/" target)
-                                (path-expand (string-append (substring target 15 (string-length target)) ".ss") root))
+                               ((string-prefix? "tao3k/agentic-ai-lab/" target)
+                                (path-expand (string-append (substring target (string-length "tao3k/agentic-ai-lab/") (string-length target)) ".ss") root))
                                ((string-prefix? "tao3k/yuanxu/" target)
-                                (path-expand (string-append "core/" (substring target 7 (string-length target)) ".ss") root))
+                                (path-expand (string-append "core/" (substring target (string-length "tao3k/yuanxu/") (string-length target)) ".ss") root))
                                (else #f))) targets))))
           (def source-before (map module-source-read inputs))
           (check-equal? (interface-products a-lib) '())

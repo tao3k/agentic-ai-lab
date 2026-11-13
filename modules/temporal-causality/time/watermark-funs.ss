@@ -8,15 +8,15 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
                  agentic-ai-lab-temporal-bounded-observation?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
                  agentic-ai-lab-temporal-bounded-observation-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/watermark-types
                  agentic-ai-lab-temporal-watermark?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/watermark-objects
                  agentic-ai-lab-temporal-watermark-value))
 
 (export agentic-ai-lab-temporal-watermark

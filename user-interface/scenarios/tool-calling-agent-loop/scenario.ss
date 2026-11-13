@@ -1,6 +1,6 @@
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -37,7 +37,7 @@
 
 (def tool-calling-agent-loop-scenario
   (.new Scenario name: 'tool-calling-agent-loop-scenario
-        config: (let ((ToolCallingModule (.get agentic-ai-lab.init.exports Profiles tool-calling profile)))
+        config: (let ((ToolCallingModule (.get tao3k/agentic-ai-lab.init.exports Profiles tool-calling profile)))
     (compose profiles
     (use-module ToolCallingModule as tool
       tool-request tool-schema tool-permission sandbox-scope

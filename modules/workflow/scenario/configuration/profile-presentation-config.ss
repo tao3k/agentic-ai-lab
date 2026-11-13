@@ -7,11 +7,11 @@
 ;;; Invariant: presentation is shallow inspection data and does not activate modules.
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/sandbox-core/profile-catalog
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
         :tao3k/yuanxu/utilities/final-projection-syntax
         :tao3k/yuanxu/profile-composition/user-profile)

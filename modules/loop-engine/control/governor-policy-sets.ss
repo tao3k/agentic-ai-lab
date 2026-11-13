@@ -5,8 +5,8 @@
 ;;; Boundary: normalizes governor policy descriptors into membership sets.
 ;;; Invariant: set construction preserves descriptor action identities and equality semantics.
 (import :gerbil/core
-        :agentic-ai-lab/modules/loop-engine/control/descriptor
-        :agentic-ai-lab/modules/loop-engine/control/governor-core)
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-core)
 
 (export loop-governor-pattern-action-key
         loop-governor-member?

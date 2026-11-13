@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/list/list append-map)
-        :agentic-ai-lab/modules/workflow/flows-alignment-specs)
+        :tao3k/agentic-ai-lab/modules/workflow/flows-alignment-specs)
 
 (export agentic-ai-lab-funflow-tutorial-alignment-report)
 

@@ -11,16 +11,16 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
                  agentic-ai-lab-brand-group
                  agentic-ai-lab-brand-name)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
         (only-in :tao3k/yuanxu/profile-composition/user-profile
                  yuanxu-user-profile-presentation-kind)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config
                  agenticAiLabUserProfilePresentation)
         "user-interface-fixtures.ss")
 

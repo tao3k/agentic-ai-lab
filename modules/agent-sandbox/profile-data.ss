@@ -6,8 +6,8 @@
 ;;; Boundary: agent-sandbox profile data records and accessors.
 ;;; Invariant: this owner has no descriptor inheritance or validation side effects.
 
-(import :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax)
 
 (export +agent-sandbox-profile-schema+
         +agent-sandbox-profile-runtime-summary-schema+

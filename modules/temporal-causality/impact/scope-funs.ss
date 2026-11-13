@@ -10,16 +10,16 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list any every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/types
                  agentic-ai-lab-temporal-trajectory-series?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/scope-types
                  agentic-ai-lab-temporal-impact-scope?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/scope-objects
                  agentic-ai-lab-temporal-impact-scope-value
                  agentic-ai-lab-temporal-impact-scope-audit-value)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/funs
                  agentic-ai-lab-temporal-intervention-window-audit))
 (export agentic-ai-lab-temporal-impact-scope
         agentic-ai-lab-temporal-impact-scope-audit)

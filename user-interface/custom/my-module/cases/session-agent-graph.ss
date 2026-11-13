@@ -7,7 +7,7 @@
 ;;; Invariant: this is declarative graph/registry data; message delivery,
 ;;; providers, tools, and sandbox runtime stay behind Marlin handoff.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-agent-graph-case)
 

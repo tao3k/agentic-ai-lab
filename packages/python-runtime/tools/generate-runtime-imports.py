@@ -23,9 +23,9 @@ def main():
         '(import :gerbil/compiler/driver :gerbil/expander)', '-e', expression],
         cwd=ROOT, check=True, capture_output=True, text=True, timeout=60)
     modules = list(dict.fromkeys(name for name in result.stdout.splitlines()
-        if name.startswith(('clan/', 'yuanxu/', 'agentic-ai-lab/')) and ' ' not in name))
+        if name.startswith(('clan/', 'tao3k/yuanxu/', 'tao3k/agentic-ai-lab/')) and ' ' not in name))
     for name in ['yuanxu/profile-composition/selection-syntax',
-                 'agentic-ai-lab/modules/workflow/profiles/funflow-library']:
+                 'tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library']:
         if name not in modules:
             modules.append(name)
     target = ROOT / 'packages/python-runtime/src/agentic_ai_lab_runtime/projections/runtime_load_imports.json'

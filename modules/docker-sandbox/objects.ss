@@ -6,10 +6,10 @@
 ;;; Boundary: Docker sandbox module objects.
 
 (import :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/sandbox-core/backend-object-syntax
-        :agentic-ai-lab/modules/sandbox-core/objects
-        :agentic-ai-lab/modules/sandbox-core/resource-contract)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-object-syntax
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects
+        :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract)
 
 (export agentic-ai-lab-docker-sandbox-object
         agentic-ai-lab-docker-sandbox-backend-capability

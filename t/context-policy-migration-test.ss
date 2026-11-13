@@ -4,18 +4,18 @@
 ;;; Runtime effects use production Scheme; this file supplies no alternate CAS.
 (import (only-in :clan/poo/object .o .ref .call)
         (only-in :std/list/list find every)
-        (prefix-in :agentic-ai-lab/t/context-durable-owner old.)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (prefix-in :tao3k/agentic-ai-lab/t/context-durable-owner old.)
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context push-row push-revision
                  push-join! context-source at policy
                  clock-check-originals!)
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy)
 (export migration-driver migration-case)
 
 (def (ensure value message) (unless value (error message)))

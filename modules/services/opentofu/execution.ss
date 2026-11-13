@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Explicit Ops handoff over a checked publication; importing this file is inert.
 (import :clan/poo/object
-        (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session call-with-derivation-session)
+        (only-in :tao3k/agentic-ai-lab/bindings/nix-c-api/derivation-session call-with-derivation-session)
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/string/misc string-subst)
         (only-in :tao3k/yuanxu/ops/func run-script call-with-execution-cancellation)

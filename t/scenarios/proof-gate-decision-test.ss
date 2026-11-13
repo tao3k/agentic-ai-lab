@@ -4,9 +4,9 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
-        :agentic-ai-lab/modules/proof/projections/proof-gate-decision
-        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-gate-decision
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
 (export proof-gate-decision-test)
 

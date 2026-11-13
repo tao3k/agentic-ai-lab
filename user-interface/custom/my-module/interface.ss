@@ -3,7 +3,6 @@
 (.def (MyModule @ [] config)
   identity: 'my-module
   config: Config
-  core: (.o requires: (.o)
-            scope-contract: MyModuleScopeContract
+  core: (.o scope-contract: MyModuleScopeContract
             exports: (.o config))
   features: (.o))

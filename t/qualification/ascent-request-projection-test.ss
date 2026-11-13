@@ -5,7 +5,7 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-request-projection
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-request-projection
                  agentic-ai-lab-ascent-project-request))
 
 (export ascent-request-projection-test)

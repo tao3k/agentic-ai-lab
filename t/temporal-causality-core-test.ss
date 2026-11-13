@@ -7,7 +7,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :tao3k/yuanxu/graph/types
                  yuanxu-graph yuanxu-graph-edge yuanxu-graph-node)
-        :agentic-ai-lab/modules/temporal-causality/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/interface)
 
 (export temporal-causality-core-test)
 

@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/watermark-types
                  agentic-ai-lab-temporal-watermark-kind AgenticAILabTemporalWatermark))
 
 (export agentic-ai-lab-temporal-watermark-value)

@@ -9,7 +9,7 @@
         agentic-ai-lab-model-core-default-catalog
         agentic-ai-lab-model-core-default-selection-policy)
 
-(import :agentic-ai-lab/modules/model-core/objects)
+(import :tao3k/agentic-ai-lab/modules/model-core/objects)
 
 (def agentic-ai-lab-model-core-fast-text-model
   (agentic-ai-lab-model-spec

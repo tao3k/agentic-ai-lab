@@ -11,7 +11,7 @@
                  check-eq?
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/loop-engine/proof-abi)
+        :tao3k/agentic-ai-lab/modules/loop-engine/proof-abi)
 
 (export loop-engine-proof-abi-test)
 

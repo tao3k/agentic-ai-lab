@@ -38,12 +38,12 @@
        (list-sort string<? (artifact-files (map string->symbol targets) library))))
 
 (def base-compile-targets
-  '("agentic-ai-lab/modules/ai-agentic-context/config"
-    "agentic-ai-lab/modules/ai-agentic-context/funs-features"
-    "agentic-ai-lab/modules/ai-agentic-context/interface"
-    "agentic-ai-lab/modules/ai-agentic-context/objects"
-    "agentic-ai-lab/modules/ai-agentic-context/types"
-    "agentic-ai-lab/modules/temporal-causality/time/types"
+  '("tao3k/agentic-ai-lab/modules/ai-agentic-context/config"
+    "tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features"
+    "tao3k/agentic-ai-lab/modules/ai-agentic-context/interface"
+    "tao3k/agentic-ai-lab/modules/ai-agentic-context/objects"
+    "tao3k/agentic-ai-lab/modules/ai-agentic-context/types"
+    "tao3k/agentic-ai-lab/modules/temporal-causality/time/types"
     "yuanxu-context-consumer/init"
     "yuanxu-context-consumer/main"
     "yuanxu-context-consumer/modules/review/config"
@@ -53,14 +53,14 @@
 
 (def memory-compile-targets
   (append
-    (map (cut string-append "agentic-ai-lab/modules/ai-agentic-context/features/memory/" <>)
+    (map (cut string-append "tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/" <>)
          '("config" "interface" "objects" "objects-builtin" "objects-catalog" "objects-core"
            "objects-durable" "objects-handoff" "objects-validation" "org-selection"
            "session-selection"))
-    '("agentic-ai-lab/modules/module-authoring/module-config-syntax"
-      "agentic-ai-lab/modules/session/durable-policy"
-      "agentic-ai-lab/modules/session/objects-core"
-      "agentic-ai-lab/modules/session/transform-support/memory-intent")))
+    '("tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax"
+      "tao3k/agentic-ai-lab/modules/session/durable-policy"
+      "tao3k/agentic-ai-lab/modules/session/objects-core"
+      "tao3k/agentic-ai-lab/modules/session/transform-support/memory-intent")))
 
 (def yuanxu-context-memory-downstream-test
   (test-suite "Agentic Context Memory in an independent Gerbil package"
@@ -127,12 +127,12 @@
           (def base (state "base" ""))
           (def enabled (state "enabled" " +memory"))
           (def withdrawn (state "withdrawn" " -memory"))
-          (def memory-prefix "agentic-ai-lab/modules/ai-agentic-context/features/memory/")
+          (def memory-prefix "tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/")
           (def base-targets (build! base))
           (check-equal? base-targets base-compile-targets)
           (def enabled-targets (build! enabled))
           (check-equal?
-            (member "agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy"
+            (member "tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy"
                     enabled-targets)
             #f)
           (check-equal?

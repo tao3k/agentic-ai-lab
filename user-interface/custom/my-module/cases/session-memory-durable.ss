@@ -7,8 +7,8 @@
 ;;; Invariant: this is durable job handoff data only; Scheme does not recall,
 ;;; commit, consolidate, persist, or repair memory stores.
 
-(import :agentic-ai-lab/modules/session/syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
+(import :tao3k/agentic-ai-lab/modules/session/syntax
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export agentic-ai-lab-custom-my-module-session-memory-durable-case)
 

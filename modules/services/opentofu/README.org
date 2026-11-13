@@ -16,8 +16,8 @@ repeating dependency names. Lab's executable downstream fixture is
 #+end_src
 
 Paths are relative to that fixture's =init.ss=; a downstream declares its own
-source windows. OpenTofu's =deployment= tag selects one root. Its =requires=
-edges select Nix (=package-management=), JsonSchema (=schema validation=), and
+source windows. OpenTofu's =deployment= tag selects one root. Native imports
+reach Nix (=package-management=), JsonSchema (=schema validation=), and
 Funflow (=workflow=), including the Core package owners. These dependencies
 do not become extra visible category roots. Native =.get= admits the reached
 scopes. Production =std-make-spec= and default Profile tests consume that same
@@ -25,7 +25,8 @@ dependency Graph. Selected owner sources retain original compiler identities,
 and the downstream =GERBIL_PATH= owns their products; installed prerequisites
 outside those sources stay under Gerbil's package management.
 
-Build demand reads the declared =Config= directly. The runtime scope installs
+The owner of the final =Config= declares the external request in =core.projections=.
+The request uses the =OpenTofuPackageBuild.= prototype. The runtime scope installs
 that same Config when demanded. An inactive service can therefore project its
 library build without loading the OpenTofu runtime prototype.
 

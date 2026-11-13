@@ -6,8 +6,8 @@
 ;;; Invariant: Scheme manufactures proof facts only; runtime execution stays
 ;;; behind the Marlin handoff boundary.
 (import (only-in :clan/poo/object .o)
-        :agentic-ai-lab/modules/loop-engine/session-agent-graph
-        :agentic-ai-lab/modules/session/objects-handoff)
+        :tao3k/agentic-ai-lab/modules/loop-engine/session-agent-graph
+        :tao3k/agentic-ai-lab/modules/session/objects-handoff)
 
 ;; : (-> Alist Symbol Object)
 (def (fact-ref facts key)

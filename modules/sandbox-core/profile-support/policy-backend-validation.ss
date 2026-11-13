@@ -10,9 +10,9 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object object<-alist object? .slot? .ref)
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
-        :agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax)
 
 (export agentic-ai-lab-sandbox-backend-capability-registry-diagnostic
         agentic-ai-lab-sandbox-backend-capability-registry-diagnostic?

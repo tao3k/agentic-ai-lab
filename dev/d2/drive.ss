@@ -4,9 +4,9 @@
 ;;; A development consumer. No ASCENT rules or graph algorithm live here.
 (import (only-in :clan/poo/object .o .ref .get)
         (only-in :std/list/list find delete-duplicates/hash)
-        (only-in "./init.ss" agentic-ai-lab/dev/d2.init.exports))
+        (only-in "./init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
 (export main)
-(def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
+(def Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def Profile (.get Scope profiles ContextEvolution))
 (def ExperienceWindow. (.get Profile Window))
 (include "context-evolution-example.ss")
@@ -49,7 +49,7 @@
 
 (def (main (output "dev/d2/output"))
   ;; Prepare the init-owned source closure without running a build/compiler.
-  (.get agentic-ai-lab/dev/d2.init.exports std-make-spec)
+  (.get tao3k/agentic-ai-lab/dev/d2.init.exports std-make-spec)
   (def input (context-evolution-example))
   (def result ((.get Profile evaluate) input))
   (def snapshots
@@ -58,7 +58,7 @@
              (view ((.get Scope infer) diagram)))
         (cons (.ref window-value 'identity) ((.get Scope source) view)))) (.ref input 'windows)))
   ;; Use the init owner's current-source boundary before publishing artifacts.
-  ((.get agentic-ai-lab/dev/d2.init.exports admit-current))
+  ((.get tao3k/agentic-ai-lab/dev/d2.init.exports admit-current))
   (create-directory* output)
   (for-each (lambda (snapshot)
     (def destination (path-expand (string-append "ascent-" (symbol->string (car snapshot)) ".d2") output))

@@ -6,7 +6,7 @@
          :std/test
         :clan/poo/object
         (only-in :clan/poo/mop element?)
-        :agentic-ai-lab/modules/model-core/interface)
+        :tao3k/agentic-ai-lab/modules/model-core/interface)
 
 (def (model-core-test-row-ref row key)
   (let (entry (assq key row))

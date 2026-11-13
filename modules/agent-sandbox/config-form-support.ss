@@ -8,10 +8,10 @@
 
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :clan/poo/mop element?)
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/profile-contract
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-contract
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
         :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export #t)

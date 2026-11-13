@@ -3,14 +3,14 @@
 (import :clan/poo/object
         (only-in :std/list/list find)
         (only-in :std/misc/ports read-all-as-string)
-        :agentic-ai-lab/modules/ai-agentic-context/runtime-service
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/runtime-service
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
 (export durable-agenda-start)
 
 (def clock-id "durable-agenda")

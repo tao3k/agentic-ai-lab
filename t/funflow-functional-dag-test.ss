@@ -6,7 +6,7 @@
 ;;; Boundary: Funflow functional DAG objects are POO reports.
 ;;; Invariant: DAG construction is pure and never schedules or runs checks.
 
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
         (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
@@ -16,9 +16,9 @@
         (only-in :clan/poo/object .ref)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/funflow-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/funflow-config
         (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-check-map->functional-dag
                  yuanxu-funflow-composition-step?

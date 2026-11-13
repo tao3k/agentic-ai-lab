@@ -88,11 +88,11 @@ def _load_projection_rows(
     project_dependency_roots: tuple[Path, ...],
 ) -> tuple[object, ...]:
     runner_source = (
-        "(import :yuanxu/profile-composition/selection-syntax\n"
-        "        :yuanxu/profile-composition/profile-bundle\n"
+        "(import :tao3k/yuanxu/profile-composition/selection-syntax\n"
+        "        :tao3k/yuanxu/profile-composition/profile-bundle\n"
         "        (only-in :clan/poo/mop .new)\n"
-        "        (only-in :yuanxu/modules/funflow/scenario Scenario)\n"
-        "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
+        "        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)\n"
+        "        :tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
         "(agentic-ai-lab-runtime-load-write!\n"
         f" (begin (include {_scheme_string(str(source))})))\n"

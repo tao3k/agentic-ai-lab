@@ -7,13 +7,13 @@
 ;;; Invariant: this owner normalizes user rows but never builds command manifests.
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :agentic-ai-lab/modules/session/materialization
+        (only-in :tao3k/agentic-ai-lab/modules/session/materialization
                  agentic-ai-lab-session-materialization-receipt?
                  agentic-ai-lab-session-materialization-receipt->alist)
-        (only-in :agentic-ai-lab/modules/session/selector
+        (only-in :tao3k/agentic-ai-lab/modules/session/selector
                  agentic-ai-lab-session-selector-receipt?
                  agentic-ai-lab-session-selector-receipt->alist)
-        (only-in :agentic-ai-lab/modules/loop-engine/control/spec-evolution
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/spec-evolution
                  spec-evolution-review-item?
                  spec-evolution-review-item->alist
                  spec-evolution-review-item->human-audit-review-item

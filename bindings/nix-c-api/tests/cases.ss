@@ -8,7 +8,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :tao3k/yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!)
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         "../compatibility.ss")
 (export nix-api-suite root nix demand field admit provider-expression

@@ -11,7 +11,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-binary-program
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-binary-program
                  agentic-ai-lab-ascent-binary-relation
                  agentic-ai-lab-ascent-binary-copy-rule
                  agentic-ai-lab-ascent-binary-join-rule

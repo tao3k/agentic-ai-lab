@@ -2,9 +2,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Explicit in-process runtime control capability. No semantic wire dispatch.
-(import :agentic-ai-lab/modules/temporal-causality/runtime/change-feed
+(import :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/change-feed
         (only-in :clan/poo/object .o .ref .slot? object? .call)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
         "policy.ss")
 (export agentic-ai-lab-temporal-support-policy-host
         agentic-ai-lab-temporal-support-policy-host-refresh!

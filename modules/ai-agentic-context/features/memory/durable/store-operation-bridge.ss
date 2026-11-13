@@ -7,7 +7,7 @@
 ;;; Invariant: this is a functional projection layer only; Scheme does not
 ;;; append logs, claim leases, retain artifacts, or attach sandbox handles.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+(import :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
         :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-durable-runtime-store-operations-from-rows

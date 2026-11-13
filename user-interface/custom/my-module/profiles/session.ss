@@ -7,11 +7,11 @@
 ;;; Invariant: standalone module; it declares data only.
 
 (import :clan/poo/object
-        :agentic-ai-lab/modules/sandbox-core/profile
-        :agentic-ai-lab/modules/sandbox-core/profile-interface
-        :agentic-ai-lab/modules/nono-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/profile-interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-interface
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
 
 (export agentic-ai-lab-custom-my-module-session-module)
 

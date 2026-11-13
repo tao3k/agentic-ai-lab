@@ -4,14 +4,14 @@
 (import :clan/poo/object
         (only-in :std/error Error? Error-message Error-irritants)
         (only-in :std/source this-source-file)
-        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
+        (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports)
         (only-in "../../../dev/modules/testing/native-test-observation.ss"
                  native-test-command make-native-test-progress-reader))
 
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def (execution fixture vm)
   (def demand
-    (.call (.get agentic-ai-lab.init.exports tests) .for-files
+    (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
       (list (path-expand fixture root))
       (list (path-expand "dev/modules/testing/native-test-observation.ss" root)
             (this-source-file))))

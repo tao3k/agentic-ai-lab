@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify strict module-system observability traces.
 ;;; Invariant: trace construction never dereferences POO slots.
 
-(import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
+(import (only-in :tao3k/agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .ref object?)

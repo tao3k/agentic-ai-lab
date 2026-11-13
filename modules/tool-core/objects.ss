@@ -5,11 +5,11 @@
 
 ;;; Boundary: stable facade for POO tool specs, catalogs, and receipts.
 
-(import :agentic-ai-lab/modules/tool-core/objects-spec
-        :agentic-ai-lab/modules/tool-core/objects-catalog
-        :agentic-ai-lab/modules/tool-core/objects-handoff
-        :agentic-ai-lab/modules/tool-core/objects-receipt
-        :agentic-ai-lab/modules/tool-core/objects-builtin)
+(import :tao3k/agentic-ai-lab/modules/tool-core/objects-spec
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-catalog
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-handoff
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-receipt
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-builtin)
 
 (export +agentic-ai-lab-tool-core-spec-kind+
         +agentic-ai-lab-tool-core-catalog-kind+

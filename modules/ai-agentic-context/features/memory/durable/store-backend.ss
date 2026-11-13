@@ -13,7 +13,7 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :tao3k/yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
 (export +agentic-ai-lab-durable-runtime-store-backend-kind+
         +agentic-ai-lab-durable-runtime-store-backend-schema+

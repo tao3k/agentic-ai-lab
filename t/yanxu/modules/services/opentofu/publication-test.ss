@@ -7,7 +7,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read current-module-source-observer)
         (only-in :tao3k/yuanxu/module-system/source/preparation yuanxu-prepare-module-build-source)
         (only-in :tao3k/yuanxu/module-system/observability/presentation
@@ -60,8 +60,7 @@
     (yuanxu-test-case "one real publication is inert until a consumer needs construction"
       (call-with-temporary-directory "opentofu-publication"
         (lambda (root)
-          (let* ((project (path-directory (path-strip-trailing-directory-separator
-                                           (path-directory (this-source-file)))))
+          (let* ((project (path-normalize (path-expand "../../../../.." (path-directory (this-source-file)))))
                  (maintained (path-expand "modules" project))
                 (init (path-expand "init.ss" root))
                 (starts 0))
@@ -74,6 +73,7 @@
                 (call-with-output-string
                   (lambda (port)
                     (write `(yuanxu!
+                              :test-dir "./t"
                               :load-modules ,(path-expand "core/modules" project)
                               mode: explicit rename: Core
                               (json-schema disable: ,schema-disabled?) (funflow)
@@ -93,15 +93,15 @@
                 (write-source (path-expand "objects.ss" review) "(def Defaults (.o)) (export Defaults)")
                 (write-source (path-expand "config.ss" review) "(def Config (.o revision: 1))")
                 (write-source (path-expand "interface.ss" review)
-                  "(.def Review identity: 'app/review core: (.o requires: (.o OpenTofuInterface: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface view: 'interface) JsonSchema: (.o module-id: 'tao3k/yuanxu/modules/json-schema/interface)) scope-contract: ReviewScope exports: (.o schema: (.get OpenTofuInterface requires JsonSchema) baseline: JsonSchema revision: (.get Config revision))) features: (.o))"))
+                  "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects JsonSchemaScope) (rename-in (only-in :tao3k/yuanxu/modules/json-schema/config JsonSchemaScope) (JsonSchemaScope NativeSchema))) (.def Review identity: 'app/review core: (.o scope-contract: ReviewScope exports: (.o schema: JsonSchemaScope baseline: NativeSchema revision: (.get Config revision))) features: (.o))"))
             (let (consumer (path-expand "modules/app/infrastructure" root))
                 (write-source (path-expand "types.ss" consumer)
-                  "(import (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)) (export OpenTofuScopeContract)")
+                  "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/contracts OpenTofuScopeContract)) (export OpenTofuScopeContract)")
                 (write-source (path-expand "objects.ss" consumer)
-                  "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
+                  "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/package-build OpenTofuPackageBuild.) (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)) (def Defaults OpenTofuScope.) (def PackageBuild OpenTofuPackageBuild.) (export Defaults PackageBuild)")
                 (write-source (path-expand "config.ss" consumer) "(def Config (.o))")
                 (write-source (path-expand "interface.ss" consumer)
-                  "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface contract: OpenTofuScopeContract)) scope-contract: OpenTofuScopeContract exports: (.o config: Config)) features: (.o))"))
+                  "(.def Infrastructure identity: 'app/infrastructure core: (.o scope-contract: OpenTofuScopeContract exports: Defaults projections: (list PackageBuild)) features: (.o))"))
             (write-init #f #t)
             (parameterize ((current-nix-process-observer (lambda (_argv) (set! starts (1+ starts)))))
               (def next-view #f)
@@ -128,7 +128,7 @@
                   (ormap (lambda (issue) (equal? (.get issue path) '(source)))
                     (.get refused diagnostics)) #t)
                 (assert 'scope-and-selection-start-no-nix (zero? starts))
-                (let (prepared (.call view prepare-publication 'agentic-ai-lab/modules/services/opentofu/interface))
+                (let (prepared (.call view prepare-publication 'tao3k/agentic-ai-lab/modules/services/opentofu/interface))
                   (assert 'physical-core-interface-source
                     (equal? (path-normalize (.get prepared source value))
                             (path-normalize (path-expand "services/opentofu/interface.ss" maintained))))
@@ -138,13 +138,13 @@
                           (.get prepared source-dependencies))))
                 (let* ((review (selected-record view 'app/review))
                        (review-schema (.get review scope schema))
-                       (review-edge (.get review dependency-records OpenTofuInterface))
+                       (review-current! (.get review admit-construction-current))
                        (record (selected-record view 'services/opentofu))
-                       (edge (.get record dependency-records JsonSchema)))
+                       (provider (selected-record view 'json-schema)))
                   (assert 'review-receives-opentofu-schema
-                    (and (eq? review-schema (.get record interface requires JsonSchema))
-                         (eq? review-schema (.get edge scope))
-                         (eq? (.get edge provider) (selected-record view 'json-schema))))
+                    (and (eq? review-schema (.get record scope JsonSchema))
+                         (eq? review-schema (.get provider scope))
+                         (eq? (.get review scope baseline) (.get provider scope))))
                   (assert 'review-does-not-request-packages
                     (null? (.get view build-graph external-packages)))
                   (let (schema-source (path-expand "core/modules/json-schema/interface.ss" project))
@@ -153,14 +153,14 @@
                                      (lambda (entry) (equal? (.get entry path) schema-source))
                                      (.get view build-graph entries))))))
                   (check-equal? (.get review scope revision) 1)
-                  (def old-schema (.get edge provider scope))
+                  (def old-schema (.get provider scope))
                   (def hot-compile (.get old-schema compile))
-                  ((.get edge provider admit-construction-current))
-                  ((.get review-edge admit-current))
+                  ((.get provider admit-construction-current))
+                  (review-current!)
                   (assert 'review-starts-no-nix (zero? starts))
                   (write-source (path-expand "modules/app/review/config.ss" root)
                     "(def Config (.o revision: 2))")
-                  (check-exception ((.get review-edge admit-current)) error?)
+                  (check-exception (review-current!) error?)
                   (check-exception (selected-record view 'app/review) error?)
                   (displayln "MVP-STALE-SOURCE-REFUSED") (force-output)
                   (write-init #t #t)
@@ -198,13 +198,13 @@
                       (assert 'review-has-new-generation-evidence
                         (not (eq? (.get review scope-evidence) (.get next-review scope-evidence))))
                       (assert 'json-schema-has-new-generation-evidence
-                        (not (eq? (.get edge provider scope-evidence)
+                        (not (eq? (.get provider scope-evidence)
                                   (.get next-schema-record scope-evidence))))
                       (assert 'successor-schema-is-third-party-baseline
                         (eq? next-schema (.get next-review scope baseline)))
                       (assert 'successor-schema-is-published-edge
                         (eq? (.get next-review scope schema)
-                             (.get (selected-record next 'services/opentofu) interface requires JsonSchema)))
+                             (.get (selected-record next 'services/opentofu) scope JsonSchema)))
                       (for-each
                         (lambda (id)
                           (check-equal? (hash-get calls (list 'scope-factory id)) 1)
@@ -222,7 +222,7 @@
                   (and (= (.get review scope revision) 2)
                        (eq? (.get review scope schema)
                             (.get (selected-record successor 'services/opentofu)
-                                  interface requires JsonSchema))))
+                                  scope JsonSchema))))
                 (def graph (.get successor build-graph))
                 (assert 'consumer-keeps-package-preparation-deferred
                   (not (.ref/cached graph 'external-packages)))

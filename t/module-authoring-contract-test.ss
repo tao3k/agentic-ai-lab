@@ -22,13 +22,13 @@
                  yuanxu-poo-slot-authoring-diagnostics)
         (only-in :tao3k/yuanxu/utilities/algorithms
                  yuanxu-directory-files-recursive)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface
                  yuanxu-module-interface-authoring
                  yuanxu-module-interface-prototype)
         (only-in :tao3k/yuanxu/module-system/source/collection make-yuanxu-module-source-collection make-yuanxu-contribution-module-source yuanxu-module-source-collection-role-entrypoints)
         (only-in :tao3k/yuanxu/module-system/authoring/roles ModuleAuthoringExecutor. ModuleSourceRole. ObjectsSourceRole. yuanxu-default-module-authoring-profile)
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module agentic-ai-lab-user-root-module-authoring-profile))
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module agentic-ai-lab-user-root-module-authoring-profile))
 
 (export module-authoring-contract-test)
 

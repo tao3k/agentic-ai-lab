@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/workflow/qualification/cutover-readiness)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/cutover-readiness)
 
 
 (def accepted-symbol-receipt

@@ -12,8 +12,8 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in "../user-interface/custom/my-module/profiles/loops"
                  agentic-ai-lab-custom-my-module-loops-module))
 

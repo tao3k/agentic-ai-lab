@@ -3,10 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .cc .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant))
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant))
 (export context-use-host-test)
 (def (at n) (agentic-ai-lab-temporal-instant (string-append "at-" (number->string n)) "clock" n "host" 'observed))
 (def policy (agentic-ai-lab-temporal-support-policy "policy" "r1" (at 1) (at 4)))

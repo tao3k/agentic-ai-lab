@@ -14,9 +14,9 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config
                  agentic-ai-lab-user-config-cicd-intents
                  agentic-ai-lab-user-workflow-cicd-marlin-handoff-receipt-bundle)
         (only-in "../user-interface/custom/my-module/cases/cicd"

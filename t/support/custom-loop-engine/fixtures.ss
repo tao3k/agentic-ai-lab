@@ -7,14 +7,14 @@
 
 (import (only-in :clan/poo/object .ref .slot? object?)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        (only-in :agentic-ai-lab/modules/loop-engine/runtime
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
                  agentic-ai-lab-user-loop-engine-capability-receipt-ref)
-        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/cubeSandbox/config
                  agentic-ai-lab-cubeSandbox-module-bundles)
-        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/config
                  agentic-ai-lab-nono-sandbox-module-bundles)
         (only-in "../../../user-interface/custom/my-module/cases/loop-engine-owner"
                  agentic-ai-lab-custom-my-module-loop-engine-case))

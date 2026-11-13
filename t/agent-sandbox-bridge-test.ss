@@ -21,7 +21,7 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/agent-sandbox/api)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api)
 
 (export agent-sandbox-bridge-test)
 

@@ -7,9 +7,9 @@
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
-        :agentic-ai-lab/modules/query/interface
+        :tao3k/agentic-ai-lab/modules/query/interface
         :tao3k/yuanxu/poo-clos/interface
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt
                  agentic-ai-lab-gql-candidate-row-check))

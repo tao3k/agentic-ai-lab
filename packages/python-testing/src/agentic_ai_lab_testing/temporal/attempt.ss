@@ -6,7 +6,7 @@
 ;;; Two fixed, pre-registered causal-cut fixtures. This file does not
 ;;; interpret model output or grant event/clinical authority.
 (import (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/temporal-causality/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/interface)
 
 (export main)
 

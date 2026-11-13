@@ -10,8 +10,8 @@
 ;;; Runtime nono dynamic-library selection and live-test receipts.
 ;;; - Keep FFI handles isolated while the Scheme layer reports bounded sandbox receipts.
 (import :gerbil/core
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
         :tao3k/yuanxu/module-system/selection/objects
         (only-in ./_nono
                  nono_ffi_apply_null

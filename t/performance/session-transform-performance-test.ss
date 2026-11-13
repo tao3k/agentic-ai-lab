@@ -14,8 +14,8 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/transform)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/transform)
 
 (export session-transform-performance-test)
 

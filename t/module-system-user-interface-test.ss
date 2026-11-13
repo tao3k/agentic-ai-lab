@@ -20,24 +20,24 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .def .ref .slot? .get)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/source/collection
-        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree
-        :agentic-ai-lab/modules/module-authoring/module-option-projection
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-option-projection
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         :tao3k/yuanxu/module-system/catalog/values
         :tao3k/yuanxu/module-system/loader/objects
         :tao3k/yuanxu/module-system/projection/option-objects
         :tao3k/yuanxu/module-system/projection/option-validation
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
-        :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
         :tao3k/yuanxu/module-system/funs
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :tao3k/yuanxu/module-system/catalog/objects
         :tao3k/yuanxu/module-system/authoring/syntax)
 

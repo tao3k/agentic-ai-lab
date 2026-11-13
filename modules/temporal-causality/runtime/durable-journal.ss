@@ -6,7 +6,7 @@
         (only-in :std/db/sqlite sqlite-open) (only-in :std/db/db new-db)
         :std/db/interface
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read))
 (export journal-open journal-close! journal-closed? journal-input journal-get journal-put! journal-evidence!
         journal-receive! journal-begin! journal-commit! journal-abort! journal-rows
         journal-terminal! journal-verify! journal-epoch journal-active? journal-pack journal-unpack journal-hash journal-cut!)

@@ -8,9 +8,9 @@
 ;;; scores candidates, calls a model, dispatches workflows, or mutates sessions.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/receipt-syntax
-        :agentic-ai-lab/modules/session/receipt-projection)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-projection)
 
 (export agentic-ai-lab-session-selector-candidate
         agentic-ai-lab-session-selector-candidate?

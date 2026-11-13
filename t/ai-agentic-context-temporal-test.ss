@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/funs-temporal
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-temporal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs)
 (export ai-agentic-context-temporal-test)
 (def (at n (domain-value "clock") (modality-value 'observed))
   (agentic-ai-lab-temporal-instant (number->string n) domain-value n "test-clock" modality-value))

@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Read-only inert v1 projection into the original POO support/evidence owners.
 (import (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
-        :agentic-ai-lab/modules/temporal-causality/revisions/interface
-        :agentic-ai-lab/modules/temporal-causality/time/objects)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects)
 (export temporal-support-call temporal-support-input temporal-support-result temporal-support-journal-input temporal-support-revise-call)
 (def (field x key)
   (unless (and (hash-table? x) (hash-key? x key)) (error "missing support field" key))

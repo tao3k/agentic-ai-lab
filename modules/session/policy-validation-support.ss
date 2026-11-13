@@ -7,9 +7,9 @@
 
 (import (only-in :std/list/list fold)
         (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy-syntax
-        :agentic-ai-lab/modules/session/receipt-syntax)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax)
 
 (export agentic-ai-lab-session-validation-slot
         agentic-ai-lab-session-validation-alist-ref

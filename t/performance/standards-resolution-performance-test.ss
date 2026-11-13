@@ -14,7 +14,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :agentic-ai-lab/modules/standards/interface)
+        :tao3k/agentic-ai-lab/modules/standards/interface)
 
 (export standards-resolution-performance-test)
 

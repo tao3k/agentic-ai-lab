@@ -11,8 +11,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
 (export durable-runtime-store-contract-test)
 

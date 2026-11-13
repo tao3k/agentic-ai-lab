@@ -11,8 +11,8 @@
 
 (import (only-in :clan/poo/mop make-instance)
         (only-in :clan/poo/object .o .all-slots .ref .slot?)
-        :agentic-ai-lab/modules/module-authoring/module-interface
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/projection/option-objects
         :tao3k/yuanxu/module-system/projection/option-validation)
 

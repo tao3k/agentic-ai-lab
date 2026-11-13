@@ -8,8 +8,8 @@
         (only-in :gerbil-ascent/candidate/provenance
                  positive-proof-nodes positive-proof-roots proof-node-kind proof-node-row
                  proof-node-relation proof-node-inputs)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/interface agentic-ai-lab-temporal-evidence-journal)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface agentic-ai-lab-temporal-evidence-journal)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
                  agentic-ai-lab-temporal-support agentic-ai-lab-temporal-support-premise)
         "../positive-proof.ss" "../fact.ss")
 (export agentic-ai-lab-temporal-proof-source-binding agentic-ai-lab-temporal-proof-support

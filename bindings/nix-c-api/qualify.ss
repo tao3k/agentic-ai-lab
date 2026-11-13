@@ -19,7 +19,7 @@
     '("dependencies.nix" "session.h" "worker.c" "binding.ss" "session.ss"
       "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss" "tests/profile-test.ss"))
   (map (lambda (name) (let (path (path-expand name root)) (cons path (module-source-read path))))
-    '("modules/nix/objects.ss" "modules/nix/func.ss" "modules/nix/types.ss" "t/nix-flake-source-test.ss"))))
+    '("modules/nix/objects.ss" "modules/nix/func.ss" "modules/nix/types.ss" "t/yanxu/modules/nix/flake-source-test.ss"))))
 (def (current!) (module-source-admit-current! observations))
 
 (def (execute command (environment (.o)) stderr-redirection: (stderr-value #t))
@@ -50,7 +50,7 @@
   (def product? (member backend '("product-runtime" "product-cli")))
   (def test-file (local (cond (worker? "tests/qualification-test.ss")
                              ((equal? backend "product-runtime") "tests/product-test.ss")
-                             ((equal? backend "product-cli") "../../t/nix-flake-source-test.ss")
+                             ((equal? backend "product-cli") "../../t/yanxu/modules/nix/flake-source-test.ss")
                              (profiling? "tests/profile-test.ss")
                              (else "tests/embedding-test.ss"))))
   (if worker?
@@ -69,9 +69,9 @@
       (lambda (port)
         (pretty-print
           `(import :std/test :clan/poo/object
-             (only-in ,(path-expand "agentic-ai-lab/bindings/nix-c-api/binding.ssi" build)
+             (only-in ,(path-expand "tao3k/agentic-ai-lab/bindings/nix-c-api/binding.ssi" build)
                call-with-flake-evaluator)
-             (only-in ,(path-expand "t/nix-flake-source-test.ss" root) nix-flake-source-suite)) port)
+             (only-in ,(path-expand "t/yanxu/modules/nix/flake-source-test.ss" root) nix-flake-source-suite)) port)
         (pretty-print '(export product-test) port)
         (pretty-print
           '(def (with-owned-evaluator procedure)

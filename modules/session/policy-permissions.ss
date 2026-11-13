@@ -5,9 +5,9 @@
 
 ;;; Boundary: session tool and hook permission predicates.
 
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy-core
-        :agentic-ai-lab/modules/session/policy-tool-grant)
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy-core
+        :tao3k/agentic-ai-lab/modules/session/policy-tool-grant)
 
 (export agentic-ai-lab-session-tool-permission-policy-allows?
         agentic-ai-lab-session-hook-tool-permission-policy-allows?)

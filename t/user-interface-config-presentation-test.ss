@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -13,14 +13,14 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :clan/poo/object
-        :agentic-ai-lab/modules/sandbox-core/profile
-        :agentic-ai-lab/modules/sandbox-core/profile-interface
-        :agentic-ai-lab/modules/nono-sandbox/config
-        :agentic-ai-lab/modules/nono-sandbox/profile-interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
-        :agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-interface
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/agent-sandbox-audit"
                  agentic-ai-lab-custom-module-agent-sandbox-audit-module))
 

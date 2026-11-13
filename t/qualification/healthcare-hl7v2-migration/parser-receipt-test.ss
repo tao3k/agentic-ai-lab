@@ -7,7 +7,7 @@
          :std/test
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/standards/interface
+        :tao3k/agentic-ai-lab/modules/standards/interface
         :agentic-ai-lab/lambda-episteme/modules/healthcare/standards/interface
         :agentic-ai-lab/lambda-episteme/modules/ontology/interface
         (only-in :agentic-ai-lab/lambda-episteme/user-interface/scenarios/healthcare/cases/au-legacy-interface-fhir-migration/case

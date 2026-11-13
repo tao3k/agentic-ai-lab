@@ -3,14 +3,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/objects
-        :agentic-ai-lab/modules/ai-agentic-context/types
-        :agentic-ai-lab/modules/ai-agentic-context/funs-features
-        :agentic-ai-lab/modules/ai-agentic-context/funs-projection
-        :agentic-ai-lab/modules/ai-agentic-context/funs-anchors
-        :agentic-ai-lab/modules/ai-agentic-context/funs-session
-        (only-in :agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule agentic-ai-lab-session-claim)
-        :agentic-ai-lab/modules/query/semantic/context-restriction)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/types
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-projection
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-anchors
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-session
+        (only-in :tao3k/agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule agentic-ai-lab-session-claim)
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction)
 (export ai-agentic-context-org-anchors-test)
 (def scope (.o (:: @ AiAgenticContextScope.) bundle: "bundle" organization: "org" epoch: 1
   project: "project" worktree: "worktree" source-cut: "cut" actor: "actor" task: "task"

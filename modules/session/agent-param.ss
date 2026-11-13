@@ -8,11 +8,11 @@
 ;;; validation; they never run providers, tools, memory stores, or streams.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :agentic-ai-lab/modules/session/agent
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy-validation
-        :agentic-ai-lab/modules/session/receipt-syntax
-        :agentic-ai-lab/modules/session/receipt-projection)
+        :tao3k/agentic-ai-lab/modules/session/agent
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy-validation
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-projection)
 
 (export agentic-ai-lab-session-agent-param-contract
         agentic-ai-lab-session-agent-param-contract?

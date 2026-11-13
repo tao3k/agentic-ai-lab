@@ -11,9 +11,9 @@
                  +runtime-request-schema+)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-object
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-validation)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-object
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-validation)
 
 (export +agentic-ai-lab-durable-artifact-profile-kind+
         +agentic-ai-lab-durable-artifact-profile-schema+

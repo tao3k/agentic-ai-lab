@@ -5,8 +5,8 @@
 ;;; Boundary: validates protocol-person promotion messages at the Runtime v0 ABI edge.
 ;;; Invariant: only schema-valid requests and receipts cross the runtime boundary.
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion
-        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
+        :tao3k/agentic-ai-lab/modules/governance/policy/protocol-person-promotion
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
 (export +agentic-ai-lab-runtime-language-promotion-request-schema+
         +agentic-ai-lab-runtime-language-promotion-receipt-schema+
@@ -46,7 +46,7 @@
         agentic-ai-lab-contract-artifact-projection-receipt-valid?
         agentic-ai-lab-contract-artifact-projection-receipt->alist)
 
-(import :agentic-ai-lab/modules/workflow/contracts/protocol-person-promotion-abi)
+(import :tao3k/agentic-ai-lab/modules/workflow/contracts/protocol-person-promotion-abi)
 
 (def +agentic-ai-lab-runtime-language-source-query-receipt-schema+
   (string->symbol

@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in "./progress.ss" make-nix-progress-reader) :clan/poo/object
-        (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session query-derivation-session)
+        (only-in :tao3k/agentic-ai-lab/bindings/nix-c-api/derivation-session query-derivation-session)
         (only-in :std/misc/process run-process)
         (only-in :tao3k/yuanxu/ops/func run-script)
         (only-in :tao3k/yuanxu/ops/progress execution-idle-seconds execution-total-seconds)

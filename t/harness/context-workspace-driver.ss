@@ -5,12 +5,12 @@
 ;;; to a real Session worker. This driver owns no recovery reducer or database.
 (import :clan/poo/object :std/encoding/json (only-in :std/text/pregexp pregexp-replace)
   (only-in :std/list/list find)
-  (prefix-in :agentic-ai-lab/t/context-query-provider-test query.)
-  (only-in :agentic-ai-lab/t/context-query-durable-test retain-originals!)
-  :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-  :agentic-ai-lab/modules/ai-agentic-context/session-host
-  :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-  :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
+  (prefix-in :tao3k/agentic-ai-lab/t/context-query-provider-test query.)
+  (only-in :tao3k/agentic-ai-lab/t/context-query-durable-test retain-originals!)
+  :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+  :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+  :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+  :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
 (def (ensure x message) (unless x (error message)))
 (def (text path) (call-with-input-file path (lambda (p) (read-line p #f))))
 (def (write-text path bytes) (call-with-output-file path (lambda (p) (display bytes p) (force-output p))))

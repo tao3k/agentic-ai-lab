@@ -2,9 +2,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in "../dev/d2/init.ss" agentic-ai-lab/dev/d2.init.exports))
+        (only-in "../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
 (export d2-teaching-test)
-(def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
+(def Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def source-value (.o nodes: (list (.o source-ref: "native/a") (.o source-ref: "native/b"))
   documents: (list (.o identity: "design.org" text: "Originals stay. Results are proposals."))))
 (def (proposal name q facet-value target-value)

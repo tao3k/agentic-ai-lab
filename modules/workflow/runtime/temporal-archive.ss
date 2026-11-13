@@ -3,14 +3,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Full Family premise projection/replay. No current Source or handle mutation.
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values temporal-family-task)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values temporal-family-task)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-admission
                  temporal-family-revisions temporal-journal-receipt
                  temporal-frontier-value temporal-revision-receipt)
-        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
                  agentic-ai-lab-temporal-source-snapshot agentic-ai-lab-temporal-family-admit)
-        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/interface
                  agentic-ai-lab-temporal-family-archive agentic-ai-lab-temporal-family-revision-root
                  agentic-ai-lab-temporal-family-revision-change))
 (export temporal-family-archive-export-call temporal-family-archive-replay-call)

@@ -4,10 +4,10 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
-        :agentic-ai-lab/modules/proof/projections/composition-facts
-        :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
-        :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :tao3k/agentic-ai-lab/modules/proof/projections/composition-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
 
 (export proof-fact-wire-test)
 

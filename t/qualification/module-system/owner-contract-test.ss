@@ -16,10 +16,10 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/workflow/qualification/module-system/g0
-        :agentic-ai-lab/modules/session/runtime-context-recovery
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/module-system/g0
+        :tao3k/agentic-ai-lab/modules/session/runtime-context-recovery
         :tao3k/yuanxu/composition/lineage
-        :agentic-ai-lab/modules/workflow/qualification/module-system/gerbil-poo-consumption)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/module-system/gerbil-poo-consumption)
 
 (export owner-contract-test)
 

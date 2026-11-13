@@ -5,10 +5,10 @@
 
 ;;; Boundary: declared POO session policy families.
 
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy-syntax
-        :agentic-ai-lab/modules/session/policy-core
-        :agentic-ai-lab/modules/session/policy-tool-grant)
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy-syntax
+        :tao3k/agentic-ai-lab/modules/session/policy-core
+        :tao3k/agentic-ai-lab/modules/session/policy-tool-grant)
 
 (export agentic-ai-lab-session-isolation-policy
         agentic-ai-lab-session-sandbox-policy

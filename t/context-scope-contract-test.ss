@@ -3,9 +3,9 @@
 (import :std/test
         (only-in :clan/poo/object .o .ref .get)
         (only-in :clan/poo/mop validate TypeError?)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/types AiAgenticContextAdmissionType AiAgenticContextScopeType)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-scope agentic-ai-lab-ai-agentic-context-scope-admit))
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/types AiAgenticContextAdmissionType AiAgenticContextScopeType)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-scope agentic-ai-lab-ai-agentic-context-scope-admit))
 (export context-scope-contract-test)
 (def scope (.o (:: @ AiAgenticContextScope.)
   bundle: "bundle:1" organization: "org:1" epoch: 1 project: "project:1"

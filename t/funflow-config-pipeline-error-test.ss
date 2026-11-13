@@ -9,10 +9,10 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
-        :agentic-ai-lab/modules/workflow/funflow-config)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :tao3k/agentic-ai-lab/modules/workflow/funflow-config)
 
 (export funflow-config-pipeline-error-test)
 

@@ -19,7 +19,7 @@
         (only-in :tao3k/yuanxu/object-types/facts
                  yuanxu-object-contract->type-facts
                  yuanxu-object-contract->lean-fact-contracts)
-        (only-in :agentic-ai-lab/modules/session/policy
+        (only-in :tao3k/agentic-ai-lab/modules/session/policy
                  AgenticAILabSessionPolicyContract
                  AgenticAILabSessionToolGrantContract
                  agentic-ai-lab-session-policy-require-slots!

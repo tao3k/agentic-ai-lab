@@ -12,13 +12,13 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref object?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
                  make-agentic-ai-lab-module-diagnostic)
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         :tao3k/yuanxu/module-system/loader/objects
         :tao3k/yuanxu/module-system/catalog/objects
         :tao3k/yuanxu/module-system/projection/option-objects)

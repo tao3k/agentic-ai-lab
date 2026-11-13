@@ -10,15 +10,15 @@
 (import (only-in :clan/poo/object .ref object<-alist)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle
-        :agentic-ai-lab/modules/workflow/contracts/organization-bundle
-        :agentic-ai-lab/modules/workflow/contracts/organization-bundle-runtime-v0-batch
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token
-        :agentic-ai-lab/modules/authorization/providers/cedar/decision
-        :agentic-ai-lab/modules/governance/policy/strict-mediation
-        :agentic-ai-lab/modules/proof/projections/proof-case-projection
-        :agentic-ai-lab/modules/proof/projections/proof-case-vector
-        :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/organization-bundle
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/organization-bundle-runtime-v0-batch
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
+        :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/decision
+        :tao3k/agentic-ai-lab/modules/governance/policy/strict-mediation
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-case-projection
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-case-vector
+        :tao3k/agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1)
 
 ;; : (-> Object DigestHex)
 (def (fixture-digest value)

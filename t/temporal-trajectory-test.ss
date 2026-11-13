@@ -6,8 +6,8 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :agentic-ai-lab/modules/temporal-causality/time/interface
-        :agentic-ai-lab/modules/temporal-causality/trajectory/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/interface)
 (export temporal-trajectory-test)
 
 (def (point id domain coordinate value)

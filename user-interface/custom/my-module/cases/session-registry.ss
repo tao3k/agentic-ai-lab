@@ -7,7 +7,7 @@
 ;;; Invariant: registry rows describe project/root/child address space only;
 ;;; Scheme does not retain live runtime state.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-registry-case)
 

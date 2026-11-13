@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal?)
         (only-in :clan/poo/object .o .ref)
-        (only-in :agentic-ai-lab/dev/modules/testing/source-admission
+        (only-in :tao3k/agentic-ai-lab/dev/modules/testing/source-admission
                  agentic-ai-lab-source-admission-observability-profile-prototype
                  agentic-ai-lab-source-admission-observability-profile?))
 

@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :agentic-ai-lab/modules/session/durable-policy
+        (only-in :tao3k/agentic-ai-lab/modules/session/durable-policy
                  agentic-ai-lab-durable-policy)
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy)
 
 (export sandbox-profile-policy-test)
 

@@ -8,8 +8,8 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
         (only-in :tao3k/yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :tao3k/yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-checkpoint)
@@ -99,9 +99,9 @@
           (lambda (port)
             (for-each (lambda (form) (write form port) (newline port))
               `((import :clan/poo/object
-                   (rename-in (only-in :agentic-ai-lab/modules/services/opentofu/config
+                   (rename-in (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/config
                                 Config OpenTofuProviderConfig) (Config Defaults))
-                   (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
+                   (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.))
                 (export Config OpenTofuProviderConfig)
                 (.def (Config @ Defaults)
                   source: (.o (:: @ NixSource.)
@@ -114,28 +114,26 @@
       (write-source init-path
         (call-with-output-string
           (lambda (port)
-            (write `(yuanxu! :load-modules ,(path-expand "modules" root-dir) mode: explicit
+            (write `(yuanxu! :test-dir "./t" :load-modules ,(path-expand "modules" root-dir) mode: explicit
                       (json-schema @ ,(path-expand "core/modules/json-schema" project))
                       (nix @ ,(path-expand "modules/nix" project))
                       (funflow @ ,(path-expand "core/modules/funflow" project))
                       :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)
-      (def selected-view
-        (yuanxu-load-modules init-path
-          module-view: (lambda (owner scope!) (.o identity: owner scope: (scope!)))))
+      (def selected-view (yuanxu-load-modules init-path))
       (def original-text (module-source-read config-path))
       (def service
         (.o config: config-path original: original-text
           .source-scope:
-          (lambda () (.get selected-view modules modules services opentofu scope))
+          (lambda () (.get selected-view modules modules services opentofu))
           .prepare:
           (lambda ()
             (def packages
               (.call (.cc SelectedPackages. 'selection selected-view
                           'directory (path-expand "packages" root-dir)) .run))
             (def ready-view (.call selected-view .with-packages packages))
-            (def ready-value (.get ready-view modules modules services opentofu scope))
+            (def ready-value (.get ready-view modules modules services opentofu))
             (def recipe-value (.get ready-value Null))
             (.o ready-scope: ready-value recipe: recipe-value))
           .workspace:

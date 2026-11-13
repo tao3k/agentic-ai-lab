@@ -5,7 +5,7 @@
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every ormap)
         :tao3k/yuanxu/object-family/role-syntax
-        (only-in :agentic-ai-lab/modules/search-engine/funs agentic-ai-lab-search-stage?))
+        (only-in :tao3k/agentic-ai-lab/modules/search-engine/funs agentic-ai-lab-search-stage?))
 (export agentic-ai-lab-search-attempt-state agentic-ai-lab-search-attempt-issue
         agentic-ai-lab-search-attempt-settle agentic-ai-lab-search-attempt-revise
         agentic-ai-lab-search-attempt-retire agentic-ai-lab-search-attempt-complete

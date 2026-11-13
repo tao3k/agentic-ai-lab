@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
                  agentic-ai-lab-temporal-bounded-observation-kind
                  agentic-ai-lab-temporal-duration-assessment-kind
                  AgenticAILabTemporalBoundedObservation

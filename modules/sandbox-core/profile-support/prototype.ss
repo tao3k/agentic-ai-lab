@@ -9,13 +9,13 @@
         (only-in :clan/poo/object .def .o .ref .slot? object?)
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
-        :agentic-ai-lab/modules/sandbox-core/resource-contract
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy)
 
 (export agentic-ai-lab-sandbox-core-profile-object
         agentic-ai-lab-sandbox-profile-prototype

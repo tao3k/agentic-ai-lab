@@ -11,11 +11,11 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/tool-core/objects-policy-refs
+        (only-in :tao3k/agentic-ai-lab/modules/tool-core/objects-policy-refs
                  agentic-ai-lab-tool-merge-policy-tool-refs
                  agentic-ai-lab-tool-unique-symbols)
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/tool-core/config)
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/tool-core/config)
 
 (export tool-core-test)
 

@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref .o)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/revisions/interface
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface)
 (export temporal-support-test)
 (def (at n) (agentic-ai-lab-temporal-instant (number->string n) "txn" n "ledger" 'observed))
 (def (valid n) (agentic-ai-lab-temporal-instant (number->string n) "valid" n "ledger" 'observed))

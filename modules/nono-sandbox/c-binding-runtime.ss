@@ -6,17 +6,17 @@
 ;;; Owner: nono-sandbox C binding runtime manifest projection lives here.
 ;;; Boundary: this module emits capability plans and backend handoff manifests.
 ;;; Runtime contract: Marlin or another C runtime owns dlopen/FFI execution.
-;;; Source contract: symbols mirror the package-owned bindings/nono-c/nono.h.
+;;; Source contract: symbols mirror the package-owned modules/nono-sandbox/nono-c/nono.h.
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
 ;;; Runtime nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/bridge
-        :agentic-ai-lab/modules/nono-sandbox/c-binding-build
-        :agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor
         (only-in :std/misc/process run-process))
 
 (export +nono-c-binding-dry-run-receipt-schema+

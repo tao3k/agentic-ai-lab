@@ -9,12 +9,12 @@
 (import
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/module-authoring/module-config-syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects
-        :agentic-ai-lab/modules/session/durable-policy)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects
+        :tao3k/agentic-ai-lab/modules/session/durable-policy)
 
-(export (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
-        (import: :agentic-ai-lab/modules/session/durable-policy)
+(export (import: :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
+        (import: :tao3k/agentic-ai-lab/modules/session/durable-policy)
         memory-store-spec
         memory-catalog
         memory-catalog-validation

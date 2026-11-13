@@ -15,7 +15,7 @@
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-admit-current!)
         (only-in :tao3k/yuanxu/module-system/source/build unique-build-inputs)
         (only-in :tao3k/yuanxu/observability/testing-script admit-testing-result)
-        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
+        (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports)
         :std/encoding/json)
 (export main aggregate snapshots publication-observations assert-control)
 (def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
@@ -126,10 +126,10 @@
     ;; Each external Nix Source retains its own transitive currentness checks
     ;; inside the actual Cases; this summary does not impersonate that owner.
     (def tests
-      (.call (.get agentic-ai-lab.init.exports tests) .for-files
+      (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
         (map (cut path-expand <> root)
           (append '("t/opentofu-selected-graph-test.ss")
-            (if artifact '("t/nix-flake-source-test.ss") '())))))
+            (if artifact '("t/yanxu/modules/nix/flake-source-test.ss") '())))))
     (def build (.get tests build))
     ((.get build admit-current))
     (let* ((initial (snapshots (publication-observations tests build))) (rounds '()) (flake-rounds '())
@@ -170,7 +170,7 @@
                (script (.cc base 'directory root 'environment env 'log log))
                (_log-recorded (hash-put! report 'last_control_log log))
                (result (observe-control script '() host))
-               (assertions (assert-control result log (if flake-test? "t/nix-flake-source-test.ss" "t/opentofu-selected-graph-test.ss")))
+               (assertions (assert-control result log (if flake-test? "t/yanxu/modules/nix/flake-source-test.ss" "t/opentofu-selected-graph-test.ss")))
                (value (json-file metrics)))
           (hash-put! value 'round index) (hash-put! value 'assertions assertions)
           (hash-put! value 'host (json-file host))

@@ -8,23 +8,23 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/query/types
+        (only-in :tao3k/agentic-ai-lab/modules/query/types
                  agentic-ai-lab-query? agentic-ai-lab-query-element-space?
                  agentic-ai-lab-query-provider?
                  agentic-ai-lab-source-query-receipt?)
-        (only-in :agentic-ai-lab/modules/query/funs agentic-ai-lab-query-admit)
-        (only-in :agentic-ai-lab/modules/query/contracts
+        (only-in :tao3k/agentic-ai-lab/modules/query/funs agentic-ai-lab-query-admit)
+        (only-in :tao3k/agentic-ai-lab/modules/query/contracts
                  agentic-ai-lab-query-source-content-identity
                  agentic-ai-lab-query-bind-execution-receipt)
-        (only-in :agentic-ai-lab/modules/query/objects
+        (only-in :tao3k/agentic-ai-lab/modules/query/objects
                  agentic-ai-lab-query-execution-candidate)
-        (only-in :agentic-ai-lab/modules/query/results/types
+        (only-in :tao3k/agentic-ai-lab/modules/query/results/types
                  agentic-ai-lab-query-result-set?)
-        (only-in :agentic-ai-lab/modules/query/results/funs
+        (only-in :tao3k/agentic-ai-lab/modules/query/results/funs
                  agentic-ai-lab-query-result-set-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/types
                  agentic-ai-lab-candidate-scope? agentic-ai-lab-candidate-receipt?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/funs
                  agentic-ai-lab-candidate-receipt agentic-ai-lab-candidate-check))
 (export agentic-ai-lab-gql-candidate-receipt agentic-ai-lab-gql-candidate-row-check)
 

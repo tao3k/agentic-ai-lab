@@ -3,14 +3,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Explicit runtime authority capability. POO owns contract/grant declarations;
 ;;; MRR owns typed identities and Context admission. No effect commit occurs here.
-(import :agentic-ai-lab/modules/temporal-causality/runtime/change-feed
+(import :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/change-feed
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
                  agentic-ai-lab-temporal-support-policy-status)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host-current))
 (export agentic-ai-lab-context-use-contract agentic-ai-lab-context-use-grant
         agentic-ai-lab-context-use-grant-revoke

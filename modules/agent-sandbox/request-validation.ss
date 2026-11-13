@@ -16,10 +16,10 @@
 ;;; - Profile and bridge tests assert both valid requests and failure codes.
 
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/request-field)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-field)
 
 (export agent-sandbox-request-validation-errors
         agent-sandbox-validate-request

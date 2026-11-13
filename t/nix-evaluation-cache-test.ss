@@ -10,7 +10,7 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer
                  current-module-process-trace-budget)
-        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixFlakeSource.
                  agentic-ai-lab-nix-flake-admit-generation))
 (export nix-evaluation-cache-test)
 

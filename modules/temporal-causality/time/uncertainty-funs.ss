@@ -8,12 +8,12 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
                  agentic-ai-lab-temporal-bounded-observation?
                  agentic-ai-lab-temporal-duration-assessment?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
                  agentic-ai-lab-temporal-bounded-observation-value
                  agentic-ai-lab-temporal-duration-assessment-value))
 

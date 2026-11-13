@@ -7,7 +7,7 @@
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/module-system/source/publication module-publication?)
-        (only-in :agentic-ai-lab/scenarios/aws/types AWSProfileContract.
+        (only-in :tao3k/agentic-ai-lab/scenarios/aws/types AWSProfileContract.
           AWSInterfaceContract aws-scenario-contract))
 (export aws-scenario-contract-test)
 ;; Deliberately a tiny Schema fixture, never claimed to be the AWS export.
@@ -65,9 +65,9 @@
     (yuanxu-test-case "publication admits paths without linking payloads"
       (def (publication declarations)
         (.o identity: 'test features: (.o)
-            core: (.o requires: (.o) scope-contract: AWSInterfaceContract
+            core: (.o scope-contract: AWSInterfaceContract
                       admissions: declarations
-                      link: (lambda (_) (error "metadata inspection must not link")))))
+                      exports: (error "metadata inspection must not construct scope"))))
       (check-equal? (module-publication? (publication
         (.o Scenario: (.o export-path: '(Scenario) contract-path: '(types Scenario))))) #t)
       (check-equal? (module-publication? (publication

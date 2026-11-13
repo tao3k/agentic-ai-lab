@@ -6,7 +6,7 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/types
                  agentic-ai-lab-temporal-impact-contrast?))
 (export AgenticAILabTemporalImpactRefresh agentic-ai-lab-temporal-impact-refresh?)
 

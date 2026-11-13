@@ -1,5 +1,5 @@
 (import (only-in :tao3k/yuanxu/profile-composition/user-profile yuanxu-user-profile-set-presentation-kind yuanxu-user-profile-set? yuanxu-user-profile-name yuanxu-user-profile-set-name yuanxu-user-profile-set-default-profile-name yuanxu-user-profile-set-profile-names yuanxu-user-profile-set-default-profile)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config agenticAiLabUserProfileSetPresentation))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config agenticAiLabUserProfileSetPresentation))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -21,8 +21,8 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         )
 
 (export user-interface-profile-set-case-test)

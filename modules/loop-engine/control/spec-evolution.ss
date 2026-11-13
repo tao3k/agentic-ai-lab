@@ -11,7 +11,7 @@
         :tao3k/yuanxu/modules/funflow/control-plane/roles
         :tao3k/yuanxu/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object-family/role-syntax
-        (only-in :agentic-ai-lab/modules/loop-engine/control/human-audit
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit
                  +loop-human-audit-decisions+))
 
 (export +spec-evolution-feedback-schema+

@@ -7,7 +7,7 @@
 
 (import (only-in :std/test check-equal?)
         (only-in :clan/poo/object object?)
-        (only-in :agentic-ai-lab/modules/loop-engine/runtime
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?)
         "./fixtures")
 

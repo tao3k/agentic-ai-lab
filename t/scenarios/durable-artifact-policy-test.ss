@@ -6,10 +6,10 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
         (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         :tao3k/yuanxu/module-system/authoring/roles
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
         :tao3k/yuanxu/profile-composition/selection-syntax
 
         :tao3k/yuanxu/profile-composition/profile-bundle

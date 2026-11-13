@@ -5,10 +5,10 @@
         (only-in :std/error Error? Error-message)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource. agentic-ai-lab-nix-admit-generation)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource. agentic-ai-lab-nix-admit-generation)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer
                  current-module-process-trace-budget)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
 (export nix-derivation-query-test test-cleanup!)
 ;; Store registration can stream a final path without a newline. Keep runtime
 ;; harness markers on their own line without changing the captured process data.

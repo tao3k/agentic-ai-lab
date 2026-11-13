@@ -6,7 +6,7 @@
 ;;; together or replaced together through this single command boundary.
 
 (import (only-in :std/misc/ports read-file-string write-file-string)
-        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
 ;; : Path
 (def header-path

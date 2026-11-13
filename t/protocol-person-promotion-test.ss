@@ -7,7 +7,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion)
+        :tao3k/agentic-ai-lab/modules/governance/policy/protocol-person-promotion)
 
 (def provenance
   (agentic-ai-lab-provenance

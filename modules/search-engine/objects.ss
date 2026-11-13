@@ -5,7 +5,7 @@
 
 ;;; Backend-neutral Search role objects and immutable declaration prototypes.
 (import :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/search-engine/types)
+        :tao3k/agentic-ai-lab/modules/search-engine/types)
 
 (export agentic-ai-lab-search-framework-role
         agentic-ai-lab-search-acquisition-role

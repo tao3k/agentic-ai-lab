@@ -6,7 +6,7 @@
         (only-in :clan/poo/mop validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
         "types.ss" "funs.ss")
 (export agentic-ai-lab-temporal-support-policy agentic-ai-lab-temporal-support-policy-status agentic-ai-lab-temporal-support-guard
         agentic-ai-lab-temporal-support-guard-replay agentic-ai-lab-temporal-support-claim)

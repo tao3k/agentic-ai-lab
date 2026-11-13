@@ -5,14 +5,14 @@
 (import
  (only-in :clan/poo/object .o .ref .call)
  (only-in :std/list/list every find)
- (prefix-in :agentic-ai-lab/t/context-query-provider-test query.)
- (only-in :agentic-ai-lab/t/context-query-durable-test retain-originals!)
- :agentic-ai-lab/modules/ai-agentic-context/durable-owner
- :agentic-ai-lab/modules/ai-agentic-context/use-host
- :agentic-ai-lab/modules/ai-agentic-context/query-provider
- :agentic-ai-lab/modules/ai-agentic-context/session-host
- :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
- :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
+ (prefix-in :tao3k/agentic-ai-lab/t/context-query-provider-test query.)
+ (only-in :tao3k/agentic-ai-lab/t/context-query-durable-test retain-originals!)
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock)
 (export grant-durable-driver)
 
 (def (ensure value message)

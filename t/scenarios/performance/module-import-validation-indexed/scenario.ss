@@ -12,7 +12,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
                  make-empty-agentic-ai-lab-module-descriptor
                  agentic-ai-lab-module-name
                  yuanxu-module-imports

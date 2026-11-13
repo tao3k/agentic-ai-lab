@@ -7,10 +7,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/types
                  agentic-ai-lab-temporal-trajectory-sample?
                  agentic-ai-lab-temporal-trajectory-series?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/objects
                  agentic-ai-lab-temporal-trajectory-series-value))
 (export agentic-ai-lab-temporal-trajectory-series
         agentic-ai-lab-temporal-trajectory-replay)

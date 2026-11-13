@@ -8,10 +8,10 @@
 (export #t)
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
-        :agentic-ai-lab/modules/workflow/contracts/release-assurance-claim-verifier
-        :agentic-ai-lab/modules/workflow/qualification/agentic-control-plane-fixture
-        :agentic-ai-lab/modules/workflow/qualification/runner)
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-claim-verifier
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/agentic-control-plane-fixture
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/runner)
 
 (def (release-gate-receipt run gate-id)
   (find (lambda (receipt) (eq? gate-id (.ref receipt 'gate-id)))

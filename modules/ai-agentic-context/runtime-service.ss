@@ -3,9 +3,9 @@
 ;;; POO service over the existing Context owner. This module owns no
 ;;; foreign runtime or transport protocol; observations stay runtime capabilities.
 (import (only-in :clan/poo/object .o .ref .call .slot?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-hash journal-open journal-close!)
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
         "session-host.ss" "use-host.ss" "durable-owner.ss")
 (export context-runtime-service context-service-resource context-service-command
         context-start-durable-service context-service-agenda!

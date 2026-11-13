@@ -15,9 +15,9 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :agentic-ai-lab/modules/loop-engine/runtime-agent
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime-agent
                  agentic-ai-lab-user-loop-engine-intent-session-agent-topology-trace)
-        (only-in :agentic-ai-lab/modules/loop-engine/session-agent-graph
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/session-agent-graph
                  agentic-ai-lab-user-loop-engine-intent-session-agent-graph))
 
 (export loop-engine-session-agent-graph-performance-test)

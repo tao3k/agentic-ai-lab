@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/object .o .ref .call object?)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :agentic-ai-lab/modules/query/semantic/organization-bundle
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
                  agentic-ai-lab-organization-principal
                  agentic-ai-lab-organization-agent
                  agentic-ai-lab-organization-delegation

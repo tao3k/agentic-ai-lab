@@ -26,7 +26,7 @@ class NamespaceContractTests(unittest.TestCase):
                 return contract.issues(path)
 
     def test_new_package_and_independent_core_are_accepted(self):
-        self.assertEqual(self.check_source("config.ss", "(import :agentic-ai-lab/init :yuanxu/types)"), [])
+        self.assertEqual(self.check_source("config.ss", "(import :tao3k/agentic-ai-lab/init :tao3k/yuanxu/types)"), [])
 
     def test_old_import_and_source_path_are_refused(self):
         old = "poo" + "-flow"

@@ -5,7 +5,7 @@
 ;;; Boundary: Strict mediation owns pure nonce/root state transitions.
 ;;; Invariant: a token is consumed at most once and roots never fork silently.
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token)
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token)
 
 (export agentic-ai-lab-strict-mediation-state
         agentic-ai-lab-strict-mediate

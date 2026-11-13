@@ -8,7 +8,7 @@
 ;;; owns storage, locking, leases, fsync, backfill, replay, and side effects.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        :agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
         :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export +agentic-ai-lab-durable-runtime-store-contract-kind+

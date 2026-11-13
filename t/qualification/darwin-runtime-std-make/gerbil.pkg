@@ -2,5 +2,5 @@
 ;;
 ;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(package: agentic-ai-lab/t/qualification/darwin-runtime-std-make)
+(package: tao3k/agentic-ai-lab/t/qualification/darwin-runtime-std-make)
 =

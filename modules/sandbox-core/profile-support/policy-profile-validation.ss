@@ -10,19 +10,19 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object object? .slot? .ref object<-alist)
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-core
-        :agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
-        (only-in :agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-core
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
+        (only-in :tao3k/agentic-ai-lab/modules/session/durable-policy
                  agentic-ai-lab-durable-policy?
                  agentic-ai-lab-durable-policy-diagnostic->alist
                  agentic-ai-lab-durable-policy-diagnostics
                  agentic-ai-lab-durable-policy->receipt
                  agentic-ai-lab-durable-policy-name
                  agentic-ai-lab-durable-policy-receipt->alist)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics))
 

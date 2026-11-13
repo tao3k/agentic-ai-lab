@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o)
-        :agentic-ai-lab/modules/loop-engine/policy-extension)
+        :tao3k/agentic-ai-lab/modules/loop-engine/policy-extension)
 
 (export loop-engine-policy-extension-test)
 

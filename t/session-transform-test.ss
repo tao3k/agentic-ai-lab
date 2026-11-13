@@ -10,8 +10,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/transform)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/transform)
 
 (export session-transform-test)
 

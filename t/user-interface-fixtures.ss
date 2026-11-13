@@ -10,9 +10,9 @@
         :tao3k/yuanxu/module-system/selection/objects
         (only-in :tao3k/yuanxu/module-system/selection/syntax
                  yuanxu-modules!)
-        :agentic-ai-lab/modules/loop-engine/config
+        :tao3k/agentic-ai-lab/modules/loop-engine/config
         :tao3k/yuanxu/profile-composition/user-profile
-        :agentic-ai-lab/modules/workflow/profiles/kernel/interface)
+        :tao3k/agentic-ai-lab/modules/workflow/profiles/kernel/interface)
 
 (export test-yuanxu-user-module-bundles
         test-agentic-ai-lab-user-modules

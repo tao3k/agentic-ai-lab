@@ -6,8 +6,8 @@
 ;;; Boundary: nono sandbox kernel module selection.
 ;;; Invariant: object inheritance and row extension live in objects.ss owners.
 
-(import :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/sandbox-core/objects
+(import :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/yuanxu/utilities/final-projection-syntax)
 

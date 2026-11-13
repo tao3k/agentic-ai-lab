@@ -6,8 +6,8 @@
 ;;; runtime receipt builders without starting durable execution.
 ;;; Invariant: generated materialization objects must keep checkpoint and
 ;;; recovery ids explicit.
-(import :agentic-ai-lab/modules/session/config-session-runtime
-        :agentic-ai-lab/modules/session/config-session-syntax-core)
+(import :tao3k/agentic-ai-lab/modules/session/config-session-runtime
+        :tao3k/agentic-ai-lab/modules/session/config-session-syntax-core)
 
 (export session-materialization)
 

@@ -5,7 +5,7 @@
 ;;; Initial anchors are document IDs and IDs of selected ordinary headlines.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list every delete-duplicates/hash find)
-        (only-in :agentic-ai-lab/modules/query/semantic/orgize-source-interface parse-org-events
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface parse-org-events
                  org-source-headline-parser-identity)
         "types.ss" "objects.ss" "funs-projection.ss" "funs-scope.ss")
 (export agentic-ai-lab-ai-agentic-context-org-anchors agentic-ai-lab-ai-agentic-context-org-anchors-replay)

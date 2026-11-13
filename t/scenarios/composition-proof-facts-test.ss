@@ -4,7 +4,7 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :agentic-ai-lab/modules/proof/projections/composition-facts)
+        :tao3k/agentic-ai-lab/modules/proof/projections/composition-facts)
 
 (export composition-proof-facts-test)
 

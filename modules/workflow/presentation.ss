@@ -9,18 +9,18 @@
 (export agentic-ai-lab-user-config-workflow-cicd-focused-presentation)
 
 (import (only-in :clan/poo/object .ref object<-fun)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-valid?
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostic-count
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostics)
-        :agentic-ai-lab/modules/workflow/cicd-config
-        :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config
-        :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support)
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-pipeline-run-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support)
 
 ;; Engineering note: workflow-CI focused presentation keeps runtime projection
 ;; memoized so command, handoff, and receipt rows share one projection pass.

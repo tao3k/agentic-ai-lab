@@ -17,12 +17,12 @@
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        (only-in :agentic-ai-lab/modules/loop-engine/runtime
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
                  agentic-ai-lab-user-loop-engine-capability-receipt-ref)
-        :agentic-ai-lab/modules/loop-engine/config
-        :agentic-ai-lab/modules/loop-engine/prototypes)
+        :tao3k/agentic-ai-lab/modules/loop-engine/config
+        :tao3k/agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-capability-test)
 

@@ -1,6 +1,6 @@
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
         (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
-        (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -12,14 +12,14 @@
         (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/funflow-config
-        :agentic-ai-lab/modules/workflow/cicd-config
-        :agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/funflow-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
         (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries))
 
 (export funflow-config-pipeline-direct-test)
 

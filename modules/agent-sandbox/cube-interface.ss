@@ -12,10 +12,10 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/bridge)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge)
 
 (export +cube-interface-schema+
         +cube-interface-api-compatibilities+

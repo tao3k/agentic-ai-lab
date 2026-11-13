@@ -7,9 +7,9 @@
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
         :tao3k/yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/tool-core/objects-support)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-support)
 
 (export +agentic-ai-lab-tool-core-spec-kind+
         agentic-ai-lab-tool-spec

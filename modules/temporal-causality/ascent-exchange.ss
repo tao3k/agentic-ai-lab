@@ -8,11 +8,11 @@
         (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/types
                  agentic-ai-lab-causal-event-graph? agentic-ai-lab-causal-cut?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-cut)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-instant?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-cut)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-instant?)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
                  agentic-ai-lab-temporal-bounded-observation?)
         (only-in :gerbil-ascent/temporal/lens
                  temporal-interval temporal-lens temporal-source temporal-solve temporal-verify))

@@ -5,9 +5,9 @@
 ;;; composition installs one runtime service reference; this is not a Session
 ;;; registry, a Context factory or a second owner of lifecycle state.
 (import (only-in :clan/poo/object .o .ref .call)
-        (only-in :agentic-ai-lab/modules/durable/agenda durable-agenda-start)
-        (only-in :agentic-ai-lab/modules/query/org-agenda org-agenda-occurrences)
-        :agentic-ai-lab/modules/ai-agentic-context/runtime-service)
+        (only-in :tao3k/agentic-ai-lab/modules/durable/agenda durable-agenda-start)
+        (only-in :tao3k/agentic-ai-lab/modules/query/org-agenda org-agenda-occurrences)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/runtime-service)
 (export semantic-context-install! context-lifecycle-command
         context-lifecycle-inspect context-lifecycle-shutdown)
 

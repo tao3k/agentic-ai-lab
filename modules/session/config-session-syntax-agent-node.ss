@@ -6,7 +6,7 @@
 ;;; surface for child agent graph nodes.
 ;;; Invariant: macro expansion must preserve session id ancestry without
 ;;; materializing runtime agents during configuration parsing.
-(import :agentic-ai-lab/modules/session/config-session-runtime)
+(import :tao3k/agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-agent-node
         session-agent-graph

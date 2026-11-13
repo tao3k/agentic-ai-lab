@@ -2,9 +2,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in "../dev/d2/init.ss" agentic-ai-lab/dev/d2.init.exports))
+        (only-in "../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
 (export d2-explanation-test)
-(def Scope (.get agentic-ai-lab/dev/d2.init.exports modules d2))
+(def Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def Representation. (.get Scope prototypes Representation))
 (def (example)
   (.o views: (list (.o identity: 'explanation revision: 'r1 audience: 'beginner))

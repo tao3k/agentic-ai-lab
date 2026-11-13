@@ -15,14 +15,14 @@
         (only-in :clan/poo/object .o .cc .ref object<-alist)
         (only-in :clan/poo/type Record RecordSlot)
         (only-in :clan/poo/number Integer)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface
                  yuanxu-module-interface-schema-spec)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
                  agentic-ai-lab-modules)
         (only-in :tao3k/yuanxu/module-system/projection/option-objects
                  yuanxu-module-option-schema-value)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-option-projection
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-option-projection
                  agentic-ai-lab-module-option-schemas)
         (only-in :tao3k/yuanxu/module-system/projection/option-validation
                  yuanxu-module-find-schema))

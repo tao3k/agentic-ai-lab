@@ -7,7 +7,7 @@
         (only-in :std/encoding/json json->string)
         (only-in :clan/poo/object .o)
         (only-in :std/misc/ports read-all-as-string)
-        :agentic-ai-lab/modules/authorization/providers/cedar/objects
+        :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/objects
         (only-in :gerbil-scheme-rust/scheme/native gerbil-rs-root-string))
 (export main)
 
@@ -62,10 +62,10 @@
 ;; Keep exception handling in the ordinary Gerbil functions and qualify them.
 (begin-foreign
   (c-define (snapshot-root) () int64 "agentic_ai_lab_cedar_snapshot_root" "extern"
-    (agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-snapshot))
+    (tao3k/agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-snapshot))
   (c-define (allow-root) () int64 "agentic_ai_lab_cedar_allow_root" "extern"
-    (agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"alice\"" #f))
+    (tao3k/agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"alice\"" #f))
   (c-define (deny-root) () int64 "agentic_ai_lab_cedar_deny_root" "extern"
-    (agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"bob\"" #f))
+    (tao3k/agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"bob\"" #f))
   (c-define (forbid-root) () int64 "agentic_ai_lab_cedar_forbid_root" "extern"
-    (agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"alice\"" #t)))
+    (tao3k/agentic-ai-lab/bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance#project-request "User::\"alice\"" #t)))

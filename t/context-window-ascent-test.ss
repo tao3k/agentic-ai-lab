@@ -4,8 +4,8 @@
 
 (import (only-in :std/test test-suite test-case check-equal?)
         (only-in :clan/poo/object .o .ref .get)
-        (only-in "../dev/d2/init.ss" agentic-ai-lab/dev/d2.init.exports))
-(def ContextProfile (.get agentic-ai-lab/dev/d2.init.exports modules d2 profiles ContextEvolution))
+        (only-in "../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
+(def ContextProfile (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2 profiles ContextEvolution))
 (def ExperienceWindow. (.get ContextProfile Window))
 (def context-evolution-evaluate (.get ContextProfile evaluate))
 (def context-evolution-rows (.get ContextProfile rows))

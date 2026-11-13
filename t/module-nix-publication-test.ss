@@ -8,7 +8,7 @@
         (only-in :clan/poo/mop call-with-slot-read-observer validate TypeError?)
         (only-in :clan/poo/object object-protocol-set! .o)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-operation-resume)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules))
@@ -46,7 +46,7 @@
                  (source (path-expand "../modules" (path-directory (this-source-file)))))
             (call-with-output-file path
               (lambda (port)
-                (write `(yuanxu! mode: explicit source: ,source (nix)) port)))
+                (write `(yuanxu! :test-dir "./t" mode: explicit source: ,source (nix)) port)))
             (let* ((view (yuanxu-load-modules path))
                    (scope (.get view modules nix))
                    (prototype (.get scope prototypes Source)))

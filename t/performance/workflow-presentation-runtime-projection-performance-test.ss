@@ -15,7 +15,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxuUserConfig)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
         (only-in "../../user-interface/custom/my-module/cases/cicd-owner"
                  agentic-ai-lab-custom-my-module-cicd-module

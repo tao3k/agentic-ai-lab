@@ -10,12 +10,12 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
                  agentic-ai-lab-user-config-workflow-cicd-runtime-readiness
                  agentic-ai-lab-user-config-workflow-cicd-runtime-command-manifests
                  agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries
                  agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))
 

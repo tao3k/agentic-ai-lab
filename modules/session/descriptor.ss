@@ -4,8 +4,8 @@
 ;;; Inert descriptor owned by the independent Session Module.
 (import (only-in :clan/poo/type Record)
         (only-in :clan/poo/object .o)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-interface yuanxu-module-interface)
-        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor agenticAiLabModules))
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-interface yuanxu-module-interface)
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor agenticAiLabModules))
 (export +agentic-ai-lab-session-default-flags+ agentic-ai-lab-session-module)
 (def +agentic-ai-lab-session-default-flags+
   '(+lineage +placement +handoff +graph +transform +doctor))

@@ -18,7 +18,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection?
                  yuanxu-user-module-selection-flag-entry)
-        :agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/session/config
         (only-in "../../user-interface/custom/my-module/cases/cicd"
                  agentic-ai-lab-custom-my-module-cicd-case)
         (only-in "../../user-interface/custom/my-module/cases/loop-engine-owner"

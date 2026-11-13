@@ -9,10 +9,10 @@
 (import (only-in :clan/poo/object .@ object?)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/profile-data
-        :agentic-ai-lab/modules/agent-sandbox/profile-validation)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-data
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation)
 
 (export agent-sandbox-profile-descriptor-prototype
         make-agent-sandbox-backend-profile-descriptor

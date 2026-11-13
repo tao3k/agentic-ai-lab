@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
-        :agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
+        :tao3k/agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot))
 (export ascent-evidence-store-test)
 (def (field name answer) (cadr (assq name answer)))

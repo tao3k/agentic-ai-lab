@@ -4,10 +4,6 @@
 (.def Review
   identity: 'review
   core:
-  (.o requires:
-      (.o Context:
-          (.o module-id: 'agentic-ai-lab/modules/ai-agentic-context/interface
-              refine: refine-context))
-      scope-contract: ReviewScopeContract
-      exports: (.o context: Context))
+  (.o scope-contract: ReviewScopeContract
+      exports: (.o context: refine-context))
   features: (.o))

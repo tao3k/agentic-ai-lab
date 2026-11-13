@@ -32,8 +32,6 @@ filegroup(
     # identity and the explicit build entry owns the module graph.
     srcs = [
         "gerbil.pkg",
-        "modules/gerbil.pkg",
-        "scenarios/gerbil.pkg",
         ":core_module_sources",
         "bindings/nix-c-api/derivation-session.ss",
         # Context program admission observes both execution-boundary sources.
@@ -45,7 +43,7 @@ filegroup(
         "//packages/python-runtime/src/agentic_ai_lab_runtime:reasoning_rule_sources",
     ] + glob([
         "*.ss",
-        "bindings/nono-c/**/*.h",
+        "modules/nono-sandbox/nono-c/**",
         "modules/**/*.ss",
         "modules/**/*.inc",
         "user-interface/**/*.ss",
@@ -207,7 +205,7 @@ gerbil_project_compile(
     name = "compile",
     srcs = [":gerbil_package_sources"],
     args = ["compile"],
-    build_script = ":build-development.ss",
+    build_script = ":build.ss",
     # Fence compiler VMs before imports; native tools preserve this budget.
     env = {
         "GERBIL_BUILD_VERBOSE": "1",
@@ -246,7 +244,7 @@ gerbil_project_environment(
 gerbil_project_dev(
     name = "dev_compile",
     args = ["compile"],
-    build_script = ":build-development.ss",
+    build_script = ":build.ss",
     tags = ["local", "manual"],
     deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )

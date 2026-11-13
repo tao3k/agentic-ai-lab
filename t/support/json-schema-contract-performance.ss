@@ -18,7 +18,7 @@
                  yuanxu-json-schema-contract-artifact-normalization)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-valid
                  yuanxu-json-schema-node-valid?)
-        (only-in :agentic-ai-lab/modules/workflow/profiles/github-ci-contract
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/github-ci-contract
                  agentic-ai-lab-funflow-github-ci-contract-artifact
                  agentic-ai-lab-funflow-github-ci-validate-workflow->alist))
 

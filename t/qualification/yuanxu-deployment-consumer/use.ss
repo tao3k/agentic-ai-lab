@@ -1,12 +1,14 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in "./main.ss" selected-deployment)
-        (only-in "./init.ss" yuanxu-deployment-consumer.init.exports)
+(import (only-in :yuanxu-deployment-consumer/main selected-deployment)
+        (only-in :yuanxu-deployment-consumer/init yuanxu-deployment-consumer.init.exports)
         (only-in :clan/poo/object .get .all-slots .ref/cached)
-        (only-in :std/list/list delete-duplicates/hash)
         (only-in :gerbil/runtime/loader list-modules)
         (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
 (export verify-deployment-use verify-deployment-runtime)
+(def (publication-reads times)
+  (+ (hash-ref times '(calls candidate-read) 0)
+     (hash-ref times '(calls publication-read) 0)))
 (def (verify-deployment-use)
   (displayln "LAB-DEPLOYMENT-USE enter epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
   (force-output)
@@ -16,7 +18,7 @@
   (unless (and (equal? (.all-slots lab) '(services))
                (equal? (.all-slots (.get lab services)) '(opentofu))
                (null? (.all-slots (.get yuanxu-deployment-consumer.init.exports Core)))
-               (zero? (hash-ref namespace-times '(calls candidate-read) 0))
+               (zero? (publication-reads namespace-times))
                (zero? (hash-ref namespace-times '(calls scope-factory) 0))
                (not (.ref/cached (.get lab services) 'opentofu)))
     (error "Profile must expose only category roots without forcing a scope"))
@@ -26,22 +28,23 @@
     (call-with-module-source-operation-measurement selected-deployment accounting?: #f))
   (displayln "LAB-DEPLOYMENT-GET return epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
   (force-output)
-  (unless (and (= (hash-ref first-times '(calls candidate-read) 0) 4)
+  (unless (and (= (publication-reads first-times) 4)
                (= (hash-ref first-times '(calls scope-factory) 0) 4)
                (andmap (lambda (id) (= (hash-ref first-times (list 'calls (list 'scope-factory id)) 0) 1))
-                       '(agentic-ai-lab/modules/nix/interface yuanxu/modules/json-schema/interface
-                         yuanxu/modules/funflow/interface agentic-ai-lab/modules/services/opentofu/interface)))
+                       '(tao3k/agentic-ai-lab/modules/nix/interface tao3k/yuanxu/modules/json-schema/interface
+                         tao3k/yuanxu/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface)))
     (error "First business read must admit and construct exactly the selected closure"))
   (defvalues (again repeat-times)
     (call-with-module-source-operation-measurement selected-deployment accounting?: #f))
   (unless (and (eq? scope again)
-               (zero? (hash-ref repeat-times '(calls candidate-read) 0))
+               (zero? (publication-reads repeat-times))
                (zero? (hash-ref repeat-times '(calls scope-factory) 0)))
     (error "Repeated native .get must retain scope identity without readmission"))
-  (unless (equal? (.get yuanxu-deployment-consumer.init.exports tests selected-graph module-order)
-                  '(agentic-ai-lab/modules/nix/interface yuanxu/modules/json-schema/interface
-                         yuanxu/modules/funflow/interface agentic-ai-lab/modules/services/opentofu/interface))
-    (error "Test projection differs from the runtime dependency closure"))
+  (def test-order (.get yuanxu-deployment-consumer.init.exports tests selected-graph module-order))
+  (unless (equal? test-order
+                  '(tao3k/agentic-ai-lab/modules/nix/interface tao3k/yuanxu/modules/json-schema/interface
+                         tao3k/yuanxu/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface))
+    (error "Test projection differs from the runtime dependency closure" test-order))
   (unless (equal? ((.get scope schema type) '("map" "string"))
                   '((type . "object") (additionalProperties . ((type . "string")))))
     (error "OpenTofu public schema operation failed"))
@@ -57,7 +60,10 @@
       (def loaded (assoc identity (list-modules)))
       (unless (and loaded (string? (cdr loaded)) (string-prefix? library (path-normalize (cdr loaded))))
         (error "runtime did not initialize the selected downstream product" identity loaded)))
-    '("tao3k/yuanxu/modules/json-schema/json-schema-contract~0" "tao3k/yuanxu/modules/funflow/objects~0"))
+    '("yuanxu-deployment-consumer/main~0"
+      "yuanxu-deployment-consumer/init~0"
+      "tao3k/yuanxu/modules/json-schema/json-schema-contract~0"
+      "tao3k/yuanxu/modules/funflow/objects~0"))
   (displayln "LAB-DEPLOYMENT-PRODUCT-USE-OK"))
 
 (def (main) (verify-deployment-runtime))

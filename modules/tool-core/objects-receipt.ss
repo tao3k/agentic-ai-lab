@@ -7,12 +7,12 @@
 
 (import (only-in :clan/poo/object .o .ref object?)
         :tao3k/yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/tool-core/objects-catalog
-        :agentic-ai-lab/modules/tool-core/objects-policy-refs
-        :agentic-ai-lab/modules/tool-core/objects-support
-        :agentic-ai-lab/modules/tool-core/objects-validation)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-catalog
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-policy-refs
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-support
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-validation)
 
 (export +agentic-ai-lab-tool-core-policy-validation-receipt-kind+
         agentic-ai-lab-tool-policy-catalog-validation-receipt

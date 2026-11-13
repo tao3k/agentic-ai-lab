@@ -9,13 +9,13 @@
 ;;; projections live in the split submodules so policy users keep one import
 ;;; path while the implementation stays below the source-owner modularity gate.
 
-(import :agentic-ai-lab/modules/session/policy-core
-        :agentic-ai-lab/modules/session/policy-tool-grant
-        :agentic-ai-lab/modules/session/policy-families
-        :agentic-ai-lab/modules/session/policy-permissions)
+(import :tao3k/agentic-ai-lab/modules/session/policy-core
+        :tao3k/agentic-ai-lab/modules/session/policy-tool-grant
+        :tao3k/agentic-ai-lab/modules/session/policy-families
+        :tao3k/agentic-ai-lab/modules/session/policy-permissions)
 
 (export
-  (import: :agentic-ai-lab/modules/session/policy-core)
-  (import: :agentic-ai-lab/modules/session/policy-tool-grant)
-  (import: :agentic-ai-lab/modules/session/policy-families)
-  (import: :agentic-ai-lab/modules/session/policy-permissions))
+  (import: :tao3k/agentic-ai-lab/modules/session/policy-core)
+  (import: :tao3k/agentic-ai-lab/modules/session/policy-tool-grant)
+  (import: :tao3k/agentic-ai-lab/modules/session/policy-families)
+  (import: :tao3k/agentic-ai-lab/modules/session/policy-permissions))

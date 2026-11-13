@@ -4,7 +4,7 @@
 
 ;;; Exercise the installed Orgize dependency through Agentic AI Lab's POO surface.
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/query/semantic/orgize-interface
+        :tao3k/agentic-ai-lab/modules/query/semantic/orgize-interface
         (only-in :orgize/bindings/c/orgize orgize-c-round-trip))
 (export run-orgize-runtime-reuse-test)
 

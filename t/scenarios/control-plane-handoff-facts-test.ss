@@ -4,7 +4,7 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts)
+        :tao3k/agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts)
 
 (export control-plane-handoff-facts-test)
 

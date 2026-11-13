@@ -3,10 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Dedicated host control state; ordinary queries supply neither policy nor clock.
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy agentic-ai-lab-temporal-support-claim)
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-input temporal-support-result))
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy agentic-ai-lab-temporal-support-claim)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-input temporal-support-result))
 (export temporal-policy-refresh temporal-policy-guard-call temporal-policy-host-host temporal-policy-claim-call)
 (def (temporal-policy-host-host) host)
 (def host (agentic-ai-lab-temporal-support-policy-host))

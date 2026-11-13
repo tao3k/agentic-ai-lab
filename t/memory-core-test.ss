@@ -10,9 +10,9 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
                  agentic-ai-lab-memory-field-rows))
 
 (export memory-core-test)

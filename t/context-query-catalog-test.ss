@@ -3,8 +3,8 @@
 ;;; Real catalog/journal replay without Sessions, Tasks or dummy observations.
 (import
  (only-in :clan/poo/object .o .ref)
- :agentic-ai-lab/modules/ai-agentic-context/query-provider
- :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal)
+ :tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal)
 (export context-query-catalog-driver)
 
 (def (ensure value message)

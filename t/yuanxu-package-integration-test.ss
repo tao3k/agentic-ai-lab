@@ -13,7 +13,7 @@
         (only-in :tao3k/yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
         (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
-        (only-in "../init.ss" agentic-ai-lab.init.exports))
+        (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports))
 (export yuanxu-package-integration-test)
 (def (product-snapshot targets directories)
   (map (lambda (path) (cons path (sha256 (call-with-input-file path read-all-as-u8vector))))
@@ -32,13 +32,13 @@
 (def yuanxu-package-integration-test
   (test-suite "Lab package consumes Yuanxu public declarations"
     (test-case "the package owns its build projection and native module demand"
-      (check-equal? (list? (.get agentic-ai-lab.init.exports std-make-spec)) #t)
+      (check-equal? (list? (.get tao3k/agentic-ai-lab.init.exports std-make-spec)) #t)
       (def started (real-time))
-      (def scope (.get agentic-ai-lab.init.exports modules nix))
+      (def scope (.get tao3k/agentic-ai-lab.init.exports modules nix))
       (displayln "lab-business-get seconds=" (- (real-time) started))
       (force-output)
       (check-equal? (.get scope config nix) "nix")
-      (check-equal? (eq? scope (.get agentic-ai-lab.init.exports modules nix)) #t))
+      (check-equal? (eq? scope (.get tao3k/agentic-ai-lab.init.exports modules nix)) #t))
     (test-case "package build owns only the selected real Lab closure"
       ;; Locate this package's fixture from the test source. The root test
       ;; projection admits other Lab owners and is not a consumer build input.
@@ -103,20 +103,21 @@
             (map (lambda (identity)
                    (def path
                      (path-expand
-                       (string-append (substring identity 15 (string-length identity)) ".ss")
+                       (string-append (substring identity (string-length "tao3k/agentic-ai-lab/") (string-length identity)) ".ss")
                        package-root))
                    (cons path (module-source-read path)))
-                 (filter (cut string-prefix? "agentic-ai-lab/" <>) targets)))
+                 (filter (cut string-prefix? "tao3k/agentic-ai-lab/" <>) targets)))
           (def sentinel (path-expand "lib/unrelated.ssi" a))
           (call-with-output-file sentinel (lambda (port) (display "unrelated product" port)))
           (check-equal? (pair? targets) #t)
           (for-each (lambda (identity)
-                      (unless (or (string-prefix? "agentic-ai-lab/modules/nix/" identity)
-                                  (member identity '("agentic-ai-lab/nix-contracts" "yuanxu-nix-consumer/init" "yuanxu-nix-consumer/main")))
+                      (unless (or (string-prefix? "tao3k/agentic-ai-lab/modules/nix/" identity)
+                                  (member identity '("yuanxu-nix-consumer/init" "yuanxu-nix-consumer/main")))
                         (error "unselected compiler owner" identity)))
                     targets)
-          (check-equal? (and (member "agentic-ai-lab/modules/nix/progress" targets) #t) #t)
-          (check-equal? (and (member "agentic-ai-lab/modules/nix/interface" targets) #t) #t)
+          (check-equal? (and (member "tao3k/agentic-ai-lab/modules/nix/progress" targets) #t) #t)
+          (check-equal? (and (member "tao3k/agentic-ai-lab/modules/nix/contracts" targets) #t) #t)
+          (check-equal? (and (member "tao3k/agentic-ai-lab/modules/nix/interface" targets) #t) #t)
           (check-equal? (compile-events (action a "compile")) targets)
           (for-each (lambda (identity)
                       (for-each (lambda (suffix)

@@ -5,7 +5,7 @@
                  yuanxuUserConfig yuanxu-settings yuanxu-user-module-selection
                  yuanxu-user-custom-module-selection yuanxu-user-module-bundles-extend
                  yuanxu-user-module-bundles->modules)
-        (only-in :agentic-ai-lab/modules/workflow/profiles/kernel/bundles
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/kernel/bundles
                  agentic-ai-lab-kernel-module-bundles))
 (def Config
   (yuanxuUserConfig

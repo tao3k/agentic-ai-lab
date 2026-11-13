@@ -6,7 +6,7 @@
 ;;; session runtime receipts materialize message routing.
 ;;; Invariant: channel expansion must preserve explicit session ids so policy
 ;;; can reason about allowed cross-agent communication.
-(import :agentic-ai-lab/modules/session/config-session-runtime)
+(import :tao3k/agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-communication-channel
         session-communication-channel-rows

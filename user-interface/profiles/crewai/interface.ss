@@ -3,6 +3,6 @@
 (.def (Published @ [] config)
   identity: 'crewai
   config: Config
-  core: (.o requires: (.o) scope-contract: ScopeContract
+  core: (.o scope-contract: ScopeContract
             exports: (.cc Profile. 'config config))
   features: (.o))

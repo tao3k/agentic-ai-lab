@@ -6,7 +6,7 @@
          :std/test
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 
 (export capability-prototypes-test)

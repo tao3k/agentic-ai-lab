@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-capabilities))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-capabilities))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -8,8 +8,8 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
-        :agentic-ai-lab/modules/nono-sandbox/config
-        :agentic-ai-lab/modules/agent-sandbox/config)
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/config
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config)
 
 (export sandbox-profile-object-composition-performance-test)
 

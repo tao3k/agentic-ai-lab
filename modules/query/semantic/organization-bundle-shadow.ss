@@ -7,8 +7,8 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/query/semantic/organization-bundle
-        :agentic-ai-lab/modules/query/semantic/funcs)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/modules/query/semantic/funcs)
 
 (def +agentic-ai-lab-organization-shadow-receipt-schema+
   'agentic-ai-lab.organization-bundle-shadow-receipt.draft.1)

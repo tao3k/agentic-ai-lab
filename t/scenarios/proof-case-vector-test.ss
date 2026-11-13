@@ -7,8 +7,8 @@
         (only-in :std/source this-source-file)
         (only-in :std/encoding/hex hex-decode)
         :clan/poo/object
-        :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1
-        :agentic-ai-lab/modules/proof/projections/proof-case-vector)
+        :tao3k/agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-case-vector)
 
 (export proof-case-vector-test
         canonical-proof-case)

@@ -9,16 +9,16 @@
 (import (only-in :clan/poo/object .ref object<-fun)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/yuanxu/utilities/runtime-receipt-syntax
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
                  agentic-ai-lab-user-alist-ref)
-        :agentic-ai-lab/modules/sandbox-core/profile-catalog
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
         (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-check-map->functional-dag
                  yuanxu-funflow-functional-dag->alist)
         (only-in :tao3k/yuanxu/modules/funflow/check-objects
                  yuanxu-cicd-check-map?
                  yuanxu-cicd-check-map-name)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi))
 
 (export agentic-ai-lab-user-cicd-payload?
         agentic-ai-lab-user-cicd-payload-section
@@ -53,7 +53,7 @@
 ;;; CI/CD payload predicates recognize the nested flag shape emitted by init.ss.
 ;;; They avoid descriptor lookup so user tools can inspect declared intent first.
 ;; : (-> UserCicdPayloadCandidate Boolean)
-(import :agentic-ai-lab/modules/workflow/cicd-runtime-command-config)
+(import :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config)
 
 ;;; Payload section reads are deliberately lossy: missing sections become empty
 ;;; lists, which keeps partial user declarations presentable before validation.

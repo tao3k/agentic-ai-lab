@@ -4,19 +4,19 @@
 ;;; workspace recovery deployment and operator commands over the normal host API.
 (import :clan/poo/object
         :std/encoding/json
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features ContextCoreProfile)
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/runtime-service
-        :agentic-ai-lab/modules/ai-agentic-context/workspace-endpoint
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/authorization/providers/cedar/interface
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features ContextCoreProfile)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/runtime-service
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/workspace-endpoint
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+        :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/interface
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
 (export durable-workspace-recovery-host)
 
 (def (text path) (call-with-input-file path (lambda (port) (read-line port #f))))

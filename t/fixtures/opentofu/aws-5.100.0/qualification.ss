@@ -13,8 +13,8 @@
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        :agentic-ai-lab/opentofu-contracts "./release.ss"
-        :agentic-ai-lab/modules/services/opentofu/collections :agentic-ai-lab/modules/services/opentofu/objects
+        :tao3k/agentic-ai-lab/modules/services/opentofu/contracts "./release.ss"
+        :tao3k/agentic-ai-lab/modules/services/opentofu/collections :tao3k/agentic-ai-lab/modules/services/opentofu/objects
         "./request-types.ss")
 (export AwsProviderBinaryContract AwsProviderSourceContract agentic-ai-lab-opentofu-aws-sources-lock agentic-ai-lab-opentofu-aws-provider)
 

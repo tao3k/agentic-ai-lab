@@ -6,7 +6,7 @@
 ;;; session graph and child-agent addressing.
 ;;; Invariant: selector expansion must keep fallback and parent-child ancestry
 ;;; visible to policy validation.
-(import :agentic-ai-lab/modules/session/config-session-runtime)
+(import :tao3k/agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-selector-candidate
         session-selector)

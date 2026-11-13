@@ -5,12 +5,12 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test test-suite check check-exception)
         (only-in :clan/poo/object .o .ref .slot?)
-        (only-in :agentic-ai-lab/modules/query/interface
+        (only-in :tao3k/agentic-ai-lab/modules/query/interface
                  AgenticAILabQuery. AgenticAILabGqlQueryProgram.
                  AgenticAILabSchemeGqlQueryLanguage.
                  GraphSyntaxNode. GraphSyntaxPath. GraphSyntaxProperty.
                  GraphSyntaxProjection. agentic-ai-lab-query-result-contract)
-        (only-in :agentic-ai-lab/modules/evidence-assessment/interface
+        (only-in :tao3k/agentic-ai-lab/modules/evidence-assessment/interface
                  AgenticAILabEvidenceAssessmentCase.
                  agentic-ai-lab-evidence-reference
                  agentic-ai-lab-evidence-claim

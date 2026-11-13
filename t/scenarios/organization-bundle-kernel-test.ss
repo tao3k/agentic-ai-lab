@@ -4,8 +4,8 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :clan/poo/object :std/test
-        :agentic-ai-lab/modules/query/semantic/organization-bundle
-        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel)
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
+        :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle-kernel)
 
 
 (def (bundle epoch child-authority)

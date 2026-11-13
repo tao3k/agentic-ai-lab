@@ -5,7 +5,7 @@
 
 ;;; Boundary: executable exercise for tool-calling object-list performance.
 
-(import :agentic-ai-lab/modules/tool-core/calling-control)
+(import :tao3k/agentic-ai-lab/modules/tool-core/calling-control)
 
 (def (tool-calling-performance-symbol prefix index)
   (string->symbol (string-append prefix "-" (number->string index))))

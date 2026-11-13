@@ -4,10 +4,10 @@
 
 ;;; Proof gate receipt projection.
 ;;; - Convert module receipts into bounded proof facts before bundling verifier inputs.
-(import :agentic-ai-lab/modules/proof/projections/proof-gate-bundle
-        :agentic-ai-lab/modules/proof/projections/composition-facts
-        :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
-        :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
+(import :tao3k/agentic-ai-lab/modules/proof/projections/proof-gate-bundle
+        :tao3k/agentic-ai-lab/modules/proof/projections/composition-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
+        :tao3k/agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
 
 (export agentic-ai-lab-proof-receipt-ref
         agentic-ai-lab-composition-receipt->proof-facts

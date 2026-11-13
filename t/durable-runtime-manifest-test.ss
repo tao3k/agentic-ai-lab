@@ -4,10 +4,10 @@
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest)
 
 (export durable-runtime-manifest-test)
 

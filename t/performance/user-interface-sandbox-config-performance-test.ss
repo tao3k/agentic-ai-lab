@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-by-name))
 (import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -19,10 +19,10 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
         "../user-interface-fixtures.ss"
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         
-        :agentic-ai-lab/modules/agent-sandbox/config)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config)
 
 (export user-interface-sandbox-config-performance-test)
 

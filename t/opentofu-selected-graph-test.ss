@@ -5,9 +5,9 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource. NixFlakeSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource. NixFlakeSource.)
         (only-in :std/encoding/json read-json write-json)
-        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer current-nix-process-completion-observer)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer current-nix-process-completion-observer)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/string/misc string-subst)
         (only-in :gerbil/expander eval-syntax current-expander-context make-top-context syntax->list)
@@ -38,7 +38,8 @@
   (call-with-output-file (list path: path truncate: #t) (cut display text <>)))
 (def (configured-modules init upstream-source)
   (configured-opentofu-modules init
-    (lambda (scope) (.cc scope 'config (.cc (.get scope config) 'source upstream-source)))))
+    (lambda (scope) (.cc scope 'config (.cc (.get scope config) 'source upstream-source)))
+    'app/infrastructure))
 (def (derivation-inputs value)
   (run-process (list "nix-store" "--query" "--references" (.get value derivation))
                stdin-redirection: #f stderr-redirection: #f
@@ -48,7 +49,7 @@
     "(def Config (.o resource: (.o aws_security_group: (.o web: (.o name: \"web\"))"
     (if null? " null_resource: (.o smoke: (.o triggers: (.o release: \"smoke\")))" "")
     ")))"))
-;; Internal inspection only: package keys are consumer-qualified by Core.
+;; The configuration owner publishes its own external request.
 (def (package-id artifact)
   (.get (car (.get artifact build-graph external-packages)) identity))
 (def (package-result artifact)
@@ -185,6 +186,7 @@
             (call-with-output-string
               (lambda (port)
                 (write `(yuanxu!
+                          :test-dir "./t"
                           :load-modules ,(path-expand "core/modules" (current-directory))
                           mode: explicit rename: Core (json-schema) (funflow)
                           :load-modules ,(path-expand "modules" (current-directory))
@@ -213,7 +215,7 @@
                   (map (lambda (path) (cons path (module-source-read path)))
                        (list expression-path catalog-path collector-path checker))))))
           (write-source (path-expand "interface.ss" owner)
-            "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
+            "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects)) (.def Infrastructure identity: 'app/infrastructure core: (.o scope-contract: Scope exports: (.o config: Config)) features: (.o))")
           (write-source (path-expand "modules/unused/bomb/interface.ss" root)
                         "(((disabled module must not parse")
           (write-source (path-expand "modules/unused/bomb/build.ss" root)
@@ -230,9 +232,12 @@
           (assert 'maintained-publisher-source
             (equal? (path-normalize (.get (.call (.get parent-view context) locate 'services/opentofu) value))
                     (path-normalize (path-expand "interface.ss" maintained))))
-          (assert 'maintained-build-role-source
-            (equal? (path-normalize (.get (.call parent-view prepare-publication 'agentic-ai-lab/modules/services/opentofu/interface) build-source))
-                    (path-normalize (path-expand "build.ss" maintained))))
+          (assert 'maintained-package-build-source
+            (find (lambda (input)
+                    (equal? (.get input path) (path-normalize (path-expand "package-build.ss" maintained))))
+                  (.get (.call parent-view prepare-publication
+                               'tao3k/agentic-ai-lab/modules/services/opentofu/interface)
+                        source-dependencies)))
           (def public-scope (.get parent-view modules Lab services opentofu))
           (assert 'scope-published-before-build (object? public-scope))
           (assert 'scope-does-not-force-source (not (.ref/cached (.get public-scope config source) 'source-inputs)))
@@ -245,28 +250,21 @@
                  (json-schema (find (lambda (record) (eq? (.get record identity) (owner-id 'json-schema))) records))
                  (nix (find (lambda (record) (eq? (.get record identity) (owner-id 'nix))) records))
                  (tofu (find (lambda (record) (eq? (.get record identity) (owner-id 'services/opentofu))) records)))
-            (def json-schema-requirement (.get tofu dependency-records JsonSchema))
-            (assert 'json-schema-provider-record-shared
-              (eq? (.get json-schema-requirement provider) json-schema))
+            (assert 'json-schema-export-shares-provider-scope
+              (eq? (.get tofu scope JsonSchema) (.get json-schema scope)))
             (assert 'json-schema-producer-contract-retained
               (eq? (.get json-schema scope-evidence admission-contract)
                    (.get json-schema publication core scope-contract)))
-            (assert 'json-schema-edge-uses-producer-admission
-              (eq? (.get json-schema-requirement provider-evidence)
-                   (.get json-schema scope-evidence)))
-            (assert 'json-schema-requirement-admitted
-              (yuanxu-validation-evidence-accepted?
-                (.get json-schema-requirement requirement-evidence)))
-            (assert 'nix-contract-identity-shared
-              (eq? (.get nix publication core scope-contract)
-                   (.get tofu publication core requires Nix contract))))
+            (assert 'json-schema-provider-admitted
+              (yuanxu-validation-evidence-accepted? (.get json-schema scope-evidence)))
+            (assert 'nix-provider-admitted
+              (yuanxu-validation-evidence-accepted? (.get nix scope-evidence))))
           (def parent-graph (.get parent-view build-graph))
           (assert 'external-package-in-selected-graph (= (length (.get parent-graph external-packages)) 1))
           (assert 'consumer-has-no-build-role (not (file-exists? (path-expand "build.ss" owner))))
-          (assert 'upstream-build-owner
-            (eq? (.get (car (.get parent-graph external-packages)) build-owner) (owner-id 'services/opentofu)))
           (assert 'downstream-configuration-owner
-            (eq? (.get (car (.get parent-graph external-packages)) configuration-owner) (owner-id 'app/infrastructure)))
+            (eq? (.get (car (.get parent-graph external-packages)) scope-owner)
+                 (owner-id 'app/infrastructure)))
           (assert 'config-observed (assoc (path-normalize config) (.get parent-graph source-inputs)))
           (def parent (measure "aws-build" (lambda () (run-selected-packages parent-view (path-expand "parent" root))) 2
             types: (lambda (result) (if result (type-counts (.get (package-result result) scope) '(aws)) '()))))

@@ -5,7 +5,7 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
                  agentic-ai-lab-ascent-closure-candidates))
 
 (export ascent-closure-candidates-test)

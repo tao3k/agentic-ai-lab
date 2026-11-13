@@ -7,10 +7,10 @@
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/funs
                  agentic-ai-lab-temporal-evidence-as-of)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
                  agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts))
 (export agentic-ai-lab-temporal-support-program agentic-ai-lab-temporal-support-inventory
         agentic-ai-lab-temporal-support-evaluate agentic-ai-lab-temporal-support-reverse-plan)

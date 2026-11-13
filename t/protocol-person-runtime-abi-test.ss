@@ -5,9 +5,9 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion
-        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema
-        :agentic-ai-lab/modules/workflow/contracts/protocol-person-runtime-abi)
+        :tao3k/agentic-ai-lab/modules/governance/policy/protocol-person-promotion
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/protocol-person-runtime-abi)
 
 (export protocol-person-runtime-abi-test)
 

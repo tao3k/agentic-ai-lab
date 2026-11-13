@@ -6,7 +6,7 @@
 ;;; Boundary: downstream session transform case.
 ;;; Invariant: importing this module derives session receipts only.
 
-(import :agentic-ai-lab/modules/session/syntax)
+(import :tao3k/agentic-ai-lab/modules/session/syntax)
 
 (export agentic-ai-lab-custom-my-module-session-transform-case)
 

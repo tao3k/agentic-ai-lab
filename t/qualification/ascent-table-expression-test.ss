@@ -6,7 +6,7 @@
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
                  agentic-ai-lab-ascent-table-expression-prototype))
 
 (export ascent-table-expression-test)

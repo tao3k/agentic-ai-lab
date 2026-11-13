@@ -25,7 +25,7 @@
                (= (hash-ref first-times '(calls (scope-factory governance)) 0) 1)
                (zero? (hash-ref repeat-times '(calls candidate-read) 0))
                (zero? (hash-ref repeat-times '(calls scope-factory) 0))
-               (eq? (.get scope library) 'agentic-ai-lab/modules/governance/interface))
+               (eq? (.get scope library) 'tao3k/agentic-ai-lab/modules/governance/interface))
     (error "Governance demand differed from the selected closure"))
   (unless (equal? (.get yuanxu-governance-consumer.init.exports tests selected-graph module-order)
                   '(governance))

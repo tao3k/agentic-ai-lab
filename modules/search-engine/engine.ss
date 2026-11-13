@@ -5,12 +5,12 @@
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every filter ormap)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/search-engine/funs
-        :agentic-ai-lab/modules/search-engine/attempt
-        (only-in :agentic-ai-lab/modules/temporal-causality/types agentic-ai-lab-causal-event?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+        :tao3k/agentic-ai-lab/modules/search-engine/funs
+        :tao3k/agentic-ai-lab/modules/search-engine/attempt
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/types agentic-ai-lab-causal-event?)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/objects
                  agentic-ai-lab-temporal-observation agentic-ai-lab-causal-event)
-        (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph))
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph))
 (export agentic-ai-lab-search-engine agentic-ai-lab-search-engine-frontier
         agentic-ai-lab-search-engine-issue agentic-ai-lab-search-engine-complete
         agentic-ai-lab-search-engine-revise agentic-ai-lab-search-engine-node

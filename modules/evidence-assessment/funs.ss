@@ -7,7 +7,7 @@
 ;;; actions. The caller owns domain claim names and step topology.
 (import (only-in :clan/poo/object .o .ref object?)
         (only-in :std/list/list every find)
-        (only-in :agentic-ai-lab/modules/query/scheme-select
+        (only-in :tao3k/agentic-ai-lab/modules/query/scheme-select
                  agentic-ai-lab-query-select-scheme-nodes)
         (only-in :gerbil-ascent/program/api
                  relational-program gerbil-ascent-evaluate-program))

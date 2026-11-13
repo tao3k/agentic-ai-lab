@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
                  AgenticAILabTemporalDerivation AgenticAILabTemporalDependencyIndex
                  AgenticAILabTemporalInvalidationPlan))
 

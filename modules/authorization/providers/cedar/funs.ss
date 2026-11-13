@@ -8,12 +8,12 @@
 ;;; Rust+Lean Runtime Host remains the sole dual-engine execution boundary.
 (import (only-in :clan/poo/object .cc .ref)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :agentic-ai-lab/modules/authorization/providers/cedar/objects
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/objects
                  agentic-ai-lab-cedar-authority-snapshot
                  agentic-ai-lab-cedar-policy
                  agentic-ai-lab-cedar-authorization-request
                  agentic-ai-lab-cedar-runtime-handoff)
-        (only-in :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-pack journal-unpack journal-hash)
         (only-in "contracts.ss" agentic-ai-lab-cedar-governance-contract))
 

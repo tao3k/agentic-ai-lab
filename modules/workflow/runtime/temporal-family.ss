@@ -7,12 +7,12 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/objects
                  agentic-ai-lab-temporal-clock-domain
                  agentic-ai-lab-temporal-model-observation
                  agentic-ai-lab-temporal-constraint agentic-ai-lab-temporal-hypothesis
                  agentic-ai-lab-temporal-query)
-        (only-in :agentic-ai-lab/modules/temporal-causality/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs
                  agentic-ai-lab-temporal-model agentic-ai-lab-temporal-overlapping-model
                  agentic-ai-lab-temporal-model-classify))
 (export temporal-family-values temporal-family-task temporal-family-call temporal-family-observe)

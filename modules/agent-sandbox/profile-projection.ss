@@ -6,10 +6,10 @@
 ;;; Boundary: runtime and handoff summaries for validated sandbox profiles.
 ;;; Invariant: summaries are inert Scheme receipts for Marlin-owned execution.
 
-(import :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/profile-data
-        :agentic-ai-lab/modules/agent-sandbox/profile-validation)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-data
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation)
 
 (export agent-sandbox-profile-runtime-summary
         agent-sandbox-profile-handoff-summary)

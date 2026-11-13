@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :agentic-ai-lab/modules/agent-sandbox/resource)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export sandbox-resource-test)
 

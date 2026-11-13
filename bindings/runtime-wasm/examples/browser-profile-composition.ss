@@ -11,7 +11,7 @@
         :tao3k/yuanxu/profile-composition/selection-syntax
 
         :tao3k/yuanxu/profile-composition/profile-bundle
-        (only-in :agentic-ai-lab/modules/workflow/profiles/agentic-research
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/agentic-research
                  AgenticResearchModule
                  BrowserResearchScenarioProfile))
 

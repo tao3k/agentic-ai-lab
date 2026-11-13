@@ -9,12 +9,12 @@
 (import
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/module-authoring/module-config-syntax
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
                  agentic-ai-lab-module-configs)
-        :agentic-ai-lab/modules/tool-core/objects)
+        :tao3k/agentic-ai-lab/modules/tool-core/objects)
 
-(export (import: :agentic-ai-lab/modules/tool-core/objects)
+(export (import: :tao3k/agentic-ai-lab/modules/tool-core/objects)
         tool-spec
         tool-catalog
         tool-catalog-validation

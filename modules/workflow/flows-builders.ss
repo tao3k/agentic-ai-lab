@@ -20,7 +20,7 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  make-stdout-runtime-command-descriptor)
         :tao3k/yuanxu/modules/funflow/control-plane/projection-syntax
-        :agentic-ai-lab/modules/docker/funs
+        :tao3k/agentic-ai-lab/modules/docker/funs
         :tao3k/yuanxu/modules/funflow/store)
 
 (export make-docker-store-run-config

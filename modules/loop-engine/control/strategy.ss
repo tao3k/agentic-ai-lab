@@ -11,7 +11,7 @@
         :tao3k/yuanxu/modules/funflow/control-plane/roles
         :tao3k/yuanxu/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/loop-engine/control/descriptor)
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor)
 
 (export +loop-strategy-plan-schema+
         +loop-local-validation-default+

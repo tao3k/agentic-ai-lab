@@ -7,9 +7,9 @@
 ;;; Invariant: Git submodule gitlinks own revisions and .gitmodules owns URLs;
 ;;; this module only exposes the packages root for identity-driven discovery.
 
-(import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabModuleStylePolicy)
+(import (only-in :tao3k/agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabModuleStylePolicy)
         :tao3k/yuanxu/module-system/source/collection
-        :agentic-ai-lab/modules/module-authoring/module-source-collection)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection)
 
 (export agentic-ai-lab-official-contribution-sources
         agentic-ai-lab-official-contribution-load-path)

@@ -200,8 +200,8 @@ The remaining boundaries are unchanged:
 ** 10.05.91 Nono C Probe Input Contract
 The =nono= C probe remains a syntax-only host check, but its input contract is
 now explicit:
-- package-owned adapter includes live under =bindings/nono-c=;
-- the nono ABI header is package-owned at =bindings/nono-c/nono.h=;
+- package-owned adapter includes live under =modules/nono-sandbox/nono-c=;
+- the nono ABI header is package-owned at =modules/nono-sandbox/nono-c/nono.h=;
 - optional upstream include groups remain POO build object slots and can be
   overridden by a user or installer;
 - required build inputs are serialized into the build contract so receipts can
@@ -224,7 +224,7 @@ header, compile probe, and runtime =diagnostic-plan=. This lets Marlin consume
 denial diagnostics and remediation JSON through the same handoff manifest as
 capability, query, apply, and state functions.
 
-The Agentic AI Lab-owned =bindings/nono-c/nono.h= may need refresh when the Rust
+The Agentic AI Lab-owned =modules/nono-sandbox/nono-c/nono.h= may need refresh when the Rust
 source ABI changes. The adapter header keeps diagnostic prototypes visible so
 the syntax-only probe stays tied to the source ABI while still including
 =nono.h= for shared types and constants.

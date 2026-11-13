@@ -11,10 +11,10 @@
                  check-equal?
                  test-suite)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/loop-engine/config
-        :agentic-ai-lab/modules/loop-engine/prototypes)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/loop-engine/config
+        :tao3k/agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-slot-contract-test)
 

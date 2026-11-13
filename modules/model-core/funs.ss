@@ -8,10 +8,10 @@
 ;;; receipt; it neither constructs configuration nor invokes a Provider.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/session/objects-core
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-every?
                  agentic-ai-lab-session-require)
-        :agentic-ai-lab/modules/model-core/objects)
+        :tao3k/agentic-ai-lab/modules/model-core/objects)
 
 (export agentic-ai-lab-model-catalog-find
         agentic-ai-lab-model-supports-capability?

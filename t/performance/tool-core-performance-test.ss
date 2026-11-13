@@ -17,8 +17,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/tool-core/config)
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/tool-core/config)
 
 (export tool-core-performance-test)
 

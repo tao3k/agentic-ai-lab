@@ -9,7 +9,7 @@
         (only-in :clan/poo/mop TypeError?)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :gerbil/runtime/loader list-modules)
-        :agentic-ai-lab/modules/agent-sandbox/interface
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
         (only-in :tao3k/yuanxu/module-system/building/source-closure for-each-build-module)
         (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
@@ -30,7 +30,7 @@
     (write-source (path-expand "gerbil.pkg" root)
       (string-append "(package: " (symbol->string (gensym 'profile-modules-)) ")\n"))
     (write-source (path-expand "init.ss" root)
-      "(import :tao3k/yuanxu/module-system/selection/init-syntax)\n(yuanxu! :load-modules \"./profiles\" mode: explicit rename: Profiles (sandbox))\n")
+      "(import :tao3k/yuanxu/module-system/selection/init-syntax)\n(yuanxu! :test-dir \"./t\" :load-modules \"./profiles\" mode: explicit rename: Profiles (sandbox))\n")
     (write-source (path-expand "profiles/unselected/interface.ss" root)
       "(error \"unselected Profile was loaded\")\n")
     (.o (:: resource [workspace])
@@ -57,14 +57,14 @@
       ;; Walk official import contexts, not Make targets or a second loader.
       (def identities '())
       (for-each-build-module
-        (core-import-module ':agentic-ai-lab/modules/agent-sandbox/interface)
+        (core-import-module ':tao3k/agentic-ai-lab/modules/agent-sandbox/interface)
         (lambda (context) (set! identities (cons (symbol->string (expander-context-id context)) identities))))
       (for-each
         (lambda (prefix)
           (check-equal? (filter (cut string-prefix? prefix <>) identities) '()))
-        '("agentic-ai-lab/modules/workflow/scenario/configuration/"
-          "agentic-ai-lab/modules/loop-engine/"
-          "agentic-ai-lab/modules/ai-agentic-context/features/memory/config")))
+        '("tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/"
+          "tao3k/agentic-ai-lab/modules/loop-engine/"
+          "tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config")))
     (yuanxu-test-fixture "repeated scope and preview reads use the official loaded-module cache"
       (modules ProfileModulesFixture)
       (def scope (.get modules scope))

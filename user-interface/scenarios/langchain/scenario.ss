@@ -1,6 +1,6 @@
 (import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -29,7 +29,7 @@
 
 (def langchain-scenario
   (.new Scenario name: 'langchain-scenario
-        config: (let ((LangChainModule (.get agentic-ai-lab.init.exports Profiles langchain profile)))
+        config: (let ((LangChainModule (.get tao3k/agentic-ai-lab.init.exports Profiles langchain profile)))
     (compose profiles
     (use-module LangChainModule as chain memory prompt model parser no-tool)
     LangChainProductionProfile))))

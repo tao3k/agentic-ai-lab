@@ -4,12 +4,12 @@
 ;;; Library proof retention and Host current-state selection. No effect grant.
 (import (only-in :clan/poo/object .o .ref .slot? object? .call)
         (only-in :std/list/list delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/interface agentic-ai-lab-temporal-evidence-journal)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support-program)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface agentic-ai-lab-temporal-evidence-journal)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support-program)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host-guard-current)
         "derivation.ss" "rule.ss")
 (export agentic-ai-lab-temporal-derivation-context agentic-ai-lab-temporal-proof-host

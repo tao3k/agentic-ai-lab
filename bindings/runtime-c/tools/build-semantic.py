@@ -70,19 +70,31 @@ def main() -> None:
     stage.mkdir(parents=True, exist_ok=True)
     gsc = str(home / "bin/gsc")
     os.environ["GAMBOPT"] = f"~~={home},~~bin={home / 'bin'},~~lib={home / 'lib'}"
-    # Compile Scheme modules through the product's single init-owned Make spec.
-    # This consumer only materializes C objects from Gerbil's static
-    # closure below; it never maintains a module list or compiler-order policy.
-    run([frontend, "env", "./build-development.ss", "compile"])
-    expression = '''(let* ((ctx (import-module "modules/workflow/runtime/semantic.ss"))
-                           (deps (gxc#find-runtime-module-deps ctx)))
-                      (for-each (lambda (dep)
-                        (displayln (expander-context-id dep) "\\t"
-                                   (gxc#find-static-module-file dep))) deps)
-                      (displayln "ROOT\\t" (gxc#find-static-module-file ctx)))'''
-    # Resolve the compiler's static closure in that same runtime package
-    # environment, rather than guessing GERBIL_PATH/LOADPATH in Python.
-    closure = run([frontend, "env", str(home / "bin/gxi"), "-:max-heap=1G,debug=q", "-e", "(import :gerbil/compiler/driver :gerbil/expander)",
+    # This AOT consumer owns one entry. Gerbil discovers its native closure.
+    expression = '''(let* ((root (current-directory))
+                           (entry "modules/workflow/runtime/semantic.ss")
+                           (targets (package-library-spec root 'tao3k/agentic-ai-lab (list entry)))
+                           (spec (map (lambda (target)
+                                        (if (and DARWIN_HOST
+                                                 (member target '("modules/workflow/runtime/semantic"
+                                                                  "modules/workflow/runtime/runtime-v0-ffi")))
+                                            (list gxc: target "-ld-options" "-Wl,-undefined,dynamic_lookup")
+                                            target))
+                                      targets)))
+                      (parameterize ((current-output-port (current-error-port)))
+                        (make spec srcdir: root))
+                      (let* ((ctx (import-module entry))
+                             (deps (gxc#find-runtime-module-deps ctx)))
+                        (for-each (lambda (dep)
+                          (displayln (expander-context-id dep) "\\t"
+                                     (gxc#find-static-module-file dep))) deps)
+                        (displayln "ROOT\\t" (gxc#find-static-module-file ctx))))'''
+    expression = expression.replace("DARWIN_HOST", "#t" if platform.system() == "Darwin" else "#f")
+    closure = run([frontend, "env", str(home / "bin/gxi"), "-:max-heap=1G,debug=q",
+                   "-e", "(import :gerbil/compiler/driver :gerbil/expander :std/make "
+                         ":tao3k/yuanxu/module-system/building/source-package "
+                         ":tao3k/yuanxu/module-system/building/source-closure)",
+                   "-e", "(register-module-build-source! (current-directory) 'tao3k/agentic-ai-lab)",
                    "-e", expression], capture=True)
     system, user, inputs = [], [], []
     seen = set()

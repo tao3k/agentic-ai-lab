@@ -3,13 +3,13 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/objects
-        :agentic-ai-lab/modules/ai-agentic-context/funs-features
-        :agentic-ai-lab/modules/ai-agentic-context/funs-projection
-        :agentic-ai-lab/modules/ai-agentic-context/funs-delta
-        :agentic-ai-lab/modules/ai-agentic-context/funs-session
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        (only-in :agentic-ai-lab/modules/session/types agentic-ai-lab-session-input-ref-shape?))
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-projection
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-delta
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-session
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+        (only-in :tao3k/agentic-ai-lab/modules/session/types agentic-ai-lab-session-input-ref-shape?))
 (export ai-agentic-context-delta-test)
 (def scope (.o (:: @ AiAgenticContextScope.) bundle: "b" organization: "o" epoch: 1
   project: "p" worktree: "w" source-cut: "cut:0" actor: "a" task: "t" destination: "d"))

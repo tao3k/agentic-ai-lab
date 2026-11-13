@@ -36,6 +36,6 @@
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
      :tao3k/yuanxu/testing
-     :agentic-ai-lab/modules/temporal-causality/admission/interface
-     :agentic-ai-lab/modules/temporal-causality/lifecycle/interface))
+     :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
+     :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/interface))
   (exit (apply gxtest-main args)))

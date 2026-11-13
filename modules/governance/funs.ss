@@ -14,7 +14,7 @@
                  yuanxu-user-module-selection?
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
-        (only-in :agentic-ai-lab/modules/governance/types
+        (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assess))
 

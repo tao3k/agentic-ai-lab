@@ -4,17 +4,17 @@
 
 ;;; Effectful host registration is separate from pure semantic admission.
 (import (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values)
-        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
                  agentic-ai-lab-temporal-source-snapshot agentic-ai-lab-temporal-family-admit)
-        (only-in :agentic-ai-lab/modules/temporal-causality/applicability/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/funs
                  agentic-ai-lab-temporal-family-applicability)
-        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/interface
                  agentic-ai-lab-temporal-family-revision-root
                  agentic-ai-lab-temporal-family-revision-change
                  agentic-ai-lab-temporal-family-revision-replay
                  agentic-ai-lab-temporal-family-revision-journal)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
                  agentic-ai-lab-temporal-invalidation-plan-value))
 (export temporal-source-register temporal-family-admit-call temporal-family-current-call
         temporal-family-revision-root-call temporal-family-revision-change-call

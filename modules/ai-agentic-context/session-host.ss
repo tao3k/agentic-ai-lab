@@ -5,20 +5,20 @@
 ;;; Local claim publication is neither provider disclosure nor MRR/Data admission.
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist .call)
         (only-in :std/list/list every find delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule
+        (only-in :tao3k/agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule
                  agentic-ai-lab-session-claim agentic-ai-lab-session-recover
                  agentic-ai-lab-session-complete agentic-ai-lab-session-reconcile agentic-ai-lab-session-close)
-        (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host agentic-ai-lab-temporal-proof-host-current agentic-ai-lab-temporal-proof-host-watch! agentic-ai-lab-temporal-proof-host-unwatch! agentic-ai-lab-temporal-proof-host-policy agentic-ai-lab-temporal-proof-host-retained-digest agentic-ai-lab-temporal-proof-host-source-snapshot
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/proof-host agentic-ai-lab-temporal-proof-host-current agentic-ai-lab-temporal-proof-host-watch! agentic-ai-lab-temporal-proof-host-unwatch! agentic-ai-lab-temporal-proof-host-policy agentic-ai-lab-temporal-proof-host-retained-digest agentic-ai-lab-temporal-proof-host-source-snapshot
                  agentic-ai-lab-temporal-proof-host-refresh!)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
           agentic-ai-lab-temporal-support-policy-host-watch! agentic-ai-lab-temporal-support-policy-host-unwatch!)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
           agentic-ai-lab-temporal-support-policy-status)
         "funs-scope.ss" "funs-features.ss" "funs-projection.ss" "funs-session.ss" "use-host.ss"
         "query-provider.ss"
-        (only-in :agentic-ai-lab/modules/query/semantic/context-restriction agentic-ai-lab-context-flow-decision))
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction agentic-ai-lab-context-flow-decision))
 (export agentic-ai-lab-ai-agentic-context-session-host
         agentic-ai-lab-ai-agentic-context-session-host-enroll!
         agentic-ai-lab-ai-agentic-context-session-host-refresh!

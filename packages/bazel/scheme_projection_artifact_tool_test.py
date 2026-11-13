@@ -135,11 +135,11 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             )
             runner_source = runner_capture.read_text(encoding="utf-8")
             self.assertIn(
-                ":yuanxu/profile-composition/selection-syntax",
+                ":tao3k/yuanxu/profile-composition/selection-syntax",
                 runner_source,
             )
             self.assertIn(
-                ":yuanxu/profile-composition/profile-bundle",
+                ":tao3k/yuanxu/profile-composition/profile-bundle",
                 runner_source,
             )
             self.assertIn(
@@ -147,15 +147,15 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
                 runner_source,
             )
             self.assertIn(
-                "(only-in :yuanxu/modules/funflow/scenario Scenario)",
+                "(only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)",
                 runner_source,
             )
             self.assertIn(
-                ":agentic-ai-lab/modules/workflow/profiles/funflow-library",
+                ":tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library",
                 runner_source,
             )
             self.assertNotIn(
-                ":agentic-ai-lab/src/user-interface/init-syntax",
+                ":tao3k/agentic-ai-lab/src/user-interface/init-syntax",
                 runner_source,
             )
 

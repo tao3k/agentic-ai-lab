@@ -15,10 +15,10 @@
                  current-module-source-phase call-with-module-source-operation-measurement)
         (only-in "../core/t/qualification/testing/directory.ss" write-source)
         (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture refused)
-        :agentic-ai-lab/modules/module-authoring/module-interface
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
                  agenticAiLabModuleDoctorPresentation)
         :tao3k/yuanxu/module-system/catalog/values)
 (export module-preview-cost-test)

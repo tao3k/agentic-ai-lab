@@ -22,9 +22,9 @@
                  test-error
                  test-suite)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/docker/interface
+        :tao3k/agentic-ai-lab/modules/docker/interface
         :tao3k/yuanxu/modules/funflow/store
-        (only-in :agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config))
 
 (export tutorial-runtime-result-test)
 

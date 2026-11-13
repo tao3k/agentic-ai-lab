@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/session/config)
+        :tao3k/agentic-ai-lab/modules/session/config)
 
 (export session-communication-receipt-test)
 

@@ -36,7 +36,7 @@
                  yuanxu-empty-imports yuanxu-empty-capabilities
                  yuanxu-empty-profiles)
         :tao3k/yuanxu/module-system/authoring/roles
-        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export observability-framework-test)
 
 (def (framework-id name) (yuanxu-observation-identity 'test name 'v1))

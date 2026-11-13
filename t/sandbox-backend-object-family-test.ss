@@ -12,11 +12,11 @@
                  check-equal?
                  test-suite)
         :tao3k/yuanxu/module-system/schema/interface
-        :agentic-ai-lab/modules/sandbox-core/objects
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy
-        :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/cubeSandbox/objects
-        :agentic-ai-lab/modules/docker-sandbox/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/cubeSandbox/objects
+        :tao3k/agentic-ai-lab/modules/docker-sandbox/objects)
 
 ;; : (-> Symbol Alist MaybeValue)
 (def (alist-ref/default key entries default)

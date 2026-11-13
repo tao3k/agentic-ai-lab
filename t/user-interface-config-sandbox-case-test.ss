@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-recipe-portable? agentic-ai-lab-sandbox-profile->descriptor agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-recipe-portable? agentic-ai-lab-sandbox-profile->descriptor agentic-ai-lab-sandbox-profile-by-name))
 (import (only-in :tao3k/yuanxu/profile-composition/user-profile yuanxuUserConfigFromProfile))
 (import (only-in :tao3k/yuanxu/module-system/selection/objects yuanxu-user-config-modules yuanxu-user-config-settings yuanxu-user-module-selection? yuanxu-user-module-selection-key yuanxu-user-module-selection-has-flag? yuanxu-user-module-selection-has-flags? yuanxu-user-module-selection yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
@@ -19,12 +19,12 @@
         test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         
-        :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
                  agentic-ai-lab-sandbox-backend-capability/backend-kind))
 
 (def (check-error thunk)

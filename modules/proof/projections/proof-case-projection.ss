@@ -6,7 +6,7 @@
 ;;; Invariant: proof cases retain source identities and explicit discharge status.
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :std/list/list find)
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token)
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token)
 
 (export agentic-ai-lab-proof-obligation
         agentic-ai-lab-proof-obligation-family-build

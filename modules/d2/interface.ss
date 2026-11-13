@@ -6,8 +6,7 @@
   identity: 'd2
   tags: '(graph diagram)
   core:
-  (.o requires: (.o)
-      scope-contract: D2ScopeContract
+  (.o scope-contract: D2ScopeContract
       exports:
       (.o config: D2Config
           prototypes: (.o Diagram: D2Diagram. Node: D2Node. Relation: D2Relation.

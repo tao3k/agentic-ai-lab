@@ -3,20 +3,20 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .o .ref .call)
         (only-in :std/list/list find every)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context push-row push-revision
                  push-join! context-source context-scope at
                  policy clock-check-originals!)
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/ai-agentic-context/funs-features
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
         (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes positive-proof-roots positive-proof-status
           proof-node-id proof-node-kind proof-node-row proof-node-relation proof-node-inputs))

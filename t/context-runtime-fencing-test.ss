@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Real independent Actors/connections share one local durable authority.
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal)
 (export runtime-fencing-probe)
 
 (def (ensure value message) (unless value (error message)))

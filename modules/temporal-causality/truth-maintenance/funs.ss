@@ -9,14 +9,14 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/types
                  agentic-ai-lab-temporal-evidence-journal?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/funs
                  agentic-ai-lab-temporal-evidence-as-of)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
                  agentic-ai-lab-temporal-derivation?
                  agentic-ai-lab-temporal-dependency-index?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
                  agentic-ai-lab-temporal-dependency-index-value
                  agentic-ai-lab-temporal-invalidation-plan-value))
 

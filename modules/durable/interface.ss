@@ -4,8 +4,7 @@
   identity: 'durable
   tags: '(engine policy)
   core:
-  (.o requires: (.o)
-      scope-contract: DurableScopeContract
+  (.o scope-contract: DurableScopeContract
       exports: (.o recovery-policy: DurableConfig
                    decide-recovery: durable-recovery-decision
                    workspace-recovery-host: durable-workspace-recovery-host

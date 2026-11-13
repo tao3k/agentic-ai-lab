@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :tao3k/yuanxu/module-system/selection/init-syntax)
 (yuanxu!
+  :test-dir "./t"
   :load-modules "modules" package: "github.com/tao3k/agentic-ai-lab" mode: explicit rename: Lab
   (ai-agentic-context +memory)
   :load-modules "./modules" mode: explicit rename: Consumer

@@ -5,7 +5,7 @@
  :tao3k/yuanxu/modules/funflow/config-adapter
  :tao3k/yuanxu/module-system/selection/objects
 
- (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-command-manifests))
+ (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-command-manifests))
 (export agentic-ai-lab-funflow-config-flags
         agentic-ai-lab-funflow-pipeline-runtime-command-manifests
         agentic-ai-lab-funflow-module-bundles)

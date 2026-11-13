@@ -15,15 +15,15 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan)
-        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-core
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-core
                  make-loop-governor)
-        (only-in :agentic-ai-lab/modules/loop-engine/control/governor
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/governor
                  loop-governor->contract)
-        :agentic-ai-lab/modules/loop-engine/control/human-audit)
+        :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-performance-test)
 

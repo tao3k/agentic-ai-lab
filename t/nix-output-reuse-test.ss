@@ -6,8 +6,8 @@
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :agentic-ai-lab/modules/nix/func
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.)
+        (only-in :tao3k/agentic-ai-lab/modules/nix/func
                  agentic-ai-lab-nix-realize current-nix-process-observer))
 (export nix-output-reuse-test)
 

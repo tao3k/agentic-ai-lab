@@ -7,7 +7,7 @@
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read))
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read))
 (export main main-with-cases)
 (def (file-digest path)
   (hex-encode (sha256 (call-with-input-file path read-all-as-u8vector))))

@@ -10,7 +10,7 @@
         (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/sandbox-core/resource-contract)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract)
 
 (export sandbox-core-resource-contract-test)
 

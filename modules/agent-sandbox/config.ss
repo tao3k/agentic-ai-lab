@@ -9,10 +9,10 @@
 
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :clan/poo/mop element?)
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/profile-contract
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-contract
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
         :tao3k/yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-sandbox-profile-kind
@@ -28,7 +28,7 @@
         agentic-ai-lab-default-sandbox-profile-names
         agentic-ai-lab-default-sandbox-profile-presentation)
 
-(import :agentic-ai-lab/modules/agent-sandbox/config-form-support)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/config-form-support)
 ;;; Bass-style profile rows are just data recipes. The macro is deliberately a
 ;;; thin syntax bridge; semantic state lives in the POO profile object slots.
 ;; agentic-ai-lab-sandbox-profile

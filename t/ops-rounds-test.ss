@@ -4,9 +4,9 @@
 (import :std/test :clan/poo/object "./qualification/opentofu/opentofu-rounds.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/source this-source-file)
-        (only-in "../init.ss" agentic-ai-lab.init.exports)
+        (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
+        (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.))
 (export ops-rounds-test)
 (def ops-rounds-test
   (test-suite "Runtime operational qualification summaries"
@@ -50,7 +50,7 @@
           (check-equal? (file-exists? log) #t))))
     (yuanxu-test-case "summary inputs come from the native test publication"
       (def tests
-        (.call (.get agentic-ai-lab.init.exports tests) .for-files
+        (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
           (list (this-source-file))))
       (check-equal? (.ref/cached (.get tests source) 'selected-graph) #f)
       (def build (.get tests build))

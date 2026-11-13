@@ -5,8 +5,8 @@
 ;;; Boundary: defines the Runtime v0 wire ABI for protocol-person promotion.
 ;;; Invariant: ABI receipts preserve policy decision and provenance identities.
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion
-        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
+        :tao3k/agentic-ai-lab/modules/governance/policy/protocol-person-promotion
+        :tao3k/agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
 (export #t)
 

@@ -9,7 +9,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/sandbox-core/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects)
 
 (export sandbox-core-profile-authoring-diagnostics-test)
 

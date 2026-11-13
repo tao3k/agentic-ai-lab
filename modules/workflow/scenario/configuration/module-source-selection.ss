@@ -7,7 +7,7 @@
 
 (import :tao3k/yuanxu/modules/funflow/control-plane/failure
         :tao3k/yuanxu/module-system/source/collection
-        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
+        (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         (only-in :tao3k/yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-metadata
                  yuanxu-module-source-ref-value)

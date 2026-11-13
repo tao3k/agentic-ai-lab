@@ -3,11 +3,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in "./qualification/context-memory-init.ss" agentic-ai-lab/t/qualification.context-memory-init.exports)
+        (only-in "./qualification/context-memory-init.ss" tao3k/agentic-ai-lab/t/qualification.context-memory-init.exports)
         (only-in :clan/poo/object .o .get .ref)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        :agentic-ai-lab/modules/ai-agentic-context/funs
-        :agentic-ai-lab/modules/query/semantic/context-restriction)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction)
 (export ai-agentic-context-core-test)
 
 (def source "#+SEQ_TODO: TODO | DONE\n* TODO Review source evidence\n* DONE Historical task\n")
@@ -36,7 +36,7 @@
         (check (.ref (agentic-ai-lab-ai-agentic-context-org-replay source p scope) 'semantic-digest)
                => (.ref p 'semantic-digest))))
     (yuanxu-test-case "init selects Memory from the real Context Interface"
-      (def selected (.get agentic-ai-lab/t/qualification.context-memory-init.exports
+      (def selected (.get tao3k/agentic-ai-lab/t/qualification.context-memory-init.exports
                           Context ai-agentic-context))
       (def profile (.get selected profile))
       (def projection (project profile))

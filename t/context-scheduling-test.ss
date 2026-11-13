@@ -3,7 +3,7 @@
 ;;; Runtime reference adapter and cross-language path replay, not a cluster gate.
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :agentic-ai-lab/modules/temporal-causality/runtime/scheduling)
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/scheduling)
 (export scheduling-probe)
 
 (def operations '(offer-data offer-control dispatch complete drain close idle))

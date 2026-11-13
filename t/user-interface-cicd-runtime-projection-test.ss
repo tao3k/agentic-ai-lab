@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
                  agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))

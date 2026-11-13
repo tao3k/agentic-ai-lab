@@ -14,7 +14,7 @@
         :tao3k/yuanxu/object-family/role-syntax
         :tao3k/yuanxu/modules/funflow/control-plane/task
         :tao3k/yuanxu/modules/funflow/control-plane/flow
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         (only-in :tao3k/yuanxu/module-system/graph/funs
                  module-closure module-missing-imports)
         (only-in :tao3k/yuanxu/module-system/funs

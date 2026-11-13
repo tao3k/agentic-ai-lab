@@ -8,12 +8,12 @@
 ;;; dispatches providers, tools, memory stores, or messages.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :agentic-ai-lab/modules/session/communication
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/objects-handoff
-        :agentic-ai-lab/modules/session/registry
-        :agentic-ai-lab/modules/session/receipt-syntax
-        :agentic-ai-lab/modules/session/receipt-projection)
+        :tao3k/agentic-ai-lab/modules/session/communication
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/objects-handoff
+        :tao3k/agentic-ai-lab/modules/session/registry
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-projection)
 
 (export agentic-ai-lab-session-agent-node
         agentic-ai-lab-session-agent-node?

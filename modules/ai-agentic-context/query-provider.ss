@@ -14,18 +14,18 @@
           poo-clos-prototype-specializer poo-clos-any-specializer
           poo-clos-compose-method-bundle)
  (only-in :tao3k/yuanxu/poo-clos/method-bundle-syntax .defmethod-bundle)
- :agentic-ai-lab/modules/query/objects
- (only-in :agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
- :agentic-ai-lab/modules/query/contracts
- :agentic-ai-lab/modules/query/gql
- :agentic-ai-lab/modules/query/funs
- :agentic-ai-lab/modules/query/scheme-select
- :agentic-ai-lab/modules/query/results/funs
- :agentic-ai-lab/modules/temporal-causality/runtime/change-feed
- :agentic-ai-lab/modules/temporal-causality/evaluator/positive-proof
- :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
- :agentic-ai-lab/modules/temporal-causality/revisions/interface
- :agentic-ai-lab/modules/temporal-causality/time/objects
+ :tao3k/agentic-ai-lab/modules/query/objects
+ (only-in :tao3k/agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
+ :tao3k/agentic-ai-lab/modules/query/contracts
+ :tao3k/agentic-ai-lab/modules/query/gql
+ :tao3k/agentic-ai-lab/modules/query/funs
+ :tao3k/agentic-ai-lab/modules/query/scheme-select
+ :tao3k/agentic-ai-lab/modules/query/results/funs
+ :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/change-feed
+ :tao3k/agentic-ai-lab/modules/temporal-causality/evaluator/positive-proof
+ :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+ :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/interface
+ :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
  (only-in
   :gerbil-ascent/candidate/checked-program
   reasoning-source-snapshot

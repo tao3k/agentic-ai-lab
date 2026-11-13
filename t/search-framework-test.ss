@@ -8,8 +8,8 @@
 (import :std/test
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/search-engine/interface
-        (only-in :agentic-ai-lab/modules/temporal-causality/funs
+        :tao3k/agentic-ai-lab/modules/search-engine/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs
                  agentic-ai-lab-causal-event-graph))
 
 (export agentic-ai-lab-search-framework-test)

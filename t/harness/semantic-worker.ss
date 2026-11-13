@@ -19,14 +19,14 @@
    :tao3k/yuanxu/graph/types-core
    :tao3k/yuanxu/graph/types-contracts
    :tao3k/yuanxu/graph/types
-   :agentic-ai-lab/modules/temporal-causality/types
-   :agentic-ai-lab/modules/temporal-causality/objects
-   :agentic-ai-lab/modules/temporal-causality/funs
-   :agentic-ai-lab/modules/temporal-causality/time/types
-   :agentic-ai-lab/modules/temporal-causality/time/objects
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
-   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/table/expression
    :gerbil-ascent/table/funs
@@ -81,33 +81,33 @@
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
-   :agentic-ai-lab/modules/temporal-causality/ascent-exchange
+   :tao3k/agentic-ai-lab/modules/temporal-causality/ascent-exchange
    :tao3k/yuanxu/graph/algorithms
-   :agentic-ai-lab/modules/workflow/runtime/scheme-wire
-   :agentic-ai-lab/modules/workflow/runtime/temporal-family
-   :agentic-ai-lab/modules/temporal-causality/conclusions/types
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
-   :agentic-ai-lab/modules/temporal-causality/conclusions/objects
-   :agentic-ai-lab/modules/temporal-causality/conclusions/funs
-   :agentic-ai-lab/modules/temporal-causality/admission/interface
-   :agentic-ai-lab/modules/temporal-causality/applicability/types
-   :agentic-ai-lab/modules/temporal-causality/applicability/objects
-   :agentic-ai-lab/modules/temporal-causality/applicability/funs
-   :agentic-ai-lab/modules/temporal-causality/lifecycle/types
-   :agentic-ai-lab/modules/temporal-causality/lifecycle/objects
-   :agentic-ai-lab/modules/temporal-causality/lifecycle/funs
-   :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
-   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
-   :agentic-ai-lab/modules/workflow/runtime/temporal-admission
-   :agentic-ai-lab/modules/workflow/runtime/temporal-archive
-   :agentic-ai-lab/modules/workflow/runtime/semantic))
+   :tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire
+   :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-family
+   :tao3k/agentic-ai-lab/modules/temporal-causality/conclusions/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/conclusions/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/conclusions/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
+   :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/applicability/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/types
+   :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/objects
+   :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/funs
+   :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+   :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+   :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-admission
+   :tao3k/agentic-ai-lab/modules/workflow/runtime/temporal-archive
+   :tao3k/agentic-ai-lab/modules/workflow/runtime/semantic))
 (displayln "MODULE-OK semantic")
 (displayln "HARNESS-OK semantic-worker")
 (displayln "READY") (force-output)
 (let loop ()
   (let (line (read-line))
     (unless (eof-object? line)
-      (displayln (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call "temporal.solve" line))
+      (displayln (tao3k/agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call "temporal.solve" line))
       (force-output)
       (loop))))
 (displayln "OK") (force-output)

@@ -4,7 +4,7 @@
 ;;; Inert declarations project to the runtime Library; no registry or grant IO.
 (import (only-in :std/list/list every)
         (only-in :clan/poo/object .ref)
-        :agentic-ai-lab/modules/query/semantic/context-restriction)
+        :tao3k/agentic-ai-lab/modules/query/semantic/context-restriction)
 (export context-restriction-compose-call context-flow-evaluate-call)
 (def (field x key)
   (unless (and (hash-table? x) (hash-key? x key)) (error "missing Context field" key))

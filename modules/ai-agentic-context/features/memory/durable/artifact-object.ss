@@ -7,7 +7,7 @@
 ;;; and runtime handoff manifests stay in durable-artifact-policy.
 
 (import (only-in :clan/poo/object .ref .slot? object? object<-alist)
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-profile)
 
 (export agentic-ai-lab-durable-artifact
         agentic-ai-lab-durable-artifact?

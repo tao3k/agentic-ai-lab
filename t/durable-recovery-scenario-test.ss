@@ -11,11 +11,11 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object object?)
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export durable-recovery-scenario-test)
 

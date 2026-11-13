@@ -9,11 +9,11 @@
 ;;; construction, and profile validation are split into owner leaves so policy
 ;;; repairs stay local to the semantic family that owns the behavior.
 
-(import :agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-core
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-validation)
+(import :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-core
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-validation)
 
 (export agentic-ai-lab-sandbox-backend-capability-kind
         agentic-ai-lab-sandbox-backend-capability-registry-kind

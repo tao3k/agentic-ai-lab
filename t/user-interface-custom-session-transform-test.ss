@@ -15,7 +15,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
-        :agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-transform"
                  agentic-ai-lab-custom-my-module-session-transform-case))
 

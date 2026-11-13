@@ -18,11 +18,11 @@
                  test-suite)
         (only-in :clan/poo/object .o .ref)
         :tao3k/yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :tao3k/yuanxu/module-system/catalog/objects)
 
 (export module-system-test)

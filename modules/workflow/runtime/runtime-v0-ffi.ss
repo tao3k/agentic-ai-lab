@@ -24,9 +24,9 @@
                  agentic-ai-lab-runtime-language-admission-receipt-failures
                  agentic-ai-lab-contract-artifact-projection-receipt
                  agentic-ai-lab-contract-artifact-projection-receipt-failures)
-        (only-in :agentic-ai-lab/modules/query/objects
+        (only-in :tao3k/agentic-ai-lab/modules/query/objects
                  agentic-ai-lab-query-execution-candidate)
-        (only-in :agentic-ai-lab/modules/query/types
+        (only-in :tao3k/agentic-ai-lab/modules/query/types
                  agentic-ai-lab-query-execution-candidate?))
 
 (export contract-abi-version
@@ -339,42 +339,42 @@ END-C
 (begin-foreign
   (c-define (agentic-ai-lab-scheme-contract-abi-version)
     () unsigned-int32 "agentic_ai_lab_scheme_contract_abi_version" "extern"
-    (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-abi-version))
+    (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-abi-version))
 
   (c-define (agentic-ai-lab-scheme-contract-descriptor result)
     (agentic_ai_lab_scheme_result_v1-borrowed-ptr*) int32
     "agentic_ai_lab_scheme_contract_descriptor" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result -1)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result -1)
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#runtime-error-payload
+                (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#runtime-error-payload
                  exception)))
        -1)
      (lambda ()
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result 0)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result 0)
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-descriptor-payload)))
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status result))))
+                (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-descriptor-payload)))
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status result))))
 
   (c-define (agentic-ai-lab-scheme-contract-validate contract payload result)
     (UTF-8-string UTF-8-string agentic_ai_lab_scheme_result_v1-borrowed-ptr*) int32
     "agentic_ai_lab_scheme_contract_validate" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result -1)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result -1)
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#runtime-error-payload
+                (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#runtime-error-payload
                  exception)))
        -1)
      (lambda ()
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result 0)
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status-set! result 0)
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic-ai-lab-scheme-result-v1-set-bytes!
         result
         (string->utf8
-         (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-validate-payload
+         (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#contract-validate-payload
           contract payload)))
-       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status result)))))
+       (tao3k/agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi#agentic_ai_lab_scheme_result_v1-status result)))))

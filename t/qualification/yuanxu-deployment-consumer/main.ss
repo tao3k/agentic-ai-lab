@@ -3,4 +3,6 @@
 (import (only-in "./init.ss" yuanxu-deployment-consumer.init.exports))
 (export selected-deployment)
 (def (selected-deployment)
-  (.get yuanxu-deployment-consumer.init.exports Lab services opentofu))
+  (def leaf (.get yuanxu-deployment-consumer.init.exports Lab services opentofu))
+  (.get leaf schema)
+  leaf)

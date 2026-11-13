@@ -4,7 +4,7 @@
 (import :std/test :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile make-temporary-file-name)
-        (only-in :agentic-ai-lab/modules/services/opentofu/execution opentofu-execution)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/execution opentofu-execution)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
@@ -94,7 +94,7 @@
       (write-text (path-expand "gerbil.pkg" project)
         "(package: qualification prelude: :tao3k/yuanxu/module-system/source/module-prelude)\n")
       (def init (path-expand "init.ss" project))
-      (write-text init "(yuanxu! mode: explicit source: \"./modules\" (null) (aws-validation))\n")
+      (write-text init "(yuanxu! :test-dir \"./t\" mode: explicit source: \"./modules\" (null) (aws-validation))\n")
       (select-provider! (path-expand "config.ss" null-directory) (path-expand "null" package-root))
       (select-provider! (path-expand "config.ss" validation-directory) (path-expand "child" package-root))
       (def execution-view (yuanxu-load-modules init))

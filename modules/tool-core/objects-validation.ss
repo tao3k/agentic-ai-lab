@@ -5,11 +5,11 @@
 
 ;;; Boundary: pure catalog and policy validation.
 
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/tool-core/objects-catalog
-        :agentic-ai-lab/modules/tool-core/objects-policy-refs
-        :agentic-ai-lab/modules/tool-core/objects-spec
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-catalog
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-policy-refs
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-spec
         :tao3k/yuanxu/utilities/functional)
 
 (export agentic-ai-lab-tool-action-mismatch-bundle

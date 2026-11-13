@@ -5,12 +5,12 @@
 
 ;;; Boundary: communication receipt normalization and grant checks.
 
-(import (only-in :agentic-ai-lab/modules/session/communication
+(import (only-in :tao3k/agentic-ai-lab/modules/session/communication
                  agentic-ai-lab-session-communication-channel-receipt?
                  agentic-ai-lab-session-communication-channel-receipt->alist
                  agentic-ai-lab-session-communication-receipt?
                  agentic-ai-lab-session-communication-receipt->alist)
-        :agentic-ai-lab/modules/session/policy-validation-support)
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-support)
 
 (export agentic-ai-lab-session-policy-communication-receipts
         agentic-ai-lab-session-policy-communication-channel-receipts

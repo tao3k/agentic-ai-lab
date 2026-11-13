@@ -4,11 +4,11 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
                  agentic-ai-lab-temporal-family-admission?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/conclusions/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/conclusions/types
                  agentic-ai-lab-temporal-conclusion-revision? agentic-ai-lab-temporal-conclusion-journal?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
                  agentic-ai-lab-temporal-invalidation-plan?))
 (export AgenticAILabTemporalFamilyRevision agentic-ai-lab-temporal-family-revision?
         AgenticAILabTemporalFamilyArchive agentic-ai-lab-temporal-family-archive?)

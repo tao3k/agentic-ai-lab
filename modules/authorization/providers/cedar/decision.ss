@@ -7,7 +7,7 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :agentic-ai-lab/modules/governance/policy/authorized-effect-token)
+        :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token)
 
 (export agentic-ai-lab-cedar-decision
         agentic-ai-lab-cedar-decision-permit?

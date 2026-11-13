@@ -10,7 +10,7 @@
 ;;; interface selects sandbox profile supers, then declares isolation
 ;;; policy, command fields, and runner-local options.
 ;; : POOObject
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
                  agentic-ai-lab-module-inherited-config))
 
 (export agentic-ai-lab-custom-my-module-cicd-case)

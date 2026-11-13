@@ -6,9 +6,9 @@
 ;;; Boundary: tool, memory, and diagnostic catalog checks for session policy validation.
 
 (import (only-in :std/list/list fold)
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/session/policy-validation-support
-        :agentic-ai-lab/modules/session/policy-validation-communication)
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-support
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-communication)
 
 (export agentic-ai-lab-session-agent-tool-attempt-allowed?
         agentic-ai-lab-session-hook-tool-attempt-allowed?

@@ -16,8 +16,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
+        :tao3k/agentic-ai-lab/modules/session/config
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export session-agent-param-contract-performance-test)
 

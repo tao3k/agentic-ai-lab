@@ -4,7 +4,7 @@
 
 (import (only-in :clan/poo/object .o .ref .call)
         (only-in :std/io/tempfile call-with-temporary-file-name current-temporary-directory)
-        (only-in :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-pack journal-hash))
 (export context-workspace-text-endpoint)
 

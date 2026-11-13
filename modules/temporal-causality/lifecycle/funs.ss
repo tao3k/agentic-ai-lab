@@ -6,14 +6,14 @@
         (only-in :std/list/list every)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/admission/interface
                  agentic-ai-lab-temporal-family-admission-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/conclusions/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/conclusions/funs
                  agentic-ai-lab-temporal-conclusion-change agentic-ai-lab-temporal-conclusion-journal
                  agentic-ai-lab-temporal-conclusion-journal-replay)
-        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/types
                  agentic-ai-lab-temporal-family-revision? agentic-ai-lab-temporal-family-archive?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/lifecycle/objects
                  agentic-ai-lab-temporal-family-revision-value agentic-ai-lab-temporal-family-archive-value))
 (export agentic-ai-lab-temporal-family-revision-root agentic-ai-lab-temporal-family-revision-change
         agentic-ai-lab-temporal-family-revision-replay agentic-ai-lab-temporal-family-revision-journal

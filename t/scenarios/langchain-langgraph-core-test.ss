@@ -1,5 +1,5 @@
 (import (only-in :clan/poo/mop .new)
-        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -14,7 +14,7 @@
         :tao3k/yuanxu/graph/types
         :tao3k/yuanxu/graph/algorithms
         :tao3k/yuanxu/graph/control-analysis
-        :agentic-ai-lab/modules/workflow/graph/runtime-executor
+        :tao3k/agentic-ai-lab/modules/workflow/graph/runtime-executor
         :tao3k/yuanxu/profile-composition/profile-bundle
         (rename-in
          (only-in :tao3k/yuanxu/profile-composition/selection-syntax
@@ -25,8 +25,8 @@
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
 
-        :agentic-ai-lab/user-interface/scenarios/langchain/scenario
-        :agentic-ai-lab/user-interface/scenarios/langgraph/scenario)
+        :tao3k/agentic-ai-lab/user-interface/scenarios/langchain/scenario
+        :tao3k/agentic-ai-lab/user-interface/scenarios/langgraph/scenario)
 
 
 (def langchain-composition
@@ -185,10 +185,10 @@
 (def (profile-identity profile)
   (.ref profile (if (.slot? profile 'identity) 'identity 'name)))
 
-(def langchain (.get agentic-ai-lab.init.exports Profiles langchain defaults))
-(def LangChainModule (.get agentic-ai-lab.init.exports Profiles langchain profile))
-(def langgraph (.get agentic-ai-lab.init.exports Profiles langgraph defaults))
-(def LangGraphModule (.get agentic-ai-lab.init.exports Profiles langgraph profile))
+(def langchain (.get tao3k/agentic-ai-lab.init.exports Profiles langchain defaults))
+(def LangChainModule (.get tao3k/agentic-ai-lab.init.exports Profiles langchain profile))
+(def langgraph (.get tao3k/agentic-ai-lab.init.exports Profiles langgraph defaults))
+(def LangGraphModule (.get tao3k/agentic-ai-lab.init.exports Profiles langgraph profile))
 
 (export langchain-langgraph-core-test)
 

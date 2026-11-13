@@ -8,7 +8,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :agentic-ai-lab/modules/query/types
+        (only-in :tao3k/agentic-ai-lab/modules/query/types
                  agentic-ai-lab-query-result-contract?)
         (only-in "types.ss"
                  agentic-ai-lab-query-result-cell? agentic-ai-lab-query-result-row?

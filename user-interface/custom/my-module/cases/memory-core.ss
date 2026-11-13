@@ -7,8 +7,8 @@
 ;;; Invariant: this declares memory store specs and validation receipts only;
 ;;; no memory backend recall or commit is executed.
 
-(import :agentic-ai-lab/modules/session/syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/spec
+(import :tao3k/agentic-ai-lab/modules/session/syntax
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/spec
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry
                  yuanxu-user-module-selection->alist))

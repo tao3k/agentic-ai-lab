@@ -7,17 +7,17 @@
 ;;; Invariant: syntax modules expand to these pure constructors, not directly
 ;;; to the wider session object graph.
 
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/config
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-default-sandbox-profiles)
-        :agentic-ai-lab/modules/session/agent
-        :agentic-ai-lab/modules/session/agent-param
-        :agentic-ai-lab/modules/session/communication
-        :agentic-ai-lab/modules/session/materialization
-        :agentic-ai-lab/modules/session/objects-core
-        :agentic-ai-lab/modules/session/objects-handoff
-        :agentic-ai-lab/modules/session/objects-graph
-        :agentic-ai-lab/modules/session/registry
-        :agentic-ai-lab/modules/session/selector)
+        :tao3k/agentic-ai-lab/modules/session/agent
+        :tao3k/agentic-ai-lab/modules/session/agent-param
+        :tao3k/agentic-ai-lab/modules/session/communication
+        :tao3k/agentic-ai-lab/modules/session/materialization
+        :tao3k/agentic-ai-lab/modules/session/objects-core
+        :tao3k/agentic-ai-lab/modules/session/objects-handoff
+        :tao3k/agentic-ai-lab/modules/session/objects-graph
+        :tao3k/agentic-ai-lab/modules/session/registry
+        :tao3k/agentic-ai-lab/modules/session/selector)
 
 (export agentic-ai-lab-session-syntax-chunk
         agentic-ai-lab-session-syntax-lineage

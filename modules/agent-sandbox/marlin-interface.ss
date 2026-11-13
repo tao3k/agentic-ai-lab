@@ -10,13 +10,13 @@
 
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/bridge
-        (only-in :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
                  nono-c-binding-runtime-manifest->manifest)
-        :agentic-ai-lab/modules/agent-sandbox/cube-interface)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/cube-interface)
 
 (export +agent-sandbox-marlin-interface-schema+
         +agent-sandbox-marlin-admission-schema+

@@ -8,24 +8,24 @@
 (export agenticAiLabUserConfigPresentation)
 
 (import (only-in :clan/poo/object object<-alist)
-        :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/sandbox-core/profile-support/policy
-        (only-in :agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-config-cicd-intents agentic-ai-lab-user-module-selection-workflow-cicd-check-map agentic-ai-lab-user-config-workflow-cicd-functional-dag-rows agentic-ai-lab-user-config-workflow-cicd-runtime-projection agentic-ai-lab-user-alist-ref)
-        (only-in :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config agentic-ai-lab-user-config-workflow-cicd-pipeline-runs agentic-ai-lab-user-config-workflow-cicd-pipeline-results)
-        :agentic-ai-lab/modules/module-authoring/module-interface
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-config-cicd-intents agentic-ai-lab-user-module-selection-workflow-cicd-check-map agentic-ai-lab-user-config-workflow-cicd-functional-dag-rows agentic-ai-lab-user-config-workflow-cicd-runtime-projection agentic-ai-lab-user-alist-ref)
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-pipeline-run-config agentic-ai-lab-user-config-workflow-cicd-pipeline-runs agentic-ai-lab-user-config-workflow-cicd-pipeline-results)
+        :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :tao3k/yuanxu/module-system/observability/presentation
-        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        :agentic-ai-lab/modules/workflow/cicd-config
-        :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config
-        :agentic-ai-lab/modules/session/presentation
-        (only-in :agentic-ai-lab/modules/loop-engine/config
+        :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-config
+        :tao3k/agentic-ai-lab/modules/workflow/cicd-pipeline-run-config
+        :tao3k/agentic-ai-lab/modules/session/presentation
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/config
                  agentic-ai-lab-user-config-loop-engine-intents
                  agentic-ai-lab-user-loop-engine-intent-ref)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support
-        :agentic-ai-lab/modules/loop-engine/presentation
-        :agentic-ai-lab/modules/workflow/presentation)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support
+        :tao3k/agentic-ai-lab/modules/loop-engine/presentation
+        :tao3k/agentic-ai-lab/modules/workflow/presentation)
 
 ;; : (-> ModuleSelections Bool)
 (def (agentic-ai-lab-user-config-loop-engine-only? selected-modules)

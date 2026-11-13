@@ -78,6 +78,8 @@ jobs:
         run: |
           bazel run //:nix_adapter_test_environment -- just test-root \
             t/nix-*-test.ss t/opentofu-*-test.ss t/aws-*-test.ss \
+            t/yanxu/scenarios/aws/*-test.ss \
+            t/yanxu/modules/nix/*-test.ss t/yanxu/modules/services/opentofu/*-test.ss \
             t/module-nix-*-test.ss t/json-schema-aws-*-test.ss \
             t/ops-selected-packages-test.ss t/execution-progress-test.ss \
             t/approved-build-recovery-test.ss t/build-store-recovery-test.ss

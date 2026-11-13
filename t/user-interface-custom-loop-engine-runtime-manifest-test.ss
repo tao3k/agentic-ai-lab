@@ -12,15 +12,15 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
 
-        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-marlin
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/governor-marlin
                  +loop-governor-marlin-loop-engine-discovery-schema+
                  loop-governor-marlin-loop-engine-discovery)
-        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/cubeSandbox/config
                  agentic-ai-lab-cubeSandbox-module-bundles)
-        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/config
                  agentic-ai-lab-nono-sandbox-module-bundles)
         (only-in "./support/loop-engine-runtime-manifest-receipts"
                  check-custom-loop-runtime-manifest-request-receipts)

@@ -16,9 +16,9 @@
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules
                  yuanxu-user-module-selection)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
                  agentic-ai-lab-sandbox-profile-config)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
                  agenticAiLabUserConfigPresentation)
         (only-in "../user-interface/custom/my-module/cases/loop-engine-owner"
                  agentic-ai-lab-custom-my-module-loop-engine-case))

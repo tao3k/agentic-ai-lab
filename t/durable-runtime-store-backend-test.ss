@@ -14,9 +14,9 @@
         (only-in :clan/poo/object .o object?)
         :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
         :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter
-        :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
+        :tao3k/agentic-ai-lab/modules/session/durable-policy
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 
 (export durable-runtime-store-backend-test)
 

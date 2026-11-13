@@ -8,8 +8,8 @@
 (import (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/list/list filter map)
         (only-in :clan/poo/object .ref .slot?)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy)
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy)
 
 (export agentic-ai-lab-tool-policy-grant-tool-refs
         agentic-ai-lab-tool-policy-grants

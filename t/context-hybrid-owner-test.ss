@@ -3,19 +3,19 @@
 ;;; Production owner saturation with actual ASCENT/Session/journal effects.
 (import (only-in :clan/poo/object .o .ref .call)
         (only-in :std/sync/channel make-channel channel-put channel-get)
-        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+        (only-in :tao3k/agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture clock-original-context push-row push-revision
                  push-join! context-source at policy
                  clock-check-originals!)
-        (prefix-in :agentic-ai-lab/t/context-durable-owner originals.)
-        :agentic-ai-lab/modules/ai-agentic-context/durable-owner
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/temporal-causality/runtime/scheduling
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-        :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
+        (prefix-in :tao3k/agentic-ai-lab/t/context-durable-owner originals.)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/use-host
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/scheduling
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+        :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
 (export hybrid-owner-probe)
 (def (ensure value message) (unless value (error message)))
 (def (rejected? operation) (with-catch (lambda (_) #t) (lambda () (operation) #f)))

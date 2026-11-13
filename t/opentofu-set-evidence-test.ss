@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract)
-        (only-in :agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-value-digest)
-        (only-in :agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-string-set-authority)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-value-digest)
+        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-string-set-authority)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         :tao3k/yuanxu/object-types/contracts
         :clan/poo/object)

@@ -5,11 +5,11 @@
 
 ;;; Owns the validation receipt record and pure admission construction.
 ;;; ABI/report projection is isolated in policy-validation-receipt-projection.ss.
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy
-        :agentic-ai-lab/modules/session/policy-validation-support
-        :agentic-ai-lab/modules/session/policy-validation-communication
-        :agentic-ai-lab/modules/session/policy-validation-catalog)
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-support
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-communication
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-catalog)
 
 (export (struct-out agentic-ai-lab-session-policy-validation-receipt-record)
         agentic-ai-lab-session-policy-validation-receipt

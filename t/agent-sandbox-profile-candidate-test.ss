@@ -17,8 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :agentic-ai-lab/modules/agent-sandbox/api
-        :agentic-ai-lab/modules/agent-sandbox/profile-candidate)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-candidate)
 
 (export agent-sandbox-profile-candidate-test)
 

@@ -20,9 +20,9 @@
                  make-adapter-result normalize-runtime-response)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation
                  runtime-command-call)
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
-        :agentic-ai-lab/modules/agent-sandbox/request)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request)
 
 (export +agent-sandbox-bridge-schema+
         +agent-sandbox-runtime-manifest-schema+

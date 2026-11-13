@@ -4,8 +4,8 @@
 
 ;;; Proof gate decision projection.
 ;;; - Keep rejection reasons derived from validated proof wires before runtime handoff.
-(import :agentic-ai-lab/modules/proof/projections/proof-fact-wire
-        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
+(import :tao3k/agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
 (export agentic-ai-lab-proof-gate-bundle->decision
         agentic-ai-lab-proof-gate-receipts->decision

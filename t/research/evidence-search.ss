@@ -6,13 +6,13 @@
         (only-in :gerbil-ascent/program/scheme-language relational-program)
         (only-in :gerbil-ascent/program/session gerbil-ascent-open-session
                  gerbil-ascent-session-run gerbil-ascent-session-replace-source!)
-        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant agentic-ai-lab-temporal-interval)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/objects agentic-ai-lab-temporal-evidence-revision)
-        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs agentic-ai-lab-temporal-evidence-journal agentic-ai-lab-temporal-evidence-as-of)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
-        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant agentic-ai-lab-temporal-interval)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/objects agentic-ai-lab-temporal-evidence-revision)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/funs agentic-ai-lab-temporal-evidence-journal agentic-ai-lab-temporal-evidence-as-of)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
                  agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts)
-        :agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
+        :tao3k/agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot))
 (export main)
 (def (field key rows) (cadr (assq key rows)))

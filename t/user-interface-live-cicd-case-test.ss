@@ -6,7 +6,7 @@
 ;;; Boundary: test entrypoint for root user-interface CI/CD live cases.
 ;;; Invariant: live execution cases are test fixtures, not user module syntax.
 
-(import (only-in :agentic-ai-lab/dev/modules/testing/module-system-live-case
+(import (only-in :tao3k/agentic-ai-lab/dev/modules/testing/module-system-live-case
                  agentic-ai-lab-module-system-live-case-test-suite
                  agenticAiLabModuleSystemLiveCaseFromModuleSelection)
         (only-in "../user-interface/custom/my-module/profiles/cicd"

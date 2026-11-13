@@ -4,8 +4,8 @@
 
 ;;; Proof FFI bridge payload projection.
 ;;; - Keep gate decisions serialized explicitly before handing them to foreign runtimes.
-(import :agentic-ai-lab/modules/proof/projections/proof-fact-wire
-        :agentic-ai-lab/modules/proof/projections/proof-gate-decision)
+(import :tao3k/agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :tao3k/agentic-ai-lab/modules/proof/projections/proof-gate-decision)
 
 (export agentic-ai-lab-proof-gate-decision->ffi-payload
         agentic-ai-lab-proof-gate-receipts->ffi-payload

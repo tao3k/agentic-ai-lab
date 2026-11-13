@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :agentic-ai-lab/modules/session/lifecycle-gate)
+        :tao3k/agentic-ai-lab/modules/session/lifecycle-gate)
 
 
 (export agent-lifecycle-gate-test)

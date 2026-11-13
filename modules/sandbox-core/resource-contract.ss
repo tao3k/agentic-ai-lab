@@ -40,7 +40,7 @@
         agentic-ai-lab-sandbox-resources-prototype->resource-policy
         agentic-ai-lab-sandbox-resources-value->resource-policy)
 
-(import :agentic-ai-lab/modules/sandbox-core/resource-prototypes)
+(import :tao3k/agentic-ai-lab/modules/sandbox-core/resource-prototypes)
 
 ;; : PooSandboxResourcesPrototypeContractValidationKind
 (def agentic-ai-lab-sandbox-resources-prototype-contract-validation-kind

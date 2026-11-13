@@ -6,7 +6,7 @@
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-binary-program
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-binary-program
                  agentic-ai-lab-ascent-binary-relation
                  agentic-ai-lab-ascent-binary-copy-rule
                  agentic-ai-lab-ascent-binary-join-rule

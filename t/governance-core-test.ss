@@ -14,9 +14,9 @@
         (only-in :tao3k/yuanxu/poo-clos/interface
                  poo-clos-generic-methods
                  poo-clos-make-instance)
-        :agentic-ai-lab/modules/governance/interface
-        :agentic-ai-lab/modules/authorization/interface
-        :agentic-ai-lab/modules/authorization/providers/cedar/interface)
+        :tao3k/agentic-ai-lab/modules/governance/interface
+        :tao3k/agentic-ai-lab/modules/authorization/interface
+        :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/interface)
 
 (export governance-core-test)
 

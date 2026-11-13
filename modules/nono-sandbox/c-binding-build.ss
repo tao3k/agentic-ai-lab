@@ -14,9 +14,9 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/yuanxu/object-family/role-syntax
-        :agentic-ai-lab/modules/agent-sandbox/alist
-        :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
 
 (export +nono-c-binding-build-schema+
         +nono-c-binding-default-adapter-include-dirs+
@@ -75,7 +75,7 @@
 
 ;; : (List String)
 (def +nono-c-binding-default-adapter-include-dirs+
-  '("bindings/nono-c"))
+  '("modules/nono-sandbox/nono-c"))
 
 ;; : (List String)
 (def +nono-c-binding-default-upstream-include-dirs+
@@ -147,7 +147,7 @@
            (include-dirs
             +nono-c-binding-default-include-dirs+)
            (probe-ref
-            "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
+            "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c")
            (validator
             (lambda (build)
               (nono-c-binding-validate-build build)))))

@@ -13,9 +13,9 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
                  agentic-ai-lab-ascent-table-expression-prototype)
-        (only-in :agentic-ai-lab/t/scenarios/performance/ascent-table-expression/baseline
+        (only-in :tao3k/agentic-ai-lab/t/scenarios/performance/ascent-table-expression/baseline
                  ascent-table-expression-baseline))
 
 (def fixture

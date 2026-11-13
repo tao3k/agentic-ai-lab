@@ -23,7 +23,7 @@
                  yuanxu-json-schema->contract-artifact
                  yuanxu-json-schema-contract-artifact-object-contract
                  yuanxu-json-schema-contract-artifact->alist)
-        (only-in :agentic-ai-lab/modules/workflow/profiles/github-ci-contract
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/github-ci-contract
                  +agentic-ai-lab-funflow-github-ci-schema-audit+
                  agentic-ai-lab-funflow-github-ci-contract-receipt
                  agentic-ai-lab-funflow-github-ci-validate-workflow->alist))

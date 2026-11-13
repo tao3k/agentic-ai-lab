@@ -4,8 +4,8 @@
 ;;; Context produces the independent Session input proposal; Session never parses Org.
 ;;; The producer receipt reference must be resolved by a Host before publication.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :agentic-ai-lab/modules/session/objects-attempt SessionInputRef. SessionTask.)
-        (only-in :agentic-ai-lab/modules/query/gql agentic-ai-lab-query->gql)
+        (only-in :tao3k/agentic-ai-lab/modules/session/objects-attempt SessionInputRef. SessionTask.)
+        (only-in :tao3k/agentic-ai-lab/modules/query/gql agentic-ai-lab-query->gql)
         "funs-scope.ss" "funs-projection.ss" "funs-anchors.ss")
 (export agentic-ai-lab-ai-agentic-context-session-input agentic-ai-lab-ai-agentic-context-session-task)
 (def (agentic-ai-lab-ai-agentic-context-session-input source projection expected-scope receipt-reference)

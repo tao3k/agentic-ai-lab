@@ -9,15 +9,15 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/delta-types
                  agentic-ai-lab-temporal-trajectory-delta?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/trajectory/delta-funs
                  agentic-ai-lab-temporal-trajectory-delta)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/types
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/types
                  agentic-ai-lab-temporal-impact-contrast?)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/funs
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/funs
                  agentic-ai-lab-temporal-impact-contrast)
-        (only-in :agentic-ai-lab/modules/temporal-causality/impact/refresh-objects
+        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/impact/refresh-objects
                  agentic-ai-lab-temporal-impact-refresh-value))
 (export agentic-ai-lab-temporal-impact-refresh)
 

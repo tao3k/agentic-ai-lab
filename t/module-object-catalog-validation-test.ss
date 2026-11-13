@@ -13,12 +13,12 @@
                  check-equal?)
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/yuanxu/module-system/schema/validation
-        :agentic-ai-lab/modules/sandbox-core/shared-object
-        :agentic-ai-lab/modules/sandbox-core/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/root-objects
-        :agentic-ai-lab/modules/nono-sandbox/objects
-        :agentic-ai-lab/modules/cubeSandbox/objects
-        :agentic-ai-lab/modules/docker-sandbox/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/root-objects
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
+        :tao3k/agentic-ai-lab/modules/cubeSandbox/objects
+        :tao3k/agentic-ai-lab/modules/docker-sandbox/objects)
 
 (export module-object-catalog-validation-test)
 

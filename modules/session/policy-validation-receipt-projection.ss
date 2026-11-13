@@ -5,10 +5,10 @@
 
 ;;; Projects admitted validation receipts into the stable report ABI.
 ;;; This owner does not construct, validate, or execute a Session.
-(import :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/receipt-syntax
-        :agentic-ai-lab/modules/session/receipt-projection
-        :agentic-ai-lab/modules/session/policy-validation-receipt-core)
+(import :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/receipt-syntax
+        :tao3k/agentic-ai-lab/modules/session/receipt-projection
+        :tao3k/agentic-ai-lab/modules/session/policy-validation-receipt-core)
 
 (export agentic-ai-lab-session-policy-validation-receipt->alist
         agentic-ai-lab-session-policy-validation-receipts->alists)

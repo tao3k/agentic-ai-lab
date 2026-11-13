@@ -7,9 +7,9 @@
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop element?)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/policy-syntax
-        :agentic-ai-lab/modules/session/policy-core
+        :tao3k/agentic-ai-lab/modules/session/objects
+        :tao3k/agentic-ai-lab/modules/session/policy-syntax
+        :tao3k/agentic-ai-lab/modules/session/policy-core
         (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot

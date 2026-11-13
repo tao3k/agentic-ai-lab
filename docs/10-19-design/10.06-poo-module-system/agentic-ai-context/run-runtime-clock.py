@@ -19,7 +19,7 @@ authority=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(authority)
 base=authority.base
 ROOT=authority.ROOT
-INPUTS=tuple(dict.fromkeys((*authority.INPUTS,'build-spec.ss',
+INPUTS=tuple(dict.fromkeys((*authority.INPUTS,'build.ss',
  'modules/temporal-causality/runtime/monotonic-clock.ss',
  'modules/temporal-causality/runtime/policy-clock.ss',str(Path(__file__).resolve().relative_to(ROOT)))))
 ALL=[p for p in itertools.permutations(range(1,6)) if p.index(4)<p.index(5)]

@@ -6,7 +6,7 @@
 ;;; Boundary: tests inspect Funflow CI/CD pipeline run/result presentation.
 ;;; Invariant: pipeline results are handoff-readiness data, not execution output.
 
-(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
         (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
@@ -15,8 +15,8 @@
         (only-in :clan/poo/object .ref)
         (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         :tao3k/yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/funflow-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/funflow-config
         (only-in "../user-interface/custom/my-module/cases/cicd-owner"
                  agentic-ai-lab-custom-my-module-cicd-module
                  agentic-ai-lab-custom-my-module-funflow-cicd-case))

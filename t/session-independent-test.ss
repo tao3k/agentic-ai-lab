@@ -8,7 +8,7 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         (only-in :gerbil/runtime/loader list-modules)
-        :agentic-ai-lab/modules/session/interface)
+        :tao3k/agentic-ai-lab/modules/session/interface)
 (export session-independent-test)
 
 ;; Observe the actual native loader, with a positive matcher control. No
@@ -35,8 +35,8 @@
 (def session-independent-test
   (test-suite "Independent public Session consumer"
     (yuanxu-test-case "select claim and recover without loading Context or Memory"
-      (check (loaded-prefix? "agentic-ai-lab/modules/session/") => #t)
-      (check (loaded-prefix? "agentic-ai-lab/modules/ai-agentic-context/") => #f)
+      (check (loaded-prefix? "tao3k/agentic-ai-lab/modules/session/") => #t)
+      (check (loaded-prefix? "tao3k/agentic-ai-lab/modules/ai-agentic-context/") => #f)
       (check (agentic-ai-lab-durable-policy?
                agentic-ai-lab-durable-policy/default) => #t)
       (check (length agentic-ai-lab-session-module-bundles) => 1)
@@ -63,4 +63,4 @@
                => 'wrong-attempt)
         (check (.ref (agentic-ai-lab-session-close recovered 2) 'reason)
                => 'pending-obligation))
-      (check (loaded-prefix? "agentic-ai-lab/modules/ai-agentic-context/") => #f))))
+      (check (loaded-prefix? "tao3k/agentic-ai-lab/modules/ai-agentic-context/") => #f))))

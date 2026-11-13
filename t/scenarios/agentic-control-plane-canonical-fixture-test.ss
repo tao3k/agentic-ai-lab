@@ -5,10 +5,10 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        (only-in :agentic-ai-lab/modules/query/semantic/organization-bundle
+        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/organization-bundle
                  agentic-ai-lab-organization-bundle-normalize
                  agentic-ai-lab-organization-digest)
-        :agentic-ai-lab/modules/workflow/qualification/agentic-control-plane-fixture)
+        :tao3k/agentic-ai-lab/modules/workflow/qualification/agentic-control-plane-fixture)
 
 
 (def canonical-fixture

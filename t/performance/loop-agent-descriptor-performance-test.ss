@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
+        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor
                  loop-pattern-descriptor->contract))
 

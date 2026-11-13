@@ -5,8 +5,8 @@
 
 ;;; Boundary: builtin tool specs and default tool catalog.
 
-(import :agentic-ai-lab/modules/tool-core/objects-spec
-        :agentic-ai-lab/modules/tool-core/objects-catalog)
+(import :tao3k/agentic-ai-lab/modules/tool-core/objects-spec
+        :tao3k/agentic-ai-lab/modules/tool-core/objects-catalog)
 
 (export agentic-ai-lab-tool-core-builtin-read-workspace-file
         agentic-ai-lab-tool-core-builtin-write-workspace-file
