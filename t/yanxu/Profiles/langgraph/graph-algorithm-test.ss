@@ -195,4 +195,21 @@
               graph-algorithm-condensation-dedup-sample)))
         (check-equal? (.ref analysis 'components) '((a b) (c d)))
         (check-equal? (.ref analysis 'cyclic-components) '((a b) (c d)))
-        (check-equal? (.ref analysis 'condensation-edges) '((0 1)))))))
+        (check-equal? (.ref analysis 'condensation-edges) '((0 1)))))
+    (yuanxu-test-case "preserves structural IDs and declaration order in POO components"
+      (def graph
+        (yuanxu-graph 'mixed-ids
+          (map yuanxu-graph-node (list '(scope . 1) "build" 'build 7))
+          (list (yuanxu-graph-edge (cons 'scope 1) (string-copy "build"))
+                (yuanxu-graph-edge (string-copy "build") (cons 'scope 1))
+                (yuanxu-graph-edge "build" 'build)
+                (yuanxu-graph-edge "build" 'build)
+                (yuanxu-graph-edge 7 7))))
+      (defvalues (analysis loops) (yuanxu-graph-analysis-receipts graph))
+      (check-equal? (yuanxu-graph-outgoing-ids graph (string-copy "build"))
+                    '((scope . 1) build build))
+      (check-equal? (.ref analysis 'cycle-path)
+                    '((scope . 1) "build" (scope . 1)))
+      (check-equal? (.ref loops 'components) '(((scope . 1) "build") (build) (7)))
+      (check-equal? (.ref loops 'cyclic-components) '(((scope . 1) "build") (7)))
+      (check-equal? (.ref loops 'condensation-edges) '((0 1))))))
