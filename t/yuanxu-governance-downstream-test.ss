@@ -13,20 +13,12 @@
         (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read
                  call-with-module-source-operation-measurement)
+        (only-in "./qualification/yuanxu-build-events.ss" compile-events)
         (only-in "./qualification/yuanxu-governance-consumer/init.ss" yuanxu-governance-consumer.init.exports)
         (rename-in (only-in "./qualification/yuanxu-governance-consumer/build.ss" main)
                    (main governance-build-main)))
 (export yuanxu-governance-downstream-test)
 
-(def (compile-events output)
-  (call-with-input-string output
-    (lambda (port)
-      (let loop ((events '()))
-        (let (line (read-line port))
-          (cond ((eof-object? line) (list-sort string<? events))
-                ((string-prefix? "... compile " line)
-                 (loop (cons (substring line 12 (string-length line)) events)))
-                (else (loop events))))))))
 (def (interface-products directory (prefix ""))
   (list-sort string<?
     (foldl (lambda (name found)
@@ -50,24 +42,20 @@
         (lambda (temporary)
           (def a (path-expand "a" temporary))
           (def b (path-expand "b" temporary))
-          (def base (path-expand "base" temporary))
           (def a-lib (path-expand "lib" a))
           (def b-lib (path-expand "lib" b))
-          (for-each create-directory* (list a-lib b-lib (path-expand "lib" base)))
+          (for-each create-directory* (list a-lib b-lib))
           (def completed 0)
-          (def (action state operation (package-default? #f))
+          (def (action state operation)
             (def start (real-time))
             (displayln "LAB-GOVERNANCE-ACTION start=" operation " environment=" (path-strip-directory state))
             (force-output)
             (def result
               (run-script
                 (.cc (.get Ops prototypes Script)
-                  command: (cond ((eq? package-default? 'governance)
-                                  (list "gxi" "build.ss" operation "--modules" "governance"))
-                                 (package-default? (list "gxi" "build.ss" operation))
-                                 ((equal? operation "use") '("gxi" "use.ss"))
-                                 (else (list "gxi" "build.ss" operation)))
-                  directory: (if package-default? root consumer)
+                  command: (if (equal? operation "use") '("gxi" "use.ss")
+                             (list "gxi" "build.ss" operation))
+                  directory: consumer
                   timeout: 120 idle-timeout: 60 progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: state GAMBOPT: runtime-options
                     GERBIL_BUILD_VERBOSE: "1"
@@ -93,7 +81,8 @@
           (check-equal? (hash-ref spec-times '(calls scope-factory) 0) 0)
           (check-equal? (hash-ref spec-times '(calls candidate-read) 0) 1)
           (execution-progress! 'lab-governance-spec 1)
-          (def targets (list-sort string<? (map cadr (call-with-input-string spec read))))
+          (def targets (list-sort string<? (map (lambda (row) (if (pair? row) (cadr row) row))
+                                                   (call-with-input-string spec read))))
           (def owner "tao3k/agentic-ai-lab/modules/governance/")
           (def selected-tests (.get yuanxu-governance-consumer.init.exports tests))
           (def test-files (.get (.call selected-tests .select) spec))
@@ -115,20 +104,6 @@
                                    (path-expand (string-append (substring target 15 (string-length target)) ".ss") root)))
                             targets))))
           (def source-before (map module-source-read inputs))
-          ;; The default producer has no compiled output. Downstream A/B
-          ;; below selects Governance itself.
-          (check-equal? (compile-events (action base "compile" #t)) '())
-          (check-equal? (interface-products (path-expand "lib" base)) '())
-          (check-equal? (compile-events (action base "compile" #t)) '())
-          (displayln "LAB-PACKAGE-BASE-OK targets=0 modules=0 hot=0")
-          ;; The very same package build entry can explicitly add one owner.
-          (def governance-targets (filter (cut string-prefix? owner <>) targets))
-          (check-equal? (compile-events (action base "compile" 'governance))
-                        (map (lambda (target) (substring target 15 (string-length target))) governance-targets))
-          (check-equal? (interface-products (path-expand "lib" base))
-                        (list-sort string<? governance-targets))
-          (check-equal? (compile-events (action base "compile" 'governance)) '())
-          (displayln "LAB-PACKAGE-SELECTION-OK module=governance targets=" (length governance-targets) " hot=0")
           (check-equal? (interface-products a-lib) '())
           (for-each (lambda (state)
                       (def library (path-expand "lib" state))

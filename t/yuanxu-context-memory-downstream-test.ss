@@ -88,6 +88,8 @@
             ;; and generated products belong to this downstream environment.
             (create-symbolic-link packages (path-expand "pkg" prefix))
             (copy-source fixture source)
+            (copy-file (path-expand "core/dev/gerbil/clean-outputs.ss" lab)
+                       (path-expand "clean-outputs.ss" source))
             ;; The fixture lives in Lab. Preserve that source window when
             ;; copying its consumer into an independent build directory.
             (def init (path-expand "init.ss" source))

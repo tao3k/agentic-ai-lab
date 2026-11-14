@@ -1,7 +1,7 @@
 #!/usr/bin/env gxi
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in "../../../core/dev/gerbil/clean-outputs.ss" clean-selected-outputs!)
+(import (only-in "./clean-outputs.ss" clean-selected-outputs!)
         (only-in :std/source this-source-file)
         (only-in :std/make make make-clean)
         (only-in :clan/poo/object .o .get .call)
