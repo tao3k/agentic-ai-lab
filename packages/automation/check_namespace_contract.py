@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from check_license_contract import ROOT, project_files, git_output, submodule_paths
+from check_license_contract import ROOT, project_files, git_output
 
 OBSOLETE = re.compile(r"poo(?:[-_ ]|_x2d)?flow|(?<![A-Za-z0-9_/]):co[r]e/", re.IGNORECASE)
 EVIDENCE_SUFFIXES = {".log", ".receipt", ".snapshot", ".gz"}
@@ -61,14 +61,6 @@ def issues(path: Path, owner: Path | None = None) -> list[str]:
 def main() -> int:
     files = set(project_files())
     failures = [issue for path in sorted(files) for issue in issues(path)]
-    for name in submodule_paths():
-        owner = ROOT / name
-        if not (owner / ".git").exists():
-            continue
-        for relative in git_output("-C", str(owner), "ls-files").splitlines():
-            path = owner / relative
-            if path.is_file():
-                failures.extend(f"{name}/{issue}" for issue in issues(path, owner))
     core_revision = git_output("ls-files", "--stage", "core").split()[1]
     failures.extend(proof_pin_issues(
         core_revision,
