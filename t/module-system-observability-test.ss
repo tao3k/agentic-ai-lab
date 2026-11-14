@@ -94,7 +94,7 @@
                 (yuanxu-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy))
+                  "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/api make-task))") AgenticAILabSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
