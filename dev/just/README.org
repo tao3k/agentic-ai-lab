@@ -1,0 +1,150 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Agentic AI Lab Developer Entrypoints
+
+* Organization
+
+The root Justfile imports ordinary Just recipe files and retains the existing
+command namespace and root working directory.
+
+- =environment.just=: shared package paths, compiler and VM settings.
+- =build.just=: product compilation and artifact preparation.
+- =testing.just=: ordinary tests and qualification entrypoints.
+- =runtime-tests.just=: runtime, ABI and temporal qualifications.
+- =contributions.just=: contribution-owned build and test entrypoints.
+- =proofs.just=: Lean, Quint and proof correspondence gates.
+- =dependencies.just=: dependency maintenance.
+- =checks.just=: remaining source and integration checks.
+
+* Reuse
+
+=just test-file PATH= calls the installed =gerbil test= tool directly.
+It retains the product's pre-import heap fence and 120-second budget. The
+same VM executes native =std/test= through the official tool. It does not
+construct a Script/Process, select init, compile support or start a child
+Harness. Independent build commands own compilation and issuance; domain
+Cases exercise actual source-currentness and admission checks.
+
+=test-root= passes =t= and =t/yanxu/...= to one Gerbil Harness by default.
+Gerbil discovers package-level tests directly under =t= and discovers module
+qualification files recursively under =t/yanxu/=. Explicit directories or
+files replace the default arguments. The Lab qualification layout test checks
+the ownership of those directories against the windows in =init.ss=.
+
+=test-root= and =test-package-file= do not rebuild the product or prepare Nix
+packages. The complete =just test= aggregate and CI prepare declared inputs once.
+The existing Python fixture transport uses =exec= to replace itself and injects
+only the already-built package inputs. It performs no test discovery or build.
+Focused =test-file= retains its 120-second process fence; whole-suite execution
+retains its aggregate fence and existing Case policies. It no longer claims a
+separate per-file clock implemented by a second batch runner.
+
+Performance directories are explicit native test arguments. Nix qualifications
+use the same entry with explicit files; the Nix Justfile owns only its independent
+build and worker-effect qualifications. Init-selected module test inputs remain
+owned by the module projection, separately from ordinary =t/= discovery.
+
+The initial recipe split preserved the parsed command definitions.  Specialized
+historical gates have been relocated, not silently replaced or declared green.
+
+* Focused verification
+
+The Core TestingScript regression passed through both =just test-file= entrypoints
+with the installed Gerbil and the existing compiled Core dependency environment.
+Both runs completed with exit zero, exact =MODULE-OK= and =HARNESS-OK= lines,
+a final =OK=, and no harness/heap/stack failure markers.  Core's existing seven
+test partitions remained complete and disjoint (172 files).  This is a focused
+runner verification, not a claim that every relocated qualification was run.
+
+* Specialized execution consolidation
+
+The source and compiled-Gerbil qualifications now declare their command and
+receipt requirements through
+[[file:../../t/qualification/testing/specialized.ss][the qualification entry projection]]
+and the existing Core =TestingScript.=.  Core owns process execution, status,
+error markers, source Fixture cleanup and exact runtime harness completion.
+The qualification source includes the selected suite and selected runner inputs;
+unselected suites are not imported or read by the selector.
+
+| Entry | Original total budget | Retained receipt obligation |
+|-------+-----------------------+-----------------------------|
+| Interpreter/tool | 90 seconds | Exact module and runtime harness |
+| Runtime FFI | 120 seconds per existing phase | Exact compiled module/harness |
+| Query source/runtime | 45 seconds | 4 / 24 Case receipts |
+| Temporal runtime/support/evaluator | 45 seconds | 13 / 9 / 28 Case receipts |
+| Context/Temporal | 45 seconds | 69 Case receipts, all six modules |
+| ASCENT temporal | 45 seconds | Both named semantic controls |
+| Module ownership | 120 seconds | Existing aggregator identity |
+| Whole product | 1200 seconds | Official Harness completion for every explicit file |
+
+Watched commands retain the existing five-second byte-progress watchdog and
+failure-only stack capture.  The Scheme projection does not widen the outer
+watchdog or replace real progress with timer output.  Gates which previously
+had no idle cutoff retain that property.  Their total budgets remain bounded.
+
+[[file:../../t/qualification/testing/package-result.ss][ASP completion admission]]
+consumes the actual discovery and batch-start receipts.  It does not introduce
+another discovery list or another scheduler.
+
+Passing synthetic receipt controls qualifies admission logic, not a Query,
+Temporal, Rust ABI or full-package run.  Compiled artifact entrypoints still
+require their original producer outputs; absence is a failure, never a skip.
+
+* Development-only source observation dependency
+
+=dev/gerbil.pkg= owns the optional ASP pin used by the source-admission
+qualification. =just deps-dev= installs it. Yuanxu Core owns the public
+=:yuanxu/testing= module, including Case, Fixture, Script, source observation,
+and profile policy. The =core= Git submodule fixes the Yuanxu revision; Lab's
+=gerbil.pkg= does not declare Yuanxu again. Production =build.ss= uses Core's runtime import closure
+and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
+=asp-gerbil-scheme/= rather than silently building development modules.
+CI installs the optional development dependency after the library build.
+
+The development package store is =dev/.gerbil=, separate from the production
+store. Test commands search production libraries first, then the development
+store. Installing ASP must not replace the production MOP implementation.
+The shared =gerbil-poo= pin is aligned with =core/gerbil.pkg=, with its archive
+digest evaluated by Bazel and synchronized to both platform lock projections.
+
+** Namespace and negative-process repairs
+
+Product adapters now call the actual =yuanxu= source/catalog/option constructors.
+The earlier unbound =resolve-agentic-ai-lab-module-source/default= and constructor
+failures are retained as historical local failures, not current interfaces.
+=check-production-build= uses runtime =build.ss spec=: =--help= is not a supported
+=std/build-script= operation on this runtime.
+
+The retired ASP batch extension and its duplicate Lab policy wrapper are no
+longer part of this package. Native Harness failure admission remains covered
+by the bounded Yuanxu Script and the existing =native-progress-admission=
+qualification.
+
+** Upstream dependency boundary
+
+The production build and Parser's local Bazel entry both use Core's
+=package-library-spec= over the runtime context graph. ASP owns no library
+source collector or build executor. Shared imports are visited once, excluded
+targets are still inspected for dependency admission, and unselected sources
+are not opened. =std/make= still owns compilation and currentness.
+
+The pinned upstream packages remain separate evidence:
+
+- Parser =78507e68b1275be1be748be465d6354f596d9063= declares ASP and an older
+  Core in =gerbil.pkg=; its =language-support/entry.ss= imports the retired Core package namespace.
+- Ascent =0f99da9e3a3baf1a272ba58fe0769ed8278ae746= declares ASP and an older
+  Core, and its own =build.ss= still uses the ASP Building API.
+- The cached Ascent checkout =86ad9ae3469565bea6229b71ef1d9197c6a82d63= does
+  not match the requested pin. Validation extracted the requested Git objects
+  into an independent directory; it did not reset that checkout or another
+  session's upstream work.
+
+Removing the product import does not remove these upstream package-install
+requirements. Their runtime executable/artifact build behavior must not be
+silently discarded merely to remove a dependency edge.
+
+Installed Gerbil invokes a script's =main= itself. Qualification entry scripts
+therefore define =main= without also calling it at top level. The new counter
+fixture verifies one actual subprocess launch. The real Gitea/PostgreSQL
+publication suite then completed its 11 cases once within the existing bound;
+the earlier duplicate-run timeout remains a failed local artifact.

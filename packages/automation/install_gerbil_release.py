@@ -15,19 +15,32 @@ import subprocess
 from pathlib import Path
 
 
-REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
-RELEASES = {
-    ("Linux", "x86_64"): (
-        "linux", "x86_64",
-        f"gerbil-v0.19-{REVISION}-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb",
-        "9844ba362fdf6f1c5e8a4411e462a466d52dee0d541f8e84f61091cec0e5e740",
-    ),
-    ("Darwin", "arm64"): (
-        "darwin", "aarch64",
-        f"gerbil-v0.19-{REVISION}-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-patchf5cedd8168cb",
-        "8d9c88434aed6301eaebb719bf52472f05c2368eafc630e8a9f1d67cc9895a21",
-    ),
-}
+from gerbil_dependency_pin import declared_toolchain
+
+ROOT = Path(__file__).resolve().parents[2]
+DARWIN_REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
+DARWIN_TAG = (
+    f"gerbil-v0.19-{DARWIN_REVISION}-darwin-aarch64-gcc16-arm64"
+    "-aot-tools-single-host-unlimited-multiple-vms-patch618d76f9eb72"
+)
+DARWIN_RELEASE = (
+    "darwin", "aarch64", DARWIN_REVISION,
+    f"https://github.com/tao3k/gerbil-bazel/releases/download/{DARWIN_TAG}/{DARWIN_TAG}.tar.gz",
+    "0e18d063f888a73d9f9692d441fb3776898114e8440eada6876937d289578183",
+)
+
+
+def release_configuration(host: tuple[str, str]) -> tuple[str, str, str, str, str]:
+    if host == ("Darwin", "arm64"):
+        return DARWIN_RELEASE
+    if host != ("Linux", "x86_64"):
+        raise ValueError(f"unsupported Gerbil release host: {host[0]}-{host[1]}")
+    sdk = declared_toolchain(ROOT)
+    urls = sdk["linux_prebuilt_urls"]
+    if len(urls) != 1:
+        raise ValueError("native Linux SDK declaration must select one immutable release URL")
+    return ("linux", "x86_64", sdk["linux_prebuilt_release_revision"],
+            urls[0], sdk["linux_prebuilt_sha256"])
 
 
 def _digest(path: Path) -> str:
@@ -56,18 +69,20 @@ def main() -> int:
     parser.add_argument("release_root", type=Path)
     args = parser.parse_args()
     host = (platform.system(), platform.machine())
-    if host not in RELEASES:
-        parser.error(f"unsupported Gerbil release host: {host[0]}-{host[1]}")
-    release_os, release_arch, tag, expected_digest = RELEASES[host]
+    try:
+        release_os, release_arch, revision, url, expected_digest = release_configuration(host)
+    except ValueError as error:
+        parser.error(str(error))
     runner_temp = os.environ.get("RUNNER_TEMP")
     if not runner_temp:
         parser.error("RUNNER_TEMP is required")
-    archive = Path(runner_temp) / f"{tag}.tar.gz"
+    archive = Path(runner_temp) / url.rsplit("/", 1)[1]
     root = args.release_root.resolve()
     root.mkdir(parents=True, exist_ok=True)
     subprocess.run(
-        ["curl", "--fail", "--location", "--retry", "3", "--output", str(archive),
-         f"https://github.com/tao3k/gerbil-bazel/releases/download/{tag}/{archive.name}"],
+        ["curl", "--fail", "--location", "--retry", "3", "--retry-all-errors",
+         "--output", str(archive),
+         url],
         check=True,
     )
     if _digest(archive) != expected_digest:
@@ -77,7 +92,7 @@ def main() -> int:
     receipt = json.loads((root / "gerbil-toolchain-release.json").read_text(encoding="utf-8"))
     if not (
         receipt.get("schema") == "gerbil-bazel.toolchain-release.v1"
-        and receipt.get("upstreamRevision") == REVISION
+        and receipt.get("upstreamRevision") == revision
         and receipt.get("platform", {}).get("os") == release_os
         and receipt.get("platform", {}).get("arch") == release_arch
     ):

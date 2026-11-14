@@ -11,17 +11,17 @@ strict. When a gate fails, the tool should expose enough evidence to separate
 package compile work from package-manager startup and launcher overhead.
 
 This diagnostic layer does not relax thresholds. It records why a failing
-=poo-flow-build-profile= run failed so the next repair can target the real
+=agentic-ai-lab-build-profile= run failed so the next repair can target the real
 owner.
 
 * Receipt Surfaces
 
-- =poo-flow-build-profile= records the wrapped command wall time, internal
-  package time from =poo-flow-compile-debug= rows, and the computed
+- =agentic-ai-lab-build-profile= records the wrapped command wall time, internal
+  package time from =agentic-ai-lab-compile-debug= rows, and the computed
   =external-gap-micros=.
-- =poo-flow-build-profile-gate= records the threshold result for wall, package,
+- =agentic-ai-lab-build-profile-gate= records the threshold result for wall, package,
   and external-gap metrics.
-- =poo-flow-build-profile-launcher-diagnostic= records a launcher baseline for
+- =agentic-ai-lab-build-profile-launcher-diagnostic= records a launcher baseline for
   the wrapped command. It is emitted when =--diagnose-launcher= is passed or
   when the =external-gap= gate fails.
 

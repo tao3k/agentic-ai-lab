@@ -1,0 +1,32 @@
+[
+  {
+    "id": "fragment_fresh",
+    "source": "program/scheme-language.ss",
+    "question": "When one relational-fragment builder is instantiated twice, are its source and private predicate names fresh for each call or shared between calls? Answer with fresh or shared.",
+    "answer": "(answer fresh)"
+  },
+  {
+    "id": "diagnostic_body",
+    "source": "program/scheme-admission.ss",
+    "question": "A relational program fails in the second body clause of its first rule. What diagnostic code and zero-based path does relational-admit/report return? Answer as (answer CODE PATH).",
+    "answer": "(answer invalid-body (rule 0 body 1))"
+  },
+  {
+    "id": "diagnostic_head",
+    "source": "program/scheme-admission.ss",
+    "question": "A relational program fails because its first rule has an unbound variable in the first head atom. What diagnostic code and zero-based path does relational-admit/report return? Answer as (answer CODE PATH).",
+    "answer": "(answer invalid-head (rule 0 head 0))"
+  },
+  {
+    "id": "receipt_verdict",
+    "source": "candidate/reasoning.ss",
+    "question": "For a complete receipt bound to the current source and candidate, finite evidence verification succeeds. What atom does reasoning-verify-finite-receipt return? Answer with that atom.",
+    "answer": "(answer valid)"
+  },
+  {
+    "id": "receipt_generation",
+    "source": "candidate/reasoning.ss",
+    "question": "A complete receipt was made for source generation 1. Its rows and candidate are unchanged, but reasoning-verify-stratified-receipt is called with generation 2. What atom does it return? Answer with that atom.",
+    "answer": "(answer invalid)"
+  }
+]

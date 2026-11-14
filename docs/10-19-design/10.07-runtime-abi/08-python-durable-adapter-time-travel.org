@@ -35,7 +35,7 @@ thread stores a durable checkpoint; the runtime can inspect history, load a
 specific checkpoint id, patch state, and resume through the same adapter that
 was built from the Scheme manifest or runtime envelope.
 
-The policy center remains Scheme/POO-native. Python is the runtime harness and
+The policy center remains Scheme/POO. Python is the runtime harness and
 FFI consumer; it does not re-own durable policy semantics.
 
 * Test performance boundary
@@ -57,8 +57,8 @@ entry. They can measure package stages such as =runtime=, =tests=, and
 =package-total=, but they cannot measure time spent before the package entry is
 loaded by =gxpkg= and Gerbil.
 
-=uv run --project packages/python-runtime poo-flow-build-profile= wraps =gxpkg build -g= and emits
-=poo-flow.build-profile.v1=. The receipt preserves the normal build output and
+=uv run --project packages/python-runtime agentic-ai-lab-build-profile= wraps =gxpkg build -g= and emits
+=agentic-ai-lab.build-profile.v1=. The receipt preserves the normal build output and
 adds:
 
 - =wall-micros=
@@ -78,7 +78,7 @@ The wrapper also accepts explicit gates:
 - =--max-package-seconds=
 - =--max-external-gap-seconds=
 
-When a gate fails, the command emits =poo-flow.build-profile-gate.v1= with
+When a gate fails, the command emits =agentic-ai-lab.build-profile-gate.v1= with
 =status: fail= and exits non-zero if the wrapped build command itself
 succeeded. This lets CI and local audits keep the package compile body and the
 host startup gap as separate budgets.

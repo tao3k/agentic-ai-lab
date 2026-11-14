@@ -1,0 +1,105 @@
+{
+  "case": "generation-mismatch",
+  "raw": "{\"status\":\"rejected\",\"rows\":[]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.23722095800007992
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.23741270799996528
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.703018375000056
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.703048125000123
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7030718749999778
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8050467079999635
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8051000420000491
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8051256250000733
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8076674169999478
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8077120420000483
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8077373329999773
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.807760916999996
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8077838330000304
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8214210000001003
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.8216394169999148
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8216647920000923
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8216893750000054
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.8225885829999697
+    }
+  ],
+  "contentGapsSeconds": [
+    0.7030718749999778,
+    0.10197483299998567,
+    5.3334000085669686e-05,
+    2.5583000024198554e-05,
+    0.0025417919998744765,
+    4.4625000100495527e-05,
+    2.5290999928984093e-05,
+    2.358400001867267e-05,
+    2.2916000034456374e-05,
+    0.013637167000069894
+  ],
+  "responseId": "920ce4d6-30a7-4d54-a125-118d2aadc62c",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9654,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 10,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9664
+  },
+  "seconds": 0.8225930420001077
+}

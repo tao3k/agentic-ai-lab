@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     RuntimeGraphBuilder,
     RuntimeGraphToolCall,
     RuntimeGraphToolError,
@@ -73,7 +73,7 @@ def test_tool_calling_scheme_case_maps_to_runtime_tool_loop():
                         tool_calls=(
                             RuntimeGraphToolCall(
                                 name="lookup",
-                                args={"query": "poo-flow"},
+                                args={"query": "agentic-ai-lab"},
                                 id="call-1",
                             ),
                         ),
@@ -85,9 +85,9 @@ def test_tool_calling_scheme_case_maps_to_runtime_tool_loop():
     executor = create_tool_call_loop(model, {"lookup": lookup})
     state, trace = executor.invoke_with_trace({"messages": ()})
     assert trace == ["model", "tools", "model"]
-    assert observed_calls == ["poo-flow"]
+    assert observed_calls == ["agentic-ai-lab"]
     assert state["accepted"] is True
-    assert state["final"] == "result:poo-flow"
+    assert state["final"] == "result:agentic-ai-lab"
 
 
 def test_tool_calling_scheme_case_validates_missing_tool_scope():

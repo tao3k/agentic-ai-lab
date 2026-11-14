@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages Scenario Source Corpus
+#+date: [2026-10-16]
+#+filetags: :config-language:scenarios:references:
+#+property: STATUS upstream-source-snapshots-not-executed
+
+* Fixed-revision external research references
+
+Reference repositories are not submodules or build/runtime dependencies.
+Read upstream source at the reviewed revisions; no recursive checkout is needed.
+
+| Repository | Reviewed commit |
+|------------+-----------------|
+| [[https://github.com/kcl-lang/examples][KCL examples]] | =c15aaa191d2ad250a60d86a8508a9c8fa28a3997= |
+| [[https://github.com/kcl-lang/konfig][Konfig]] | =12025e8e250ca409006879126761c40e0eb0c0e0= |
+| [[https://github.com/tao3k/omnibus-ncl][Omnibus NCL]] | =c5d37eb51961fd7bd32f775843044ca7f8191715= |
+| [[https://github.com/tao3k/hivebus][HiveBus]] | =edc6095bed63a3c14f9f7147c931378d3e9d1609= |
+
+Links below retain the original upstream file layout and revision. Updating a
+reference requires reviewing the source changes and the corresponding analysis.
+These links record source inspection, not configuration evaluation or deployment.
+
+* Read cases from consumer input to model and renderer
+
+| Actual case | User source | Model/consumer source | Research question |
+|-------------+-------------+-----------------------+-------------------|
+| KCL multi-environment | [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/codelab/collaborative/appops/test_app/base/base.k][base]], [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/codelab/collaborative/appops/test_app/dev/main.k][dev]], [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/codelab/collaborative/appops/test_app/prod/main.k][prod]] | [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/codelab/collaborative/pkg/server.k][Server schema]], [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/codelab/collaborative/appops/test_app/dev/ci-test/stdout.golden.yaml][upstream dev golden]] | Defaults, assignment/append and reproducible environment inputs |
+| Konfig Guestbook, three workloads | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/base/base.k][frontend/leader/follower baseline]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/dev/main.k][dev image override]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/prod/main.k][prod overrides]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/server.k][Server]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/backend/server_backend.k][backend]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/render/render.k][renderer]] | Multi-instance typing, DNS conventions, labels and resource relationships |
+| Konfig nginx application | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/nginx-example/base/base.k][baseline]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/nginx-example/dev/main.k][dev]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/service/service.k][Service model]] | How much application config stays out of raw manifests? |
+| Konfig StatefulSet | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/server/app_stateful_set/prod/main.k][workload selection]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/server.k][Server model]] | Stateful workloads need different consumers/policies |
+| Konfig sidecar/volume | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/server/app_sidecar/prod/main.k][sidecar and mounts]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/server/app_volume/prod/main.k][volume case]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/sidecar/sidecar.k][sidecar]], [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/volume/volume.k][volume]] | Structured nested records and cross-container references |
+| Konfig Secrets | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/server/app_secret/prod/main.k][Secret input]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/secret/secret.k][Secret model]] | What is validated without exposing sensitive payloads in previews? |
+| KCL portable app abstraction | [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/abstraction/main.k][input]] | [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/abstraction/app.k][schema]], [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/abstraction/kubernetes_render.k][Kubernetes]], [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/abstraction/docker_compose_render.k][Compose]] | Shared business values and different backends |
+| KCL database config | [[https://github.com/kcl-lang/examples/blob/c15aaa191d2ad250a60d86a8508a9c8fa28a3997/configuration/db.k][environment-derived connection]] | [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/storage/database.k][separate cloud DB schema]] | Do not confuse connection configuration with database provisioning |
+| Omnibus AWS | [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/aws/main.ncl][business inputs and network reference]] | [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/aws/modules/aws-simple-ec2.ncl][EC2]], [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/aws/modules/aws-simple-vpc.ncl][VPC]] | Typed business relationships and infrastructure elaboration |
+| Omnibus Sandbox | [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/sandbox/examples/web-scraper.ncl][scraper]], [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/sandbox/examples/data-processor.ncl][processor]] | [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/sandbox/seatbelt/interface.ncl][interface]] | Simple policy values versus deliberate policy extension |
+| HiveBus multiple hosts | [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/hosts/host-1/meta.nix][host-1]], [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/hosts/host-2/meta.nix][host-2]], [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/hosts/host-3/meta.nix][host-3]] | [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/units/self/flakeOutputs.nix][exports and extension]], [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/flake.nix][entry]] | Multi-target organization, ordinary deployment values and advanced POP changes |
+
+* Dependency and execution boundaries
+
+A cited upstream revision is not a resolved package dependency closure.
+Relative paths and upstream manifests remain unchanged. Konfig cases retain their
+kcl.mod/lock files; OCI dependencies are not fetched. The AWS example references a
+generated tf-ncl-schema.ncl absent from the pinned tree; no replacement is supplied.
+Sandbox runtime binaries/local paths and HiveBus flake inputs are not resolved.
+Upstream golden files are upstream expectations, not results produced here.
+
+Compare actual APIs/inputs, derived resource identities, validation and demand.
+Do not infer a typed cross-service connection protocol merely from DNS use, or
+that schema.instances() means the whole global package catalog is loaded.
+
+[[file:../10-source-scenario-research.org][The source-to-design study]] connects these cases to the proposed POO surface.
+[[file:../11-guestbook-source-comparison.org][The Guestbook comparison]] traces the three workloads through environment inputs,
+field contracts and resource consumers. [[file:../../../../core/docs/10-19-design/11-configuration-languages/11.10-application-scenario-admission.org][Application admission]] remains unexecuted
+Scheme design, separate from these pinned upstream sources.

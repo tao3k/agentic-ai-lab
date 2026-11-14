@@ -10,7 +10,7 @@
 (def proof-fact-family
   (.o (kind 'proof-fact-family)
       (name 'proof-fact-family)
-      (source 'poo-flow.performance.policy-proof)))
+      (source 'agentic-ai-lab.performance.policy-proof)))
 
 (def (proof-fact fact-name status-value source-value)
   (.o (family 'proof-fact-family)

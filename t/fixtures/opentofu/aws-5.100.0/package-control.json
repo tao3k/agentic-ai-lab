@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-17",
+  "platform": "aarch64-darwin",
+  "package_paths": {
+    "engine": "/nix/store/1n0dnxjs2w93vpi3r41agqw5djrbgbd5-opentofu-1.11.5",
+    "engineVersion": "1.11.5",
+    "nixpkgsVersion": "26.05pre-git",
+    "provider": "/nix/store/871mwwjz43k6q8mjkdd90mlq4fysql0l-terraform-provider-aws-5.100.0",
+    "schema": "/nix/store/2rlwphdsarjzllarlr64vw25y05fl3pv-terraform-provider-aws-5.100.0-schema"
+  },
+  "schema_bytes": 13591718,
+  "manifest": {
+    "format": "agentic-ai-lab/provider-schema-v1",
+    "provider": "registry.opentofu.org/hashicorp/aws",
+    "version": "5.100.0",
+    "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"
+  },
+  "package_build": "passed",
+  "native_artifact_assertions": 19,
+  "native_unique_suites": 8,
+  "provider_validation": [
+    {
+      "case": "valid",
+      "valid": true,
+      "error_summaries": []
+    },
+    {
+      "case": "wrong-type",
+      "valid": false,
+      "error_summaries": [
+        "Incorrect attribute value type"
+      ]
+    },
+    {
+      "case": "cidr-host-bits",
+      "valid": false,
+      "error_summaries": [
+        "\"10.0.0.1/16\" is not a valid IPv4 CIDR block; did you mean \"10.0.0.0/16\"?"
+      ]
+    },
+    {
+      "case": "missing-port",
+      "valid": false,
+      "error_summaries": [
+        "Missing required argument"
+      ]
+    }
+  ],
+  "applied": false,
+  "loader_connected": false
+}

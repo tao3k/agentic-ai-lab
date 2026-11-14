@@ -1,0 +1,255 @@
+{
+  "chain": {
+    "status": "complete",
+    "frontier": [],
+    "operation": "temporal.solve",
+    "evidence": [
+      "valid",
+      "valid"
+    ],
+    "rows": [
+      [
+        "r7",
+        "s4"
+      ],
+      [
+        "r7",
+        "t9"
+      ]
+    ],
+    "verification": "valid",
+    "bindingDigest": "d036028733ce2553548bed9dd8e6dab0c88cd3260d003555a53cdd4bead4ed35",
+    "schema": "poo-flow.semantic-result"
+  },
+  "branch": {
+    "frontier": [],
+    "operation": "temporal.solve",
+    "evidence": [
+      "valid",
+      "valid"
+    ],
+    "status": "complete",
+    "bindingDigest": "f079d9ff40240f6a7864bb79ae649fbaeafc2ce65cd764073fe319021d63dda9",
+    "schema": "poo-flow.semantic-result",
+    "rows": [
+      [
+        "r7",
+        "s4"
+      ],
+      [
+        "r7",
+        "t9"
+      ]
+    ],
+    "verification": "valid"
+  },
+  "withdrawal": {
+    "frontier": [],
+    "evidence": [
+      "valid",
+      "unsupported"
+    ],
+    "operation": "temporal.solve",
+    "status": "complete",
+    "bindingDigest": "b7aa53c232340518b58c2545e5c914b928a273c3dd92793110f4c5604f5e61d1",
+    "schema": "poo-flow.semantic-result",
+    "rows": [],
+    "verification": "valid"
+  },
+  "open-cut": {
+    "status": "partial",
+    "operation": "temporal.solve",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "frontier": [
+      [
+        "open-cut",
+        "contract-cut-open-cut"
+      ]
+    ],
+    "verification": "invalid",
+    "rows": [],
+    "schema": "poo-flow.semantic-result",
+    "bindingDigest": "5a86a0a6833a024d17780ce2e88f2e8beb777b05aa6b3fc46d06349eb79a88e4"
+  },
+  "late-ingestion": {
+    "status": "partial",
+    "frontier": [
+      [
+        "knowledge-unavailable",
+        "s4"
+      ],
+      [
+        "knowledge-unavailable",
+        "t9"
+      ]
+    ],
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "operation": "temporal.solve",
+    "rows": [],
+    "verification": "invalid",
+    "bindingDigest": "388b74f1383a1eafe566e0c9f9a4bc7d32a7c28fe68cca48f70ae0db3cfbe42e",
+    "schema": "poo-flow.semantic-result"
+  },
+  "interval": {
+    "verification": "invalid",
+    "rows": [],
+    "schema": "poo-flow.semantic-result",
+    "bindingDigest": "a763b8ab4c8b831074d0212fabcae27f8b15e0f26cefa8532de564fcbd128019",
+    "status": "partial",
+    "operation": "temporal.solve",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "frontier": [
+      [
+        "unknown-valid-time",
+        "s4"
+      ],
+      [
+        "unknown-parent-order",
+        [
+          "r7",
+          "s4"
+        ]
+      ],
+      [
+        "unknown-parent-order",
+        [
+          "s4",
+          "t9"
+        ]
+      ]
+    ]
+  },
+  "zero-horizon": {
+    "status": "partial",
+    "frontier": [
+      [
+        "horizon-frontier",
+        [
+          "s4"
+        ]
+      ]
+    ],
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "operation": "temporal.solve",
+    "rows": [],
+    "verification": "invalid",
+    "bindingDigest": "87fdcbf522995ecc40ec73f229d1344a3ad6a99fe7d122e8f4823bf9b7727514",
+    "schema": "poo-flow.semantic-result"
+  },
+  "one-horizon": {
+    "frontier": [
+      [
+        "horizon-frontier",
+        [
+          "t9"
+        ]
+      ]
+    ],
+    "operation": "temporal.solve",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "status": "partial",
+    "bindingDigest": "8b3f6f907cff6b4dc33115575e02ba039c8e38f456f63397c6cb141f89c6cd4f",
+    "schema": "poo-flow.semantic-result",
+    "rows": [],
+    "verification": "invalid"
+  },
+  "clock-mismatch": {
+    "status": "rejected",
+    "operation": "temporal.solve",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "frontier": [
+      [
+        "clock-mismatch"
+      ]
+    ],
+    "verification": "invalid",
+    "rows": [],
+    "schema": "poo-flow.semantic-result",
+    "bindingDigest": "7b5a3f2ce5c70f0ec1c04d158607f3449fd551e5f45259f39b73f315f7ca9a2b"
+  },
+  "generation-mismatch": {
+    "verification": "invalid",
+    "rows": [],
+    "schema": "poo-flow.semantic-result",
+    "bindingDigest": "8f26001ce157320b3a6452fa88a7488f84d720b8f8b2fb9e4fcc6110044833af",
+    "status": "rejected",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "operation": "temporal.solve",
+    "frontier": [
+      [
+        "generation-mismatch"
+      ]
+    ]
+  },
+  "window-end": {
+    "schema": "poo-flow.semantic-result",
+    "bindingDigest": "6cccb9cd65a8db8c3c0114805b2e2759a145cc39499999f799eadbd8a6fd33d4",
+    "verification": "valid",
+    "rows": [
+      [
+        "r7",
+        "s4"
+      ]
+    ],
+    "operation": "temporal.solve",
+    "evidence": [
+      "valid",
+      "valid"
+    ],
+    "frontier": [],
+    "status": "complete"
+  },
+  "unknown-time": {
+    "bindingDigest": "04e0892a10f23deecbb55adf72560e7eca015c7d6c00466859f7901a1276fad1",
+    "schema": "poo-flow.semantic-result",
+    "rows": [],
+    "verification": "invalid",
+    "frontier": [
+      [
+        "unknown-valid-time",
+        "s4"
+      ],
+      [
+        "unknown-parent-order",
+        [
+          "r7",
+          "s4"
+        ]
+      ],
+      [
+        "unknown-parent-order",
+        [
+          "s4",
+          "t9"
+        ]
+      ]
+    ],
+    "operation": "temporal.solve",
+    "evidence": [
+      "not-produced",
+      "not-produced"
+    ],
+    "status": "partial"
+  }
+}

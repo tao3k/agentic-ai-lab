@@ -1,0 +1,23 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+;;; Complete runtime dependency imports before the original guarded cases.
+;;; Output reports actual import boundaries, never a timer heartbeat.
+(for-each
+ (lambda (module)
+   (displayln "IMPORT " module) (force-output)
+   (eval `(import ,module))
+   (displayln "IMPORT-OK " module) (force-output))
+ '(:clan/poo/object
+   :clan/poo/mop
+   :clan/poo/trie
+   :tao3k/yuanxu/types/contracts
+   :tao3k/yuanxu/module-system/schema/slot-contracts
+   :tao3k/yuanxu/observability/testing-case
+   :gerbil-ascent/table/expression
+   :gerbil-ascent/core/binary-relation
+   :gerbil-ascent/core/binary-program
+   :gerbil/tools/gxtest))
+(eval '(exit (gerbil/tools/gxtest#main "-v" "5"
+                                    "t/integration/ascent-integration/guarded-test.ss")))

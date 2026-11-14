@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: live nono profile checks use native FFI, not the nono CLI.
+;;; Boundary: live nono profile checks use runtime FFI, not the nono CLI.
 ;;; Invariant: irreversible sandbox apply is never performed by package tests.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o)
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/api
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-live-profile-test
         make-custom-cicd-ci-check-profile
@@ -82,7 +82,7 @@
   (agent-sandbox-request
    (make-custom-cicd-ci-check-profile)
    (command "sh")
-   (args '("-lc" "printf poo-flow-native-cicd"))
+   (args '("-lc" "printf agentic-ai-lab-runtime-cicd"))
    (workdir ".")
    (mounts '(((path . ".")
               (kind . directory)
@@ -90,7 +90,7 @@
    (network-policy +custom-cicd-ci-check-network-policy+)
    (capabilities '((allow-commands . ("sh" "gxpkg"))))
    (resource-policy '((timeout-ms . 90000)))
-   (metadata '((check . native-cicd-probe)))))
+   (metadata '((check . runtime-cicd-probe)))))
 
 ;; : (-> Unit AgentSandboxRuntimeManifest)
 (def (make-custom-cicd-ci-check-runtime-manifest)
@@ -99,14 +99,14 @@
 
 ;; : (-> AgentSandboxRuntimeManifest Alist)
 (def (nono-live-cicd-receipt runtime-manifest)
-  (nono-c-binding-native-live-test runtime-manifest))
+  (nono-c-binding-ffi-live-test runtime-manifest))
 
 ;; : (-> Unit PooUserModuleSelection)
 (def (custom-cicd-nono-selection)
-  (.o kind: "poo-flow.modules.user-selection.v1"
+  (.o kind: "yuanxu.modules.user-selection.v1"
       user-group: 'sandbox
       user-module: 'nono-sandbox
-      selection-flags: '(+native-ffi)
+      selection-flags: '(+ffi)
       source-ref: 'none
       entrypoint: 'none
       enabled?: #t))
@@ -115,8 +115,8 @@
 ;;; sandbox apply outside the test path.
 ;; : TestSuite
 (def nono-sandbox-live-profile-test
-  (test-suite "nono-sandbox native live user-interface profile"
-    (poo-flow-test-case "normalizes custom ci/check profile into POO sandbox policy"
+  (test-suite "nono-sandbox runtime live user-interface profile"
+    (yuanxu-test-case "normalizes custom ci/check profile into POO sandbox policy"
       (let ((profile (make-custom-cicd-ci-check-profile)))
         (check-equal? (agent-sandbox-profile-backend-kind profile) 'nono)
         (check-equal? (agent-sandbox-profile-backend-ref profile) 'ci/check)
@@ -129,7 +129,7 @@
         (check-equal? (test-ref (agent-sandbox-profile-metadata profile)
                                 'source)
                       +custom-cicd-profile-source+)))
-    (poo-flow-test-case "projects ci/check into nono C binding manifest with filesystem sandbox"
+    (yuanxu-test-case "projects ci/check into nono C binding manifest with filesystem sandbox"
       (let* ((runtime-manifest
               (make-custom-cicd-ci-check-runtime-manifest))
              (manifest
@@ -154,12 +154,12 @@
                       'NONO_ACCESS_MODE_READ_WRITE)
         (check-equal? (test-ref network-call 'network-constant)
                       'NONO_NETWORK_MODE_BLOCKED)))
-    (poo-flow-test-case "checks ci/check through native nono FFI"
+    (yuanxu-test-case "checks ci/check through runtime nono FFI"
       (let* ((runtime-manifest
               (make-custom-cicd-ci-check-runtime-manifest))
              (receipt (nono-live-cicd-receipt runtime-manifest)))
         (check-equal? (test-ref receipt 'schema)
-                      +nono-c-binding-native-live-test-receipt-schema+)
+                      +nono-c-binding-ffi-live-test-receipt-schema+)
         (check-equal? (test-ref receipt 'ok?) #t)
         (check-equal? (test-ref receipt 'cli-executed) #f)
         (check-equal? (test-ref receipt 'runtime-executed) #f)
@@ -169,41 +169,41 @@
         (if (test-ref receipt 'enabled?)
           (begin
             (check-equal? (test-ref receipt 'skipped?) #f)
-            (check-equal? (test-ref receipt 'native-executed) #t)
-            (check-equal? (test-ref receipt 'native-loaded?) #t)
+            (check-equal? (test-ref receipt 'runtime-executed) #t)
+            (check-equal? (test-ref receipt 'runtime-loaded?) #t)
             (check-equal? (test-ref receipt 'apply-symbol)
                           'nono_sandbox_apply)
             (check-equal? (test-ref receipt 'apply-null-only?) #t)
             (check-equal? (test-ref receipt 'apply-null-code)
-                          +nono-c-binding-native-apply-null-error-code+)
+                          +nono-c-binding-ffi-apply-null-error-code+)
             (check-equal? (test-ref receipt 'capability-roundtrip-code) 0))
           (begin
             (check-equal? (test-ref receipt 'skipped?) #t)
             (check-equal? (test-ref receipt 'skip-reason)
-                          'native-library-not-found)))))
-    (poo-flow-test-case "dispatches custom use-module binding to native nono FFI"
+                          'runtime-library-not-found)))))
+    (yuanxu-test-case "dispatches custom use-module binding to runtime nono FFI"
       (let* ((selection (custom-cicd-nono-selection))
              (runtime-manifest
               (make-custom-cicd-ci-check-runtime-manifest))
              (receipt
               (nono-c-binding-selection-live-test selection runtime-manifest)))
         (check-equal? (nono-c-binding-selection-binding selection)
-                      'native-ffi)
+                      'ffi)
         (check-equal? (test-ref receipt 'binding-source) 'use-module)
-        (check-equal? (test-ref receipt 'selection-binding) 'native-ffi)
+        (check-equal? (test-ref receipt 'selection-binding) 'ffi)
         (check-equal? (test-ref receipt 'selection-key)
                       '(sandbox . nono-sandbox))
         (check-equal? (test-ref receipt 'schema)
-                      +nono-c-binding-native-live-test-receipt-schema+)
+                      +nono-c-binding-ffi-live-test-receipt-schema+)
         (check-equal? (test-ref receipt 'cli-executed) #f)
         (check-equal? (test-ref receipt 'runtime-executed) #f)
         (check-equal? (test-ref receipt 'would-apply?) #f)
         (if (test-ref receipt 'enabled?)
           (begin
-            (check-equal? (test-ref receipt 'native-executed) #t)
+            (check-equal? (test-ref receipt 'runtime-executed) #t)
             (check-equal? (test-ref receipt 'apply-symbol)
                           'nono_sandbox_apply))
           (begin
-            (check-equal? (test-ref receipt 'native-executed) #f)
+            (check-equal? (test-ref receipt 'runtime-executed) #f)
             (check-equal? (test-ref receipt 'skip-reason)
-                          'native-library-not-found)))))))
+                          'runtime-library-not-found)))))))

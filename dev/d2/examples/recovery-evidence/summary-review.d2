@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+classes: {
+  title: {shape: text; style: {font-size: 34; bold: true; font-color: "#14273A"}}
+  note: {shape: text; style: {font-size: 17; font-color: "#415668"}}
+  claim: {width: 335; style: {fill: "#EAF0F6"; stroke-width: 0; font-size: 17; border-radius: 8}}
+  basis: {width: 465; style: {fill: "#F2F5F8"; stroke-width: 0; font-size: 17; border-radius: 8}}
+  duty: {width: 310; style: {fill: "#F2F5F8"; stroke-width: 0; font-size: 17; border-radius: 8}}
+  head: {style: {bold: true; font-size: 19}}
+  revision: {width: 555; style: {fill: "#EAF0F6"; stroke-width: 0; font-size: 17; border-radius: 8}}
+}
+
+figure: {
+  label: ""
+  grid-rows: 6
+  vertical-gap: 12
+  style: {fill: transparent; stroke-width: 0}
+
+  title: "Which claims can the new recovery summary carry?" {class: title}
+  premise: "At D, W1-v2 supports success for the original append. Review the claims in summary B one by one." {class: note}
+
+  claims: {
+    label: ""
+    grid-rows: 4
+    horizontal-gap: 8
+    vertical-gap: 8
+    style: {fill: transparent; stroke-width: 0}
+
+    claim_head: "Claim from summary B" {class: [claim; head]}
+    basis_head: "Basis needed for this claim" {class: [basis; head]}
+    duty_head: "ASCENT review" {class: [duty; head]}
+
+    commit: "Original append committed" {class: claim}
+    commit_basis: "W1-v2 can support this exact claim.\nVerify its use for the claim at D." {class: basis}
+    commit_review: "CAN CLOSE AFTER ASSESSMENT\nSame claim, new evidence basis." {class: duty; style.fill: "#D8EFE3"}
+
+    count: "Exactly one commit for this effect\nin the recovery window" {class: claim}
+    count_basis: "Independent storage audit with full window coverage.\nThe audit must show exactly one commit." {class: basis}
+    count_review: "OPEN UNTIL COUNT IS VERIFIED" {class: duty; style.fill: "#FBE8CD"}
+
+    replay: "No replay dispatch for this effect\nin the recovery window" {class: claim}
+    replay_basis: "Independent dispatch journal with full coverage.\nThe journal must show zero replay dispatches." {class: basis}
+    replay_review: "OPEN UNTIL ABSENCE IS VERIFIED" {class: duty; style.fill: "#FBE8CD"}
+  }
+
+  publication: {
+    label: ""
+    grid-rows: 2
+    horizontal-gap: 8
+    vertical-gap: 8
+    style: {fill: transparent; stroke-width: 0}
+
+    partial_head: "Partial revision" {class: [revision; head]}
+    full_head: "Full revision" {class: [revision; head]}
+    partial: "Example with only the append claim checked.\nPublish that claim and list the two open items.\nThe count and dispatch reviews stay open." {class: revision}
+    full: "Publish all three claims after separate verification.\nClose the aggregate summary review.\nThis can be the first replacement." {class: revision}
+  }
+
+  gate: "Temporal verifies the current cut, review revision, exact claim bases and coverage before admitting either version." {class: note}
+  history: "Keep summary B with its original basis. An admitted replacement adds a version. Open claim reviews stay visible." {class: note}
+}

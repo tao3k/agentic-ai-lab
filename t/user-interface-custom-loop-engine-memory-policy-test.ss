@@ -6,13 +6,15 @@
 ;;; Boundary: tests verify loop-engine memory-policy declaration contracts.
 ;;; Invariant: malformed memory policy rows fail before runtime projection.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :tao3k/yuanxu/module-system/selection/objects
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/loop-engine/config
+        :tao3k/agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-memory-policy-test)
 
@@ -20,18 +22,17 @@
 ;;; memory-policy failures stay tied to real `use-module` declarations.
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-memory-policy-presentation module-bundle)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Duplicate memory policies for one loop case would make Marlin guess which
 ;;; state spine to bind. The POO lowering rejects that shape before receipt
 ;;; projection.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-duplicate-memory-policy-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (duplicate-memory-loop @ loop-engine-use-case name workflow)
       name: 'duplicate-memory-loop
       workflow: 'funflow-cicd)
@@ -52,8 +53,7 @@
 ;;; structurally invalid because no selected branch can bind it deterministically.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-unmatched-memory-policy-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (unmatched-memory-loop @ loop-engine-use-case name workflow)
       name: 'unmatched-memory-loop
       workflow: 'funflow-cicd)
@@ -70,7 +70,7 @@
 ;;; contract before receipts are emitted for Marlin.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-duplicate-memory-policy-case)
-  (poo-flow-test-case "rejects duplicate loop-engine memory-policies"
+  (yuanxu-test-case "rejects duplicate loop-engine memory-policies"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -84,7 +84,7 @@
 ;;; use-case names do not become inert but misleading runtime handoff data.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-unmatched-memory-policy-case)
-  (poo-flow-test-case "rejects loop-engine memory-policy for undeclared use-case"
+  (yuanxu-test-case "rejects loop-engine memory-policy for undeclared use-case"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -95,9 +95,9 @@
      #t)))
 
 ;;; The suite isolates memory-policy contract failures from the larger custom
-;;; loop-engine presentation test, keeping negative POO-native cases explicit.
+;;; loop-engine presentation test, keeping negative POO cases explicit.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-memory-policy-test
-  (test-suite "poo-flow custom loop-engine memory-policy contracts"
+  (test-suite "agentic-ai-lab custom loop-engine memory-policy contracts"
     (user-interface-custom-loop-engine-duplicate-memory-policy-case)
     (user-interface-custom-loop-engine-unmatched-memory-policy-case)))

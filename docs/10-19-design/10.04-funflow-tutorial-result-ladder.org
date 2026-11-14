@@ -14,10 +14,10 @@ values printed by minimal flows, composed flows, custom task extensions,
 word-count workflows, external configuration checks, Docker execution, and
 runtime-backed artifacts.
 
-Poo-flow implementation should now advance by result gates. Each gate must
+Agentic AI Lab implementation should now advance by result gates. Each gate must
 state:
 - the Funflow tutorial output being matched;
-- the poo-flow behavior that produces an equivalent observable result;
+- the agentic-ai-lab behavior that produces an equivalent observable result;
 - the command that proves the result in this repository.
 
 ** 10.04.10 Audited Tutorial Surface
@@ -53,7 +53,7 @@ The reference checkout under =.data/funflow= exposes these result sources:
 Reference result:
 - Tutorial1 runs a pure flow over =1= and returns =2=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =pure-flow= plus =runner-run= returns =2=.
 
 Proof:
@@ -66,7 +66,7 @@ Reference result:
 - QuickReference returns ="Hello Watson !"= for the minimal greeting.
 - QuickReference returns ="Hello world"= for composed flows.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =pure-flow= produces the greeting.
 - =flow-then= composes two local flows into the same visible output.
 
@@ -80,7 +80,7 @@ Reference result:
 - Tutorial2 custom task returns ="Kangaroo goes
   woop!woop!woop!woop!woop!woop!woop!"=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =custom-repeat-flow= and =make-custom-run-config= demonstrate the same
   extension-facing behavior through a local extension-owned task family.
 
@@ -95,7 +95,7 @@ Proof:
 Reference result:
 - WordCount prints counts including =a: 3=, =and: 3=, =lets: 2=, and =file: 1=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =word-count-flow= and =make-text-run-config= return deterministic counts with
   the same observable cardinalities.
 
@@ -112,7 +112,7 @@ Reference result:
 - Saved notebook output includes =Missing the following required config keys:
   ["SECOND_GREETING"]=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =run-flow-with-config= raises typed =missing-config-keys= before adapter
   submission.
 
@@ -125,10 +125,10 @@ Proof:
 Reference result:
 - ErrorHandling uses =tryE= to catch local/runtime failures and route them to handled branches.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =try-flow= wraps an ordinary flow and returns =try-left= or =try-right=
   through normal =runner-run= composition.
-- =defpoo-flow-try= exposes the same boundary to user-facing functional flow
+- =defagentic-ai-lab-try= exposes the same boundary to user-facing functional flow
   declarations.
 
 Proof:
@@ -144,7 +144,7 @@ Reference result:
 - ExternalConfig prints configured Docker echo output.
 - makefile-tool builds a C example and then =./hello= runs.
 
-Poo-flow target result:
+Agentic AI Lab target result:
 - Rust/runtime owns Docker execution, CAS materialization, filesystem movement,
   and process output.
 - Scheme core owns descriptor registries, config preflight, request envelopes,
@@ -153,14 +153,14 @@ Poo-flow target result:
   commands, process-backed commands, and later Rust commands share one
   invocation shape.
 - Process-backed commands may use the stdout protocol: print one
-  =poo-flow.runtime-response.v1= s-expression and let Scheme normalize it.
+  =yuanxu.runtime-response.v1= s-expression and let Scheme normalize it.
 - Docker-specific declarations belong to =modules/docker/config.ss=.
 - CAS/store lifecycle interpretation belongs to a store/CAS extension or Rust
   runtime, not to =src/core/runner.ss=.
 - Core receipts may carry generic =adapter-result= evidence: task, kind,
   adapter operation, status, request id, and artifact handle.
 
-Poo-flow precursor landed:
+Agentic AI Lab precursor landed:
 - =modules/docker/config.ss= owns =docker-task-family-descriptor=.
 - =modules/docker/config.ss= owns =docker-flow= and =make-docker-task=.
 - The extension installs its own registry, strategy capability, and adapter
@@ -201,17 +201,17 @@ Reference result:
 - Funflow's Docker/CAS tutorials make runtime artifacts observable across
   workflow steps rather than only returning an immediate scalar.
 
-Poo-flow target result:
+Agentic AI Lab target result:
 - Scheme composes =docker-flow= and =store-flow= with =flow-then=.
 - =src/extensions/workflow.ss= owns the Docker+Store run-config composition.
 - The composed config installs Docker and Store task registries, strategy
   capabilities, and adapter capabilities without changing core defaults.
 - The stdout runtime command handles both =docker= and =store= requests through
-  the same =poo-flow.runtime-response.v1= schema.
+  the same =yuanxu.runtime-response.v1= schema.
 - The Store step receives the previous Docker =adapter-result= as input and can
   observe its value and artifact handle.
 
-Poo-flow landed:
+Agentic AI Lab landed:
 - Stage 8 returns a store manifest whose =input-value= is =15=.
 - Stage 8 returns a store manifest whose =input-artifact= is
   =(artifact stage-8-ccompilation-output)=.
@@ -227,17 +227,17 @@ Reference result:
 - A Rust-backed runtime should replace the current process test command without
   changing workflow declarations or response normalization.
 
-Poo-flow target result:
+Agentic AI Lab target result:
 - =runtime-command-descriptor= records command name, executable, argument
   builder, response protocol, and metadata as inert data.
 - =runtime-command-descriptor->command= materializes a descriptor into the
   existing process command boundary.
-- The stdout protocol remains =poo-flow.runtime-response.v1=, so a future Rust
+- The stdout protocol remains =yuanxu.runtime-response.v1=, so a future Rust
   CLI only needs to print the same response s-expression.
 - Docker-to-Store workflows depend on the descriptor protocol, not on the
   =make-stdout-runtime-command= constructor directly.
 
-Poo-flow landed:
+Agentic AI Lab landed:
 - Stage 9 runs the same Docker artifact handoff through a descriptor-declared
   command.
 - The descriptor exposes =stdout-s-expression= and the executable path as
@@ -256,16 +256,16 @@ Reference result:
 - A real Rust runtime needs an explicit command manifest before it can replace
   the test process command.
 
-Poo-flow target result:
+Agentic AI Lab target result:
 - =runtime-command-descriptor->manifest= projects a descriptor and request
   envelope into stable CLI handoff data.
-- The manifest records =poo-flow.runtime-command-descriptor.v1=, the request
+- The manifest records =yuanxu.runtime-command-descriptor.v1=, the request
   schema, request id, command name, protocol, executable, arguments, argv, and
   metadata.
 - The projection evaluates the descriptor's argument builder for a concrete
   envelope but still does not execute the process.
 
-Poo-flow landed:
+Agentic AI Lab landed:
 - Stage 10 exposes a Rust-compatible argv manifest for a stdout response
   protocol descriptor.
 - Runtime bridge tests prove the manifest shape independently of Docker/Store.
@@ -284,7 +284,7 @@ Reference result:
 - QuickReference's cached increment performs the side-effecting increment once
   for repeated identical cache keys.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =conditional-flow= provides local branch selection without pretending this is
   the same as graph scheduling.
 - =cached-scheme-flow= memoizes local task outputs for tutorial parity while
@@ -300,7 +300,7 @@ Reference result:
 - Tutorial2 builds a custom task declaration, weaves an interpreter, and returns
   ="Kangaroo goes woop!woop!woop!woop!woop!woop!woop!"=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =extensions/custom-task= owns the =custom= task descriptor, run config,
   request data, and local interpreter.
 
@@ -314,7 +314,7 @@ Reference result:
 - WordCount removes tutorial punctuation, filters non-word tokens, counts words,
   sorts by descending count, and formats lines such as =a: 3= and =Lets: 2=.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =extensions/text= owns =text= task descriptors and WordCount text parsing.
   The module consumes text directly; caller/runtime code owns file IO.
 
@@ -328,7 +328,7 @@ Reference result:
 - CCompilation and TensorflowDocker are multi-step runtime workflows with Docker
   images, commands, mounted inputs, and runtime-owned artifacts.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =modules/workflow= exposes public constructors for CCompilation,
   CCompilation-to-store, Tensorflow training, Tensorflow inference, and the
   two-step Tensorflow workflow descriptor.
@@ -343,7 +343,7 @@ Reference result:
 - ErrorHandling uses =tryE= to catch both local =throwStringFlow= failures and
   runtime failures, then returns handled branch values.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =throw-string-flow= raises typed control-plane failures through a Scheme task.
 - =runner-run-value-or-recover= recovers either raised =execution-failure=
   values or failed adapter receipts in one public runner boundary.
@@ -363,7 +363,7 @@ Reference result:
 - =funflow-examples/makefile-tool= parses a Makefile project, runs the selected
   target, and observes =./hello= process output.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =modules/workflow= exposes =make-makefile-tool-parse-flow=,
   =make-makefile-tool-run-flow=, and =make-makefile-tool-workflow= as external
   task descriptors.
@@ -381,7 +381,7 @@ Reference result:
 - =funflow-examples/makefile-tool= runs the generated tool and then runs
   =./hello= from the test project.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =make-makefile-tool-runtime-command-descriptor= materializes through the same
   stdout runtime-response protocol used by Docker/Store stages.
 - The parse step returns a makefile plan artifact; the run step consumes that
@@ -399,7 +399,7 @@ Reference result:
 - A Rust-backed makefile-tool runtime needs a stable command manifest for both
   parse and run task requests.
 
-Poo-flow result:
+Agentic AI Lab result:
 - =make-makefile-tool-runtime-arguments= projects request id, plan id,
   operation, Makefile path, working directory, source files, target, binary, and
   expected process-output into argv-compatible strings.
@@ -413,7 +413,7 @@ Proof:
 *** 10.04.39 Stage 19: Runtime Manifest Consumer
 Reference result:
 - Funflow's configured runner consumes a fully configured task interpreter and returns a runtime-owned result without changing the flow declaration.
-Poo-flow result:
+Agentic AI Lab result:
 - =runtime-command-descriptor->manifest= exports a request-bound CLI manifest with argv, request id, operation, policy, plan id, node id, frontier, and artifact handle.
 - =run-runtime-command-manifest= consumes that manifest locally: it validates the schema, executes the stored argv, reads one stdout s-expression, and normalizes it into an =adapter-result=.
 - =runtime-command-manifest->command= lets the same manifest plug into the existing =runtime-command= slot, so Rust can replace only the executable while Scheme keeps descriptor policy and response normalization.
@@ -424,13 +424,13 @@ Proof:
 Reference result:
 - Funflow exposes a functional core through =Flow=, =pureFlow=, =returnFlow=,
   Arrow composition, and Arrow fanout helpers.
-Poo-flow result:
+Agentic AI Lab result:
 - =src/core/flow.ss= exposes =flow-arr=, =flow-identity=, =flow-map=,
   =flow-fanout=, =flow-first=, and =flow-second= as Gerbil Scheme functions
   over the existing =flow= declaration.
 - =default-flow-category= is a POO object whose slots name the Category/Arrow
   operations over =flow=.
-- =src/core/flow-syntax.ss= exposes =defpoo-flow-*= hygienic Gerbil macros
+- =src/core/flow-syntax.ss= exposes =defagentic-ai-lab-*= hygienic Gerbil macros
   that author the same flow declarations through bindings.
 - The stable =flow= struct and runner boundary remain unchanged; this is not a
   new workflow DSL or alist/record language.
@@ -441,7 +441,7 @@ Proof:
 Reference result:
 - Funflow users author real task-family flows through a compact functional
   surface while task interpreters stay extension/runtime-owned.
-Poo-flow result:
+Agentic AI Lab result:
 - Workflow modules expose ordinary public constructors such as
   =custom-repeat-flow=, =docker-flow=, =store-flow=,
   =make-ccompilation-store-workflow=, =make-tensorflow-workflow=,
@@ -473,8 +473,8 @@ Reference result:
   WordCount, ExternalConfig, ErrorHandling, CCompilation, TensorflowDocker, and
   the makefile-tool example.
 
-Poo-flow result:
-- =poo-flow-funflow-tutorial-alignment-report= exposes the audited tutorial
+Agentic AI Lab result:
+- =agentic-ai-lab-funflow-tutorial-alignment-report= exposes the audited tutorial
   surface as one POO object with stable kind/schema slots.
 - Each tutorial source is a POO spec with source path, observable result,
   coverage status, proof commands, runtime-owned operations, and deferred

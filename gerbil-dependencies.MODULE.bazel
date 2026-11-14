@@ -3,73 +3,85 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 # Gerbil package dependency revisions are generated from gerbil.pkg by
-# `just pin-gerbil-dependency`. The Git submodule supplies parent builds;
-# downstream Gerbil package installs resolve the same Core revision.
+# `just pin-gerbil-dependency`. Core is compiled from the tracked subtree,
+# so it has no external source-package projection here.
 
 gerbil_dependency_sources = use_extension(
     "@gerbil_bazel//gerbil:extensions.bzl",
     "gerbil",
 )
 gerbil_dependency_sources.source_package(
-    name = "poo_flow_core_sources",
-    canonical_uri = "https://github.com/tao3k/poo-flow-core",
-    package = "poo-flow-core",
-    revision = "e85fd45303b208b23e5957fd316e7004994109a4",
-    sha256 = "da03dbec74a66bf8090246cdc02fbefcf2de21c7b61597b73ad7a608e477df3c",
-    strip_prefix = "poo-flow-core-e85fd45303b208b23e5957fd316e7004994109a4",
-    urls = [
-        "https://github.com/tao3k/poo-flow-core/archive/e85fd45303b208b23e5957fd316e7004994109a4.tar.gz",
-    ],
-)
-gerbil_dependency_sources.source_package(
     name = "gerbil_poo_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-poo",
     package = "gerbil-poo",
-    revision = "099b381588360a8a49fd772f666a1a00351366f5",
-    sha256 = "5cafed5170c4ade18a1cce3898149f92b236aabba11c80020359f19531084597",
-    strip_prefix = "gerbil-poo-099b381588360a8a49fd772f666a1a00351366f5",
+    revision = "6ed403d62b4bdbabbecb43bdb1e25f3ac9ac43e1",
+    sha256 = "8c21185295eda1f11d573533b3136b69b8d2094fdb14be27b980a0969e6dfb02",
+    strip_prefix = "gerbil-poo-6ed403d62b4bdbabbecb43bdb1e25f3ac9ac43e1",
     urls = [
-        "https://github.com/tao3k/gerbil-poo/archive/099b381588360a8a49fd772f666a1a00351366f5.tar.gz",
+        "https://github.com/tao3k/gerbil-poo/archive/6ed403d62b4bdbabbecb43bdb1e25f3ac9ac43e1.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "asp_gerbil_scheme_sources",
     canonical_uri = "https://github.com/tao3k/asp-gerbil-scheme",
     package = "asp-gerbil-scheme",
-    revision = "19bf659450f619a410cef46b093ccaa6bb203c03",
-    sha256 = "0771c766c317f2e221dc10495e6a315e4a981bc66618f9e346b8d581c80155da",
-    strip_prefix = "asp-gerbil-scheme-19bf659450f619a410cef46b093ccaa6bb203c03",
+    revision = "9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
+    sha256 = "27f4cfef9406c300a70efe4d90b72314b3e558a058892fc0604346d77ded7bbe",
+    strip_prefix = "asp-gerbil-scheme-9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
     urls = [
-        "https://github.com/tao3k/asp-gerbil-scheme/archive/19bf659450f619a410cef46b093ccaa6bb203c03.tar.gz",
+        "https://github.com/tao3k/asp-gerbil-scheme/archive/9ae9bc377cbab4b84de52b512a2c03375a36d6c9.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "gerbil_parser_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-parser",
     package = "gerbil-parser",
-    revision = "0e6d0d6c325145e7af576e6f1af0e136f22487c4",
-    sha256 = "84d7e84eb3c040d7465101ddfb6122be7d48143e87a4e245532f86834a470f2c",
-    strip_prefix = "gerbil-parser-0e6d0d6c325145e7af576e6f1af0e136f22487c4",
+    revision = "v0.1.0",
+    sha256 = "791bb1ca15d0170c13bed8782d60233406cf839633a181d6eaf33a160a236be0",
+    strip_prefix = "gerbil-parser-0.1.0",
     urls = [
-        "https://github.com/tao3k/gerbil-parser/archive/0e6d0d6c325145e7af576e6f1af0e136f22487c4.tar.gz",
+        "https://github.com/tao3k/gerbil-parser/archive/v0.1.0.tar.gz",
+    ],
+)
+gerbil_dependency_sources.source_package(
+    name = "gerbil_ascent_sources",
+    canonical_uri = "https://github.com/tao3k/gerbil-ascent",
+    package = "gerbil-ascent",
+    revision = "ba1108ca2ee4578a9c5dede9c3c415d6b59fec81",
+    sha256 = "3b1462d671ff384f6c5e9dc36f99c672b45f3612eb21e3d16d76ace16f1757b5",
+    strip_prefix = "gerbil-ascent-ba1108ca2ee4578a9c5dede9c3c415d6b59fec81",
+    urls = [
+        "https://github.com/tao3k/gerbil-ascent/archive/ba1108ca2ee4578a9c5dede9c3c415d6b59fec81.tar.gz",
+    ],
+)
+gerbil_dependency_sources.source_package(
+    name = "gerbil_scheme_rust_sources",
+    canonical_uri = "https://github.com/tao3k/gerbil-scheme-rust",
+    package = "gerbil-scheme-rust",
+    revision = "dfe8b62b5dc64de88f8d70a77059a1741218ef80",
+    sha256 = "63efb70f4fc42b8e4c8b7f0790cc19029421338c57ac61a96e44768c730ffca4",
+    strip_prefix = "gerbil-scheme-rust-dfe8b62b5dc64de88f8d70a77059a1741218ef80",
+    urls = [
+        "https://github.com/tao3k/gerbil-scheme-rust/archive/dfe8b62b5dc64de88f8d70a77059a1741218ef80.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "orgize_sources",
     canonical_uri = "https://github.com/tao3k/orgize",
     package = "orgize",
-    revision = "f80ee4de8c39ac4d8f3fbbed0c88d4072300c9b9",
-    sha256 = "bdc42fbb6a0257cf5b888be03640a320afacfef87a947eeba713a25c0251eef9",
-    strip_prefix = "orgize-f80ee4de8c39ac4d8f3fbbed0c88d4072300c9b9",
+    revision = "7d98b5355b866bfba9ce7d16f6d401d9addb50c4",
+    sha256 = "46fbce077b907fc630ece7812b35b7eade3a434ff8c21a3684e651a8a6429213",
+    strip_prefix = "orgize-7d98b5355b866bfba9ce7d16f6d401d9addb50c4",
     urls = [
-        "https://github.com/tao3k/orgize/archive/f80ee4de8c39ac4d8f3fbbed0c88d4072300c9b9.tar.gz",
+        "https://github.com/tao3k/orgize/archive/7d98b5355b866bfba9ce7d16f6d401d9addb50c4.tar.gz",
     ],
 )
 use_repo(
     gerbil_dependency_sources,
     "asp_gerbil_scheme_sources",
     "gerbil_parser_sources",
+    "gerbil_ascent_sources",
     "gerbil_poo_sources",
+    "gerbil_scheme_rust_sources",
     "orgize_sources",
-    "poo_flow_core_sources",
 )

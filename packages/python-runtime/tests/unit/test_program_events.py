@@ -4,7 +4,7 @@
 
 import pytest
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     END,
     START,
     RuntimeGraphBindings,
@@ -83,7 +83,7 @@ def test_runtime_graph_program_interrupt_does_not_leak_internal_handle() -> None
     assert interrupted.node == "pause"
     assert interrupted.state["value"] == 42
     assert interrupted.state["trace"] == ["load", "pause"]
-    assert "_poo_flow_runtime_graph_plan" not in interrupted.state
+    assert "_agentic_ai_lab_runtime_graph_plan" not in interrupted.state
     assert interrupted.trace == ("load", "pause")
     assert interrupted.events[-1].kind == "interrupt"
 
@@ -131,7 +131,7 @@ def test_runtime_graph_program_resumes_from_interrupt() -> None:
 
     assert execution.state["status"] == "approved"
     assert execution.state["trace"] == ["load", "approve", "done"]
-    assert "_poo_flow_runtime_graph_plan" not in execution.state
+    assert "_agentic_ai_lab_runtime_graph_plan" not in execution.state
     assert execution.trace == ("load", "approve", "done")
     assert execution.plan_digest is not None
     assert any(event.kind == "resume" for event in execution.events)

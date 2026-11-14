@@ -5,15 +5,19 @@
 
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :tao3k/agentic-ai-lab/modules/workflow/funflow-config)
 
 (export funflow-config-pipeline-error-test)
 
 ;; : Boolean
-(def poo-flow-import-side-effect-test-suite? #t)
+(def agentic-ai-lab-import-side-effect-test-suite? #t)
 
 ;; : (-> (-> Unit Object) Boolean)
 (def (funflow-config-error? thunk)
@@ -22,25 +26,23 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-workflow-category-selection)
-  (use-module workflow
-    :config
-    (pipeline default)))
+  (agentic-ai-lab-product-use-module 'workflow '()))
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-bad-dependency-selection)
-  (use-module funflow
-    :config
-    (.def (funflow-test/bad @ funflow-check
-                            check-name profile-ref command-vector
-                            dependency-refs)
+  (let ()
+    (.def (funflow-test/bad @ funflow-check)
       check-name: 'bad
       profile-ref: 'ci/check
       command-vector: '("gerbil" "build")
       dependency-refs: '("build"))
-    (.def (funflow-test/bad-pipeline @ funflow-pipeline
-                                     pipeline-name checks)
+    (.def (funflow-test/bad-pipeline @ funflow-pipeline)
       pipeline-name: 'bad
-      checks: (list funflow-test/bad))))
+      checks: (list funflow-test/bad))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map funflow-test/bad-pipeline)
+        (list ':config funflow-test/bad-pipeline)))))
 
 ;; : (-> Unit Symbol)
 (def (run-funflow-config-pipeline-error-checks)
@@ -59,6 +61,6 @@
   'ok)
 
 (def funflow-config-pipeline-error-test
-  (test-suite "poo-flow Funflow config contract errors"
-    (poo-flow-test-case "rejects invalid Funflow POO declarations"
+  (test-suite "agentic-ai-lab Funflow config contract errors"
+    (yuanxu-test-case "rejects invalid Funflow POO declarations"
       (check-equal? (run-funflow-config-pipeline-error-checks) 'ok))))

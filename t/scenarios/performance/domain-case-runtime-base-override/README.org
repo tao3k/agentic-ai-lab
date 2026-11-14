@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+#
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: DomainCase runtime base/override composition scenario
+
+This A/B scenario compares two public =:clan/poo/object= composition windows
+over the same 64-slot shared prototype.  The baseline constructs every Agent
+with a three-parent =.mix=.  The candidate uses =:clan/poo= =make-object= with
+the shared object as its sole =supers:= base and installs marker/local slots in
+one allocation; this is the direct form of the same runtime override window.
+
+Admission requires equal =.ref= values for every visible slot, bidirectional
+=.slot?= coverage, equal =.all-slots= cardinality, and a lower complete-sample
+P95 for the candidate.  Both paths run 20 samples of 500 Agents after warmup.
+The production capacity gate remains separate and unchanged at 20 samples of
+5,000 Agents for each of 8, 32, and 64 shared slots.
+
+The 2026-09-14 local A/B receipt measured a complete-sample P95 of about
+290.72 ms for three-parent =.mix= and 270.35 ms for the earlier =.+= form,
+with the full slot
+surface equivalent.  These host timings are supporting evidence; the checked
+semantic and relative-performance gates are authoritative.
+
+Run from the repository root:
+
+#+begin_src sh
+gerbil env gxi t/scenarios/performance/domain-case-runtime-base-override/scenario.ss
+#+end_src

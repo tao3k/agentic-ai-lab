@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-17",
+  "core_head": "7595bedcc5347c7add6b9d3b7b2713d6ddc8a42e",
+  "worktree": "shared dirty worktree; focused source hashes, no full Core build qualification",
+  "runtime": "default Gerbil, focused native owner build, serial heap-fenced Justfile gates",
+  "metric_scope": "direct Nix CLI starts at owned argv boundary; successful selected input reads and Contract compilations; not child-process totals",
+  "cold_definition": "fresh Scheme scope and Contract cache; existing real Nix store artifacts, not a clean Nix store",
+  "hot_definition": "five repeated native cached slot/admission accesses; independent currentness is separately measured",
+  "baseline_variant": "original eager NixSource.build plus Core publication recheck; observation hooks only, before phase refactor",
+  "baseline": [
+    {
+      "phase": "aws-build",
+      "seconds": 4.942686080932617,
+      "instantiate": 3,
+      "realize": 1
+    },
+    {
+      "realize": 0,
+      "seconds": 0.872046947479248,
+      "instantiate": 1,
+      "phase": "aws-first-admission"
+    },
+    {
+      "realize": 0,
+      "phase": "aws-hot-slots",
+      "seconds": 4.0531158447265625e-06,
+      "instantiate": 0
+    },
+    {
+      "realize": 0,
+      "instantiate": 1,
+      "seconds": 0.8043918609619141,
+      "phase": "aws-explicit-recheck"
+    },
+    {
+      "realize": 1,
+      "instantiate": 3,
+      "seconds": 2.748278856277466,
+      "phase": "aws-null-build"
+    },
+    {
+      "instantiate": 1,
+      "seconds": 0.8737690448760986,
+      "phase": "aws-null-first-admission",
+      "realize": 0
+    },
+    {
+      "realize": 0,
+      "seconds": 3.814697265625e-06,
+      "instantiate": 0,
+      "phase": "aws-null-hot-slots"
+    }
+  ],
+  "candidate": {
+    "phases": [
+      {
+        "instantiate": 2,
+        "seconds": 2.098628044128418,
+        "phase": "aws-build",
+        "realize": 1
+      },
+      {
+        "realize": 0,
+        "instantiate": 1,
+        "seconds": 0.7878451347351074,
+        "phase": "aws-first-admission"
+      },
+      {
+        "realize": 0,
+        "seconds": 3.0994415283203125e-06,
+        "instantiate": 0,
+        "phase": "aws-hot-slots"
+      },
+      {
+        "realize": 0,
+        "seconds": 0.8194730281829834,
+        "instantiate": 1,
+        "phase": "aws-explicit-recheck"
+      },
+      {
+        "realize": 1,
+        "instantiate": 2,
+        "seconds": 1.7394638061523438,
+        "phase": "aws-null-build"
+      },
+      {
+        "phase": "aws-null-first-admission",
+        "seconds": 0.8591670989990234,
+        "instantiate": 1,
+        "realize": 0
+      },
+      {
+        "realize": 0,
+        "instantiate": 0,
+        "seconds": 4.0531158447265625e-06,
+        "phase": "aws-null-hot-slots"
+      }
+    ],
+    "child-types": [
+      [
+        "aws",
+        1,
+        1
+      ],
+      [
+        "null",
+        1,
+        1
+      ]
+    ],
+    "parent-types": [
+      [
+        "aws",
+        1,
+        1
+      ]
+    ]
+  },
+  "source_sha256": {
+    "core/module-system/source/preparation.ss": "f501e1c754971931a32696b4b2a41e04dae90fd754bdfd6c9119440e4e20809e",
+    "core/module-system/source/reader.ss": "2b1362d8c50fad9e07830e9990bbf628e3f2dc8766d1114fd58b040dcdef2fa5",
+    "core/module-system/source/build.ss": "fe70bbe0967108270a5327c08206a28f7748ac20384ae78abf394bfd1bf95f3d",
+    "core/module-system/source/link.ss": "f4f1cfe0ed8ad2a060511a333fcb2e68fba8341473c3d3c52181064b22b49f9c",
+    "core/modules/building/build-projection.ss": "2d036c36e9594141f00d3bffa47590aecfdd4deaf7e0abec986822968d6ba115",
+    "core/modules/building/configuration-source.ss": "3f336d723a5c6628a73f96c4bbcf83d912f022cbccd58b6eb4582c5ae90afa1b",
+    "core/modules/nix/config.ss": "e461aa656c69cfe357e374eba2c32f971229ed06b427e6ee68c6121a2645bfa9",
+    "core/modules/nix/types.ss": "ee82d70beadf6e2ead5c630de74ae9df7609beb3ed3801a772933e465ccb3ade",
+    "core/modules/nix/objects.ss": "c23595ae225064ee4fe618577778162c126f028b1c1f1f3caec5ad68bbf71918",
+    "core/modules/nix/interface.ss": "1d0730998d819f17587d16004efb3dd7b8c4dee55054e97ada91dcd8e61da1a8",
+    "core/modules/nix/func.ss": "c1f09c30500858885c6c5fa023700122afae5717b5b91f8a6ac3243ab8ac6527",
+    "core/modules/nix/source-inputs.nix": "67dbb2fe38c5fc9304248ba50a02780839f3b1bf6332d289d05a0235f3189f75",
+    "core/modules/services/opentofu/build.ss": "d900e072a4cca29bef71866eea9079254bc2410aec8e36ff74d1bdc82c74f1b4",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "core/modules/building/bootstrap.ss": "7407be41c2643ec062b9ba2174b8fe568e663f9520547dbda416487bbb7861f9",
+    "core/modules/services/opentofu/objects.ss": "ac40a84174664394e35ea8746857ac7d107dad79c86c1fc2810ce66fe50fb704",
+    "t/opentofu-selected-graph-test.ss": "c90a9ac47b6eccead330fac9cd46eac2f079359c7ed34e46c7485cca665466ef",
+    "core/t/module-configuration-source-test.ss": "d93e947abc544b052024f8a0f71bac7143d181c1a8500cb7433266d05ec877b9",
+    "core/t/module-nix-phase-test.ss": "e5defd00946e65b931f925227c241a108dc4d291cabec92b73dfc5aca36e9d88"
+  },
+  "source_unchanged_during_final_gates": true,
+  "gates": {
+    "selected-graph": {
+      "passed": true,
+      "native_harness_markers_verified": true,
+      "explicit_assert_ok": 43
+    },
+    "configuration-source": {
+      "passed": true,
+      "native_harness_markers_verified": true,
+      "explicit_assert_ok": 0
+    },
+    "native-phase": {
+      "passed": true,
+      "native_harness_markers_verified": true,
+      "explicit_assert_ok": 0
+    },
+    "publication": {
+      "passed": true,
+      "native_harness_markers_verified": true,
+      "explicit_assert_ok": 0
+    },
+    "build-graph": {
+      "passed": true,
+      "native_harness_markers_verified": true,
+      "explicit_assert_ok": 0
+    }
+  },
+  "controls": [
+    "no processes during preparation; receiver-local derivation and artifact caching",
+    "configuration context exactly once per synchronous check, again on next check",
+    "stale prepared candidate rejected before realization",
+    "mutation during standalone realization rejected",
+    "late first admission rejects changed source",
+    "parent Contract identity and AWS-only namespace retained",
+    "transitive Nix dependency and generated-script rejection",
+    "tampered request bytes rejected",
+    "generated entry modified during realization rejected",
+    "unselected awscc excluded; aws_instance uncompiled"
+  ],
+  "limitations": [
+    "single local before/after timing observation, not statistical speedup",
+    "explicit recheck still starts one nix-instantiate",
+    "no product Loader",
+    "selected Provider still exports its full own Schema",
+    "no global currentness cache or cross-generation Contract sharing",
+    "trusted source/phase closure; no whole-program dynamic IO dependency proof"
+  ],
+  "retained_local_failure": {
+    "path": "/private/tmp/nix-phase-final.log",
+    "reason": "test instrumentation accidentally added a third argument to rejects?; corrected before final gate"
+  }
+}

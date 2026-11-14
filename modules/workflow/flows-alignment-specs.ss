@@ -8,50 +8,50 @@
 
 (import (only-in :clan/poo/object .o .ref object?))
 
-(export poo-flow-funflow-tutorial-alignment-schema
-        poo-flow-funflow-tutorial-alignment-spec-kind
-        poo-flow-funflow-tutorial-alignment-report-kind
-        poo-flow-funflow-tutorial-alignment-spec
-        poo-flow-funflow-tutorial-alignment-spec?
-        poo-flow-funflow-tutorial-alignment-report?
-        poo-flow-funflow-tutorial-alignment-spec-id
-        poo-flow-funflow-tutorial-alignment-spec-status
-        poo-flow-funflow-tutorial-alignment-specs
-        poo-flow-funflow-tutorial-alignment-gate-proofs
+(export agentic-ai-lab-funflow-tutorial-alignment-schema
+        agentic-ai-lab-funflow-tutorial-alignment-spec-kind
+        agentic-ai-lab-funflow-tutorial-alignment-report-kind
+        agentic-ai-lab-funflow-tutorial-alignment-spec
+        agentic-ai-lab-funflow-tutorial-alignment-spec?
+        agentic-ai-lab-funflow-tutorial-alignment-report?
+        agentic-ai-lab-funflow-tutorial-alignment-spec-id
+        agentic-ai-lab-funflow-tutorial-alignment-spec-status
+        agentic-ai-lab-funflow-tutorial-alignment-specs
+        agentic-ai-lab-funflow-tutorial-alignment-gate-proofs
         alignment-gate-proof-id
         alignment-gate-proof-commands
-        poo-flow-funflow-tutorial-alignment-gate-ids)
+        agentic-ai-lab-funflow-tutorial-alignment-gate-ids)
 
 ;;; Boundary: this schema symbol is the stable POO report envelope identity.
 ;;; Tests and docs compare this value directly, so it must not drift with paths.
-;; | PooFlowFunflowTutorialAlignmentSchema = Symbol
-;; : (-> Unit PooFlowFunflowTutorialAlignmentSchema)
-(def (poo-flow-funflow-tutorial-alignment-schema)
-  'poo-flow.modules.funflow.tutorial-alignment.v1)
+;; | AgenticAILabFunflowTutorialAlignmentSchema = Symbol
+;; : (-> Unit AgenticAILabFunflowTutorialAlignmentSchema)
+(def (agentic-ai-lab-funflow-tutorial-alignment-schema)
+  'agentic-ai-lab.modules.funflow.tutorial-alignment.v1)
 
 ;;; Boundary: spec kind tags individual tutorial evidence rows inside the report.
 ;;; It separates row objects from the aggregate report without runtime loading.
-;; | PooFlowFunflowTutorialAlignmentKind = String
-;; : (-> Unit PooFlowFunflowTutorialAlignmentKind)
-(def (poo-flow-funflow-tutorial-alignment-spec-kind)
-  "poo-flow.modules.funflow.tutorial-alignment.spec.v1")
+;; | AgenticAILabFunflowTutorialAlignmentKind = String
+;; : (-> Unit AgenticAILabFunflowTutorialAlignmentKind)
+(def (agentic-ai-lab-funflow-tutorial-alignment-spec-kind)
+  "agentic-ai-lab.modules.funflow.tutorial-alignment.spec.v1")
 
 ;;; Boundary: report kind tags the aggregate alignment object consumed by tests.
 ;;; The string is external evidence metadata, not an executable workflow handle.
-;; | PooFlowFunflowTutorialAlignmentKind = String
-;; : (-> Unit PooFlowFunflowTutorialAlignmentKind)
-(def (poo-flow-funflow-tutorial-alignment-report-kind)
-  "poo-flow.modules.funflow.tutorial-alignment.report.v1")
+;; | AgenticAILabFunflowTutorialAlignmentKind = String
+;; : (-> Unit AgenticAILabFunflowTutorialAlignmentKind)
+(def (agentic-ai-lab-funflow-tutorial-alignment-report-kind)
+  "agentic-ai-lab.modules.funflow.tutorial-alignment.report.v1")
 
-;; : (-> PooObject PooFlowFunflowTutorialAlignmentKind Boolean)
-(def (poo-flow-funflow-alignment-kind? value kind)
+;; : (-> PooObject AgenticAILabFunflowTutorialAlignmentKind Boolean)
+(def (agentic-ai-lab-funflow-alignment-kind? value kind)
   (and (object? value)
        (equal? (.ref value 'kind) kind)
        (equal? (.ref value 'schema)
-               (poo-flow-funflow-tutorial-alignment-schema))))
+               (agentic-ai-lab-funflow-tutorial-alignment-schema))))
 
 ;; : (-> Symbol String String Symbol [Symbol] [String] [Symbol] [Symbol] PooObject)
-(def (poo-flow-funflow-tutorial-alignment-spec
+(def (agentic-ai-lab-funflow-tutorial-alignment-spec
       id source observable status coverage proofs runtime-owned deferred)
   (let ((id-value id)
         (source-value source)
@@ -61,8 +61,8 @@
         (proofs-value proofs)
         (runtime-owned-value runtime-owned)
         (deferred-value deferred))
-    (.o kind: (poo-flow-funflow-tutorial-alignment-spec-kind)
-        schema: (poo-flow-funflow-tutorial-alignment-schema)
+    (.o kind: (agentic-ai-lab-funflow-tutorial-alignment-spec-kind)
+        schema: (agentic-ai-lab-funflow-tutorial-alignment-schema)
         id: id-value
         source: source-value
         observable: observable-value
@@ -73,31 +73,31 @@
         deferred: deferred-value)))
 
 ;; : (-> PooObject Boolean)
-(def (poo-flow-funflow-tutorial-alignment-spec? value)
-  (poo-flow-funflow-alignment-kind?
+(def (agentic-ai-lab-funflow-tutorial-alignment-spec? value)
+  (agentic-ai-lab-funflow-alignment-kind?
    value
-   (poo-flow-funflow-tutorial-alignment-spec-kind)))
+   (agentic-ai-lab-funflow-tutorial-alignment-spec-kind)))
 
 ;; : (-> PooObject Boolean)
-(def (poo-flow-funflow-tutorial-alignment-report? value)
-  (poo-flow-funflow-alignment-kind?
+(def (agentic-ai-lab-funflow-tutorial-alignment-report? value)
+  (agentic-ai-lab-funflow-alignment-kind?
    value
-   (poo-flow-funflow-tutorial-alignment-report-kind)))
+   (agentic-ai-lab-funflow-tutorial-alignment-report-kind)))
 
 ;; : (-> PooObject Symbol)
-(def (poo-flow-funflow-tutorial-alignment-spec-id spec)
+(def (agentic-ai-lab-funflow-tutorial-alignment-spec-id spec)
   (.ref spec 'id))
 
 ;; : (-> PooObject Symbol)
-(def (poo-flow-funflow-tutorial-alignment-spec-status spec)
+(def (agentic-ai-lab-funflow-tutorial-alignment-spec-status spec)
   (.ref spec 'status))
 
 ;;; Boundary: this table is the canonical Funflow tutorial alignment corpus.
 ;;; Keep row construction centralized so report tests can detect drift in coverage.
 ;; : (-> Unit [PooObject])
-(def (poo-flow-funflow-tutorial-alignment-specs)
+(def (agentic-ai-lab-funflow-tutorial-alignment-specs)
   (list
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'tutorial1
     "funflow-tutorial/notebooks/Tutorial1.ipynb"
     "runFlow over input 1 returns 2"
@@ -106,7 +106,7 @@
     '("gxtest t/tutorial-result-test.ss: stage 1 tutorial1 minimal pure flow returns 2")
     '()
     '())
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'quick-reference
     "funflow-tutorial/notebooks/QuickReference.ipynb"
     "Hello Watson !, Hello world, conditional result 1, cached increment reuse"
@@ -116,7 +116,7 @@
       "gxtest t/tutorial-feature-batch-test.ss: stage 11 quick reference conditional and cached increment run")
     '()
     '())
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'tutorial2-custom-task
     "funflow-tutorial/notebooks/Tutorial2.ipynb"
     "Kangaroo goes woop! repeated seven times"
@@ -126,7 +126,7 @@
       "gxtest t/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension")
     '()
     '())
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'word-count
     "funflow-tutorial/notebooks/WordCount/WordCount.ipynb"
     "word count lines include a: 3, and: 3, Lets: 2, FILE: 1"
@@ -136,7 +136,7 @@
       "gxtest t/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts")
     '()
     '())
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'external-config
     "funflow-tutorial/notebooks/ExternalConfig/ExternalConfig.ipynb"
     "file/env/literal arguments render before Docker work; missing keys fail fast"
@@ -146,7 +146,7 @@
       "gxtest t/store-funflow-alignment-test.ss: aligns Funflow external config preflight and rendering")
     '(docker-echo runtime-container)
     '(real-docker-echo-output))
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'error-handling
     "funflow-tutorial/notebooks/ErrorHandling.ipynb"
     "try boundary routes local and runtime failures to handled values"
@@ -156,7 +156,7 @@
       "gxtest t/tutorial-feature-batch-test.ss: stage 15 error handling recovers local throw and adapter failure")
     '(runtime-failure-source)
     '())
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'ccompilation
     "funflow-tutorial/notebooks/CCompilation/CCompilation.ipynb"
     "Docker-backed GCC flow prints 15 for input 3"
@@ -168,7 +168,7 @@
       "gxtest t/tutorial-runtime-result-test.ss: stage 10 descriptor manifest exposes rust cli handoff")
     '(docker-process cas-materialization artifact-store)
     '(real-container-execution real-cas-write))
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'tensorflow-docker
     "funflow-tutorial/notebooks/TensorflowDocker/TensorflowDocker.ipynb"
     "store data, train model, run inference, render summary.png"
@@ -177,7 +177,7 @@
     '("gxtest t/tutorial-feature-batch-test.ss: stage 14 ccompilation and tensorflow workflow descriptors are public")
     '(docker-process python-training image-rendering cas-materialization)
     '(real-training-result real-inference-output summary-png))
-   (poo-flow-funflow-tutorial-alignment-spec
+   (agentic-ai-lab-funflow-tutorial-alignment-spec
     'makefile-tool
     "funflow-examples/makefile-tool/README.md"
     "parse Makefile project, build hello target, return process output"
@@ -189,19 +189,19 @@
     '(make-process filesystem-build)
     '(real-make-execution real-hello-binary-output))))
 
-;; | PooFlowAlignmentGateProof = Alist
+;; | AgenticAILabAlignmentGateProof = Alist
 
 ;;; Boundary: gate proofs are report metadata, not test execution directives.
 ;;; Keeping proof strings inert lets downstream tooling audit coverage safely.
-;; : (-> Symbol [String] PooFlowAlignmentGateProof)
+;; : (-> Symbol [String] AgenticAILabAlignmentGateProof)
 (def (alignment-gate-proof id proofs)
   (list (cons 'id id)
         (cons 'proofs proofs)))
 
 ;;; Boundary: result gates track the repository proof ladder, not upstream files.
 ;;; The catalog connects tutorial parity to concrete local verification commands.
-;; : (-> Unit [PooFlowAlignmentGateProof])
-(def (poo-flow-funflow-tutorial-alignment-gate-proofs)
+;; : (-> Unit [AgenticAILabAlignmentGateProof])
+(def (agentic-ai-lab-funflow-tutorial-alignment-gate-proofs)
   (list
    (alignment-gate-proof
     'stage-1-minimal-flow
@@ -284,17 +284,17 @@
     '("gxtest t/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI"
       "gxtest t/funflow-tutorial-alignment-report-test.ss: user-interface Marlin handoff result gate"))))
 
-;; : (-> PooFlowAlignmentGateProof Symbol)
+;; : (-> AgenticAILabAlignmentGateProof Symbol)
 (def (alignment-gate-proof-id gate-proof)
   (cdr (assoc 'id gate-proof)))
 
-;; : (-> PooFlowAlignmentGateProof [String])
+;; : (-> AgenticAILabAlignmentGateProof [String])
 (def (alignment-gate-proof-commands gate-proof)
   (cdr (assoc 'proofs gate-proof)))
 
 ;;; Boundary: ids are projected from the proof catalog to prevent drift.
 ;;; Downstream code should consume ids and proofs from the same source.
 ;; : (-> Unit [Symbol])
-(def (poo-flow-funflow-tutorial-alignment-gate-ids)
+(def (agentic-ai-lab-funflow-tutorial-alignment-gate-ids)
   (map alignment-gate-proof-id
-       (poo-flow-funflow-tutorial-alignment-gate-proofs)))
+       (agentic-ai-lab-funflow-tutorial-alignment-gate-proofs)))

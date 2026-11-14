@@ -1,0 +1,530 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Org intent, Context inquiry and Durable action
+#+language: en
+#+property: STATUS design-proposal
+
+* Durable Agenda: one Query and the next wake
+:PROPERTIES:
+:CUSTOM_ID: durable-agenda
+:END:
+
+Keep the existing Org Element as the agenda item. It already supplies
+the TODO state, scheduling information, tags and source identity.
+Org Agenda determines the planning candidates. Super Agenda-style
+grouping organizes the view; grouping does not dispatch an action.
+The model can write or update an ordinary Org item, and Context can
+query it through the existing Element path.
+
+The caller composes a Query and a registered action as POO values.
+For example, this is the shape of a configuration, with illustrative
+object names rather than new public syntax:
+
+#+begin_src scheme
+(.o query: OpenScheduledOrgElements
+    action: NotifyTeam)
+#+end_src
+
+The Query owns the source scope and selection, such as open scheduled
+items tagged =team=. The action owns the meaning of notification.
+If notification is due before the event, the action's existing timing
+policy supplies that offset. The model does not need to author a
+separate notification subtree for the ordinary case.
+
+Durable picks the earliest eligible occurrence from the Query result
+and arms the next wake through the existing clock owner. It waits
+when nothing qualifies. On a source change, clock wake or restart,
+it queries the current view again. At wake it rechecks the selected
+Element, its eligibility and current authorization before admitting
+the registered action. Once that occurrence is consumed, the same
+query can expose the next one. Overdue handling belongs to the existing
+delivery policy; an overdue display row does not by itself permit a send.
+
+The engine owns occurrence identity, wake replacement and handoff
+recovery. A format edit does not create another occurrence. A changed
+schedule can replace a pending wake. An already consumed handoff keeps
+its receipt or unresolved outcome. Callers configure the Query and
+action once; provider reconciliation remains behind the engine boundary.
+
+Orgize already exposes typed agenda entries in the semantic AST.
+The Scheme =orgize-source.ss= open-headline example currently returns
+source digest, range, title and TODO state. It does not return planning
+time. Reuse a public Agenda Element projection if available; otherwise
+expose the typed time through the existing POO Query boundary.
+The engine work is to consume that projection using the Durable clock
+owner and the existing handoff journal. The [[file:../../10.07-runtime-abi/06-scheme-durable-policy-contract.org][Scheme VM host boundary]]
+keeps the same Agenda behavior across runtime languages.
+
+See the [[https://www.gnu.org/software/emacs/manual/html_node/org/Deadlines-and-Scheduling.html][Org scheduling semantics]]
+and [[https://github.com/alphapapa/org-super-agenda][Super Agenda grouping]].
+
+The sections below retain the detailed source admission and external
+delivery cases as engine design references. The query-and-action
+configuration above is the ordinary Durable Agenda interface.
+
+* Org gives Context an intent and an address
+
+An Org heading is one way to put human intent in a source the Context
+Engine can locate and revisit. The heading is the human-readable name.
+The ID is its address in an authenticated source. The body can carry
+the objective and observations to consider. Properties can bind scope,
+policy and references to existing capabilities. Orgize and the existing
+Org Contract selector preserve the exact source behind that intent.
+
+#+begin_example
+* Find out whether the interrupted write took effect
+:PROPERTIES:
+:ID: recovery-inquiry
+:CONTEXT_SCOPE: original-workspace-attempt
+:CONTEXT_QUESTION: workspace-effect-outcome
+:DURABLE_WAKE: evidence-change
+:DURABLE_POLICY: recovery-read-only
+:END:
+
+Find out whether the intended change took effect.
+Keep the original workspace untouched.
+#+end_example
+
+These property names and values are proposed references. The declared
+question has one stable identity per Attempt, effect and scope. Multiple
+sources may contribute intent or evidence to that same question.
+The read-only policy names a capability boundary. It does not choose a
+tool, prescribe exploration order or grant permission on its own.
+An Org TODO by itself has no activation semantics.
+
+* Context drives the inquiry
+
+| Role | What it contributes |
+|------+---------------------|
+| Context Engine | Keeps the original Attempt, active intent, admitted evidence, alternatives and unresolved question together. It gives the model a bounded working view. |
+| ASCENT | Derives what needs checking from current evidence and policy. It can expose several alternatives and identify when support changes. |
+| Model | Chooses what to investigate or defer. Its proposal names the question, relevant evidence and expected distinction, and a candidate observation, Task or Workflow. It can propose different paths on different evidence. |
+| Durable | Accepts authorized wakes and selected handoffs, freezes their input basis, and preserves pending work, decisions and outcomes across interruption. |
+| Temporal Causality | Assesses and admits returned findings as scoped evidence. A proposed explanation or a tool result does not by itself settle the question. |
+
+A receipt correction, new observation, changed intent or due deadline
+can wake the inquiry. An admitted wake updates or reconsiders Context;
+it is not a request to run a specific tool. Wakes and selected actions
+have different identities. Several wakes can refer to the same open
+question, and the same wake can yield several alternative proposals or
+none. A monitored Task's missing heartbeat is evidence for investigating
+whether it is stalled or unreachable; failure and retry require their
+own evidence and authority.
+
+In the interrupted write, a file observation may show changed bytes.
+ASCENT can expose the missing link to the original Attempt. The model
+might inspect the retained receipt, look for a separately recorded
+effect identity, or defer if it lacks access. If an admitted receipt
+already settles the question, the relevant obligation closes before a
+pending inspection is dispatched. If a later correction invalidates
+that receipt, the same question can reopen. None of this depends on a
+timer sequence or a Workflow graph. A declared Workflow, when useful,
+is one candidate that the model can propose within the policy.
+
+* A selected proposal becomes an explicit handoff
+
+A proposal carries the question and a reference to the relevant Context
+basis, expected information gain, normalized action scope, resolved
+capability and arguments. Model-generated text or a proposal ID does not
+establish the identity of an effect. The owner binds an admitted handoff
+key to the selected semantic action under its question and scope.
+An authorized, intentional repeat is a distinct decision under the
+existing Attempt rules.
+
+Before dispatch, the owner rechecks the question and its relevant
+premises, current permission and effect-specific guards. An unrelated
+Context edit need not invalidate the handoff. A changed premise, closed
+question or revoked grant blocks it. Durable retains the admitted
+decision and the exact input basis. On restart it restores that
+decision; a missing receipt leaves the outcome unknown. A new model
+call may propose another inquiry, but does not manufacture the result
+of the earlier call or redispatch an ambiguous effect. New observations
+return to Context as evidence candidates for Temporal assessment.
+
+The existing clock path can wake the same inquiry as a fallback. The
+section below specifies that optional wake boundary.
+
+* Three identities at the execution boundary
+
+| Identity | Meaning |
+|----------+---------|
+| Declaration | Authenticated source namespace plus heading =ID=. The same heading can survive a move or edit within its admitted source lineage. An ambiguous or conflicting ID is quarantined. |
+| Admitted binding | Selected Org element, source cut and parser/projection provenance, normalized declaration, resolved target, trigger policy, scope and authority. This is the frozen input basis for an accepted activation. |
+| Activation | Declaration identity, stable trigger stream and canonical occurrence. For a schedule this is the nominal slot, not delivery time; for an event it is the authenticated producer and event identity; for a manual request it is the admitted request identity. |
+
+The owner compares a delivery with the current binding and authority,
+then atomically records the activation key and its frozen input. Delivery
+retries and owner restarts find the same acceptance record. Re-reading
+unchanged Org or editing a heading does not mint another key for an
+already accepted occurrence. Trigger-stream identity is explicitly
+admitted and stable across ordinary edits. An intentional new stream
+requires owner admission. An explicitly requested retry belongs to the
+same activation and follows the existing Task/Attempt recovery rules.
+
+* Change, restart and missed monitoring
+
+A source change that alters the declaration requires re-admission for
+future occurrences. Old timers and candidates cannot use a stale
+binding. If the declaration is removed or disabled, the owner disarms
+future activations and wakes any retained unresolved responsibility.
+Accepted work retains its frozen input and prior decisions. The existing
+effect boundary checks current authorization before a later dispatch.
+
+After restart, the owner restores the journal and pending activations.
+It does not infer that an external effect failed simply because a
+receipt is missing. The monitor can continue to gather authorized
+evidence about that effect while the recovery obligation remains open.
+
+For the proposed monitor, downtime uses a coalescing policy. If several
+slots were missed, record the gap and perform one read for the latest
+due slot. It may describe what is visible now. It cannot reconstruct what
+would have been observed in earlier slots. Persist the cursor and the
+activation decision under the same owner fence so restart cannot silently
+skip or double-admit the selected slot.
+
+* Existing owners and design scope
+
+| Owner | Responsibility |
+|-------+----------------|
+| Orgize and Org Contract selector | Parse heading and property structure; retain source and element provenance. Literal blocks and prose remain content. |
+| Context and ASCENT | Relate admitted intent, open questions, evidence and applicable policy. |
+| Model | Propose a way to distinguish the live alternatives or defer. |
+| Durable owner | Admit authorized activations, retain receipts and recover outstanding work. |
+| Task / Workflow and effect owner | Interpret the registered target and authorize actual effects. |
+| Temporal Causality | Retain observation and judgment evidence, including stale or conflicting uses. |
+
+This proposal reuses the [[file:14-runtime-durable-recovery.org][Org Contract recovery boundary]],
+[[file:13-runtime-background-clock.org][owner and clock boundary]] and
+[[file:workspace-recovery.org][interrupted-write evidence design]].
+The existing Module System Feature can assemble the participating modules.
+Declaration policy is domain data, with target and trigger contracts
+resolved by the owning modules. No new parser, scheduler or journal is
+required by the design.
+
+[[file:org-durable-declarations.sysml][SysML]] names the objects and dependencies.
+[[file:org-durable-declarations.qnt][Quint]] models bounded admission interleavings.
+[[file:org-durable-declarations.lean][Lean]] states the admission and retention guarantees.
+The bounded clock model covers one trigger stream and two nominal
+occurrences. The inquiry model covers alternative proposals, relevant
+invalidation, permission, and retained handoffs. Source authentication,
+coalescing and external effects lie outside these proofs.
+
+[[file:../../../../dev/d2/output/org-agentic-inquiry/figure.svg][Rendered Context inquiry]].
+
+* Delivery reference case: a commitment with a separate notice
+:PROPERTIES:
+:CUSTOM_ID: agenda-contract
+:END:
+
+A user may say, “I have work today at six. Please let the others know.”
+The model drafts one commitment and a related notice. The commitment says
+what is planned and when it starts. The notice says when to notify, whom,
+through which authorized channel and what may be shared. The model resolves
+“today” against the conversation's time context and uses an established user
+preference for ambiguous times or recipients only when applicable. Otherwise
+it records the missing fact and leaves the notice unarmed. A time inferred
+for the commitment does not also choose the notice time.
+
+In this illustrative resolved case, the commitment starts at 18:00 local
+time and the user wants the project team told at 17:45. The property names
+below are a proposed Agenda profile on the existing Org Contract path.
+
+#+begin_example
+* Project work
+:PROPERTIES:
+:ID: agenda-project-work
+:AGENDA_TIMEZONE: Asia/Shanghai
+:END:
+<2026-11-04 Wed 18:00>
+
+** Notify the project team
+:PROPERTIES:
+:ID: notice-project-team
+:AGENDA_KIND: notify
+:AGENDA_AT: 2026-11-04T17:45:00+08:00
+:AGENDA_AUDIENCE: project-team
+:AGENDA_CHANNEL: team-chat
+:END:
+Share the start time and work title.
+#+end_example
+
+The parent and child are queryable Org Elements. The existing Org Contract
+envelope supplies authenticated source identity and parser/projection
+provenance. A normalized Agenda projection names the commitment Element,
+notice Element, relationship, both resolved instants, original time zone,
+audience and sharing scope. The model's interpretation and the user's
+authorization have separate provenance. An ordinary calendar entry or a
+draft with unresolved timing or audience cannot authorize a send.
+
+** Query the Element, retain the binding
+
+Context uses the existing Org Element Query path to select the notice by
+contract kind, stable ID and permitted scope, and follows its parent
+relation to the commitment. The Durable owner consumes that source-qualified
+selection rather than opening another parsing path. It records exact
+Element references and the selected source basis, resolved event and notice
+times, normalized audience and message scope, and the applicable policy.
+The model may draft the message or propose a different notice. Any material
+change to an accepted binding requires current admission.
+
+A clock occurrence, a changed commitment, or new evidence can wake Context.
+The initial profile wakes on the nominal notice time. A due wake identifies
+the notice to consider; current Context, source applicability and authority
+determine whether sending is still appropriate. A cancellation or relevant
+edit invalidates stale wake candidates and unconsumed send proposals. The owner checks
+current authority and deadline at dispatch. The first slice expires a missed
+notice at the commitment start; a later delivery requires a new decision.
+
+** One intent, independent recipient outcomes
+
+The logical key is the authenticated source namespace, stable notice ID,
+commitment occurrence and canonical recipient. The same occurrence keeps
+its identity when rescheduled. A repeat wake or an ordinary
+edit does not mint a new send key for that same notice. A changed time or
+message can replace the binding for pending recipients without redelivering
+to those already handled. Sending a correction or using a second channel
+as a distinct delivery requires a distinct authorized notice intent.
+Recipient expansion is retained with the binding; a group change does not
+silently add recipients to an accepted notice. Each recipient is rechecked
+for current permission before dispatch.
+
+The durable owner retains the per-recipient handoff and provider receipt
+separately. A provider acknowledgement establishes only the result it
+actually attests. If the owner crashes after handoff and before retaining
+the receipt, the outcome is unknown. Context and ASCENT keep that recipient's
+reconciliation open. The model may propose provider lookup or another
+permitted observation. A successful recipient is not sent to again, and
+an unknown result does not itself authorize another send. The same stable
+key can also be passed to a provider with a supported idempotency contract.
+
+** Rescheduling races with handoff, not with receipt arrival
+
+Suppose the 17:45 notice says the work starts at 18:00. At 17:46 the
+user moves the work to 19:00. The change invalidates the old source
+binding; a current binding must be admitted before a pending original
+notice can be sent with the new details. Context distinguishes three
+recipient situations rather than repeating the whole notice.
+
+| Recipient evidence at the edit | What remains possible |
+|--------------------------------+-----------------------|
+| No handoff was consumed | Retire the old preparation. The same notice key can be prepared under the fresh binding if still due, allowed and useful. Cancellation blocks it. |
+| Handoff consumed, receipt missing | Keep the old payload and its outcome unknown. Reconcile against the provider with the same key. Do not send either payload again by default. |
+| Provider accepted the old payload | Keep that receipt. A model can propose a correction to that recipient, linked to the earlier notice and separately authorized. Provider acceptance alone does not prove the recipient read it. |
+
+A preparation is revocable. Before crossing the provider boundary the
+current Durable owner must atomically recheck basis, time and permission
+and consume a one-use handoff for that recipient under the owner fence.
+The commit is the point after which local cancellation can no longer
+promise that the old payload did not leave. If cancellation or
+supersession wins the fence, the old preparation cannot dispatch. If
+handoff consumption wins, a restart before the provider receipt leaves
+an uncertainty interval that includes a crash before the actual call.
+A receipt that arrives after an edit can still resolve the original
+handoff if it binds that recipient, key and frozen payload. It never
+makes the old plan current again.
+
+ASCENT derives the unresolved responsibility per recipient. It can also
+surface that a previously accepted message contradicts the current
+commitment. The model may propose a provider lookup, wait, or propose a
+correction whose audience is supported by the current facts. A duplicate
+delivery or provider lookup does not create authority to resend. A
+compensating notice is a new intent linked to the old delivery; its own
+grant and sharing scope are checked before dispatch.
+
+The bounded Agenda model covers one notice and independently keyed recipients. It
+distinguishes reversible preparation from consumed handoff, rechecks
+admission after changes, and ties late receipts to their frozen basis.
+Org parsing, audience expansion and provider authentication remain owner
+responsibilities. The model does not guarantee exactly-once execution by
+the provider.
+
+[[file:../../../../dev/d2/examples/org-agenda-contract/case.ss][ASCENT rendering case]].
+
+** A missing provider record is evidence about a lookup
+
+When the work moved to 19:00, Alice's old notice had a provider acceptance
+receipt. Bob's 18:00 notice had crossed the Durable handoff fence, but no
+receipt was saved. A provider query for Bob may find nothing while indexing,
+routing or a delayed request can still account for the gap. Context records
+that lookup and keeps the original delivery outcome unknown.
+
+| Evidence about the original handoff | Current assessment | What the model can propose |
+|-------------------------------------+--------------------+----------------------------|
+| No match in a partial, delayed or unfenced lookup | Unknown | Check the provider request key, fetch authoritative evidence, or wait. |
+| Authenticated acceptance for the original recipient, request and frozen payload | Provider accepted | If the old message conflicts with the current plan, propose a targeted correction. |
+| Authenticated final nonacceptance for the same handoff, with a fence excluding late acceptance | Confirmed no send | Propose a replacement for the still-useful current plan. A cancelled plan need not produce a replacement. |
+| Qualifying acceptance and final nonacceptance both appear | Conflicted | Ask which evidence or fence was invalid. Pause either dependent send. |
+
+An empty query result becomes no-send support only when the provider
+attests the result is final for that exact handoff. The attestation binds
+the canonical delivery key, provider account, dispatch token and frozen
+payload, covers the relevant acceptance scope, and prevents any delayed
+request for the original token from being accepted. Provider capabilities
+vary. Without this evidence, a later observation may change the judgment.
+
+Temporal retains the raw lookup, the evidence used and the reasons for
+the assessment. A correction to a receipt or a negative attestation can
+reopen the same recipient reconciliation question. ASCENT closes that
+question only while uncontested evidence resolves it. Whether an accepted
+old message needs a correction is a separate question about the current
+commitment. Alice's receipt does not settle Bob's outcome.
+
+A replacement or correction is a linked notice with a distinct key and
+its own authorization. Reconciliation does not reopen the already
+consumed key. The proposal records which original handoff and evidence
+it relies on, the current commitment and intended recipient. Durable
+rechecks that basis, deadline, policy and authority at consumption. If
+the evidence changes between proposal and consumption, re-evaluate before
+sending. If a conflicting receipt arrives after consumption, retain the
+new handoff and its own evidence; the evidence change cannot undo an
+external effect. Provider idempotency, if available, is a separate
+mechanism for the same request and payload.
+
+The bounded formal model checks evidence classification and the gate for
+linked notices. Provider authentication, finality and the fence are inputs
+from the evidence owner. The model does not assert that every provider can
+supply them.
+
+** Authoring and authority: what an Org edit is allowed to change
+:PROPERTIES:
+:CUSTOM_ID: agenda-authoring-admission
+:END:
+
+The model first drafts the Org Elements and the proposed effect envelope.
+The Org write is its own scoped action. A draft does not arm a notice.
+When the user has already authorized the precise effect, the owner can
+bind that authorization directly; asking again is unnecessary. If
+the conversation leaves the recipient, timing or sharing scope ambiguous,
+Context retains the question and leaves the notice unarmed.
+
+Three references must remain distinguishable:
+
+| Reference | What it binds |
+|-----------+---------------|
+| Source observation | Authenticated source namespace, stable Element IDs, exact bytes/Element ranges and Orgize projection basis. |
+| Effect envelope | Resolved occurrence and notice times, recipient identity, provider/channel, content to disclose, and applicable delivery policy. For this slice the owner requires an exact match to the approved envelope for each recipient. |
+| Authority | Who authorized that envelope, the applicable scope and its current status. Neither a file edit nor a property declaring approval can create a grant. |
+
+The model proposes a source patch against the source it read. The writer
+applies it through the existing authorized source-edit boundary and rejects
+an outdated base or an ambiguous Element identity. After writing, Orgize
+projects the actual bytes again. The Durable owner binds the qualified
+Element selection and current authority. Recovery from a crash between
+the write and admission can rediscover the draft by ID, while the notice
+remains unarmed until the owner commits the binding. This does not require
+a transaction across the Org file and the Durable journal.
+
+| Observed change | What the owner does |
+|-----------------+---------------------|
+| A heading moves or formatting changes, while the normalized envelope is identical | Retain the new source observation and rebind the Element selection. The still-current grant can be reused. The same notice identity and any consumed handoffs are retained. |
+| Time, recipient, channel, disclosed content or delivery policy changes | Retire the old binding for pending work. The new envelope needs matching authority. The model can resolve ambiguities or propose the updated effect. |
+| The notice is removed, becomes ambiguous, or is cancelled through the owner | Invalidate pending preparations. Keep prior decisions and receipt reconciliation visible. |
+
+For example, moving the 17:45 notice under another Org heading can be
+cosmetic only if its logical commitment and all resolved fields are
+unchanged. If the event moves from 18:00 to 19:00, even an unchanged
+notification timestamp does not preserve authorization for the old
+payload. A broad team name is resolved to canonical recipients before
+binding. Re-expanding it later does not silently add a recipient.
+
+The owner serializes admitted source changes, revocation and handoff
+consumption. A bare edit in a separate editor can precede the owner's
+observation of that edit. This profile does not claim an atomic fence
+across a filesystem write and the owner journal. For a guaranteed stop
+before consumption, cancellation must reach the owner; the Org edit
+can then reflect that decision. Admitted changes re-open the relevant
+Context question. They cannot retroactively alter a handoff that won
+the fence, and its later receipt still binds the frozen effect.
+
+The authoring model separates projected source identity from approved
+effect identity. It covers one recipient and one notice occurrence.
+It treats source authentication, normalization and authorization as
+owner inputs. The existing Agenda admission model continues to cover
+the time window, per-recipient handoff and provider evidence.
+
+** Agenda MVP acceptance cases
+
+The source-write, query, authority, activation and reconciliation
+boundaries compose into one slice. The same case should demonstrate:
+
+- Draft only: an Org notice exists, but an unresolved audience cannot
+  arm it.
+- Bind and wake: an authorized notice is queried by its Element IDs.
+  A repeated wake recovers the same decision.
+- Rebind or stop: a formatting-only change preserves authority; a change
+  to the message or recipient requires authority for that new effect.
+  A cancellation admitted before handoff stops it.
+- Recover: a consumed handoff with no receipt remains unknown.
+  A qualified receipt settles the original recipient; a plain missing
+  provider row does not.
+
+** One Agenda notice across an Org edit and a restart
+:PROPERTIES:
+:CUSTOM_ID: agenda-mvp-reschedule
+:END:
+
+The model writes two related Org Elements: the 18:00 commitment and
+the 17:45 notice. Orgize projects the saved source; Context queries
+both Elements and compares the resolved send with the current grant.
+The scope covers named recipients, channel and disclosed content.
+A clock wake alone is not permission to send.
+
+Two edits affect the same notice differently. Formatting alone changes
+the source observation; rebind the Elements and reuse matching authority.
+Moving the work from 18:00 to 19:00 changes the send envelope. It requires
+authority for the new effect and invalidates old unconsumed preparations.
+Both preserve the occurrence and original notice identity.
+
+At the edit, Alice's handoff has a provider acceptance receipt; Bob's
+handoff was consumed but its receipt is missing; Cara's old preparation
+was never consumed. On restart the journal distinguishes all three:
+
+| Recipient | Retained fact | Current consequence |
+|-----------+---------------+---------------------|
+| Alice | Provider accepted the old 18:00 message | Keep the receipt; the model may propose a separately authorized correction. |
+| Bob | The old handoff was consumed; outcome unknown | Keep the original payload and reconcile against provider evidence. |
+| Cara | No consumed handoff | Drop the stale preparation. A current, useful and authorized notice can use the same key. |
+
+Evidence can arrive before or after the edit, and Context evaluates
+each affected recipient independently. An admitted late receipt can
+resolve Bob's old handoff without making the 18:00 plan current. Durable
+preserves consumed decisions and returns findings for assessment.
+These relations describe what can change a judgment and what can
+authorize an effect; they do not prescribe an exploration order.
+
+** Late receipt: reevaluate the recipient, retain the notice
+:PROPERTIES:
+:CUSTOM_ID: agenda-late-receipt
+:END:
+
+After restart, Bob's late receipt names his original 18:00 handoff.
+Temporal checks the provider account, request token, recipient and frozen
+payload before admitting it. The receipt settles provider acceptance of
+that old payload. The 19:00 plan remains current. A receipt for a different
+handoff or a contradictory qualified result keeps reconciliation open.
+
+| Recipient | ASCENT's current finding | Model proposal that can be considered |
+|-----------+--------------------------+--------------------------------------|
+| Alice | The accepted 18:00 message conflicts with the current 19:00 plan. | Correct the old message. |
+| Bob | The matched late receipt resolves the unknown. The accepted 18:00 message now has the same conflict as Alice's. | Correct the old message. |
+| Cara | No handoff was consumed. | Send the current 19:00 message using the original notice identity. |
+
+ASCENT closes Bob's old receipt question while the acceptance remains
+uncontested. It derives a correction question per affected recipient.
+A model can propose the appropriate message or defer. Before any send,
+Durable checks the current plan, evidence, authorization, recipient and
+usefulness deadline. Provider acceptance does not prove a person read it.
+
+The correction has one stable key per original consumed handoff and
+admitted material commitment change. A new draft, repeated receipt,
+restart or formatting-only edit does not mint another correction key.
+Durable atomically consumes that key once and freezes the correction
+payload. An ambiguous correction result gets its own reconciliation
+question. The original consumed key remains closed to another send;
+Cara's original key is still unused. The durable journal keeps these
+identities and outcomes independently.
+
+Quint uses a symbolic identity for the 18:00 to 19:00 material change.
+The model bounds the case to one such change and three recipients.
+Receipt authentication and the current permission and evidence checks
+are inputs from their respective owners.

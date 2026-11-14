@@ -23,8 +23,9 @@ py_test(
         "validate_owner_map.py",
     ],
     data = [
-        ":owner-contract-test.ss",
+        "//:t/module-owner-contract-test.ss",
         ":ownership.bzl",
+        ":rfc45_04_sources",
         "//:gerbil_package_sources",
         "//:t/module-system-observability-test.ss",
         "//:t/profile-binding-syntax-test.ss",
@@ -44,7 +45,7 @@ gerbil_project_test(
     source_root_marker = "//:scheme_source_root_marker",
     tags = ["exclusive"],
     tests = [
-        ":owner-contract-test.ss",
+        "//:t/module-owner-contract-test.ss",
         "//:t/module-system-observability-test.ss",
         "//:t/profile-binding-syntax-test.ss",
         "//:t/profile-bundle-test.ss",

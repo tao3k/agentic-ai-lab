@@ -1,0 +1,170 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Reuse check: unchanged content and a changed owner generation
+#+LANGUAGE: en
+
+* Existing source and intended question
+
+This uses the unchanged existing =21-runtime-policy-transition.org= and
+=21-policy-transition.sysml= under the Context design directory. The native
+OpenSysML SDK selects the existing =ContextPolicyTransition::fixture= through
+=view.sysml=. There is one native fixture occurrence, not five invented runtime
+objects. The explanatory views show an illustrative owner generation 7 changing
+to 8 while policy text remains the same. They are not recorded runtime
+measurements or a new policy-state registry.
+
+The question is why a command that captured generation 7 must still be refused
+when content matches but the current registered generation is 8. The source
+requires both expected generation and digest to match; a stale command receives
+a durable refusal rather than an automatic rebase. Generation is the owner's
+counter, distinct from an immutable policy revision. This small explanation
+neither qualifies the complete trusted-capability boundary nor replaces the
+existing executable policy contract.
+
+* Model input and Module judgments
+
+The POO case contains meanings, reader facets, source quotations, descriptions
+and five local object illustrations. It has no direction, solver options,
+handmade regions, coordinates, routes or whole-scene SVG. The model identifies a state
+change, a captured expectation, a candidate input, a current-state reason and
+a refused consequence. It declares comparable owner-state image encodings and
+a comparison image for the checker.
+
+=modules/d2/ascent-composition.ss= independently derives five =Near= constraints,
+one state =Compare=, one =Check=, and the fact that the current-head reason is
+=NonSequential=. It derives important-route needs and native solver preferences.
+A state comparison gets stronger shortness/straightness preferences. The native
+SDK/ELK then computes positions and paths from actual font measurements.
+
+The Module refuses whole-scene artwork. The driver also refuses object images
+that embed scene-node, scene-edge or explanation scopes. The old hybrid case's
+scene SVG and handmade region/settings route have been retired from selection;
+local state encodings remain ordinary model choices.
+
+* Actual reading and adjustment
+
+The current model viewed the first actual PNG. It could follow the envelope's
+captured 7, the current 8 and the refusal, but found unexplained generation/head/
+bytes vocabulary and approximately 15 px text. Its natural observation was
+bound to that image digest in =readings.ss=. ASCENT derived an illustration
+request from the finding; no favorable review field was supplied.
+
+The model shortened relation captions and explained the vocabulary. The Module
+now also consumes actual scoped font sizes and requests relayout below the
+18 CSS px POO reader-policy target, independently of caption coverage. The
+upstream technical export gate remains 12 px. A second actual reading found
+that the word revision could conflate owner generation with immutable policy
+revision. That contrary finding was returned to Context before the final
+owner-counter wording and local-image changes.
+
+The retained negative observations remain tied to their original image hashes.
+Only observations and located quotations on the current rendered image may
+support its answers. Coverage is not a claim that a child understood the figure.
+
+* Verification
+
+=just test-d2= passed all eight managed Module suites with =MODULE-OK=,
+=HARNESS-OK= and final =OK= and no harness, case, check or heap/stack failures.
+The composition regressions use unrelated object identities and an extensible
+POO relation meaning, change relation density to alter orientation, and check
+that missing check imagery or reused state imagery reopens an obligation.
+Whole-scene substitution is refused. Reader-size regressions show that small
+current-image text blocks an otherwise grounded answer and stale-image font
+measurements cannot trigger current-image layout claims. TypeScript checking
+passed. These are finite rule/renderer checks, not runtime or learner-study
+qualification.
+
+Run through the unchanged general driver:
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/policy-generation/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/policy-generation/case.ss --evaluate
+#+end_src
+
+Outputs and rejected image snapshots stay under ignored =dev/d2/output/=.
+
+* Reader correction: what does each visible value mean?
+
+The user rejected the bare 7/8/X and large inequality as insufficiently grounded:
+a reader could mistake them for a score, a magnitude argument or permission.
+That actual image-specific criticism is retained in Context. The Module now
+requires visual-expression meanings and uses, rejects identity-match ranking,
+and requires local role/quantity/value labels plus actual number-reading
+citations. Merely printing 8 or quoting a nearby caption cannot discharge it.
+
+The local illustrations now distinguish the record at capture, the registered
+record now, and the expectation saved by the unprocessed request. Generation
+values are neutral identifiers, not orange/green quality ranks. The check names
+the current and saved records explicitly; X and the oversized arithmetic
+comparison have been removed. Policy text remains the same, while owner state
+differs. This is an unprocessed stale request; an unchanged retry of an already
+applied command has a separate historical-acknowledgement contract.
+
+Further actual reading found redundant captions reducing text size. The model
+removed repeated wording rather than lowering the reader policy. The case
+still contains no global geometry or solver settings. Numeric meaning, visible
+binding, actual reading and stale-image refusal have focused regressions under
+the same eight-module test entrypoint and unchanged resource bounds.
+
+The final revised figure is 1800 x 795 with a measured minimum text size of
+20 CSS px. Actual number-role/property/value anchors are captured from the
+local illustrations, not inferred from captions alone. The current model
+viewed both the PNG and independently displayed SVG and supplied eighteen
+located quotations, including all five numeric references and their labels.
+An intermediate semantic reading did not close the case: three measured
+role/property text intersections still derived relayout requests, and the
+local illustration spacing was corrected before the final reading.
+
+* Curiosity-driven reconstruction
+
+The earlier zero-request picture was rejected by the reader: identifying the
+fields did not make the mechanism vivid or invite investigation. That rejection
+remains bound to its actual image in =readings.ss=.
+
+The new composition infers =Divergence(captured,current,request,check)= from the
+source-qualified capture, change, input and reason relationships. Its six open
+=Explore= questions ask the current model to consider an initial expectation,
+a discoverable change, a retained copy, a challenging clue, an experiment and
+a misleading metaphor. No case identity or generation value occurs in those
+rules. Removing the capture edge removes this inquiry even with unchanged art.
+
+The model's proposed visual explanation is a fork: the live record turns after
+a deadline while the request retains its saved tag; the two branches meet in an
+inspection lens, where equal policy strokes coexist with unequal version tags.
+The refusal is shown as a stopped update with a separately saved receipt. These
+are local explanatory object/action illustrations. Native SDK/ELK still owns
+the whole-scene positions and routes; no scene SVG or dedicated TS layout was
+introduced. The snapshot metaphor stands for the frozen expected generation
+and digest, not a claim that the command copies all policy bytes. A matching
+tag alone would remove this mismatch, not establish every admission condition.
+
+Supplying =representation.action= is a proposal, not evidence that it is
+perceptible. The rules keep all six inquiry questions after descriptions are
+supplied. Actual image reading must record what attracts attention, what could
+be investigated, and what remains unclear; only a learner response could supply
+independent evidence of that learner's curiosity or understanding.
+
+The first reconstruction was actually viewed and rejected in part: the lens
+rim crossed labels, the raised stop arm suggested passage, terminology still
+presumed prior knowledge, and a long consequence tail wasted space. Those
+image-bound findings reopened requests. The Module now derives a check and
+terminal-consequence neighborhood; the model lowers the stop arm, separates
+labels from the lens and uses the local property name =version tag=.
+
+A further actual reading showed that native cross-hierarchy layout ignored the
+child-direction preference. The module now selects native SIMPLE placement for
+a detected split/rejoin, retaining NETWORK_SIMPLEX for other structures. The
+incoming neighborhood padding leaves room for both evidence paths without
+relaxing the existing route bound. Rejected second and third reconstructions
+are retained under ignored output directories.
+
+The current model viewed final image
+=9cfb68af1eb985e13e0d845b1a3e7741f4c99211482908bb416942529b44a1ac=,
+then returned a natural reading of all six exploration questions and 23 located
+quotes, including all five numeric references. The export has English text,
+18.70 px minimum scoped text and at most 1.886 route stretch against the
+unchanged 2.0 bound. The image-bound feedback derives a scoped answer basis;
+that basis covers this illustrative counter mismatch. It does not establish
+that a child enjoyed the picture or comprehended the complete runtime design.
+The six exploration questions remain present after the feedback is grounded.

@@ -138,7 +138,7 @@
   (check-equal? (test-ref (car (.ref presentation
                                   'loop-engine-runtime-command-manifest-summaries))
                           'contract)
-                'poo-flow.loop-governor.runtime-command-manifest.v1))
+                'agentic-ai-lab.loop-governor.runtime-command-manifest.v1))
 
 ;;; Presentation assertions verify the public doctor view exposes the same
 ;;; object graph rows that the runtime manifest carries.

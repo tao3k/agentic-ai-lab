@@ -5,35 +5,35 @@
 
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .ref)
-        (only-in :core/observability/testing-case poo-flow-test-case)
-        :poo-flow/src/scenario/workload)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+        :tao3k/yuanxu/modules/funflow/workload)
 
 (export scenario-workload-test)
 
 (def scenario-workload-test
   (test-suite "Scenario workload owner"
-    (poo-flow-test-case "ordered launch ranges preserve local ordinals"
-      (let* ((first (poo-flow-scenario-case-multiplicity 'first 2))
-             (second (poo-flow-scenario-case-multiplicity 'second 3))
-             (workload (poo-flow-scenario-case-workload
+    (yuanxu-test-case "ordered launch ranges preserve local ordinals"
+      (let* ((first (scenario-multiplicity 'first 2))
+             (second (scenario-multiplicity 'second 3))
+             (workload (scenario-workload
                         (list first second)))
-             (at-zero (poo-flow-scenario-case-workload/ref workload 0))
-             (at-four (poo-flow-scenario-case-workload/ref workload 4)))
+             (at-zero (scenario-workload/ref workload 0))
+             (at-four (scenario-workload/ref workload 4)))
         (check-equal? (.ref workload 'total-count) 5)
         (check-equal? (.ref at-zero 'composition) 'first)
         (check-equal? (.ref at-zero 'local-ordinal) 0)
         (check-equal? (.ref at-four 'composition) 'second)
         (check-equal? (.ref at-four 'local-ordinal) 2)
         (check-exception
-         (poo-flow-scenario-case-workload/ref workload 5)
+         (scenario-workload/ref workload 5)
          (lambda (_) #t))))
-    (poo-flow-test-case "one thousand ranges retain bounded ordinal lookup"
+    (yuanxu-test-case "one thousand ranges retain bounded ordinal lookup"
       (let* ((multiplicities
               (map (lambda (index)
-                     (poo-flow-scenario-case-multiplicity index 1))
+                     (scenario-multiplicity index 1))
                    (iota 1000)))
-             (workload (poo-flow-scenario-case-workload multiplicities))
-             (last (poo-flow-scenario-case-workload/ref workload 999)))
+             (workload (scenario-workload multiplicities))
+             (last (scenario-workload/ref workload 999)))
         (check-equal? (.ref workload 'total-count) 1000)
         (check-equal? (.ref last 'composition) 999)
         (check-equal? (.ref last 'local-ordinal) 0)))))

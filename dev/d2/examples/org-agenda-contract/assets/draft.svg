@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 170"><g font-family="Inter,Arial,sans-serif" text-anchor="middle" fill="#244952"><path d="M50 25h173l33 31v87H50z" fill="#e9f2f3" stroke="#54818a" stroke-width="4"/>
+<path d="M222 25v32h34" fill="#c2dce1" stroke="#54818a" stroke-width="3"/>
+<path d="M70 77h164" stroke="#a4c0c6" stroke-width="2"/>
+<text x="141" y="65" font-size="25">Was 18:00</text>
+<text x="141" y="116" font-size="25">Now 19:00</text>
+<path d="m261 102 18-25 10 8-18 25-14 8z" fill="#e6bb87" stroke="#986741" stroke-width="3"/></g></svg>

@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Image-bound Context explanation session
+#+LANGUAGE: en
+
+* What ran
+
+On 2026-11-04, the current assistant consumed the ASCENT outbox, authored SVG
+proposals, rendered each through the pinned SDK/Chromium exporter, inspected all
+three actual PNGs with the image-view tool, and returned POO findings. This is an
+executed model-host tool session, not a transcript of an unattended provider API.
+The build experiments are illustrative inputs; no compiler diagnosis was executed.
+
+The lesson uses the finite Context profile's two cuts: a rebuild passed at 10;
+a control failed at 12 but its result was only known at 30. The first window is
+known by 15 and the second by 40. Support for the original hypothesis remains in
+history even after opposition appears. A proposed method retains scope and the
+counterexample; age alone does not admit it to long-term knowledge.
+
+* Why these pictures
+
+The window ribbons share an event-time scale and explicitly name their known
+cuts. Two labeled time marks explain late knowledge without asking the reader
+to infer what an unlabeled clock means. A build conveyor depicts observations;
+stacked generated parts suggest one possible cause; disconnected incompatible
+plugs make another cause understandable without ABI vocabulary. The repeated
+stack tracks the same hypothesis across two views. An open field notebook keeps
+a method alongside scope and counterexamples rather than portraying automatic
+promotion to an authoritative book. These are model-authored choices for this
+lesson, not global object-kind-to-image rules.
+
+* Findings and retained history
+
+| Revision | Actual image findings | ASCENT response after feedback |
+|----------+-----------------------+--------------------------------|
+| r1 | Delivery arc crossed captions; plus glyph ambiguous; ABI vocabulary unexplained | Reconsider the affected questions and explain newly discovered concepts |
+| r2 | Support/alternative/retention explanations supported by model review; time arc still crossed tick wording | Reconsider time expression; the other three plan needs stayed covered |
+| r3 | Separate arrow in caption gap; all four current questions supported by image-bound model review | Zero requests; one Reviewable image |
+
+The added support/alternative questions came from actual r1 image inspection.
+No rule required three revisions or forced a particular response to a critique.
+SVG sources and concise POO findings are retained in =history.ss=. Raw logs and
+render exports stay in ignored =output/authoring=. Feedback names the exact PNG
+SHA-256 and producer; learner checks are empty. The final image digest is
+=32761a25c7f94102ceedb5187374545ba977de7e722572b46862ff42a02130cc=.
+
+* Replay and continue
+
+From the repository root, after installing the development rendering dependencies:
+
+#+begin_src sh
+just d2-export
+bun dev/d2/session-render.ts --asset dev/d2/examples/time-window/r1.svg --revision r1
+bun dev/d2/session-render.ts --asset dev/d2/examples/time-window/r2.svg --revision r2
+bun dev/d2/session-render.ts --asset dev/d2/examples/time-window/r3.svg --revision r3
+just d2-author r3
+just test-d2
+#+end_src
+
+This reproduces artifacts and re-evaluates recorded observations. A fresh image
+inspection must be performed by the model host when starting a new review.
+If rendering produces different pixel bytes, old findings cannot approve those
+new bytes; inspect them and add new observations instead of editing old hashes.
+=author.ss= verifies the proposal/render/observation byte hashes before and after
+inference. The TS receipt verifier also checks captured semantic sources. A
+deliberately altered PNG was rejected by the verifier during this session.
+
+To continue, introduce questions, candidate expressions, new view revisions or
+other model observations as POO facts. Invoke =just d2-author <revision>= to read
+the current outbox. The host decides how to address those requests and may use
+ordinary code-native SVG authoring and image-view tools, or another provider.
+There is no serialized visual JSON model and no hidden model-stage loop in TS.
+Receipt JSON is export provenance only. Passing these finite checks establishes
+neither actual pupil comprehension nor production Context/Durable integration.

@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-17",
+  "runtime": "default Gerbil, Justfile pre-import heap fence",
+  "package_receipt": "family-publication-control.json",
+  "nix_outputs_reused": true,
+  "gates": {
+    "configuration": {
+      "test": "t/opentofu-configuration-families-test.ss",
+      "assertions": 36,
+      "passed": true
+    },
+    "publication_regression": {
+      "test": "t/opentofu-provider-families-test.ss",
+      "assertions": 64,
+      "passed": true
+    },
+    "schema_regression": {
+      "test": "t/opentofu-schema-test.ss",
+      "assertions": 57,
+      "passed": true
+    }
+  },
+  "assertions": 157,
+  "selected_contracts": {
+    "provider": 3,
+    "resource": 3,
+    "data": 3
+  },
+  "negative_paths": [
+    "resource.aws_security_group.web.ingress.0.from_port",
+    "resource.awscc_ec2_security_group.web.security_group_ingress.0.from_port",
+    "resource.null_resource.smoke.triggers.release",
+    "provider.null.0.region",
+    "data.awscc_ec2_security_group.existing.id",
+    "resource.awscc_ec2_security_group.web.group_description",
+    "resource.aws_s3_bucket"
+  ],
+  "unselected_uncached": [
+    "aws/resource/aws_s3_bucket",
+    "aws/data/aws_security_group",
+    "awscc/resource/awscc_s3_bucket",
+    "awscc/data/awscc_s3_bucket"
+  ],
+  "failed_attempts": [
+    "unbound standard-library list helper; explicit import added",
+    "POO lexical slot shadows same-named scope alias; aliases renamed, failed local log retained"
+  ],
+  "loader_connected": false,
+  "provider_plan_or_apply_executed": false,
+  "arbitrary_custom_admission_overrides_composed": false
+}

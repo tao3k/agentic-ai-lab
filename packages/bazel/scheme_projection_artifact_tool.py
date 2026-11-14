@@ -18,7 +18,7 @@ from _scheme_datum import parse_scheme_datum, write_scheme_datum
 from packages.bazel.gerbil_environment import build_gerbil_environment
 
 
-SCHEMA = "poo-flow.scheme-load-projection-artifact.v1"
+SCHEMA = "agentic-ai-lab.scheme-load-projection-artifact.v1"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -88,13 +88,13 @@ def _load_projection_rows(
     project_dependency_roots: tuple[Path, ...],
 ) -> tuple[object, ...]:
     runner_source = (
-        "(import :core/profile-composition/selection-syntax\n"
-        "        :poo-flow/src/scenario/composition-syntax\n"
-        "        :core/profile-composition/profile-bundle\n"
-        "        :poo-flow/src/scenario/profile-root\n"
-        "        :poo-flow/modules/funflow/profile-library)\n"
+        "(import :tao3k/yuanxu/profile-composition/selection-syntax\n"
+        "        :tao3k/yuanxu/profile-composition/profile-bundle\n"
+        "        (only-in :clan/poo/mop .new)\n"
+        "        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)\n"
+        "        :tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
-        "(poo-flow-runtime-load-write!\n"
+        "(agentic-ai-lab-runtime-load-write!\n"
         f" (begin (include {_scheme_string(str(source))})))\n"
     )
     with tempfile.NamedTemporaryFile(
@@ -120,7 +120,7 @@ def _load_projection_rows(
             stderr=subprocess.PIPE,
         )
         if result.returncode:
-            # Preserve the native Gerbil diagnostic at the Bazel action
+            # Preserve the Gerbil diagnostic at the Bazel action
             # boundary; a bare CalledProcessError hides the typed root cause.
             sys.stderr.write(result.stdout)
             sys.stderr.write(result.stderr)

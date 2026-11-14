@@ -6,10 +6,10 @@
 ;;; Boundary: structured agent-sandbox profile validation.
 ;;; Invariant: invalid filesystem/resource markers are reported before runtime handoff.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile-data)
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-data)
 
 (export agent-sandbox-required-field-errors
         agent-sandbox-profile-validation-errors

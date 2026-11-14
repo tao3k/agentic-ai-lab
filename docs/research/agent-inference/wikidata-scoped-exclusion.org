@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Wikidata scoped exclusion fixture: scoped exclusion on pinned Wikidata entity revisions
+#+STATUS: bounded executable fixture; no model score or world-completeness claim
+#+DATE: 2026-10-05
+#+FILETAGS: :research:wikidata:reasoning:qualification:
+
+* Source boundary
+
+The [[https://www.wikidata.org/wiki/Help:Data_access][Wikidata data-access documentation]] states that its data is CC0 and
+that =Special:EntityData= can serve a specified entity revision. The
+[[https://www.mediawiki.org/wiki/Wikibase/EntityData][Wikibase EntityData documentation]] describes the JSON and =revision=
+parameters. On 2026-10-05, we selected twelve non-deprecated
+entity-valued claims from seven entity revisions and pinned =Q30= as
+the eighth, target entity. The fixed rows live
+in [[file:../../../t/qualification/ascent-reasoning-library-test.ss][the qualification test]]. The URLs below use exact revision IDs.
+
+| Entity | Label | Revision | Pinned JSON |
+|--------+-------+----------+-------------|
+| Q100 | Boston | 2547889431 | [[https://www.wikidata.org/wiki/Special:EntityData/Q100.json?revision=2547889431][Q100]] |
+| Q54072 | Suffolk County | 2540139006 | [[https://www.wikidata.org/wiki/Special:EntityData/Q54072.json?revision=2540139006][Q54072]] |
+| Q771 | Massachusetts | 2552116487 | [[https://www.wikidata.org/wiki/Special:EntityData/Q771.json?revision=2552116487][Q771]] |
+| Q62 | San Francisco | 2550751036 | [[https://www.wikidata.org/wiki/Special:EntityData/Q62.json?revision=2550751036][Q62]] |
+| Q18013 | Sacramento | 2532498976 | [[https://www.wikidata.org/wiki/Special:EntityData/Q18013.json?revision=2532498976][Q18013]] |
+| Q108131 | Sacramento County | 2540133250 | [[https://www.wikidata.org/wiki/Special:EntityData/Q108131.json?revision=2540133250][Q108131]] |
+| Q99 | California | 2551332986 | [[https://www.wikidata.org/wiki/Special:EntityData/Q99.json?revision=2551332986][Q99]] |
+| Q30 | United States | 2551885605 | [[https://www.wikidata.org/wiki/Special:EntityData/Q30.json?revision=2551885605][Q30]] |
+
+The selected claims are below. =P131= supplies administrative links,
+=P17= the direct country branch, and =P36= state capitals. Statement
+IDs distinguish these rows from inferred links or user-supplied facts.
+
+| Subject | Predicate | Object | Statement ID |
+|---------+-----------+--------+--------------|
+| Q100 | P131 | Q54072 | =q100$DB7269D7-D24C-4B50-8A12-3F86B79E448E= |
+| Q54072 | P131 | Q771 | =q54072$A425FAC3-01D6-4AF2-808D-7C8A8F659C86= |
+| Q771 | P131 | Q30 | =q771$362DD430-6254-4220-ACAB-61FE210EDA39= |
+| Q62 | P131 | Q99 | =Q62$904998ec-4bc0-5fe6-aec0-ec7c145e2287= |
+| Q18013 | P131 | Q108131 | =q18013$B344A9E9-21BA-476F-97CC-C43843CEBB4B= |
+| Q108131 | P131 | Q99 | =q108131$39f4e94b-40ff-d9cc-6bde-ec29131f139d= |
+| Q99 | P131 | Q30 | =q99$2D645D41-8AF6-4FE3-B547-0338C71E322D= |
+| Q100 | P17 | Q30 | =q100$696DD242-30F6-4AF2-AE0C-541ED9C538A4= |
+| Q62 | P17 | Q30 | =q62$C429A4CE-A196-4B31-A4DB-8B8762654729= |
+| Q18013 | P17 | Q30 | =q18013$267E2E4F-1E1F-487E-B949-B3EA19E2AB1C= |
+| Q771 | P36 | Q100 | =q771$28A01274-D06B-49F3-9BFD-79BB1DF235AF= |
+| Q99 | P36 | Q18013 | =q99$A36A965E-1C01-4E07-98B4-671F492CDC00= |
+
+These are *selected* claims, not an exhaustive extraction of =P131=,
+=P17= or =P36=. The revisions form a vector of individually fixed
+entity versions, not one transactional Wikidata dump. The =city=
+rows =Q100/Q62/Q18013= and =target= row =Q30= are explicit query
+scope, not claimed Wikidata statements. Results mean exact closure over
+this local finite extract. They do not assert that absent Wikidata
+statements or missing real-world facts are false.
+
+* Structured question and independent oracle
+
+The structured question is: which selected cities are in the United
+States either (a) through an administrative chain *provided they are
+not a selected state capital*, or (b) through a direct country claim?
+The exclusion applies only to branch (a). An ordinary set walk over
+the source pairs is the independent test oracle; it does not call the
+relational compiler or evaluator.
+
+| Observation | Exact finite result |
+|-------------+---------------------|
+| =viaAdmin(city,Q30)= after transitive =P131= | =Q100, Q62, Q18013= |
+| =excluded(city)= from the two selected =P36= facts | =Q100, Q18013= |
+| Scoped answer, both branches | =Q100, Q62, Q18013= |
+| Wrong control: exclude after branch union | =Q62= |
+| Generation 2: withdraw only =P17(Q100,Q30)= | =Q62, Q18013= |
+
+The test checks candidate completion, full rows, intermediate
+relations, stratified proof verification, source-generation mismatch,
+and retained Scheme Session replacement. The old receipt and old
+Session result remain tied to generation 1. The withdrawn row in
+generation 2 is a *counterfactual local source change*, not an edit to
+Wikidata or a claim that Wikidata removed the statement.
+
+* What this does not measure
+
+This is an executor/semantics discriminator, with no model proposal or
+raw model response. The next model study must submit a request once,
+preserve its raw response, then compare its admitted program and exact
+rows with this gold structured request. A gold executor result cannot
+by itself establish natural-language intent fidelity. The tiny extract
+does not qualify [[https://proceedings.mlr.press/v306/miao26e.html][MatLogic]]'s reported benchmark, a population
+estimate, or an MRR publication path.
+
+[[file:reasoning-language-formal-agenda.org][Reasoning-language agenda]]; [[file:scoped-witness.org][MatLogic reading]].

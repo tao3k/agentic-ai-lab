@@ -1,0 +1,10 @@
+[package]
+name = "context-hybrid-runtime-probe"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0 AND LGPL-2.1-or-later"
+publish = false
+
+[dependencies]
+gerbil-scheme = { git = "https://github.com/tao3k/gerbil-scheme-rust", rev = "f2c8ccfaaaa88eededad2dfef45eac1760fb4408", features = ["tokio-dispatch"] }
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "time"] }

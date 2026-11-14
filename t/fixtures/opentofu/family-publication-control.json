@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-17",
+  "platform": "aarch64-darwin",
+  "providers": {
+    "aws": {
+      "package": {
+        "artifact": "/nix/store/2rlwphdsarjzllarlr64vw25y05fl3pv-terraform-provider-aws-5.100.0-schema",
+        "engine": "/nix/store/1n0dnxjs2w93vpi3r41agqw5djrbgbd5-opentofu-1.11.5",
+        "engineVersion": "1.11.5",
+        "provider": "/nix/store/871mwwjz43k6q8mjkdd90mlq4fysql0l-terraform-provider-aws-5.100.0",
+        "version": "5.100.0"
+      },
+      "manifest": {
+        "format": "agentic-ai-lab/provider-schema-v1",
+        "provider": "registry.opentofu.org/hashicorp/aws",
+        "version": "5.100.0",
+        "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"
+      },
+      "schema_bytes": 13591718,
+      "resources": 1526,
+      "data_sources": 608,
+      "provider_configuration_present": true
+    },
+    "awscc": {
+      "package": {
+        "artifact": "/nix/store/bpyna476j06igkilnbvc5pzvkriyhc7m-terraform-provider-awscc-1.77.0-schema",
+        "engine": "/nix/store/5rxmpjxr6fa31jhysrxsf5baasy1w5dk-opentofu-1.11.5",
+        "engineVersion": "1.11.5",
+        "provider": "/nix/store/xmy1ad3zqb0fzbicrvhyd0dbjz2inan8-terraform-provider-awscc-1.77.0",
+        "version": "1.77.0"
+      },
+      "manifest": {
+        "format": "agentic-ai-lab/provider-schema-v1",
+        "provider": "registry.opentofu.org/hashicorp/awscc",
+        "version": "1.77.0",
+        "schema-sha256": "da2d45cbf066407681bc9b3ead3196277f966fd562bd004411a460ae83cfe7f0"
+      },
+      "schema_bytes": 12570947,
+      "resources": 1327,
+      "data_sources": 2336,
+      "provider_configuration_present": true
+    },
+    "null": {
+      "package": {
+        "artifact": "/nix/store/3v5v8k15vy11jrshvc5n8vcm2dhwr6py-terraform-provider-null-3.2.4-schema",
+        "engine": "/nix/store/dyp95291rxfgyjzqfa6prkprx1xnr518-opentofu-1.11.5",
+        "engineVersion": "1.11.5",
+        "provider": "/nix/store/hahs5hasy59vvrjfyq32706xd52jrjay-terraform-provider-null-3.2.4",
+        "version": "3.2.4"
+      },
+      "manifest": {
+        "format": "agentic-ai-lab/provider-schema-v1",
+        "provider": "registry.opentofu.org/hashicorp/null",
+        "version": "3.2.4",
+        "schema-sha256": "da768a39ea9a9c3464288786667f8cd2f6838c7d4a258e3a563bd49eb2466448"
+      },
+      "schema_bytes": 2964,
+      "resources": 1,
+      "data_sources": 1,
+      "provider_configuration_present": true
+    }
+  },
+  "native_runtime": "default heap-fenced Justfile entrypoints",
+  "gates": {
+    "families": {
+      "passed": true,
+      "assertions": 64
+    },
+    "version_regression": {
+      "passed": true,
+      "assertions": 84
+    },
+    "opentofu-module-scope-test.ss": {
+      "passed": true,
+      "assertions": 19
+    },
+    "module-scope-syntax-test.ss": {
+      "passed": true,
+      "assertions": 0
+    },
+    "opentofu-provider-artifact-test.ss": {
+      "passed": true,
+      "assertions": 19
+    },
+    "opentofu-schema-test.ss": {
+      "passed": true,
+      "assertions": 57
+    },
+    "opentofu-set-evidence-test.ss": {
+      "passed": true,
+      "assertions": 36
+    }
+  },
+  "collision_controls": [
+    "actual provider configuration node in three packages",
+    "awscc_ec2_security_group resource and data nodes"
+  ],
+  "schema_fields_renamed": false,
+  "cloud_access": false,
+  "provider_plan_executed": false,
+  "loader_connected": false
+}

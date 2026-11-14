@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime.benchmarks import composition as benchmark
+from agentic_ai_lab_runtime.benchmarks import composition as benchmark
 
 
 def test_composition_benchmark_runs_all_scenarios() -> None:
@@ -22,7 +22,7 @@ def test_composition_benchmark_receipt_is_line_oriented() -> None:
 
     receipt = result.receipt()
 
-    assert "schema: \"poo-flow.composition-benchmark.v1\"" in receipt
+    assert "schema: \"agentic-ai-lab.composition-benchmark.v1\"" in receipt
     assert "scenario: \"strategy-combinator-pipeline\"" in receipt
     assert "stages: 8" in receipt
 
@@ -31,4 +31,4 @@ def test_composition_benchmark_cli_emits_receipts(capsys) -> None:
     assert benchmark.main(["--iterations", "1", "--fanout", "2"]) == 0
 
     output = capsys.readouterr().out
-    assert output.count("poo-flow.composition-benchmark.v1") == 4
+    assert output.count("agentic-ai-lab.composition-benchmark.v1") == 4

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     RuntimeDurableAdapter,
     RuntimeDurablePolicyError,
     coerce_runtime_durable_envelope_manifest,
@@ -14,15 +14,15 @@ from poo_flow_runtime import (
 from scheme_durable_fixtures import scheme_durable_runtime_envelope_bytes
 
 
-SCHEME_DURABLE_RUNTIME_ENVELOPE = b"""schema=poo-flow.durable.runtime-envelope.v1
+SCHEME_DURABLE_RUNTIME_ENVELOPE = b"""schema=agentic-ai-lab.durable.runtime-envelope.v1
 owner=scheme
-policy-schema=poo-flow.durable.runtime-policy-manifest.v1
+policy-schema=agentic-ai-lab.durable.runtime-policy-manifest.v1
 policy-id=durable/default
 checkpoint-id-strategy=runtime-generated
 checkpoint-store=runtime/checkpoint-store
 repair-mode=fail-closed
 action-classes=replayable,idempotent,compensatable,terminal,manual
-store-schema=poo-flow.module-system.durable-runtime-store-contract.receipt.v1
+store-schema=agentic-ai-lab.module-system.durable-runtime-store-contract.receipt.v1
 store-id=runtime-store/default
 store-owner=marlin-runtime-store
 fact-log-ref=runtime/fact-log
@@ -35,7 +35,7 @@ communication-ledger-ref=runtime/communication-ledger
 sandbox-ledger-ref=runtime/sandbox-ledger
 ledger-kinds=fact-log,checkpoint,derived-index,job,repair,artifact,communication,sandbox
 capability-flags=append-fact,write-checkpoint,rebuild-index,claim-job-lease,append-repair-event,retain-artifact,append-communication-event,attach-sandbox-handle
-backend-schema=poo-flow.module-system.durable-runtime-store-backend.receipt.v1
+backend-schema=agentic-ai-lab.module-system.durable-runtime-store-backend.receipt.v1
 backend-id=runtime-backend/marlin-store
 backend-kind=marlin-runtime-store
 backend-executable=marlin-runtime-store
@@ -58,7 +58,7 @@ def test_parses_scheme_durable_runtime_envelope_payload() -> None:
         SCHEME_DURABLE_RUNTIME_ENVELOPE
     )
 
-    assert envelope.schema == "poo-flow.durable.runtime-envelope.v1"
+    assert envelope.schema == "agentic-ai-lab.durable.runtime-envelope.v1"
     assert envelope.owner == "scheme"
     assert envelope.policy_id == "durable/default"
     assert envelope.store_id == "runtime-store/default"

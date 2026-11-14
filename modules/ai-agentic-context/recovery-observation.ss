@@ -1,0 +1,85 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Pure bounded recovery assessment. Runtime owners admit the source witnesses.
+(import (only-in :clan/poo/object .o .ref)
+        (only-in :gerbil-ascent/program/syntax ascent)
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
+(export RecoveryObservation. recovery-observation-evaluate recovery-observation-rows)
+(def RecoveryObservation.
+  (.o identity: #f revision: #f intents: '() journal-heads: '() scans: '()
+      workspace-cuts: '() reads: '() history: '() hypotheses: '()
+      requirements: '() reconciliations: '()))
+(def (project values slots)
+  (map (lambda (v) (map (lambda (s) (.ref v s)) slots)) values))
+(def (recovery-observation-evaluate context-value)
+  (gerbil-ascent-evaluate-program
+    (ascent
+      ;; All supplied witnesses have already crossed their source admission
+      ;; boundary. This pure probe does not authenticate arbitrary model text.
+      (relation Intent (command task revision attempt scope epoch)
+        (project (.ref context-value 'intents) '(command task revision attempt scope epoch)))
+      (relation JournalHead (scope cut epoch)
+        (project (.ref context-value 'journal-heads) '(scope cut epoch)))
+      (relation Scan (observation command scope cut epoch coverage outcome)
+        (project (.ref context-value 'scans) '(identity command scope cut epoch coverage outcome)))
+      (relation WorkspaceCut (scope cut)
+        (project (.ref context-value 'workspace-cuts) '(scope cut)))
+      (relation Read (observation command scope cut coherent content)
+        (project (.ref context-value 'reads) '(identity command scope cut coherent content)))
+      (relation History (witness command attempt scope epoch outcome)
+        (project (.ref context-value 'history) '(identity command attempt scope epoch outcome)))
+      (relation Hypothesis (command hypothesis question)
+        (project (.ref context-value 'hypotheses) '(command identity question)))
+      ;; Retained requirements come from the admitted Task/effect contract.
+      ;; They do not wait for journal coverage and do not prescribe ordering.
+      (relation Requires (command aspect)
+        (project (.ref context-value 'requirements) '(command aspect)))
+      ;; These independently admitted receipts discharge the named obligation,
+      ;; not a Task terminal. Their validity is an input contract, not a vote.
+      (relation Reconciled (witness command attempt aspect)
+        (project (.ref context-value 'reconciliations) '(identity command attempt aspect)))
+      (relation QualifiedScan (command outcome observation))
+      (relation ReceiptGap (command observation))
+      (relation CurrentContent (command content observation))
+      (relation HistoricalEffect (command outcome witness))
+      (relation ConflictingHistory (command))
+      (relation Discharged (command aspect))
+      (relation Unknown (command aspect))
+      (relation Obligation (command aspect))
+      (relation Explore (command hypothesis question))
+      ((QualifiedScan C Outcome O) <-- (Intent C T R A S OldEpoch)
+        (JournalHead S Cut Epoch) (Scan O C S Cut Epoch (lit 'complete) Outcome))
+      ((ReceiptGap C O) <-- (QualifiedScan C (lit 'missing) O))
+      ((CurrentContent C Content O) <-- (Intent C T R A S Epoch)
+        (WorkspaceCut S Cut) (Read O C S Cut (lit #t) Content))
+      ((HistoricalEffect C Outcome W) <-- (Intent C T R A S Epoch)
+        (History W C A S Epoch Outcome)
+        (if (Outcome) (or (eq? Outcome 'applied) (eq? Outcome 'not-applied))))
+      ((ConflictingHistory C) <-- (HistoricalEffect C First W) (HistoricalEffect C Second V)
+        (if (First Second) (not (eq? First Second))))
+      ((Discharged C Aspect) <-- (Intent C T R A S Epoch) (Requires C Aspect)
+        (Reconciled W C A Aspect)
+        (if (Aspect) (not (or (eq? Aspect 'current-content)
+                             (eq? Aspect 'journal-coverage) (eq? Aspect 'historical-effect)))))
+      ((Discharged C (lit 'journal-coverage)) <-- (QualifiedScan C Outcome O))
+      ((Discharged C (lit 'current-content)) <-- (CurrentContent C Content O))
+      ((Discharged C (lit 'historical-effect)) <-- (HistoricalEffect C Outcome W)
+        (not (ConflictingHistory C)))
+      ((Unknown C (lit 'historical-effect)) <-- (Intent C T R A S Epoch)
+        (not (Discharged C (lit 'historical-effect))))
+      ((Unknown C (lit 'journal-result)) <-- (Intent C T R A S Epoch)
+        (not (Discharged C (lit 'journal-coverage))))
+      ((Unknown C (lit 'current-content)) <-- (Intent C T R A S Epoch)
+        (not (Discharged C (lit 'current-content))))
+      ((Obligation C (lit 'journal-coverage)) <-- (Unknown C (lit 'journal-result)))
+      ((Obligation C (lit 'current-content)) <-- (Unknown C (lit 'current-content)))
+      ((Obligation C (lit 'historical-effect)) <-- (Unknown C (lit 'historical-effect)))
+      ((Obligation C Aspect) <-- (Intent C T R A S Epoch) (Requires C Aspect)
+        (not (Discharged C Aspect)))
+      ((Explore C H Q) <-- (Unknown C (lit 'historical-effect)) (Hypothesis C H Q))
+      ;; There is deliberately no rule that turns matching content, a missing
+      ;; receipt or a hypothesis into historical attribution, replay permission
+      ;; or Task success. A changed cut is evaluated as another immutable view.
+      (bounds 256 1024 2048))))
+(def (recovery-observation-rows result relation) ((.ref result 'rows-of) relation))

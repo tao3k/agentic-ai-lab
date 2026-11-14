@@ -10,7 +10,7 @@ import subprocess
 
 import pytest
 
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanClosureError,
     LeanDeclarationClosure,
     export_declaration_closure,
@@ -41,7 +41,7 @@ def closure_payload() -> dict[str, object]:
         "owner_modules": ["Example.Core", "Example.Root"],
         "root_declarations": ["Example.safe"],
         "root_module": "Example.Root",
-        "schema_id": "poo-flow.lean-declaration-closure.v1",
+        "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
     }
 
 
@@ -119,12 +119,12 @@ def test_exporter_builds_root_before_running_lean(tmp_path: Path) -> None:
             "lake",
             "build",
             "Example.Root",
-            "pooFlowDeclarationClosure",
+            "agenticAiLabDeclarationClosure",
         ],
         [
             "lake",
             "env",
-            ".lake/build/bin/pooFlowDeclarationClosure",
+            ".lake/build/bin/agenticAiLabDeclarationClosure",
             "--root-module",
             "Example.Root",
             "--root-declaration",

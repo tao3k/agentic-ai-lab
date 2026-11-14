@@ -5,17 +5,18 @@
 
 ;;; Owner: Marlin-facing agent sandbox backend dispatch lives here.
 ;;; Boundary: this module selects backend interface manifests, not runtimes.
-;;; Runtime contract: Marlin owns all native/Cube API execution after handoff.
+;;; Runtime contract: Marlin owns all runtime/Cube API execution after handoff.
 ;;; Policy evidence: dispatcher tests assert nono/Cube routing and failure gates.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/runtime-protocol +runtime-request-schema+)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/nono-sandbox/c-binding
-        :poo-flow/modules/agent-sandbox/cube-interface)
+(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+                 nono-c-binding-runtime-manifest->manifest)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/cube-interface)
 
 (export +agent-sandbox-marlin-interface-schema+
         +agent-sandbox-marlin-admission-schema+
@@ -47,13 +48,13 @@
 ;;; delegates to backend-specific nono or Cube runners.
 ;; : (-> Unit MarlinInterfaceSchema)
 (def +agent-sandbox-marlin-interface-schema+
-  'poo-flow.agent-sandbox-marlin-interface.v1)
+  'agentic-ai-lab.agent-sandbox-marlin-interface.v1)
 
 ;;; Admission envelopes are the Marlin runtime entry contract. They keep the
 ;;; core runtime request identity beside the selected backend handoff manifest.
 ;; : (-> Unit MarlinAdmissionSchema)
 (def +agent-sandbox-marlin-admission-schema+
-  'poo-flow.agent-sandbox-marlin-admission.v1)
+  'agentic-ai-lab.agent-sandbox-marlin-admission.v1)
 
 ;;; Supported backends are explicit so adding a new backend requires a dispatch
 ;;; branch and tests instead of silently passing through unknown manifests.
@@ -173,7 +174,7 @@
   (and (pair? value) (list? value)))
 
 ;;; Final Marlin handoff wraps the backend-owned manifest with uniform routing
-;;; fields. Marlin can inspect `handoff-kind` before delegating to a native or
+;;; fields. Marlin can inspect `handoff-kind` before delegating to a runtime or
 ;;; remote runner, while tests can assert one shape across backends.
 ;; : (-> AgentSandboxRuntimeManifest MarlinInterfaceManifest)
 (def (agent-sandbox-runtime-manifest->marlin-interface-manifest

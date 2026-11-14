@@ -1,16 +1,20 @@
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Reusable Scenario: native Profile selection plus noun-slot metadata.
+;;; Reusable Scenario: runtime Profile selection plus noun-slot metadata.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :poo-flow/user-interface/profiles/crewai)
+        :tao3k/yuanxu/profile-composition/selection-syntax
+        )
+
 (export CrewAIProductionProfile crewai-scenario)
 
 (.def CrewAIProductionProfile
@@ -35,10 +39,12 @@
                handoff-after-proof-gate: #t)
            handoff: 'marlin-control-plane))))
 
-(user-composition crewai-scenario
-  (compose profiles
+(def crewai-scenario
+  (.new Scenario name: 'crewai-scenario
+        config: (let ((CrewAIModule (.get tao3k/agentic-ai-lab.init.exports Profiles crewai profile)))
+    (compose profiles
     (use-module CrewAIModule as crew
       agent task crew planning memory knowledge sequential-process flow-state
       flow-router flow-persist guardrail human-input observability
       runtime-handoff)
-    CrewAIProductionProfile))
+    CrewAIProductionProfile))))

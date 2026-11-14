@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Validate POO Flow's SPDX, REUSE, and publication license contract."""
+"""Validate Agentic AI Lab's SPDX, REUSE, and publication license contract."""
 
 from __future__ import annotations
 
@@ -85,6 +85,13 @@ def sidecar_patterns(errors: list[str]) -> tuple[str, ...]:
             for value in values:
                 patterns.append(value if base == "." else f"{base}/{value}")
     return tuple(patterns)
+
+
+def validate_source_artifacts(files: tuple[Path, ...], errors: list[str]) -> None:
+    """Raw execution logs belong to local or CI artifacts, never source releases."""
+    for path in files:
+        if ".log" in path.suffixes:
+            errors.append(f"{path.relative_to(ROOT).as_posix()}: execution log must remain a local or CI artifact")
 
 
 def validate_file_coverage(files: tuple[Path, ...], errors: list[str]) -> None:
@@ -191,6 +198,7 @@ def validate_published_license_copies(errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     files = project_files()
+    validate_source_artifacts(files, errors)
     validate_file_coverage(files, errors)
     validate_license_texts(errors)
     validate_cargo_metadata(files, errors)

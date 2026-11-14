@@ -13,7 +13,7 @@
  (rule . poo-slot-authoring-linear)
  (feature . poo-slot-authoring-linear-traversal)
  (optimizationFocus . "replace recursive result append with tail-passing accumulation")
- (inputShape . "300-level nested native POO object datum")
+ (inputShape . "300-level nested POO object datum")
  (expectedOutcome . "candidate preserves source-order bindings and beats baseline")
  (measurementPhases . (baseline-traversal candidate-traversal assert-semantic-gate assert-time-gate observe-runtime-memory))
  (baseline . "recursive append of complete child binding lists")

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-//! Byte-stable Rust IR projected from executable POO Flow Scheme contracts.
+//! Byte-stable Rust IR projected from executable Agentic AI Lab Scheme contracts.
 //!
 //! This crate distributes generated build inputs. It does not implement or
 //! reinterpret the owning Scheme contracts.

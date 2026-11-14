@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Tests for the POO Flow publication license contract."""
+"""Tests for the Agentic AI Lab publication license contract."""
 
 from __future__ import annotations
 
@@ -26,6 +26,14 @@ def license_contract_module():
 
 
 class LicenseContractTest(unittest.TestCase):
+    def test_source_release_rejects_raw_and_compressed_execution_logs(self) -> None:
+        contract = license_contract_module()
+        errors: list[str] = []
+        contract.validate_source_artifacts(tuple(ROOT / name for name in
+            ["run.log", "run.log.gz", "run.log.zst", "qualification.ss", "catalog.ss"]), errors)
+        self.assertEqual(len(errors), 3)
+        self.assertTrue(all("local or CI artifact" in error for error in errors))
+
     def test_gitlink_contributor_repository_is_excluded(self) -> None:
         contract = license_contract_module()
 

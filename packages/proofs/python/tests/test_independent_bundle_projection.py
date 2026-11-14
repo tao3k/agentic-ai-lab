@@ -8,12 +8,12 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_proof.axle_exact_closure import ExactAxleClosure, SourceDeclaration
-from poo_flow_proof.independent_bundle_projection import (
+from agentic_ai_lab_proof.axle_exact_closure import ExactAxleClosure, SourceDeclaration
+from agentic_ai_lab_proof.independent_bundle_projection import (
     IndependentBundleProjectionError,
     build_independent_declaration_bundle,
 )
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanDeclaration,
     LeanDeclarationClosure,
     LeanOwnerSource,
@@ -81,7 +81,7 @@ def test_projects_lake_and_owner_evidence_into_independent_bundle(
     tmp_path: Path,
 ) -> None:
     closure, exact, sources = fixture_values(tmp_path)
-    (tmp_path / "lake-manifest.json").write_text('{"name":"«poo-flow-proof»","packages":[]}\n')
+    (tmp_path / "lake-manifest.json").write_text('{"name":"«agentic-ai-lab-proof»","packages":[]}\n')
 
     bundle = build_independent_declaration_bundle(
         closure=closure,
@@ -92,7 +92,7 @@ def test_projects_lake_and_owner_evidence_into_independent_bundle(
 
     assert bundle.root_declarations == ("Example.safe",)
     assert bundle.axle_environment.name == "lean-4.31.0"
-    assert bundle.resolved_sources[0].package_id == "poo-flow-proof"
+    assert bundle.resolved_sources[0].package_id == "agentic-ai-lab-proof"
     assert bundle.resolved_sources[0].revision.startswith("workspace:")
     assert bundle.declarations[0].owner_path == "Example/Root.lean"
     assert bundle.declarations[0].owner_source_digest == sources[0].source_digest
@@ -102,7 +102,7 @@ def test_runtime_receipts_do_not_change_independent_bundle_identity(
     tmp_path: Path,
 ) -> None:
     closure, exact, sources = fixture_values(tmp_path)
-    (tmp_path / "lake-manifest.json").write_text('{"name":"poo-flow-proof","packages":[]}\n')
+    (tmp_path / "lake-manifest.json").write_text('{"name":"agentic-ai-lab-proof","packages":[]}\n')
     changed_receipt = ExactAxleClosure(
         **{
             **exact.__dict__,
@@ -153,7 +153,7 @@ def test_unused_proof_base_interface_declarations_preserve_typed_identity(
             ),
         }
     )
-    (tmp_path / "lake-manifest.json").write_text('{"name":"poo-flow-proof","packages":[]}\n')
+    (tmp_path / "lake-manifest.json").write_text('{"name":"agentic-ai-lab-proof","packages":[]}\n')
 
     bundle = build_independent_declaration_bundle(
         closure=closure,

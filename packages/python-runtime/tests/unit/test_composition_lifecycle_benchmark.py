@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime.benchmarks import _composition_lifecycle_runner as runner
-from poo_flow_runtime.benchmarks.composition_lifecycle import (
+from agentic_ai_lab_runtime.benchmarks import _composition_lifecycle_runner as runner
+from agentic_ai_lab_runtime.benchmarks.composition_lifecycle import (
     ArrivalSchedule,
     COMPOSITION_LIFECYCLE_SCHEMA,
     run_composition_benchmarks,

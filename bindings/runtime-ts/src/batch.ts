@@ -4,7 +4,7 @@
 
 import {
   assertRuntimeStatus,
-  type PooFlowRuntime,
+  type AgenticAILabRuntime,
   type RuntimeExports,
   unsignedRuntimeStatus,
 } from "./runtime.ts";
@@ -45,13 +45,13 @@ const align = (value: number, alignment: number): number =>
   Math.ceil(value / alignment) * alignment;
 
 export const runRuntimeBatch = (
-  runtime: PooFlowRuntime,
+  runtime: AgenticAILabRuntime,
   instanceSlot: number,
   sessionSlot: number,
   inputs: readonly RuntimeEventInput[],
 ): RuntimeBatchResult => {
   if (inputs.length === 0) {
-    throw new RangeError("poo-flow runtime batch requires at least one event");
+    throw new RangeError("agentic-ai-lab runtime batch requires at least one event");
   }
   const exports = runtime.exports as BatchExports;
   const payloadOffsets: number[] = [];
@@ -87,7 +87,7 @@ export const runRuntimeBatch = (
     for (const size of sizes) {
       const pointer = exports.malloc(size);
       if (pointer === 0) {
-        throw new RangeError(`poo-flow runtime could not allocate ${size} batch bytes`);
+        throw new RangeError(`agentic-ai-lab runtime could not allocate ${size} batch bytes`);
       }
       pointers.push(pointer);
     }
@@ -108,7 +108,7 @@ export const runRuntimeBatch = (
       acceptedBitmap,
     ] = pointers;
     if (pointers.some((pointer) => pointer === undefined)) {
-      throw new RangeError("poo-flow runtime batch allocation plan was incomplete");
+      throw new RangeError("agentic-ai-lab runtime batch allocation plan was incomplete");
     }
     const arenaPointer = align(arenaAllocation!, 16);
     arenaAllocationPointer = arenaAllocation!;

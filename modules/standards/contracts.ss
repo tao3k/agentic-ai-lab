@@ -9,14 +9,14 @@
         (only-in :clan/poo/mop .defgeneric)
         "types.ss")
 
-(export PooFlowStandardValidationProvider.
-        poo-flow-standard-validate)
+(export AgenticAILabStandardValidationProvider.
+        agentic-ai-lab-standard-validate)
 
-(.defgeneric (poo-flow-standard-validate provider validation-closure subject)
+(.defgeneric (agentic-ai-lab-standard-validate provider validation-closure subject)
   slot: .validate-standard)
 
-(def PooFlowStandardValidationProvider.
-  (.o kind: +poo-flow-standard-validation-provider-kind+
+(def AgenticAILabStandardValidationProvider.
+  (.o kind: +agentic-ai-lab-standard-validation-provider-kind+
       identity: #f
       supported-families: '()
       .validate-standard:

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#include "poo_flow/bundle_v1.h"
+#include "agentic_ai_lab/bundle_v1.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -13,18 +13,18 @@
 #define COMPONENT_COUNT UINT64_C(65536)
 #define LOOKUP_COUNT UINT64_C(1000000)
 
-static poo_flow_bundle_v1_compact_id compact_id(uint64_t value) {
-  poo_flow_bundle_v1_compact_id result = {0u, value};
+static agentic_ai_lab_bundle_v1_compact_id compact_id(uint64_t value) {
+  agentic_ai_lab_bundle_v1_compact_id result = {0u, value};
   return result;
 }
 
 int main(void) {
   const uint64_t arena_bytes =
-      COMPONENT_COUNT * sizeof(poo_flow_bundle_v1_component_entry);
-  poo_flow_bundle_v1_component_entry *components =
-      (poo_flow_bundle_v1_component_entry *)calloc(1u, (size_t)arena_bytes);
-  poo_flow_bundle_v1_descriptor descriptor;
-  const poo_flow_bundle_v1_component_entry *found = NULL;
+      COMPONENT_COUNT * sizeof(agentic_ai_lab_bundle_v1_component_entry);
+  agentic_ai_lab_bundle_v1_component_entry *components =
+      (agentic_ai_lab_bundle_v1_component_entry *)calloc(1u, (size_t)arena_bytes);
+  agentic_ai_lab_bundle_v1_descriptor descriptor;
+  const agentic_ai_lab_bundle_v1_component_entry *found = NULL;
   clock_t start = 0;
   clock_t finish = 0;
   uint64_t index = 0u;
@@ -37,34 +37,34 @@ int main(void) {
     components[index].case_id = compact_id(1u);
     components[index].component_id = compact_id(index);
     components[index].object_id = compact_id(index + UINT64_C(1000000));
-    components[index].flags = POO_FLOW_BUNDLE_V1_COMPONENT_F_ENABLED;
+    components[index].flags = AGENTIC_AI_LAB_BUNDLE_V1_COMPONENT_F_ENABLED;
   }
   memset(&descriptor, 0, sizeof(descriptor));
   descriptor.struct_size = (uint32_t)sizeof(descriptor);
-  descriptor.flags = POO_FLOW_BUNDLE_V1_DESCRIPTOR_F_SORTED |
-                     POO_FLOW_BUNDLE_V1_DESCRIPTOR_F_ZERO_COPY;
-  descriptor.schema_major = POO_FLOW_BUNDLE_V1_SCHEMA_MAJOR;
-  descriptor.schema_minor = POO_FLOW_BUNDLE_V1_SCHEMA_MINOR;
+  descriptor.flags = AGENTIC_AI_LAB_BUNDLE_V1_DESCRIPTOR_F_SORTED |
+                     AGENTIC_AI_LAB_BUNDLE_V1_DESCRIPTOR_F_ZERO_COPY;
+  descriptor.schema_major = AGENTIC_AI_LAB_BUNDLE_V1_SCHEMA_MAJOR;
+  descriptor.schema_minor = AGENTIC_AI_LAB_BUNDLE_V1_SCHEMA_MINOR;
   descriptor.bundle_id = compact_id(1u);
   descriptor.digest[0] = 1u;
   descriptor.arena_bytes = arena_bytes;
-  descriptor.symbols = (poo_flow_bundle_v1_region){
-      0u, 0u, (uint32_t)sizeof(poo_flow_bundle_v1_symbol_entry),
-      (uint32_t)_Alignof(poo_flow_bundle_v1_symbol_entry)};
-  descriptor.components = (poo_flow_bundle_v1_region){
+  descriptor.symbols = (agentic_ai_lab_bundle_v1_region){
+      0u, 0u, (uint32_t)sizeof(agentic_ai_lab_bundle_v1_symbol_entry),
+      (uint32_t)_Alignof(agentic_ai_lab_bundle_v1_symbol_entry)};
+  descriptor.components = (agentic_ai_lab_bundle_v1_region){
       0u, arena_bytes, (uint32_t)sizeof(*components),
-      (uint32_t)_Alignof(poo_flow_bundle_v1_component_entry)};
-  descriptor.edges = (poo_flow_bundle_v1_region){
-      0u, 0u, (uint32_t)sizeof(poo_flow_bundle_v1_edge_entry),
-      (uint32_t)_Alignof(poo_flow_bundle_v1_edge_entry)};
-  descriptor.evidence_obligations = (poo_flow_bundle_v1_region){
-      0u, 0u, (uint32_t)sizeof(poo_flow_bundle_v1_evidence_entry),
-      (uint32_t)_Alignof(poo_flow_bundle_v1_evidence_entry)};
+      (uint32_t)_Alignof(agentic_ai_lab_bundle_v1_component_entry)};
+  descriptor.edges = (agentic_ai_lab_bundle_v1_region){
+      0u, 0u, (uint32_t)sizeof(agentic_ai_lab_bundle_v1_edge_entry),
+      (uint32_t)_Alignof(agentic_ai_lab_bundle_v1_edge_entry)};
+  descriptor.evidence_obligations = (agentic_ai_lab_bundle_v1_region){
+      0u, 0u, (uint32_t)sizeof(agentic_ai_lab_bundle_v1_evidence_entry),
+      (uint32_t)_Alignof(agentic_ai_lab_bundle_v1_evidence_entry)};
   descriptor.metadata_bytes =
-      (poo_flow_bundle_v1_region){0u, 0u, 1u, 1u};
+      (agentic_ai_lab_bundle_v1_region){0u, 0u, 1u, 1u};
 
-  if (poo_flow_bundle_v1_validate(&descriptor, components, arena_bytes) !=
-      POO_FLOW_BUNDLE_V1_OK) {
+  if (agentic_ai_lab_bundle_v1_validate(&descriptor, components, arena_bytes) !=
+      AGENTIC_AI_LAB_BUNDLE_V1_OK) {
     free(components);
     return 3;
   }
@@ -73,9 +73,9 @@ int main(void) {
   for (index = 0u; index < LOOKUP_COUNT; ++index) {
     const uint64_t key =
         (index * UINT64_C(11400714819323198485)) & (COMPONENT_COUNT - 1u);
-    if (poo_flow_bundle_v1_find_component(
+    if (agentic_ai_lab_bundle_v1_find_component(
             &descriptor, components, compact_id(1u), compact_id(key),
-            &found) != POO_FLOW_BUNDLE_V1_OK) {
+            &found) != AGENTIC_AI_LAB_BUNDLE_V1_OK) {
       free(components);
       return 4;
     }
@@ -83,7 +83,7 @@ int main(void) {
   }
   finish = clock();
 
-  printf("schema=poo-flow.bundle-v1.lookup-benchmark.1\n");
+  printf("schema=agentic-ai-lab.bundle-v1.lookup-benchmark.1\n");
   printf("entries=%llu\n", (unsigned long long)COMPONENT_COUNT);
   printf("lookups=%llu\n", (unsigned long long)LOOKUP_COUNT);
   printf("elapsed-seconds=%.9f\n",

@@ -47,7 +47,7 @@ The package dependencies confirm the heavy runtime boundary: =cas-store=,
 =cas-hashable=, =docker-client=, and =kernmantle= are implementation-heavy
 dependencies that should stay outside the Scheme control plane for this repo.
 
-** 10.02.20 Current Poo-Flow Surface
+** 10.02.20 Current Agentic AI Lab Surface
 The current Gerbil implementation has a useful first control-plane slice:
 - =roles.ss= declares POO role descriptors for flow, task, strategy, runner,
   runtime adapter, and receipt.

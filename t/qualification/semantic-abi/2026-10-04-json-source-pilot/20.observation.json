@@ -1,0 +1,33 @@
+{
+  "candidate": {
+    "status": "complete",
+    "rows": [
+      [
+        "a",
+        "b"
+      ],
+      [
+        "b",
+        "c"
+      ]
+    ]
+  },
+  "receipt": {
+    "candidateValid": true,
+    "requestDigest": "40026fb8900538098f25018543ba47d532778bcb7e798d646a3c9c0c453659d6",
+    "difference": {
+      "kind": "extra-row",
+      "observed": [
+        "b",
+        "c"
+      ],
+      "index": 1
+    },
+    "operation": "temporal.observe",
+    "verification": "valid",
+    "bindingDigest": "fdd9daf6481eca283c6e3c5c19564be71790ab9d94854a29563c2bb4fc0a9d5d",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation"
+  },
+  "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+}

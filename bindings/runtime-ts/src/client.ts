@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 import type { RuntimeWorkerRequest, RuntimeWorkerResponse } from "./protocol.ts";
-import { PooFlowRuntimeError } from "./runtime.ts";
+import { AgenticAILabRuntimeError } from "./runtime.ts";
 
 export type RuntimeWorkerRequestPayload = RuntimeWorkerRequest extends infer Request
   ? Request extends { id: number }
@@ -45,7 +45,7 @@ export class RuntimeWorkerClient {
       pending.reject(
         response.status === undefined
           ? new Error(response.message)
-          : new PooFlowRuntimeError(response.status, response.message),
+          : new AgenticAILabRuntimeError(response.status, response.message),
       );
       return;
     }
@@ -54,7 +54,7 @@ export class RuntimeWorkerClient {
 
   request(payload: RuntimeWorkerRequestPayload): Promise<RuntimeWorkerResponse> {
     if (this.closed) {
-      return Promise.reject(new Error("poo-flow runtime worker client is closed"));
+      return Promise.reject(new Error("agentic-ai-lab runtime worker client is closed"));
     }
     const id = this.nextId;
     this.nextId += 1;
@@ -71,7 +71,7 @@ export class RuntimeWorkerClient {
     this.closed = true;
     this.transport.removeEventListener("message", this.handleMessage);
     for (const { reject } of this.pending.values()) {
-      reject(new Error("poo-flow runtime worker client closed before receiving a response"));
+      reject(new Error("agentic-ai-lab runtime worker client closed before receiving a response"));
     }
     this.pending.clear();
     this.transport.terminate?.();

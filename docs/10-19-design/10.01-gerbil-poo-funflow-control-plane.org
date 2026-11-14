@@ -92,7 +92,7 @@ of the control plane.
 
 *** 10.01.41 C4 Role Composition
 
-Gerbil POO's native multiple inheritance is part of the flow control-plane
+Gerbil POO's runtime multiple inheritance is part of the flow control-plane
 design, not an incidental implementation detail.
 
 Flow declaration descriptors are POO objects whose primary parent is the flow
@@ -170,7 +170,7 @@ The first milestone task kinds are:
 - =pure=: deterministic Scheme value transform.
 - =scheme=: lightweight Scheme procedure execution.
 - =store=: abstract store operation such as =put= or =get=.
-- =external=: adapter-routed work such as Docker, subprocess, or Rust-native
+- =external=: adapter-routed work such as Docker, subprocess, or Rust-runtime
   execution.
 
 *** 10.01.63 Strategy

@@ -5,18 +5,18 @@
 
 ;;; Owner: nono-sandbox C binding build/probe metadata lives here.
 ;;; Boundary: this module describes host-side compile probes and include policy.
-;;; Runtime contract: native loading lives in native.ss; irreversible apply is gated.
+;;; Runtime contract: runtime loading lives in ffi.ss; irreversible apply is gated.
 
-;;; Native nono C binding build manifest and validation.
+;;; Runtime nono C binding build manifest and validation.
 ;;; - Keep compiler/include policy explicit before any probe command is materialized.
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
-        (only-in :poo-flow/src/core/roles execution-policy-role)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/nono-sandbox/c-binding-descriptor)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :tao3k/yuanxu/object/role-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
 
 (export +nono-c-binding-build-schema+
         +nono-c-binding-default-adapter-include-dirs+
@@ -68,14 +68,14 @@
   (foldr cons tail values))
 
 ;;; Build schema is separate from the ABI descriptor. The descriptor names the
-;;; native surface; this object names the package-managed host probe policy.
+;;; runtime surface; this object names the package-managed host probe policy.
 ;; : Symbol
 (def +nono-c-binding-build-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.build.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.build.v1)
 
 ;; : (List String)
 (def +nono-c-binding-default-adapter-include-dirs+
-  '("bindings/nono-c"))
+  '("modules/nono-sandbox/nono-c"))
 
 ;; : (List String)
 (def +nono-c-binding-default-upstream-include-dirs+
@@ -147,7 +147,7 @@
            (include-dirs
             +nono-c-binding-default-include-dirs+)
            (probe-ref
-            "bindings/nono-c/poo_flow_nono_binding_probe.c")
+            "modules/nono-sandbox/nono-c/agentic_ai_lab_nono_binding_probe.c")
            (validator
             (lambda (build)
               (nono-c-binding-validate-build build)))))

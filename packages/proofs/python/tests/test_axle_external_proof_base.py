@@ -5,11 +5,11 @@
 import asyncio
 from pathlib import Path
 
-from poo_flow_proof.axle_exact_closure import (
+from agentic_ai_lab_proof.axle_exact_closure import (
     AxleExactClosureError,
     build_exact_axle_closure,
 )
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanDeclaration,
     LeanDeclarationClosure,
     LeanOwnerSource,

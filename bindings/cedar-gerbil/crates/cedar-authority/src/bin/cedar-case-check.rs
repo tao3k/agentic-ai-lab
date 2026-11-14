@@ -5,7 +5,7 @@
 //! Minimal command-line entrypoint for the crate-owned case checker.
 
 fn main() {
-    if let Err(error) = poo_flow_cedar_authority::case_check::run_cli() {
+    if let Err(error) = agentic_ai_lab_cedar_authority::case_check::run_cli() {
         eprintln!("cedar-case-check: {error}");
         std::process::exit(1);
     }

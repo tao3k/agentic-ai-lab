@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Runtime-C checks that need a small Bazel-native test launcher."""
+"""Runtime-C checks that need a small Bazel-runtime test launcher."""
 
 load(
     "@gerbil_bazel//gerbil:defs.bzl",
@@ -170,13 +170,13 @@ library="$runfiles/%s"
 library_dir="$(dirname "$library")"
 gxc="$runfiles/%s"
 gxi="$runfiles/%s"
-native_env="$runfiles/%s"
+runtime_env="$runfiles/%s"
 gerbil_cc=%s
 gerbil_as=%s
 gerbil_ld=%s
 output_root="$TEST_TMPDIR/gerbil"
 mkdir -p "$output_root/lib"
-"$native_env" env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
+"$runtime_env" env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
   GERBIL_CC="$gerbil_cc" \
   GERBIL_AS="$gerbil_as" \
   GERBIL_LD="$gerbil_ld" \
@@ -188,7 +188,7 @@ env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
   DYLD_LIBRARY_PATH="$library_dir" \
   LD_LIBRARY_PATH="$library_dir" \
   GERBIL_PATH="$output_root" \
-  "$gxi" -e '(begin (import :poo-flow/bindings/runtime-c/benchmarks/runtime-v0-gerbil-ffi-benchmark) (main))'
+  "$gxi" -e '(begin (import :tao3k/agentic-ai-lab/bindings/runtime-c/benchmarks/runtime-v0-gerbil-ffi-benchmark) (main))'
 """ % (
             ctx.file.source.short_path,
             ctx.file.header.short_path,

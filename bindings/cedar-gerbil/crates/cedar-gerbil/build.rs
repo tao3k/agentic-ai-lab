@@ -45,7 +45,7 @@ fn main() {
     println!("cargo:rerun-if-changed=scheme/conformance-build-runtime.ss");
     println!("cargo:rerun-if-changed=../../../../gerbil.pkg");
     println!("cargo:rerun-if-changed=scheme/conformance.ss");
-    println!("cargo:rerun-if-changed=../../../../core/object-family/syntax.ss");
+    println!("cargo:rerun-if-changed=../../../../core/object/syntax.ss");
     println!("cargo:rerun-if-changed=../../../../modules/authorization/providers/cedar/objects.ss");
     println!("cargo:rerun-if-env-changed=GERBIL_GXI");
     println!("cargo:rerun-if-env-changed=GERBIL_GSC");
@@ -59,13 +59,13 @@ fn main() {
     let gxi = env::var_os("GERBIL_GXI").unwrap_or_else(|| "gxi".into());
     let gsc =
         env::var_os("GERBIL_GSC").expect("GERBIL_GSC must select the installed Gambit compiler");
-    let bridge = gerbil_scheme_native_build::source_workspace();
+    let bridge = gerbil_scheme_build::source_workspace();
     let bridge_build = bridge.join("build.ss");
     let bridge_program_build = bridge.join("scheme/program-build.ss");
-    let bridge_native = bridge.join("scheme/native.ss");
+    let bridge_runtime = bridge.join("scheme/native.ss");
     println!("cargo:rerun-if-changed={}", bridge_build.display());
     println!("cargo:rerun-if-changed={}", bridge_program_build.display());
-    println!("cargo:rerun-if-changed={}", bridge_native.display());
+    println!("cargo:rerun-if-changed={}", bridge_runtime.display());
 
     let stage = output.join("gerbil");
     let load_path = gerbil_load_path(&stage);
@@ -87,16 +87,16 @@ fn main() {
         &load_path,
         "build canonical Cedar/Gerbil conformance graph",
     );
-    let receipt = gerbil_scheme_native_build::build_program_archive(
-        gerbil_scheme_native_build::ProgramArchiveRequest {
+    let receipt = gerbil_scheme_build::build_program_archive(
+        gerbil_scheme_build::ProgramArchiveRequest {
             manifest: &output.join("program.json"),
             gsc: &PathBuf::from(gsc),
-            archive_name: "poo_flow_cedar_program",
-            linker_name: "poo_flow_cedar_linker",
+            archive_name: "agentic_ai_lab_cedar_program",
+            linker_name: "agentic_ai_lab_cedar_linker",
             out_dir: &output,
         },
     )
-    .expect("build native POO conformance graph");
+    .expect("build POO conformance graph");
     for directive in receipt.cargo_directives {
         println!("{}", directive.line());
     }

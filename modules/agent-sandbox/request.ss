@@ -13,14 +13,14 @@
 ;;; Policy evidence:
 ;;; - Agent-sandbox descriptor, bridge, and profile tests import this facade.
 
-(import :poo-flow/modules/agent-sandbox/request-field
-        :poo-flow/modules/agent-sandbox/request-validation
-        :poo-flow/modules/agent-sandbox/request-builder
-        :poo-flow/modules/agent-sandbox/request-macro
-        :poo-flow/modules/agent-sandbox/request-accessor)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/request-field
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-validation
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-builder
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-macro
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-accessor)
 
-(export (import: :poo-flow/modules/agent-sandbox/request-field)
-        (import: :poo-flow/modules/agent-sandbox/request-validation)
-        (import: :poo-flow/modules/agent-sandbox/request-builder)
-        (import: :poo-flow/modules/agent-sandbox/request-macro)
-        (import: :poo-flow/modules/agent-sandbox/request-accessor))
+(export (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-field)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-validation)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-builder)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-macro)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/request-accessor))

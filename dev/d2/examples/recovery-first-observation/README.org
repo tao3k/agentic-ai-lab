@@ -1,0 +1,84 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: A matching file is not a recovered execution receipt
+#+LANGUAGE: en
+
+* Source and scope
+
+The case consumes =33-recovery-first-observation.org= and its SysML companion.
+The native OpenSysML view exposes one =RecoveryFirstObservation::fixture=;
+six pedagogical facets describe that fixture, not invented runtime occurrences.
+The illustrative edit changes =mode: slow= to =mode: fast=. No such workspace
+edit or process crash is actually executed by the figure driver.
+
+The independent pure rule model lives beside the ORG/SysML design in
+=33-recovery-first-observation.ss=, outside the renderer. It derives scoped
+unknowns, receipt gaps and reconciliation obligations from admitted POO facts.
+Its focused test uses the unchanged project heap-fenced Just entrypoint:
+
+#+begin_src sh
+just test-file t/recovery-first-observation-test.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-first-observation/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-first-observation/case.ss --evaluate
+#+end_src
+
+These semantic tests do not qualify a production recovery service or actual
+workspace effect delivery. Read authority, snapshot coherence, historical-witness
+authentication and Task terminals remain with their existing owners.
+
+* Explanation choices
+
+The saved plan describes desired content. A recovery view retains the unknown
+old effect. A fresh read shows current content; the comparison invites a causal
+question. Competing explanations and outstanding responsibilities remain peers,
+with no mandatory recommended next Task. The model can introduce other questions.
+
+All figure inputs are inert POO meanings, exact source quotations and local
+object/action illustrations. There is no case-specific TypeScript, whole-scene
+SVG, position, route, solver preference or handmade region in this case.
+=modules/d2= infers the uncertainty-sensitive inquiry and native composition.
+The generic existing driver runs native SysML capture and rendering.
+
+* Actual reading
+
+The current model viewed the first actual PNG. Its title created a question,
+but the scene was rejected: a torn receipt implied destruction of an existing
+record, a bare question mark conflated content with history, a folder overlay
+obscured questions, compound grouping made exploration look sequential, and
+scoped text fell to 14.11 px. The image and its captures are preserved under
+ignored =output/recovery-first-observation/first-reading/=; =readings.ss= retains
+the natural criticism and current-image representation gaps.
+
+Interest and comprehension have no pass flag. Actual image observations and
+source-qualified evidence support only this explanation at its precise cut.
+
+* Final reconstruction and scoped evidence
+
+The module now treats unresolved inputs as non-sequential evidence links while
+retaining their route checks. A comparison's peer explanations prevent compound
+terminal grouping. Multi-source comparisons with peer branches receive native
+branch clearance. These general relation rules also have focused tests using
+arbitrary object names and open POO link qualities; no case name selects layout.
+
+Subsequent actual readings named the Context/ASCENT/model/Task roles, simplified
+vocabulary, removed repeated edge labels and separated a footer from the paper.
+After located quotes were supplied, ASCENT detected a remaining overlap between
+=mode:= and =fast= inside the read lens. The model retained that finding and
+increased local line spacing; neither the evidence nor the collision rule was
+removed. All earlier image-specific observations remain in =readings.ss=.
+
+The final actual image is
+=956d2758a5775b4cf0437a43c61c155a92ad0186b4ef5d5d97d110cdcf1f4bb7=.
+The model returned 26 located quotes across six facets. Native export has English
+text, no raster/foreignObject embedding, 19.01 px minimum scoped text, and at most
+1.948 route stretch against the unchanged 2.0 bound. The scoped answer basis is
+an explanation of this example, not a learner-interest/comprehension verdict.
+All six exploration questions remain after the feedback is grounded.
+
+The independent ASCENT design probe passes twelve focused semantic scenarios;
+the D2 suite passes all eight modules and TypeScript checks pass. Existing
+2 GiB/120-second test entrypoint limits and reader/layout limits are unchanged.
+No actual crash, workspace effect delivery or production recovery service has
+been qualified. Retained contract requirements can create responsibilities
+before journal coverage is established, and independent acceptance can discharge
+its own obligation while the original effect history remains unknown.

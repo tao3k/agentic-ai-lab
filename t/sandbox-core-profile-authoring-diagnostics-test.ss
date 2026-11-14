@@ -3,13 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: report-only POO-native authoring diagnostics for sandbox profiles.
+;;; Boundary: report-only POO authoring diagnostics for sandbox profiles.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/sandbox-core/objects)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/objects)
 
 (export sandbox-core-profile-authoring-diagnostics-test)
 
@@ -43,16 +43,16 @@
 ;; : TestSuite
 (def sandbox-core-profile-authoring-diagnostics-test
   (test-suite "sandbox-core profile authoring diagnostics"
-    (poo-flow-test-case "keeps POO-native rows diagnostic-free"
+    (yuanxu-test-case "keeps POO rows diagnostic-free"
       (let ((diagnostics
-             (poo-flow-sandbox-profile-object-authoring-diagnostics
-              poo-flow-sandbox-core-profile-object
+             (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
+              agentic-ai-lab-sandbox-core-profile-object
               clean-profile-authoring-rows)))
         (check-equal? diagnostics '())))
-    (poo-flow-test-case "reports advanced and non-native authoring shapes"
+    (yuanxu-test-case "reports advanced and non-runtime authoring shapes"
       (let ((diagnostics
-             (poo-flow-sandbox-profile-object-authoring-diagnostics
-              poo-flow-sandbox-core-profile-object
+             (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
+              agentic-ai-lab-sandbox-core-profile-object
               advanced-profile-authoring-rows)))
         (check-equal? (map (lambda (diagnostic)
                              (alist-value 'code diagnostic))

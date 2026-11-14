@@ -1,50 +1,41 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-#
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: User Module, Profile and Scenario Library
+#+language: en
 
-* User Interface Contribution Library
+The root [[file:../init.ss][init.ss]] selects these sources through =yuanxu!=.
+Profiles are ordinary modules mounted under =Profiles=; no independent Profile
+or Registry loading API remains. See [[file:CONTRACT.org][the source-role contract]].
 
-This directory models the downstream surface that users and agents read before writing POO Flow configuration. Stable policy objects live in =profiles/=, and reusable workflow compositions live in =scenarios/<name>/scenario.ss=.
+* Profiles
 
-* Reusable Profiles
+- [[file:profiles/langchain/interface.ss][LangChain]]: linear memory, prompt, model and parser policies.
+- [[file:profiles/langgraph/interface.ss][LangGraph]]: typed state, routing, bounded loops and explicit handoff.
+- [[file:profiles/crewai/interface.ss][CrewAI]]: agent/task/crew/flow relationships and guardrails.
+- [[file:profiles/tool-calling/interface.ss][Tool calling]]: permission, arguments, cooldown and receipt boundaries.
 
-- =profiles/langchain.ss=: linear chain profile slots for memory, prompt, model, parser, and no-tool policy.
-- =profiles/langgraph.ss=: guarded graph profile slots for session, state, router, agent/tool nodes, bounded loop, and runtime handoff.
-- =profiles/crewai.ss=: CrewAI-style profile slots for agents, tasks, crews, processes, flow state/router/persist, guardrails, human input, observability, and runtime handoff.
-- =profiles/tool-calling.ss=: framework-neutral tool calling profile slots for tool request, schema, permission, sandbox scope, cooldown, runtime binding, receipts, and observability.
+Each module has =types.ss=, ordinary defaults in =config.ss=, domain projections
+in =objects.ss= and one declarative =interface.ss=. =Profile.= reads final Config;
+=profile= is admitted by the existing SemanticModuleContract. Namespace leaves
+are the configured POO objects; there is no additional scope facade.
 
-* Reusable Scenarios
+* Scenarios and ordinary configuration
 
-- =scenarios/langchain/scenario.ss=: LangChain-style composition.
-- =scenarios/langgraph/scenario.ss=: LangGraph-style guarded state graph composition.
-- =scenarios/crewai/scenario.ss=: CrewAI-style crew/flow composition that reuses profile slots instead of cloning CrewAI's Python runtime surface.
-- =scenarios/tool-calling-agent-loop/scenario.ss=: framework-neutral tool calling control-plane composition for agent loop/tool/state runtime handoff.
+[[file:scenarios/developer/interface.ss][Developer]] publishes its ordinary configuration,
+inert domain preview and declaration diagnostics through the same module
+protocol. [[file:custom/my-module/interface.ss][The custom module]] has the same roles.
+The domain intent rows in Developer's Config are preview inputs, not another
+module-loading graph. The root alone selects modules.
 
-* Rule
+[[file:config.ss][The control-plane composition]] consumes published Profile values.
+The existing LangChain, LangGraph, CrewAI and tool-calling Scenario Case sources
+remain pure domain examples; acquiring a semantic value and composing its fields
+does not select or activate another module. Native POO assignment, inheritance
+and functional slot refinement own object changes.
 
-Object-level Case extension uses native =gerbil-poo= noun slots:
+* Reproduce
 
-#+begin_src scheme
-(.def OntologyCase
-  (events ? (.o)))
-
-(.def (PrescriptionCase @ OntologyCase)
-  (events =>.+
-    (.o prescription: PrescriptionEvent)))
-
-(.def (ReviewedPrescriptionCase @ PrescriptionCase)
-  (events =>.+
-    (.o prescription: ReviewedPrescriptionEvent
-        review: ClinicalReviewEvent)))
-#+end_src
-
-The root config only composes prepared Profiles and Standards:
-
-#+begin_src scheme
-(user-composition my-composition
-  (compose profiles
-    (use-module crewai production)))
-#+end_src
-
-Do not add a parallel JSON/alist language, action evaluator, stage grammar, or
-framework-specific DSL for these scenarios.
+From the repository root, use =just test-file t/user-interface-root-config-test.ss=,
+=just test-file t/yanxu/Profiles/sandbox/profile-module-test.ss= and the domain Contract suites.
+Use =just test-root= for the official product test inventory. Build preparation
+and test execution are separate; namespace access does not run std/make or Ops.
