@@ -206,7 +206,7 @@ gerbil_project_compile(
     name = "compile",
     srcs = [":gerbil_package_sources"],
     args = ["compile"],
-    build_script = ":build.ss",
+    build_script = ":build-bazel.ss",
     # Fence compiler VMs before imports; native tools preserve this budget.
     env = {
         "GERBIL_BUILD_VERBOSE": "1",
