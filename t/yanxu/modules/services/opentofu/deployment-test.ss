@@ -196,12 +196,12 @@
               (newline) (force-output)))
           (def (observe-context stage)
             (when (and prelude-row (not context-change-reported?))
-              (def actual (hash-get __module-registry (car prelude-row)))
-              (if (eq? (cdr prelude-row) actual)
-                (set! last-context-check stage)
-                (begin
-                  (set! context-change-reported? #t)
-                  (report-context stage actual)))))
+              (let (actual (hash-get __module-registry (car prelude-row)))
+                (if (eq? (cdr prelude-row) actual)
+                  (set! last-context-check stage)
+                  (begin
+                    (set! context-change-reported? #t)
+                    (report-context stage actual))))))
           (def (check-compiler-contexts!)
             (for-each
               (lambda (row)
