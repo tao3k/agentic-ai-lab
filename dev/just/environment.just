@@ -65,6 +65,8 @@ gerbil_darwin_env := if os() == "macos" { if gerbil_homebrew_runtime == "true" {
 agentic_ai_lab_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directory() + "/.gerbil")
 
 agentic_ai_lab_library_path := env_var_or_default("GERBIL_LOADPATH", agentic_ai_lab_gerbil_path + "/lib")
+lab_build_env := ("GERBIL_PATH=" + quote(agentic_ai_lab_gerbil_path) +
+    " GERBIL_LOADPATH=" + quote(agentic_ai_lab_library_path) + " " + gerbil_darwin_env)
 
 # Optional development packages must never rewrite the production package store.
 agentic_ai_lab_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
