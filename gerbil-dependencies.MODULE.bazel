@@ -69,11 +69,11 @@ gerbil_dependency_sources.source_package(
     name = "orgize_sources",
     canonical_uri = "https://github.com/tao3k/orgize",
     package = "orgize",
-    revision = "a51526189f99fcd034c96a7fa09b791726489341",
-    sha256 = "07da6773cdb826a4af949f1922faf25746b2df7ee2d47df0402eac0d3783a94b",
-    strip_prefix = "orgize-a51526189f99fcd034c96a7fa09b791726489341",
+    revision = "e10a6230aadd094a9eed25c59b493270df4f63ac",
+    sha256 = "67202416e381478fc34187f5dd49a9c8169fce6534efb8a50d25cbdee60ce055",
+    strip_prefix = "orgize-e10a6230aadd094a9eed25c59b493270df4f63ac",
     urls = [
-        "https://github.com/tao3k/orgize/archive/a51526189f99fcd034c96a7fa09b791726489341.tar.gz",
+        "https://github.com/tao3k/orgize/archive/e10a6230aadd094a9eed25c59b493270df4f63ac.tar.gz",
     ],
 )
 use_repo(
