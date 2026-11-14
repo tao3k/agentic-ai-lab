@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "pXAwy0VxLFeRoP576dW0RPw0TzXcfxASO9R494VMk1I=",
-        "usagesDigest": "hXycVv+wW3AFM1QjZNTz4u2u3Hp+eHu9TD8NsLZ7f3w=",
+        "usagesDigest": "cTd9GAgjvXxQ7sjLlD1HnIj8dcL3zvY8NdHD87iZALo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -202,11 +202,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-parser",
               "package": "gerbil-parser",
-              "revision": "v0.1.0",
-              "sha256": "791bb1ca15d0170c13bed8782d60233406cf839633a181d6eaf33a160a236be0",
-              "strip_prefix": "gerbil-parser-0.1.0",
+              "revision": "336065903071b2217549b1bf60772b77d19cfe79",
+              "sha256": "5597f35aeb29072408265917038414cede06fdce543ca9faded65fa4102798e7",
+              "strip_prefix": "gerbil-parser-336065903071b2217549b1bf60772b77d19cfe79",
               "urls": [
-                "https://github.com/tao3k/gerbil-parser/archive/v0.1.0.tar.gz"
+                "https://github.com/tao3k/gerbil-parser/archive/336065903071b2217549b1bf60772b77d19cfe79.tar.gz"
               ]
             }
           },
@@ -256,7 +256,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "pXAwy0VxLFeRoP576dW0RPw0TzXcfxASO9R494VMk1I=",
-        "usagesDigest": "hXycVv+wW3AFM1QjZNTz4u2u3Hp+eHu9TD8NsLZ7f3w=",
+        "usagesDigest": "cTd9GAgjvXxQ7sjLlD1HnIj8dcL3zvY8NdHD87iZALo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -312,11 +312,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-parser",
               "package": "gerbil-parser",
-              "revision": "v0.1.0",
-              "sha256": "791bb1ca15d0170c13bed8782d60233406cf839633a181d6eaf33a160a236be0",
-              "strip_prefix": "gerbil-parser-0.1.0",
+              "revision": "336065903071b2217549b1bf60772b77d19cfe79",
+              "sha256": "5597f35aeb29072408265917038414cede06fdce543ca9faded65fa4102798e7",
+              "strip_prefix": "gerbil-parser-336065903071b2217549b1bf60772b77d19cfe79",
               "urls": [
-                "https://github.com/tao3k/gerbil-parser/archive/v0.1.0.tar.gz"
+                "https://github.com/tao3k/gerbil-parser/archive/336065903071b2217549b1bf60772b77d19cfe79.tar.gz"
               ]
             }
           },
