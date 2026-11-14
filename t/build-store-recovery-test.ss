@@ -1,9 +1,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The orchestrator retains a selected store path, NEVER a Core issuance map.
-(import (only-in "./qualification/nix/programs.ss" nix-publication-programs)
+(import (only-in "./fixtures/nix/programs.ss" nix-publication-programs)
         :std/test :clan/poo/object
-        (only-in "../core/t/qualification/build-publication/projection.ss" write-artifact-bytes)
+        (only-in "./fixtures/nix/projection.ss" write-artifact-bytes)
         (only-in :std/string/path path-force-extension)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
@@ -14,8 +14,8 @@
         (only-in :tao3k/yuanxu/ops/config Config)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :tao3k/yuanxu/ops/progress execution-progress!)
-        (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture write-source)
-        "../core/t/qualification/build-publication/store.ss")
+        (only-in "./fixtures/nix/directory.ss" DirectoryFixture write-source)
+        "./fixtures/nix/store.ss")
 (export build-store-recovery-test test-cleanup!)
 (def programs (nix-publication-programs (current-directory)))
 (def observations '())

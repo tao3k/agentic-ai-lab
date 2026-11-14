@@ -94,16 +94,18 @@ children. No Make scheduler, process-exit shortcut or cache protocol is added.
 =init.exports.tests= publishes the official Harness input spec: a list of test
 file paths, consumed by the installed =gerbil test=. It is not a package
 manifest, a Make target list, or a replacement TestSuite format.
-Ordinary =t/= discovery is the installed tool's default non-recursive directory
-operation. Explicit =t/...= requests its recursive mode. There is no product
-=dev/tests.ss=, private exclusion table, per-file executor or second Harness.
-The retired =tests.for-directory= API and its recursive scanner are removed.
+The default =just test-root= takes its =t/yanxu/= paths from
+=init.exports.tests.qualification= and includes the root and Nix integration
+test files. Gerbil imports every file in its argument list before running its
+Harness. The entry submits serial batches of at most eight paths and starts a
+new batch at each directory. It also accepts explicit Gerbil test paths.
+The entry runs the independent Session and deployment tests in their own Gerbil
+processes with the same watchdog as =just test-file=.
 
-=just test-root= passes =t= or the supplied native arguments to that tool once.
-Just owns the pre-import heap and aggregate process fence; existing Case policies
-retain their semantic budgets. Focused =just test-file= keeps its 120-second
-fence. Whole-suite execution does not claim the former runner's independent
-per-file deadlines. No success or admission result is cached.
+The pre-import heap fence applies to every process. One aggregate deadline
+covers the default entry, and existing Case budgets still apply. Focused
+=just test-file= keeps its 120-second fence. Every batch must report its module
+and Harness completion, and the entry reports failure if any batch fails.
 
 Build and qualification-input preparation are explicit, independent operations.
 CI and the complete repository aggregate prepare them once; focused native tests
@@ -442,7 +444,7 @@ Missing, unresolved and multiple outputs retain native realization. No Scheme
 mapping or registration result is cached. Source/currentness and publication
 checks still bracket realization, including the registered-output branch.
 The real cold-build, repeated-registration, registration-refusal, multiple-output
-and failing-native-command controls are maintained in =t/nix-output-reuse-test.ss=.
+and failing-native-command controls are maintained in =t/yanxu/modules/nix/output-reuse-test.ss=.
 The Selected Graph tamper injection covers both output lookup and realization.
 
 ASCENT now uses the official Gerbil test entry and its existing worker progress

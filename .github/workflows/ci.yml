@@ -130,7 +130,9 @@ jobs:
           echo "GERBIL_GCC=$gcc_bin" >> "$GITHUB_ENV"
 
           openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
-          echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
+          zlib_prefix="$(brew --prefix zlib)"
+          sqlite_prefix="$(brew --prefix sqlite)"
+          echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$zlib_prefix/lib/pkgconfig:$sqlite_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
           "$gcc_bin" --version
 
       - name: Install pinned recipe runner
@@ -208,7 +210,11 @@ jobs:
           # Run every gate even if an earlier gate fails, then preserve the failure.
           downstream_status=0
           for category in context-memory governance deployment; do
-            gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log" || downstream_status=$?
+            suite="t/yuanxu-$category-downstream-test.ss"
+            if [[ "$category" == deployment ]]; then
+              suite="t/yanxu/modules/services/opentofu/deployment-test.ss"
+            fi
+            gerbil env just test-file "$suite" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log" || downstream_status=$?
           done
           if (( downstream_status != 0 )); then
             exit "$downstream_status"
@@ -221,7 +227,7 @@ jobs:
               "governance": ("LAB-GOVERNANCE-PRODUCT-USE-OK",
                              "profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"),
               "deployment": ("LAB-DEPLOYMENT-PRODUCT-USE-OK",
-                             "profile=deployment roots=1 owners=4 selected-tests=3 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
+                             "profile=deployment roots=1 owners=4 discovered-tests=3 lab-tests=1 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
               "context-memory": ("LAB-CONTEXT-USE-OK mode=base",
                                  "LAB-CONTEXT-USE-OK mode=enabled",
                                  "LAB-CONTEXT-USE-OK mode=withdrawn",
@@ -280,7 +286,7 @@ jobs:
       - name: Prepare explicit qualification inputs
         run: gerbil env just build-testing build-test-workers prepare-test-inputs
 
-      - name: Run the single runtime unit-test entrypoint
+      - name: Run Lab unit tests through bounded Gerbil Harness batches
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |

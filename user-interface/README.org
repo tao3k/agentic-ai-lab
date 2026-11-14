@@ -36,6 +36,6 @@ and functional slot refinement own object changes.
 * Reproduce
 
 From the repository root, use =just test-file t/user-interface-root-config-test.ss=,
-=just test-file t/sandbox-profile-module-test.ss= and the domain Contract suites.
+=just test-file t/yanxu/Profiles/sandbox/profile-module-test.ss= and the domain Contract suites.
 Use =just test-root= for the official product test inventory. Build preparation
 and test execution are separate; namespace access does not run std/make or Ops.

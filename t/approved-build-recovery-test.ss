@@ -1,13 +1,13 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in "./qualification/nix/programs.ss" nix-publication-programs)
-        (only-in "../core/t/qualification/build-publication/projection.ss" write-artifact-bytes)
+        (only-in "./fixtures/nix/programs.ss" nix-publication-programs)
+        (only-in "./fixtures/nix/projection.ss" write-artifact-bytes)
         (only-in :tao3k/yuanxu/ops/func run-script)
         (only-in :tao3k/yuanxu/ops/config Config)
         (only-in :tao3k/yuanxu/ops/progress execution-progress! make-test-progress-reader)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture)
+        (only-in "./fixtures/nix/directory.ss" DirectoryFixture)
         (only-in :std/encoding/json write-json)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

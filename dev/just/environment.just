@@ -70,6 +70,15 @@ agentic_ai_lab_library_path := env_var_or_default("GERBIL_LOADPATH", agentic_ai_
 agentic_ai_lab_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
 agentic_ai_lab_dev_library_path := agentic_ai_lab_library_path + ":" + agentic_ai_lab_dev_gerbil_path + "/lib"
 
+gerbil_test_heap_env := 'GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=' + gerbil_test_max_heap + ',debug=' + gerbil_test_debug + '"'
+lab_test_env := (gerbil_test_heap_env +
+    " GERBIL_PATH=" + quote(agentic_ai_lab_gerbil_path) +
+    " GERBIL_LOADPATH=" + quote(agentic_ai_lab_dev_library_path + ":" + justfile_directory()) +
+    " " + gerbil_darwin_env)
+lab_test_fixtures := 'python3 packages/automation/gerbil_test_inputs.py --inputs "${AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS:-' + agentic_ai_lab_gerbil_path + '/test-inputs}"'
+gerbil_test_timeout := "timeout --signal=TERM --kill-after=5s"
+lab_test_file_budget := "120s"
+
 # gerbil.pkg is the parser revision authority.  Resolve source-owned fixtures
 # through gxpkg's installed package root; never fall back to an arbitrary
 # sibling checkout whose branch may differ from the declared dependency.

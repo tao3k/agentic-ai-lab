@@ -13,7 +13,7 @@ Gerbil 0.19 compiler and its static tools (=env= and =gxtest=) available, then r
 
 #+begin_src sh
 gxc -d "$GERBIL_PATH/lib" t/query-core-test.ss t/query-orgize-source-test.ss t/evidence-assessment-core-test.ss
-gxc -exe -o /tmp/poo-query-parser-runtime t/qualification/query-parser-runtime/runtime-test.ss
+gxc -exe -o /tmp/poo-query-parser-runtime t/fixtures/query-parser-runtime/runner.ss
 just test-query-parser-runtime /tmp/poo-query-parser-runtime
 #+end_src
 

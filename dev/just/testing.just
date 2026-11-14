@@ -31,16 +31,15 @@ test: build-testing build-test-workers prepare-test-inputs build-library
 test-dev:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test dev.ss
 
-# Keep the root package's runtime entry independently callable during repairs.
+# Run Lab test batches with the existing fixture environment and aggregate deadline.
 [group('test')]
 [positional-arguments]
-test-root *paths:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    if [[ "$#" -eq 0 ]]; then
-        set -- t 't/yanxu/...'
-    fi
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" python3 packages/automation/gerbil_test_inputs.py --inputs "${AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS:-{{ agentic_ai_lab_gerbil_path }}/test-inputs}" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test "$@"
+test-root *paths: test-lab-layout
+    {{ lab_test_env }} {{ lab_test_fixtures }} -- {{ gerbil_test_timeout }} 1200s gerbil {{ gerbil_test_runtime_options }} interactive dev/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} "$@"
+
+[group('test')]
+test-lab-layout:
+    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} interactive dev/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} t/yuanxu-qualification-layout-test.ss
 
 # Diagnose a long runtime file with the full package's unchanged process budget.
 [group('test')]
@@ -75,7 +74,7 @@ test-file path observe="false":
       trace) options=(-D yuanxu-module-test-observation,yuanxu-module-test-trace) ;;
       *) echo 'observe must be false, true, or trace' >&2; exit 64 ;;
     esac
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
+    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
 
 # Run performance Suites serially through the same official test entry.
 [group('test')]

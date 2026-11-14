@@ -4,7 +4,7 @@
 # Execute the root-owned, mechanism-only cross-contribution qualification.
 [group('test')]
 test-standards-multi-industry-profile-composition:
-    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-aitia:{{ contribution_source_root }}/lambda-episteme:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/qualification/standards-multi-industry/profile-composition-test.ss
+    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-aitia:{{ contribution_source_root }}/lambda-episteme:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/integration/standards-multi-industry/profile-composition-test.ss
 
 # Aitia owns the SDLC and GitOps composition and its integration closure.
 [group('check')]
@@ -44,19 +44,19 @@ check-healthcare-gql: _prepare-gerbil-parser
 # require exact equality with Lambda's retained projection.
 [group('check')]
 check-healthcare-hl7v2-migration: _prepare-gerbil-parser
-    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ gerbil_parser_path }}" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-episteme:{{ gerbil_parser_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/qualification/healthcare-hl7v2-migration/parser-receipt-test.ss
+    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ gerbil_parser_path }}" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-episteme:{{ gerbil_parser_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/integration/healthcare-hl7v2-migration/parser-receipt-test.ss
 
 # Qualify parser-owned FHIRPath syntax without claiming evaluator semantics.
 [group('check')]
 check-healthcare-fhirpath-syntax: _prepare-gerbil-parser
-    GERBIL_PARSER_DIR="{{ gerbil_parser_dir }}" GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ gerbil_parser_path }}" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-episteme:{{ gerbil_parser_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/qualification/healthcare-fhirpath-syntax/parser-receipt-test.ss
+    GERBIL_PARSER_DIR="{{ gerbil_parser_dir }}" GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ gerbil_parser_path }}" GERBIL_LOADPATH="{{ contribution_source_root }}/lambda-episteme:{{ gerbil_parser_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/integration/healthcare-fhirpath-syntax/parser-receipt-test.ss
 
 # Replay the pinned external Validator from its local JAR/package cache. The
 # test verifies the binary digest and compares decoded OperationOutcome JSON.
 [group('check')]
 check-healthcare-fhir-reference-validator:
     test -n "{{ fhir_validator_jar }}" && test -f "{{ fhir_validator_jar }}"
-    FHIR_VALIDATOR_JAR="{{ fhir_validator_jar }}" GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/qualification/healthcare-fhir-reference-validator/replay-test.ss
+    FHIR_VALIDATOR_JAR="{{ fhir_validator_jar }}" GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/integration/healthcare-fhir-reference-validator/replay-test.ss
 
 # remain independent gates owned by their parser/model-checker lifecycles.
 [group('check')]

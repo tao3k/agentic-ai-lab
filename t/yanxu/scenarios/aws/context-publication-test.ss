@@ -6,7 +6,7 @@
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :tao3k/yuanxu/observability/testing-case
                  yuanxu-test-checkpoint yuanxu-test-observe)
-        (only-in "./fixtures.ss"
+        (only-in "../../../fixtures/aws/publication.ss"
                  Workspace prepare-aws-selection! realize-aws-selection write-aws-version!)
         (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.)
         (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)

@@ -4,7 +4,7 @@
 
 (import :clan/poo/object
         :tao3k/yuanxu/module-system/feature/interface
-        "../../../../core/t/fixtures/bundle-v1-domain-case-projection.ss")
+        "../../../fixtures/bundle-v1/domain-case-projection.ss")
 
 (def +agent-count+ 1000)
 

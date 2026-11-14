@@ -8,7 +8,7 @@
  (sampleCount . 20)
  (targetRationale . "Measure complete installed Rust/runtime MRR admission scenario including fresh process and thread-affine Scheme lifetime; not a kernel throughput claim.")
  (unit . "us")
- (sourcePath . "t/qualification/temporal-mrr-host/runtime-test.ss")
+ (sourcePath . "t/integration/temporal-mrr-host/runtime-test.ss")
  (rule . GERBIL-SCHEME-AGENT-R031)
  (feature . temporal-mrr-host)
  (optimizationFocus . "runtime typed handoff and bounded Scheme datum ABI")

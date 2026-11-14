@@ -362,6 +362,8 @@
              "packages/lambda-aitia/modules/assurance/interface.ss"
              "packages/lambda-aitia/modules/formal-methods/interface.ss"
              "packages/lambda-aitia/modules/gitops/interface.ss"
+             "packages/lambda-aitia/modules/nasa-7150-2d-catalog/interface.ss"
+             "packages/lambda-aitia/modules/project-config/interface.ss"
              "packages/lambda-aitia/modules/sdlc/interface.ss"))))
         (let (failure
               (capture-lazy-loader-failure

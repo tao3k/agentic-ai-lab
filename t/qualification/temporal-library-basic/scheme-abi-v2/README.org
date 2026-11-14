@@ -74,7 +74,7 @@ made that harness compilation/initialization completed within five seconds.
 * Reproduction
 
 - =just test-file t/scheme-wire-test.ss=
-- =just test-file t/qualification/temporal-model-host/load-test.ss=
+- =just test-file t/integration/temporal-model-host/load-test.ss=
 - Generate =oracle.ss= with the installed wheel and =.ci/mrr-runtime/runtime/tools/differential.py=.
 - Release =cargo test --locked --features mrr-transport -- --nocapture= with the artifact/hash/oracle environment.
 - =just benchmark-temporal-mrr= with the release MRR integration test executable and receipt path.

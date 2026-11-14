@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test :clan/poo/object "./qualification/opentofu/objects.ss"
+(import :std/test :clan/poo/object "./fixtures/opentofu/objects.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/error Error? Error-message)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read module-source-admit-current!)

@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import importlib.util
 import os
 from pathlib import Path
 import re
@@ -18,6 +17,7 @@ import sys
 import tempfile
 import time
 from collections.abc import Callable
+from contextlib import contextmanager
 
 from ..model import CaseContext, CaseEvidence
 from .quint_cases import GROUPS, QuintCase
@@ -157,14 +157,50 @@ def _scheme(value: object) -> str:
     return str(value)
 
 
-def _load_backend(root: Path):
-    # Core also runs standalone; locate its tool through the explicit repository.
-    spec = importlib.util.spec_from_file_location(
-        "_agentic_ai_lab_quint_backend", root / "core/dev/proofs/quint/backend.py")
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+@contextmanager
+def _backend_session(backend: Path, quint: Path):
+    # The Core backend owns JVM startup, version attestation and gRPC readiness.
+    # Keep its process open for the Lab catalogue and close it over stdin.
+    bootstrap = """
+const fs = require('node:fs');
+async function run() {
+  const backend = await require(process.argv[1]).startBackend(process.argv[2]);
+  try {
+    fs.writeSync(Number(process.argv[3]), backend.endpoint + '\\n');
+    process.stdin.resume();
+    for await (const _ of process.stdin) {}
+  } finally {
+    await backend.close();
+  }
+}
+run().catch(error => { console.error(error); process.exitCode = 1; });
+"""
+    reader, writer = os.pipe()
+    try:
+        child = subprocess.Popen(
+            ["node", "-e", bootstrap, str(backend), str(quint), str(writer)],
+            stdin=subprocess.PIPE, pass_fds=(writer,),
+        )
+    except BaseException:
+        os.close(reader)
+        raise
+    finally:
+        os.close(writer)
+    assert child.stdin is not None
+    try:
+        with os.fdopen(reader, encoding="ascii") as ready:
+            endpoint = ready.readline().strip()
+        if not re.fullmatch(r"127\.0\.0\.1:[1-9][0-9]{0,4}", endpoint):
+            raise RuntimeError("Core Quint backend exited before publishing readiness")
+        yield endpoint
+    except BaseException:
+        child.stdin.close()
+        child.wait()
+        raise
+    else:
+        child.stdin.close()
+        if child.wait() != 0:
+            raise RuntimeError("Core Quint backend failed")
 
 
 def main() -> int:
@@ -183,9 +219,9 @@ def main() -> int:
         sys.stdout.buffer.write(data)
         sys.stdout.buffer.flush()
 
-    backend = _load_backend(root)
+    backend = root / "core/dev/proofs/quint/backend.cjs"
     from . import quint_cases
-    bound = [Path(__file__), Path(quint_cases.__file__), Path(backend.__file__),
+    bound = [Path(__file__), Path(quint_cases.__file__), backend, backend.with_name("runtime.cjs"),
              root / "packages/proofs/quint/package-lock.json"]
     directories = sorted({c.source_directory for c in cases})
     def source_cut():
@@ -195,7 +231,7 @@ def main() -> int:
         return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in sorted(current)}
     sources = source_cut()
-    with backend.backend_session(progress, root / "packages/proofs/quint/node_modules/.bin/quint") as endpoint:
+    with _backend_session(backend, root / "packages/proofs/quint/node_modules/.bin/quint") as endpoint:
         results = [dict(check_quint(context, c, progress, endpoint).details) for c in cases]
     if sources != source_cut():
         raise AssertionError("bound Quint sources or checkers changed during qualification")

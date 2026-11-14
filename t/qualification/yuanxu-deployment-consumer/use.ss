@@ -1,23 +1,53 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :yuanxu-deployment-consumer/main selected-deployment)
-        (only-in :yuanxu-deployment-consumer/init yuanxu-deployment-consumer.init.exports)
-        (only-in :clan/poo/object .get .all-slots .ref/cached)
+(begin-syntax
+  (displayln "LAB-DEPLOYMENT-IMPORT use main enter")
+  (force-output))
+(import (only-in :yuanxu-deployment-consumer/main selected-deployment))
+(begin-syntax
+  (displayln "LAB-DEPLOYMENT-IMPORT use main expanded")
+  (force-output))
+(import (only-in :yuanxu-deployment-consumer/init Lab Core yuanxu-deployment-consumer.init.exports))
+(begin-syntax
+  (displayln "LAB-DEPLOYMENT-IMPORT use init expanded")
+  (force-output))
+(import (only-in :clan/poo/object .get .all-slots .slot? .ref/cached)
         (only-in :gerbil/runtime/loader list-modules)
         (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
+(begin-syntax
+  (displayln "LAB-DEPLOYMENT-IMPORT use dependencies expanded")
+  (force-output))
+(displayln "LAB-DEPLOYMENT-IMPORT use initialized")
+(force-output)
 (export verify-deployment-use verify-deployment-runtime)
 (def (publication-reads times)
   (+ (hash-ref times '(calls candidate-read) 0)
      (hash-ref times '(calls publication-read) 0)))
+(def (assert-renamer-business-cold!)
+  (for-each
+    (lambda (entry)
+      (def name (car entry))
+      (when (or (string-prefix? "tao3k/agentic-ai-lab/modules/" name)
+                (string-prefix? "tao3k/yuanxu/modules/" name))
+        (error "Renamer import or reflection initialized a business dependency" name)))
+    (list-modules)))
+;; The Harness imports this qualification entry before the selected atomic
+;; suites. Check import and reflection before their own native imports run.
+(assert-renamer-business-cold!)
+(unless (and (.slot? Lab 'services)
+             (equal? (.all-slots (.get Lab services)) '(opentofu))
+             (null? (.all-slots Core)))
+  (error "Renamer reflection differs from the deployment selection"))
+(assert-renamer-business-cold!)
 (def (verify-deployment-use)
   (displayln "LAB-DEPLOYMENT-USE enter epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
   (force-output)
   (defvalues (lab namespace-times)
     (call-with-module-source-operation-measurement
-      (lambda () (.get yuanxu-deployment-consumer.init.exports Lab)) accounting?: #f))
+      (lambda () Lab) accounting?: #f))
   (unless (and (equal? (.all-slots lab) '(services))
                (equal? (.all-slots (.get lab services)) '(opentofu))
-               (null? (.all-slots (.get yuanxu-deployment-consumer.init.exports Core)))
+               (null? (.all-slots Core))
                (zero? (publication-reads namespace-times))
                (zero? (hash-ref namespace-times '(calls scope-factory) 0))
                (not (.ref/cached (.get lab services) 'opentofu)))
@@ -25,8 +55,22 @@
   (displayln "LAB-DEPLOYMENT-GET enter epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
   (force-output)
   (defvalues (scope first-times)
-    (call-with-module-source-operation-measurement selected-deployment accounting?: #f))
+    (call-with-module-source-operation-measurement selected-deployment accounting?: 'stages))
   (displayln "LAB-DEPLOYMENT-GET return epoch=" (time->seconds (current-time)) " cpu=" (cpu-time))
+  (force-output)
+  (for-each
+    (lambda (stage)
+      (let ((calls (hash-ref first-times (list 'calls stage) 0))
+            (user (hash-get first-times (list 'cpu-user stage)))
+            (system (hash-get first-times (list 'cpu-system stage))))
+        (when (> calls 0)
+          (displayln "LAB-DEPLOYMENT-GET stage=" stage " calls=" calls
+                     " wall=" (hash-ref first-times stage 0)
+                     " cpu=" (if (and user system) (+ user system) 'unmeasured)))))
+    '(publication-read publication-admission candidate-read reader-native-import
+      reader-role-import reader-interface-start reader-admission-start
+      reader-value-admission metadata-replay reader-current link-current
+      scope-factory scope-admission))
   (force-output)
   (unless (and (= (publication-reads first-times) 4)
                (= (hash-ref first-times '(calls scope-factory) 0) 4)

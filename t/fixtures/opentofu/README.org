@@ -165,4 +165,4 @@ This fixture directory is owned by the Core submodule. Commands above run from
 the Core root. Nix imports resolve to modules/services/opentofu inside Core, not the POO
 Flow product. Historical JSON receipts retain original source paths and outcomes;
 their relocation is not a new validation. Current controls run through Core's
-Justfile and t/qualification/opentofu.
+Justfile and t/yanxu/modules/services/opentofu.

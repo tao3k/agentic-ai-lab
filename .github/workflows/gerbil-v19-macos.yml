@@ -75,9 +75,11 @@ jobs:
           test -x /opt/homebrew/bin/gcc-16
 
           openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
+          zlib_prefix="$(brew --prefix zlib)"
+          sqlite_prefix="$(brew --prefix sqlite)"
           test -e "$openssl_prefix/lib/libssl.dylib"
           {
-            echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+            echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$zlib_prefix/lib/pkgconfig:$sqlite_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
             echo "LIBRARY_PATH=$openssl_prefix/lib${LIBRARY_PATH:+:$LIBRARY_PATH}"
             echo "GERBIL_BUILD_CORES=$(sysctl -n hw.logicalcpu)"
           } >> "$GITHUB_ENV"

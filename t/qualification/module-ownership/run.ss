@@ -6,7 +6,6 @@
         (only-in "../../control-plane-role-test.ss" control-plane-role-test)
         (only-in "../../feature-bundle-v1-composition-writer-test.ss" feature-bundle-v1-composition-writer-test)
         (only-in "../../funflow-public-module-test.ss" funflow-public-module-test)
-        (only-in "../../../core/t/functional-flow-kernel-test.ss" functional-flow-kernel-test)
         (only-in "../../json-schema-contract-bridge-test.ss" json-schema-contract-bridge-test)
         (only-in "../../json-schema-poo-contract-test.ss" json-schema-poo-contract-test)
         (only-in "../../funflow-github-ci-json-schema-contract-test.ss" funflow-github-ci-json-schema-contract-test))
@@ -15,7 +14,6 @@
 (export control-plane-role-test
         feature-bundle-v1-composition-writer-test
         funflow-public-module-test
-        functional-flow-kernel-test
         json-schema-contract-bridge-test
         json-schema-poo-contract-test
         funflow-github-ci-json-schema-contract-test)

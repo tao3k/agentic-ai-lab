@@ -97,9 +97,9 @@ tools=$(nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-
 cli=$(readlink "$tools/bin/nix-instantiate")
 b_execution="$GERBIL_PATH/lib/agentic-ai-lab/modules/services/opentofu/execution~0.o1"
 shasum -a 256 "$b_execution"
-PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
-PATH="$(dirname "$cli"):$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
-PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+PATH="$tools/bin:$PATH" just test-file t/fixtures/opentofu/runtime-qualification.ss
+PATH="$(dirname "$cli"):$PATH" just test-file t/fixtures/opentofu/runtime-qualification.ss
+PATH="$tools/bin:$PATH" just test-file t/fixtures/opentofu/runtime-qualification.ss
 shasum -a 256 "$b_execution"
 #+end_src
 
@@ -198,7 +198,7 @@ They used 2.033 s of process CPU, with two collections (0.192 s wall),
 244 minor faults and zero major faults. The 0.642 s wall-minus-CPU
 residual is unclassified. The replay and checkpoint times are nested and
 must not be added. Use the callback-free accounting round emitted by
-=just test-file t/qualification/opentofu/runtime-qualification.ss= to
+=just test-file t/fixtures/opentofu/runtime-qualification.ss= to
 reproduce this breakdown.
 
 An independent deployment run using the physical Core source tree passed
@@ -820,7 +820,7 @@ native =dlopen=, Gerbil expansion and MOP authentication. Sampling can
 change dyld notifications and does not explain the earlier unsampled
 wait. The Memory aggregate remains incomplete.
 Run them through =just test-file t/yuanxu-context-memory-downstream-test.ss=
-and =just test-file t/yuanxu-deployment-downstream-test.ss=. Neither result
+and =just test-file t/yanxu/modules/services/opentofu/deployment-test.ss=. Neither result
 changes the boundaries of the numbered runtime samples above.
 
 ** Checkpoint accounting on the same execution path
@@ -1008,7 +1008,7 @@ travels as a local procedure rather than a dynamic mode visible to an
 exception handler. The control leaves general replay delivery and callbacks
 on the regular per-record verifier.
 
-Run =just test-file t/qualification/opentofu/runtime-qualification.ss=
+Run =just test-file t/fixtures/opentofu/runtime-qualification.ss=
 with the same fixed B, worker, Provider, and Core prerequisites. For each
 candidate process, prepend the isolated compiled =object= and =read-route=
 products to =GERBIL_LOADPATH=. The timed calls start after import and first
@@ -1334,7 +1334,7 @@ the linker rechecks the selected sources before returning. A replaced
 
 The compiled candidate and =6ebf37d= control used the same B execution
 digest and Null provider through
-=just test-file t/qualification/opentofu/runtime-qualification.ss=.
+=just test-file t/fixtures/opentofu/runtime-qualification.ss=.
 The table excludes import, first =.get= and producer preparation.
 
 | Linker | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
@@ -1557,7 +1557,7 @@ gate unclosed.
 
 **** First call versus subsequent calls
 
-Repeat =just test-file t/qualification/opentofu/runtime-qualification.ss=
+Repeat =just test-file t/fixtures/opentofu/runtime-qualification.ss=
 in three serial processes with the same complete Core library, B
 execution digest, admitted Null 3.2.4 provider and paired Nix binary.
 The one-minute host load at launch was 12.77–15.98. The timed region

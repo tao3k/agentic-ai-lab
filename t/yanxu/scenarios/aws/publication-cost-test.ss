@@ -10,7 +10,7 @@
         (only-in :tao3k/yuanxu/observability/debug YuanxuDebugMemoryAnomaly? YuanxuDebugMemoryAnomaly-receipt
                  yuanxu-debug-memory-snapshot)
         (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.)
-        (only-in "./fixtures.ss"
+        (only-in "../../../fixtures/aws/publication.ss"
                  Workspace prepare-aws-selection! realize-aws-selection))
 (export aws-publication-cost-test)
 (def aws-publication-cost-test

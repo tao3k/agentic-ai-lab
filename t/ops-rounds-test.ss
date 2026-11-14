@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test :clan/poo/object "./qualification/opentofu/opentofu-rounds.ss"
+(import :std/test :clan/poo/object "./fixtures/opentofu/opentofu-rounds.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/source this-source-file)
         (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports)

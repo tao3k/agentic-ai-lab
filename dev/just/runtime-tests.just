@@ -137,7 +137,7 @@ test-ascent-integration:
     GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s python3 "{{ justfile_directory() }}/packages/python-runtime/tools/watch.py" gerbil {{ gerbil_test_runtime_options }} env gerbil {{ gerbil_test_runtime_options }} t/harness/ascent-guarded-runner.ss 2>&1 | tee "$log"
     if grep -E 'ERROR (CHECK|CASE|HARNESS|MODULE)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
     grep -F 'CASE-OK guarded copy and join preserve source snapshots' "$log" >/dev/null
-    grep -F 'MODULE-OK t/qualification/ascent-integration/guarded-test.ss' "$log" >/dev/null
+    grep -F 'MODULE-OK t/integration/ascent-integration/guarded-test.ss' "$log" >/dev/null
     grep -F 'HARNESS-OK' "$log" >/dev/null
     grep -x 'OK' "$log" >/dev/null
 
@@ -189,7 +189,7 @@ semantic-worker:
 # Explicit installed-artifact acceptance; ASP Scheme owns measurement and receipts.
 [group('test')]
 benchmark-temporal-mrr:
-    just test-file t/qualification/temporal-mrr-host/runtime-test.ss
+    just test-file t/integration/temporal-mrr-host/runtime-test.ss
 
 # Paid model samples run once; ASP measures each, without repeated p95 sampling.
 [group('test')]

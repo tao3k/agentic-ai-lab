@@ -57,4 +57,4 @@ prepare-test-inputs:
 # These existing recovery tests execute runtime workers rather than mocks.
 [group('build')]
 build-test-workers:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} just --justfile t/qualification/nix/Justfile build
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} just --justfile t/fixtures/nix/Justfile build

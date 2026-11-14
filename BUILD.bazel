@@ -14,7 +14,8 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "gerbil-dependencies.MODULE.bazel",
-    "core/t/feature-bundle-v1-foreign-arena-fixture.ss",
+    "t/fixtures/bundle-v1/foreign-arena.ss",
+    "t/module-owner-contract-test.ss",
     "t/module-system-observability-test.ss",
     "t/profile-binding-syntax-test.ss",
     "t/profile-bundle-test.ss",
@@ -226,11 +227,11 @@ gerbil_project_environment(
 gerbil_project_compile(
     name = "nix_adapters",
     srcs = [":gerbil_library_sources"] + glob([
-        "core/t/**/*.ss",
-        "t/qualification/build-publication/**/*.ss",
-        "t/qualification/nix/**/*.ss",
+        "t/fixtures/build-publication/**/*.ss",
+        "t/fixtures/nix/gerbil.pkg",
+        "t/fixtures/nix/**/*.ss",
     ]),
-    build_script = "t/qualification/nix/build.ss",
+    build_script = "t/fixtures/nix/build.ss",
     require_library_output = True,
     deps = [":yuanxu_package"],
 )

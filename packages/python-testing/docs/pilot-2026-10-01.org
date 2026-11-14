@@ -40,7 +40,7 @@ gate was attempted twice. GitHub HTTPS first disconnected while fetching
 =just build= compiled Core but failed because the pinned
 =gerbil-ascent.manifest= had not been installed. The full Agentic AI Lab build and
 its pinned Ascent integration test remain unverified. A focused
-=just test-file t/qualification/ascent-integration/guarded-test.ss= run with
+=just test-file t/integration/ascent-integration/guarded-test.ss= run with
 the local ASCENT PR checkout on =GERBIL_LOADPATH= passed with =MODULE-OK=,
 =HARNESS-OK= and final =OK=. This confirms local source interface
 compatibility, not the pinned gxpkg installation.

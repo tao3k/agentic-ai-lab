@@ -63,8 +63,8 @@ event_vector="$5"
 poo_root="$(dirname "$6")"
 loadpath="$(mktemp -d "${TMPDIR:-/tmp}/agentic-ai-lab-gerbil-loadpath.XXXXXX")"
 trap 'rm -rf "$loadpath"' EXIT
-ln -s "$PWD" "$loadpath/agentic-ai-lab"
-mkdir -p "$loadpath/clan"
+mkdir -p "$loadpath/tao3k" "$loadpath/clan"
+ln -s "$PWD" "$loadpath/tao3k/agentic-ai-lab"
 mkdir -p "$loadpath/clan/poo"
 for entry in "$poo_root"/*; do
   name="$(basename "$entry")"

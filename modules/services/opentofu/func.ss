@@ -6,6 +6,7 @@
 ;;; public results and diagnostics are POO objects. No process or Loader.
 (import :clan/poo/object
         (only-in "./types.ss" OpenTofuConfigContract)
+        (only-in "./cty.ss" agentic-ai-lab-opentofu-cty->schema)
         (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         :std/text/pregexp
         (only-in :std/list/list delete-duplicates/hash)
@@ -42,29 +43,6 @@
                         (let (bound (ref declaration (car keys)))
                           (and bound (> bound 0) (cons (cdr keys) bound))))
                       '((min_items . minItems) (max_items . maxItems)))))
-
-;; cty is a different source format, not another JSON Schema evaluator.
-(def (agentic-ai-lab-opentofu-cty->schema type)
-  (cond
-   ((member type '("string" "number" "bool"))
-    `((type . ,(if (equal? type "bool") "boolean" type))))
-   ((and (list? type) (= (length type) 2))
-    (let ((kind (car type)) (child (cadr type)))
-      (cond
-       ((member kind '("list" "set"))
-        `((type . "array") (items . ,(agentic-ai-lab-opentofu-cty->schema child))))
-       ((equal? kind "map")
-        `((type . "object") (additionalProperties . ,(agentic-ai-lab-opentofu-cty->schema child))))
-       ((equal? kind "tuple")
-        `((type . "array")
-          (items . ,(if (null? child) #f (map agentic-ai-lab-opentofu-cty->schema child)))
-          (minItems . ,(length child)) (maxItems . ,(length child))))
-       ((equal? kind "object")
-        `((type . "object") (additionalProperties . #f)
-          (properties . ,(map (lambda (row)
-                                (cons (car row) (nullable (agentic-ai-lab-opentofu-cty->schema (cdr row))))) child))))
-       (else (error "unsupported cty constructor" type)))))
-   (else (error "unsupported cty type" type))))
 
 (def (collection-schema mode schema declaration)
   (cond ((equal? mode "single") schema)

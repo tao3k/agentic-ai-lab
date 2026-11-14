@@ -40,7 +40,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
         pins = module.parse_package_pins((ROOT / "gerbil.pkg").read_text(encoding="utf-8"))
         self.assertEqual(
             list(pins),
-            ["gerbil-parser", "orgize", "gerbil-ascent"],
+            ["gerbil-parser", "gerbil-scheme-rust", "orgize", "gerbil-ascent"],
         )
         self.assertNotIn("gerbil-poo", pins)
         self.assertNotIn("asp-gerbil-scheme", pins)

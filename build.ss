@@ -16,7 +16,5 @@
 (export main)
 
 (defbuild-script
-  ;; Compiled Lab interfaces refer to the package prelude by name.
-  (cons "prelude"
-    (parameterize ((current-build-module-roots '(temporal-causality)))
-      (.get tao3k/agentic-ai-lab.init.exports std-make-spec))))
+  (parameterize ((current-build-module-roots '(temporal-causality)))
+    (.get tao3k/agentic-ai-lab.init.exports std-make-spec)))

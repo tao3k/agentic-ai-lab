@@ -9,6 +9,8 @@ on:
       - 'bindings/nix-c-api/**'
       - 'scenarios/**'
       - 't/**'
+      - 'dev/just/dependencies.just'
+      - 'dev/just/testing.just'
       - 'core'
       # These inputs own the shared native dependency and adapter projection.
       - '.bazelrc'
@@ -77,7 +79,7 @@ jobs:
       - name: Serial product adapter regressions
         run: |
           bazel run //:nix_adapter_test_environment -- just test-root \
-            t/nix-*-test.ss t/opentofu-*-test.ss t/aws-*-test.ss \
+            t/integration/nix/*-test.ss t/aws-*-test.ss \
             t/yanxu/scenarios/aws/*-test.ss \
             t/yanxu/modules/nix/*-test.ss t/yanxu/modules/services/opentofu/*-test.ss \
             t/module-nix-*-test.ss t/json-schema-aws-*-test.ss \

@@ -318,17 +318,16 @@ Run the development suites with =gerbil test dev.ss= when the project and
 development dependencies are on the load path. =just test-dev= supplies
 that environment and the existing single-file test budget.
 
-Ordinary =t/= discovery belongs to Gerbil's test tool. =just test-root= passes
-that directory directly; explicit directories and files are native arguments.
-Selected module tests remain published through =init.exports.tests=, without a
-second product test runner or test-time compilation.
+=just test-root= runs the Lab layout contract and submits root tests, Nix
+integration tests and Loader-published module tests in serial Gerbil Harness
+batches. Module tests are published through =init.exports.tests=.
 =dev/gerbil.pkg= owns optional ASP dependencies; it has no product build
 forwarder. =just deps-dev= installs those dependencies separately. The product
 library builds once in its production prefix without importing ASP; development
 preparation compiles only its dependencies. Core projects the selected test
 files and the installed =gerbil test= owns suite execution and Harness results.
-=just test= and =just test-performance= fail closed before Scheme
-imports with a 1 GiB launch heap and non-interactive =debug=q=.  The maintained
+=just test-root= starts each test process with a 2 GiB launch heap and
+non-interactive =debug=q= by default. The maintained
 debug controls remain declarative Just inputs, for example
 =GERBIL_TEST_MAX_HEAP=1536M GERBIL_TEST_DEBUG=aq9b9h2 just test=.  A larger
 individual test still derives ASP's memory Profile with =.cc= and maps it with

@@ -13,8 +13,8 @@
         (only-in :tao3k/yuanxu/observability/memory yuanxu-debug-memory-snapshot)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-observer module-source-read
                  current-module-source-phase call-with-module-source-operation-measurement)
-        (only-in "../core/t/qualification/testing/directory.ss" write-source)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture refused)
+        (only-in "./fixtures/nix/directory.ss" write-source)
+        (only-in "./fixtures/nix/services.ss" ServicesFixture refused)
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation

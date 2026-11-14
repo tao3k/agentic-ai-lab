@@ -5,7 +5,6 @@ from contextlib import nullcontext
 from pathlib import Path
 import sys
 import tempfile
-from types import SimpleNamespace
 
 import pytest
 
@@ -25,9 +24,7 @@ def test_model_source_cut_controls_receipt_publication(monkeypatch, change):
         case = QuintCase("Control", source_directory=str(models.relative_to(root)))
         monkeypatch.setattr(quint, "GROUPS", {"control": [case]})
         monkeypatch.setattr(sys, "argv", ["quint", "--receipt", str(receipt)])
-        monkeypatch.setattr(quint, "_load_backend", lambda root: SimpleNamespace(
-            __file__=str(root / "core/dev/proofs/quint/backend.py"),
-            backend_session=lambda _progress, _quint: nullcontext("localhost:0")))
+        monkeypatch.setattr(quint, "_backend_session", lambda _backend, _quint: nullcontext("localhost:0"))
 
         def verifier(*_):
             if change == "added":

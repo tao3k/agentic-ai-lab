@@ -34,11 +34,13 @@ Nix and OpenTofu import their public contract libraries from their type
 roles. Yuanxu follows those imports and OpenTofu's dependency on =services=
 through the Gerbil source graph.
 
-Run =just test-file t/yuanxu-deployment-downstream-test.ss= with built Core
+Yuanxu discovers the deployment test under the OpenTofu service owner.
+Core owns the package-independent selection and build tests. Run
+=just test-file t/yanxu/modules/services/opentofu/deployment-test.ss= with built Core
 prerequisites. The gate uses a 120-second aggregate limit, a 120-second action
 limit and a 60-second idle limit. The assertions check exact cold A/B compiler events and interfaces,
-zero hot compiler events, selected test execution, and B product hashes after
-cleaning A. It invokes the public schema operation through the downstream
+zero hot compiler events, selected test discovery, OpenTofu test execution,
+and B product hashes after cleaning A. It invokes the public schema operation through the consumer
 scope; provider realization and external OpenTofu execution remain explicit
 configuration effects.
 
@@ -109,7 +111,7 @@ run from the repository root and reuse the maintained finite provider fixtures:
 
 =NixSource.= is the existing Source supplied by the consuming project's package
 configuration; it is not a new service API. The executable test
-=t/opentofu-service-test.ss= supplies a complete expression Source using the
+=t/yanxu/modules/services/opentofu/service-test.ss= supplies a complete expression Source using the
 maintained locked provider fixtures. It derives build demand and input from
 this configuration; it does not maintain a second hand-written resource input.
 The lifecycle test first evaluates that real Null producer, then reuses its
@@ -197,19 +199,19 @@ this document is not such a receipt.
 
 * Executable acceptance
 
-=t/opentofu-service-contract-test.ss= checks the finite declaration tree without
+=t/yanxu/modules/services/opentofu/service-contract-test.ss= checks the finite declaration tree without
 building a Provider. =core/t/module-configuration-admission-test.ss= and
 =core/t/module-build-graph-test.ss= check generic configuration admission,
 binding order and source-owned declaration identities.
-=t/opentofu-execution-binding-test.ss= checks that detached forward/cleanup
+=t/yanxu/modules/services/opentofu/execution-binding-test.ss= checks that detached forward/cleanup
 Tasks refuse before package approval, and that a different validated receiver
 receives its own Task check.
 
-=t/opentofu-service-test.ss= exercises unprepared refusal and a real selected
-Null apply/output/destroy workflow. =t/opentofu-service-failure-test.ss= checks
-command failure and real destroy. =t/opentofu-service-cleanup-test.ss= checks
+=t/yanxu/modules/services/opentofu/service-test.ss= exercises unprepared refusal and a real selected
+Null apply/output/destroy workflow. =t/yanxu/modules/services/opentofu/service-failure-test.ss= checks
+command failure and real destroy. =t/yanxu/modules/services/opentofu/service-cleanup-test.ss= checks
 source expiry after apply, cleanup and source revalidation in one process
 and selection. The independent epochs reuse the existing Core fixture protocol
-through =t/qualification/opentofu/service.ss=. They use real selected Nix
+through =t/fixtures/opentofu/service.ss=. They use real selected Nix
 artifacts and keep the maintained heap and wall-clock limits. These test sources
 describe required checks; a timeout or unsuccessful natural exit is not a pass.

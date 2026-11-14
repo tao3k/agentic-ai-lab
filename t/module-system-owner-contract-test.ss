@@ -8,8 +8,8 @@
 (import (only-in :clan/poo/type Record String List)
         (only-in :clan/poo/object-contract diagnose)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in "../core/t/qualification/testing/directory.ss" write-source)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture refused)
+        (only-in "./fixtures/nix/directory.ss" write-source)
+        (only-in "./fixtures/nix/services.ss" ServicesFixture refused)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test

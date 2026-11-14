@@ -20,4 +20,4 @@
    :gerbil-ascent/core/binary-program
    :gerbil/tools/gxtest))
 (eval '(exit (gerbil/tools/gxtest#main "-v" "5"
-                                    "t/qualification/ascent-integration/guarded-test.ss")))
+                                    "t/integration/ascent-integration/guarded-test.ss")))

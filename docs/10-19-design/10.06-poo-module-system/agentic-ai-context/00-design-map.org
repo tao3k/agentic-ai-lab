@@ -37,7 +37,7 @@ uses =t/feature-bundle-v1-composition-writer-test.ss=. Run the existing entries:
 #+begin_src sh
 just test-file t/feature-bundle-v1-composition-writer-test.ss
 just test-file t/yuanxu-context-memory-downstream-test.ss
-just test-file t/yuanxu-deployment-downstream-test.ss
+just test-file t/yanxu/modules/services/opentofu/deployment-test.ss
 #+end_src
 
 The package gitlink selects the Core revision used for this qualification.
@@ -1249,7 +1249,7 @@ cohort, the existing multi-industry Profile test refuses the old Feature
 import in Episteme's FHIR source lock. In an isolated source checkout,
 change only the seven Aitia and four Episteme import occurrences from
 =:yuanxu/feature-system/= to =:yuanxu/module-system/feature/=. Run
-=just test-file t/qualification/standards-multi-industry/profile-composition-test.ss=
+=just test-file t/integration/standards-multi-industry/profile-composition-test.ss=
 against the same Core and source roots. It completes with the Module,
 Harness and final success markers. This proves the focused consumer
 path with the existing contribution identities. It does not qualify
@@ -1608,7 +1608,7 @@ from B's compiled product takes 4.90 seconds. The child Harness
 emits its final success marker at 94.04 seconds and returns at
 97.28 seconds in the suite clock.
 
-Run =just test-file t/yuanxu-deployment-downstream-test.ss= with the
+Run =just test-file t/yanxu/modules/services/opentofu/deployment-test.ss= with the
 same corrected dependency tree and regular installed prerequisites.
 The deployment gate exits naturally in 105.53 seconds. Both cold
 outputs build, cleaning A leaves B's product digests intact, the hot
@@ -2588,7 +2588,7 @@ The Core mutation gate rejected all four faults with status 70
 and passed the order and admission controls before and after.
 The Core Feature interface, publication and testing-source-admission
 suites passed on =62bd03c=. With the same Core prerequisites,
-=6f10339= passed =just test-file t/yuanxu-deployment-downstream-test.ss=
+=6f10339= passed =just test-file t/yanxu/modules/services/opentofu/deployment-test.ss=
 in 59.50 seconds and =just test-file t/yuanxu-governance-downstream-test.ss=
 in 66.11 seconds. Both qualified the independently built B output
 and reported zero hot targets with clean isolation. These are
