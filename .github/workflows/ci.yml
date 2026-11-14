@@ -206,7 +206,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gerbil env gerbil pkg build github.com/tao3k/agentic-ai-lab
           # Measure Memory before the other independent downstreams use this runner.
           # Run every gate even if an earlier gate fails, then preserve the failure.
           downstream_status=0
@@ -251,6 +250,10 @@ jobs:
                       + re.escape(markers[1]) + r"\s*$", text, re.M):
                   raise SystemExit("deployment downstream target receipt is missing")
           PY
+
+      # Keep the package build check after the downstreams have used clean Lab inputs.
+      - name: Build the linked Lab package
+        run: gerbil env gerbil pkg build github.com/tao3k/agentic-ai-lab
 
       - name: Build the development library
         run: GERBIL_BUILD_VERBOSE=1 gerbil env just build-library
