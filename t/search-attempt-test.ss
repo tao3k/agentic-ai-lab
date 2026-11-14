@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref)
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/search-engine/interface)
 (export search-attempt-test)
 (def stage (agentic-ai-lab-search-stage 'a 'acquire '() 'source 'candidates

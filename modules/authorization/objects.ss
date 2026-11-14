@@ -6,7 +6,7 @@
 ;;; Boundary: inert authorization Provider objects; execution is external.
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        :tao3k/yuanxu/poo-clos/interface
+        :clan/poo/clos
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types
                  agentic-ai-lab-authorization-provider-kind
                  agentic-ai-lab-authorization-capability-kind

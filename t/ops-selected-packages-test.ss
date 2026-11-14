@@ -7,7 +7,7 @@
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read module-source-admit-current!)
         (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-predicate-contract))
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-predicate-contract))
 (export ops-selected-packages-test)
 (def SelectedPackages. (.get Ops prototypes SelectedPackages))
 (def ObjectContract (yuanxu-predicate-contract 'ops/test-object object? (lambda (_v _c) '())))

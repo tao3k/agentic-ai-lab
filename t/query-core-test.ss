@@ -8,7 +8,7 @@
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
         :tao3k/agentic-ai-lab/modules/query/interface
-        :tao3k/yuanxu/poo-clos/interface
+        :clan/poo/clos
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt

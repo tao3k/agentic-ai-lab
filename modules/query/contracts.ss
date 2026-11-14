@@ -11,13 +11,13 @@
         (only-in :std/list/list filter-map)
         ;; Binding uses the owned generic kernel and declaration-only bundle
         ;; syntax. Reflection, evolution and class declaration syntax stay lazy.
-        (only-in :tao3k/yuanxu/poo-clos/objects
+        (only-in :clan/poo/clos/objects
                  poo-clos-generic-protocol poo-clos-generic-function
                  poo-clos-method poo-clos-class-specializer
                  poo-clos-any-specializer poo-clos-prototype-specializer
                  poo-clos-compose-method-bundle)
-        (only-in :tao3k/yuanxu/poo-clos/dispatch poo-clos-call)
-        (only-in :tao3k/yuanxu/poo-clos/method-bundle-syntax .defmethod-bundle)
+        (only-in :clan/poo/clos/dispatch poo-clos-call)
+        (only-in :clan/poo/clos/method-bundle-syntax .defmethod-bundle)
         (only-in "types.ss"
                  agentic-ai-lab-query?
                  agentic-ai-lab-query-provider?

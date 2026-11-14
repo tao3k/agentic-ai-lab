@@ -307,7 +307,7 @@ fresh image payload. It does not use the whole Guestbook as that slot's super.
 The original must be a compatible object; object refinement cannot silently
 manufacture a missing intermediate slot.
 
-Current [[file:../../../core/object-syntax/path-slots.ss][path-slots.ss]] accepts dotted paths only with =>.+ and one object
+Current [[file:../../../core/syntax/path-slots.ss][path-slots.ss]] accepts dotted paths only with =>.+ and one object
 expression, and rejects a dotted direct assignment with "path slots require one
 =>.+ object expression". Consequently the runtime nested form above is the
 currently available equivalent, while the concise user form is a design target.

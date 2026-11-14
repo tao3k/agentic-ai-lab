@@ -10,7 +10,7 @@
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-provider-from-directory agentic-ai-lab-opentofu-block-contract) (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        :tao3k/yuanxu/object-types/contracts :clan/poo/object)
+        :tao3k/yuanxu/types/contracts :clan/poo/object)
 (export opentofu-indexed-inputs-test)
 
 (def (assert label value)

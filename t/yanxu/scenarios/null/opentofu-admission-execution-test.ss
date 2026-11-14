@@ -9,7 +9,7 @@
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read)
         (only-in :tao3k/yuanxu/ops/objects ProcessScript.))
@@ -21,7 +21,7 @@
   (displayln "OPENTOFU-ADMISSION-EXECUTION: completed"))
 (def Script ProcessScript.)
 (def test-source (this-source-file))
-(def core-root (path-expand ".." (path-directory test-source)))
+(def core-root (path-expand "../../../.." (path-directory test-source)))
 
 (def (assert label accepted)
   (unless accepted (error "integration assertion failed" label))

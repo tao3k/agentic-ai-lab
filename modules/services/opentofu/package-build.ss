@@ -11,7 +11,7 @@
         (only-in :tao3k/yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
         ;; Build-tool runtime owners, not a second runtime facade or Loader.
         (only-in :tao3k/agentic-ai-lab/modules/nix/contracts NixFlakeSourceContract)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
 (export OpenTofuPackageBuild.)
 ;; The runtime outer module slot keeps source/config refinements receiver-local.

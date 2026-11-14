@@ -22,7 +22,7 @@
                  .ref
                  .setslot!
                  $constant-slot-spec)
-        :tao3k/yuanxu/object-family/indexed)
+        :tao3k/yuanxu/object/indexed)
 
 (export poo-performance-fixture-policy-contract-pass?
         poo-performance-display-receipt

@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?)
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
-        :tao3k/yuanxu/object-family/indexed
+        :tao3k/yuanxu/object/indexed
         :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/yuanxu/graph/interface

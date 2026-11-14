@@ -23,7 +23,7 @@
   (test-suite "type-facts-contract-projection-test"
     (yuanxu-test-case "validates the runtime contract"
       (eval '(import :tao3k/yuanxu/module-system/schema/slot-contracts))
-      (eval '(import :tao3k/yuanxu/object-types/facts))
+      (eval '(import :tao3k/yuanxu/types/facts))
       (eval '(import :clan/poo/object :clan/poo/mop))
       (type-facts-projection-eval
  '(begin

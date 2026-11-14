@@ -255,7 +255,7 @@ jobs:
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
 
       - name: Qualify selected Agentic Context memory
-        run: gerbil env just test-file t/ai-agentic-context-core-test.ss
+        run: gerbil env just test-file t/yanxu/modules/ai-agentic-context/core-test.ss
 
       - name: Retain build input context and real downstream evidence
         if: always()

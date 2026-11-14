@@ -12,7 +12,7 @@
   (def found? #f)
   (for-each-build-module (core-import-module source)
     (lambda (context)
-      (when (eq? (expander-context-id context) 'tao3k/yuanxu/poo-clos/interface)
+      (when (eq? (expander-context-id context) 'clan/poo/clos)
         (set! found? #t))))
   found?)
 
@@ -25,4 +25,4 @@
       (check (imports-aggregate-clos? ':tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider) => #f))
     (yuanxu-test-case "the native closure control detects an aggregate import"
       ;; Keep the full facade available for consumers that actually need it.
-      (check (imports-aggregate-clos? ':tao3k/yuanxu/poo-clos/interface) => #t))))
+      (check (imports-aggregate-clos? ':clan/poo/clos) => #t))))

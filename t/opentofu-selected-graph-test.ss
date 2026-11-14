@@ -13,7 +13,7 @@
         (only-in :gerbil/expander eval-syntax current-expander-context make-top-context syntax->list)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/observability/debug YuanxuDebugDurationAnomaly? YuanxuDebugMemoryAnomaly?)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read current-module-source-observer)

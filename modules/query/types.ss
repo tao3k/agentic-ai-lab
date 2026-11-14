@@ -9,7 +9,7 @@
         (only-in :clan/poo/mop Type. define-type element?)
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list every)
-        (only-in :tao3k/yuanxu/poo-clos/instance-state
+        (only-in :clan/poo/clos/instance-state
                  poo-clos-instance?))
 
 (export agentic-ai-lab-query-kind

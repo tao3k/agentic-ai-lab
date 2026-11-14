@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/object .@ object?)
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-data

@@ -11,7 +11,7 @@
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/agentic-ai-lab/modules/nix/objects NixFlakeSource.)
         (only-in :tao3k/agentic-ai-lab/modules/nix/contracts NixFlakeSourceContract)
         (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer)

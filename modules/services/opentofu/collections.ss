@@ -8,7 +8,7 @@
 (import :clan/poo/object
         ;; Only declaration syntax is required. Reflection, class evolution and
         ;; load-form publication are not collection-evidence dependencies.
-        (only-in :tao3k/yuanxu/poo-clos/generic-syntax .defgeneric .defmethod)
+        (only-in :clan/poo/clos/generic-syntax .defgeneric .defmethod)
         (only-in :clan/poo/mop element?)
         "./types.ss" "./aws-hash.ss"
         (only-in :std/crypto/digest sha256)

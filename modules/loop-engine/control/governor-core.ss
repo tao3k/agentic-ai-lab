@@ -10,7 +10,7 @@
         (only-in :tao3k/yuanxu/composition/roles role-slot/default)
         :tao3k/yuanxu/modules/funflow/control-plane/roles
         :tao3k/yuanxu/modules/funflow/control-plane/failure
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         (only-in "./strategy.ss"
                  loop-strategy-engine-role
                  loop-strategy-plan?)

@@ -1,21 +1,18 @@
 #!/usr/bin/env gxi
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :std/source this-source-file)
-        (only-in :std/make make make-clean)
+(import (only-in :std/make make make-clean)
         (only-in :clan/poo/object .o .get .call)
-        (only-in :tao3k/yuanxu/module-system/building/build-projection yuanxu-project-source-spec)
+        (only-in "./init.ss" yuanxu-deployment-consumer.init.exports)
         (only-in :tao3k/yuanxu/module-system/building/products
                  build-output-directory current-build-source-directory)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path))
 (export main)
 
-(def script (this-source-file))
-(def root (path-directory script))
 (def consumer
-  (.o projection: (yuanxu-project-source-spec (path-expand "init.ss" root) '("main") root script)))
+  (.o projection: (.call yuanxu-deployment-consumer.init.exports .project-build '("main"))))
 
-(def (main (operation "compile"))
+(def (main (operation "compile") (observe-make (lambda (action) (action))))
   (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
@@ -27,8 +24,12 @@
          (write spec) (newline))
         ((compile)
          (.call projection .with-compiler-inputs
-           (lambda () (make spec srcdir: (current-build-source-directory) libdir: output verbose: 1))))
+           (lambda ()
+             (observe-make
+               (lambda () (make spec srcdir: (current-build-source-directory) libdir: output verbose: 1))))))
         ((clean)
          (.call projection .with-clean-outputs
-           (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output))))
+           (lambda ()
+             (observe-make
+               (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output))))))
         (else (error "unknown fixture build operation" operation))))))

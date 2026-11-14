@@ -2,8 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; One declarative publication. The admitted role wrapper owns compiler imports.
-(import "./types.ss" "./objects.ss" "./config.ss" "./func.ss"
-        (only-in "./package-build.ss" OpenTofuPackageBuild.))
+(import (only-in "./package-build.ss" OpenTofuPackageBuild.))
 (.def OpenTofu
   identity: 'services/opentofu
   tags: '(deployment)

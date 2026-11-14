@@ -5,7 +5,7 @@
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         :tao3k/yuanxu/profile-composition/selection-syntax
         (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
-        :tao3k/yuanxu/object-types/contracts :clan/poo/object)
+        :tao3k/yuanxu/types/contracts :clan/poo/object)
 (export opentofu-provider-families-test)
 
 (def (assert label value)

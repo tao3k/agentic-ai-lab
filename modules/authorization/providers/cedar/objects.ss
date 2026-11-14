@@ -6,7 +6,7 @@
 ;;; Invariant: construction and projection perform no authorization or runtime IO.
 (import (only-in :clan/poo/object .o .ref .alist object?)
         (only-in :std/encoding/hex hex-encode)
-        :tao3k/yuanxu/object-family/syntax)
+        :tao3k/yuanxu/object/syntax)
 
 (export agentic-ai-lab-cedar-policy agentic-ai-lab-cedar-policy?
         agentic-ai-lab-cedar-schema agentic-ai-lab-cedar-entities

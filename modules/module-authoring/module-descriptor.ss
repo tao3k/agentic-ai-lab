@@ -11,7 +11,7 @@
         (only-in :clan/poo/object .o .@ .ref .mix .slot? .all-slots object? object<-alist)
         :tao3k/yuanxu/modules/funflow/control-plane/roles
         :tao3k/yuanxu/modules/funflow/control-plane/failure
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/yuanxu/modules/funflow/control-plane/task
         :tao3k/yuanxu/modules/funflow/control-plane/flow
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
@@ -19,7 +19,7 @@
                  module-closure module-missing-imports)
         (only-in :tao3k/yuanxu/module-system/funs
                  yuanxu-module-flags-enabled?)
-        (only-in :tao3k/yuanxu/object-family/syntax
+        (only-in :tao3k/yuanxu/object/syntax
                  defpoo-object-family)
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects)

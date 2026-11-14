@@ -29,7 +29,7 @@
                  yuanxu-observation-explain
                  yuanxu-observation-summary
                  yuanxu-observability-diagnostic-record)
-        (only-in :tao3k/yuanxu/object-types/contracts
+        (only-in :tao3k/yuanxu/types/contracts
                  yuanxu-contract-admit yuanxu-predicate-contract)
         (only-in :tao3k/yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity

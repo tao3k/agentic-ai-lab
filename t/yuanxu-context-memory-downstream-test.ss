@@ -88,7 +88,15 @@
             ;; and generated products belong to this downstream environment.
             (create-symbolic-link packages (path-expand "pkg" prefix))
             (copy-source fixture source)
-            (rewrite (path-expand "init.ss" source) " +memory" flag)
+            ;; The fixture lives in Lab. Preserve that source window when
+            ;; copying its consumer into an independent build directory.
+            (def init (path-expand "init.ss" source))
+            (def context "modules/ai-agentic-context")
+            (def relative (object->string (string-append "../../../" context)))
+            (def absolute (object->string (path-expand context lab)))
+            (rewrite init relative absolute)
+            (rewrite init relative absolute)
+            (rewrite init " +memory" flag)
             (.o name source prefix library: (path-expand "lib" prefix)))
           (def (action state command)
             (def started (real-time))

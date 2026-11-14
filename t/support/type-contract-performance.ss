@@ -16,7 +16,7 @@
                  yuanxu-object-contract
                  yuanxu-object-contract->alist
                  yuanxu-object-contract-slots)
-        (only-in :tao3k/yuanxu/object-types/facts
+        (only-in :tao3k/yuanxu/types/facts
                  yuanxu-object-contract->type-facts
                  yuanxu-object-contract->lean-fact-contracts)
         (only-in :tao3k/agentic-ai-lab/modules/session/policy

@@ -22,7 +22,7 @@
         recursive-root-forms?: #t
         forbidden-imports:
         '(:clan/poo/mop
-          :tao3k/yuanxu/poo-clos/interface)
+          :clan/poo/clos)
         forbidden-forms:
         '(poo-clos-class
           poo-clos-generic-function

@@ -49,7 +49,7 @@ def sha(path):
 
 def sources():
     values = migration.sources()
-    for name in (*[p + ".ss" for p in PRODUCTION], "t/context-owner-lifecycle-test.ss", "t/ai-agentic-context-core-test.ss",
+    for name in (*[p + ".ss" for p in PRODUCTION], "t/context-owner-lifecycle-test.ss", "t/yanxu/modules/ai-agentic-context/core-test.ss",
                  "core/observability/testing-script.ss",
                  "core/module-system/building/artifacts.ss", "t/context-runtime-fencing-test.ss",
                  "t/harness/context-runtime-fencing-driver.ss",

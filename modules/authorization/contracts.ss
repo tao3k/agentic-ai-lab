@@ -8,7 +8,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
-        :tao3k/yuanxu/poo-clos/interface
+        :clan/poo/clos
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types

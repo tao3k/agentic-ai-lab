@@ -25,11 +25,11 @@ construct a Script/Process, select init, compile support or start a child
 Harness. Independent build commands own compilation and issuance; domain
 Cases exercise actual source-currentness and admission checks.
 
-=test-root= passes the default directory =t= straight to the installed tool.
-Gerbil owns filename filtering, non-recursive directory discovery, import hooks
-and the single Harness. An explicit =t/...= requests Gerbil's recursive mode;
-additional directories/files are native arguments, not another discovery policy.
-There is no =dev/tests.ss=, exclusion table or per-file execution loop.
+=test-root= passes =t= and =t/yanxu/...= to one Gerbil Harness by default.
+Gerbil discovers package-level tests directly under =t= and discovers module
+qualification files recursively under =t/yanxu/=. Explicit directories or
+files replace the default arguments. The Lab qualification layout test checks
+the ownership of those directories against the windows in =init.ss=.
 
 =test-root= and =test-package-file= do not rebuild the product or prepare Nix
 packages. The complete =just test= aggregate and CI prepare declared inputs once.

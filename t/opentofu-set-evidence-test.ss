@@ -7,7 +7,7 @@
         (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-value-digest)
         (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-string-set-authority)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        :tao3k/yuanxu/object-types/contracts
+        :tao3k/yuanxu/types/contracts
         :clan/poo/object)
 (export opentofu-set-evidence-test)
 

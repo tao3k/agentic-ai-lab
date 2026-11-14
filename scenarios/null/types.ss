@@ -4,7 +4,7 @@
         :clan/poo/object-contract
         (only-in :clan/poo/type True)
         (only-in :tao3k/yuanxu/modules/json-schema/contracts ProjectionContract.)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-predicate-contract))
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-predicate-contract))
 (export ScopeContract null-admission)
 (def ScopeShape
   (.cc ProjectionContract.

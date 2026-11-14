@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in "./qualification/context-memory-init.ss" tao3k/agentic-ai-lab/t/qualification.context-memory-init.exports)
+        (only-in "../../../qualification/context-memory-init.ss" tao3k/agentic-ai-lab/t/qualification.context-memory-init.exports)
         (only-in :clan/poo/object .o .get .ref)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs

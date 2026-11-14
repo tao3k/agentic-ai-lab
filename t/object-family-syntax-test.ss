@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref object? object<-alist)
-        :tao3k/yuanxu/object-family/syntax)
+        :tao3k/yuanxu/object/syntax)
 
 (def +poo-object-family-syntax-test-kind+
   'poo-object-family-syntax-test)

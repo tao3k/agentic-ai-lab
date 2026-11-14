@@ -11,7 +11,7 @@
         (only-in :std/hash/misc hash-key? hash-put!)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :tao3k/yuanxu/object-family/syntax
+        (only-in :tao3k/yuanxu/object/syntax
                  defpoo-object-family)
         (only-in :tao3k/yuanxu/utilities/functional yuanxu-all?)
         "types.ss")

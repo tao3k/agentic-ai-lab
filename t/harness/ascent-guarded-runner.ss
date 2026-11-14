@@ -12,7 +12,7 @@
  '(:clan/poo/object
    :clan/poo/mop
    :clan/poo/trie
-   :tao3k/yuanxu/object-types/contracts
+   :tao3k/yuanxu/types/contracts
    :tao3k/yuanxu/module-system/schema/slot-contracts
    :tao3k/yuanxu/observability/testing-case
    :gerbil-ascent/table/expression

@@ -5,7 +5,7 @@
         (only-in :clan/poo/mop define-type)
         (only-in :clan/poo/type True)
         (only-in :tao3k/yuanxu/modules/json-schema/contracts ProjectionContract.)
-        (only-in :tao3k/yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence))
+        (only-in :tao3k/yuanxu/types/contracts YuanxuContract. yuanxu-classification-evidence))
 (export AWSProfileContract. AWSScenarioContract. AWSAdmissionContract.
         AWSProfileAdmissionContract. AWSInterfaceContract aws-scenario-contract)
 

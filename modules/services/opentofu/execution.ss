@@ -7,8 +7,8 @@
         (only-in :std/string/misc string-subst)
         (only-in :tao3k/yuanxu/ops/func run-script call-with-execution-cancellation)
         (only-in :tao3k/yuanxu/modules/funflow/objects Task. Job.)
-        (only-in :tao3k/yuanxu/modules/funflow/func run-job job-graph)
-        (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.))
+        (only-in :tao3k/yuanxu/modules/funflow/job run-job job-graph)
+        (only-in :tao3k/yuanxu/module-system/source/deferred-declaration module-binding-action))
 (export OpenTofuExecution. NullExecution. opentofu-execution)
 
 ;; POO is the public model; hashes exist only at the JSON output boundary.
@@ -227,7 +227,10 @@
         graph: projection flow-receipt: (.get outcome flow-receipt) output: output-value)))
 
 ;; Existing platform binding: workspaces are supplied only to Job.run.
+(def selected-publication
+  (module-binding-action "tao3k/yuanxu/admission/publication" 'selected-export-publication))
+
 (def (opentofu-execution selection owner name)
-  (let (publication (.call AdmissionPublication. .for-export selection owner name))
+  (let (publication (selected-publication (list selection owner name)))
     (.cc (.get publication value) 'publication publication
          'package-current (.get selection package-current))))

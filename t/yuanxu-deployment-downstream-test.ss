@@ -8,7 +8,8 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :tao3k/yuanxu/ops/progress current-execution-progress execution-progress! make-test-progress-reader)
+        (only-in :tao3k/yuanxu/ops/progress current-execution-progress execution-progress!
+                 call-with-execution-watchdog make-test-progress-reader)
         (only-in :tao3k/yuanxu/observability/testing-script TestingScript. make-compiler-progress-reader)
         (only-in :tao3k/yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
         (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
@@ -61,7 +62,9 @@
   (if failed? (raise failure) (apply values (cdr (assq 'result stats)))))
 
 ;; Relay completed native compiler work while retaining its exact transcript.
-(def (call-with-compiler-output action)
+(def (call-with-compiler-output phase action)
+  (def diagnostic (current-output-port))
+  (def started (real-time))
   (call-with-output-string
     (lambda (output)
       (defvalues (reader writer) (open-string-pipe '(direction: input)))
@@ -71,11 +74,17 @@
         (make-thread
           (lambda ()
             (parameterize ((current-execution-progress progress))
-              (let loop ((line (read-line reader #\newline #t)))
+              (let loop ((line (read-line reader #\newline #t)) (reported? #f))
                 (unless (eof-object? line)
-                  (receive line)
-                  (display line output)
-                  (loop (read-line reader #\newline #t))))))))
+                  (let (first-compile? (and (not reported?) (string-prefix? "... compile " line)))
+                    (when first-compile?
+                      (parameterize ((current-output-port diagnostic))
+                        (displayln "LAB-DEPLOYMENT-FIRST-COMPILE " phase " seconds="
+                                   (- (real-time) started))
+                        (force-output)))
+                    (receive line)
+                    (display line output)
+                    (loop (read-line reader #\newline #t) (or reported? first-compile?)))))))))
       (thread-start! drain)
       (dynamic-wind void
         (lambda () (parameterize ((current-output-port writer)) (action)))
@@ -133,17 +142,32 @@
             (check-compiler-contexts!)
             (def libdir (path-expand "lib" state))
             (def previous (load-path))
+            (def diagnostics (current-output-port))
+            (def started (real-time))
+            (def (observe-make action)
+              (parameterize ((current-output-port diagnostics))
+                (displayln "LAB-DEPLOYMENT-MAKE-START " phase " seconds=" (- (real-time) started))
+                (force-output))
+              (let (make-started (real-time))
+                (begin0 (action)
+                  (parameterize ((current-output-port diagnostics))
+                    (displayln "LAB-DEPLOYMENT-MAKE-RETURN " phase " seconds=" (- (real-time) make-started))
+                    (force-output)))))
+            (displayln "LAB-DEPLOYMENT-ACTION-START " phase)
+            (force-output)
             (def output
               (measure-phase phase
                 (lambda ()
-                  (call-with-compiler-output
+                  (call-with-execution-watchdog 60000 120000
                     (lambda ()
-                      (parameterize ((current-build-output-directory libdir)
-                                     (current-directory consumer))
-                        (dynamic-wind
-                          (lambda () (set-load-path! (cons libdir prerequisites)))
-                          (lambda () (deployment-build-main operation))
-                          (lambda () (set-load-path! previous)))))))))
+                      (call-with-compiler-output phase
+                        (lambda ()
+                          (parameterize ((current-build-output-directory libdir)
+                                         (current-directory consumer))
+                            (dynamic-wind
+                              (lambda () (set-load-path! (cons libdir prerequisites)))
+                              (lambda () (deployment-build-main operation observe-make))
+                              (lambda () (set-load-path! previous)))))))))))
             (check-compiler-contexts!)
             (display output) (force-output)
             (set! completed (1+ completed))
@@ -246,7 +270,8 @@
                                ((string-prefix? "tao3k/yuanxu/" target)
                                 (path-expand (string-append "core/" (substring target (string-length "tao3k/yuanxu/") (string-length target)) ".ss") root))
                                (else #f))) targets))))
-          (def source-before (map module-source-read inputs))
+          (def source-before
+            (measure-phase 'source-inputs-before (lambda () (map module-source-read inputs))))
           (check-equal? (interface-products a-lib) '())
           (for-each (lambda (state)
                       (def library (path-expand "lib" state))
@@ -278,6 +303,7 @@
                                        (force-output))
                                       ((or (string-prefix? "HARNESS " line)
                                            (string-prefix? "MODULE " line)
+                                           (string-prefix? "LAB-DEPLOYMENT-IMPORT " line)
                                            (string-prefix? "LAB-DEPLOYMENT-USE " line)
                                            (string-prefix? "LAB-DEPLOYMENT-GET " line))
                                        ;; Keep real child boundaries visible even if .run is interrupted.

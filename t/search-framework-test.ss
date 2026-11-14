@@ -7,7 +7,7 @@
 
 (import :std/test
         (only-in :clan/poo/object .ref)
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/search-engine/interface
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs
                  agentic-ai-lab-causal-event-graph))

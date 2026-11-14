@@ -4,7 +4,7 @@
 (import :clan/poo/object
         (only-in :clan/poo/mop Type. define-type)
         (only-in :std/text/pregexp pregexp-match)
-        (only-in :tao3k/yuanxu/object-types/contracts yuanxu-predicate-contract))
+        (only-in :tao3k/yuanxu/types/contracts yuanxu-predicate-contract))
 (export NixSourceContract NixFlakeSourceContract NixScopeContract)
 (def (nix-arguments? value)
   (and (object? value)

@@ -8,7 +8,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         :tao3k/agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 

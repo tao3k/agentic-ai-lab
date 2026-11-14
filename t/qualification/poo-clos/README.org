@@ -1,42 +1,10 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-#
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO CLOS qualification ownership
+#+title: CLOS authoring checks in Agentic AI Lab
 
-This directory owns CLOS-specific test data and optional observation helpers.
-Build and test execution remain owned by the package's =build.ss= and its
-single upstream =unit-tests.ss=/=:clan/testing= path.  The =mop-extended= row is
-deliberately outside the POO CLOS core denominator.
+Gerbil-POO owns the CLOS runtime and its Common Lisp conformance suites.
+[[https://github.com/tao3k/gerbil-poo/pull/17][Gerbil-POO migration]]
 
-| File | Responsibility |
-|------+----------------|
-| =clause-ledger.ss= | explicit-status semantic clauses plus the exhaustive 41-entry CLHS 7.7 operator manifest |
-| =clause-ledger-test.ss= | closure, uniqueness, profile separation, and runtime-reader binding to exported suites with nonzero checks |
-| =observation.ss= | optional POO memory-observation extension for scenario tests |
-
-Agentic AI Lab does not maintain a qualification-local source catalog, dependency
-order, compiler wrapper, output directory, artifact scanner, or manifest.
-=build.ss= declares the package once through the ASP Gerbil Scheme Build API;
-the inherited runtime build graph owns those concerns.
-
-From the project root with its Gerbil environment active:
-
-#+begin_src sh
-gerbil build
-just test
-#+end_src
-
-The package's single =unit-tests.ss= entrypoint applies the default ASP POO
-Testing memory profile directly to the current Gambit runtime.  Scenario tests
-may extend or replace that profile and may use =observation.ss= for periodic
-heap/live-growth receipts.  Builds remain memory-unbounded; no test or build
-path supplies a heap command-line option.
-
-The ledger test is fail-closed while any required dictionary operator is
-=open=.  Closed rows resolve to an exact source-owned executable suite; its
-source path, exported binding, expected case cardinality, and nonzero checks are
-verified from Scheme datums.  Open rows carry an explicit gap identifier.
-
-Passing these focused tests admits semantic conformance only; it is not an
-artifact-provenance or performance claim.
+=authoring-test.ss= checks the local diagnostic for self-referencing Slot
+initializers. =observation.ss= supplies memory observations for scenarios.

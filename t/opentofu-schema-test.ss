@@ -16,7 +16,7 @@
                  yuanxu-json-schema-validation-diagnostic-metadata)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-ir
                  yuanxu-json-schema-normalization-schema)
-        :tao3k/yuanxu/object-types/contracts
+        :tao3k/yuanxu/types/contracts
         :clan/poo/object)
 (export opentofu-schema-test)
 (def opentofu-schema-test

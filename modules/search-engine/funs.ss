@@ -9,7 +9,7 @@
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/search-engine/objects
         (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow
                  external-flow flow-fanout flow-input-contract

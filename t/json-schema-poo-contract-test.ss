@@ -20,7 +20,7 @@
       (eval '(import "./core/modules/json-schema/json-schema-receipt.ss"))
       (eval '(import "./core/modules/json-schema/json-schema-validate.ss"))
       (eval '(import :tao3k/yuanxu/module-system/schema/slot-contracts))
-      (eval '(import :tao3k/yuanxu/object-types/facts))
+      (eval '(import :tao3k/yuanxu/types/facts))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (json-schema-gerbil-eval
  '(def +json-schema-host-artifact+

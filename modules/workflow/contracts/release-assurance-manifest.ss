@@ -9,8 +9,8 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :tao3k/yuanxu/object-family/role-syntax
-        :tao3k/yuanxu/object-family/syntax
+        :tao3k/yuanxu/object/role-syntax
+        :tao3k/yuanxu/object/syntax
         :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 (def +agentic-ai-lab-release-assurance-manifest-schema+

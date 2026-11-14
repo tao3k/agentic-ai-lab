@@ -45,7 +45,7 @@ fn main() {
     println!("cargo:rerun-if-changed=scheme/conformance-build-runtime.ss");
     println!("cargo:rerun-if-changed=../../../../gerbil.pkg");
     println!("cargo:rerun-if-changed=scheme/conformance.ss");
-    println!("cargo:rerun-if-changed=../../../../core/object-family/syntax.ss");
+    println!("cargo:rerun-if-changed=../../../../core/object/syntax.ss");
     println!("cargo:rerun-if-changed=../../../../modules/authorization/providers/cedar/objects.ss");
     println!("cargo:rerun-if-env-changed=GERBIL_GXI");
     println!("cargo:rerun-if-env-changed=GERBIL_GSC");

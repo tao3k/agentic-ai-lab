@@ -17,7 +17,7 @@
                  yuanxu-object-contract
                  yuanxu-object-contract->alist)
         :tao3k/yuanxu/utilities/final-projection-syntax
-        :tao3k/yuanxu/object-types/facts)
+        :tao3k/yuanxu/types/facts)
 
 (export agentic-ai-lab-runtime-filesystem-prototype
         agentic-ai-lab-runtime-volume-filesystem-prototype

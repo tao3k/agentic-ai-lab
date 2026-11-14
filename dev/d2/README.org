@@ -23,7 +23,7 @@ Requires the project Gerbil environment and Bun >= 1.3.11.
 #+begin_src sh
 # From the repository root: Scheme/ASCENT -> D2.
 just d2-export
-just test-file t/d2-module-test.ss
+just test-file t/yanxu/modules/d2/module-test.ss
 just test-file t/context-window-ascent-test.ss
 just test-d2-rules
 just test-d2

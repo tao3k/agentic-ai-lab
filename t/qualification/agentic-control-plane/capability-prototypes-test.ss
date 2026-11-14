@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
-        :tao3k/yuanxu/object-family/role-syntax
+        :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 

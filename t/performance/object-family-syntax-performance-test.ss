@@ -17,7 +17,7 @@
         (only-in :clan/poo/object .ref object<-alist)
         (only-in "../support/poo-performance-object-scenarios"
                  poo-performance-build-list)
-        :tao3k/yuanxu/object-family/syntax)
+        :tao3k/yuanxu/object/syntax)
 
 (export object-family-syntax-performance-test)
 

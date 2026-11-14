@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in "../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
+        (only-in "../../../../dev/d2/init.ss" tao3k/agentic-ai-lab/dev/d2.init.exports))
 (export d2-module-test)
 (def D2Scope (.get tao3k/agentic-ai-lab/dev/d2.init.exports modules d2))
 (def Node. (.get D2Scope prototypes Node))

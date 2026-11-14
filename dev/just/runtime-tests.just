@@ -310,7 +310,7 @@ test-context-actor-runtime executable directory:
 # The enclosing fence includes init, selection, child execution and teardown.
 [group('test')]
 test-context-core observe="false":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gerbil {{ gerbil_test_runtime_options }} test {{ if observe == "false" { "" } else if observe == "trace" { "-D yuanxu-module-test-observation,yuanxu-module-test-trace" } else { "-D yuanxu-module-test-observation" } }} t/ai-agentic-context-core-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gerbil {{ gerbil_test_runtime_options }} test {{ if observe == "false" { "" } else if observe == "trace" { "-D yuanxu-module-test-observation,yuanxu-module-test-trace" } else { "-D yuanxu-module-test-observation" } }} t/yanxu/modules/ai-agentic-context/core-test.ss
 
 [group('test')]
 test-context-runtime-fencing path:
