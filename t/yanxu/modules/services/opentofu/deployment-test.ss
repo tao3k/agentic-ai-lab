@@ -4,7 +4,8 @@
         (only-in :clan/poo/object .get .cc .o)
         (only-in :std/source this-source-file)
         (only-in :gerbil/runtime/loader load-path set-load-path!)
-        (only-in :gerbil/expander __module-registry module-context? module-context-path)
+        (only-in :gerbil/expander __module-registry expander-context-id
+                 module-context? module-context-path)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
@@ -62,7 +63,7 @@
   (if failed? (raise failure) (apply values (cdr (assq 'result stats)))))
 
 ;; Relay completed native compiler work while retaining its exact transcript.
-(def (call-with-compiler-output phase libdir action)
+(def (call-with-compiler-output phase libdir action observe-context)
   (def diagnostic (current-output-port))
   (def started (real-time))
   (call-with-output-string
@@ -85,6 +86,7 @@
                         (force-output)))
                     (when (and (eq? phase 'cold-a)
                                (string-prefix? "... compile " line))
+                      (observe-context line)
                       (parameterize ((current-output-port diagnostic))
                         (display (string-append "LAB-DEPLOYMENT-COMPILE-TARGET "
                                    (symbol->string phase) " seconds="
@@ -171,6 +173,35 @@
           (for-each create-directory* (list a-lib b-lib))
           (def completed 0)
           (def compiler-contexts '())
+          (def prelude-row #f)
+          (def prelude-digest #f)
+          (def last-context-check #f)
+          (def context-change-reported? #f)
+          (def diagnostics-port (current-output-port))
+          (def (describe-context context)
+            (and (module-context? context)
+                 (list (object->serial-number context)
+                       (expander-context-id context) (module-context-path context))))
+          (def (report-context stage actual)
+            (def path (car prelude-row))
+            (parameterize ((current-output-port diagnostics-port))
+              (write (list 'LAB-DEPLOYMENT-PRELUDE-CONTEXT stage last-context-check path
+                           (list 'expected (describe-context (cdr prelude-row)))
+                           (list 'actual (describe-context actual))
+                           (list 'by-id (describe-context (hash-get __module-registry 'tao3k/yuanxu/prelude)))
+                           (list 'by-import (describe-context (hash-get __module-registry ':tao3k/yuanxu/prelude)))
+                           (list 'same-file-bytes
+                                 (with-catch (lambda (_) 'unreadable)
+                                   (lambda () (equal? prelude-digest (cdar (product-digests (list path)))))))))
+              (newline) (force-output)))
+          (def (observe-context stage)
+            (when (and prelude-row (not context-change-reported?))
+              (def actual (hash-get __module-registry (car prelude-row)))
+              (if (eq? (cdr prelude-row) actual)
+                (set! last-context-check stage)
+                (begin
+                  (set! context-change-reported? #t)
+                  (report-context stage actual)))))
           (def (check-compiler-contexts!)
             (for-each
               (lambda (row)
@@ -188,15 +219,20 @@
             (def previous (load-path))
             (def diagnostics (current-output-port))
             (def started (real-time))
+            (def (observe-phase stage)
+              (when (eq? phase 'cold-a) (observe-context stage)))
             (def (observe-make action)
+              (observe-phase 'before-make)
               (parameterize ((current-output-port diagnostics))
                 (displayln "LAB-DEPLOYMENT-MAKE-START " phase " seconds=" (- (real-time) started))
                 (force-output))
               (let (make-started (real-time))
                 (begin0 (action)
+                  (observe-phase 'after-make)
                   (parameterize ((current-output-port diagnostics))
                     (displayln "LAB-DEPLOYMENT-MAKE-RETURN " phase " seconds=" (- (real-time) make-started))
                     (force-output)))))
+            (observe-phase 'before-build)
             (displayln "LAB-DEPLOYMENT-ACTION-START " phase)
             (force-output)
             (def output
@@ -211,7 +247,9 @@
                             (dynamic-wind
                               (lambda () (set-load-path! (cons libdir prerequisites)))
                               (lambda () (deployment-build-main operation observe-make))
-                              (lambda () (set-load-path! previous)))))))))))
+                              (lambda () (set-load-path! previous)))))
+                        observe-phase))))))
+            (observe-phase 'after-build)
             (check-compiler-contexts!)
             (display output) (force-output)
             (set! completed (1+ completed))
@@ -257,6 +295,18 @@
                     (set! compiler-contexts (cons (cons path context) compiler-contexts))))))
             (yuanxu-bootstrap-contexts))
           (check-equal? (pair? compiler-contexts) #t)
+          (when (equal? (getenv "LAB_TRACE_PRELUDE_CONTEXT" #f) "1")
+            (set! prelude-row
+              (let loop ((rows compiler-contexts))
+                (and (pair? rows)
+                     (if (string-suffix? "/tao3k/yuanxu/prelude.ssi" (caar rows))
+                       (car rows)
+                       (loop (cdr rows))))))
+            (if prelude-row
+              (begin
+                (set! prelude-digest (cdar (product-digests (list (car prelude-row)))))
+                (report-context 'after-projection (hash-get __module-registry (car prelude-row))))
+              (begin (displayln "LAB-DEPLOYMENT-PRELUDE-CONTEXT no-captured-ssi") (force-output))))
           (execution-progress! 'lab-deployment-spec 1)
           (def targets (list-sort string<? (map (lambda (row) (if (pair? row) (cadr row) row)) (call-with-input-string spec read))))
           (check-equal? (and (member "tao3k/yuanxu/modules/funflow/store-flow" targets) #t) #t)
