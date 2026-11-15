@@ -67,7 +67,7 @@
                    (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host id 5 0 worker)))
               (native-finish-worker worker)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host id 5 0
-                (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host id token)) 'native-result-published?) => #t))) '("session" "session-c"))
+                (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host id token)) 'runtime-result-published?) => #t))) '("session" "session-c"))
           (displayln "NATIVE-PUSH-OBSERVE enable-retained historical-source-discovered=#t affected-only-dependent=#t unaffected=completed"))))
     (yuanxu-test-case "push pending source dependency blocks a consumer whose own proof Host is still current"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof)) (p (.ref f 'policy))
@@ -90,7 +90,7 @@
               (native-finish-worker worker)
               (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token)))
           (let ((completed (worker-at 4 "independent-completed" "independent-result")) (fail? #t))
-            (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 5 0 completed) 'native-result-published?) => #t)
+            (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 5 0 completed) 'runtime-result-published?) => #t)
             (let* ((observation (worker-at 6 "independent-pending" "independent-late"))
                    (observer (.o kind: 'temporal.source-observer.v1 .prepare: (lambda (self event)
                      (.o kind: 'temporal.source-propagation-batch.v1 .publish!: (lambda (batch)
@@ -109,7 +109,7 @@
               (check (.ref (proof-current independent registration 1 2 p) 'current?) => #t)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 8 0 observation) 'runtime-published?) => #t)
               (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" 3 0 (push-join! f "session"))
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
               (displayln "NATIVE-PUSH-OBSERVE multi-source pending-dependency-blocks=#t own-proof-stays-current=#t cached-delivered=#t history-unusable=#t"))))))
     (yuanxu-test-case "push retains frozen parent versions after the live Context head is replaced"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof))
@@ -130,7 +130,7 @@
           (check (.ref (push-row f "session-c") 'context-state) => 'admitted)
           (native-finish-worker worker)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 5 0
-            (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token)) 'native-result-published?) => #t)
+            (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token)) 'runtime-result-published?) => #t)
           (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 3 0 old-b) 'accepted?) => #f)
           (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 3 0 old-b)
@@ -147,9 +147,9 @@
                  (token-b (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session-b" 6 0 worker-b)))
             (native-finish-worker worker-b)
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 6 0
-              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)) 'native-result-published?) => #t))
+              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)) 'runtime-result-published?) => #t))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
           (displayln "NATIVE-PUSH-OBSERVE frozen-parent old-version-invalidated=#t replacement-unaffected=#t dependent-invalidated=#t rebased-dependent=#t old-result-reactivated=#f"))))
     (yuanxu-test-case "push cross Session result commits interleave independently with automatic source withdrawal"
       (let ((orders '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1))) (asymmetric 0))
@@ -171,7 +171,7 @@
                 (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id
                   (push-revision f id) 0 observation) 'runtime-published?) => #t))) '("session" "session-b") (list a b))
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-              (push-join! f "session-c")) 'native-result-published?) => #t)
+              (push-join! f "session-c")) 'runtime-result-published?) => #t)
             (let* ((oa (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'outcome))
                    (ob (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session-b")) 'outcome))
                    (a-before? (> (length (member 1 order)) (length (member 3 order))))
@@ -219,7 +219,7 @@
               (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id (push-revision f id) 0 observation)))
             '("session" "session-b"))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
           (displayln "NATIVE-AUTHORITY-COUNTEREXAMPLE kind=" kind " cached-admitted=#t active-after-change=#t final-guard-denies=#t")))
         '(grant policy expiry)))
     (yuanxu-test-case "authority delivery failure preserves pending barrier and cancellation on retry"
@@ -259,7 +259,7 @@
           (let (observation (push-join! f "session-b"))
             (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" (push-revision f "session-b") 0 observation))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
           (displayln "NATIVE-AUTHORITY-RETRY kind=" kind " preflight-atomic=#t pending-blocks=#t terminal-preserved=#t unaffected=completed")))
         '(grant policy expiry)))
 )

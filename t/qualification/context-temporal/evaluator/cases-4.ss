@@ -48,7 +48,7 @@
           (lambda ()
             (policy-clock-call! clock (lambda (f)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host)
-                "session" 2 0 (push-join! f "session")) 'native-result-published?) => #t)
+                "session" 2 0 (push-join! f "session")) 'runtime-result-published?) => #t)
               (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes (.ref f 'host) "session")) 'current-use?) => #t)))
             (policy-clock-await-events! clock 2)
             (policy-clock-call! clock (lambda (f)

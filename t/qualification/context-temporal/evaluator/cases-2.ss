@@ -100,9 +100,9 @@
             (let ((a (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token))
                   (b (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)))
               (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 a))
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 b) 'native-result-published?) => #t)
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 b) 'runtime-result-published?) => #t)
               (check (.ref (.ref (agentic-ai-lab-ai-agentic-context-session-host-current host "session") 'schedule) 'revision) => 2)
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 a) 'native-result-published?) => #t))
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 a) 'runtime-result-published?) => #t))
             (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 2 (car ctx) (withdrawn-journal (list-ref ctx 9)))
             (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 2))
             (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
@@ -126,7 +126,7 @@
                  (next-token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session" 5 0 next-worker)))
             (native-finish-worker next-worker)
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 5 0
-              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" next-token)) 'native-result-published?) => #t)
+              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" next-token)) 'runtime-result-published?) => #t)
             (let (outcomes (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session"))
               (check (length outcomes) => 2)
               (check (.ref (car outcomes) 'current-use?) => #f)
@@ -157,7 +157,7 @@
         (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-require-proof! (.ref f 'host) "session-b"
           (push-revision f "session-b") 0 (.ref f 'proof) (.ref (.ref f 'registration-c) 'identity) 2 2
           (.ref (.ref f 'policy) 'semantic-digest) 128))
-        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
+        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
         (displayln "NATIVE-PUSH-OBSERVE selective direct=invalidated dependent=invalidated unaffected=completed cached-before-query=#t history-retained=#t replay-idempotent=#t")))
     (yuanxu-test-case "push pending delivery fences results and retries merge actual cancellation recovery and terminal state"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof)) (fail? #t) (prepare-fail? #t)
@@ -189,7 +189,7 @@
         (agentic-ai-lab-temporal-proof-host-drain! proof)
         (check (length (agentic-ai-lab-ai-agentic-context-session-host-propagations host)) => 3)
         (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 3 0 (push-join! f "session-b"))
-        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
+        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
         (displayln "NATIVE-PUSH-OBSERVE retry preflight-atomic=#t pending-blocks-result=#t cancelled-terminal-preserved=#t unaffected=completed duplicate-delivery=#f")))
     (yuanxu-test-case "push subscription omission retains a real native stale cached Context counterexample"
       (let* ((f (push-fixture #f)) (host (.ref f 'host)))

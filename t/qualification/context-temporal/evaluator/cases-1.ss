@@ -134,7 +134,7 @@
                (terminal (.ref r 'terminal)))
           (check (.ref r 'accepted?) => #t)
           (check (.ref r 'runtime-published?) => #t)
-          (check (.ref r 'native-result-published?) => #t)
+          (check (.ref r 'runtime-result-published?) => #t)
           (check (.ref terminal 'outcome) => 'completed)
           (check (.ref terminal 'payload) => "native-result-for-request")
           (check (.ref terminal 'proof-registration) => (.ref registration 'identity))

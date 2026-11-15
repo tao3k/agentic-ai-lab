@@ -321,7 +321,7 @@
           (when (and withdrawn? (pair? outcomes)) (check (.ref (car outcomes) 'current-use?) => #f)))) ids)
       (check (.ref (push-row f "session-c") 'context-state) => 'admitted)
       (check (push-revision f "session-c") => 2)) order)
-    (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
+    (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
     (push-join! f "session")
     (let (observation (push-join! f "session-b"))
       (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b"
@@ -473,7 +473,7 @@
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id
             (push-revision f id) 0 observation) 'runtime-published?) => #t)))) '("session" "session-b"))
     (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-      (push-join! f "session-c")) 'native-result-published?) => #t)))
+      (push-join! f "session-c")) 'runtime-result-published?) => #t)))
 (def (clock-replace! f observed)
   (let* ((p (agentic-ai-lab-temporal-support-policy "policy" "clock-new" (at 1) (at 1000000)))
          (host (.ref f 'host)) (grants (.ref f 'grants)) (sid "session-new"))
@@ -527,7 +527,7 @@
           (check (.ref (push-row f "session-new") 'context-state) => 'admitted)
           (check (push-revision f "session-new") => 2)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-new" 2 0
-            (push-join! f "session-new")) 'native-result-published?) => #t)
+            (push-join! f "session-new")) 'runtime-result-published?) => #t)
           (clock-check-originals! f)))
         (let (audit (policy-clock-audit clock))
           (check (clock-phases audit 'received) => 2)
