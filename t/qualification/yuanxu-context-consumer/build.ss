@@ -31,10 +31,16 @@
          (.call projection .with-compiler-inputs
            (lambda () (make spec srcdir: (current-build-source-directory) libdir: output verbose: 1))))
         ((clean)
+         (displayln "LAB-CONTEXT-CLEAN projection-return seconds=" (- (real-time) started))
+         (force-output)
          (.call projection .with-clean-outputs
            (lambda ()
+             (displayln "LAB-CONTEXT-CLEAN native-enter seconds=" (- (real-time) started))
+             (force-output)
              (clean-selected-outputs! (.get projection compiler-identities) output
-               (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output))))))
+               (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output)))))
+         (displayln "LAB-CONTEXT-CLEAN native-return seconds=" (- (real-time) started))
+         (force-output))
         (else (error "unknown fixture build operation" operation)))))
   (displayln "BUILD-STAGE main return at=" (real-time)
              " seconds=" (- (real-time) started)))

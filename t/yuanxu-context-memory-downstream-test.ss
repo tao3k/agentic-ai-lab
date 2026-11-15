@@ -102,6 +102,7 @@
             (.o name source prefix library: (path-expand "lib" prefix)))
           (def (action state command)
             (def started (real-time))
+            (def build? (or (equal? (car command) "gerbil") (equal? command '("gxi" "build.ss" "clean"))))
             (displayln "LAB-CONTEXT-ACTION enter state=" (.get state name) " command=" command
                        " at=" started " epoch=" (time->seconds (current-time)))
             (force-output)
@@ -111,7 +112,7 @@
                   command: command directory: (.get state source) timeout: 120 idle-timeout: 60
                   progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: (.get state prefix) GAMBOPT: runtime-options
-                    GERBIL_BUILD_VERBOSE: (if (equal? (car command) "gerbil") "2" "0")
+                    GERBIL_BUILD_VERBOSE: (if build? "2" "0")
                     GERBIL_LOADPATH: (string-join (cons (.get state library) prerequisites) ":")))
                 '() output-port: (current-error-port)))
             (def output (.get result output))
@@ -126,7 +127,11 @@
             (force-output)
             output)
           (def (build! state (operation "build"))
-            (def output (action state (list "gerbil" operation)))
+            ;; gerbil clean delegates to this exact script and operation.
+            ;; Keep the native cleaner and its independent exit without the extra package process.
+            (def command (if (equal? operation "clean") '("gxi" "build.ss" "clean")
+                             (list "gerbil" operation)))
+            (def output (action state command))
             (check-equal? (and (string-contains output "BUILD-STAGE main return") #t) #t)
             (check-equal? (string-contains output "scope-factory") #f)
             (compile-events output))

@@ -3,6 +3,7 @@
 ;;; Entry projection only: installed runtime harnesses still own the suites.
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
+        (only-in :tao3k/yuanxu/ops/progress make-test-progress-reader)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
@@ -62,9 +63,24 @@
      (let* ((source (absolute "t/qualification/context-temporal/interface.ss"))
             (compiled (getenv "LAB_CONTEXT_TEMPORAL_INTERFACE" #f))
             (files (list (or compiled source))))
-       (qualification-script files
-         (watched (append (list "gerbil" vm "test" "-v" "5") files)) 45
-         inputs: (list source (this-source-file) (absolute watch)) case-count: 99)))
+       (def script
+         (qualification-script files
+           (watched (append (list "gerbil" vm "test" "-v" "5") files)) 45
+           inputs: (list source (this-source-file) (absolute watch)) case-count: 99))
+       (if (not compiled)
+         script
+         (.cc script progress:
+           (lambda ()
+             (def started (real-time))
+             (make-test-progress-reader
+               (lambda (line)
+                 (when (ormap (lambda (prefix) (string-prefix? prefix line))
+                              '("HARNESS " "SUITE " "CASE " "CASE-OK " "ERROR CASE " "OK"))
+                   (display "LAB-TEMPORAL at=")
+                   (display (- (real-time) started))
+                   (display " ")
+                   (display line)
+                   (force-output)))))))))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)
