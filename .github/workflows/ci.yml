@@ -255,7 +255,7 @@ jobs:
           PY
 
       - name: Build the development library
-        run: GERBIL_BUILD_VERBOSE=1 gerbil env just build-library
+        run: GERBIL_BUILD_VERBOSE=1 gerbil env just build-qualification-library
 
       - name: Install optional development policy dependencies
         run: |
