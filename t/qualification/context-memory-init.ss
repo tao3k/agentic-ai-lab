@@ -2,5 +2,5 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (yuanxu!
   :test-dir "./t"
-  :load-modules "../../modules" mode: explicit rename: Context
-  (ai-agentic-context +memory))
+  :load-modules "../../modules/ai-agentic-context" mode: explicit rename: Context
+  (ai-agentic-context @ "../../modules/ai-agentic-context" +memory))
