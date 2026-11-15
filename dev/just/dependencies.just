@@ -54,7 +54,8 @@ build-testing:
 prepare-test-inputs:
     nix-build --out-link "{{ agentic_ai_lab_gerbil_path }}/test-inputs" t/fixtures/opentofu/ci.nix
 
-# These existing recovery tests execute runtime workers rather than mocks.
+# Recovery workers use the runtime package store. Yuanxu may move the
+# build output behind prerequisites, so the optional ASP store cannot be an input.
 [group('build')]
 build-test-workers:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} just --justfile t/fixtures/nix/Justfile build
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib" {{ gerbil_darwin_env }} just --justfile t/fixtures/nix/Justfile build
