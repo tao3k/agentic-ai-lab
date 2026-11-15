@@ -7,7 +7,20 @@
         (only-in :tao3k/yuanxu/observability/testing-script TestingScript.)
         (only-in :tao3k/yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!))
-(export qualification-source qualification-script)
+(export qualification-source qualification-script
+        macos-qualification-timing? qualification-timing-profile)
+
+(def (macos-qualification-timing?)
+  (cond-expand
+    (darwin (equal? (getenv "LAB_MACOS_QUALIFICATION_TIMING" #f) "1"))
+    (else #f)))
+
+;; Yuanxu's profile requires a positive duration. The macOS measurement uses
+;; a duration longer than the job lifetime and retains normal result admission.
+(def (qualification-timing-profile profile)
+  (if (macos-qualification-timing?)
+    (.cc profile max-duration-milliseconds: 86400000)
+    profile))
 
 (def implementation (this-source-file))
 (def (qualification-source files inputs)

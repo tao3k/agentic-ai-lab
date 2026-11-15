@@ -2,7 +2,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Entry projection only: installed runtime harnesses still own the suites.
 (import :clan/poo/object
-        (only-in "./qualification.ss" qualification-script)
+        (only-in "./qualification.ss" qualification-script
+                 macos-qualification-timing? qualification-timing-profile)
         (only-in :tao3k/yuanxu/ops/progress make-test-progress-reader)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
@@ -62,11 +63,16 @@
     ((context-temporal)
      (let* ((source (absolute "t/qualification/context-temporal/interface.ss"))
             (compiled (getenv "LAB_CONTEXT_TEMPORAL_INTERFACE" #f))
-            (files (list (or compiled source))))
-       (def script
-         (qualification-script files
-           (watched (append (list "gerbil" vm "test" "-v" "5") files)) 45
+            (files (list (or compiled source)))
+            (command (append (list "gerbil" vm "test" "-v" "5") files)))
+       (def measure? (macos-qualification-timing?))
+       (def qualified
+         (qualification-script files (if measure? command (watched command)) 45
            inputs: (list source (this-source-file) (absolute watch)) case-count: 99))
+       (def script
+         (if measure?
+           (.cc qualified profile: (qualification-timing-profile (.get qualified profile)))
+           qualified))
        (if (not compiled)
          script
          (.cc script progress:

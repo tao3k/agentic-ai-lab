@@ -74,7 +74,7 @@ test-file path observe="false":
       trace) options=(-D yuanxu-module-test-observation,yuanxu-module-test-trace) ;;
       *) echo 'observe must be false, true, or trace' >&2; exit 64 ;;
     esac
-    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
+    {{ lab_test_env }} {{ lab_focused_test_deadline }} gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
 
 # Run performance Suites serially through the same official test entry.
 [group('test')]

@@ -1,6 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
+        (only-in "./qualification/testing/qualification.ss"
+                 macos-qualification-timing?)
         (only-in :clan/poo/object .get .cc .o)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
@@ -109,7 +111,8 @@
             (def result
               (run-script
                 (.cc (.get Ops prototypes Script)
-                  command: command directory: (.get state source) timeout: 120 idle-timeout: 60
+                  command: command directory: (.get state source) timeout: (and (not (macos-qualification-timing?)) 120)
+                  idle-timeout: (and (not (macos-qualification-timing?)) 60)
                   progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: (.get state prefix) GAMBOPT: runtime-options
                     GERBIL_BUILD_VERBOSE: (if build? "2" "0")

@@ -1,6 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
+        (only-in "./qualification/testing/qualification.ss"
+                 macos-qualification-timing? qualification-timing-profile)
         (only-in :clan/poo/object .get .cc .o)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
@@ -56,7 +58,8 @@
                   command: (if (equal? operation "use") '("gxi" "use.ss")
                              (list "gxi" "build.ss" operation))
                   directory: consumer
-                  timeout: 120 idle-timeout: 60 progress: make-compiler-progress-reader
+                  timeout: (and (not (macos-qualification-timing?)) 120)
+                  idle-timeout: (and (not (macos-qualification-timing?)) 60) progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: state GAMBOPT: runtime-options
                     GERBIL_BUILD_VERBOSE: "1"
                     GERBIL_LOADPATH: (string-join (cons (path-expand "lib" state) prerequisites) ":")))
@@ -124,7 +127,10 @@
           (def test-result
             ;; The selected Suite consumes B's production products through the
             ;; existing harness. Test discovery supplies the exact file list.
-            (.call (.cc TestingScript. source: selected-tests timeout: 120 idle-timeout: 60
+            (.call (.cc TestingScript. source: selected-tests
+                     profile: (qualification-timing-profile (.get TestingScript. profile))
+                     timeout: (and (not (macos-qualification-timing?)) 120)
+                     idle-timeout: (and (not (macos-qualification-timing?)) 60)
                      environment: (.o GERBIL_PATH: b GAMBOPT: runtime-options
                        GERBIL_LOADPATH: (string-join (cons b-lib prerequisites) ":"))) .run))
           (check-equal? (.get test-result status) 0)

@@ -1,6 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
+        (only-in "../../../../qualification/testing/qualification.ss"
+                 macos-qualification-timing? qualification-timing-profile)
         (only-in :clan/poo/object .get .cc .o)
         (only-in :std/source this-source-file)
         (only-in :gerbil/runtime/loader load-path set-load-path!)
@@ -239,7 +241,9 @@
             (def output
               (measure-phase phase
                 (lambda ()
-                  (call-with-execution-watchdog 60000 120000
+                  (call-with-execution-watchdog
+                    (and (not (macos-qualification-timing?)) 60000)
+                    (and (not (macos-qualification-timing?)) 120000)
                     (lambda ()
                       (call-with-compiler-output phase libdir
                         (lambda ()
@@ -439,7 +443,10 @@
           (def test-result
             ;; The selected Suite consumes B's production products through the
             ;; existing harness. Test discovery supplies the exact file list.
-            (.call (.o (:: script TestingScript.) source: acceptance-tests timeout: 120 idle-timeout: 60
+            (.call (.o (:: script TestingScript.) source: acceptance-tests
+                     profile: (qualification-timing-profile (.get TestingScript. profile))
+                     timeout: (and (not (macos-qualification-timing?)) 120)
+                     idle-timeout: (and (not (macos-qualification-timing?)) 60)
                      command: (append '("gerbil") (.get script runtime-options)
                                       '("test" "-D" "lab-deployment-test-import-timing")
                                       (.get script source spec))
