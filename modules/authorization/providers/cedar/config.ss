@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import :clan/poo/clos
+(import (only-in :clan/poo/mop poo-clos-class poo-clos-make-instance)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor
                  agentic-ai-lab-authorization-provider))

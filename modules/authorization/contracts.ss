@@ -8,7 +8,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
-        :clan/poo/clos
+        (only-in :clan/poo/mop
+                 poo-clos-any-specializer poo-clos-class-specializer
+                 poo-clos-generic-protocol poo-clos-generic-function
+                 poo-clos-method poo-clos-compose-method-bundle poo-clos-call)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types

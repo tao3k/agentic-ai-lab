@@ -13,9 +13,10 @@ build:
 build-library:
     GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 600s ./build.ss compile
 
-# Use the selected Lab and Funflow projection shared by the Bazel package.
+# Prepare Core's published libraries and the selected Lab qualification.
 [group('build')]
 build-qualification-library:
+    cd "{{ justfile_directory() }}/core" && {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 300s gxi {{ gerbil_test_runtime_options }} dev/build-published-modules.ss
     {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} ./build-bazel.ss qualify
 
 # Compile the pinned local Core using Gerbil's incremental outputs.

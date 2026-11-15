@@ -11,7 +11,7 @@
         (only-in :clan/poo/mop TypeError? validate)
         (only-in :std/test check-equal? check-exception test-suite)
         :tao3k/yuanxu/module-system/authoring/admission
-        (only-in :clan/poo/clos
+        (only-in :clan/poo/mop
                  poo-clos-call
                  poo-clos-compose-method-bundle
                  poo-clos-compute-applicable-methods

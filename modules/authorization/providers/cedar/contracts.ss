@@ -11,7 +11,9 @@
         (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assessment?)
-        :clan/poo/clos
+        (only-in :clan/poo/mop
+                 poo-clos-any-specializer poo-clos-class-specializer
+                 poo-clos-eql-specializer poo-clos-method poo-clos-compose-method-bundle)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric

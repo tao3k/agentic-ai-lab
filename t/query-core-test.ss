@@ -6,9 +6,11 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
         :tao3k/agentic-ai-lab/modules/query/interface
-        :clan/poo/clos
+        (only-in :clan/poo/mop validate poo-clos-class poo-clos-make-instance
+                 poo-clos-method poo-clos-class-specializer poo-clos-eql-specializer
+                 poo-clos-prototype-specializer poo-clos-any-specializer
+                 poo-clos-compose-method-bundle)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt

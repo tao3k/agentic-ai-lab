@@ -7,8 +7,7 @@
 (import (only-in :gerbil/runtime/gambit current-time time->seconds)
         (only-in :clan/poo/object
                  .ref .slot? compute-precedence-list!)
-        (only-in :clan/poo/clos/objects poo-clos-class-precedence-list)
-        :clan/poo/clos/classes)
+        (only-in :clan/poo/mop poo-clos-class-precedence-list poo-clos-class))
 
 (def +sample-count+ 40)
 

@@ -23,7 +23,8 @@
         :tao3k/agentic-ai-lab/modules/agent-sandbox/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/cube
         :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
-        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding)
+        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor
+                 +nono-c-binding-schema+))
 
 (export agent-sandbox-marlin-interface-test)
 

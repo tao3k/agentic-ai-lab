@@ -10,7 +10,7 @@
                  yuanxu-funflow-workflow-agreement)
         (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule. Job. Task.)
         (only-in :clan/poo/object object?)
-        (only-in :clan/poo/clos
+        (only-in :clan/poo/mop
                  poo-clos-generic-function))
 
 (export funflow-public-module-test)

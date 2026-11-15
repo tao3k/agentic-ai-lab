@@ -11,7 +11,7 @@
                  admit-contributions)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection)
-        (only-in :clan/poo/clos
+        (only-in :clan/poo/mop
                  poo-clos-generic-methods
                  poo-clos-make-instance)
         :tao3k/agentic-ai-lab/modules/governance/interface

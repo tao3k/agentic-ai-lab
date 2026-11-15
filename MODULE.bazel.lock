@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "pXAwy0VxLFeRoP576dW0RPw0TzXcfxASO9R494VMk1I=",
-        "usagesDigest": "4GXhXvF10O+/N9S89R8EQS9WvPPDjoNDbSvPo5oR8Kg=",
+        "usagesDigest": "Dv1KlF4d6iAMDuSvXa87rt/wDPEPhaSJOCA8LolNSvg=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -174,11 +174,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-poo",
               "package": "gerbil-poo",
-              "revision": "7f5535c459ca5b6c879cdd9c2635258d6880a840",
-              "sha256": "b84b3f9087197a4d2a8284d66ee8af3559d723195ea5c109881cb3e68afeda0e",
-              "strip_prefix": "gerbil-poo-7f5535c459ca5b6c879cdd9c2635258d6880a840",
+              "revision": "dc7c407341bd428f92d19500c75082ad6658cfac",
+              "sha256": "34cb9762ddf9c8034a6e2f821fcbfae68117393acd681901a72c5898032fa3fd",
+              "strip_prefix": "gerbil-poo-dc7c407341bd428f92d19500c75082ad6658cfac",
               "urls": [
-                "https://github.com/tao3k/gerbil-poo/archive/7f5535c459ca5b6c879cdd9c2635258d6880a840.tar.gz"
+                "https://github.com/tao3k/gerbil-poo/archive/dc7c407341bd428f92d19500c75082ad6658cfac.tar.gz"
               ]
             }
           },
@@ -256,7 +256,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "pXAwy0VxLFeRoP576dW0RPw0TzXcfxASO9R494VMk1I=",
-        "usagesDigest": "4GXhXvF10O+/N9S89R8EQS9WvPPDjoNDbSvPo5oR8Kg=",
+        "usagesDigest": "Dv1KlF4d6iAMDuSvXa87rt/wDPEPhaSJOCA8LolNSvg=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -284,11 +284,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-poo",
               "package": "gerbil-poo",
-              "revision": "7f5535c459ca5b6c879cdd9c2635258d6880a840",
-              "sha256": "b84b3f9087197a4d2a8284d66ee8af3559d723195ea5c109881cb3e68afeda0e",
-              "strip_prefix": "gerbil-poo-7f5535c459ca5b6c879cdd9c2635258d6880a840",
+              "revision": "dc7c407341bd428f92d19500c75082ad6658cfac",
+              "sha256": "34cb9762ddf9c8034a6e2f821fcbfae68117393acd681901a72c5898032fa3fd",
+              "strip_prefix": "gerbil-poo-dc7c407341bd428f92d19500c75082ad6658cfac",
               "urls": [
-                "https://github.com/tao3k/gerbil-poo/archive/7f5535c459ca5b6c879cdd9c2635258d6880a840.tar.gz"
+                "https://github.com/tao3k/gerbil-poo/archive/dc7c407341bd428f92d19500c75082ad6658cfac.tar.gz"
               ]
             }
           },
