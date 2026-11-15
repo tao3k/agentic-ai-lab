@@ -22,7 +22,11 @@
      (else (error "unknown Lab build operation" operation))))
   (def root (path-directory (this-source-file)))
   (def output (build-output-directory))
-  (call-with-build-source-fallbacks (list (path-expand "core" root))
+  (def source-roots
+    (if (equal? operation "qualify")
+      (list root (path-expand "core" root))
+      (list (path-expand "core" root))))
+  (call-with-build-source-fallbacks source-roots
     (lambda ()
       (def projection
         (.call tao3k/agentic-ai-lab.init-bazel.exports .project-build entries))
