@@ -153,24 +153,28 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Install Gerbil package dependencies
         run: |
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
+          rebuild_dependents=false
           if [ "${{ steps.runtime-gerbil-pkg-cache.outputs.cache-hit }}" != "true" ] ||
              ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependency-cache-ready"))' >/tmp/gerbil-dependency-cache-check.log 2>&1; then
             gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
-            # Transitive packages can still declare older POO revisions.
-            # Restore the direct Core pin before building either checkout.
+            # Restore the vendored Core pin after recursive dependency installation.
             (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
+            rebuild_dependents=true
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
           # Clean the vendored package through its native build declaration.
           # Its development cleanup script imports the previously built Core.
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil clean)
           gerbil env just build-core
+          if "$rebuild_dependents"; then
+            gerbil env gerbil interactive packages/automation/runtime-dependencies.ss --rebuild-core-dependents
+          fi
 
       - name: Save Gerbil package cache
         if: steps.runtime-gerbil-pkg-cache.outputs.cache-hit != 'true'
@@ -180,7 +184,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Link the Lab source package for downstream qualification
         run: |

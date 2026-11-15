@@ -5,7 +5,8 @@
 ;; dependencies, tags and runtime builds remain Gerbil-owned. Editor TAGS generation
 ;; is separate tooling: it is not part of compilation or dependency admission.
 (import (only-in :gerbil/tools/gxpkg
-          pkg-install pkg-update pkg-root-dir with-pkg-build-env)
+          pkg-install pkg-update pkg-root-dir pkg-dependents* pkg-clean pkg-build
+          with-pkg-build-env)
         (only-in :std/error Error-irritants)
         (only-in :std/list/list find)
         (only-in :std/misc/process process-error? run-process run-process/batch))
@@ -99,9 +100,23 @@
   (install-dependency! parser)
   (install-dependency! (orgize-scheme-rust-dependency directory)))
 
-(def (main . arguments)
-  (unless (or (null? arguments) (equal? arguments '("--fetch-only")))
-    (error "usage: runtime-dependencies.ss [--fetch-only]" arguments))
+(def (rebuild-core-dependents!)
+  ;; Build the installed sources against the vendored Core and its POO ABI.
+  ;; An ancestor has strictly more transitive dependents than its descendants.
+  (def packages (pkg-dependents* "github.com/tao3k/gebril-yuanxu"))
+  (def ranked
+    (map (lambda (package)
+           (cons (length (pkg-dependents* package packages)) package))
+         packages))
+  (with-pkg-build-env
+    (for-each
+      (lambda (entry)
+        (def package (cdr entry))
+        (pkg-clean package)
+        (pkg-build package))
+      (list-sort (lambda (left right) (> (car left) (car right))) ranked))))
+
+(def (prepare-dependencies! fetch-only?)
   (def properties (call-with-input-file "gerbil.pkg" read))
   (def dependencies (pgetq depend: properties '()))
   (unless (and (list? dependencies) (andmap string? dependencies))
@@ -114,10 +129,18 @@
                (directory (path-expand package (pkg-root-dir)))
                (revision (and (pair? (cdr parts)) (cadr parts))))
           (cond
-           ((pair? arguments)
+           (fetch-only?
             (when revision (prepare-pinned-source dependency package directory revision)))
            ((equal? package "github.com/tao3k/orgize")
             (prepare-orgize-build! dependency package directory revision)
             (install-pinned pkg-install dependency directory revision))
            (else (install-dependency! dependency)))))
       dependencies)))
+
+(def (main . arguments)
+  (match arguments
+    ([] (prepare-dependencies! #f))
+    (["--fetch-only"] (prepare-dependencies! #t))
+    (["--rebuild-core-dependents"] (rebuild-core-dependents!))
+    (else (error "usage: runtime-dependencies.ss [--fetch-only|--rebuild-core-dependents]"
+                 arguments))))
