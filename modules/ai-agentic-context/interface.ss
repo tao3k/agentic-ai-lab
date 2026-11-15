@@ -7,5 +7,4 @@
   core:
   (.o scope-contract: ContextScopeContract
       exports: (.o config: Config profile: ContextCoreProfile))
-  features:
-  (.o memory: (.o refine: EnableMemory contract: ContextMemoryScopeContract)))
+  features: '(memory))

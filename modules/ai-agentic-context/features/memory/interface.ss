@@ -3,12 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Memory publishes catalog and selection operations through this Interface.
-;;; Store execution, artifact policy and recovery consumers import their owners.
-
-(import "config.ss"
+(import (only-in :tao3k/yuanxu/module-system/source/declaration .def)
+        (only-in "../../objects.ss" EnableMemory)
+        (only-in "../../types.ss" ContextMemoryScopeContract)
+        "config.ss"
         "org-selection.ss"
         "session-selection.ss")
-(export (import: "config.ss")
-        (import: "org-selection.ss")
-        (import: "session-selection.ss"))
+
+(.def Feature
+  refine: EnableMemory
+  contract: ContextMemoryScopeContract)

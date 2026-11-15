@@ -10,7 +10,10 @@
                  make-org-element-graph-view org-element-query
                  org-elements property descendant-of)
         :tao3k/agentic-ai-lab/modules/session/config
-        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/interface)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/objects
+                 agentic-ai-lab-memory-store-spec)
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/org-selection
+        :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/session-selection)
 
 (export memory-org-selection-test)
 
