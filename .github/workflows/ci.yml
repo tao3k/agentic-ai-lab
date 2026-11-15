@@ -167,9 +167,9 @@ jobs:
             (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
-          # The prerequisite cache is saved before Lab is linked or built.
-          # Replace any transitive Core products before expanding Lab.
-          gerbil env just clean-core
+          # Clean the vendored package through its native build declaration.
+          # Its development cleanup script imports the previously built Core.
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil clean)
           gerbil env just build-core
 
       - name: Save Gerbil package cache
