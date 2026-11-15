@@ -407,6 +407,7 @@
           (check-equal? (measure-phase 'b-hashes-after-clean (lambda () (product-digests (artifact-files identities b-lib)))) b-products)
           (check-equal? (compile-events (from-source-plan b "compile" 'hot-b)) '())
           (displayln "LAB-DEPLOYMENT-STAGE test-start at=" (real-time)) (force-output)
+          (def child-pid #f)
           (def child-pids #f)
           (def test-returned? #f)
           (def (sample-exit)
@@ -427,7 +428,13 @@
                               (list "/bin/ps" "-p" child-pids "-o" "pid=,ppid=,pgid=,stat=,comm=")
                               coprocess: read-all-as-string check-status: #f))
                           (displayln "LAB-DEPLOYMENT-EXIT-PROBE child,parent=" child-pids
-                                     " at=" (real-time) " rows=" (object->string rows))))
+                                     " at=" (real-time) " rows=" (object->string rows))
+                          (force-output)
+                          (when (and (not test-returned?)
+                                     (string-contains rows (string-append child-pid " ")))
+                            (run-process
+                              (list "/usr/bin/sample" child-pid "1" "10" "-mayDie" "-file" "/dev/stdout")
+                              stdout-redirection: #f check-status: #f))))
                       (force-output)))))))
           (def test-result
             ;; The selected Suite consumes B's production products through the
@@ -446,6 +453,7 @@
                                                                (string-length line)) read-all))
                                          (when (and (= (length pids) 2)
                                                     (andmap (lambda (pid) (and (fixnum? pid) (positive? pid))) pids))
+                                           (set! child-pid (number->string (car pids)))
                                            (set! child-pids (string-join (map number->string pids) ","))
                                            (display line)
                                            (force-output))))
