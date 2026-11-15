@@ -59,10 +59,12 @@
          "CASE-OK explicit cut bridge preserves uncertainty and original identity binding")
        (list "gerbil" vm "env" "gerbil" vm "t/harness/ascent-temporal-runner.ss")))
     ((context-temporal)
-     (let (files (list (absolute "t/qualification/context-temporal/interface.ss")))
+     (let* ((source (absolute "t/qualification/context-temporal/interface.ss"))
+            (compiled (getenv "LAB_CONTEXT_TEMPORAL_INTERFACE" #f))
+            (files (list (or compiled source))))
        (qualification-script files
          (watched (append (list "gerbil" vm "test" "-v" "5") files)) 45
-         inputs: (list (this-source-file) (absolute watch)) case-count: 99)))
+         inputs: (list source (this-source-file) (absolute watch)) case-count: 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)
