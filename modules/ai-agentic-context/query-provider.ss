@@ -10,9 +10,8 @@
  (only-in :clan/poo/clos/classes poo-clos-class)
  (only-in :clan/poo/clos/lifecycle poo-clos-make-instance)
  (only-in :clan/poo/clos/objects
-          poo-clos-method poo-clos-class-specializer poo-clos-eql-specializer
-          poo-clos-prototype-specializer poo-clos-any-specializer
           poo-clos-compose-method-bundle)
+ (only-in :clan/poo/clos/generic-syntax .defmethod)
  (only-in :clan/poo/clos/method-bundle-syntax .defmethod-bundle)
  :tao3k/agentic-ai-lab/modules/query/objects
  (only-in :tao3k/agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
@@ -109,23 +108,15 @@
    'agentic-ai-lab
    (poo-clos-make-instance ContextOrgExecutor)))
 
-(def binding-method
-  (poo-clos-method
-   'context/org-query-binding
-   (list
-    (poo-clos-class-specializer ContextOrgExecutor)
-    (poo-clos-eql-specializer ContextOrgQueryProvider)
-    (poo-clos-prototype-specializer AgenticAILabQuery.)
-    (poo-clos-any-specializer)
-    (poo-clos-any-specializer))
-   (lambda (_frame _executor provider query admission candidate)
-     (agentic-ai-lab-query-bind-execution-receipt/default
-      provider
-      query
-      admission
-      candidate))))
-
-(.defmethod-bundle ContextOrgQueryMethods QueryReceiptBindingProtocol binding-method)
+(.defmethod-bundle ContextOrgQueryMethods
+  QueryReceiptBindingProtocol
+  (.defmethod (context/org-query-binding
+               (_executor ContextOrgExecutor)
+               (provider (eql ContextOrgQueryProvider))
+               (query (prototype AgenticAILabQuery.))
+               admission candidate)
+    (agentic-ai-lab-query-bind-execution-receipt/default
+     provider query admission candidate)))
 
 (poo-clos-compose-method-bundle QueryReceiptBindingGeneric ContextOrgQueryMethods)
 

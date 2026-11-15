@@ -13,10 +13,9 @@
         ;; syntax. Reflection, evolution and class declaration syntax stay lazy.
         (only-in :clan/poo/clos/objects
                  poo-clos-generic-protocol poo-clos-generic-function
-                 poo-clos-method poo-clos-class-specializer
-                 poo-clos-any-specializer poo-clos-prototype-specializer
                  poo-clos-compose-method-bundle)
         (only-in :clan/poo/clos/dispatch poo-clos-call)
+        (only-in :clan/poo/clos/generic-syntax .defmethod)
         (only-in :clan/poo/clos/method-bundle-syntax .defmethod-bundle)
         (only-in "types.ss"
                  agentic-ai-lab-query?
@@ -152,22 +151,15 @@
    'query-bind-execution-receipt 5
    protocol: QueryReceiptBindingProtocol))
 
-(def QueryUnsupportedReceiptBindingMethod
-  (poo-clos-method
-   'query/unsupported-receipt-binding
-   (list
-    (poo-clos-class-specializer QueryReceiptBindingExecutor)
-    (poo-clos-any-specializer)
-    (poo-clos-prototype-specializer AgenticAILabQuery.)
-    (poo-clos-any-specializer)
-    (poo-clos-any-specializer))
-   (lambda (_frame _executor provider _query _admission _candidate)
-     (error "Query Provider lacks a receipt binding method"
-            (.ref provider 'identity)))))
-
 (.defmethod-bundle QueryReceiptBindingCoreMethods
   QueryReceiptBindingProtocol
-  QueryUnsupportedReceiptBindingMethod)
+  (.defmethod (query/unsupported-receipt-binding
+               (_executor QueryReceiptBindingExecutor)
+               provider
+               (_query (prototype AgenticAILabQuery.))
+               _admission _candidate)
+    (error "Query Provider lacks a receipt binding method"
+           (.ref provider 'identity))))
 
 (poo-clos-compose-method-bundle
  QueryReceiptBindingGeneric
