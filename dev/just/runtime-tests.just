@@ -223,7 +223,7 @@ test-context-owner-cas:
 
 [group('test')]
 test-context-temporal:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
+    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
 
 # Qualify the default interpreter dispatcher independently of the AOT tool.
 [group('test')]
