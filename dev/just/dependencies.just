@@ -4,7 +4,7 @@
 # Install the dependency revisions declared by gerbil.pkg.
 [group('dependency')]
 deps:
-    {{ gerbil_darwin_env }} gerbil deps --install
+    {{ gerbil_darwin_env }} gerbil env gxi packages/automation/runtime-dependencies.ss
     {{ gerbil_darwin_env }} gerbil clean
 
 # Rebuild one installed source without fetching or changing its dependencies.

@@ -7,14 +7,17 @@
 (import (only-in :gerbil/tools/gxpkg
           pkg-install pkg-update pkg-root-dir with-pkg-build-env)
         (only-in :std/error Error-irritants)
+        (only-in :std/list/list find)
         (only-in :std/misc/process process-error? run-process run-process/batch))
 (export main)
 
-(def (missing-pinned-tree? failure directory revision)
-  (and (string? revision)
-       (= (string-length revision) 40)
+(def (git-revision? revision)
+  (and (string? revision) (= (string-length revision) 40)
        (andmap (lambda (ch) (or (char<=? #\0 ch #\9) (char<=? #\a ch #\f)))
-               (string->list revision))
+               (string->list revision))))
+
+(def (missing-pinned-tree? failure directory revision)
+  (and (git-revision? revision)
        (process-error? failure)
        (match (Error-irritants failure)
          (["git" _ settings]
@@ -53,6 +56,49 @@
   (unless (pkg-update dependency)
     (error "cannot bind pinned Gerbil package source" dependency)))
 
+(def (install-dependency! dependency)
+  (def parts (string-split dependency #\@))
+  (def directory (path-expand (car parts) (pkg-root-dir)))
+  (def revision (and (pair? (cdr parts)) (cadr parts)))
+  (when (file-exists? directory)
+    (install-pinned pkg-update dependency directory revision))
+  (install-pinned pkg-install dependency directory revision))
+
+(def (orgize-scheme-rust-dependency directory)
+  ;; Orgize's native build imports Scheme Rust for its ABI check. Its Cargo
+  ;; lock owns this revision, just as the Bazel producer's input does.
+  (def package "github.com/tao3k/gerbil-scheme-rust")
+  (def prefix (string-append "source = \"git+https://" package "?"))
+  (def revisions
+    (call-with-input-file (path-expand "Cargo.lock" directory)
+      (lambda (port)
+        (let loop ((revisions '()))
+          (let (line (read-line port))
+            (cond
+             ((eof-object? line) revisions)
+             ((string-prefix? prefix line)
+              (def source (cadr (string-split line #\")))
+              (def parts (string-split source #\#))
+              (unless (and (= (length parts) 2) (git-revision? (cadr parts)))
+                (error "Orgize has an invalid Scheme Rust git source" line))
+              (loop (if (member (cadr parts) revisions) revisions (cons (cadr parts) revisions))))
+             (else (loop revisions))))))))
+  (unless (= (length revisions) 1)
+    (error "Orgize must lock one Scheme Rust revision" revisions))
+  (string-append package "@" (car revisions)))
+
+(def (prepare-orgize-build! dependency package directory revision)
+  (if (file-exists? directory)
+    (install-pinned pkg-update dependency directory revision)
+    (prepare-pinned-source dependency package directory revision))
+  (def metadata (call-with-input-file (path-expand "gerbil.pkg" directory) read))
+  (def parser
+    (find (lambda (entry) (string-prefix? "github.com/tao3k/gerbil-parser@" entry))
+          (pgetq depend: metadata '())))
+  (unless parser (error "Orgize must pin its Parser dependency" directory))
+  (install-dependency! parser)
+  (install-dependency! (orgize-scheme-rust-dependency directory)))
+
 (def (main . arguments)
   (unless (or (null? arguments) (equal? arguments '("--fetch-only")))
     (error "usage: runtime-dependencies.ss [--fetch-only]" arguments))
@@ -64,14 +110,14 @@
     (for-each
       (lambda (dependency)
         (let* ((parts (string-split dependency #\@))
-               (directory (path-expand (car parts) (pkg-root-dir)))
+               (package (car parts))
+               (directory (path-expand package (pkg-root-dir)))
                (revision (and (pair? (cdr parts)) (cadr parts))))
-          ;; Call the native APIs directly: v0.19's deps --update forwards the
-          ;; tagged spelling to a directory lookup after updating it.
-          (if (pair? arguments)
-            (when revision (prepare-pinned-source dependency (car parts) directory revision))
-            (begin
-              (when (file-exists? directory)
-                (install-pinned pkg-update dependency directory revision))
-              (install-pinned pkg-install dependency directory revision)))))
+          (cond
+           ((pair? arguments)
+            (when revision (prepare-pinned-source dependency package directory revision)))
+           ((equal? package "github.com/tao3k/orgize")
+            (prepare-orgize-build! dependency package directory revision)
+            (install-pinned pkg-install dependency directory revision))
+           (else (install-dependency! dependency)))))
       dependencies)))
