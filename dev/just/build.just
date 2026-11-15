@@ -16,7 +16,7 @@ build-library:
 # Use the selected Lab and Funflow projection shared by the Bazel package.
 [group('build')]
 build-qualification-library:
-    {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} ./build-bazel.ss compile
+    {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} ./build-bazel.ss qualify
 
 # Compile the pinned local Core using Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.

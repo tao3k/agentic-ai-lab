@@ -12,16 +12,20 @@
 (export main)
 
 (def (main (operation "compile"))
-  (unless (equal? operation "compile")
-    (error "Bazel Scheme package expects compile" operation))
+  (def entries
+    (cond
+     ((equal? operation "compile")
+      '("modules/workflow/profiles/funflow-library"
+        "modules/workflow/scenario/runtime-funflow"))
+     ((equal? operation "qualify")
+      '("t/qualification/context-temporal/interface"))
+     (else (error "unknown Lab build operation" operation))))
   (def root (path-directory (this-source-file)))
   (def output (build-output-directory))
   (call-with-build-source-fallbacks (list (path-expand "core" root))
     (lambda ()
       (def projection
-        (.call tao3k/agentic-ai-lab.init-bazel.exports .project-build
-               '("modules/workflow/profiles/funflow-library"
-                 "modules/workflow/scenario/runtime-funflow")))
+        (.call tao3k/agentic-ai-lab.init-bazel.exports .project-build entries))
       (.call projection .with-compiler-inputs
         (lambda ()
           (make (.get projection spec)
