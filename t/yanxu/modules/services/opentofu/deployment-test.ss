@@ -7,7 +7,8 @@
         (only-in :gerbil/expander __module-registry expander-context-id
                  module-context? module-context-path)
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :std/misc/ports read-all-as-u8vector)
+        (only-in :std/misc/ports read-all-as-u8vector read-all-as-string)
+        (only-in :std/misc/process run-process)
         (only-in :std/crypto/digest sha256)
         (only-in :tao3k/yuanxu/ops/progress current-execution-progress execution-progress!
                  call-with-execution-watchdog make-test-progress-reader)
@@ -406,6 +407,28 @@
           (check-equal? (measure-phase 'b-hashes-after-clean (lambda () (product-digests (artifact-files identities b-lib)))) b-products)
           (check-equal? (compile-events (from-source-plan b "compile" 'hot-b)) '())
           (displayln "LAB-DEPLOYMENT-STAGE test-start at=" (real-time)) (force-output)
+          (def child-pids #f)
+          (def test-returned? #f)
+          (def (sample-exit)
+            (when child-pids
+              ;; Run beside the existing output reader. Diagnostics never count
+              ;; as progress and do not delay or substitute for the child's exit.
+              (thread-start!
+                (make-thread
+                  (lambda ()
+                    (thread-sleep! .15)
+                    (unless test-returned?
+                      (with-catch
+                        (lambda (failure)
+                          (displayln "LAB-DEPLOYMENT-EXIT-PROBE failed " failure))
+                        (lambda ()
+                          (def rows
+                            (run-process
+                              (list "/bin/ps" "-p" child-pids "-o" "pid=,ppid=,pgid=,stat=,comm=")
+                              coprocess: read-all-as-string check-status: #f))
+                          (displayln "LAB-DEPLOYMENT-EXIT-PROBE child,parent=" child-pids
+                                     " at=" (real-time) " rows=" (object->string rows))))
+                      (force-output)))))))
           (def test-result
             ;; The selected Suite consumes B's production products through the
             ;; existing harness. Test discovery supplies the exact file list.
@@ -417,9 +440,19 @@
                                  (make-test-progress-reader
                                    (lambda (line)
                                      (cond
+                                      ((string-prefix? "LAB-DEPLOYMENT-PID " line)
+                                       (let (pids (call-with-input-string
+                                                    (substring line (string-length "LAB-DEPLOYMENT-PID ")
+                                                               (string-length line)) read-all))
+                                         (when (and (= (length pids) 2)
+                                                    (andmap (lambda (pid) (and (fixnum? pid) (positive? pid))) pids))
+                                           (set! child-pids (string-join (map number->string pids) ","))
+                                           (display line)
+                                           (force-output))))
                                       ((or (string=? line "OK\n") (string=? line "OK"))
                                        (displayln "LAB-DEPLOYMENT-STAGE child-ok at=" (real-time))
-                                       (force-output))
+                                       (force-output)
+                                       (sample-exit))
                                       ((or (string-prefix? "HARNESS " line)
                                            (string-prefix? "MODULE " line)
                                            (string-prefix? "LAB-DEPLOYMENT-IMPORT " line)
@@ -431,6 +464,7 @@
                                        (force-output))))))
                      environment: (.o GERBIL_PATH: b GAMBOPT: runtime-options
                        GERBIL_LOADPATH: (string-join (cons b-lib prerequisites) ":"))) .run))
+          (set! test-returned? #t)
           (check-equal? (.get test-result status) 0)
           (displayln "LAB-DEPLOYMENT-STAGE test-return at=" (real-time)) (force-output)
           (check-equal? (compile-events (.get test-result output)) '())

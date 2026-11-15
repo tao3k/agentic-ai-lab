@@ -4,11 +4,14 @@
   (displayln "LAB-DEPLOYMENT-IMPORT runtime-test enter")
   (force-output))
 (import :std/test
+        (only-in :std/os/pid getpid getppid)
         (only-in "../../../../../use.ss" verify-deployment-runtime))
 (begin-syntax
   (displayln "LAB-DEPLOYMENT-IMPORT runtime-test expanded")
   (force-output))
 (displayln "LAB-DEPLOYMENT-IMPORT runtime-test initialized")
+(when (equal? (getenv "LAB_TRACE_PRELUDE_CONTEXT" #f) "1")
+  (displayln "LAB-DEPLOYMENT-PID " (getpid) " " (getppid)))
 (force-output)
 (export deployment-runtime-test)
 (def deployment-runtime-test
