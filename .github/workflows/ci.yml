@@ -255,12 +255,15 @@ jobs:
           PY
 
       - name: Build the development library
-        run: GERBIL_BUILD_VERBOSE=1 gerbil env just build-qualification-library
+        run: |
+          qualification="$RUNNER_TEMP/lab-qualification"
+          mkdir -p "$qualification/lib"
+          gerbil env env GERBIL_PATH="$qualification" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" just build-qualification-library
 
       - name: Install optional development policy dependencies
         run: |
           (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
-          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib:$RUNNER_TEMP/lab-qualification/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
 
       - name: Qualify selected Agentic Context memory
@@ -282,7 +285,6 @@ jobs:
 
       - name: Check original Temporal proof binding and Session invalidation
         env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
           AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/agentic-ai-lab-test-stalls
         run: gerbil env just test-context-temporal
 
@@ -290,8 +292,6 @@ jobs:
         run: gerbil env just build-testing build-test-workers prepare-test-inputs
 
       - name: Run Lab unit tests through bounded Gerbil Harness batches
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |
           set -euo pipefail
           gerbil env just test-root 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
