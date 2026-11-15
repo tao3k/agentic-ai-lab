@@ -8,7 +8,8 @@
         (only-in :clan/poo/object .get .call .o)
         (only-in :gerbil/expander core-import-module)
         (only-in :tao3k/yuanxu/module-system/building/products
-                 build-output-directory current-build-source-directory)
+                 build-output-directory current-build-output-directory
+                 current-build-source-directory)
         (only-in :tao3k/yuanxu/module-system/building/artifacts call-with-static-compiler-inputs)
         (only-in :tao3k/yuanxu/module-system/building/source-closure for-each-build-module)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path)
@@ -16,13 +17,15 @@
         (rename-in (only-in "./init.ss" agentic-ai-lab-nix-qualification.init.exports)
                    (agentic-ai-lab-nix-qualification.init.exports adapter-exports)))
 
+(export main)
+
 (def root (path-directory (this-source-file)))
-(def output (build-output-directory))
 (def tool-target
   (list exe: "tools" bin: "build-publication-tools"
         "-ld-options" (pkg-config-libs "libcrypto" "libssl")))
 
 (def (build targets (with-inputs (lambda (_projection action) (action))))
+  (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
       (def projection (.call adapter-exports .project-build targets))
@@ -34,16 +37,19 @@
                 srcdir: (or (current-build-source-directory) root)
                 libdir: output bindir: (path-expand "bin" (gerbil-path))))))))))
 
-;; The worker imports public libraries that consume selected adapter products.
-(build '())
-(build '("programs" "approved-producer" "worker" "store-producer"))
-(build (list tool-target)
-  (lambda (projection action)
-    (def contexts '())
-    (for-each-build-module (core-import-module (path-expand "tools.ss" root))
-      (lambda (context) (set! contexts (cons context contexts))))
-    (call-with-static-compiler-inputs
-      (.o static-inputs:
-          (module-static-compiler-inputs (reverse contexts) (.get projection compiler-identities)))
-      action)))
-(displayln "NIX-ADAPTER-BUILD-OK")
+(def (main (_operation "compile") (libdir #f))
+  (parameterize ((current-build-output-directory libdir))
+    (create-directory* (build-output-directory))
+    ;; The worker imports public libraries that consume selected adapter products.
+    (build '())
+    (build '("programs" "approved-producer" "worker" "store-producer"))
+    (build (list tool-target)
+      (lambda (projection action)
+        (def contexts '())
+        (for-each-build-module (core-import-module (path-expand "tools.ss" root))
+          (lambda (context) (set! contexts (cons context contexts))))
+        (call-with-static-compiler-inputs
+          (.o static-inputs:
+              (module-static-compiler-inputs (reverse contexts) (.get projection compiler-identities)))
+          action)))
+    (displayln "NIX-ADAPTER-BUILD-OK")))

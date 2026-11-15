@@ -6,8 +6,8 @@ root := justfile_directory() + "/../../.."
 # Reuse the existing test VM setting in standalone Nix qualification.
 vm := "-:max-heap=" + env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") + ",debug=q"
 
-build:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1200s gerbil {{ vm }} interactive t/fixtures/nix/build.ss compile
+build library="":
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1200s gerbil {{ vm }} interactive t/fixtures/nix/build.ss compile {{ if library == "" { "" } else { quote(library) } }}
 
 # Nix-specific approval preparation; Lab owns the restarted publication worker.
 approved-producer workspace:
