@@ -369,11 +369,11 @@
 
 ;;; A has the changed grant/policy. B has independent authority/proof but captures
 ;;; A's immutable Context version. C shares B's authority without that dependency.
-(def (authority-fixture (enabled? #t) (original-context #f) (safe-end 10) (workers? #t))
+(def (authority-fixture (enabled? #t) (original-context #f) (safe-end 10) (workers? #t) (safe-context #f))
   (let (grants (agentic-ai-lab-context-use-host))
     (let-values (((host proof ph registration p ctx) (context-proof-setup grants original-context #f enabled?)))
       (let* ((safe (agentic-ai-lab-temporal-support-policy "safe-policy" "safe-v1" (at 1) (at safe-end)))
-             (ctx-c (mrr-derivation-fixture push-candidate '(1 2) (list-ref ctx 9)))
+             (ctx-c (or safe-context (mrr-derivation-fixture push-candidate '(1 2) (list-ref ctx 9))))
              (registered-c (agentic-ai-lab-temporal-proof-host-register! proof "source"
                (.ref (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 1 (car ctx) (list-ref ctx 9)) 'semantic-digest)
                (selected-context ctx-c push-candidate) "safe-policy"))
@@ -444,9 +444,10 @@
              'assert #f (at 1) (agentic-ai-lab-temporal-interval "clock-valid" (at 0) (at 1000000) #t #f)
              (.ref r 'content-identity))) (.ref old 'revisions)))))
     (mrr-derivation-fixture proposal #f j)))
-(def (clock-fixture paused? delay copies (enabled? #t) (tick 0.002))
+(def (clock-fixture paused? delay copies (enabled? #t) (tick 0.002)
+                   (original-context #f) (safe-context #f))
   (policy-clock-owner (lambda ()
-    (let (f (authority-fixture #t (clock-original-context) 1000000))
+    (let (f (authority-fixture #t (or original-context (clock-original-context)) 1000000 #t safe-context))
       (values f (.ref f 'policies)))) "txn" 1 tick delay copies paused? enabled?))
 (def (clock-phases audit phase)
   (length (filter (lambda (row) (eq? (.ref row 'phase) phase)) audit)))
@@ -500,8 +501,8 @@
 ;;; Both duplicate deliveries are produced by the REAL timer before these
 ;;; operations. Pausing delays handling, not clock passage or event production.
 ;;; 1 resume; 2 replace+fresh D; 3 actual old commit; 4 cancel; 5 recover.
-(def (clock-replay order)
-  (let (clock (clock-fixture #t 0.004 2))
+(def (clock-replay order original-context safe-context)
+  (let (clock (clock-fixture #t 0.004 2 #t 0.002 original-context safe-context))
     (dynamic-wind void
       (lambda ()
         (policy-clock-await-events! clock 2)

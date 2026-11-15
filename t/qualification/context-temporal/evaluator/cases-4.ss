@@ -105,12 +105,16 @@
       "native delayed duplicate tickets policy replacement results cancellation recovery races"
       (let* ((all (clock-orders '() '(1 2 3 4 5)))
              (replay (getenv "AGENTIC_CONTEXT_CLOCK_ORDER" #f))
-             (orders (if replay (list (call-with-input-string replay read)) all)) (count 0))
+             (orders (if replay (list (call-with-input-string replay read)) all))
+             (original (clock-original-context))
+             ;; Replay immutable source evidence against fresh owners and timers.
+             (safe (mrr-derivation-fixture push-candidate '(1 2) (list-ref original 9)))
+             (count 0))
         (check (length all) => 60)
         (for-each (lambda (order)
           (unless (member order all) (error "Illegal native clock order" order))
           (displayln "NATIVE-CLOCK-BEGIN order=" order) (force-output)
-          (clock-replay order)
+          (clock-replay order original safe)
           (set! count (+ count 1)) (execution-progress! '(native-clock-paths-verified) count)) orders)
         (check count => (if replay 1 60))
         (displayln "NATIVE-CLOCK-OBSERVE races paths=" count " duplicate-terminals=0 old-ticket-new-policy-damage=0 stale-reactivations=0 unaffected-failures=0")))
