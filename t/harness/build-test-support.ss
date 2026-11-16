@@ -12,7 +12,13 @@
   (def tests
     (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
       (if (null? files) (default-test-files) files) '()
-      `((gxc: "t/qualification/context-temporal/c-abi-caller"
+      (append
+        (map (lambda (target)
+               (cons (car target)
+                 (cons (string-append "modules/nono-sandbox/" (cadr target))
+                       (cddr target))))
+          (.get tao3k/agentic-ai-lab.init.exports modules nono-sandbox __std-make-spec))
+        `((gxc: "t/qualification/context-temporal/c-abi-caller"
               "-cc-options"
-              ,(string-append "-I" root " -I" (path-expand "bindings/runtime-c/include" root))))))
+              ,(string-append "-I" root " -I" (path-expand "bindings/runtime-c/include" root)))))))
   (make (.get tests std-make-spec) srcdir: root))
