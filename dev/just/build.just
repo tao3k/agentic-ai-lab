@@ -28,12 +28,12 @@ build-core:
 # Clean only Core outputs; dependency source checkouts stay intact.
 [group('build')]
 clean-core:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} just clean
+    cd "{{ justfile_directory() }}/core" && {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} clean
 
 # Clean the same explicit development build artifacts.
 [group('build')]
 clean:
-    {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} build.ss spec | {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} core/dev/gerbil/clean-outputs.ss "$PWD" "{{ agentic_ai_lab_gerbil_path }}/lib" ./build.ss clean
+    {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} clean
 
 # Incrementally build the canonical Scheme project through a persistent Bazel development root.
 [group('build')]
