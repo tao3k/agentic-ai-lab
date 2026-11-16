@@ -19,7 +19,7 @@ OBSOLETE = re.compile(r"poo(?:[-_ ]|_x2d)?flow|(?<![A-Za-z0-9_/]):co[r]e/", re.I
 EVIDENCE_SUFFIXES = {".log", ".receipt", ".snapshot", ".gz"}
 SOURCE_SUFFIXES = {
     ".ss", ".scm", ".pkg", ".py", ".rs", ".c", ".cc", ".h", ".pc",
-    ".toml", ".bzl", ".bazel", ".nix", ".just", ".yml", ".yaml", ".lean",
+    ".toml", ".nix", ".just", ".yml", ".yaml", ".lean",
     ".qnt", ".mjs", ".ts", ".json", ".lock", ".md", ".org", ".txt",
 }
 

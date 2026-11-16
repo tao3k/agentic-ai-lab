@@ -46,7 +46,7 @@ class NamespaceContractTests(unittest.TestCase):
 
     def test_core_source_path_is_not_a_module_namespace(self):
         self.assertEqual(self.check_source("README.org", "[[file:core/types.ss]]"), [])
-        self.assertEqual(self.check_source("BUILD.bazel", '"//:core/gerbil.pkg"'), [])
+        self.assertEqual(self.check_source("Justfile", '"core/gerbil.pkg"'), [])
 
     def test_recorded_evidence_keeps_original_identity(self):
         old = "POO" + "_FLOW"
