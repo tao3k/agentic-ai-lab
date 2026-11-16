@@ -4,7 +4,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Optional Provider role: relational admission before runtime projection.
-(import (only-in :clan/poo/object .ref)
+(import (only-in :clan/poo/mop .defmethod-bundle)
+        (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every)
         (only-in :std/encoding/hex hex-encode)

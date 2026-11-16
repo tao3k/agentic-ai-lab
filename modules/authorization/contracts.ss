@@ -4,7 +4,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Optional module role: relations spanning Provider and capability values.
-(import (only-in :clan/poo/object .o .ref)
+(import (only-in :clan/poo/mop .defmethod-bundle)
+        (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
