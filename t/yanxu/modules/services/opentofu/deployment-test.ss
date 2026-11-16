@@ -320,8 +320,8 @@
                       "tao3k/yuanxu/modules/funflow/control-plane/config"
                       "tao3k/yuanxu/modules/funflow/control-plane/agent-harness"))
           (def selected-owners '(tao3k/agentic-ai-lab/modules/nix/interface
-                                 tao3k/yuanxu/modules/json-schema/interface
                                  tao3k/yuanxu/modules/funflow/interface
+                                 tao3k/yuanxu/modules/json-schema/interface
                                  tao3k/agentic-ai-lab/modules/services/opentofu/interface))
           (def owner-prefixes '("tao3k/agentic-ai-lab/modules/nix/" "tao3k/agentic-ai-lab/modules/services/opentofu/"
                                 "tao3k/yuanxu/modules/json-schema/" "tao3k/yuanxu/modules/funflow/"))
