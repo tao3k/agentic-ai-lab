@@ -16,4 +16,4 @@
   (c-define (context-test-evaluate operation payload result)
     (UTF-8-string UTF-8-string context-test-result-pointer) int32
     "context_test_evaluate" "extern"
-    (native-evaluate operation payload result)))
+    (gerbil-evaluate operation payload result)))
