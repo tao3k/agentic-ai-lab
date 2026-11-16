@@ -33,10 +33,12 @@ clean-core:
     rm -rf "{{ agentic_ai_lab_gerbil_path }}/lib/tao3k/yuanxu"
     rm -f "{{ agentic_ai_lab_gerbil_path }}/lib/static/tao3k__yuanxu__"*
 
-# Clean the same explicit development build artifacts.
+# Native clean owns the declared spec; remove retired optional Lab products too.
 [group('build')]
 clean:
     {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} clean
+    rm -rf "{{ agentic_ai_lab_gerbil_path }}/lib/tao3k/agentic-ai-lab"
+    rm -f "{{ agentic_ai_lab_gerbil_path }}/lib/static/tao3k__agentic-ai-lab__"*
 
 # Build the runtime-C library target.
 [group('build')]
