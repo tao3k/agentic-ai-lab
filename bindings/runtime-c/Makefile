@@ -7,6 +7,13 @@ CFLAGS += -std=c11 -Wall -Wextra -Werror -pedantic -fPIC
 CXXFLAGS += -std=c++17 -Wall -Wextra -Werror -pedantic
 AR ?= ar
 ifeq ($(shell uname -s),Darwin)
+# Match the system SDK and sanitizer runtime unless the caller selects a compiler.
+ifeq ($(origin CC),default)
+CC := /usr/bin/cc
+endif
+ifeq ($(origin CXX),default)
+CXX := /usr/bin/c++
+endif
 EXT := dylib
 SHARED := -dynamiclib
 else
