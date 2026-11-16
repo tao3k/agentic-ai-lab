@@ -7,7 +7,7 @@
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
         :tao3k/agentic-ai-lab/modules/query/interface
-        (only-in :clan/poo/mop validate poo-clos-class poo-clos-make-instance
+        (only-in :clan/poo/mop validate .defmethod-bundle poo-clos-class poo-clos-make-instance
                  poo-clos-method poo-clos-class-specializer poo-clos-eql-specializer
                  poo-clos-prototype-specializer poo-clos-any-specializer
                  poo-clos-compose-method-bundle)
