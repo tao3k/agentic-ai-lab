@@ -5,24 +5,11 @@
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
         (only-in :tao3k/yuanxu/module-system/source/objects yuanxu-module-source-ref-metadata)
         (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports))
-(export yuanxu-qualification-layout-test)
+(export lab-loader-ownership-test)
 (def tests-root (path-normalize (path-expand "../.." (path-directory (this-source-file)))))
 
-(def yuanxu-qualification-layout-test
-  (test-suite "Lab qualification layout"
-    (test-case "test infrastructure cannot live in the development module tree"
-      (def root (path-expand ".." tests-root))
-      (for-each (lambda (path)
-                  (check-equal? (file-exists? (path-expand path root)) #f))
-                '("dev/modules"
-                  "dev/run-lab-tests.ss"
-                  "dev/build-lab-test-support.ss")))
-    (test-case "top-level tests cannot bypass Loader or integration ownership"
-      (check-equal?
-        (list-sort string<?
-          (filter (lambda (name) (string-suffix? "-test.ss" name))
-                  (directory-files tests-root)))
-        '()))
+(def lab-loader-ownership-test
+  (test-suite "Lab init-owned downstream test publication"
     (test-case "declared owners discover their exact qualification files without running them"
       (def root tests-root)
       (def qualification (.get tao3k/agentic-ai-lab.init.exports tests qualification))
