@@ -26,9 +26,9 @@ d2-reuse mode="evaluate":
 # imports; this entry does not depend on Core's private progress adapter.
 [group('test')]
 test-d2:
-    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/module-test.ss t/context-window-ascent-test.ss t/yanxu/modules/d2/reader-review-test.ss t/yanxu/modules/d2/explanation-test.ss t/yanxu/modules/d2/authoring-test.ss t/yanxu/modules/d2/image-reading-test.ss t/yanxu/modules/d2/scene-test.ss t/yanxu/modules/d2/teaching-test.ss
+    {{ lab_test_env }} {{ lab_focused_test_deadline }} gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/module-test.ss t/context-window-ascent-test.ss t/yanxu/modules/d2/reader-review-test.ss t/yanxu/modules/d2/explanation-test.ss t/yanxu/modules/d2/authoring-test.ss t/yanxu/modules/d2/image-reading-test.ss t/yanxu/modules/d2/scene-test.ss t/yanxu/modules/d2/teaching-test.ss
 
 # Focused reader-rule assertions use the same declared D2 Module.
 [group('test')]
 test-d2-rules:
-    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/reader-rules-test.ss
+    {{ lab_test_env }} {{ lab_focused_test_deadline }} gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/reader-rules-test.ss
