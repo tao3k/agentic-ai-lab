@@ -60,7 +60,10 @@
   (force-output)
   (def test-command ["gerbil" vm "test" . files])
   (def command
-    (if (independent-test? (car files))
+    (if (and (independent-test? (car files))
+             (not (cond-expand
+                    (darwin (equal? (getenv "LAB_MACOS_QUALIFICATION_TIMING" #f) "1"))
+                    (else #f))))
       ["timeout" "--signal=TERM" "--kill-after=5s" file-budget . test-command]
       test-command))
   (def expected (filter (cut string-suffix? "-test.ss" <>) files))

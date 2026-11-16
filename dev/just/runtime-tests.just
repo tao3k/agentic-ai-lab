@@ -144,15 +144,15 @@ test-ascent-integration:
 # Run the ordinary runtime-C acceptance suite.
 [group('test')]
 test-runtime-c:
-    {{ lab_build_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} interactive bindings/runtime-c/tools/generate-runtime-v0-contract.ss --check
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} interactive bindings/runtime-c/tools/generate-runtime-v0-contract.ss --check
     {{ gerbil_darwin_env }} make -C bindings/runtime-c OUT="{{ runtime_c_output }}" test-runtime
-    {{ lab_build_env }} {{ gerbil_test_timeout }} 120s sh bindings/runtime-c/tests/runtime_v0_symbol_surface_test.sh gxi bindings/runtime-c/t/validate-runtime-v0-symbol-surface.ss "{{ runtime_c_output }}/libagentic_ai_lab_runtime_v0.{{ runtime_c_extension }}" bindings/runtime-c/tests/runtime_v0_exported_symbols.json
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s sh bindings/runtime-c/tests/runtime_v0_symbol_surface_test.sh gxi bindings/runtime-c/t/validate-runtime-v0-symbol-surface.ss "{{ runtime_c_output }}/libagentic_ai_lab_runtime_v0.{{ runtime_c_extension }}" bindings/runtime-c/tests/runtime_v0_exported_symbols.json
 
 # Run the Bundle v1 acceptance suite.
 [group('test')]
 test-bundle-v1:
     {{ gerbil_darwin_env }} make -C bindings/runtime-c OUT="{{ runtime_c_output }}" test-bundle
-    {{ lab_build_env }} {{ gerbil_test_timeout }} 120s sh bindings/runtime-c/bundle-v1/tests/bundle_v1_scheme_image_test.sh gxi t/fixtures/bundle-v1/foreign-arena.ss "{{ runtime_c_output }}/bundle_v1_scheme_image_harness" "{{ agentic_ai_lab_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo/gerbil.pkg" core/gerbil.pkg
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s sh bindings/runtime-c/bundle-v1/tests/bundle_v1_scheme_image_test.sh gxi t/fixtures/bundle-v1/foreign-arena.ss "{{ runtime_c_output }}/bundle_v1_scheme_image_harness" "{{ agentic_ai_lab_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo/gerbil.pkg" core/gerbil.pkg
 
 # Qualify an explicitly supplied Cedar Runtime Host artifact.
 [group('test')]
