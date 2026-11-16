@@ -4,17 +4,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Optional Provider role: relational admission before runtime projection.
-(import (only-in :clan/poo/mop .defmethod-bundle)
-        (only-in :clan/poo/object .ref)
+(import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every)
         (only-in :std/encoding/hex hex-encode)
         (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assessment?)
-        (only-in :clan/poo/mop
-                 clos-any-specializer clos-class-specializer
-                 clos-eql-specializer clos-method clos-compose-method-bundle)
+        (only-in :clan/poo/mop .defmethod .defmethod-bundle clos-compose-method-bundle)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric
@@ -28,20 +25,12 @@
         agentic-ai-lab-cedar-governance-contract
         CedarCapabilityContractMethods)
 
-(def CedarCapabilityContractMethod
-  (clos-method
-   'authorization/cedar-capability-contract
-   (list
-    (clos-class-specializer CedarCapabilityContractExecutor)
-    (clos-eql-specializer CedarAuthorizationProvider)
-    (clos-any-specializer))
-   (lambda (_frame _executor provider capabilities)
-     (agentic-ai-lab-authorization-capability-contract/default
-      provider capabilities))))
-
 (.defmethod-bundle CedarCapabilityContractMethods
   AuthorizationCapabilityContractProtocol
-  CedarCapabilityContractMethod)
+  (.defmethod (authorization/cedar-capability-contract
+               (_executor CedarCapabilityContractExecutor)
+               (provider (eql CedarAuthorizationProvider)) capabilities)
+    (agentic-ai-lab-authorization-capability-contract/default provider capabilities)))
 
 (clos-compose-method-bundle
  AuthorizationCapabilityContractGeneric

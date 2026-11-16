@@ -4,15 +4,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Optional module role: relations spanning Provider and capability values.
-(import (only-in :clan/poo/mop .defmethod-bundle)
-        (only-in :clan/poo/object .o .ref)
+(import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
         (only-in :clan/poo/mop
-                 clos-any-specializer clos-class-specializer
+                 .defmethod .defmethod-bundle
                  clos-generic-protocol clos-generic-function
-                 clos-method clos-compose-method-bundle clos-call)
+                 clos-compose-method-bundle clos-call)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types
@@ -90,20 +89,12 @@
    'authorization-capability-contract 3
    protocol: AuthorizationCapabilityContractProtocol))
 
-(def AuthorizationUnsupportedCapabilityContractMethod
-  (clos-method
-   'authorization/unsupported-capability-contract
-   (list
-    (clos-class-specializer AuthorizationCapabilityContractExecutor)
-    (clos-any-specializer)
-    (clos-any-specializer))
-   (lambda (_frame _executor provider _capabilities)
-     (error "authorization Provider lacks a capability contract method"
-            (.ref provider 'identity)))))
-
 (.defmethod-bundle AuthorizationCapabilityContractCoreMethods
   AuthorizationCapabilityContractProtocol
-  AuthorizationUnsupportedCapabilityContractMethod)
+  (.defmethod (authorization/unsupported-capability-contract
+               (_executor AuthorizationCapabilityContractExecutor) provider _capabilities)
+    (error "authorization Provider lacks a capability contract method"
+           (.ref provider 'identity))))
 
 (clos-compose-method-bundle
  AuthorizationCapabilityContractGeneric
