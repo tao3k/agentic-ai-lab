@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: upstream test framework for downstream module-system live cases.
+;;; Boundary: Lab-owned runner fixture for downstream module-system live cases.
 ;;; Invariant: concrete cases stay under user-interface; this file only runs them.
 
 (import (only-in :gerbil/core getenv)
@@ -178,7 +178,7 @@
      (agentic-ai-lab-module-system-live-case-rsync-exclude-join (cdr values))))))
 
 ;;; Staging is framework-owned, but every concrete path and exclude rule is read
-;;; from the downstream case object. This keeps src/testing generic while still
+;;; from the downstream case object. This keeps the Lab fixture generic while still
 ;;; proving the project is copied before sandbox execution.
 ;; : (-> POOObject MaybeWorkspacePath)
 (def (agentic-ai-lab-module-system-live-case-stage-project-copy live-case)

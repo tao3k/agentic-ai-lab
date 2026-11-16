@@ -9,6 +9,13 @@
 
 (def yuanxu-qualification-layout-test
   (test-suite "Lab qualification layout"
+    (test-case "test infrastructure cannot live in the development module tree"
+      (def root (path-expand ".." (path-directory (this-source-file))))
+      (for-each (lambda (path)
+                  (check-equal? (file-exists? (path-expand path root)) #f))
+                '("dev/modules"
+                  "dev/run-lab-tests.ss"
+                  "dev/build-lab-test-support.ss")))
     (test-case "declared owners discover their exact qualification files without running them"
       (def root (path-directory (this-source-file)))
       (def qualification (.get tao3k/agentic-ai-lab.init.exports tests qualification))

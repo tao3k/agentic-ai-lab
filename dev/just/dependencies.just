@@ -30,7 +30,7 @@ build-testing:
 [group('build')]
 [positional-arguments]
 build-test-support *paths:
-    {{ lab_test_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} interactive dev/build-lab-test-support.ss "$@"
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} interactive t/harness/build-test-support.ss "$@"
 
 # Reuse the maintained, hash-locked qualification inputs; retain a GC root.
 [group('dependency')]

@@ -5,7 +5,7 @@
         (only-in :std/error Error? Error-message Error-irritants)
         (only-in :std/source this-source-file)
         (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports)
-        (only-in "../../../dev/modules/testing/native-test-observation.ss"
+        (only-in "../../fixtures/testing/native-test-observation.ss"
                  native-test-command make-native-test-progress-reader))
 
 (def root (path-expand "../../.." (path-directory (this-source-file))))
@@ -13,7 +13,7 @@
   (def demand
     (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
       (list (path-expand fixture root))
-      (list (path-expand "dev/modules/testing/native-test-observation.ss" root)
+      (list (path-expand "t/fixtures/testing/native-test-observation.ss" root)
             (this-source-file))))
   (.def (Script @ (.get demand execution))
     runtime-options: (list vm)

@@ -35,11 +35,15 @@ test-dev:
 [group('test')]
 [positional-arguments]
 test-root *paths: test-lab-layout
-    {{ lab_test_env }} {{ lab_test_fixtures }} -- {{ gerbil_test_timeout }} 1200s gerbil {{ gerbil_test_runtime_options }} interactive dev/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} "$@"
+    {{ lab_test_env }} {{ lab_test_fixtures }} -- {{ gerbil_test_timeout }} 1200s gerbil {{ gerbil_test_runtime_options }} interactive t/harness/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} "$@"
 
 [group('test')]
 test-lab-layout:
-    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} interactive dev/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} t/yuanxu-qualification-layout-test.ss
+    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} interactive t/harness/run-lab-tests.ss {{ gerbil_test_runtime_options }} {{ lab_test_file_budget }} t/yuanxu-qualification-layout-test.ss
+
+[group('test')]
+test-testing-integration:
+    just test-root t/integration/testing/source-admission-observability-profile-test.ss t/integration/testing/user-interface-live-cicd-case-test.ss
 
 # Diagnose a long runtime file with the full package's unchanged process budget.
 [group('test')]

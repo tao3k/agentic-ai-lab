@@ -4,11 +4,11 @@
         (only-in :clan/poo/object .get .call)
         (only-in :std/source this-source-file)
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
-        (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports))
+        (only-in "../../init.ss" tao3k/agentic-ai-lab.init.exports))
 (export main default-test-files)
 
 (def (loader-test-files)
-  (def init (path-expand "../init.ss" (path-directory (this-source-file))))
+  (def init (path-expand "../../init.ss" (path-directory (this-source-file))))
   (def context
     (module-directory-context init
       (lambda (_) (error "test roster must leave publications cold"))
@@ -33,7 +33,8 @@
             (filter (lambda (file) (not (string=? file "t/yuanxu-qualification-layout-test.ss")))
                     (directory-tests "t")))
           (list-sort string<? (map local-path (loader-test-files)))
-          (list-sort string<? (directory-tests "t/integration/nix"))))
+          (list-sort string<? (directory-tests "t/integration/nix"))
+          (list-sort string<? (directory-tests "t/integration/testing"))))
 
 (def (independent-test? file)
   (member file '("t/session-independent-test.ss"

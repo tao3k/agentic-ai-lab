@@ -79,7 +79,7 @@
 ;; agenticAiLabModuleSystemLiveCase
 ;;   : (-> Symbol [PooUserModuleSelection] [Symbol] LiveCaseConfig POOObject)
 ;;   | contract: constructs inert live-case POO objects for the testing runner
-;;   | result: runtime-executed remains #f until src/testing/module-system-live-case.ss starts it
+;;   | result: runtime-executed remains #f until the Lab test fixture starts it
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -117,10 +117,10 @@
              (agentic-ai-lab-module-system-live-case-slot 'config config-value)
              (agentic-ai-lab-module-system-live-case-slot
               'case-owner
-              "src/testing")
+              "t/fixtures/testing")
              (agentic-ai-lab-module-system-live-case-slot
               'framework-owner
-              "dev/modules/testing/module-system-live-case.ss")
+              "t/fixtures/testing/module-system-live-case.ss")
              (agentic-ai-lab-module-system-live-case-slot 'runtime-executed #f)))))
 
 ;;; Boundary: module system live case flag value is the policy-visible edge for
