@@ -9,7 +9,7 @@
     ;; Native workers can print a job record between the prefix and target
     ;; or directly after the target before Make prints its newline.
     (let* ((worker (string-contains line worker-prefix))
-           (target (if worker (substring line 0 worker) line)))
+           (target (if (fixnum? worker) (substring line 0 worker) line)))
       (if (string-empty? target)
         (next events #t)
         (next (cons target events) #f))))
