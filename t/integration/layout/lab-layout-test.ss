@@ -17,6 +17,12 @@
                 '("dev/modules"
                   "dev/run-lab-tests.ss"
                   "dev/build-lab-test-support.ss")))
+    (test-case "top-level tests cannot bypass Loader or integration ownership"
+      (check-equal?
+        (list-sort string<?
+          (filter (lambda (name) (string-suffix? "-test.ss" name))
+                  (directory-files tests-root)))
+        '()))
     (test-case "declared owners discover their exact qualification files without running them"
       (def root tests-root)
       (def qualification (.get tao3k/agentic-ai-lab.init.exports tests qualification))

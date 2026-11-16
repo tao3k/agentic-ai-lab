@@ -29,8 +29,7 @@
   (def (directory-tests dir)
     (map (lambda (name) (string-append dir "/" name))
          (filter (cut string-suffix? "-test.ss" <>) (directory-files dir))))
-  (append (list-sort string<? (directory-tests "t"))
-          (list-sort string<? (map local-path (loader-test-files)))
+  (append (list-sort string<? (map local-path (loader-test-files)))
           (list-sort string<? (directory-tests "t/integration/nix"))
           (list-sort string<? (directory-tests "t/integration/testing"))))
 
