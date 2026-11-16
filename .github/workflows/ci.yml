@@ -335,6 +335,8 @@ jobs:
         run: gerbil env just prepare-test-inputs
 
       - name: Run Lab unit tests through bounded Gerbil Harness batches
+        env:
+          LAB_MACOS_QUALIFICATION_TIMING: ${{ runner.os == 'macOS' && '1' || '' }}
         run: |
           set -euo pipefail
           gerbil env just test-root 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
