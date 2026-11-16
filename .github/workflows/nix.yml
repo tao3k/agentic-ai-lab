@@ -67,9 +67,9 @@ jobs:
       - name: Serial product adapter regressions
         run: |
           gerbil env just test-root \
-            t/integration/nix/*-test.ss t/aws-*-test.ss \
+            t/integration/nix/*-test.ss \
             t/yanxu/scenarios/aws/*-test.ss \
             t/yanxu/modules/nix/*-test.ss t/yanxu/modules/services/opentofu/*-test.ss \
-            t/module-nix-*-test.ss t/json-schema-aws-*-test.ss \
-            t/ops-selected-packages-test.ss t/execution-progress-test.ss \
-            t/approved-build-recovery-test.ss t/build-store-recovery-test.ss
+            t/integration/lab/dependencies/json-schema-aws-*-test.ss \
+            t/integration/lab/core/execution-progress-test.ss \
+            t/library/building/approved-build-recovery-test.ss t/library/building/build-store-recovery-test.ss

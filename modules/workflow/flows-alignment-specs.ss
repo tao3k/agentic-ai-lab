@@ -113,7 +113,7 @@
     'result-covered
     '(pure-flow composition conditional-flow cached-scheme-flow)
     '("gxtest t/tutorial-result-test.ss: stage 2 quick reference hello and composition results"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 11 quick reference conditional and cached increment run")
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 11 quick reference conditional and cached increment run")
     '()
     '())
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -123,7 +123,7 @@
     'result-covered
     '(custom-task-family custom-run-config extension-owned-interpreter)
     '("gxtest t/tutorial-result-test.ss: stage 3 tutorial2 extension behavior repeats custom text"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension")
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension")
     '()
     '())
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -133,7 +133,7 @@
     'result-covered
     '(text-task-family word-count-summary)
     '("gxtest t/tutorial-result-test.ss: stage 4 word count exposes deterministic counts"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts")
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts")
     '()
     '())
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -143,7 +143,7 @@
     'result-covered
     '(config-preflight argument-rendering missing-config-diagnostics)
     '("gxtest t/tutorial-result-test.ss: stage 5 external config fails before runtime submission"
-      "gxtest t/store-funflow-alignment-test.ss: aligns Funflow external config preflight and rendering")
+      "gxtest t/integration/lab/funflow/store-funflow-alignment-test.ss: aligns Funflow external config preflight and rendering")
     '(docker-echo runtime-container)
     '(real-docker-echo-output))
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -153,7 +153,7 @@
     'result-covered
     '(try-flow runner-recover adapter-failure-receipt)
     '("gxtest t/tutorial-result-test.ss: stage 6 error handling try-flow routes thrown failures"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 15 error handling recovers local throw and adapter failure")
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 15 error handling recovers local throw and adapter failure")
     '(runtime-failure-source)
     '())
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -162,10 +162,10 @@
     "Docker-backed GCC flow prints 15 for input 3"
     'runtime-manifest-covered
     '(docker-flow stdout-runtime-response docker-store-handoff runtime-manifest)
-    '("gxtest t/tutorial-runtime-result-test.ss: stage 7 docker process runtime command returns CCompilation visible result"
-      "gxtest t/tutorial-runtime-result-test.ss: stage 8 docker artifact feeds store manifest"
-      "gxtest t/tutorial-runtime-result-test.ss: stage 9 descriptor command drives docker store workflow"
-      "gxtest t/tutorial-runtime-result-test.ss: stage 10 descriptor manifest exposes rust cli handoff")
+    '("gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 7 docker process runtime command returns CCompilation visible result"
+      "gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 8 docker artifact feeds store manifest"
+      "gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 9 descriptor command drives docker store workflow"
+      "gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 10 descriptor manifest exposes rust cli handoff")
     '(docker-process cas-materialization artifact-store)
     '(real-container-execution real-cas-write))
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -174,7 +174,7 @@
     "store data, train model, run inference, render summary.png"
     'descriptor-covered
     '(tensorflow-train-flow tensorflow-inference-flow docker-store-plan)
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 14 ccompilation and tensorflow workflow descriptors are public")
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 14 ccompilation and tensorflow workflow descriptors are public")
     '(docker-process python-training image-rendering cas-materialization)
     '(real-training-result real-inference-output summary-png))
    (agentic-ai-lab-funflow-tutorial-alignment-spec
@@ -183,9 +183,9 @@
     "parse Makefile project, build hello target, return process output"
     'runtime-manifest-covered
     '(external-parse-flow external-run-flow runtime-cli-manifest)
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 16 makefile tool workflow descriptor is public"
-      "gxtest t/tutorial-makefile-runtime-test.ss: stage 17 descriptor command drives makefile tool workflow"
-      "gxtest t/tutorial-makefile-runtime-test.ss: stage 18 makefile tool descriptor manifest exposes rust cli handoff")
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 16 makefile tool workflow descriptor is public"
+      "gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss: stage 17 descriptor command drives makefile tool workflow"
+      "gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss: stage 18 makefile tool descriptor manifest exposes rust cli handoff")
     '(make-process filesystem-build)
     '(real-make-execution real-hello-binary-output))))
 
@@ -212,11 +212,11 @@
    (alignment-gate-proof
     'stage-3-extension-behavior
     '("gxtest t/tutorial-result-test.ss: stage 3 tutorial2 extension behavior repeats custom text"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension"))
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension"))
    (alignment-gate-proof
     'stage-4-word-count-pipeline
     '("gxtest t/tutorial-result-test.ss: stage 4 word count exposes deterministic counts"
-      "gxtest t/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts"))
+      "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts"))
    (alignment-gate-proof
     'stage-5-external-config-fail-fast
     '("gxtest t/tutorial-result-test.ss: stage 5 external config fails before runtime submission"))
@@ -226,63 +226,63 @@
       "gxtest t/functional-flow-kernel-test.ss: authors functional flows with hygienic Gerbil macros"))
    (alignment-gate-proof
     'stage-7-docker-cas-real-runtime
-    '("gxtest t/tutorial-runtime-result-test.ss: stage 7 docker process runtime command returns CCompilation visible result"
-      "gxtest t/docker-descriptor-test.ss: captures CCompilation-style docker payload"
-      "gxtest t/docker-descriptor-test.ss: captures ExternalConfig-style rendered arguments"))
+    '("gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 7 docker process runtime command returns CCompilation visible result"
+      "gxtest t/library/docker/docker-descriptor-test.ss: captures CCompilation-style docker payload"
+      "gxtest t/library/docker/docker-descriptor-test.ss: captures ExternalConfig-style rendered arguments"))
    (alignment-gate-proof
     'stage-8-docker-artifact-handoff-to-store
-    '("gxtest t/tutorial-runtime-result-test.ss: stage 8 docker artifact feeds store manifest"))
+    '("gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 8 docker artifact feeds store manifest"))
    (alignment-gate-proof
     'stage-9-descriptor-declared-runtime-command
-    '("gxtest t/runtime-bridge-test.ss: stdout runtime command descriptor materializes process command"
-      "gxtest t/tutorial-runtime-result-test.ss: stage 9 descriptor command drives docker store workflow"))
+    '("gxtest t/library/workflow/runtime-bridge-test.ss: stdout runtime command descriptor materializes process command"
+      "gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 9 descriptor command drives docker store workflow"))
    (alignment-gate-proof
     'stage-10-descriptor-manifest-for-rust-cli-handoff
-    '("gxtest t/runtime-bridge-test.ss: runtime command descriptor exports cli manifest"
-      "gxtest t/tutorial-runtime-result-test.ss: stage 10 descriptor manifest exposes rust cli handoff"))
+    '("gxtest t/library/workflow/runtime-bridge-test.ss: runtime command descriptor exports cli manifest"
+      "gxtest t/integration/lab/workflow/tutorial-runtime-result-test.ss: stage 10 descriptor manifest exposes rust cli handoff"))
    (alignment-gate-proof
     'stage-11-quick-reference-conditional-and-cache
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 11 quick reference conditional and cached increment run"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 11 quick reference conditional and cached increment run"))
    (alignment-gate-proof
     'stage-12-tutorial2-custom-task-interpreter
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 12 tutorial2 custom task interpreter runs through extension"))
    (alignment-gate-proof
     'stage-13-word-count-text-extension
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 13 word count extension returns notebook counts"))
    (alignment-gate-proof
     'stage-14-ccompilation-and-tensorflow-descriptors
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 14 ccompilation and tensorflow workflow descriptors are public"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 14 ccompilation and tensorflow workflow descriptors are public"))
    (alignment-gate-proof
     'stage-15-error-handling-recovery-boundary
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 15 error handling recovers local throw and adapter failure"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 15 error handling recovers local throw and adapter failure"))
    (alignment-gate-proof
     'stage-16-makefile-tool-workflow-descriptor
-    '("gxtest t/tutorial-feature-batch-test.ss: stage 16 makefile tool workflow descriptor is public"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: stage 16 makefile tool workflow descriptor is public"))
    (alignment-gate-proof
     'stage-17-makefile-tool-descriptor-runtime-result
-    '("gxtest t/tutorial-makefile-runtime-test.ss: stage 17 descriptor command drives makefile tool workflow"))
+    '("gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss: stage 17 descriptor command drives makefile tool workflow"))
    (alignment-gate-proof
     'stage-18-makefile-tool-rust-cli-manifest
-    '("gxtest t/tutorial-makefile-runtime-test.ss: stage 18 makefile tool descriptor manifest exposes rust cli handoff"))
+    '("gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss: stage 18 makefile tool descriptor manifest exposes rust cli handoff"))
    (alignment-gate-proof
     'stage-19-runtime-manifest-consumer
-    '("gxtest t/runtime-manifest-test.ss: runtime command descriptor exports cli manifest"
-      "gxtest t/runtime-manifest-test.ss: runtime command manifest consumer executes stdout protocol"
-      "gxtest t/runtime-manifest-test.ss: runtime command manifest rejects unsupported protocol"))
+    '("gxtest t/library/workflow/runtime-manifest-test.ss: runtime command descriptor exports cli manifest"
+      "gxtest t/library/workflow/runtime-manifest-test.ss: runtime command manifest consumer executes stdout protocol"
+      "gxtest t/library/workflow/runtime-manifest-test.ss: runtime command manifest rejects unsupported protocol"))
    (alignment-gate-proof
     'stage-20-functional-flow-kernel-and-macro-authoring
     '("gxtest t/functional-flow-kernel-test.ss: functional flow kernel"))
    (alignment-gate-proof
     'stage-21-workflow-module-macro-authoring
-    '("gxtest t/tutorial-feature-batch-test.ss: authors extension-owned workflows with Gerbil macros"
-      "gxtest t/tutorial-makefile-runtime-test.ss: authors makefile runtime descriptor with Gerbil macros"))
+    '("gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss: authors extension-owned workflows with Gerbil macros"
+      "gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss: authors makefile runtime descriptor with Gerbil macros"))
    (alignment-gate-proof
     'stage-22-poo-tutorial-alignment-report
-    '("gxtest t/funflow-tutorial-alignment-report-test.ss: funflow tutorial alignment report"))
+    '("gxtest t/integration/lab/funflow/funflow-tutorial-alignment-report-test.ss: funflow tutorial alignment report"))
    (alignment-gate-proof
     'stage-23-user-interface-marlin-handoff-projection
-    '("gxtest t/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI"
-      "gxtest t/funflow-tutorial-alignment-report-test.ss: user-interface Marlin handoff result gate"))))
+    '("gxtest t/library/workflow/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI"
+      "gxtest t/integration/lab/funflow/funflow-tutorial-alignment-report-test.ss: user-interface Marlin handoff result gate"))))
 
 ;; : (-> AgenticAILabAlignmentGateProof Symbol)
 (def (alignment-gate-proof-id gate-proof)

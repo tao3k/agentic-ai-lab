@@ -122,4 +122,4 @@
             (eval `(import ,module))
             (hash-put! imported-modules module #t)
             (displayln "CONTEXT-IMPORT-OK " module) (force-output)))))) deps)))
-(eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/temporal-evaluator-test.ss")))
+(eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/yanxu/modules/temporal-causality/temporal-evaluator-test.ss")))

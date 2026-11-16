@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [group('test')]
-test-gerbil-test-tool executable path="t/gerbil-runtime-import-test.ss":
+test-gerbil-test-tool executable path="t/integration/lab/core/gerbil-runtime-import-test.ss":
     GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss gerbil-tool "{{ gerbil_test_runtime_options }}" "{{ executable }}" "{{ path }}"
 
 # Parse an exported policy set without starting the Runtime Host.
@@ -13,38 +13,38 @@ inspect-cedar-file policy:
 # Check explicit clock domains and conservative interval observations.
 [group('check')]
 check-temporal-time:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-time-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-time-test.ss
 
 # Replay immutable conclusion journals before forming a CAS proposal.
 [group('check')]
 check-temporal-conclusions:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-conclusions-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-conclusions-test.ss
 
 # Check exclusive and overlapping finite hypothesis-family semantics.
 [group('check')]
 check-temporal-model:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-model-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-model-test.ss
 
 # Verify Trajectory independently of the consuming Impact module.
 [group('check')]
 check-temporal-trajectory:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-trajectory-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-trajectory-test.ss
 
 # Verify exact irregular-grid Impact arithmetic without claiming a
 # trained forecaster, statistical estimator or causal effect.
 [group('check')]
 check-temporal-impact:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-impact-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-impact-test.ss
 
 # Check domain-neutral retrieval/use lineage and finite interleavings.
 [group('check')]
 check-temporal-evidence:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-evidence-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-evidence-test.ss
 
 # Audit exact cut/provider receipts as inert candidate review material.
 [group('check')]
 check-temporal-candidate-exchange:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-candidate-exchange-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/yanxu/modules/temporal-causality/temporal-candidate-exchange-test.ss
 
 [group('check')]
 check-runtime-semantic-query-model: check-runtime-semantic-query-lean
@@ -75,7 +75,7 @@ benchmark-poo-clos-runtime-c4:
 # focused test entry owns support compilation, heap fencing and runtime Harness.
 [group('test')]
 test-runtime-v0-ffi: build-library
-    just test-file t/runtime-v0-ffi-test.ss
+    just test-file t/library/workflow/runtime-v0-ffi-test.ss
 
 # A plain C consumer loads the packaged artifact with its actual SDK VM.
 # The facade fences the heap at 2 GiB before setup; the watchdog covers dlopen,

@@ -21,7 +21,7 @@ on:
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-runtime-std-make/**
-      - t/funflow-github-ci-json-schema-contract-test.ss
+      - t/integration/lab/funflow/funflow-github-ci-json-schema-contract-test.ss
   pull_request:
     paths:
       - .github/workflows/gerbil-v19-macos.yml
@@ -35,7 +35,7 @@ on:
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-runtime-std-make/**
-      - t/funflow-github-ci-json-schema-contract-test.ss
+      - t/integration/lab/funflow/funflow-github-ci-json-schema-contract-test.ss
 
 permissions:
   contents: read

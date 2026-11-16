@@ -5,8 +5,8 @@
 ;;; to a real Session worker. This driver owns no recovery reducer or database.
 (import :clan/poo/object :std/encoding/json (only-in :std/text/pregexp pregexp-replace)
   (only-in :std/list/list find)
-  (prefix-in :tao3k/agentic-ai-lab/t/context-query-provider-test query.)
-  (only-in :tao3k/agentic-ai-lab/t/context-query-durable-test retain-originals!)
+  (prefix-in :tao3k/agentic-ai-lab/t/yanxu/modules/ai-agentic-context/context-query-provider-test query.)
+  (only-in :tao3k/agentic-ai-lab/t/yanxu/modules/ai-agentic-context/context-query-durable-test retain-originals!)
   :tao3k/agentic-ai-lab/modules/ai-agentic-context/durable-owner
   :tao3k/agentic-ai-lab/modules/ai-agentic-context/session-host
   :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal

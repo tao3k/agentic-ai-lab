@@ -14,4 +14,4 @@
           (eval `(import ,module))
           (displayln "QUERY-SOURCE-IMPORT-OK " module) (force-output))))) deps))
 (import :gerbil/tools/gxtest)
-(exit (gerbil/tools/gxtest#main "-v" "5" "t/query-orgize-source-test.ss"))
+(exit (gerbil/tools/gxtest#main "-v" "5" "t/library/query/query-orgize-source-test.ss"))

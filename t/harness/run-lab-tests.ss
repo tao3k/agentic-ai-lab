@@ -4,11 +4,12 @@
         (only-in :clan/poo/object .get .call)
         (only-in :std/source this-source-file)
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
+        (only-in :tao3k/yuanxu/module-system/building/test-projection admit-module-test-layout!)
         (only-in "../../init.ss" tao3k/agentic-ai-lab.init.exports))
-(export main default-test-files)
+(export main default-test-files admit-lab-test-layout!)
 
-(def (loader-test-files)
-  (def init (path-expand "../../init.ss" (path-directory (this-source-file))))
+(def (admit-lab-test-layout!)
+  (def init (path-normalize (path-expand "../../init.ss" (path-directory (this-source-file)))))
   (def context
     (module-directory-context init
       (lambda (_) (error "test roster must leave publications cold"))
@@ -18,7 +19,12 @@
       .select (.get context loader-roots)))
   (def files (.get tests spec))
   ((.get tests admit-current))
-  files)
+  (admit-module-test-layout! context files
+    require-owner-tests?: #t
+    independent-directories:
+    '("contribution" "fixtures" "harness" "integration" "library" "model-study"
+      "module-system-poo-performance-test-support" "performance" "qualification"
+      "research" "scenarios" "support")))
 
 (def (default-test-files)
   (def root (path-normalize (current-directory)))
@@ -29,13 +35,18 @@
   (def (directory-tests dir)
     (map (lambda (name) (string-append dir "/" name))
          (filter (cut string-suffix? "-test.ss" <>) (directory-files dir))))
-  (append (list-sort string<? (directory-tests "t"))
-          (list-sort string<? (map local-path (loader-test-files)))
+  (def (grouped-tests dir)
+    (foldr append '()
+      (map (lambda (group) (directory-tests (path-expand group dir)))
+           (list-sort string<? (directory-files dir)))))
+  (append (list-sort string<? (map local-path (admit-lab-test-layout!)))
+          (list-sort string<? (map local-path (grouped-tests (path-expand "t/library" root))))
+          (list-sort string<? (map local-path (grouped-tests (path-expand "t/integration/lab" root))))
           (list-sort string<? (directory-tests "t/integration/nix"))
           (list-sort string<? (directory-tests "t/integration/testing"))))
 
 (def (independent-test? file)
-  (member file '("t/session-independent-test.ss"
+  (member file '("t/library/session/session-independent-test.ss"
                  "t/yanxu/modules/services/opentofu/deployment-test.ss")))
 
 (def (test-batches files)

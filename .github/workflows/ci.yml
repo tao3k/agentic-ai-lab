@@ -229,7 +229,7 @@ jobs:
           # Run every gate even if an earlier gate fails, then preserve the failure.
           downstream_status=0
           for category in context-memory governance deployment; do
-            suite="t/yuanxu-$category-downstream-test.ss"
+            suite="t/integration/lab/dependencies/yuanxu-$category-downstream-test.ss"
             if [[ "$category" == deployment ]]; then
               suite="t/yanxu/modules/services/opentofu/deployment-test.ss"
             fi

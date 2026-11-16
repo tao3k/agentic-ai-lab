@@ -363,12 +363,12 @@
                 package-compile
                 org-lint))
         (cons 'commands
-              '("gxtest t/funflow-tutorial-alignment-report-test.ss"
-                "gxtest t/runtime-manifest-test.ss"
+              '("gxtest t/integration/lab/funflow/funflow-tutorial-alignment-report-test.ss"
+                "gxtest t/library/workflow/runtime-manifest-test.ss"
                 "gxtest t/functional-flow-kernel-test.ss"
-                "gxtest t/tutorial-feature-batch-test.ss"
-                "gxtest t/tutorial-makefile-runtime-test.ss"
-                "gxtest t/user-interface-cicd-test.ss"
+                "gxtest t/integration/lab/workflow/tutorial-feature-batch-test.ss"
+                "gxtest t/integration/lab/workflow/tutorial-makefile-runtime-test.ss"
+                "gxtest t/library/workflow/user-interface-cicd-test.ss"
                 "gxi build.ss compile"
                 "asp org lint docs/10-19-design/10.04-funflow-tutorial-result-ladder.org"))))
 
@@ -394,7 +394,7 @@
    (cons 'runtime-parses-scheme-source #f)
    (cons 'scheme-manufactures-runtime-handlers #f)
    (cons 'proof-command
-         "gxtest t/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI")))
+         "gxtest t/library/workflow/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI")))
 
 ;;; Boundary: runtime-gap detection stays structural and data-only.
 ;;; A gap means the source still delegates real work to Rust/Marlin runtime.

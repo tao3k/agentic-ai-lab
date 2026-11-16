@@ -18,6 +18,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ## Development Tests
 
 - Put Lab module suites in `t/yanxu/<Renamer-or-Loader-directory>/<module-name>/*-test.ss`. Use the module's Loader declaration to determine the owner. Keep test fixtures and generated inputs outside the Loader test tree. Run `just test-lab-layout` after adding or moving a suite.
+- Put tests of ordinary Gerbil libraries without a Yuanxu declaration in `t/library/<library>/*-test.ss`. The default Harness runs these separately from Loader-owned and integration suites. Do not put suites directly under `t/`.
 - Keep Lab suites on public Yuanxu interfaces. Yuanxu's own loader, compiler and publication fixtures belong in the Core repository. Lab owns downstream consumer assertions and their fixtures.
 - Put suites spanning multiple packages or components in `t/integration/` and invoke them through their maintained Just recipes. Keep historical qualification evidence bound to its original source paths. The Lab runtime entry `just test-root` runs the layout contract before starting the test harness.
 

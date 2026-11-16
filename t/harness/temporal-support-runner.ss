@@ -49,4 +49,4 @@
     :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
     :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface
     :gerbil/tools/gxtest))
-(eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/temporal-support-test.ss")))
+(eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/yanxu/modules/temporal-causality/temporal-support-test.ss")))

@@ -2,8 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
         (only-in :std/source this-source-file)
-        (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
-        (only-in :tao3k/yuanxu/module-system/source/objects yuanxu-module-source-ref-metadata)
+        (only-in "../../harness/run-lab-tests.ss" admit-lab-test-layout!)
         (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports))
 (export lab-loader-ownership-test)
 (def tests-root (path-normalize (path-expand "../.." (path-directory (this-source-file)))))
@@ -33,48 +32,8 @@
       ((.get selected admit-current))
       (check-equal? (eq? (.ref/cached selected 'selected-graph) graph-before) #t))
     (test-case "Loader owners publish all Lab module test files"
-      (def root (path-normalize (path-expand ".." tests-root)))
-      (def context
-        (module-directory-context (path-expand "init.ss" root)
-          (lambda (_) (error "layout discovery must leave publications cold"))
-          publication-prepares-source?: #t))
-      (def locate (.get context locate))
-      (def (owner-test-directory owner)
-        (def metadata (yuanxu-module-source-ref-metadata (locate owner)))
-        (path-expand
-          (string-append (cdr (assq 'test-dir metadata)) "/yanxu/"
-                         (symbol->string (cdr (assq 'namespace-mount metadata))) "/"
-                         (symbol->string (cdr (assq 'declaration-id metadata))))
-          root))
-      (def (test-files directory)
-        (def paths
-          (map (lambda (name)
-                 (def path (path-expand name directory))
-                 (cons path (file-info-type (file-info path #f))))
-               (directory-files directory)))
-        (def (test-file? entry)
-          (and (eq? (cdr entry) 'regular)
-               (string-suffix? "-test.ss" (car entry))))
-        (for-each (lambda (entry)
-                    (unless (or (eq? (cdr entry) 'directory) (test-file? entry))
-                      (error "Lab loader test trees admit only regular *-test.ss files" (car entry))))
-                  paths)
-        (append (map car (filter test-file? paths))
-                (foldr append '()
-                  (map (lambda (entry) (test-files (car entry)))
-                       (filter (lambda (entry) (eq? (cdr entry) 'directory)) paths)))))
-      (def owners (.get context loader-roots))
-      (def files (test-files (path-expand "t/yanxu" root)))
-      (def qualification (.get tao3k/agentic-ai-lab.init.exports tests qualification))
-      (def selected (.call qualification .select owners))
-      ((.get selected admit-current))
-      (def directories (map path-directory files))
-      (for-each (lambda (owner)
-                  (check (member (path-directory (path-expand "test.ss" (owner-test-directory owner)))
-                                 directories) ? pair?))
-                owners)
-      (check-equal? (list-sort string<? (.get selected spec))
-                    (list-sort string<? files)))
+      ;; The same Core contract runs before the default Lab Harness roster.
+      (check (admit-lab-test-layout!) ? pair?))
     (test-case "adapter module suites use their declared Loader owners"
       (def root tests-root)
       (def (legacy-adapter-test? name)

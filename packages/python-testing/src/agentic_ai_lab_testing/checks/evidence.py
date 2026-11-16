@@ -20,7 +20,7 @@ def evidence_assessment(context: CaseContext) -> None:
     env["GERBIL_LOADPATH"] = ":".join(
         roots + ([env["GERBIL_LOADPATH"]] if env.get("GERBIL_LOADPATH") else []))
     result = subprocess.run(
-        ["just", "test-file", "t/evidence-assessment-core-test.ss"],
+        ["just", "test-file", "t/library/evidence-assessment/evidence-assessment-core-test.ss"],
         cwd=context.repository_root, env=env, text=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=150,
         check=False,
@@ -28,7 +28,7 @@ def evidence_assessment(context: CaseContext) -> None:
     output = result.stdout
     # The official entry may publish a relative or normalized absolute path.
     # Bind admission to the complete source identity, never just its basename.
-    expected = (context.repository_root / "t/evidence-assessment-core-test.ss").resolve()
+    expected = (context.repository_root / "t/library/evidence-assessment/evidence-assessment-core-test.ss").resolve()
     module_ok = any(
         (context.repository_root / Path(line.removeprefix("MODULE-OK "))).resolve() == expected
         for line in output.splitlines() if line.startswith("MODULE-OK ")

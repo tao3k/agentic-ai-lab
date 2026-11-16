@@ -22,7 +22,7 @@
       command-vector: '("gxpkg"
                       "env"
                       "gxtest"
-                      "t/sandbox-core-profile-authoring-diagnostics-test.ss")
+                      "t/library/sandbox-core/sandbox-core-profile-authoring-diagnostics-test.ss")
       artifact-outputs: '(poo-authoring-report)
       cache-intents: '(gerbil-build-cache)
       result-protocol: '(read :lines)
@@ -37,7 +37,7 @@
       command-vector: '("gxpkg"
                       "env"
                       "gxtest"
-                      "t/user-interface-cicd-pipeline-run-test.ss")
+                      "t/library/workflow/user-interface-cicd-pipeline-run-test.ss")
       artifact-outputs: '(runtime-manifest-readiness)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff

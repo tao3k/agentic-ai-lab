@@ -281,7 +281,7 @@
     ('alignment-gate-id
      'stage-23-user-interface-marlin-handoff-projection)
     ('proof-command
-     "gxtest t/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI")
+     "gxtest t/library/workflow/user-interface-cicd-test.ss: projects user config into Marlin runtime handoff ABI")
     ('presentation-fields
      '(workflow-cicd-runtime-command-manifests
        workflow-cicd-runtime-command-manifest-summaries

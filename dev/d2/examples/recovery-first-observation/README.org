@@ -17,7 +17,7 @@ unknowns, receipt gaps and reconciliation obligations from admitted POO facts.
 Its focused test uses the unchanged project heap-fenced Just entrypoint:
 
 #+begin_src sh
-just test-file t/recovery-first-observation-test.ss
+just test-file t/integration/lab/workflow/recovery-first-observation-test.ss
 bun dev/d2/reuse.ts --case dev/d2/examples/recovery-first-observation/case.ss
 bun dev/d2/reuse.ts --case dev/d2/examples/recovery-first-observation/case.ss --evaluate
 #+end_src

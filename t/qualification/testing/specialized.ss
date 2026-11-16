@@ -20,8 +20,8 @@
     (runtime (list test) (watched command) 45 count (list file watch) lines))
   (case (string->symbol name)
     ((gerbil-runtime)
-     (runtime '("t/gerbil-runtime-import-test.ss")
-       (list "gerbil" vm "test" "t/gerbil-runtime-import-test.ss") 90 #f))
+     (runtime '("t/integration/lab/core/gerbil-runtime-import-test.ss")
+       (list "gerbil" vm "test" "t/integration/lab/core/gerbil-runtime-import-test.ss") 90 #f))
     ((gerbil-tool)
      (let* ((executable (car arguments))
             (file (cadr arguments))
@@ -40,8 +40,8 @@
      (let* ((query? (equal? name "query-runtime"))
             (files (map absolute
                      (if query?
-                       '("t/query-core-test.ss" "t/query-orgize-source-test.ss" "t/evidence-assessment-core-test.ss")
-                       '("t/temporal-applicability-test.ss" "t/temporal-lifecycle-test.ss"))))
+                       '("t/library/query/query-core-test.ss" "t/library/query/query-orgize-source-test.ss" "t/library/evidence-assessment/evidence-assessment-core-test.ss")
+                       '("t/yanxu/modules/temporal-causality/temporal-applicability-test.ss" "t/yanxu/modules/temporal-causality/temporal-lifecycle-test.ss"))))
             (executable (car arguments)))
        (unless (file-exists? executable) (error "test executable is missing" executable))
        (.cc (runtime files
@@ -49,14 +49,14 @@
               45 (if query? 24 13) (list watch))
          'environment (.o AGENTIC_AI_LAB_TEST_PROGRESS: "1"))))
     ((query-source)
-     (runner "t/harness/query-orgize-source-runner.ss" "t/query-orgize-source-test.ss" 4))
+     (runner "t/harness/query-orgize-source-runner.ss" "t/library/query/query-orgize-source-test.ss" 4))
     ((temporal-support)
-     (runner "t/harness/temporal-support-runner.ss" "t/temporal-support-test.ss" 9 '()
+     (runner "t/harness/temporal-support-runner.ss" "t/yanxu/modules/temporal-causality/temporal-support-test.ss" 9 '()
        (list "gerbil" vm "env" "gerbil" vm "t/harness/temporal-support-runner.ss")))
     ((temporal-evaluator)
-     (runner "t/harness/temporal-evaluator-runner.ss" "t/temporal-evaluator-test.ss" 58))
+     (runner "t/harness/temporal-evaluator-runner.ss" "t/yanxu/modules/temporal-causality/temporal-evaluator-test.ss" 58))
     ((ascent-temporal)
-     (runner "t/harness/ascent-temporal-runner.ss" "t/ascent-temporal-lens-test.ss" #f
+     (runner "t/harness/ascent-temporal-runner.ss" "t/integration/lab/dependencies/ascent-temporal-lens-test.ss" #f
        '("CASE-OK POO values keep runtime evidence separate from cut authority"
          "CASE-OK explicit cut bridge preserves uncertainty and original identity binding")
        (list "gerbil" vm "env" "gerbil" vm "t/harness/ascent-temporal-runner.ss")))
