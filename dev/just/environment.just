@@ -52,7 +52,11 @@ gerbil_homebrew_runtime := `gerbil_executable="$(command -v gerbil 2>/dev/null |
 
 homebrew_openssl_prefix := `if command -v brew >/dev/null 2>&1; then brew --prefix openssl@3 2>/dev/null || true; fi`
 
+homebrew_prefix := `if command -v brew >/dev/null 2>&1; then brew --prefix 2>/dev/null || true; fi`
+
 darwin_openssl_prefix := env_var_or_default("OPENSSL_PREFIX", homebrew_openssl_prefix)
+
+darwin_pkg_config_path := darwin_openssl_prefix + "/lib/pkgconfig:" + homebrew_prefix + "/opt/zlib/lib/pkgconfig:" + homebrew_prefix + "/opt/sqlite/lib/pkgconfig"
 
 # Preserve the configured/user-selected compiler. For Homebrew Gerbil on
 # Darwin, keep Nix SDK/header/library variables out of child builds and make
@@ -60,7 +64,7 @@ darwin_openssl_prefix := env_var_or_default("OPENSSL_PREFIX", homebrew_openssl_p
 # Restore only the explicit Homebrew OpenSSL include/library roots required by
 # Gerbil's crypto modules; never inherit ambient CPATH or LIBRARY_PATH values.
 # A Nix Gerbil runtime retains its own compiler and linker environment.
-gerbil_darwin_env := if os() == "macos" { if gerbil_homebrew_runtime == "true" { "env -u SDKROOT -u DEVELOPER_DIR -u CPATH -u LIBRARY_PATH -u C_INCLUDE_PATH -u CPLUS_INCLUDE_PATH -u MACOSX_DEPLOYMENT_TARGET -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH COMPILER_PATH=/usr/bin CPATH='" + darwin_openssl_prefix + "/include' LIBRARY_PATH='" + darwin_openssl_prefix + "/lib' PKG_CONFIG_PATH=\"" + darwin_openssl_prefix + "/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}\"" } else { "env" } } else { "env" }
+gerbil_darwin_env := if os() == "macos" { if gerbil_homebrew_runtime == "true" { "env -u SDKROOT -u DEVELOPER_DIR -u CPATH -u LIBRARY_PATH -u C_INCLUDE_PATH -u CPLUS_INCLUDE_PATH -u MACOSX_DEPLOYMENT_TARGET -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH COMPILER_PATH=/usr/bin CPATH='" + darwin_openssl_prefix + "/include' LIBRARY_PATH='" + darwin_openssl_prefix + "/lib' PKG_CONFIG_PATH=\"" + darwin_pkg_config_path + "${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}\"" } else { "env" } } else { "env" }
 
 agentic_ai_lab_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directory() + "/.gerbil")
 
