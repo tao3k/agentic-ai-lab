@@ -6,7 +6,7 @@
         (only-in :tao3k/yuanxu/module-system/source/objects yuanxu-module-source-ref-metadata)
         (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports))
 (export yuanxu-qualification-layout-test)
-(def tests-root (path-expand "../.." (path-directory (this-source-file))))
+(def tests-root (path-normalize (path-expand "../.." (path-directory (this-source-file)))))
 
 (def yuanxu-qualification-layout-test
   (test-suite "Lab qualification layout"
