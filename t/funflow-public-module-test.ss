@@ -11,7 +11,7 @@
         (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule. Job. Task.)
         (only-in :clan/poo/object object?)
         (only-in :clan/poo/mop
-                 poo-clos-generic-function))
+                 clos-generic-function))
 
 (export funflow-public-module-test)
 
@@ -24,4 +24,4 @@
     (yuanxu-test-case "functional interface remains callable"
       (check-equal? (procedure? yuanxu-funflow-workflow-agreement) #t))
     (yuanxu-test-case "POO CLOS remains directly importable from Core"
-      (check-equal? (procedure? poo-clos-generic-function) #t))))
+      (check-equal? (procedure? clos-generic-function) #t))))

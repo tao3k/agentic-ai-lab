@@ -24,10 +24,10 @@
         '(:clan/poo/mop
           :clan/poo/clos)
         forbidden-forms:
-        '(poo-clos-class
-          poo-clos-generic-function
-          poo-clos-method
-          poo-clos-method-bundle
+        '(clos-class
+          clos-generic-function
+          clos-method
+          clos-method-bundle
           .defmethod-bundle)
         forbid-raw-behavior-hooks?: #t
         forbid-raw-query-initializers?: #t

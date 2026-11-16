@@ -10,8 +10,8 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list filter-map)
         (only-in :clan/poo/mop
-                 poo-clos-generic-protocol poo-clos-generic-function
-                 poo-clos-compose-method-bundle poo-clos-call
+                 clos-generic-protocol clos-generic-function
+                 clos-compose-method-bundle clos-call
                  .defmethod .defmethod-bundle)
         (only-in "types.ss"
                  agentic-ai-lab-query?
@@ -140,10 +140,10 @@
 ;;; Provider and Query are independently extensible.  The core method fails
 ;;; closed; Provider packages own concrete method bundles.
 (def QueryReceiptBindingProtocol
-  (poo-clos-generic-protocol 'query/receipt-binding))
+  (clos-generic-protocol 'query/receipt-binding))
 
 (def QueryReceiptBindingGeneric
-  (poo-clos-generic-function
+  (clos-generic-function
    'query-bind-execution-receipt 5
    protocol: QueryReceiptBindingProtocol))
 
@@ -157,7 +157,7 @@
     (error "Query Provider lacks a receipt binding method"
            (.ref provider 'identity))))
 
-(poo-clos-compose-method-bundle
+(clos-compose-method-bundle
  QueryReceiptBindingGeneric
  QueryReceiptBindingCoreMethods)
 
@@ -165,6 +165,6 @@
       provider query admission candidate)
   (unless (agentic-ai-lab-query-provider? provider)
     (error "Query receipt binding requires a Provider" provider))
-  (poo-clos-call QueryReceiptBindingGeneric
+  (clos-call QueryReceiptBindingGeneric
                  (.ref provider 'receipt-executor)
                  provider query admission candidate))

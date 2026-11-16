@@ -10,9 +10,9 @@
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
         (only-in :clan/poo/mop
-                 poo-clos-any-specializer poo-clos-class-specializer
-                 poo-clos-generic-protocol poo-clos-generic-function
-                 poo-clos-method poo-clos-compose-method-bundle poo-clos-call)
+                 clos-any-specializer clos-class-specializer
+                 clos-generic-protocol clos-generic-function
+                 clos-method clos-compose-method-bundle clos-call)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types
@@ -83,20 +83,20 @@
 ;;; Executor strategy and Provider identity are independently extensible axes.
 ;;; The base method fails closed; Provider packages own concrete method bundles.
 (def AuthorizationCapabilityContractProtocol
-  (poo-clos-generic-protocol 'authorization/capability-contract))
+  (clos-generic-protocol 'authorization/capability-contract))
 
 (def AuthorizationCapabilityContractGeneric
-  (poo-clos-generic-function
+  (clos-generic-function
    'authorization-capability-contract 3
    protocol: AuthorizationCapabilityContractProtocol))
 
 (def AuthorizationUnsupportedCapabilityContractMethod
-  (poo-clos-method
+  (clos-method
    'authorization/unsupported-capability-contract
    (list
-    (poo-clos-class-specializer AuthorizationCapabilityContractExecutor)
-    (poo-clos-any-specializer)
-    (poo-clos-any-specializer))
+    (clos-class-specializer AuthorizationCapabilityContractExecutor)
+    (clos-any-specializer)
+    (clos-any-specializer))
    (lambda (_frame _executor provider _capabilities)
      (error "authorization Provider lacks a capability contract method"
             (.ref provider 'identity)))))
@@ -105,13 +105,13 @@
   AuthorizationCapabilityContractProtocol
   AuthorizationUnsupportedCapabilityContractMethod)
 
-(poo-clos-compose-method-bundle
+(clos-compose-method-bundle
  AuthorizationCapabilityContractGeneric
  AuthorizationCapabilityContractCoreMethods)
 
 (def (agentic-ai-lab-authorization-capability-contract provider capabilities)
   (require-authorization-values provider capabilities)
-  (poo-clos-call
+  (clos-call
    AuthorizationCapabilityContractGeneric
    (.ref provider 'contract-executor)
    provider

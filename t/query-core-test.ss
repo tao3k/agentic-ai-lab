@@ -7,10 +7,10 @@
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
         :tao3k/agentic-ai-lab/modules/query/interface
-        (only-in :clan/poo/mop validate .defmethod-bundle poo-clos-class poo-clos-make-instance
-                 poo-clos-method poo-clos-class-specializer poo-clos-eql-specializer
-                 poo-clos-prototype-specializer poo-clos-any-specializer
-                 poo-clos-compose-method-bundle)
+        (only-in :clan/poo/mop validate .defmethod-bundle clos-class clos-make-instance
+                 clos-method clos-class-specializer clos-eql-specializer
+                 clos-prototype-specializer clos-any-specializer
+                 clos-compose-method-bundle)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt
@@ -85,25 +85,25 @@
        result-contract: QueryResult)))
 
 (def TestQueryExecutor
-  (poo-clos-class 'query/test-receipt-executor
+  (clos-class 'query/test-receipt-executor
                   direct-superclasses: (list QueryReceiptBindingExecutor)))
 (def TestQueryProvider
   (agentic-ai-lab-query-provider 'test '(gql) 'test
-                           (poo-clos-make-instance TestQueryExecutor)))
+                           (clos-make-instance TestQueryExecutor)))
 (def TestQueryBindingMethod
-  (poo-clos-method
+  (clos-method
    'query/test-receipt-binding
-   (list (poo-clos-class-specializer TestQueryExecutor)
-         (poo-clos-eql-specializer TestQueryProvider)
-         (poo-clos-prototype-specializer AgenticAILabQuery.)
-         (poo-clos-any-specializer)
-         (poo-clos-any-specializer))
+   (list (clos-class-specializer TestQueryExecutor)
+         (clos-eql-specializer TestQueryProvider)
+         (clos-prototype-specializer AgenticAILabQuery.)
+         (clos-any-specializer)
+         (clos-any-specializer))
    (lambda (_frame _executor provider query admission candidate)
      (agentic-ai-lab-query-bind-execution-receipt/default
       provider query admission candidate))))
 (.defmethod-bundle TestQueryBindingMethods
   QueryReceiptBindingProtocol TestQueryBindingMethod)
-(poo-clos-compose-method-bundle
+(clos-compose-method-bundle
  QueryReceiptBindingGeneric TestQueryBindingMethods)
 
 (def query-core-test

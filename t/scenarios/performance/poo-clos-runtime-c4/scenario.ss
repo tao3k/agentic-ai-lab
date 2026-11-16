@@ -7,7 +7,7 @@
 (import (only-in :gerbil/runtime/gambit current-time time->seconds)
         (only-in :clan/poo/object
                  .ref .slot? compute-precedence-list!)
-        (only-in :clan/poo/mop poo-clos-class-precedence-list poo-clos-class))
+        (only-in :clan/poo/mop clos-class-precedence-list clos-class))
 
 (def +sample-count+ 40)
 
@@ -16,27 +16,27 @@
    (string-append prefix "-" (number->string index))))
 
 (def (make-pedalo index)
-  (let* ((boat (poo-clos-class (name "boat" index)))
+  (let* ((boat (clos-class (name "boat" index)))
          (day-boat
-          (poo-clos-class (name "day-boat" index)
+          (clos-class (name "day-boat" index)
                           direct-superclasses: (list boat)))
          (wheel-boat
-          (poo-clos-class (name "wheel-boat" index)
+          (clos-class (name "wheel-boat" index)
                           direct-superclasses: (list boat)))
          (engineless
-          (poo-clos-class (name "engineless" index)
+          (clos-class (name "engineless" index)
                           direct-superclasses: (list day-boat)))
          (pedal-wheel-boat
-          (poo-clos-class
+          (clos-class
            (name "pedal-wheel-boat" index)
            direct-superclasses: (list engineless wheel-boat)))
          (small-multihull
-          (poo-clos-class (name "small-multihull" index)
+          (clos-class (name "small-multihull" index)
                           direct-superclasses: (list day-boat)))
          (small-catamaran
-          (poo-clos-class (name "small-catamaran" index)
+          (clos-class (name "small-catamaran" index)
                           direct-superclasses: (list small-multihull))))
-    (poo-clos-class
+    (clos-class
      (name "pedalo" index)
      direct-superclasses: (list pedal-wheel-boat small-catamaran))))
 
@@ -73,7 +73,7 @@
 (make-pedalo -1)
 (let-values (((pedalo construction-times)
               (sample (lambda (index) (make-pedalo index)) +sample-count+)))
-  (let* ((projected (poo-clos-class-precedence-list pedalo))
+  (let* ((projected (clos-class-precedence-list pedalo))
          (runtime (runtime-class-precedence-list pedalo))
          (expected
           (list (name "pedalo" (- +sample-count+ 1))
@@ -94,7 +94,7 @@
     (let-values (((_ warm-times)
                   (sample
                    (lambda (_index)
-                     (poo-clos-class-precedence-list pedalo))
+                     (clos-class-precedence-list pedalo))
                    +sample-count+)))
       (display "schema=agentic-ai-lab.poo-clos-runtime-c4.v1\n")
       (display "sample-count=") (display +sample-count+) (newline)

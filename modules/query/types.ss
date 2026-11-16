@@ -6,7 +6,7 @@
 ;;; Boundary: canonical read-only Query, ElementSpace and admission contracts.
 ;;; Invariant: a Query can select evidence but cannot mutate or authorize.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop Type. define-type element? poo-clos-instance?)
+        (only-in :clan/poo/mop Type. define-type element? clos-instance?)
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list every))
 
@@ -210,7 +210,7 @@
        (query-symbol-list? (.ref value 'supported-languages))
        (query-unique-identities? (.ref value 'supported-languages))
        (symbol? (.ref value 'runtime-owner))
-       (poo-clos-instance? (.ref value 'receipt-executor))
+       (clos-instance? (.ref value 'receipt-executor))
        (eq? (.ref value 'runtime-executed?) #f)
        (eq? (.ref value 'action-authority?) #f)))
 

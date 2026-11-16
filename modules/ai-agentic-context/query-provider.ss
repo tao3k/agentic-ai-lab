@@ -3,8 +3,8 @@
 ;;; One GQL model; bounded runtime Org refinement, positive proof and source feed.
 (import
  (only-in :clan/poo/object .o .ref .slot? .call object? object<-alist .alist/sort)
- (only-in :clan/poo/mop validate poo-clos-class poo-clos-make-instance
-          poo-clos-compose-method-bundle .defmethod .defmethod-bundle)
+ (only-in :clan/poo/mop validate clos-class clos-make-instance
+          clos-compose-method-bundle .defmethod .defmethod-bundle)
  (only-in :std/list/list find every delete-duplicates/hash)
  :tao3k/agentic-ai-lab/modules/query/objects
  (only-in :tao3k/agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
@@ -89,7 +89,7 @@
 ;;; Query core owns admission and the receipt protocol. This Provider contributes
 ;;; a concrete executor method; it does not create a second Query language.
 (def ContextOrgExecutor
-  (poo-clos-class
+  (clos-class
    'context/org-query-executor
    direct-superclasses:
    (list QueryReceiptBindingExecutor)))
@@ -99,7 +99,7 @@
    'context/org-elements
    '(gql)
    'agentic-ai-lab
-   (poo-clos-make-instance ContextOrgExecutor)))
+   (clos-make-instance ContextOrgExecutor)))
 
 (.defmethod-bundle ContextOrgQueryMethods
   QueryReceiptBindingProtocol
@@ -111,7 +111,7 @@
     (agentic-ai-lab-query-bind-execution-receipt/default
      provider query admission candidate)))
 
-(poo-clos-compose-method-bundle QueryReceiptBindingGeneric ContextOrgQueryMethods)
+(clos-compose-method-bundle QueryReceiptBindingGeneric ContextOrgQueryMethods)
 
 (def (canonical-source source)
   (let (fresh

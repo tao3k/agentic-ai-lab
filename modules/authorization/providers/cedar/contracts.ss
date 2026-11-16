@@ -13,8 +13,8 @@
                  agentic-ai-lab-governance-profile?
                  agentic-ai-lab-governance-assessment?)
         (only-in :clan/poo/mop
-                 poo-clos-any-specializer poo-clos-class-specializer
-                 poo-clos-eql-specializer poo-clos-method poo-clos-compose-method-bundle)
+                 clos-any-specializer clos-class-specializer
+                 clos-eql-specializer clos-method clos-compose-method-bundle)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/contracts
                  AuthorizationCapabilityContractProtocol
                  AuthorizationCapabilityContractGeneric
@@ -29,12 +29,12 @@
         CedarCapabilityContractMethods)
 
 (def CedarCapabilityContractMethod
-  (poo-clos-method
+  (clos-method
    'authorization/cedar-capability-contract
    (list
-    (poo-clos-class-specializer CedarCapabilityContractExecutor)
-    (poo-clos-eql-specializer CedarAuthorizationProvider)
-    (poo-clos-any-specializer))
+    (clos-class-specializer CedarCapabilityContractExecutor)
+    (clos-eql-specializer CedarAuthorizationProvider)
+    (clos-any-specializer))
    (lambda (_frame _executor provider capabilities)
      (agentic-ai-lab-authorization-capability-contract/default
       provider capabilities))))
@@ -43,7 +43,7 @@
   AuthorizationCapabilityContractProtocol
   CedarCapabilityContractMethod)
 
-(poo-clos-compose-method-bundle
+(clos-compose-method-bundle
  AuthorizationCapabilityContractGeneric
  CedarCapabilityContractMethods)
 

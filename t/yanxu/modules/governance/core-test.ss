@@ -12,8 +12,8 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection)
         (only-in :clan/poo/mop
-                 poo-clos-generic-methods
-                 poo-clos-make-instance)
+                 clos-generic-methods
+                 clos-make-instance)
         :tao3k/agentic-ai-lab/modules/governance/interface
         :tao3k/agentic-ai-lab/modules/authorization/interface
         :tao3k/agentic-ai-lab/modules/authorization/providers/cedar/interface)
@@ -173,14 +173,14 @@
     (yuanxu-test-case "Authorization Provider publishes its CLOS method bundle"
       (check-equal?
        (length
-        (poo-clos-generic-methods AuthorizationCapabilityContractGeneric))
+        (clos-generic-methods AuthorizationCapabilityContractGeneric))
        2)
       (let (unsupported-provider
             (agentic-ai-lab-authorization-provider
              "test/authorization/unsupported"
              '("unsupported")
              'strict-lockstep
-             (poo-clos-make-instance
+             (clos-make-instance
               AuthorizationCapabilityContractExecutor)
              'test.runtime))
         (check-exception

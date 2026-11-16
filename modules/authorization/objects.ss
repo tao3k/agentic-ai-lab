@@ -5,7 +5,7 @@
 
 ;;; Boundary: inert authorization Provider objects; execution is external.
 (import (only-in :clan/poo/object .o)
-        (only-in :clan/poo/mop validate poo-clos-class)
+        (only-in :clan/poo/mop validate clos-class)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/types
                  agentic-ai-lab-authorization-provider-kind
                  agentic-ai-lab-authorization-capability-kind
@@ -19,7 +19,7 @@
 ;;; Provider packages specialize this executor class and publish their methods
 ;;; through a bundle.  The core owns no Provider-name branch.
 (def AuthorizationCapabilityContractExecutor
-  (poo-clos-class 'authorization/capability-contract-executor))
+  (clos-class 'authorization/capability-contract-executor))
 
 (def (agentic-ai-lab-authorization-provider identity-value engines-value
                                       arbitration-value executor-value

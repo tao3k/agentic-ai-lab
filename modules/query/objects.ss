@@ -6,7 +6,7 @@
 ;;; Boundary: canonical prototypes and validated value constructors.
 ;;; Invariant: ordinary authors derive Query values through runtime slot algebra.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop validate poo-clos-class)
+        (only-in :clan/poo/mop validate clos-class)
         (only-in :std/list/list every)
         (only-in :gerbil-parser/graph-syntax-support
                  GraphSyntaxNode.
@@ -61,7 +61,7 @@
 ;;; Provider packages specialize this executor class and publish their binding
 ;;; methods through an owned bundle.  The Query core never invokes a runtime.
 (def QueryReceiptBindingExecutor
-  (poo-clos-class 'query/receipt-binding-executor))
+  (clos-class 'query/receipt-binding-executor))
 
 (def (query-program-has-slots? value slots)
   (and (object? value)

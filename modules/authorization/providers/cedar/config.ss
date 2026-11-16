@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :clan/poo/mop poo-clos-class poo-clos-make-instance)
+(import (only-in :clan/poo/mop clos-class clos-make-instance)
         (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor
                  agentic-ai-lab-authorization-provider))
@@ -13,12 +13,12 @@
         CedarAuthorizationProvider)
 
 (def CedarCapabilityContractExecutor
-  (poo-clos-class
+  (clos-class
    'authorization/cedar-capability-contract-executor
    direct-superclasses: (list AuthorizationCapabilityContractExecutor)))
 
 (def CedarCapabilityContractProjector
-  (poo-clos-make-instance CedarCapabilityContractExecutor))
+  (clos-make-instance CedarCapabilityContractExecutor))
 
 (def CedarAuthorizationProvider
   (agentic-ai-lab-authorization-provider

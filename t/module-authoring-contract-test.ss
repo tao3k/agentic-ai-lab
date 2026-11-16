@@ -12,10 +12,10 @@
         (only-in :std/test check-equal? check-exception test-suite)
         :tao3k/yuanxu/module-system/authoring/admission
         (only-in :clan/poo/mop
-                 poo-clos-call
-                 poo-clos-compose-method-bundle
-                 poo-clos-compute-applicable-methods
-                 poo-clos-generic-function
+                 clos-call
+                 clos-compose-method-bundle
+                 clos-compute-applicable-methods
+                 clos-generic-function
                  .defgeneric .defmethod .defmethod-bundle)
         (only-in :tao3k/yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-file-observations
@@ -121,7 +121,7 @@
                    '(.o))))
        (check-equal?
         (length
-         (apply poo-clos-compute-applicable-methods
+         (apply clos-compute-applicable-methods
                 ModuleAuthoringAnalysisGeneric arguments))
         1)))
 
@@ -137,13 +137,13 @@
                  authoring: authoring
                  metadata: '()))
             (generic
-             (poo-clos-generic-function
+             (clos-generic-function
               'module-authoring-analyze/clinical 4
               protocol: ModuleAuthoringAnalysisProtocol)))
-       (poo-clos-compose-method-bundle generic TestAuthoringCoreMethods)
-       (poo-clos-compose-method-bundle generic ClinicalAuthoringMethods)
+       (clos-compose-method-bundle generic TestAuthoringCoreMethods)
+       (clos-compose-method-bundle generic ClinicalAuthoringMethods)
        (let (diagnostics
-             (validate YuanxuModuleAuthoringDiagnostics (poo-clos-call
+             (validate YuanxuModuleAuthoringDiagnostics (clos-call
               generic
               (.ref authoring 'executor)
               (.ref authoring 'objects)
@@ -300,14 +300,14 @@
               user-root-module-interface
               'config
               '(def UserGeneric
-                 (poo-clos-generic-function 'user-generic 1))))
+                 (clos-generic-function 'user-generic 1))))
             (diagnostic (first-diagnostic admission)))
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)
        (check-equal? (.ref diagnostic 'code)
                      'poo-user-surface-forbids-direct-clos)
        (check-equal? (.ref diagnostic 'subject)
-                     'poo-clos-generic-function)))
+                     'clos-generic-function)))
 
    (yuanxu-test-case "user-root rejects raw self/super behavior hooks"
      (let* ((admission
@@ -334,7 +334,7 @@
         test-module-interface
         'objects
         '(def MaintainedGeneric
-           (poo-clos-generic-function 'maintained-generic 1))))
+           (clos-generic-function 'maintained-generic 1))))
       #t))
 
    (yuanxu-test-case "maintained user-interface Scheme sources satisfy their role Contracts"
