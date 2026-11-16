@@ -6,5 +6,5 @@
   tags: '(context)
   core:
   (.o scope-contract: ContextScopeContract
-      exports: (.o config: Config profile: ContextCoreProfile))
+      exports: (.o (:: @ ContextOperations) config: Config profile: ContextCoreProfile))
   features: '(memory))

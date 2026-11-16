@@ -8,7 +8,8 @@
         "revisions/interface.ss" "truth-maintenance/interface.ss"
         "conclusions/interface.ss" "trajectory/interface.ss" "impact/interface.ss"
         "evidence/interface.ss" "candidates/types.ss" "candidates/objects.ss" "candidates/funs.ss" "admission/interface.ss"
-        "applicability/interface.ss" "lifecycle/interface.ss")
+        "applicability/interface.ss" "lifecycle/interface.ss"
+        "ascent-exchange.ss")
 (export (import: "types.ss")
         (import: "objects.ss")
         (import: "funs.ss")
@@ -27,7 +28,11 @@
   core:
   (.o scope-contract: TemporalCausalityScopeContract
       exports:
-      (.o structural-impact-analyze: agentic-ai-lab-structural-impact-analyze
+      (.o ascent-exchange: agentic-ai-lab-ascent-exchange
+          ascent-event-binding: agentic-ai-lab-ascent-event-binding
+          ascent-exchange-solve: agentic-ai-lab-ascent-exchange-solve
+          ascent-exchange-verify: agentic-ai-lab-ascent-exchange-verify
+          structural-impact-analyze: agentic-ai-lab-structural-impact-analyze
           causal-event-graph: agentic-ai-lab-causal-event-graph
           causal-trajectory-assess: agentic-ai-lab-causal-trajectory-assess
           causal-trajectory-assessment-digest: agentic-ai-lab-causal-trajectory-assessment-digest
