@@ -26,9 +26,9 @@ d2-reuse mode="evaluate":
 # imports; this entry does not depend on Core's private progress adapter.
 [group('test')]
 test-d2:
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/module-test.ss t/context-window-ascent-test.ss t/d2-reader-review-test.ss t/d2-explanation-test.ss t/d2-authoring-test.ss t/d2-image-reading-test.ss t/d2-scene-test.ss t/d2-teaching-test.ss
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/module-test.ss t/context-window-ascent-test.ss t/yanxu/modules/d2/reader-review-test.ss t/yanxu/modules/d2/explanation-test.ss t/yanxu/modules/d2/authoring-test.ss t/yanxu/modules/d2/image-reading-test.ss t/yanxu/modules/d2/scene-test.ss t/yanxu/modules/d2/teaching-test.ss
 
-# The rule-only gate retains the same limits and does not claim Module closure.
+# Focused reader-rule assertions use the same declared D2 Module.
 [group('test')]
 test-d2-rules:
-    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/d2-reader-rules-test.ss
+    {{ lab_test_env }} {{ gerbil_test_timeout }} 120s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/yanxu/modules/d2/reader-rules-test.ss
