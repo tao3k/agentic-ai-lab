@@ -1,12 +1,11 @@
 #!/usr/bin/env gxi
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in "../../../core/dev/gerbil/clean-outputs.ss" clean-selected-outputs!)
-        (only-in :std/make make make-clean)
+(import (only-in :std/make make make-clean)
         (only-in :clan/poo/object .o .get .call)
         (only-in "./init.ss" yuanxu-deployment-consumer.init.exports)
         (only-in :tao3k/yuanxu/module-system/building/products
-                 build-output-directory current-build-source-directory)
+                 build-output-directory current-build-source-directory artifact-files)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path))
 (export main)
 
@@ -33,6 +32,9 @@
            (lambda ()
              (observe-make
                (lambda ()
-                 (clean-selected-outputs! (.get projection compiler-identities) output
-                   (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output))))))))
+                 (make-clean spec srcdir: (current-build-source-directory) libdir: output)
+                 ;; Native Make leaves dynamic products. The Lab fixture owns
+                 ;; these admitted identities, not a Core development helper.
+                 (for-each delete-file
+                   (artifact-files (.get projection compiler-identities) output #f)))))))
         (else (error "unknown fixture build operation" operation))))))

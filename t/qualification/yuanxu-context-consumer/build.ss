@@ -1,13 +1,12 @@
 #!/usr/bin/env gxi
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in "./clean-outputs.ss" clean-selected-outputs!)
-        (only-in :std/source this-source-file)
+(import (only-in :std/source this-source-file)
         (only-in :std/make make make-clean)
         (only-in :clan/poo/object .o .get .call)
         (only-in :tao3k/yuanxu/module-system/building/build-projection yuanxu-project-source-spec)
         (only-in :tao3k/yuanxu/module-system/building/products
-                 build-output-directory current-build-source-directory)
+                 build-output-directory current-build-source-directory artifact-files)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path))
 (export main)
 
@@ -37,8 +36,9 @@
            (lambda ()
              (displayln "LAB-CONTEXT-CLEAN native-enter seconds=" (- (real-time) started))
              (force-output)
-             (clean-selected-outputs! (.get projection compiler-identities) output
-               (lambda () (make-clean spec srcdir: (current-build-source-directory) libdir: output)))))
+             (make-clean spec srcdir: (current-build-source-directory) libdir: output)
+             (for-each delete-file
+               (artifact-files (.get projection compiler-identities) output #f))))
          (displayln "LAB-CONTEXT-CLEAN native-return seconds=" (- (real-time) started))
          (force-output))
         (else (error "unknown fixture build operation" operation)))))
