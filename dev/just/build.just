@@ -25,10 +25,13 @@ build-qualification-library:
 build-core:
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} gerbil build
 
-# Clean only Core outputs; dependency source checkouts stay intact.
+# Native clean owns the current spec; discard retired Core package products too.
+# Gerbil's native gxc clean leaves dynamic images and removed module names.
 [group('build')]
 clean-core:
     cd "{{ justfile_directory() }}/core" && {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} clean
+    rm -rf "{{ agentic_ai_lab_gerbil_path }}/lib/tao3k/yuanxu"
+    rm -f "{{ agentic_ai_lab_gerbil_path }}/lib/static/tao3k__yuanxu__"*
 
 # Clean the same explicit development build artifacts.
 [group('build')]
