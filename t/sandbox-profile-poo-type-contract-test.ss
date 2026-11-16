@@ -21,7 +21,11 @@
 (def sandbox-profile-poo-type-contract-test
   (test-suite "sandbox-profile-poo-type-contract-test"
     (yuanxu-test-case "validates the runtime contract"
-      (eval '(import "./modules/agent-sandbox/config.ss"))
+      (eval '(import "./modules/agent-sandbox/config.ss"
+                     (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func
+                       agentic-ai-lab-sandbox-profile?
+                       agentic-ai-lab-sandbox-profile-name
+                       agentic-ai-lab-sandbox-profile->descriptor)))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (let (contract-row
       (sandbox-profile-contract-eval
