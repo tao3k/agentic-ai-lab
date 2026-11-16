@@ -15,9 +15,17 @@ import subprocess
 from pathlib import Path
 
 
-from gerbil_dependency_pin import declared_toolchain
-
 ROOT = Path(__file__).resolve().parents[2]
+LINUX_REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
+LINUX_TAG = (
+    f"gerbil-v0.19-{LINUX_REVISION}-linux-x86_64-portable-full"
+    "-single-host-unlimited-patcha379bb244bfa"
+)
+LINUX_RELEASE = (
+    "linux", "x86_64", LINUX_REVISION,
+    f"https://github.com/tao3k/gerbil-bazel/releases/download/{LINUX_TAG}/{LINUX_TAG}.tar.gz",
+    "3b345b1af68dfbbc0e73bae64941e4c8910d0ca192d81432ce699c5af385b565",
+)
 DARWIN_REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
 DARWIN_TAG = (
     f"gerbil-v0.19-{DARWIN_REVISION}-darwin-aarch64-gcc16-arm64"
@@ -35,12 +43,7 @@ def release_configuration(host: tuple[str, str]) -> tuple[str, str, str, str, st
         return DARWIN_RELEASE
     if host != ("Linux", "x86_64"):
         raise ValueError(f"unsupported Gerbil release host: {host[0]}-{host[1]}")
-    sdk = declared_toolchain(ROOT)
-    urls = sdk["linux_prebuilt_urls"]
-    if len(urls) != 1:
-        raise ValueError("native Linux SDK declaration must select one immutable release URL")
-    return ("linux", "x86_64", sdk["linux_prebuilt_release_revision"],
-            urls[0], sdk["linux_prebuilt_sha256"])
+    return LINUX_RELEASE
 
 
 def _digest(path: Path) -> str:

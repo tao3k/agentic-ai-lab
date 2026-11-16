@@ -31,13 +31,13 @@ class InstallGerbilReleaseTest(unittest.TestCase):
         self.assertNotIn("sha256=", action)
         self.assertNotIn("2591dcd", action)
 
-    def test_linux_installer_consumes_the_canonical_native_sdk_declaration(self) -> None:
-        sdk = installer.declared_toolchain(installer.ROOT)
+    def test_linux_installer_keeps_the_verified_release_pin(self) -> None:
         os_name, architecture, revision, url, digest = installer.release_configuration(("Linux", "x86_64"))
         self.assertEqual((os_name, architecture), ("linux", "x86_64"))
-        self.assertEqual(revision, sdk["linux_prebuilt_release_revision"])
-        self.assertEqual(digest, sdk["linux_prebuilt_sha256"])
-        self.assertEqual(sdk["linux_prebuilt_urls"], [url])
+        self.assertEqual(revision, "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb")
+        self.assertEqual(digest, "3b345b1af68dfbbc0e73bae64941e4c8910d0ca192d81432ce699c5af385b565")
+        tag = f"gerbil-v0.19-{revision}-linux-x86_64-portable-full-single-host-unlimited-patcha379bb244bfa"
+        self.assertEqual(url, f"https://github.com/tao3k/gerbil-bazel/releases/download/{tag}/{tag}.tar.gz")
 
     def test_activation_reads_nonexported_upstream_values(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
