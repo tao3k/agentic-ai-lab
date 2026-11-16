@@ -303,7 +303,7 @@ tools. =just build= incrementally compiles Core and Lab's development library.
 =just clean-core= explicitly removes Core outputs. =just rebuild= cleans both
 packages, installs dependencies, builds, and runs the unit suite sequentially,
 stopping at the first failure. =just check= runs the
-runtime build and unit suite; neither command invokes Bazel.
+native Gerbil library build and unit suite.
 
 Run the single runtime test entrypoint and Scheme scripts through the package
 environment:

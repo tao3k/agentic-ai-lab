@@ -25,26 +25,22 @@ independent `npm-package` branch and are not committed to `main`.
 
 ## Downstream Scheme compositions
 
-Downstream projects own their composition source as Scheme. The public Bazel
-rule keeps lowering in the host build and emits immutable files for this browser
-runtime:
+Downstream projects own their composition source as Scheme. Generate immutable
+descriptor and arena files through the native Gerbil entrypoint:
 
-```starlark
-load("@agentic_ai_lab//packages/bazel:bundle_v1.bzl", "agentic_ai_lab_bundle_v1")
-
-agentic_ai_lab_bundle_v1(
-    name = "principles_bundle",
-    src = "human-capability.ss",
-    arena_out = "human-capability.arena.bin",
-    bundle_id = "human-capability",
-    descriptor_out = "human-capability.descriptor.bin",
-)
+```sh
+AGENTIC_AI_LAB_BUNDLE_V1_ID=principles \
+AGENTIC_AI_LAB_BUNDLE_V1_EPOCH=1 \
+YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=principles.descriptor.bin \
+YUANXU_BUNDLE_V1_ARENA_OUT=principles.arena.bin \
+  gerbil env gerbil human-capability.ss
 ```
 
 The Scheme entrypoint calls
-`agentic-ai-lab-write-composition-bundle-v1/from-environment!` with its composed POO
-value. Bazel supplies the bundle identity and declared output paths. No Scheme
-compiler or lowering implementation is added to the browser WASM surface.
+`agentic-ai-lab-write-composition-bundle-v1/from-environment!` with its composed
+POO value. The browser consumes those bytes without a Scheme compiler. The npm
+build performs two independent native generations and compares both outputs
+before publishing them.
 
 
 ## Guard metadata

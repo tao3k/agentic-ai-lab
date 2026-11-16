@@ -141,7 +141,7 @@ jobs:
 
       - name: Build Gerbil
         if: matrix.gerbil-install == 'source' && steps.gerbil-cache.outputs.cache-hit != 'true'
-        run: bash tools/bazel/bootstrap_gerbil_toolchain.sh
+        run: python3 packages/automation/install_gerbil_release.py "$GERBIL_PREFIX"
 
       - name: Save Gerbil install cache
         if: matrix.gerbil-install == 'source' && steps.gerbil-cache.outputs.cache-hit != 'true'

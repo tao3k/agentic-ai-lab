@@ -31,7 +31,7 @@ from agentic_ai_lab_runtime import (
 def _repo_library() -> Path:
     configured = os.environ.get(RUNTIME_LIBRARY_ENV)
     if not configured:
-        pytest.skip(f"{RUNTIME_LIBRARY_ENV} does not name a Bazel runtime artifact")
+        pytest.skip(f"{RUNTIME_LIBRARY_ENV} does not name a native runtime artifact")
     return Path(configured).expanduser().resolve()
 
 

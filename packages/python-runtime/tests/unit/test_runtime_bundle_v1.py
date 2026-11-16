@@ -14,14 +14,9 @@ def _bundle_library() -> Path:
     override = os.environ.get("AGENTIC_AI_LAB_BUNDLE_V1_LIBRARY")
     if override:
         return Path(override).expanduser().resolve()
-    return (
-        Path(__file__).resolve().parents[4]
-        / "bazel-bin"
-        / "bindings"
-        / "runtime-c"
-        / "bundle-v1"
-        / "libbundle_v1_shared.dylib"
-    )
+    prefix = Path(os.environ.get("GERBIL_PATH", Path(__file__).resolve().parents[4] / ".gerbil"))
+    extension = "dylib" if __import__("sys").platform == "darwin" else "so"
+    return prefix / "runtime-c" / f"libagentic_ai_lab_bundle_v1.{extension}"
 
 
 def test_bundle_v1_cffi_is_typed_zero_copy_and_logarithmic() -> None:

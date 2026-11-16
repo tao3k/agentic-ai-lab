@@ -1,11 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-# Query the complete Bazel target graph without executing actions.
-[group('discovery')]
-query:
-    {{ bazel }} query //...
-
 # Run the cold runtime lifecycle in order; stop on the first failure.
 [group('check')]
 rebuild:
@@ -40,11 +35,6 @@ check-license-contract:
 [group('check')]
 check-version-contract:
     python3 packages/automation/check_version_contract.py
-
-# Validate that gerbil.pkg direct pins and every Bazel projection agree.
-[group('check')]
-check-gerbil-dependency-contract:
-    python3 packages/automation/gerbil_dependency_pin.py check
 
 # Bootstrap the expander in Gxi, then use the upstream GxTest entry point.
 # No private assertion runner; require all Cases and the final harness receipt.

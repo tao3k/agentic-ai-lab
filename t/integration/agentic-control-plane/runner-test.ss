@@ -14,7 +14,7 @@
    (find-gate gate-id registry)
    revision
    #t
-   (list (cons 'kind 'gerbil-bazel.action-receipt.v1)
+   (list (cons 'kind 'gerbil.action-receipt.v1)
          (cons 'gate-id gate-id))))
 
 (export runner-test)
@@ -43,7 +43,7 @@
         (check (.ref run 'accepted?) => #t)
         (check (.ref verified 'accepted?) => #t)
         (check (.ref receipt 'evidence)
-               => '((kind . gerbil-bazel.action-receipt.v1)
+               => '((kind . gerbil.action-receipt.v1)
                     (gate-id . scheme-canonical-fixture)))))
 
     (yuanxu-test-case "missing and stale release receipts fail closed"

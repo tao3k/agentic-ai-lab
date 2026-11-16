@@ -9,7 +9,6 @@ path = [
   "LICENSE",
   "**/LICENSE",
   "LICENSES/**",
-  ".bazelversion",
   "core/.github/workflows/ci.yml",
   "core/.gitignore",
   "VERSION",

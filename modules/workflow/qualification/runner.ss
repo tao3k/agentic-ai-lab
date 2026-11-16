@@ -5,7 +5,7 @@
 
 ;;; Boundary: pure qualification declarations and receipt verification.
 ;;; Build execution, scheduling, resource guards, and process receipts are
-;;; owned by std/make through the ASP Build API and gerbil-bazel actions.
+;;; owned by std/make through the native Gerbil build entrypoints.
 
 (export #t)
 

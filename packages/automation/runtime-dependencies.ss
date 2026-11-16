@@ -67,7 +67,7 @@
 
 (def (orgize-scheme-rust-dependency directory)
   ;; Orgize's native build imports Scheme Rust for its ABI check. Its Cargo
-  ;; lock owns this revision, just as the Bazel producer's input does.
+  ;; lock owns this build dependency revision.
   (def package "github.com/tao3k/gerbil-scheme-rust")
   (def prefix (string-append "source = \"git+https://" package "?"))
   (def revisions

@@ -12,30 +12,6 @@ deps:
 build-dependency package:
     {{ gerbil_darwin_env }} gerbil env gxpkg build "{{ package }}"
 
-# Verify that dependency resolution is represented by the tracked lock.
-[group('dependency')]
-lock-check:
-    {{ bazel }} mod deps --lockfile_mode=error
-
-# Refresh this host's runtime Bazel lock; CI merges Linux and Darwin evaluations.
-[group('dependency')]
-bazel-update:
-    {{ bazel }} mod deps --lockfile_mode=update
-
-# Change a direct Gerbil dependency once. Its owning gerbil.pkg is authoritative; the
-# source archive digest and both platform lock projections are derived.
-[group('dependency')]
-pin-gerbil-dependency package revision:
-    python3 packages/automation/gerbil_dependency_pin.py pin "{{ package }}" "{{ revision }}"
-    {{ bazel }} mod deps --lockfile_mode=update
-    python3 packages/automation/gerbil_dependency_pin.py sync-lock
-    python3 packages/automation/gerbil_dependency_pin.py check
-
-# Normalize MODULE.bazel declarations while explicitly updating the lock.
-[group('dependency')]
-mod-tidy:
-    {{ bazel }} mod tidy --lockfile_mode=update
-
 # Optional ASP source-admission probes belong to the development package.
 [group('dependency')]
 deps-dev:

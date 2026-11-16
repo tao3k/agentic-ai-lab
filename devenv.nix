@@ -31,11 +31,9 @@ in
     pkgs.typst
     pkgs.git
     pkgs.actionlint
-    pkgs.bazelisk
     pkgs.emscripten
     pkgs.lld
     pkgs.binaryen
-    pkgs.bazel-buildtools
     pkgs.nodejs_24
     # Quint pins its checker distribution in packages/proofs/quint.
     pkgs.jdk21
@@ -76,7 +74,7 @@ in
   '' + lib.optionalString pkgs.stdenv.isDarwin ''
     # Homebrew Gerbil/Gambit selects the host C toolchain itself.  Nix's SDK
     # and compiler selectors form a mixed Darwin toolchain when inherited by
-    # gxpkg, so keep them outside the Gerbil build boundary.  Bazel and
+    # gxpkg, so keep them outside the Gerbil build boundary. Native C and
     # Emscripten retain their own declared toolchains.
     unset SDKROOT DEVELOPER_DIR CC CXX
   '';

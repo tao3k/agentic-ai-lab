@@ -51,8 +51,7 @@ artifacts and is not counted as a pass. The explicit source runner uses the
 real =std/test/base= harness with every TestResult checked and a heap/timeout
 fence before imports.
 
-Bazel regenerates its runtime dependency lock from =gerbil.pkg=; the existing
-cross-platform projection helper synchronizes the source-package attributes.
+Gerbil resolves the package revisions declared in =gerbil.pkg=.
 Dependency/version/license checks and twelve automation tests pass. Raw logs
 are local/CI artifacts; historical receipts relocated from design directories
 remain under the corresponding test evidence owner.
@@ -75,9 +74,8 @@ pin (=e85fd453= versus =06fe336b=); removing the duplicate declaration restores
 the existing package manager's coherent bootstrap graph without rewriting its
 transitive constraints. The local Core build then supplies this product's Core
 artifacts. Dependency installation alone is not a complete product build.
-Bazel also compiles the initialized local Core directory; external consumer
-qualification exports its tracked files without its Git metadata. No loader or
-old-namespace forwarding layer is introduced.
+Native builds compile the initialized Core directory. No separate build graph
+or old-namespace forwarding layer is introduced.
 
 The local Core build first cleans only Core-owned compiled outputs. A newly
 installed bootstrap dependency can have newer mtimes than the checked-out Core

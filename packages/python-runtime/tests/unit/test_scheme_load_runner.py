@@ -13,7 +13,7 @@ from agentic_ai_lab_runtime._scheme_load_runner import (
 )
 
 
-def test_direct_loader_consumes_declared_bazel_environment(
+def test_direct_loader_consumes_declared_native_environment(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
@@ -39,7 +39,7 @@ def test_direct_loader_consumes_declared_bazel_environment(
     assert environment["PATH"] == inherited_path
 
 
-def test_declared_bazel_environment_selects_direct_gxi_first(
+def test_declared_native_environment_selects_direct_gxi_first(
     tmp_path: Path,
     monkeypatch,
 ) -> None:

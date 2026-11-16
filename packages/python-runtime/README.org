@@ -207,15 +207,15 @@ Build the Python runtime wheel without requiring Gerbil after the generated
 artifact has been placed next to its Scheme source:
 
 #+begin_src sh
-bazel build //bindings/runtime-c:runtime_c_shared
-AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY="$PWD/bazel-bin/bindings/runtime-c/libruntime_c_shared.dylib" \
+just build-runtime-c
+AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY="$PWD/.gerbil/runtime-c/libagentic_ai_lab_runtime_v0.dylib" \
   uv build --project packages/python-runtime --wheel \
     --out-dir dist/python-runtime-wheel
 #+end_src
 
-On Linux, use the corresponding =libruntime_c_shared.so= output.  The wheel
-builder consumes this explicitly declared Bazel product; it never invokes Make
-or discovers a source-tree =bindings/runtime-c/build= directory.
+On Linux, use the corresponding =libagentic_ai_lab_runtime_v0.so= output.  The wheel
+builder consumes this explicitly supplied native library; it does not build
+the library or discover an unrelated source-tree build directory.
 
 Install and smoke test the built wheel in a clean environment:
 

@@ -13,11 +13,11 @@ build:
 build-library:
     GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 600s ./build.ss compile
 
-# Prepare Core's published libraries and the selected Lab qualification.
+# Prepare the selected libraries through their native package declarations.
 [group('build')]
 build-qualification-library:
     cd "{{ justfile_directory() }}/core" && {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 300s gxi {{ gerbil_test_runtime_options }} dev/build-published-modules.ss
-    {{ lab_build_env }} GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_test_timeout }} 600s gxi {{ gerbil_test_runtime_options }} ./build-bazel.ss qualify
+    just build-library
 
 # Compile the pinned local Core using Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
@@ -38,30 +38,20 @@ clean-core:
 clean:
     {{ lab_build_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} clean
 
-# Incrementally build the canonical Scheme project through a persistent Bazel development root.
-[group('build')]
-build-dev:
-    {{ bazel }} run {{ gerbil_dev_compile }}
-
 # Build the runtime-C library target.
 [group('build')]
 build-runtime-c:
-    {{ bazel }} build {{ runtime_c_library }}
+    {{ gerbil_darwin_env }} make -C bindings/runtime-c OUT="{{ runtime_c_output }}" runtime
 
 # Build the Bundle v1 C library target.
 [group('build')]
 build-bundle-v1:
-    {{ bazel }} build {{ bundle_v1_library }}
+    {{ gerbil_darwin_env }} make -C bindings/runtime-c OUT="{{ runtime_c_output }}" bundle
 
 # Build the single Lean-linked Cedar Runtime Host at an explicit output path (Nix: $out/bin/cedarRuntimeHost).
 [group('build')]
 build-cedar-runtime-host out:
     python3 packages/automation/build_cedar_runtime_host.py "{{ out }}"
-
-# Show the registered Gerbil implementation selected for the host platform.
-[group('build')]
-toolchain:
-    {{ bazel }} build --toolchain_resolution_debug={{ gerbil_toolchain_type }} {{ gerbil_compile }}
 
 [group('build')]
 build-semantic-runtime output:

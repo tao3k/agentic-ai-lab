@@ -13,13 +13,6 @@ on:
       - 'dev/just/testing.just'
       - 'core'
       # These inputs own the shared native dependency and adapter projection.
-      - '.bazelrc'
-      - '.bazelversion'
-      - 'BUILD.bazel'
-      - 'MODULE.bazel'
-      - 'MODULE.bazel.lock'
-      - 'gerbil-*.MODULE.bazel'
-      - 'packages/bazel/**'
       - 'packages/automation/install_gerbil_release.py'
       - 'gerbil.pkg'
       - 'build.ss'
@@ -51,15 +44,10 @@ jobs:
         with:
           submodules: true
       - uses: ./.github/actions/setup-gerbil
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          repository-cache: true
       - name: Build the library and selected product adapters
         run: |
           # One declared dependency graph owns source identity and native ABI.
-          bazel build //:nix_adapter_test_environment
+          gerbil env just deps build-core build-qualification-library
       - name: Realize locked Provider qualification inputs
         run: |
           inputs=$(nix-build --no-out-link t/fixtures/opentofu/ci.nix)
@@ -78,7 +66,7 @@ jobs:
           } >> "$GITHUB_ENV"
       - name: Serial product adapter regressions
         run: |
-          bazel run //:nix_adapter_test_environment -- just test-root \
+          gerbil env just test-root \
             t/integration/nix/*-test.ss t/aws-*-test.ss \
             t/yanxu/scenarios/aws/*-test.ss \
             t/yanxu/modules/nix/*-test.ss t/yanxu/modules/services/opentofu/*-test.ss \

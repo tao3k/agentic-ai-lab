@@ -54,13 +54,6 @@ def collect_errors(root: Path = ROOT) -> list[str]:
         return [str(error)]
 
     try:
-        module_version = regex_value(
-            root / "MODULE.bazel",
-            r'module\(\s*name\s*=\s*"agentic_ai_lab"\s*,\s*version\s*=\s*"([^"]+)"',
-            "MODULE.bazel",
-        )
-        expect(errors, "MODULE.bazel agentic_ai_lab version", module_version, version)
-
         toml_versions = (
             ("bindings/cedar-gerbil/Cargo.toml", ("workspace", "package", "version")),
             ("bindings/rust-ir/Cargo.toml", ("package", "version")),

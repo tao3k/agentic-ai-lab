@@ -16,33 +16,11 @@ gerbil_test_debug := env_var_or_default("GERBIL_TEST_DEBUG", "q")
 
 gerbil_test_runtime_options := "-:max-heap=" + gerbil_test_max_heap + ",debug=" + gerbil_test_debug
 
-bazel := env_var_or_default("BAZEL", "bazelisk")
+runtime_c_output := agentic_ai_lab_gerbil_path + "/runtime-c"
 
-gerbil_compile := "//:compile"
-
-gerbil_dev_compile := "//:dev_compile"
-
-gerbil_capability_tests := "//t/qualification/gerbil-bazel:tests"
-
-module_system_owner_tests := "//t/qualification/module-system:owner_map_tests"
-
-runtime_c_library := "//bindings/runtime-c:runtime_c_library"
-
-runtime_c_tests := "//bindings/runtime-c:runtime_c_tests"
-
-runtime_c_sanitizer_tests := "//bindings/runtime-c:runtime_c_sanitizer_tests"
-
-runtime_c_leak_test := "//bindings/runtime-c:runtime_c_leak_test"
-
-bundle_v1_library := "//bindings/runtime-c/bundle-v1:bundle_v1"
-
-bundle_v1_tests := "//bindings/runtime-c/bundle-v1:bundle_v1_tests"
-
-gerbil_toolchain_type := "@gerbil_bazel//gerbil:toolchain_type"
+runtime_c_extension := if os() == "macos" { "dylib" } else { "so" }
 
 python_runtime_dir := "packages/python-runtime"
-
-python_runtime_test_environment := "//:python_runtime_test_environment"
 
 composition_lifecycle_tests := "tests/unit/test_composition_lifecycle_arrival.py tests/unit/test_composition_lifecycle_benchmark.py tests/unit/test_composition_lifecycle_workload.py"
 

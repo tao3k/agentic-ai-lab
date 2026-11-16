@@ -98,8 +98,8 @@ jobs:
 
           jq -e --arg head "$GITHUB_SHA" '
             .schema == "agentic-ai-lab.ci.scheme-projection-handoff.v1" and
-            .producerJob == "runtime-linux" and
-            .compileOwner == "//:compile" and
+            .producerJob == "runtime-gerbil-tests" and
+            .compileOwner == "gerbil build" and
             .currentHeadSha == $head and
             .status == 0 and
             .withinBudget == true and
@@ -110,8 +110,8 @@ jobs:
 
           jq -e --arg head "$GITHUB_SHA" '
             .schema == "agentic-ai-lab.ci.runtime-c-handoff.v1" and
-            .producerJob == "runtime-linux" and
-            .producerTarget == "//bindings/runtime-c:runtime_c_shared" and
+            .producerJob == "runtime-gerbil-tests" and
+            .producerTarget == "make runtime" and
             .currentHeadSha == $head and
             .artifactAvailable == true and
             .status == 0 and
@@ -236,7 +236,7 @@ jobs:
 
           health = probe_runtime()
           assert (health.abi_major, health.abi_minor) == (0, 1)
-          print("packaged Bazel runtime-v0 negotiation: ok")
+          print("packaged native runtime-v0 negotiation: ok")
           PY
           "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" - <<'PY'
           import shutil

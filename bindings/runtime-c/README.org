@@ -33,23 +33,16 @@ an ordered sequential merge for total batch lookup cost =O(log n + k)=.
 Run the focused gates:
 
 #+begin_src sh
-bazel test //bindings/runtime-c:runtime_c_tests
-bazel test //bindings/runtime-c:runtime_c_sanitizer_tests
-bazel test //bindings/runtime-c:runtime_c_leak_test
-bazel test //bindings/runtime-c:runtime_v0_batch_benchmark_smoke
-bazel test //bindings/runtime-c:runtime_v0_gerbil_ffi_benchmark
-bazel build \
-  //bindings/runtime-c:runtime_c_static \
-  //bindings/runtime-c:runtime_c_shared
+just test-runtime-c
+just test-runtime-c-sanitizers
+just test-runtime-c-leaks
+just test-bundle-v1
+just build-runtime-c build-bundle-v1
 #+end_src
 
-=runtime_c_tests= includes a parity test between the Scheme-generated Bazel
-contract outputs and the checked-in header/vector artifacts.  The contract rule
-has an explicit dependency on =//:runtime_v0_schema=, so schema edits invalidate
-generation and all downstream C consumers.
-
-Bazel is the external runtime-C action graph.  =build.ss= remains the runtime
-Scheme build authority and is not called or replaced by these C targets.
+The native C Makefile builds static and shared libraries. =build.ss= and Gerbil
+remain the Scheme build authority. The Just entry verifies the Scheme contract
+against the checked-in header/vectors and validates the exported symbol list.
 
 The =Runtime C SDK= workflow owns this ABI independently of the Scheme package
 CI.  On Linux and macOS it validates the generated Scheme contract/header

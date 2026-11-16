@@ -22,12 +22,12 @@ def _runtime_library() -> Path:
     configured = os.environ.get(RUNTIME_LIBRARY_ENV)
     if not configured:
         raise RuntimeError(
-            f"{RUNTIME_LIBRARY_ENV} must name the Bazel-built runtime-v0 "
+            f"{RUNTIME_LIBRARY_ENV} must name the native runtime-v0 "
             "shared library"
         )
     library = Path(configured).expanduser().resolve()
     if not library.is_file():
-        raise RuntimeError(f"Bazel runtime-v0 shared library is absent: {library}")
+        raise RuntimeError(f"native runtime-v0 shared library is absent: {library}")
     return library
 
 

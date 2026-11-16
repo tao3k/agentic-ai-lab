@@ -10,12 +10,6 @@ on:
       - main
   pull_request:
   workflow_dispatch:
-    inputs:
-      refresh_lock:
-        description: Generate and verify the cross-platform Bazel module lock
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -26,7 +20,6 @@ concurrency:
 
 jobs:
   license-contract:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: License contract
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -41,11 +34,9 @@ jobs:
           python3 packages/automation/check_license_contract.py
           python3 packages/automation/check_version_contract.py
           python3 packages/automation/check_namespace_contract.py
-          python3 packages/automation/gerbil_dependency_pin.py check
           python3 -m unittest discover -s packages/automation/tests -p 'test_*.py'
 
   runtime-gerbil-tests:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Runtime Gerbil unit tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 240
@@ -153,7 +144,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Install Gerbil package dependencies
         run: |
@@ -184,7 +175,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
+          key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Link the Lab source package for downstream qualification
         run: |
@@ -316,7 +307,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          export LAB_CONTEXT_TEMPORAL_INTERFACE="$RUNNER_TEMP/lab-qualification/lib/tao3k/agentic-ai-lab/t/qualification/context-temporal/interface.ssi"
           /usr/bin/time -p gerbil env just test-context-temporal 2>&1 | tee "$RUNNER_TEMP/lab-context-temporal.log"
 
       - name: Retain Temporal qualification evidence
@@ -348,6 +338,30 @@ jobs:
         run: |
           set -euo pipefail
           gerbil env just test-root 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
+
+      - name: Produce native C and Scheme projection wheel handoffs
+        if: runner.os == 'Linux'
+        env:
+          PYTHONPATH: ${{ github.workspace }}/packages/python-runtime/src
+        run: gerbil env python3 packages/automation/native_library_handoff.py
+
+      - name: Retain native library handoffs
+        if: ${{ always() && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: agentic-ai-lab-runtime-library
+          path: .ci/runtime-c
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Retain native Scheme projection handoff
+        if: ${{ always() && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: python-wheel-scheme-projection-producer
+          path: .ci/python-wheel-projection
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Build Scheme semantic AOT byte boundary
         env:
@@ -415,7 +429,6 @@ jobs:
           retention-days: 7
 
   quint-proof:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: ${{ matrix.phase == 'typecheck' && 'Quint types and source binding' || 'Quint finite proof models' }}
     runs-on: ubuntu-latest
     # Typechecking and verification retain their complete inventories but do
@@ -477,7 +490,6 @@ jobs:
           retention-days: 7
 
   session-poo-proof:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Session and WorkTree LeanPoo proof
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -494,7 +506,6 @@ jobs:
           build-args: AgenticAILabSessionProof AgenticAILabContextProof AgenticAILabAttemptProof
 
   lean-proof:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Lean module / ${{ matrix.owner }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -593,7 +604,6 @@ jobs:
           key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
   cedar-rust-runtime-host:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Cedar Rust Runtime Host
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -672,648 +682,7 @@ jobs:
             core/dev/proofs/lean/.lake
           key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
-  external-module-linux-full:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: Agentic AI Lab external Bazel module (linux-amd64, full)
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout agentic-ai-lab
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Initialize Core source directory
-        run: git submodule update --init core
-
-      - name: Install Linux build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            ca-certificates \
-            git \
-            libsqlite3-dev \
-            libssl-dev \
-            pkg-config \
-            zlib1g-dev
-
-      - name: Declare Bazel disk-cache generation
-        shell: bash
-        env:
-          AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          mkdir -p .ci/bazel-cache-generation
-          printf '# Agentic AI Lab external-module cache generation: %s\n' \
-            "$AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION" \
-            > .ci/bazel-cache-generation/BUILD.bazel
-
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          cache-save: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
-          cache-version: 1
-          disk-cache: ci-${{ runner.os }}-external-module-full-v1
-          repository-cache: true
-
-      - name: Verify Bazel module lock
-        run: bazelisk mod deps --lockfile_mode=error
-
-      - name: Validate external Bazel qualification logic
-        timeout-minutes: 2
-        run: python3 -m unittest discover -s t/qualification/external_bazel -p 'external_module_test.py' -v
-
-      # This includes compiling the complete cold dependency/product graph.
-      # Per-test execution profiles remain independently bounded.
-      - name: Validate Agentic AI Lab as an external Bazel module
-        timeout-minutes: 12
-        env:
-          AGENTIC_AI_LAB_EXTERNAL_BAZEL_OUTPUT_BASE: ${{ runner.temp }}/agentic-ai-lab-external-bazel-output-base-v1
-          AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: full
-        run: python3 t/qualification/external_bazel/external_module.py
-
-  runtime-linux:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.job-timeout-minutes }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            gerbil-label: release-v0.19-2591dcd
-            gerbil-install: release
-            dependency-timeout-minutes: 12
-            compile-timeout-minutes: 12
-            compile-runaway-timeout-seconds: 660
-            acceptance-timeout-minutes: 10
-            acceptance-runaway-timeout-seconds: 540
-            external-module-mode: analysis
-            job-timeout-minutes: 30
-    steps: &runtime-steps
-      - name: Checkout agentic-ai-lab
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Initialize Core source directory
-        run: git submodule update --init core
-
-      - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          # Keep the leak gate's explicit valgrind dependency; omit optional
-          # recommendations from this time-bounded compiler installation.
-          sudo apt-get install -y --no-install-recommends \
-            build-essential \
-            ca-certificates \
-            git \
-            jq \
-            libsqlite3-dev \
-            libssl-dev \
-            openssl \
-            pkg-config \
-            sqlite3 \
-            valgrind \
-            zlib1g-dev
-
-      - name: Restore Homebrew cache
-        if: runner.os == 'macOS'
-        id: homebrew-cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/Library/Caches/Homebrew
-          key: homebrew-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-v3
-          restore-keys: |
-            homebrew-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-
-
-      - name: Install macOS system dependencies
-        if: runner.os == 'macOS'
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: 1
-          HOMEBREW_NO_INSTALL_CLEANUP: 1
-        run: |
-          brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
-          brew install gcc jq openssl pkg-config sqlite zlib
-
-      - name: Install immutable Gerbil v0.19 release
-        if: matrix.gerbil-install == 'release'
-        run: python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/${{ matrix.gerbil-label }}"
-
-      - name: Save Homebrew cache
-        if: runner.os == 'macOS' && steps.homebrew-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/Library/Caches/Homebrew
-          key: homebrew-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-v3
-
-      - name: Declare Bazel disk-cache generation
-        shell: bash
-        env:
-          AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          mkdir -p .ci/bazel-cache-generation
-          printf '# Agentic AI Lab CI cache generation: %s\n' \
-            "$AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION" \
-            > .ci/bazel-cache-generation/BUILD.bazel
-
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          # setup-bazel hashes BUILD files and restores the newest matching
-          # prefix when the exact generation is absent.  The ignored synthetic
-          # BUILD file above advances that generation on every commit, so an
-          # updated action cache is published instead of being trapped behind
-          # GitHub's immutable exact key.  Forks remain restore-only.
-          cache-save: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
-          cache-version: 1
-          disk-cache: ci-${{ runner.os }}-${{ matrix.gerbil-label }}
-          repository-cache: true
-
-      - name: Verify Bazel module lock
-        run: bazelisk mod deps --lockfile_mode=error
-
-      - name: Validate Agentic AI Lab as an external Bazel module
-        timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
-        env:
-          AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: ${{ matrix.external-module-mode }}
-        run: python3 t/qualification/external_bazel/external_module.py
-
-      - name: Resolve shared Gerbil capability
-        id: gerbil-runtime-abi
-        shell: bash
-        run: |
-          set -euo pipefail
-          set +e
-          runtime_abi_output="$(
-            bazel run --ui_event_filters=-info --noshow_progress \
-              @gerbil_bazel//gerbil:native_abi_fingerprint 2>&1
-          )"
-          runtime_abi_status=$?
-          set -e
-          if (( runtime_abi_status != 0 )); then
-            printf '%s\n' "$runtime_abi_output" >&2
-            exit "$runtime_abi_status"
-          fi
-          runtime_abi="$(
-            printf '%s\n' "$runtime_abi_output" \
-              | awk '/^[0-9a-f]{40}$/ { value = $0 } END { if (value != "") print value }'
-          )"
-          if [[ "${#runtime_abi}" -ne 40 ]]; then
-            printf '%s\n' "$runtime_abi_output" >&2
-            exit 1
-          fi
-          echo "GERBIL_RUNTIME_ABI=$runtime_abi" >> "$GITHUB_ENV"
-          echo "fingerprint=$runtime_abi" >> "$GITHUB_OUTPUT"
-          echo "Gerbil runtime ABI: $runtime_abi"
-
-      - name: Build declared Gerbil dependency projects
-        id: dependency-compile
-        timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
-        run: |
-          # Keep failed action logs in the original sandbox for CI artifacts.
-          echo "output-base=$(bazel info output_base)" >> "$GITHUB_OUTPUT"
-          arguments=(--sandbox_debug)
-          if [[ "$RUNNER_OS" == macOS ]]; then
-            # Each Scheme action uses the full native compiler allocation.
-            # Serialize actions on this runner to avoid overlapping CPU/RSS
-            # budgets; std/make still schedules compilation within each action.
-            arguments+=(--jobs=1)
-          fi
-          bazel build "${arguments[@]}" //:dependency_packages
-
-      - name: Validate shared Gerbil provider
-        run: bazel test --test_output=errors //t/qualification/gerbil-bazel:tests
-
-      - name: Validate Bazel target graph
-        run: bazel query //...
-
-      - name: Build Scheme package through Bazel
-        id: scheme-compile
-        timeout-minutes: ${{ matrix.compile-timeout-minutes }}
-        env:
-          COMPILE_RUNAWAY_TIMEOUT_SECONDS: ${{ matrix.compile-runaway-timeout-seconds }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          profile="$RUNNER_TEMP/bazel-scheme-compile-profile.gz"
-          ci_receipt="$RUNNER_TEMP/bazel-scheme-compile-ci-receipt.json"
-          start_seconds=$SECONDS
-
-          set +e
-          bazel build \
-            --action_env=AGENTIC_AI_LAB_BUILD_TOTAL_TIMEOUT_SECONDS="$COMPILE_RUNAWAY_TIMEOUT_SECONDS" \
-            --profile="$profile" \
-            //:compile
-          build_status=$?
-          set -e
-
-          elapsed_seconds=$((SECONDS - start_seconds))
-          gerbil_receipt="bazel-bin/compile.receipt.json"
-          jq -n \
-            --arg schema "agentic-ai-lab.ci.bazel-phase-observation.v1" \
-            --arg phase "scheme-compile" \
-            --arg runner "${RUNNER_OS}-${RUNNER_ARCH}" \
-            --argjson status "$build_status" \
-            --argjson elapsedSeconds "$elapsed_seconds" \
-            --argjson runawayTimeoutSeconds "$COMPILE_RUNAWAY_TIMEOUT_SECONDS" \
-            --argjson schemeReceiptAvailable "$([[ -f "$gerbil_receipt" ]] && printf true || printf false)" \
-            '{schema: $schema, phase: $phase, runner: $runner, status: $status,
-              elapsedSeconds: $elapsedSeconds,
-              runawayTimeoutSeconds: $runawayTimeoutSeconds,
-              schemeReceiptAvailable: $schemeReceiptAvailable}' > "$ci_receipt"
-          echo "profile=$profile" >> "$GITHUB_OUTPUT"
-          echo "ci-receipt=$ci_receipt" >> "$GITHUB_OUTPUT"
-
-          if (( build_status != 0 )); then
-            exit "$build_status"
-          fi
-
-      - name: Upload Scheme compile evidence
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: bazel-scheme-compile-evidence-${{ runner.os }}-${{ runner.arch }}
-          path: |
-            ${{ steps.scheme-compile.outputs.ci-receipt }}
-            ${{ steps.scheme-compile.outputs.profile }}
-            bazel-bin/compile.receipt.json
-            bazel-bin/compile.log
-            bazel-bin/*_package.receipt.json
-            bazel-bin/*_package.log
-            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.log
-            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.project/.gerbil-bazel-resource-guard.json
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Build Python wheel Scheme projection through Bazel
-        if: runner.os == 'Linux'
-        id: wheel-scheme-projection
-        timeout-minutes: 2
-        env:
-          PROJECTION_ARTIFACT: bazel-bin/wheel_smoke.ss.agentic-ai-lab-projection.sexp
-          PROJECTION_BUDGET_SECONDS: 120
-        shell: bash
-        run: |
-          set -euo pipefail
-          handoff_dir="$GITHUB_WORKSPACE/.ci/python-wheel-projection"
-          profile="$RUNNER_TEMP/python-wheel-scheme-projection-profile.gz"
-          receipt="$handoff_dir/producer-receipt.json"
-          start_seconds=$SECONDS
-          mkdir -p "$handoff_dir"
-
-          set +e
-          bazel build \
-            --profile="$profile" \
-            //:wheel_smoke_projection_artifact
-          build_status=$?
-          set -e
-
-          elapsed_seconds=$((SECONDS - start_seconds))
-          artifact_available=false
-          artifact_digest=""
-          if [[ -s "$PROJECTION_ARTIFACT" ]]; then
-            artifact_available=true
-            artifact_digest="$(sha256sum "$PROJECTION_ARTIFACT" | awk '{print $1}')"
-            cp "$PROJECTION_ARTIFACT" "$handoff_dir/"
-          fi
-          jq -n \
-            --arg schema "agentic-ai-lab.ci.scheme-projection-handoff.v1" \
-          --arg producerJob "runtime-linux" \
-          --arg action "//:wheel_smoke_projection_artifact" \
-          --arg compileOwner "//:compile" \
-          --arg currentHeadSha "$GITHUB_SHA" \
-          --arg artifactDigest "$artifact_digest" \
-            --argjson status "$build_status" \
-            --argjson elapsedSeconds "$elapsed_seconds" \
-            --argjson budgetSeconds "$PROJECTION_BUDGET_SECONDS" \
-            --argjson artifactAvailable "$artifact_available" \
-          '{schema: $schema, producerJob: $producerJob, action: $action,
-            compileOwner: $compileOwner, currentHeadSha: $currentHeadSha,
-            artifactDigest: $artifactDigest,
-            status: $status, elapsedSeconds: $elapsedSeconds,
-              budgetSeconds: $budgetSeconds,
-              withinBudget: ($elapsedSeconds <= $budgetSeconds),
-              artifactAvailable: $artifactAvailable}' > "$receipt"
-
-          if (( build_status != 0 )); then
-            exit "$build_status"
-          fi
-          if (( elapsed_seconds > PROJECTION_BUDGET_SECONDS )); then
-            echo "Scheme projection exceeded ${PROJECTION_BUDGET_SECONDS}s budget" >&2
-            exit 1
-          fi
-          test -s "$PROJECTION_ARTIFACT"
-
-      - name: Upload Python wheel Scheme projection handoff
-        if: ${{ always() && runner.os == 'Linux' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: python-wheel-scheme-projection-producer
-          path: .ci/python-wheel-projection
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Build runtime-C producer artifacts through Bazel
-        if: runner.os == 'Linux'
-        id: runtime-c-producer
-        timeout-minutes: 2
-        env:
-          RUNTIME_C_BUILD_BUDGET_SECONDS: 90
-        shell: bash
-        run: |
-          set -euo pipefail
-          handoff_dir="$GITHUB_WORKSPACE/.ci/runtime-c"
-          profile="$RUNNER_TEMP/bazel-runtime-c-producer-profile.gz"
-          start_seconds=$SECONDS
-          mkdir -p "$handoff_dir"
-
-          set +e
-          bazel build --profile="$profile" \
-            //bindings/runtime-c:runtime_c_static \
-            //bindings/runtime-c:runtime_c_shared
-          build_status=$?
-          set -e
-
-          elapsed_seconds=$((SECONDS - start_seconds))
-          echo "elapsed-seconds=$elapsed_seconds" >> "$GITHUB_OUTPUT"
-          echo "profile=$profile" >> "$GITHUB_OUTPUT"
-          if (( build_status != 0 )); then
-            exit "$build_status"
-          fi
-          if (( elapsed_seconds > RUNTIME_C_BUILD_BUDGET_SECONDS )); then
-            echo "runtime-C producer build exceeded ${RUNTIME_C_BUILD_BUDGET_SECONDS}s budget" >&2
-            exit 1
-          fi
-
-          library="$GITHUB_WORKSPACE/bazel-bin/bindings/runtime-c/libruntime_c_shared.so"
-          test -s "$library"
-          cp "$library" "$handoff_dir/libagentic_ai_lab_runtime_v0.so"
-
-      - name: Run Bazel acceptance suites
-        id: bazel-acceptance
-        timeout-minutes: ${{ matrix.acceptance-timeout-minutes }}
-        env:
-          ACCEPTANCE_BUDGET_SECONDS: ${{ matrix.acceptance-runaway-timeout-seconds }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          profile="$RUNNER_TEMP/bazel-acceptance-profile.gz"
-          receipt="$RUNNER_TEMP/bazel-acceptance-ci-receipt.json"
-          start_seconds=$SECONDS
-
-          targets=(
-            //t/qualification/gerbil-bazel:tests
-            //t/qualification/module-system:owner_map_tests
-            //bindings/runtime-c:runtime_c_tests
-            //bindings/runtime-c/bundle-v1:bundle_v1_tests
-          )
-          if [[ "$RUNNER_OS" == "Linux" ]]; then
-            targets+=(
-              //bindings/runtime-c:runtime_c_sanitizer_tests
-              //bindings/runtime-c:runtime_c_leak_test
-              //bindings/runtime-c:runtime_v0_batch_benchmark_smoke
-              //bindings/runtime-c:runtime_v0_gerbil_ffi_benchmark
-            )
-          fi
-
-          set +e
-          bazel test --profile="$profile" "${targets[@]}"
-          test_status=$?
-          set -e
-
-          elapsed_seconds=$((SECONDS - start_seconds))
-          jq -n \
-            --arg schema "agentic-ai-lab.ci.bazel-phase-receipt.v1" \
-            --arg phase "acceptance" \
-            --arg runner "${RUNNER_OS}-${RUNNER_ARCH}" \
-            --argjson status "$test_status" \
-            --argjson elapsedSeconds "$elapsed_seconds" \
-            --argjson budgetSeconds "$ACCEPTANCE_BUDGET_SECONDS" \
-            '{schema: $schema, phase: $phase, runner: $runner, status: $status,
-              elapsedSeconds: $elapsedSeconds, budgetSeconds: $budgetSeconds,
-              withinBudget: ($elapsedSeconds <= $budgetSeconds)}' > "$receipt"
-          echo "profile=$profile" >> "$GITHUB_OUTPUT"
-          echo "receipt=$receipt" >> "$GITHUB_OUTPUT"
-
-          if (( test_status != 0 )); then
-            exit "$test_status"
-          fi
-          if (( elapsed_seconds > ACCEPTANCE_BUDGET_SECONDS )); then
-            echo "Bazel acceptance exceeded ${ACCEPTANCE_BUDGET_SECONDS}s budget" >&2
-            exit 1
-          fi
-
-      - name: Reject stale runtime-C Make routes
-        if: runner.os == 'Linux'
-        run: python3 -m unittest t/qualification/runtime_c/build_boundary_test.py -v
-
-      - name: Finalize runtime-C producer handoff
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          set -euo pipefail
-          handoff_dir="$GITHUB_WORKSPACE/.ci/runtime-c"
-          library="$handoff_dir/libagentic_ai_lab_runtime_v0.so"
-          acceptance_receipt="${{ steps.bazel-acceptance.outputs.receipt }}"
-          producer_receipt="$handoff_dir/producer-receipt.json"
-          test -s "$library"
-          test -s "$acceptance_receipt"
-          jq -e '.status == 0 and .withinBudget == true' \
-            "$acceptance_receipt" >/dev/null
-          cp "$acceptance_receipt" "$handoff_dir/acceptance-receipt.json"
-
-          artifact_digest="$(sha256sum "$library" | awk '{print $1}')"
-          symbols_digest="$(
-            nm -D --defined-only "$library" \
-              | awk '{print $3}' \
-              | sed '/^$/d' \
-              | LC_ALL=C sort -u \
-              | sha256sum \
-              | awk '{print $1}'
-          )"
-          symbol_count="$(
-            nm -D --defined-only "$library" \
-              | awk '{print $3}' \
-              | sed '/^$/d' \
-              | LC_ALL=C sort -u \
-              | wc -l \
-              | tr -d ' '
-          )"
-          artifact_bytes="$(stat -c %s "$library")"
-          acceptance_digest="$(sha256sum "$acceptance_receipt" | awk '{print $1}')"
-
-          jq -n \
-            --arg schema "agentic-ai-lab.ci.runtime-c-handoff.v1" \
-            --arg producerJob "runtime-linux" \
-            --arg producerTarget "//bindings/runtime-c:runtime_c_shared" \
-            --arg platform "${RUNNER_OS}-${RUNNER_ARCH}" \
-            --arg currentHeadSha "$GITHUB_SHA" \
-            --arg gerbilRuntimeAbi "$GERBIL_RUNTIME_ABI" \
-            --arg artifactPath "libagentic_ai_lab_runtime_v0.so" \
-            --arg artifactDigest "$artifact_digest" \
-            --arg exportedSymbolsDigest "$symbols_digest" \
-            --arg acceptanceReceiptDigest "$acceptance_digest" \
-            --argjson artifactBytes "$artifact_bytes" \
-            --argjson exportedSymbolCount "$symbol_count" \
-            --argjson elapsedSeconds "${{ steps.runtime-c-producer.outputs.elapsed-seconds }}" \
-            --argjson budgetSeconds 90 \
-            '{schema: $schema, producerJob: $producerJob,
-              producerTarget: $producerTarget,
-              platform: $platform, currentHeadSha: $currentHeadSha,
-              gerbilRuntimeAbi: $gerbilRuntimeAbi, artifactPath: $artifactPath,
-              artifactDigest: $artifactDigest,
-              exportedSymbolsDigest: $exportedSymbolsDigest,
-              exportedSymbolCount: $exportedSymbolCount,
-              artifactBytes: $artifactBytes,
-              acceptanceReceiptDigest: $acceptanceReceiptDigest,
-              elapsedSeconds: $elapsedSeconds, budgetSeconds: $budgetSeconds,
-              artifactAvailable: true, status: 0,
-              withinBudget: ($elapsedSeconds <= $budgetSeconds)}' \
-            > "$producer_receipt"
-
-      - name: Upload Bazel acceptance evidence
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: bazel-acceptance-evidence-${{ runner.os }}-${{ runner.arch }}
-          path: |
-            ${{ steps.bazel-acceptance.outputs.receipt }}
-            ${{ steps.bazel-acceptance.outputs.profile }}
-            ${{ steps.runtime-c-producer.outputs.profile }}
-            .ci/runtime-c/producer-receipt.json
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Upload runtime-C producer handoff
-        if: runner.os == 'Linux'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: agentic-ai-lab-runtime-library
-          path: .ci/runtime-c
-          if-no-files-found: error
-          retention-days: 7
-
-  runtime-macos:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.job-timeout-minutes }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: macos-26
-            gerbil-label: release-v0.19-1cfb032
-            gerbil-install: release
-            dependency-timeout-minutes: 12
-            external-module-mode: analysis
-            compile-timeout-minutes: 25
-            compile-runaway-timeout-seconds: 1440
-            acceptance-timeout-minutes: 15
-            acceptance-runaway-timeout-seconds: 840
-            job-timeout-minutes: 45
-    steps: *runtime-steps
-
   python-runtime-wheel:
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Python runtime wheel
-    needs: [runtime-linux, runtime-gerbil-tests]
+    needs: [runtime-gerbil-tests]
     uses: ./.github/workflows/python-runtime-wheel.yml
-
-  lock-linux-seed:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_lock }}
-    name: Lock refresh (linux-amd64 seed)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout agentic-ai-lab
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          repository-cache: true
-
-      - name: Generate the Linux module-extension evaluation
-        run: |
-          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
-          bazelisk mod deps --lockfile_mode=update
-          bazelisk mod deps --lockfile_mode=error
-
-      - name: Upload the Linux lock seed
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: agentic-ai-lab-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
-          path: MODULE.bazel.lock
-          if-no-files-found: error
-
-  lock-darwin-merge:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_lock }}
-    name: Lock refresh (darwin-arm64 merge)
-    needs: lock-linux-seed
-    runs-on: macos-26
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout agentic-ai-lab
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Download the Linux lock seed
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          name: agentic-ai-lab-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .ci/lock-linux
-
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          repository-cache: true
-
-      - name: Merge the Darwin module-extension evaluation
-        run: |
-          cp .ci/lock-linux/MODULE.bazel.lock MODULE.bazel.lock
-          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
-          bazelisk mod deps --lockfile_mode=update
-          bazelisk mod deps --lockfile_mode=error
-
-      - name: Upload the merged cross-platform lock
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: agentic-ai-lab-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
-          path: MODULE.bazel.lock
-          if-no-files-found: error
-
-  lock-linux-verify:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_lock }}
-    name: Lock verify (linux-amd64 merged)
-    needs: lock-darwin-merge
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout agentic-ai-lab
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Download the merged cross-platform lock
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          name: agentic-ai-lab-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .ci/lock-merged
-
-      - name: Set up Bazel
-        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-        with:
-          bazelisk-cache: true
-          cache-save: false
-          repository-cache: true
-
-      - name: Verify the merged lock on Linux
-        run: |
-          cp .ci/lock-merged/MODULE.bazel.lock MODULE.bazel.lock
-          bazelisk mod deps --lockfile_mode=error

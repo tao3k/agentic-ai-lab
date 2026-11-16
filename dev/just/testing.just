@@ -81,38 +81,15 @@ test-file path observe="false":
 test-performance:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test 't/performance/...' t/module-system-poo-performance-test-support
 
-# Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
-[group('test')]
-test-bazel:
-    just test-gerbil-capability
-    just test-module-system-ownership
-    just test-external-bazel-module
-
-# Validate the shared Gerbil toolchain and dependency-install capabilities.
-[group('test')]
-test-gerbil-capability:
-    {{ bazel }} test --test_output=errors {{ gerbil_capability_tests }}
-
-# Validate Agentic AI Lab as a clean external Bzlmod dependency.
-[group('test')]
-test-external-bazel-module:
-    python3 -m unittest discover -s t/qualification/external_bazel -p 'external_module_test.py' -v
-    python3 t/qualification/external_bazel/external_module.py
-
-# Validate the single source-owned RFC45 module-system ownership map.
-[group('test')]
-test-module-system-ownership:
-    {{ bazel }} test --test_output=errors {{ module_system_owner_tests }}
-
 # Run the focused composition-lifecycle Python gate.
 [group('test')]
 test-python-composition-lifecycle:
     cd {{ python_runtime_dir }} && uv run --group dev pytest -q {{ composition_lifecycle_tests }}
 
-# Run the complete Python suite in the Bazel-declared Gerbil project environment.
+# Run Python consumers against the native shared libraries.
 [group('test')]
 test-python:
-    {{ bazel }} run {{ python_runtime_test_environment }} -- uv run --group dev pytest -q
+    cd {{ python_runtime_dir }} && AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY="{{ runtime_c_output }}/libagentic_ai_lab_runtime_v0.{{ runtime_c_extension }}" uv run --group dev pytest -q
 
 [group('test')]
 model-understanding-compute script:

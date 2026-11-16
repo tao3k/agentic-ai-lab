@@ -63,3 +63,6 @@ _apalache-out/
 /runtime-capacity-current-quint.receipt.inputs.json
 /runtime-capacity-final-quint.receipt.inputs.json
 /runtime-native-capture-quint.receipt.inputs.json
+
+# Native WebAssembly bundle generation.
+bindings/runtime-wasm/.build/

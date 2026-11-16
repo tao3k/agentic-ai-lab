@@ -104,8 +104,8 @@ CI installs the optional development dependency after the library build.
 The development package store is =dev/.gerbil=, separate from the production
 store. Test commands search production libraries first, then the development
 store. Installing ASP must not replace the production MOP implementation.
-The shared =gerbil-poo= pin is aligned with =core/gerbil.pkg=, with its archive
-digest evaluated by Bazel and synchronized to both platform lock projections.
+The shared =gerbil-poo= pin is owned by =core/gerbil.pkg=. Gerbil resolves
+the declared package revisions directly; Lab has no second dependency lock.
 
 ** Namespace and negative-process repairs
 
@@ -122,8 +122,7 @@ qualification.
 
 ** Upstream dependency boundary
 
-The production build and Parser's local Bazel entry both use Core's
-=package-library-spec= over the runtime context graph. ASP owns no library
+The production build consumes the module system's =init.exports= projection. ASP owns no library
 source collector or build executor. Shared imports are visited once, excluded
 targets are still inspected for dependency admission, and unselected sources
 are not opened. =std/make= still owns compilation and currentness.
