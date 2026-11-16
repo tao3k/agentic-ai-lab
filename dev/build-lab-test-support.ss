@@ -7,11 +7,11 @@
         (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports)
         (only-in "./run-lab-tests.ss" default-test-files))
 
-(def (main)
+(def (main . files)
   (def root (path-expand ".." (path-directory (this-source-file))))
   (def tests
     (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
-      (default-test-files)))
+      (if (null? files) (default-test-files) files)))
   (make (.get tests std-make-spec) srcdir: root
     options: (list "-cc-options"
                (string-append "-I" root " -I" (path-expand "bindings/runtime-c/include" root)))))
