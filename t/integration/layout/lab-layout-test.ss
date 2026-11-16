@@ -4,20 +4,21 @@
         (only-in :std/source this-source-file)
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
         (only-in :tao3k/yuanxu/module-system/source/objects yuanxu-module-source-ref-metadata)
-        (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports))
+        (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports))
 (export yuanxu-qualification-layout-test)
+(def tests-root (path-expand "../.." (path-directory (this-source-file))))
 
 (def yuanxu-qualification-layout-test
   (test-suite "Lab qualification layout"
     (test-case "test infrastructure cannot live in the development module tree"
-      (def root (path-expand ".." (path-directory (this-source-file))))
+      (def root (path-expand ".." tests-root))
       (for-each (lambda (path)
                   (check-equal? (file-exists? (path-expand path root)) #f))
                 '("dev/modules"
                   "dev/run-lab-tests.ss"
                   "dev/build-lab-test-support.ss")))
     (test-case "declared owners discover their exact qualification files without running them"
-      (def root (path-directory (this-source-file)))
+      (def root tests-root)
       (def qualification (.get tao3k/agentic-ai-lab.init.exports tests qualification))
       (def owners '(tao3k/agentic-ai-lab/modules/nix/interface
                     tao3k/agentic-ai-lab/modules/services/opentofu/interface))
@@ -39,7 +40,7 @@
       ((.get selected admit-current))
       (check-equal? (eq? (.ref/cached selected 'selected-graph) graph-before) #t))
     (test-case "Loader owners publish all Lab module test files"
-      (def root (path-normalize (path-expand ".." (path-directory (this-source-file)))))
+      (def root (path-normalize (path-expand ".." tests-root)))
       (def context
         (module-directory-context (path-expand "init.ss" root)
           (lambda (_) (error "layout discovery must leave publications cold"))
@@ -82,13 +83,13 @@
       (check-equal? (list-sort string<? (.get selected spec))
                     (list-sort string<? files)))
     (test-case "adapter module suites use their declared Loader owners"
-      (def root (path-directory (this-source-file)))
+      (def root tests-root)
       (def (legacy-adapter-test? name)
         (and (string-suffix? "-test.ss" name)
              (or (string-prefix? "nix-" name) (string-prefix? "opentofu-" name))))
       (check-equal? (filter legacy-adapter-test? (directory-files root)) '()))
     (test-case "legacy qualification is reserved for retained evidence and consumer fixtures"
-      (def root (path-expand "qualification" (path-directory (this-source-file))))
+      (def root (path-expand "qualification" tests-root))
       (def (legacy-suites directory prefix)
         (foldr append '()
           (map (lambda (name)
