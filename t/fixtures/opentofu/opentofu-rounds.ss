@@ -12,7 +12,8 @@
         (only-in :std/string/misc string-trim)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :tao3k/yuanxu/module-system/source/admission module-source-admit-current!)
+        (only-in :tao3k/yuanxu/module-system/source/admission
+                 module-source-admit-current! module-source-read)
         (only-in :tao3k/yuanxu/module-system/source/build unique-build-inputs)
         (only-in :tao3k/yuanxu/observability/testing-script admit-testing-result)
         (only-in "../../../init.ss" tao3k/agentic-ai-lab.init.exports)
@@ -36,10 +37,17 @@
            (and (cdr entry) (hex-encode (sha256 (string->utf8 (cdr entry)))))))
     (list-sort (lambda (left right) (string<? (car left) (car right))) observations)))
 (def (publication-observations tests build)
-  ;; Suite bytes and compiler support have distinct runtime owners. Preserve
-  ;; both sets through the existing conflict-checking observation projection.
-  (unique-build-inputs
-    (append (.get tests source source-inputs) (.get build source-inputs))))
+  ;; The file publication exposes the admitted paths and their guard.
+  ;; Compiler input observations belong to its separate build projection.
+  (def source (.get tests source))
+  (def admit! (.get source admit-current))
+  (admit!)
+  (def suites
+    (map (lambda (path) (cons path (module-source-read path)))
+         (.get source spec)))
+  (module-source-admit-current! suites)
+  (admit!)
+  (unique-build-inputs (append suites (.get build source-inputs))))
 (def (sources-current? tests build initial)
   (with-catch (lambda (_) #f)
     (lambda ()
