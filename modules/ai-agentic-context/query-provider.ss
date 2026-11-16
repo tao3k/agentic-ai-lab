@@ -3,16 +3,9 @@
 ;;; One GQL model; bounded runtime Org refinement, positive proof and source feed.
 (import
  (only-in :clan/poo/object .o .ref .slot? .call object? object<-alist .alist/sort)
- (only-in :clan/poo/mop validate)
+ (only-in :clan/poo/mop validate poo-clos-class poo-clos-make-instance
+          poo-clos-compose-method-bundle .defmethod .defmethod-bundle)
  (only-in :std/list/list find every delete-duplicates/hash)
- ;; Keep the executor's native class and binding behavior without importing
- ;; unrelated reflection/evolution or the aggregate declaration language.
- (only-in :clan/poo/clos/classes poo-clos-class)
- (only-in :clan/poo/clos/lifecycle poo-clos-make-instance)
- (only-in :clan/poo/clos/objects
-          poo-clos-compose-method-bundle)
- (only-in :clan/poo/clos/generic-syntax .defmethod)
- (only-in :clan/poo/clos/method-bundle-syntax .defmethod-bundle)
  :tao3k/agentic-ai-lab/modules/query/objects
  (only-in :tao3k/agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
  :tao3k/agentic-ai-lab/modules/query/contracts

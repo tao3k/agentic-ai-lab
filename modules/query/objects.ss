@@ -6,7 +6,7 @@
 ;;; Boundary: canonical prototypes and validated value constructors.
 ;;; Invariant: ordinary authors derive Query values through runtime slot algebra.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/mop validate poo-clos-class)
         (only-in :std/list/list every)
         (only-in :gerbil-parser/graph-syntax-support
                  GraphSyntaxNode.
@@ -32,8 +32,7 @@
                  AgenticAILabQueryResultContract
                  AgenticAILabQueryProvider
                  AgenticAILabQueryExecutionCandidate
-                 AgenticAILabSourceQueryReceipt)
-        (only-in :clan/poo/clos/classes poo-clos-class))
+                 AgenticAILabSourceQueryReceipt))
 
 (export AgenticAILabQuery.
         AgenticAILabQueryLanguage.

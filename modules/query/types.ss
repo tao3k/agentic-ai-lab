@@ -6,11 +6,9 @@
 ;;; Boundary: canonical read-only Query, ElementSpace and admission contracts.
 ;;; Invariant: a Query can select evidence but cannot mutate or authorize.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop Type. define-type element?)
+        (only-in :clan/poo/mop Type. define-type element? poo-clos-instance?)
         (only-in :gerbil/core hash-get hash-put!)
-        (only-in :std/list/list every)
-        (only-in :clan/poo/clos/instance-state
-                 poo-clos-instance?))
+        (only-in :std/list/list every))
 
 (export agentic-ai-lab-query-kind
         agentic-ai-lab-query-language-kind

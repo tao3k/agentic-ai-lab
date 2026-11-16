@@ -9,14 +9,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list filter-map)
-        ;; Binding uses the owned generic kernel and declaration-only bundle
-        ;; syntax. Reflection, evolution and class declaration syntax stay lazy.
-        (only-in :clan/poo/clos/objects
+        (only-in :clan/poo/mop
                  poo-clos-generic-protocol poo-clos-generic-function
-                 poo-clos-compose-method-bundle)
-        (only-in :clan/poo/clos/dispatch poo-clos-call)
-        (only-in :clan/poo/clos/generic-syntax .defmethod)
-        (only-in :clan/poo/clos/method-bundle-syntax .defmethod-bundle)
+                 poo-clos-compose-method-bundle poo-clos-call
+                 .defmethod .defmethod-bundle)
         (only-in "types.ss"
                  agentic-ai-lab-query?
                  agentic-ai-lab-query-provider?
