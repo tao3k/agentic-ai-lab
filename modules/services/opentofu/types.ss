@@ -3,7 +3,7 @@
 ;;; This required role publishes the same public descriptors used by dependents.
 ;;; Definitions live once in the OpenTofu contracts library.
 (import (only-in "../../nix/types.ss")
-        (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/contracts
+        (only-in "./contracts.ss"
                  ProviderArtifactContract ProviderTypeIndexContract ProviderSelectionContract
                  ConfigurationEnvelopeContract NullContract OpenTofuContract ServicesContract
                  execution-admission CollectionAuthorityType CollectionReceiptType
