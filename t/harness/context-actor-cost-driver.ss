@@ -1,4 +1,4 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :tao3k/agentic-ai-lab/t/context-actor-cost-test)
+(import :tao3k/agentic-ai-lab/t/harness/context-actor-cost)
 (def (main directory) (actor-cost-probe directory))

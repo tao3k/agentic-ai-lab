@@ -222,6 +222,6 @@
   (context-probe! #f #f)
   (context-probe! (string-append directory "/context.sqlite") #t)
   (parallel-context-probe!)
-  (displayln "MODULE-OK t/context-actor-cost-test.ss")
+  (displayln "MODULE-OK t/harness/context-actor-cost.ss")
   (displayln "HARNESS-OK context-actor-cost")
   (displayln "OK"))

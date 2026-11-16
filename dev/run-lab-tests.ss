@@ -5,7 +5,7 @@
         (only-in :std/source this-source-file)
         (only-in :tao3k/yuanxu/module-system/source/directory module-directory-context)
         (only-in "../init.ss" tao3k/agentic-ai-lab.init.exports))
-(export main)
+(export main default-test-files)
 
 (def (loader-test-files)
   (def init (path-expand "../init.ss" (path-directory (this-source-file))))

@@ -137,9 +137,6 @@
         ((Explore J J (lit 'which-object-can-the-reader-investigate-to-find-out-why)) <-- (UncertainCheck J U))
         ((Explore J J (lit 'does-a-matching-appearance-prove-the-proposed-cause)) <-- (UncertainCheck J U))
         ((Explore J J (lit 'which-observation-could-distinguish-competing-explanations)) <-- (UncertainCheck J U))
-        ((Explore J J (lit 'which-responsibilities-remain-after-this-observation)) <-- (UncertainCheck J U))
-        ((Explore J J (lit 'who-may-admit-a-proposed-investigation)) <-- (UncertainCheck J U))
-        ((Explore J J (lit 'where-does-the-metaphor-overstate-the-evidence)) <-- (UncertainCheck J U))
         ;; Balance a split and rejoin around the inspection point. The native
         ;; solver chooses positions; this avoids favoring one branch as a long
         ;; baseline that strands the consequence at a corner.

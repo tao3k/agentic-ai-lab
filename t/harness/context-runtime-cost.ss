@@ -62,6 +62,6 @@
                 (context-host-dispose! (.ref next 'host)) #t))))))
     (policy-clock-stop! clock)
     (require (.ref (policy-clock-stop-receipt clock) 'owner-joined?) "Diagnostic owner did not join")
-    (displayln "MODULE-OK t/context-runtime-cost-test.ss")
+    (displayln "MODULE-OK t/harness/context-runtime-cost.ss")
     (displayln "HARNESS-OK context-runtime-cost")
     (displayln "OK")))
