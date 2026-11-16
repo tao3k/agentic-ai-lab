@@ -24,7 +24,7 @@
                  mounts
                  resource-policy
                  workdir)
-        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func
                  agentic-ai-lab-sandbox-profile->profile)
         (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
                  +nono-c-binding-live-test-receipt-schema+
