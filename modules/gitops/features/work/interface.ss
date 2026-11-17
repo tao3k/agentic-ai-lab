@@ -1,6 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import "types.ss" (only-in :clan/poo/object .def))
+(import (only-in :clan/poo/object .def)
+        (only-in "objects.ss" EnableGitOpsWork)
+        (only-in "types.ss" GitOpsWorkScope))
 (export Feature)
 
 (.def Feature refine: EnableGitOpsWork contract: GitOpsWorkScope)
