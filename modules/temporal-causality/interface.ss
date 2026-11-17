@@ -10,7 +10,8 @@
         "evidence/interface.ss" "candidates/types.ss" "candidates/objects.ss" "candidates/funs.ss" "admission/interface.ss"
         "applicability/interface.ss" "lifecycle/interface.ss"
         "ascent-exchange.ss")
-(export (import: "types.ss")
+(export TemporalCausality
+        (import: "types.ss")
         (import: "objects.ss")
         (import: "funs.ss")
         (import: "config.ss")
