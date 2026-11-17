@@ -1,8 +1,14 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; One declarative publication. The admitted role wrapper owns compiler imports.
-(import (only-in "./package-build.ss" OpenTofuPackageBuild.))
+;;; OpenTofu publication over the explicitly imported Module roles.
+(import (only-in "./types.ss" OpenTofuScopeContract)
+        (only-in "./objects.ss" OpenTofuScope. JsonSchemaScope)
+        (only-in "./config.ss" Config)
+        (only-in "./func.ss" opentofu-service-configuration)
+        (only-in "./package-build.ss" OpenTofuPackageBuild.))
+(export OpenTofu)
+
 (.def OpenTofu
   identity: 'services/opentofu
   tags: '(deployment)
