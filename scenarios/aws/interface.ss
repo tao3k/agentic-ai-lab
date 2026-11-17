@@ -1,6 +1,12 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/package-build OpenTofuPackageBuild.))
+(import (only-in :clan/poo/object .def .o .cc .get)
+        (only-in "./config.ss" Config)
+        (only-in "./types.ss" AWSInterfaceContract)
+        (only-in "./func.ss" AWSScenarioScope. aws-opentofu-configuration))
+(export AWS)
+
 (.def (AWS @ [] config)
   identity: 'aws
   config: Config

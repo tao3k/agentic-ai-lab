@@ -7,6 +7,8 @@
                  yuanxu-user-module-bundles->modules)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/kernel/bundles
                  agentic-ai-lab-kernel-module-bundles))
+(export Config)
+
 (def Config
   (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules
