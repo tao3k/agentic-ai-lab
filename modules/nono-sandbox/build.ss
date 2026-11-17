@@ -4,9 +4,10 @@
 (import (only-in :clan/poo/object .def .o) (only-in :std/source this-source-path))
 
 (.def Build
-  defbuild-script:
-  (.o spec:
-    `((gxc: "_nono"
+  ffi:
+  `((gxc: "_nono"
+            (extra-inputs: ("modules/nono-sandbox/nono-c/nono.h"))
             "-cc-options" ,(string-append "-I" (this-source-path this-source-path "nono-c"))
             "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup")
-                                       (else "-ldl"))))))
+                                       (else "-ldl"))))
+  defbuild-script: (.o spec: '()))

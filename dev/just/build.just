@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-# Build the full Scheme project through the explicit development entry.
+# Build the full Scheme project, including the Core modules Lab imports.
 [group('build')]
 build:
     just build-core
-    just build-library
+    just build-qualification-library
 
 # Compile the full product library against the selected Core installation.
 # The default build above still requires Core to build successfully first.

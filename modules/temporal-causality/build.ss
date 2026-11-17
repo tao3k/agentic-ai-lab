@@ -5,4 +5,5 @@
 ;; The platform clock is a native library, compiled by its owning Module.
 ;; It must not be evaluated while publishing the pure Temporal scope.
 (.def Build
-  defbuild-script: (.o spec: '("runtime/monotonic-clock")))
+  ffi: '("runtime/monotonic-clock")
+  defbuild-script: (.o spec: '()))
