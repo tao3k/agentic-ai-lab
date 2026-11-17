@@ -19,4 +19,8 @@
   (langchain @ "./user-interface/profiles/langchain")
   (langgraph @ "./user-interface/profiles/langgraph")
   (crewai @ "./user-interface/profiles/crewai")
-  (tool-calling @ "./user-interface/profiles/tool-calling"))
+  (tool-calling @ "./user-interface/profiles/tool-calling")
+  :load-modules (from: :tao3k/yuanxu/init ModulesSource)
+  mode: explicit rename: YuanxuModules
+  (json-schema)
+  (funflow))

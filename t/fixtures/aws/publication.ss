@@ -155,7 +155,6 @@
     (call-with-output-string
       (lambda (port)
         (write `(yuanxu!
-                  :test-dir "./t"
                   :load-modules ,(path-expand "core/modules" repository)
                   mode: explicit rename: Core (funflow) (json-schema)
                   :load-modules ,(path-expand "modules" repository)

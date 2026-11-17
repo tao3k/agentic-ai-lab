@@ -186,7 +186,6 @@
             (call-with-output-string
               (lambda (port)
                 (write `(yuanxu!
-                          :test-dir "./t"
                           :load-modules ,(path-expand "core/modules" (current-directory))
                           mode: explicit rename: Core (json-schema) (funflow)
                           :load-modules ,(path-expand "modules" (current-directory))

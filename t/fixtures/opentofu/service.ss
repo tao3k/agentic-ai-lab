@@ -114,7 +114,7 @@
       (write-source init-path
         (call-with-output-string
           (lambda (port)
-            (write `(yuanxu! :test-dir "./t" :load-modules ,(path-expand "modules" root-dir) mode: explicit
+            (write `(yuanxu! :load-modules ,(path-expand "modules" root-dir) mode: explicit
                       (json-schema @ ,(path-expand "core/modules/json-schema" project))
                       (nix @ ,(path-expand "modules/nix" project))
                       (funflow @ ,(path-expand "core/modules/funflow" project))

@@ -74,7 +74,6 @@
                 (call-with-output-string
                   (lambda (port)
                     (write `(yuanxu!
-                              :test-dir "./t"
                               :load-modules ,(path-expand "core/modules" project)
                               mode: explicit rename: Core
                               (json-schema disable: ,schema-disabled?) (funflow)
