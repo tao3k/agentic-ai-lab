@@ -80,6 +80,12 @@ test-file path observe="false":
     esac
     {{ lab_test_env }} {{ lab_focused_test_deadline }} gerbil {{ gerbil_test_runtime_options }} test ${options[@]+"${options[@]}"} "{{ path }}"
 
+# Compare native exit on Darwin using the focused test's heap and timeout.
+[group('test')]
+[positional-arguments]
+test-terminal-cleanup path mode="terminal":
+    {{ lab_test_env }} bash t/harness/macos-terminal-cleanup/run.sh "$2" "$1" {{ gerbil_test_runtime_options }} {{ lab_focused_test_deadline }}
+
 # Run performance Suites serially through the same official test entry.
 [group('test')]
 test-performance:
