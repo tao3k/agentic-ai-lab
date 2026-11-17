@@ -6,7 +6,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/contribution/objects
                  admit-contributions)
         (only-in :tao3k/yuanxu/module-system/selection/objects

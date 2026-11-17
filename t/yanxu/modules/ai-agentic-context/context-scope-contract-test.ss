@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :clan/poo/object .o .ref .get)
-        (only-in :clan/poo/mop validate TypeError?)
+        (only-in :clan/poo/type validate TypeError?)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/types AiAgenticContextAdmissionType AiAgenticContextScopeType)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-scope agentic-ai-lab-ai-agentic-context-scope-admit))

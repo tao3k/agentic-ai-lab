@@ -4,7 +4,7 @@
 ;;; Boundary shapes and invariants; no construction or runtime effects.
 (import (only-in :clan/poo/object .ref .slot? object? .cc)
         (only-in :clan/poo/type Record Exactly True Or)
-        (only-in :clan/poo/mop Type. define-type Fun)
+        (only-in :clan/poo/type Type. define-type Fun)
         (only-in :std/list/list every)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-interval?))
 (export ContextScopeContract ContextMemoryScopeContract

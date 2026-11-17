@@ -18,7 +18,7 @@
         (only-in :tao3k/yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
         (only-in :tao3k/yuanxu/module-system/building/products artifact-files)
         (only-in :tao3k/yuanxu/module-system/building/products current-build-output-directory)
-        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read
+        (only-in :tao3k/yuanxu/module-system/source/observations module-source-read
                  call-with-module-source-operation-measurement call-with-module-source-read-cache)
         (only-in "../../../../qualification/yuanxu-build-events.ss" compile-events)
         (only-in "../../../../qualification/yuanxu-deployment-consumer/init.ss" yuanxu-deployment-consumer.init.exports)
@@ -158,8 +158,9 @@
         (compile-events
           (string-append
             "... compile ... execute compile job (compile-file example.scm)\nexample/target\n"
-            "... compile example/other... execute compile job (compile-file other.scm)\n"))
-        '("example/other" "example/target"))
+            "... compile example/other... execute compile job (compile-file other.scm)\n"
+            "... execute compile job (... compile example/inside\ncompile-file inside.scm)\n"))
+        '("example/inside" "example/other" "example/target"))
       ;; The native harness has finished importing the suite. Report that
       ;; boundary before beginning a separate source projection phase.
       (execution-progress! 'lab-deployment-suite 1)
@@ -411,6 +412,7 @@
           (check-equal? (measure-phase 'b-hashes-after-clean (lambda () (product-digests (artifact-files identities b-lib)))) b-products)
           (check-equal? (compile-events (from-source-plan b "compile" 'hot-b)) '())
           (displayln "LAB-DEPLOYMENT-STAGE test-start at=" (real-time)) (force-output)
+          (def child-ok-at #f)
           (def child-pid #f)
           (def child-pids #f)
           (def test-returned? #f)
@@ -465,7 +467,8 @@
                                            (display line)
                                            (force-output))))
                                       ((or (string=? line "OK\n") (string=? line "OK"))
-                                       (displayln "LAB-DEPLOYMENT-STAGE child-ok at=" (real-time))
+                                       (set! child-ok-at (real-time))
+                                       (displayln "LAB-DEPLOYMENT-STAGE child-ok at=" child-ok-at)
                                        (force-output)
                                        (sample-exit))
                                       ((or (string-prefix? "HARNESS " line)
@@ -482,6 +485,12 @@
           (set! test-returned? #t)
           (check-equal? (.get test-result status) 0)
           (displayln "LAB-DEPLOYMENT-STAGE test-return at=" (real-time)) (force-output)
+          ;; Ops measures spawn through process status. Its fixture release
+          ;; checks source currentness after the process has already exited.
+          (when child-ok-at
+            (displayln "LAB-DEPLOYMENT-PROCESS wall=" (.get test-result seconds)
+                       " ok-to-exit-upper-bound=" (- (real-time) child-ok-at))
+            (force-output))
           (check-equal? (compile-events (.get test-result output)) '())
           (display (.get test-result output))
           (execution-progress! 'lab-deployment-selected-tests 1)

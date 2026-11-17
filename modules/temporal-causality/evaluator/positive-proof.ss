@@ -4,7 +4,7 @@
 
 ;;; Named owner adapter. No general wire reader, proof solver or effect permit.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. validate)
+        (only-in :clan/poo/type define-type Type. validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :gerbil-ascent/candidate/datum candidate-copy-pairs reasoning-bounded-data?)

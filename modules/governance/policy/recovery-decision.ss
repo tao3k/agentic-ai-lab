@@ -2,8 +2,15 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :clan/poo/object .o .ref .slot?) "objects.ss")
+(import (only-in :clan/poo/object .o .ref .slot?))
 (export DurableRecoveryPolicy. durable-recovery-decision)
+
+;;; Shared recovery policy is independent of the Context runtime host. Durable
+;;; composes that host above this pure policy, avoiding a Module back-edge.
+(def DurableRecoveryPolicy.
+  (.o revision: #f
+      outcome-interpreter: (lambda (input) 'unknown)
+      retry-policy: (lambda (input outcome) #f)))
 
 (def (known-outcome? value)
   (memq value '(succeeded failed)))

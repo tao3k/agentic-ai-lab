@@ -3,7 +3,7 @@
 ;;; Declared configuration -> one selected product -> real Null execution.
 (import :std/test :clan/poo/object
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/type TypeError?)
         (only-in :tao3k/yuanxu/module-system/source/admission admit-module-configuration!)
         (only-in "../../../../fixtures/opentofu/service.ss" call-with-service rejects? empty-state?))
 (export opentofu-service-test)

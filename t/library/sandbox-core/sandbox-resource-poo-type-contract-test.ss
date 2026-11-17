@@ -23,7 +23,7 @@
   (test-suite "sandbox-resource-poo-type-contract-test"
     (yuanxu-test-case "validates the runtime contract"
       (eval '(import (only-in :clan/poo/object .o)))
-      (eval '(import (only-in :clan/poo/mop Type element?)))
+      (eval '(import (only-in :clan/poo/type Type element?)))
       (eval '(import "./modules/sandbox-core/resource-contract.ss"))
       (let* ((row
         (sandbox-resource-eval

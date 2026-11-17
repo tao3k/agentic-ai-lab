@@ -6,7 +6,8 @@
 ;;; Boundary: nono-sandbox C binding tests cover ABI contracts and manifest projection.
 ;;; Invariant: tests do not load or execute the C library.
 
-(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/object .def .o .+ .call .get)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -215,6 +216,14 @@
               (nono-c-binding-smoke-test
                runtime-manifest
                '("sh" "-c" "printf nono-smoke")))
+             (live-failure
+              (nono-c-binding-live-test
+               runtime-manifest
+               '("sh" "-c" "printf 'nono-error\\n' >&2; exit 7")))
+             (live-missing
+              (nono-c-binding-live-test
+               runtime-manifest
+               '("/dev/null/nono")))
              (live-skip
               (nono-c-binding-ffi-live-test
                runtime-manifest
@@ -238,6 +247,20 @@
         (check-equal? (test-ref smoke 'runtime-executed) #f)
         (check-equal? (test-ref (test-ref smoke 'dry-run) 'would-apply?)
                       #f)
+        (check-equal? (test-ref live-failure 'ok?) #f)
+        (check-equal? (test-ref live-failure 'live-executed) #t)
+        (check-equal? (test-ref live-failure 'status) (arithmetic-shift 7 8))
+        (check-equal? (test-ref live-failure 'output) "nono-error\n")
+        (check-equal? (test-ref live-missing 'skipped?) #t)
+        (check-equal? (test-ref live-missing 'skip-reason) 'nono-not-found-on-path)
+        (check-equal? (test-ref live-missing 'live-executed) #f)
+        (.def (CustomProbe @ NonoSmokeProbe.)
+          manifest: runtime-manifest
+          script: =>.+ (.o command: '("sh" "-c" "printf custom-probe") timeout: 5))
+        (let (receipt (.call CustomProbe .run))
+          (check-equal? (.get receipt output) "custom-probe")
+          (check-equal? (.get receipt status) 0)
+          (check-equal? (.get receipt dry-run) dry-run))
         (check-equal? (test-ref live-skip 'schema)
                       +nono-c-binding-ffi-live-test-receipt-schema+)
         (check-equal? (test-ref live-skip 'ok?) #t)

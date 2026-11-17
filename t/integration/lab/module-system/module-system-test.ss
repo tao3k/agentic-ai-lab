@@ -5,7 +5,8 @@
 
 ;;; Boundary: module-system tests cover descriptor activation, not loading.
 
-(import (only-in :clan/poo/mop make-instance element?)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check

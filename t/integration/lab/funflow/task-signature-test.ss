@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Exercise extension executors and inert external requests through real Types.
 (import :std/test
-        (only-in :clan/poo/mop Fun Type Any TypeError? validate)
+        (only-in :clan/poo/type Fun Type Any TypeError? validate)
         (only-in :clan/poo/type String Unit)
         (only-in :clan/poo/number Integer)
         (only-in :tao3k/agentic-ai-lab/services Services)

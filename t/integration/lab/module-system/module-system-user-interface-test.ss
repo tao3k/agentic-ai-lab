@@ -7,7 +7,8 @@
 ;;; Interface owners without a module-system aggregate.
 
 (import (only-in :clan/poo/type Record String List)
-        (only-in :clan/poo/mop make-instance Function)
+        (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type Function)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check

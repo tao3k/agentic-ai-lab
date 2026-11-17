@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID: example-gitops-worktree
+:CONTRACT_ID: context.gitops.worktree.v1
+:CONTRACT_REVISION: 1
+:GITOPS_PROJECT: gambit
+:GITOPS_WORKTREE: A
+:GITOPS_SOURCE_CUT: cut-1
+:END:
+#+title: Example GitOps Worktree
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.gitops.worktree.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "worktree.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID")
+                (property value "context.gitops.worktree.v1"))
+  (expect exactly 1))
+#+end_src
+
+* Worktree evidence
+:PROPERTIES:
+:ID: owner-evidence
+:END:
+
+Placeholder Worktree observation.

@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .o)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/revisions/types
                  agentic-ai-lab-temporal-evidence-revision-kind
                  agentic-ai-lab-temporal-evidence-journal-kind

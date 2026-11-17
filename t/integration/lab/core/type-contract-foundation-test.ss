@@ -7,7 +7,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .o .cc .ref .mix)
-        (only-in :clan/poo/mop element? validate TypeError? define-type)
+        (only-in :clan/poo/type element? validate TypeError? define-type)
         :tao3k/yuanxu/types/contracts)
 (export type-contract-foundation-test)
 

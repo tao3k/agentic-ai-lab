@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO causal-trajectory and structural-analysis values.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/types
                  agentic-ai-lab-relation-trajectory-witness-kind
                  agentic-ai-lab-structural-impact-receipt-kind

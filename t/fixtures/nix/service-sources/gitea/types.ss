@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object o?/slots .get .o .cc .def)
         (only-in :clan/poo/object-contract ObjectContract. diagnose refine)
-        (only-in :clan/poo/mop define-type Type. Object Any)
+        (only-in :clan/poo/type define-type Type. Object Any)
         (only-in :tao3k/yuanxu/types/ports Port)
         (only-in :clan/poo/type List)
         (only-in :clan/poo/object-contract diagnostic-then)

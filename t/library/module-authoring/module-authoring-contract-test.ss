@@ -8,7 +8,7 @@
         (only-in :clan/poo/type Record)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .cc .o .ref)
-        (only-in :clan/poo/mop TypeError? validate)
+        (only-in :clan/poo/type TypeError? validate)
         (only-in :std/test check-equal? check-exception test-suite)
         :tao3k/yuanxu/module-system/authoring/admission
         (only-in :clan/poo/mop
@@ -284,7 +284,7 @@
              (yuanxu-module-authoring-admit-datum
               user-root-module-interface
               'config
-              '(import (only-in :clan/poo/mop validate))))
+              '(import (only-in :clan/poo/type validate))))
             (diagnostic (first-diagnostic admission)))
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)

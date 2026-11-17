@@ -5,7 +5,7 @@
 
 ;;; Boundary: engine-neutral authorization Provider identity and capabilities.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
 (export agentic-ai-lab-authorization-provider-kind

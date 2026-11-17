@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Runtime values; original ASCENT replay owns all derivation semantics.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. validate)
+        (only-in :clan/poo/type define-type Type. validate)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
         (only-in :gerbil-ascent/candidate/types reasoning-snapshot-relations
                  reasoning-snapshot-generation reasoning-candidate-relations reasoning-candidate-rules)

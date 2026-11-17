@@ -12,6 +12,7 @@
                  agentic-ai-lab-temporal-observation agentic-ai-lab-causal-event)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph))
 (export agentic-ai-lab-search-engine agentic-ai-lab-search-engine-frontier
+        agentic-ai-lab-search-engine-evidence
         agentic-ai-lab-search-engine-issue agentic-ai-lab-search-engine-complete
         agentic-ai-lab-search-engine-revise agentic-ai-lab-search-engine-node
         agentic-ai-lab-search-engine-cancel
@@ -143,6 +144,10 @@
      (string-copy (.ref event 'payload-identity))
      (map string-copy (.ref event 'causal-parent-identities))
      (.ref event 'modality) (.ref event 'committed?))))
+
+(def (agentic-ai-lab-search-engine-evidence engine name)
+  (let (event (.ref (agentic-ai-lab-search-engine-node engine name) 'evidence))
+    (and event (snapshot-event event))))
 
 ;;; Read evidence through the owner contract and return detached snapshots.
 ;;; Consumers must not mutate retained evidence through their input values.

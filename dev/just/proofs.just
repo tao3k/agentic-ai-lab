@@ -6,6 +6,12 @@
 proofs:
     cd "{{ justfile_directory() }}/core" && just proofs
 
+# One aggregate 120-second/2-GiB Scheme entry for Lab semantic correspondence.
+# The Scheme suite invokes the pinned Quint tool and compares its complete witnesses.
+[group('proof')]
+check-gitops-refinement:
+    {{ lab_test_env }} {{ gerbil_test_timeout }} {{ lab_test_file_budget }} gerbil {{ gerbil_test_runtime_options }} test t/yanxu/modules/gitops
+
 # Build one Lean module and exactly its import closure.  This is the normal
 # proof-development gate; it never traverses the AgenticAILabProof aggregate root.
 [group('check')]

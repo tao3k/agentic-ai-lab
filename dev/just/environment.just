@@ -52,7 +52,9 @@ lab_build_env := ("GERBIL_PATH=" + quote(agentic_ai_lab_gerbil_path) +
 
 # Optional development packages must never rewrite the production package store.
 agentic_ai_lab_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
-agentic_ai_lab_dev_library_path := agentic_ai_lab_library_path + ":" + agentic_ai_lab_dev_gerbil_path + "/lib"
+agentic_ai_lab_dev_library_dir := agentic_ai_lab_dev_gerbil_path + "/lib"
+agentic_ai_lab_dev_build_library_path := agentic_ai_lab_library_path + ":" + agentic_ai_lab_dev_library_dir
+agentic_ai_lab_dev_library_path := if path_exists(agentic_ai_lab_dev_library_dir) == "true" { agentic_ai_lab_dev_build_library_path } else { agentic_ai_lab_library_path }
 
 gerbil_test_heap_env := 'GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=' + gerbil_test_max_heap + ',debug=' + gerbil_test_debug + '"'
 lab_test_env := (gerbil_test_heap_env +

@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (only-in :clan/poo/mop Type. define-type)
+        (only-in :clan/poo/type Type. define-type)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/types/contracts yuanxu-predicate-contract))
 (export NixSourceContract NixFlakeSourceContract NixScopeContract)

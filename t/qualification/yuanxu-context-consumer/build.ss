@@ -21,7 +21,7 @@
   (call-with-build-input-path output
     (lambda ()
       (def projection (.get consumer projection))
-      (def spec (.get projection spec))
+      (def spec (.get projection std-make-spec))
       (case (string->symbol operation)
         ((spec)
          (.call projection .admit-spec spec)

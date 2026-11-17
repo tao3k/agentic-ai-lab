@@ -6,7 +6,7 @@
 ;;; Boundary: POO Governance values and default method slots.
 ;;; Invariant: the root Profile is abstract and an assessment is never authority.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :std/list/list filter)
         (only-in :tao3k/agentic-ai-lab/modules/governance/types
                  agentic-ai-lab-governance-profile-kind

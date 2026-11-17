@@ -6,7 +6,7 @@
 ;;; Boundary: POO session grants, wire projection and grant matching.
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         :tao3k/agentic-ai-lab/modules/session/objects
         :tao3k/agentic-ai-lab/modules/session/policy-syntax
         :tao3k/agentic-ai-lab/modules/session/policy-core

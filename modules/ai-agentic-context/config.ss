@@ -5,7 +5,7 @@
 
 ;;; Public operations are selected through this Module's init.exports scope.
 (import "types.ss" "objects.ss" "funs-scope.ss" "org-contract/elements.ss")
-(export ContextOperations)
+(export Config ContextOperations)
 (def ContextOperations
   (.o admit-scope: agentic-ai-lab-ai-agentic-context-scope-admit
       admission-type: AiAgenticContextAdmissionType

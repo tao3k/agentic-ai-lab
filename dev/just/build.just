@@ -9,9 +9,10 @@ build:
 
 # Compile the full product library against the selected Core installation.
 # The default build above still requires Core to build successfully first.
+# Use the same package environment as the Core publication preparation.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 600s ./build.ss compile
+    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ lab_build_env }} timeout --signal=TERM --kill-after=5s 600s ./build.ss compile
 
 # Prepare the selected libraries through their native package declarations.
 [group('build')]

@@ -6,7 +6,7 @@
 ;;; Boundary: domain-neutral temporal-causality analysis contracts.
 ;;; Invariant: structural reachability is never temporal proof or authority.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :tao3k/yuanxu/graph/types-core yuanxu-graph-id?))
 

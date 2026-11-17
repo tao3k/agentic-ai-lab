@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Pure admission, freezing and canonical Scope digest functions.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         "types.ss" "objects.ss")

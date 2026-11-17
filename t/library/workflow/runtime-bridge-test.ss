@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :clan/poo/mop TypeError?))
+(import (only-in :clan/poo/type TypeError?))
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
 (import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)

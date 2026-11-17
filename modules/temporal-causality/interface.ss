@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/module-system/source/declaration .def)
+(import (only-in :clan/poo/object .def)
         "types.ss" "objects.ss" "funs.ss" "config.ss" "time/interface.ss"
         "revisions/interface.ss" "truth-maintenance/interface.ss"
         "conclusions/interface.ss" "trajectory/interface.ss" "impact/interface.ss"

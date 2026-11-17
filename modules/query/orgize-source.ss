@@ -6,7 +6,7 @@
 ;;; A host must supply and recheck current source bytes; this value does not
 ;;; grant file, WorkTree, Session, temporal, or effect authority.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface
                  org-source-headline-elements
                  org-source-headline-elements?

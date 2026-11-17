@@ -1,0 +1,299 @@
+#+title: What the GitOps Library Refinement Checks
+#+date: [2026-11-16]
+#+language: en
+#+property: STATUS unified-lab-gates-passed-locally
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Business subject
+
+The subject is Lab's =agentic-ai-lab.gitops.create= revision 4. Given a Policy,
+previous evidence, a receipt and current observations, do the actual Scheme
+operations and the Quint specification make the same decision and preserve the
+same evidence? Package installation, dependency resolution, compilation and
+upstream Module System behavior are not tested by this relation.
+
+The concrete operations are the public =bind-working-copy-policy=,
+=select-working-copy=, =admit-working-copy-receipt= and
+=refresh-working-copy-evidence=. Both suites import the shared
+[[file:../../../../t/yanxu/interface.ss][t/yanxu/interface.ss]] dependency facade and read =(.get Lab gitops)=.
+The facade uses the root init's existing selection. It declares neither a new
+Loader nor another test directory or suite list.
+
+* One readable business history
+
+The [[file:../../../../t/yanxu/modules/gitops/refinement-test.ss][Scheme suite]] executes this history with actual POO values. Quint emits
+an expected successor for each step from the [[file:38-gitops-library.qnt][same pure library model]] imported
+by the protocol. Every row compares both results, rather than asserting a
+separate expected answer independently in each language.
+
+| Event | Observation or receipt | Scheme and Quint current result |
+|-------+------------------------+---------------------------------|
+| original-binding | A matching fresh r1 receipt returns /old | New admission; current binding /old |
+| duplicate-changed-path | Another r1 receipt claims /returned | No new admission; preserve /old and append the original receipt |
+| revoke-authority | Current authority becomes false | Withdraw current use; retain receipts and spent r1 |
+| restore-authority | Authority becomes true again | Remain withdrawn; observation restoration does not revive a binding |
+| late-spent-receipt | r1 is redelivered after restoration | Remain withdrawn; retain the late receipt |
+| fresh-request | A fresh matching r2 receipt returns /returned | New admission; current binding /returned; both requests stay spent |
+| replace-policy-object | An equal-shaped but distinct Policy is selected | Withdraw current use; do not transfer a binding to that object |
+| restore-policy | The original Policy is selected again | Remain withdrawn |
+| late-duplicate-after-policy-restore | Spent r2 claims a different path | Remain withdrawn; preserve history |
+
+These are evidence interpretation operations. No Git, process, Worker or
+concrete provider is executed. Current authority, fence applicability and receipt
+custody are supplied observations; interpreting them does not authenticate them.
+
+* Relation and commuting step
+
+** Derivation, replacement and historical applicability
+
+| Business rule | SysML requirement | Scheme authority | Quint projection / paired case |
+|---------------+-------------------+------------------+--------------------------------|
+| Bind an Org leaf under a parent Policy | policyDerivation | bind-working-copy-policy captures source/anchor/revision and intersects allowed capabilities | bindPolicy; projected original/replacement/rebound Policy values |
+| Preserve named higher-order behavior | policyDerivation | Derived POO object inherits select-provider; explicit parent refinement may replace it | Policy.selector identity; inherited selector checked after Org rebinding |
+| Derive again without restoring removed capabilities | capabilityRestriction | The supplied derived parent remains the bound; P05 checks the next child | restrictCapabilities and nested bindPolicy |
+| Select a replacement Policy | policyReplacement | Caller passes the new Policy to refresh/admit; current-use requires exact active Policy identity | replacementTest steps 1 and 4 |
+| Change a Policy definition while keeping the Org cut | policyReplacement | Caller supplies a new semantic revision; late old-revision receipt is retained without adoption | replacementTest steps 2/3 |
+| Bind a new Org cut | policyDerivation and semanticAdmission | New source/anchor/revision are captured; old source evidence is retained but refused for current use | replacementTest steps 5/6 |
+
+The seven-step replacement trace begins with Policy A, derives a Git-only named
+strategy at revision v2, and then rebinds that derived Policy to a changed Org at
+v3. It compares the complete Policy values as well as the evidence successors.
+The original parent stays unchanged. An old pending v1 receipt is refused under
+v2 even when the Org cut is unchanged; a later fresh matching receipt is adopted.
+After Org rebinding, the old Org/v2 receipt is refused and a fresh Org/v3 receipt
+is adopted. Historical receipt objects and spent identities remain intact.
+
+Revision labels are supplied by the Policy author. The library checks nonempty
+labels and equality; it does not infer semantic equivalence of arbitrary Scheme
+procedures. Selecting an equal-shaped new object withdraws automatic current use.
+Historical evidence is not declared false: explicit adoption still evaluates
+its source, revision, anchor, request, provider and supplied current facts.
+
+** Evidence relation
+
+Let =alpha= map a concrete evidence object to:
+
+- the ordered original receipt identities;
+- ordered spent request identities;
+- active Policy object identity, active request and active provider;
+- current returned binding;
+- newly =admitted?= and currently =accepted?=.
+
+The finite witness uses named identity classes for Policies, requests, providers
+and paths. Receipt names are backed by a separate identity condition: every
+successor retains the exact original POO receipt objects in order, and its
+binding is the original incoming or retained binding object. Equal field values
+alone do not satisfy that condition.
+
+For every admitted input in the named partition, R01 checks:
+
+#+begin_example
+alpha(Scheme.receive(c, receipt, current))
+  = Quint.receive(alpha(c), abstract-input(receipt, current))
+alpha(Scheme.refresh(c, current))
+  = Quint.refresh(alpha(c), abstract-input(current))
+#+end_example
+
+It also compares the published Contract's actual source/admission/retention
+predicates with the corresponding Quint results. Input abstraction uses the
+actual equalities and observations: source fields, revision, request, provider,
+anchor, freshness, Boolean authority/fence/custody/execution and outcome/binding.
+
+[[file:37-worktree-gitops.qnt][The protocol]] now calls these same Quint =receive= and =refresh= functions.
+Its =libraryProjection= invariant relates current use and historical acceptance
+to the embedded evidence state. =boundPath= remains the historical accepted
+path; =evidence.binding= is the current binding and becomes absent on withdrawal.
+The finite protocol allows one original delivery and one redelivery. External
+source/authority changes include the consumer's refresh of supplied observations;
+they do not make Scheme observe a filesystem automatically.
+
+* Finite coverage and falsification
+
+The [[file:39-gitops-refinement-witnesses.qnt][Quint witness source]] enumerates concrete input representatives by ID.
+=max-samples=1 evaluates every row in each partition. The large partitions
+emit ordered lists, avoiding structural hashing of nested Evidence records.
+The Scheme consumer checks the partition size and unique, in-range IDs.
+
+| Partition | Cases | What is compared |
+|-----------+-------+------------------|
+| Admission facts and initial/spent state | 16,384 | All fourteen Boolean fact combinations, full successor and published predicate |
+| Occupied current binding | 16,384 | A fresh or spent request may admit, preserve the old use, or withdraw it |
+| Previously withdrawn binding | 16,384 | Refused/spent evidence cannot revive current use |
+| Retention facts | 256 | All eight combinations, full refresh and published predicate |
+| Source equality | 64 | All five field combinations on both current and receipt source cuts |
+| Provider correspondence | 4 | Selected-and-allowed, other allowed, unknown, and selected-but-restricted |
+| Business history | 9 | The named sequence above, including original object lineage |
+| Policy specialization/selection | 64 | Parent/local capability intersection, preference and availability |
+| Policy and Org replacement | 7 | Derived Policy values, old revision refusal, new revision admission, Org rebinding and old source refusal |
+
+The current source defines 49,556 paired cases. Eight deliberately corrupted successor fields
+must be rejected. Two additional controls reconstruct receipt/binding objects
+with identical scalar projections: the identity condition must still reject them.
+The protocol's seven unsafe variants remain separate required counterexamples;
+a compiler error or timeout never qualifies one.
+
+This is an executable bounded refinement relation. The examples cover five
+request names, two available capabilities plus an unknown provider, five Policy
+identities, finite history prefixes and Boolean input partitions. It is not an
+unbounded theorem about arbitrary Scheme callbacks, all histories or all provider
+names. Malformed inputs lie outside the relation's typed domain and are refused
+by the existing C02/C03 tests. Physical observation, authorization, execution,
+persistence and global deduplication remain external responsibilities.
+
+* Run and read the evidence
+
+#+begin_src sh
+GITOPS_REFINEMENT_ARTIFACTS=/tmp/new-gitops-refinement just check-gitops-refinement
+#+end_src
+
+The directory must be new. The maintained Just entry runs the original Contract
+suite and R01 in one aggregate 120-second, default 2-GiB Scheme process. Quint
+witness generation has a 30-second wall limit and a 1-GiB Node heap. The Scheme suite
+prints named =SCENARIO-OK= rows and writes original ITF witnesses, =quint.log= and
+=receipt.ss= to the local artifact directory. Source and witness hashes must remain
+unchanged during the comparison. The receipt records bounded correspondence;
+it does not claim an unbounded source proof or Quint catalogue closure.
+
+The repository's existing =just test-lab-layout= is an independent ownership gate.
+It is not part of refinement, and this suite contains no package-management or
+dependency-version probes. The parallel facade/Core version mismatch is recorded
+separately in [[file:37-worktree-gitops.org][37]], without re-testing upstream package management or adopting
+its uncommitted changes.
+
+* One test owner and one shared facade
+
+All Scheme suites, assertions and refinement comparison code live under
+=t/yanxu/modules/gitops=. The focused recipe names that owner directory rather
+than maintaining a list of suite files. Core already provides owner-derived test
+discovery/projection; Lab does not add another registry. The root shared
+=t/yanxu/interface.ss= is an import facade, excluded from the suite roster.
+The layout contract permits that exact root support file and continues to reject
+arbitrary helper files inside owner suite directories.
+
+The former fixture init and helper were removed. Formal witness definitions now
+live beside their specification in 39; generated ITF/receipt/log files remain
+local artifacts outside the Loader test tree. =make-lab-dependencies selection=
+is a normal dependency projection, with lazy POO slots for context, temporal and
+gitops. Importing the facade does not intentionally demand any of those slots.
+
+The previous 49,549-case pass belongs to the earlier consumer cut. The first
+shared public facade import was blocked by an unbound
+=raise-control-plane-failure= reference in the existing module-authoring
+descriptor. Direct root namespace consumption also exposed a missing
+=:gerbil-ascent/temporal/lens= prerequisite. These are import/admission failures
+before business tests, not passing refusal controls. The new witness source
+typechecks and generates all nine witness families; the new Scheme path is not
+reported qualified until those actual public imports succeed. No fixture Loader
+or private-role import is restored to hide the failure, and no Core package
+manager test or downstream execution implementation is added.
+
+The first migrated layout gate stopped in the existing
+=module-authoring/interface.ss= declaration parser with =invalid Interface
+configuration or library facade=, before evaluating the suite roster. Thus the
+exact shared-interface allowance could not be qualified by that run. The
+parallel Core source/init and module-authoring facade edits retain
+their existing ownership; this change neither rewrites them nor treats an
+installed/source version mismatch as a successful layout check.
+
+* Import and artifact diagnosis
+
+Environment preparation is separate from the business relation. At the start of
+the follow-up, the local Core head was =713c7a56= with parallel edits, while the
+installed Core source store was =207524f=. The clean Gerbil-POO checkout was
+=31b42c3= although Core declares =867d5b0=; its old =poo-clos-*= exports could not
+satisfy Core's current =clos-*= imports. The installed Orgize and Ascent sources
+also differed from the Lab pins. Their existing preparation entry restored
+=cbe4a415= and =6d7495c3= respectively; no dependency declarations were changed.
+
+Refreshing POO and incrementally rebuilding Core removed the old Interface
+parser failure, and the layout gate produced its complete native success
+receipts. A subsequent public-library build exposed another stale artifact:
+=source-package.ssi= lacked =module-build-library-source-path= and
+=module-build-import-identity= even though the current source exported them.
+Its timestamp was newer than the source, so the incremental build retained it.
+The existing =clean-core= and =build-core= entries rebuilt that cohort and
+restored both exports. This is artifact preparation, not a new package-manager
+test or a change to Core resolution/projection semantics.
+
+The Core source/index diffs and Lab module-authoring facade diff are captured
+before preparation and compared separately. These parallel edits retain their
+original owners. Build outputs and diagnostic logs remain local artifacts;
+neither private imports nor a fixture init substitutes for the public path.
+
+The existing public Module build then produced the native Funflow failure
+interface, including =raise-control-plane-failure=. The Lab =build-library=
+recipe had started =build.ss= without its declared package environment and
+therefore searched the global prefix. It now uses the existing =lab_build_env=,
+just as the other library preparation entry does. This preserves the declared
+input order and the existing 600-second preparation deadline; it does not add a
+source fallback, a loader or a business-scope warm-up.
+
+The first unified Scheme run after restoring the Funflow interface and building
+the Ascent lens reached its unchanged deadline without emitting a suite receipt.
+The full Ascent build produced the lens interface and image but did not qualify:
+a compiler thread reported =runtime import context changed=, and the invocation
+reached its preparation deadline while compiling executable objects.
+Preparing the native Lab library subsequently crashed in a Parser reduction-plan
+image. Its Mach-O UUID matched the existing
+=gerbil-parser/src/runtime/reduction-plan~0.o2=, and the Parser checkout was
+=f5fb789= rather than Orgize's declared =d137786=. These outcomes are retained as
+failed preparation/qualification evidence, not GitOps refusal controls.
+
+Parser's declared source revision was restored and successfully rebuilt using
+the existing package build. It produced a new =reduction-plan~0.o3= with a
+different Mach-O UUID. Orgize generated the Fold products, but its full package
+build reached the preparation deadline before the public library finished.
+These are prerequisite results, not Scheme suite passes.
+
+The later requested Core pin update selects Gerbil-POO PR #17 at
+=3eed5fd7d19353ad3063d68edee54c53dd75fe81=. The in-flight build against the old
+pin was stopped before updating the dependency. The layout receipt from the
+earlier cohort remains historical. The new POO build completed on the existing
+incremental path after a first preparation timeout, and Core rebuilt from clean
+outputs. The latest-pin layout run printed =MODULE-OK=, =HARNESS-OK=, and final
+=OK=, but the enclosing process did not exit before 120 seconds; Just returned
+124. The assertions ran successfully, but the layout gate is not a pass on this
+cut. Apart from the single =core/gerbil.pkg= pin line, the recorded parallel Core
+diffs were unchanged at the pin update. Additional parallel build/source edits
+were observed later and left with their owners.
+
+The latest-pin public Core Module preparation regenerated the Funflow failure
+interface. Lab's full native build did not finish under its 600-second preparation
+deadline (exit 137). The separate unified Scheme run nevertheless reached both
+suites through =t/yanxu/interface.ss=. The 13-case working-copy module emitted
+=MODULE-OK= without a Case error. R01 failed before comparison: Quint wrote two
+ITF families and hit its unchanged 30-second deadline. The aggregate exited 124
+and emitted no refinement success receipt. An isolated invocation of the same
+Quint witness command likewise exited 124 (30.05 seconds wall, 6.13 user and 0.55
+system) after one ITF family. Neither run qualifies the 49,556 paired cases or
+the ten comparison controls. Their code, the protocol counterexamples, and all
+test limits are retained.
+
+* Exit and witness measurements
+
+A subsequent layout run finished in 48.13 seconds with the same 120-second
+limit. It spent 14.63 seconds after the final =OK=. A sample taken during that
+interval found the Gerbil child in Gambit's =___cleanup_dyn_module= calling
+macOS =dlclose= and waiting for dyld unload notifications. The parent was
+waiting in =select=. This identifies the observed cleanup delay. The original
+timed-out process was not sampled.
+
+At 30 seconds the earlier isolated witness run had accumulated 6.68 seconds
+of process CPU and produced one family. A subsequent full Set run took 26.63
+seconds wall and 12.83 seconds CPU. A List prototype took 6.49 seconds wall
+and 7.79 seconds CPU under a different host load. Normalizing the Set and List
+containers by witness ID produced equal state payloads in all nine traces.
+The independent size, ID, successor and identity checks still run for every
+row. The occupied and retired Scheme cases construct the exact receipt and
+current input once per row, sharing the constant alternate source object.
+
+Using the locally built MOP export at =ccdb3db85db349e7db1b7970489e9b7c04228aaf=,
+the official GitOps gate exited zero in 59.98 seconds. Quint produced all nine
+families in 4.79 seconds and the Scheme receipt recorded 49,556 comparisons and
+ten rejected controls. The final =OK= preceded natural exit by 7.41 seconds.
+The independent layout gate exited zero in 18.90 seconds, including 8.36 seconds
+after its final =OK=. Both gates emitted their module and harness receipts
+under the original limits.

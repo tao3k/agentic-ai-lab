@@ -9,7 +9,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot-name
                  yuanxu-contract-slot-predicate-key

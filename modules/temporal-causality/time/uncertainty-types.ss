@@ -6,7 +6,7 @@
 ;;; An observation bounds one coordinate; its receipt and attestation names
 ;;; are declarations, not authentication of an external clock.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant?))

@@ -4,7 +4,7 @@
 
 (import :clan/poo/object
         (only-in :std/text/pregexp pregexp-match)
-        (only-in :clan/poo/mop define-type Type.)
+        (only-in :clan/poo/type define-type Type.)
         (only-in :clan/poo/object-contract ObjectContract.)
         (only-in :clan/poo/type String Symbol OrFalse Union)
         (only-in :tao3k/agentic-ai-lab/services Services)

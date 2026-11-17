@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop Type. define-type))
+        (only-in :clan/poo/type Type. define-type))
 (export D2ScopeContract d2-diagram?)
 (def (has-slots? value slots)
   (and (object? value) (andmap (lambda (slot) (.slot? value slot)) slots)))

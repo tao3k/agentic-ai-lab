@@ -5,7 +5,7 @@
 
 ;;; Immutable evidence history; active selection is a pure as-of projection.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/types
                  agentic-ai-lab-temporal-instant? agentic-ai-lab-temporal-interval?))

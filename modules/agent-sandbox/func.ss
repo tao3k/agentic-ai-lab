@@ -7,7 +7,7 @@
 ;;; Invariant: profiles are inert data until a runtime bridge consumes them.
 
 (import (only-in :clan/poo/object .o .ref object<-alist)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-contract
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
@@ -20,7 +20,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Pure data refinement and Contract admission; no module selection or effects.
 (import (only-in :clan/poo/object .mix)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in "types.ss" AgenticAILabSandboxProfileContract))
 (export normalize-sandbox-profile agentic-ai-lab-sandbox-profile?
         agentic-ai-lab-sandbox-profile-name

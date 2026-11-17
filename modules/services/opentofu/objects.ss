@@ -12,7 +12,7 @@
         "./func.ss" "./collections.ss" "./types.ss" "./config.ss" "./source.ss"
         (only-in :tao3k/yuanxu/modules/json-schema/config JsonSchemaScope)
         (only-in :tao3k/yuanxu/module-system/source/objects make-yuanxu-module-source-ref)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/modules/json-schema/functional yuanxu-contract-object-ref
                  yuanxu-contract-key->symbol yuanxu-contract-json-array->list)
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-validation-core

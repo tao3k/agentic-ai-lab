@@ -7,10 +7,8 @@
          (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
         :tao3k/agentic-ai-lab/modules/query/interface
-        (only-in :clan/poo/mop validate .defmethod-bundle clos-class clos-make-instance
-                 clos-method clos-class-specializer clos-eql-specializer
-                 clos-prototype-specializer clos-any-specializer
-                 clos-compose-method-bundle)
+        (only-in :clan/poo/mop .defmethod-bundle clos-class clos-make-instance clos-method clos-class-specializer clos-eql-specializer clos-prototype-specializer clos-any-specializer clos-compose-method-bundle)
+        (only-in :clan/poo/type validate)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/candidates/interface
                  agentic-ai-lab-candidate-scope agentic-ai-lab-candidate-exchange
                  agentic-ai-lab-gql-candidate-receipt

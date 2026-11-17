@@ -5,7 +5,7 @@
 
 ;;; Immutable conclusion revisions and inert active-pointer plans.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
 (export AgenticAILabTemporalConclusionRevision AgenticAILabTemporalConclusionJournal

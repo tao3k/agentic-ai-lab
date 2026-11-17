@@ -3,7 +3,7 @@
 ;;; The declaration tree is authoritative before package or process effects.
 (import :std/test :clan/poo/object
         (only-in :clan/poo/object-contract ObjectContract.)
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/type TypeError?)
         (only-in :clan/poo/type String)
         (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)

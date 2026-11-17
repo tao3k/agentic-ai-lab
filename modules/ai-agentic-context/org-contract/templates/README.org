@@ -3,6 +3,29 @@
 :ID: context-org-contract-template-catalog
 :END:
 
+* Worktree examples
+
+The [[file:gitops-worktree/worktree.org][base Worktree]] uses
+=context.gitops.worktree.v1=. Enabling WorkTrunk refines the Worktree
+Contract family to =context.gitops.worktree.worktrunk= and keeps revision =1=.
+The [[file:worktree/worktree.org][WorkTrunk Worktree]] declares the resulting
+=context.gitops.worktree.worktrunk.v1= Contract ID. The root drawer holds the document ID,
+Contract revision, and =GITOPS_PROJECT=, =GITOPS_WORKTREE=,
+=GITOPS_SOURCE_CUT= and =GITOPS_WORKTRUNK=. Its placeholder evidence links to
+[[file:worktree/design.org][design.org]], which points to
+[[file:worktree/reference.org][reference.org]]. Each file keeps its own
+=scheme :org-contract= block with a direct Org Elements expression.
+
+Orgize validates each local Contract against the file that owns it. Its
+Scheme =org-contract-block= form is also available for trusted, tangled
+templates compiled as Gerbil modules. Task admission matches the selected
+Worktree Contract ID and revision against the root drawer. The
+Worktree namespace uses the registered source keys =A/worktree.org=,
+=A/design.org=, and =A/reference.org=. The Scheme Task tests use the raw files
+as input. The readable selector in a file link is its target =CUSTOM_ID=.
+The receipt uses the target's local =ID= and the source generation admitted
+by its Worktree Module.
+
 * Evidence source profile
 
 [[file:evidence-source.org][evidence-source.org]] is the executable source fixture and starter template.

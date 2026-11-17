@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO Proof artifacts, receipts and exact digest bindings.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         "types.ss")
 
 (export agentic-ai-lab-proof-artifact

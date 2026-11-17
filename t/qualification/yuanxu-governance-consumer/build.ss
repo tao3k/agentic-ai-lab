@@ -10,14 +10,14 @@
 (export main)
 
 (def consumer
-  (.o projection: (.call yuanxu-governance-consumer.init.exports .project-build '("main"))))
+  (.o projection: (.call yuanxu-governance-consumer.init.exports .yuanxu-init '("main"))))
 
 (def (main (operation "compile") (observe-make (lambda (action) (action))))
   (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
       (def projection (.get consumer projection))
-      (def spec (.get projection spec))
+      (def spec (.get projection std-make-spec))
       (case (string->symbol operation)
         ((spec)
          (.call projection .admit-spec spec)

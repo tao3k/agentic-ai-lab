@@ -5,7 +5,7 @@
 
 ;;; Boundary: pure Proof indexing, freshness and admission functions.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every)
         (only-in :std/encoding/hex hex-encode)

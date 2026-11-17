@@ -7,7 +7,7 @@
 ;;; Invariant: these predicates inspect inert values and never resolve, load,
 ;;; parse, validate, or execute a concrete industry standard.
 (import (only-in :clan/poo/object .all-slots .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-all? yuanxu-any? yuanxu-list-of?))
 

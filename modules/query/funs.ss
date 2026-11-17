@@ -6,7 +6,7 @@
 ;;; Boundary: pure Query admission over one immutable ElementSpace.
 ;;; Invariant: admission validates selection but performs no Provider execution.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list filter)
         (only-in "types.ss"

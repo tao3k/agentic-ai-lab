@@ -5,7 +5,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         :tao3k/agentic-ai-lab/modules/model-core/interface)
 
 (def (model-core-test-row-ref row key)

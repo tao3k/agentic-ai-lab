@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product-specific restricted root authoring policy; shared roles live in Core.
 (import (only-in :clan/poo/object .o)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :tao3k/yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
         (only-in :tao3k/yuanxu/module-system/authoring/roles
                  ConfigSourceRole. yuanxu-default-module-authoring-profile))

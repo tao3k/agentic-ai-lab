@@ -987,6 +987,23 @@ published as an admitted cache. The broader historical allowances below do not
 change this consumer's frozen limit. These local results do not assert a latest
 head CI pass or close Core's independent capacity gates.
 
+* OpenTofu deployment qualification
+
+The functional gate compares each cold build with its selected Make spec,
+requires zero compilation on B's hot build, and checks that cleaning A leaves
+B's hashes intact. The child must use B's products, execute the business
+=.get=, and exit successfully. Before the first access the scope remains cold.
+The owner-qualified scope counters require four scope constructions on that
+access and zero on the repeat. These assertions apply on both platforms.
+
+The 120-second reproduction deadline measures completion of the entire
+qualification. Use the phase receipts to compare performance on the same OS
+and Gerbil toolchain with the same installed prerequisites. In particular,
+report cold Make, first business =.get=, and time from the child's =OK= to its
+natural exit separately. Darwin's dynamic image mapping and unloading can
+affect both runtime measurements, and preinstalled Core modules change the
+number of Make targets. A 71-target result cannot qualify the 88-target run.
+
 * CI allowance revision after native failure diagnosis
 
 The user explicitly authorized larger CI allowances on 2026-10-29. Earlier

@@ -194,7 +194,7 @@
                           :load-modules "./modules" mode: explicit rename: App
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
-                        "(import :clan/poo/object (only-in :clan/poo/mop Type.)) (def Scope (.cc Type. identity: 'scope .element?: object?)) (export Scope)")
+                        "(import :clan/poo/object (only-in :clan/poo/type Type.)) (def Scope (.cc Type. identity: 'scope .element?: object?)) (export Scope)")
           (write-source (path-expand "objects.ss" owner)
                         "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
           (write-source config (if invalid-only?

@@ -9,7 +9,7 @@
         ;; Only declaration syntax is required. Reflection, class evolution and
         ;; load-form publication are not collection-evidence dependencies.
         (only-in :clan/poo/mop .defgeneric .defmethod)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         "./types.ss" "./aws-hash.ss"
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

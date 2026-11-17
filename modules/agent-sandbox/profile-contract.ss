@@ -12,7 +12,7 @@
                  yuanxu-contract-value-type
                  yuanxu-object-contract
                  yuanxu-object-contract->alist)
-        (only-in :clan/poo/mop element? validate))
+        (only-in :clan/poo/type element? validate))
 
 (export agentic-ai-lab-sandbox-profile-kind
         AgenticAILabSandboxProfileContract

@@ -8,7 +8,7 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .ref)
         (only-in :std/test check-equal? test-suite)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
         :tao3k/yuanxu/module-system/source/collection

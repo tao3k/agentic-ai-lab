@@ -46,8 +46,16 @@ jobs:
       - uses: ./.github/actions/setup-gerbil
       - name: Build the library and selected product adapters
         run: |
-          # One declared dependency graph owns source identity and native ABI.
-          gerbil env just deps build-core build-qualification-library
+          gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
+          # The vendored Core owns the POO revision for the final native build.
+          (
+            cd core
+            gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss
+            gerbil env gerbil clean
+          )
+          gerbil env just build-core
+          gerbil env gerbil interactive packages/automation/runtime-dependencies.ss --rebuild-core-dependents
+          gerbil env just build-qualification-library build-test-workers
       - name: Realize locked Provider qualification inputs
         run: |
           inputs=$(nix-build --no-out-link t/fixtures/opentofu/ci.nix)

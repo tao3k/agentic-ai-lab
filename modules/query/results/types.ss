@@ -5,7 +5,7 @@
 
 ;;; Finite scalar relation rows. Rich graph values need a separate profile.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop Type. define-type element?)
+        (only-in :clan/poo/type Type. define-type element?)
         (only-in :std/list/list every))
 (export AgenticAILabQueryResultCell AgenticAILabQueryResultRow AgenticAILabQueryResultSet
         agentic-ai-lab-query-result-cell? agentic-ai-lab-query-result-row?

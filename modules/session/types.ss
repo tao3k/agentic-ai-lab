@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Bounded runtime proposal shapes; these predicates confer no runtime authority.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop Type. define-type)
+        (only-in :clan/poo/type Type. define-type)
         (only-in :std/list/list every delete-duplicates/hash))
 (export SessionInputRefType SessionTaskType SessionScheduleType
         agentic-ai-lab-session-input-ref-shape? agentic-ai-lab-session-task-shape?

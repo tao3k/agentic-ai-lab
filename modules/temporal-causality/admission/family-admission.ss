@@ -4,7 +4,7 @@
 
 ;;; Pure admission relative to an explicitly trusted source-owner snapshot.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element? validate)
+        (only-in :clan/poo/type define-type Type. element? validate)
         (only-in :std/list/list every)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

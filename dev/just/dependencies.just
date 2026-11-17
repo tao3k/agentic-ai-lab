@@ -15,7 +15,7 @@ build-dependency package:
 # Optional ASP source-admission probes belong to the development package.
 [group('dependency')]
 deps-dev:
-    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/runtime-dependencies.ss
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_build_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/runtime-dependencies.ss
 
 # Compile the installed development probe dependency against the shared library.
 # Dependency acquisition belongs to deps-dev, as production acquisition belongs
@@ -23,7 +23,7 @@ deps-dev:
 # test-root separately requires build-library in the production prefix.
 [group('build')]
 build-testing:
-    GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme
+    GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_build_library_path }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme
     just build-test-support
 
 # Yuanxu owns the import closure; explicit files only narrow the same projection.

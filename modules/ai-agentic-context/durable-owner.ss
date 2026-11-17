@@ -9,7 +9,7 @@
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
         :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
-        (only-in "../durable/recovery-decision.ss" durable-recovery-decision)
+        (only-in "../governance/policy/recovery-decision.ss" durable-recovery-decision)
         :tao3k/agentic-ai-lab/modules/governance/policy/authorized-effect-token
         :tao3k/agentic-ai-lab/modules/governance/policy/strict-mediation
         "session-host.ss" "use-host.ss" "query-provider.ss" "recovery-observation.ss")

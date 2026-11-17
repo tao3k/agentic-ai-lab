@@ -6,7 +6,8 @@
 ;;; Boundary: engine-neutral Governance types and open dispatch protocols.
 ;;; Invariant: admission and threat assessment never imply action authority.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop .defgeneric define-type Type. element?)
+        (only-in :clan/poo/mop .defgeneric)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
 (export GovernanceScope

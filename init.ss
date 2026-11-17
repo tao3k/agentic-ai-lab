@@ -7,6 +7,7 @@
 (yuanxu!
   :load-modules "./modules" mode: auto :test-dir "./t"
   (ai-agentic-context +memory)
+  (gitops +worktrunk)
   (my-module @ "./user-interface/custom/my-module")
   :load-modules "./scenarios" mode: explicit rename: scenarios :test-dir "./t"
   (null)

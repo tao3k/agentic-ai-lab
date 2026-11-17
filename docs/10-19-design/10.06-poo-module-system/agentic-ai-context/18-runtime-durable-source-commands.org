@@ -370,7 +370,7 @@ extensions and returns a decision value for the existing host handoff.
 Journal writes, worker dispatch and authority minting remain at their
 existing runtime owners.
 
-[[file:../../../../modules/durable/recovery-decision.ss][The first Scheme kernel]]
+[[file:../../../../modules/governance/policy/recovery-decision.ss][The first Scheme kernel]]
 returns a pure eligibility decision tied to an Attempt, effect, policy revision
 and evidence cut. Its callers must supply admitted, current snapshots.
 The kernel is a draft for integration and has no live dispatch entry point.

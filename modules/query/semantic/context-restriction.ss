@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; RFC 91's bounded reader/destination restriction profile, before Host admission.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. validate)
+        (only-in :clan/poo/type define-type Type. validate)
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode))

@@ -33,7 +33,7 @@
           ;; swallowed by the production recovery or currentness boundary.
           " .available?: (lambda () (not (equal? (call-with-input-file expression read-line) \"null\"))))\n"))
       (write-source (path-expand "types.ss" owner)
-        "(import (only-in :clan/poo/mop Type.))\n(export ScopeContract)\n(def ScopeContract (.cc Type. identity: 'release/scope .element?: (lambda (v) (and (object? v) (.slot? v 'Source)))))\n")
+        "(import (only-in :clan/poo/type Type.))\n(export ScopeContract)\n(def ScopeContract (.cc Type. identity: 'release/scope .element?: (lambda (v) (and (object? v) (.slot? v 'Source)))))\n")
       (write-source (path-expand "interface.ss" owner)
         "(.def Release identity: 'building/release core: (.o build-publication: ReleaseSource scope-contract: ScopeContract exports: (.o Source: ReleaseSource)) features: (.o))\n")
       (write-source (path-expand "init.ss" workspace)

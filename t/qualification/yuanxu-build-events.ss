@@ -21,11 +21,14 @@
            ((eof-object? line)
             (when pending? (error "missing target in native Make output"))
             (list-sort string<? events))
+           ((string-contains line target-prefix)
+            => (lambda (start)
+                 (when pending? (error "missing target in native Make output"))
+                 ;; A worker can begin printing before Make prints its
+                 ;; complete target line.
+                 (collect-target (substring line (+ start (string-length target-prefix))
+                                            (string-length line)) events loop)))
            ((string-prefix? worker-prefix line)
             (loop events pending?))
-           ((string-prefix? target-prefix line)
-            (when pending? (error "missing target in native Make output"))
-            (collect-target (substring line (string-length target-prefix)
-                                       (string-length line)) events loop))
            (pending? (collect-target line events loop))
            (else (loop events #f))))))))

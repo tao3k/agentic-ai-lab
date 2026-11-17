@@ -6,7 +6,7 @@
 ;;; A source-scoped coverage assertion. Its receipt must be authenticated by
 ;;; the source owner before any runtime may use it to close a cut.
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
                  agentic-ai-lab-temporal-bounded-observation?))

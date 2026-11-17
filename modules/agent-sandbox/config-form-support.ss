@@ -7,7 +7,7 @@
 ;;; Invariant: profiles are inert data until a runtime bridge consumes them.
 
 (import (only-in :clan/poo/object .o .ref object<-alist)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-contract
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax

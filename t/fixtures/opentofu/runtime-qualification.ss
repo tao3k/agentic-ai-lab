@@ -105,7 +105,7 @@
         (let (seconds (hash-get counts stage))
           (and seconds (list stage (hash-get counts (list 'calls stage)) seconds))))
       '(link-current reader-current source-read metadata-replay metadata-checkpoints
-        native-configuration-request prepared-batch-closed prepared-batch-open
+        gerbil-configuration-request prepared-batch-closed prepared-batch-open
         prepared-batch-observed prepared-batch-checkpoint compiler-metadata-reader
         compiler-metadata-inputs compiler-metadata-preflight publication-admission))))
   (newline)
@@ -148,7 +148,7 @@
       (hash-update! counts name
         (lambda (previous)
           (map + previous
-            (list 1 (work '(calls native-configuration-request))
+            (list 1 (work '(calls gerbil-configuration-request))
                     (work '(calls metadata-replay)) (work '(source reads))
                     (- (real-time) started))))
         '(0 0 0 0 0.))

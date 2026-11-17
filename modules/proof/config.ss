@@ -6,7 +6,7 @@
 ;;; Proof core declares the Lego stud and mandatory assurance slots. Concrete
 ;;; engines, artifacts and vertical claims are always supplied by contributors.
 (import (only-in :clan/poo/object .o)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         "types.ss"
         "funs.ss")
 

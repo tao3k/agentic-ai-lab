@@ -13,7 +13,7 @@
   (force-output))
 (import (only-in :clan/poo/object .get .all-slots .slot? .ref/cached)
         (only-in :gerbil/runtime/loader list-modules)
-        (only-in :tao3k/yuanxu/module-system/source/admission call-with-module-source-operation-measurement))
+        (only-in :tao3k/yuanxu/module-system/source/observations call-with-module-source-operation-measurement))
 (begin-syntax
   (displayln "LAB-DEPLOYMENT-IMPORT use dependencies expanded")
   (force-output))
@@ -71,6 +71,18 @@
       reader-role-import reader-interface-start reader-admission-start
       reader-value-admission metadata-replay reader-current link-current
       scope-factory scope-admission))
+  (force-output)
+  ;; Native load spans include the module's Gerbil dependency initialization.
+  (for-each
+    (lambda (stage)
+      (displayln "LAB-DEPLOYMENT-GET role=" (cdr stage)
+                 " calls=" (hash-ref first-times (list 'calls stage))
+                 " wall=" (hash-ref first-times stage)
+                 " cpu=" (+ (hash-ref first-times (list 'cpu-user stage))
+                            (hash-ref first-times (list 'cpu-system stage)))))
+    (list-sort (lambda (left right) (string<? (cdr left) (cdr right)))
+               (filter (lambda (key) (and (pair? key) (eq? (car key) 'compiled-role-load)))
+                       (hash-keys first-times))))
   (force-output)
   (unless (and (= (publication-reads first-times) 4)
                (= (hash-ref first-times '(calls scope-factory) 0) 4)

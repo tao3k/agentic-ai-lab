@@ -6,7 +6,7 @@
 ;;; Boundary: POO Standard values and immutable constructors.
 ;;; Invariant: construction performs no source loading or validation execution.
 (import (only-in :clan/poo/object .all-slots .cc .o .ref .slot?)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/hash/misc hash-key? hash-put!)
         (only-in :std/list/list filter)

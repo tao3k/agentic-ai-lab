@@ -7,7 +7,7 @@
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/test/base current-test-case)
         (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
-        (only-in :clan/poo/mop element? validate TypeError?)
+        (only-in :clan/poo/type element? validate TypeError?)
         :tao3k/yuanxu/observability/debug
         (only-in :tao3k/yuanxu/observability/testing-case
                  yuanxu-test-case

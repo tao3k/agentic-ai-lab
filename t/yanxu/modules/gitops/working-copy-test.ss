@@ -1,0 +1,173 @@
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import :std/test :std/error (only-in :clan/poo/object .o .cc .get .ref .slot?)
+        (only-in :clan/poo/type element?)
+        (only-in :tao3k/agentic-ai-lab/modules/gitops/interface GitOps)
+        (only-in "../../interface.ss" Lab))
+(export working-copy-test)
+(def gitops (.get Lab gitops))
+(def GitOpsWorkingCopyPolicy (.get gitops working-copy-policy))
+(def gitops-bind-working-copy-policy (.get gitops bind-working-copy-policy))
+(def gitops-select-working-copy (.get gitops select-working-copy))
+(def gitops-working-copy-evidence (.get gitops working-copy-evidence))
+(def gitops-admit-working-copy-receipt (.get gitops admit-working-copy-receipt))
+(def gitops-refresh-working-copy-evidence (.get gitops refresh-working-copy-evidence))
+(def org-source (.o project: "p" worktree: "a" path: "policy.org" git-head: "head-1"
+                text: "* Work\n:PROPERTIES:\n:ID: work\n:GITOPS_ALLOWED: git-worktree worktrunk\n:GITOPS_PREFERRED: worktrunk\n:END:\n"))
+(def policy (gitops-bind-working-copy-policy GitOpsWorkingCopyPolicy org-source "work" "v1"))
+(def available (.o git-worktree: #t worktrunk: #t))
+(def receipt (.o request: "request-1" source: org-source policy-revision: "v1" anchor: "work"
+                 custody-valid?: #t executed?: #t provider: 'worktrunk outcome: 'applied
+                 working-copy: (.o path: "/actual" branch: "agent/work")))
+(def current (.o request: "request-1" provider: 'worktrunk source: org-source
+                policy-revision: "v1" authorized?: #t fence-current?: #t))
+(def (admit (r receipt) (c current) (state (gitops-working-copy-evidence)))
+  (gitops-admit-working-copy-receipt policy state r c))
+(def (prefer-git _policy _availability) 'git-worktree)
+(def (force-worktrunk _policy _availability) 'worktrunk)
+(def working-copy-test
+  (test-suite "GitOps Org-bound higher order working-copy policy"
+    (test-case "C01 published Contract names the library boundary and real input Types"
+      (let* ((contract (.get gitops create-contract))
+             (inputs (.get contract inputs)))
+        (check-equal? (.get contract identity) 'agentic-ai-lab.gitops.create)
+        (check-equal? (.get contract revision) 4)
+        (check-equal? (.get contract effects-owner) 'downstream-provider)
+        (check-equal? (.slot? (.get inputs source effective-slots) 'git-head) #t)
+        (check-equal? (.slot? (.get inputs receipt effective-slots) 'working-copy) #t)
+        (for-each (lambda (entry) (check-equal? (element? (.ref inputs (car entry)) (cdr entry)) #t))
+          (list (cons 'source org-source) (cons 'parent-policy GitOpsWorkingCopyPolicy)
+                (cons 'current current) (cons 'receipt receipt) (cons 'evidence (gitops-working-copy-evidence))))))
+    (test-case "The Worktrunk Feature expands the published provider policy"
+      (def base (.get GitOps core exports working-copy-policy))
+      (def worktrunk-only (.o git-worktree: #f worktrunk: #t))
+      (check-equal? (gitops-select-working-copy base available) 'git-worktree)
+      (check-equal? (gitops-select-working-copy base worktrunk-only) #f)
+      (check-equal? (gitops-select-working-copy GitOpsWorkingCopyPolicy worktrunk-only) 'worktrunk))
+    (test-case "P01 specialization preserves parent restrictions and supports provider fallback"
+      (check-equal? (gitops-select-working-copy policy available) 'worktrunk)
+      (check-equal? (gitops-select-working-copy
+        (gitops-bind-working-copy-policy (.cc GitOpsWorkingCopyPolicy allowed: '(git-worktree)) org-source "work" "v1") available) 'git-worktree)
+      (check-equal? (gitops-select-working-copy policy (.cc available worktrunk: #f)) 'git-worktree)
+      (check-equal? (gitops-select-working-copy policy (.cc available worktrunk: 'claimed)) 'git-worktree)
+      (check-equal? (gitops-select-working-copy policy (.o git-worktree: #f worktrunk: #f)) #f))
+    (test-case "P02 derived policies retain named selector behavior and cannot widen capabilities"
+      (let ((derived (gitops-bind-working-copy-policy
+                      (.cc GitOpsWorkingCopyPolicy select-provider: prefer-git) org-source "work" "v1"))
+            (unsafe (gitops-bind-working-copy-policy
+                     (.cc GitOpsWorkingCopyPolicy allowed: '(git-worktree) select-provider: force-worktrunk)
+                     org-source "work" "v1")))
+        (check-equal? (gitops-select-working-copy derived available) 'git-worktree)
+        (check-exception (gitops-select-working-copy unsafe available) Error?)
+        (check-exception (gitops-select-working-copy
+          (.cc policy select-provider: force-worktrunk) (.cc available worktrunk: #f)) Error?)))
+    (test-case "E01 accepts returned binding once and retains duplicate evidence"
+      (let* ((a (admit)) (b (admit receipt current a)))
+        (check-equal? (.get a accepted?) #t)
+        (check-equal? (eq? (.get a binding) (.get receipt working-copy)) #t)
+        (check-equal? (.get (.get a binding) path) "/actual")
+        (check-equal? (.get b admitted?) #f)
+        (check-equal? (.get b accepted?) #t)
+        (check-equal? (.get (gitops-refresh-working-copy-evidence
+          (.cc policy anchor: "different") b current) accepted?) #f)
+        (check-equal? (.get (gitops-refresh-working-copy-evidence policy b (.cc current authorized?: #f)) accepted?) #f)
+        (check-equal? (length (.get b receipts)) 2)
+        (check-equal? (length (.get b accepted-requests)) 1)
+        (let (redelivered (admit (.cc receipt working-copy: (.o path: "/substituted")) current b))
+          (check-equal? (.get redelivered admitted?) #f)
+          (check-equal? (eq? (.get redelivered binding) (.get a binding)) #t)
+          (check-equal? (length (.get redelivered receipts)) 3))))
+    (test-case "E02 source policy grant identity custody and outcome are independently required"
+      (for-each (lambda (c) (check-equal? (.get (admit receipt c) accepted?) #f))
+        (list (.cc current source: (.cc org-source text: "changed"))
+              (.cc current source: (.cc org-source git-head: "head-2"))
+              (.cc current source: (.cc org-source worktree: "b"))
+              (.cc current source: (.cc org-source project: "other"))
+              (.cc current source: (.cc org-source path: "other.org"))
+              (.cc current fence-current?: #f) (.cc current policy-revision: "v2") (.cc current authorized?: #f)
+              (.cc current provider: 'git-worktree) (.cc current request: "request-2")))
+      (for-each (lambda (r) (check-equal? (.get (admit r) accepted?) #f))
+        (list (.cc receipt anchor: "other") (.cc receipt custody-valid?: #f) (.cc receipt executed?: #f)
+              (.cc receipt outcome: 'rejected) (.cc receipt outcome: 'ambiguous)
+              (.cc receipt source: (.cc org-source worktree: "b"))
+              (.cc receipt policy-revision: "v2") (.cc receipt provider: 'unselected)
+              (.cc receipt provider: 'git-worktree) (.cc receipt working-copy: #f)
+              (.cc receipt working-copy: (.o path: "")))))
+    (test-case "C02 input Types refuse missing identities and malformed observations before state changes"
+      (let (empty-state (gitops-working-copy-evidence))
+        (for-each (lambda (c) (check-exception (admit receipt c empty-state) Error?))
+          (list (.cc current request: "") (.cc current authorized?: 'claimed)
+                (.cc current fence-current?: 'claimed) (.cc current policy-revision: "")
+                (.cc current source: (.cc org-source project: ""))
+                (.cc current source: (.cc org-source git-head: ""))))
+        (for-each (lambda (r) (check-exception (admit r current empty-state) Error?))
+          (list (.cc receipt request: "") (.cc receipt custody-valid?: 'claimed)
+                (.cc receipt executed?: 'claimed) (.cc receipt working-copy: 'claimed)
+                (.cc receipt working-copy: (.o path: "/actual" branch: 'claimed))))
+        (check-exception (admit (.cc receipt request: #f) (.cc current request: #f) empty-state) Error?)
+        (check-exception (admit receipt current (.cc empty-state receipts: 'invalid)) Error?)
+        (check-exception (admit receipt current (.cc empty-state receipts: '(unqualified))) Error?)
+        (check-exception (admit receipt current (.cc empty-state accepted-requests: '(#f))) Error?)
+        (check-equal? (.get empty-state receipts) '())
+        (check-equal? (.get empty-state accepted-requests) '())
+        (check-equal? (.get empty-state accepted?) #f)))
+    (test-case "E03 current use is bound to the active request provider and Policy object"
+      (let ((accepted (admit)) (other-policy (gitops-bind-working-copy-policy
+                                             GitOpsWorkingCopyPolicy org-source "work" "v1")))
+        (for-each (lambda (c)
+                    (let (withdrawn (gitops-refresh-working-copy-evidence policy accepted c))
+                      (check-equal? (.get withdrawn accepted?) #f)
+                      (check-equal? (.get withdrawn binding) #f)
+                      (check-equal? (.get withdrawn receipts) (.get accepted receipts))))
+          (list (.cc current request: "request-2") (.cc current provider: 'git-worktree)))
+        (check-equal? (.get (gitops-refresh-working-copy-evidence other-policy accepted current) accepted?) #f)
+        (check-equal? (.get accepted accepted?) #t)))
+    (test-case "E04 successive requests replace current use and preserve original receipt objects"
+      (let* ((first-state (admit))
+             (next-receipt (.cc receipt request: "request-2" working-copy: (.o path: "/second")))
+             (next-current (.cc current request: "request-2"))
+             (next-state (admit next-receipt next-current first-state)))
+        (check-equal? (.get next-state admitted?) #t)
+        (check-equal? (.get next-state active-request) "request-2")
+        (check-equal? (.get (.get next-state binding) path) "/second")
+        (check-equal? (eq? (car (.get next-state receipts)) next-receipt) #t)
+        (check-equal? (eq? (cadr (.get next-state receipts)) receipt) #t)
+        (check-equal? (.get next-state accepted-requests) '("request-2" "request-1"))
+        (check-equal? (.get (.get first-state binding) path) "/actual")))
+    (test-case "P03 new downstream capabilities use ordinary POO extension"
+      (let* ((provider-source (.cc org-source text:
+              "* Work\n:PROPERTIES:\n:ID: work\n:GITOPS_ALLOWED: custom-copy git-worktree\n:GITOPS_PREFERRED: custom-copy\n:END:\n"))
+             (custom (gitops-bind-working-copy-policy
+                       (.cc GitOpsWorkingCopyPolicy allowed: '(custom-copy git-worktree))
+                       provider-source "work" "v1")))
+        (check-equal? (gitops-select-working-copy custom (.o custom-copy: #t git-worktree: #t)) 'custom-copy)
+        (check-equal? (gitops-select-working-copy custom (.o git-worktree: #t)) 'git-worktree)
+        (check-equal? (gitops-select-working-copy custom (.o)) #f)))
+    (test-case "E05 withdrawn use retains historical receipts and never revives automatically"
+      (let* ((accepted (admit))
+             (withdrawn (gitops-refresh-working-copy-evidence policy accepted (.cc current fence-current?: #f)))
+             (restored (gitops-refresh-working-copy-evidence policy withdrawn current)))
+        (check-equal? (.get restored accepted?) #f)
+        (check-equal? (.get restored binding) #f)
+        (check-equal? (length (.get restored receipts)) 1)
+        (check-equal? (length (.get restored accepted-requests)) 1)
+        (check-equal? (.get (admit receipt current restored) admitted?) #f)))
+    (test-case "P04 missing and duplicate anchors fail closed"
+      (check-exception (gitops-bind-working-copy-policy GitOpsWorkingCopyPolicy org-source "absent" "v1") Error?)
+      (check-exception (gitops-bind-working-copy-policy GitOpsWorkingCopyPolicy
+        (.cc org-source text: (string-append (.get org-source text) (.get org-source text))) "work" "v1") Error?)
+      (check-exception (gitops-bind-working-copy-policy GitOpsWorkingCopyPolicy org-source "work" "") Error?))
+    (test-case "C03 invalid parent policies and availability fail at the public boundary"
+      (check-exception (gitops-bind-working-copy-policy
+        (.cc GitOpsWorkingCopyPolicy allowed: 'invalid) org-source "work" "v1") Error?)
+      (check-exception (gitops-select-working-copy
+        (.cc policy select-provider: 'invalid) available) Error?)
+      (check-exception (gitops-select-working-copy policy 'unqualified) Error?))
+    (test-case "P05 deriving again preserves inherited restrictions and named behavior"
+      (let* ((restricted (gitops-bind-working-copy-policy
+                          (.cc GitOpsWorkingCopyPolicy allowed: '(git-worktree)) org-source "work" "v2"))
+             (child (gitops-bind-working-copy-policy restricted org-source "work" "v3")))
+        (check-equal? (.get child allowed) '(git-worktree))
+        (check-equal? (eq? (.get child select-provider) (.get restricted select-provider)) #t)
+        (check-equal? (.get restricted revision) "v2")
+        (check-equal? (.get policy revision) "v1")
+        (check-equal? (gitops-select-working-copy child available) 'git-worktree)))))

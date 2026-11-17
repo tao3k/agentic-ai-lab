@@ -6,7 +6,7 @@
         (only-in :std/source this-source-file)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/text/pregexp pregexp-replace)
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/type TypeError?)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :gerbil/runtime/loader list-modules)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/interface

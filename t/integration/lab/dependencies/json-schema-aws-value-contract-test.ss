@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Opt-in: existing acquired AWS 5.100.0 provider export, no network or Loader.
 (import :std/test :clan/poo/object
-        (only-in :clan/poo/mop element? validate)
+        (only-in :clan/poo/type element? validate)
         :clan/poo/object-contract
         :tao3k/yuanxu/modules/json-schema/contracts
         (only-in :tao3k/yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)

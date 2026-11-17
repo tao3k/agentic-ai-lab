@@ -10,7 +10,7 @@
         (only-in :clan/poo/support/debug traced-function)
         (only-in :clan/poo/debug DDT trace-poo)
         (only-in :clan/poo/object .o .ref .call .all-slots compute-precedence-list!)
-        (only-in :clan/poo/mop define-type Type.)
+        (only-in :clan/poo/type define-type Type.)
         (only-in :tao3k/yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity)
         :tao3k/yuanxu/module-system/authoring/roles

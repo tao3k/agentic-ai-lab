@@ -4,7 +4,7 @@
         (only-in :std/misc/ports read-all-as-string)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-unpack journal-hash)
-        "../../modules/durable/recovery-decision.ss")
+        "../../modules/governance/policy/recovery-decision.ss")
 (export main)
 
 ;; Closed Lean literals only. Naturals and UTF-8 identifiers occupy disjoint

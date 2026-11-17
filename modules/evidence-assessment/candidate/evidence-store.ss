@@ -5,7 +5,7 @@
 ;;; Read-through storage of computational evidence. Source authority stays with
 ;;; the caller. Private receipts never escape; all published pair trees detach.
 (import (only-in :clan/poo/object .o .ref object? .slot?)
-        (only-in :clan/poo/mop define-type validate)
+        (only-in :clan/poo/type define-type validate)
         (only-in :tao3k/yuanxu/types/contracts YuanxuObjectContract. yuanxu-predicate-contract)
         (only-in :std/error exception->string)
         (only-in :gerbil-ascent/candidate/datum reasoning-bounded-data?)

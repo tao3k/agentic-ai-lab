@@ -14,7 +14,7 @@
 
         :tao3k/yuanxu/profile-composition/profile-bundle
 
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario))
 
 

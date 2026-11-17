@@ -12,7 +12,7 @@
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         (only-in :tao3k/yuanxu/modules/funflow/graph-projection
                  funflow-plan

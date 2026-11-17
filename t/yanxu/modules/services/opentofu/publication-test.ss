@@ -2,13 +2,14 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/type TypeError?)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/agentic-ai-lab/modules/nix/func current-nix-process-observer)
-        (only-in :tao3k/yuanxu/module-system/source/admission module-source-read current-module-source-observer)
+        (only-in :tao3k/yuanxu/module-system/source/observations
+                 module-source-read call-with-module-source-operation-measurement)
         (only-in :tao3k/yuanxu/module-system/source/preparation yuanxu-prepare-module-build-source)
         (only-in :tao3k/yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-self-reference?)
@@ -165,17 +166,9 @@
                   (displayln "MVP-STALE-SOURCE-REFUSED") (force-output)
                   (write-init #t #t)
                   (displayln "MVP-REFRESH-BEGIN") (force-output)
-                  (let ((calls (make-hash-table)) (imports 0))
-                    (parameterize
-                        ((current-module-source-observer
-                          (lambda (event count)
-                            (when (and (pair? event) (eq? (car event) 'link-stage-start))
-                              (let (stage (cadr event))
-                                (hash-put! calls stage (+ count (or (hash-get calls stage) 0)))))
-                            (when (and (pair? event) (eq? (car event) 'compiler-source-import-start))
-                              (set! imports (+ imports count)))
-                            (when (and (pair? event) (eq? (car event) 'reader-context-not-transferred))
-                              (displayln "MVP-TRANSFER " event)))))
+                  (defvalues (successor-view times)
+                    (call-with-module-source-operation-measurement
+                      (lambda ()
                       (def next (.call view .refresh))
                       (displayln "MVP-REFRESH-RETURN") (force-output)
                       (set! next-view next)
@@ -183,7 +176,6 @@
                       (def next-schema-record (selected-record next 'json-schema))
                       (def next-schema (.get next-schema-record scope))
                       (check-equal? (.get next-review scope revision) 2)
-                      (displayln "MVP-REUSE calls=" (hash->list calls) " source-imports=" imports)
                       (displayln "MVP-IDENTITY construction="
                         (eq? (car (object-supers old-schema)) (car (object-supers next-schema)))
                         " admitted=" (eq? old-schema next-schema)
@@ -205,17 +197,19 @@
                       (assert 'successor-schema-is-published-edge
                         (eq? (.get next-review scope schema)
                              (.get (selected-record next 'services/opentofu) scope JsonSchema)))
-                      (for-each
-                        (lambda (id)
-                          (check-equal? (hash-get calls (list 'scope-factory id)) 1)
-                          (check-equal? (hash-get calls (list 'scope-admission id)) 1))
-                        (map (cut owner next <>) '(json-schema services/opentofu app/review)))
                       (assert 'successor-json-schema-build-entry-once
                         (= 1 (length (filter
                           (lambda (entry)
                             (equal? (.get entry path)
                               (path-expand "core/modules/json-schema/interface.ss" project)))
-                          (.get next build-graph entries)))))))))
+                          (.get next build-graph entries)))))
+                        next)
+                      accounting?: 'stages))
+                  (for-each
+                    (lambda (id)
+                      (check-equal? (hash-ref times (list 'calls (list 'scope-factory id)) 0) 1)
+                      (check-equal? (hash-ref times (list 'calls (list 'scope-admission id)) 0) 1))
+                    (map (cut owner successor-view <>) '(json-schema services/opentofu app/review)))))
               (let (successor next-view)
                 (def review (selected-record successor 'app/review))
                 (assert 'successor-admits-revised-review

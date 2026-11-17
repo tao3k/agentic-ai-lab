@@ -6,7 +6,7 @@
 ;;; Standard core owns the composable module prototype, but no ambient industry
 ;;; catalog or concrete validation Provider.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :clan/poo/mop validate)
+        (only-in :clan/poo/type validate)
         "types.ss"
         "objects.ss"
         "funs.ss"

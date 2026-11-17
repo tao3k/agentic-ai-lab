@@ -7,7 +7,8 @@
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        (only-in :clan/poo/mop .new TypeError?)
+        (only-in :clan/poo/mop .new)
+        (only-in :clan/poo/type TypeError?)
         (only-in :clan/poo/type Record Symbol)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
         :tao3k/yuanxu/modules/funflow/control-plane/graph

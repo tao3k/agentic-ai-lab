@@ -35,14 +35,8 @@
                  .slot?
                  uninstantiate-object!
                  NoApplicableMethod?)
-        (only-in :clan/poo/mop
-                 .defgeneric
-                 Type
-                 Type.
-                 TypeError?
-                 define-type
-                 element?
-                 validate))
+        (only-in :clan/poo/mop .defgeneric)
+        (only-in :clan/poo/type Type Type. TypeError? define-type element? validate))
 
 (export gerbil-poo-operation-admission-test)
 

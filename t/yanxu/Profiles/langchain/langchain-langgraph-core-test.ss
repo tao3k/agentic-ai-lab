@@ -21,7 +21,7 @@
                   use-module)
          (use-module use-profile-module))
 
-        (only-in :clan/poo/mop element?)
+        (only-in :clan/poo/type element?)
         (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
 
 

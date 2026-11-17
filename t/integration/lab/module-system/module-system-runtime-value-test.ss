@@ -8,7 +8,8 @@
 ;;; prototype-composable objects rather than parallel Scheme records.
 
 (import (only-in :clan/poo/type Record)
-        (only-in :clan/poo/mop Bool make-instance element?)
+        (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type Bool element?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref object?)
         (only-in :std/test check-equal? test-suite)

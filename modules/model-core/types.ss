@@ -8,7 +8,7 @@
 ;;; behavior belong to objects.ss and funs.ss respectively.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :clan/poo/mop define-type Type. element?)
+        (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
 (export +agentic-ai-lab-model-core-spec-kind+

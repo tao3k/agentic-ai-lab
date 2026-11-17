@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Finite acyclic support applicability, not evaluator proof or effect admission.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :clan/poo/mop validate) "types.ss"
+        (only-in :clan/poo/type validate) "types.ss"
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

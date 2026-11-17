@@ -28,12 +28,12 @@
   (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
-      (def projection (.call adapter-exports .project-build targets))
+      (def projection (.call adapter-exports .yuanxu-init targets))
       (.call projection .with-compiler-inputs
         (lambda ()
           (with-inputs projection
             (lambda ()
-              (make (.get projection spec)
+              (make (.get projection std-make-spec)
                 srcdir: (or (current-build-source-directory) root)
                 libdir: output bindir: (path-expand "bin" (gerbil-path))))))))))
 

@@ -3,8 +3,8 @@
 ;;; One GQL model; bounded runtime Org refinement, positive proof and source feed.
 (import
  (only-in :clan/poo/object .o .ref .slot? .call object? object<-alist .alist/sort)
- (only-in :clan/poo/mop validate clos-class clos-make-instance
-          clos-compose-method-bundle .defmethod .defmethod-bundle)
+ (only-in :clan/poo/mop clos-class clos-make-instance clos-compose-method-bundle .defmethod .defmethod-bundle)
+        (only-in :clan/poo/type validate)
  (only-in :std/list/list find every delete-duplicates/hash)
  :tao3k/agentic-ai-lab/modules/query/objects
  (only-in :tao3k/agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
@@ -33,11 +33,13 @@
   proof-node-row
   proof-node-inputs)
  "org-contract/elements.ss"
+ "org-contract/descendants.ss"
  "funs-scope.ss")
 
 (export
  context-org-source
  context-org-query
+ context-org-descendants-query
  ContextOrgQueryProvider
  context-query-host
  context-query-source!
@@ -45,6 +47,7 @@
  context-query-current-source
  context-query-execute
  context-query-current?
+ context-query-observation
  context-query-watch! context-query-unwatch!
  context-query-history
  context-query-export
@@ -84,6 +87,12 @@
    'relation-row
    columns
    32))
+(def descendant-columns
+  '(identity rootAnchor sourceId sourceRevision sourceDigest contractIdentity contractRevision
+    elementKind byteStart parserIdentity byteEnd ancestryDigest text))
+(def ContextOrgDescendantContract
+  (agentic-ai-lab-query-result-contract 'context/org-descendant-row-v1
+    'relation-row descendant-columns 32))
 
 
 ;;; Query core owns admission and the receipt protocol. This Provider contributes
@@ -124,11 +133,12 @@
       (error "Forged Org source cut"))
     fresh))
 
-(def (space source)
+(def (space source nodes (window #f))
   (agentic-ai-lab-query-element-space
+   (if window (digest (list 'context-org-descendant-space.v1 (.ref source 'semantic-digest) window))
+       (.ref source 'semantic-digest))
    (.ref source 'semantic-digest)
-   (.ref source 'semantic-digest)
-   (map (lambda (n) (.ref n 'identity)) (.ref source 'nodes))
+   (map (lambda (n) (.ref n 'identity)) nodes)
    #t))
 
 (def (projections fields)
@@ -154,14 +164,25 @@
       (version-value "1")
       (bound 32)
       (selected #f))
-  (let* ((src (canonical-source source)) (sp (space src)))
+  (let (src (canonical-source source))
     (unless (and
              (memq key columns)
              (or (string? literal-value) (exact-integer? literal-value))
              (exact-integer? bound)
              (<= 1 bound 32))
       (error "Unsupported Org GQL predicate/bound"))
-    (validate
+    (make-org-query (space src (.ref src 'nodes)) literal-value key id version-value
+                    bound selected columns ContextOrgResultContract)))
+
+(def (context-org-descendants-query source anchor max-depth (bound 32) (version "1"))
+  (let* ((src (canonical-source source))
+         (nodes (.ref (context-org-descendants src anchor max-depth bound) 'descendants))
+         (query (make-org-query (space src nodes (list anchor max-depth bound)) anchor 'rootAnchor 'context/org-descendants
+                                version bound #f descendant-columns ContextOrgDescendantContract)))
+    (.o (:: @ query) org-depth: max-depth)))
+
+(def (make-org-query sp literal-value key id version-value bound selected fields result-type)
+  (validate
      AgenticAILabQuery
      (.o
        (:: @ AgenticAILabQuery.)
@@ -193,17 +214,17 @@
                                                    ((symbol? literal-value) 'symbol)
                                                    (else 'integer))
                                     value: literal-value))
-                  project: (projections columns))
+                  project: (projections fields))
        result-bound: bound
        completeness-requirement: 'complete
        evidence-requirements: '(source-content-identity provenance-root result-digest)
        visibility-request: 'restricted
-       result-contract: ContextOrgResultContract))))
+       result-contract: result-type)))
 
 
 ;;; Reconstruct the supported Query from its typed fields and compare its GQL
 ;;; rendering and contracts. A changed program cannot borrow an old receipt.
-(def (descriptor query source)
+(def (descriptor query sp depth)
   (unless (and
            (eq? (.ref (.ref query 'language) '.program?)
                 (.ref AgenticAILabSchemeGqlQueryLanguage. '.program?))
@@ -212,16 +233,19 @@
   (let* ((p (.ref (.ref query 'program) 'where))
          (key-value (.ref (.ref p 'left) 'property))
          (literal-value (.ref (.ref p 'right) 'value))
-         (fresh
-          (context-org-query
-           source
-           literal-value
-           key-value
-           (.ref query 'identity)
-           (.ref query 'version)
-           (.ref query 'result-bound)
-           (.ref query 'selected-element-identities))))
+         (result-type (if depth ContextOrgDescendantContract ContextOrgResultContract))
+         (selected (.ref query 'selected-element-identities))
+         (bound (.ref query 'result-bound))
+         (fresh (make-org-query sp literal-value key-value (.ref query 'identity) (.ref query 'version)
+                                bound selected (if depth descendant-columns columns) result-type)))
     (unless (and
+             (if depth
+                 (and (eq? 'context/org-descendants (.ref query 'identity))
+                      (eq? 'rootAnchor key-value)
+                      (equal? selected (.ref sp 'element-identities)))
+                 (and (memq key-value columns)
+                      (or (string? literal-value) (exact-integer? literal-value))
+                      (exact-integer? bound) (<= 1 bound 32)))
              (equal? (agentic-ai-lab-query->gql query) (agentic-ai-lab-query->gql fresh))
              (every
               (lambda (k)
@@ -233,30 +257,33 @@
               '(identity representation execution-boundary runtime-owner parser-owner syntax-contract))
              (every
               (lambda (k)
-                (equal? (.ref (.ref query 'result-contract) k) (.ref ContextOrgResultContract k)))
+                (equal? (.ref (.ref query 'result-contract) k) (.ref result-type k)))
               '(identity result-kind required-fields max-results)))
       (error "Unsupported or rebound Context GQL Query"))
     (let ((id-value (.ref query 'identity))
           (version-value (.ref query 'version))
           (bound-value (.ref query 'result-bound))
           (selected-value (map string-copy (.ref query 'selected-element-identities))))
-      (.o
+      (let (value (.o
         identity: id-value
         version: version-value
         key: key-value
         value: literal-value
         bound: bound-value
-        selected: selected-value))))
+        selected: selected-value))
+        (if depth (.o (:: @ value) org-depth: depth) value)))))
 
 (def (from-descriptor src d)
-  (context-org-query
+  (if (.slot? d 'org-depth)
+      (context-org-descendants-query src (.ref d 'value) (.ref d 'org-depth) (.ref d 'bound) (.ref d 'version))
+      (context-org-query
    src
    (.ref d 'value)
    (.ref d 'key)
    (.ref d 'identity)
    (.ref d 'version)
    (.ref d 'bound)
-   (.ref d 'selected)))
+   (.ref d 'selected))))
 
 
 ;;; Runtime effects stay behind this owner capability. Source versions and the
@@ -363,17 +390,17 @@
   (let (old (context-query-current-source host id))
     (context-query-source! host (context-org-source id generation (.ref old 'source) #f))))
 
-(def (result-row values)
+(def (result-row fields values)
   (agentic-ai-lab-query-result-row
    (car values)
    (map
     (lambda (field value)
       (agentic-ai-lab-query-result-cell field value))
-    columns
+    fields
     values)))
 
-(def (node-row n)
-  (result-row (map (lambda (k) (.ref n k)) columns)))
+(def (node-row fields n)
+  (result-row fields (map (lambda (k) (.ref n k)) fields)))
 
 
 ;;; Named Org-to-Fact refinement: each runtime fact binds the actual source digest,
@@ -390,13 +417,13 @@
 ;;; Run real ASCENT for each selected row and replay its positive proof through
 ;;; the existing admission adapter. Membership is proved; external source truth
 ;;; and tool authorization are deliberately separate admission obligations.
-(def (prove src rows)
+(def (prove src rows source-nodes fields)
   (let (snapshot
         (reasoning-source-snapshot
          (.ref src 'semantic-digest)
          (.ref src 'generation)
          (list
-          (list 'orgRow 4 (map (lambda (n) (fact src (node-row n))) (.ref src 'nodes))))))
+          (list 'orgRow 4 (map (lambda (n) (fact src (node-row fields n))) source-nodes)))))
     (map
      (lambda (row)
        (let* ((datum
@@ -438,27 +465,38 @@
      rows)))
 
 
+(def (path-step coordinates)
+  (match coordinates
+    ([id kind start end]
+     (.o identity: id element-kind: kind byte-start: start byte-end: end))))
+
 ;;; GQL selection -> runtime membership proof -> support -> Provider receipt.
 ;;; Source-content-identity in Query core hashes GQL text; the separate lineage
 ;;; below binds original Org bytes and its source/Contract revision as well.
 (def (execute src query source-journal seq)
   (unless (.ref src 'active?)
     (error "Org source withdrawn"))
-  (let* ((d (descriptor query src))
-         (sp (space src))
+  (let* ((depth (and (.slot? query 'org-depth) (.ref query 'org-depth)))
+         (anchor (and depth (.ref (.ref (.ref (.ref query 'program) 'where) 'right) 'value)))
+         (selection (and depth (context-org-descendants src anchor depth (.ref query 'result-bound))))
+         (source-nodes (if selection (.ref selection 'descendants) (.ref src 'nodes)))
+         (fields (if depth descendant-columns columns))
+         (result-type (if depth ContextOrgDescendantContract ContextOrgResultContract))
+         (sp (space src source-nodes (and depth (list anchor depth (.ref query 'result-bound)))))
+         (d (descriptor query sp depth))
          (admission (agentic-ai-lab-query-admit query sp))
          (_ (unless (.ref admission 'accepted?) (error "Context Query admission denied")))
          (nodes
           (filter
            (lambda (n)
              (member (.ref n 'identity) (.ref query 'selected-element-identities)))
-           (.ref src 'nodes)))
+           source-nodes))
          (selected (agentic-ai-lab-query-select-scheme-nodes query nodes))
-         (rows (map result-row (.ref selected 'rows)))
+         (rows (map (lambda (values) (result-row fields values)) (.ref selected 'rows)))
          (rs
           (agentic-ai-lab-query-result-set
            (digest (list (.ref src 'semantic-digest) (agentic-ai-lab-query->gql query)))
-           ContextOrgResultContract
+           result-type
            (.ref query 'identity)
            (.ref query 'version)
            (.ref query 'semantic-revision)
@@ -483,7 +521,7 @@
            admission
            candidate))
          (_r (unless (.ref receipt 'admitted?) (error "Context Provider receipt denied")))
-         (proofs-value (prove src rows))
+         (proofs-value (prove src rows source-nodes fields))
          (supports
           (map
            (lambda (row proof)
@@ -514,19 +552,30 @@
          (contract-value (.ref src 'contract-identity))
          (contract-revision-value (.ref src 'contract-revision))
          (ids-value
-          (map
+          (if depth (list anchor) (map
            (lambda (row)
              (.ref
               (find (lambda (c) (eq? (.ref c 'field) 'propertyId)) (.ref row 'cells))
               'value))
-           (.ref rs 'rows)))
+           (.ref rs 'rows))))
+         (window
+           (and depth
+                (let ((ancestor-paths
+                        (map (lambda (row)
+                               (let* ((id (.ref row 'identity))
+                                      (node (find (lambda (entry) (equal? (.ref entry 'identity) id)) nodes)))
+                                 (.o identity: id ancestors: (map path-step (.ref node 'ancestry)))))
+                             (.ref rs 'rows))))
+                  (.o root-anchor: anchor max-depth: depth result-bound: (.ref query 'result-bound)
+                      root: (path-step (.ref selection 'root-range))
+                      parser-identity: (.ref src 'parser-identity) paths: ancestor-paths))))
          (proof-digests-value
           (map (lambda (p) (.ref (.ref p 'admission) 'proof-digest)) proofs-value))
          (support-value (and program-value (.ref program-value 'semantic-digest)))
          (journal-value (.ref source-journal 'semantic-digest))
          (binding-value
           (digest
-           (list
+           (append (list
             'context-query-lineage.v1
             source-id-value
             generation-value
@@ -542,7 +591,8 @@
             ids-value
             proof-digests-value
             support-value
-            journal-value)))
+            journal-value)
+           (if window (list (data-form window)) '()))))
          (lineage-value
           (.o
             kind: 'context.query-lineage.v1
@@ -557,7 +607,8 @@
             proof-digests: proof-digests-value
             support-digest: support-value
             journal-digest: journal-value
-            semantic-digest: binding-value)))
+            semantic-digest: binding-value))
+         (result-lineage (if window (.o (:: @ lineage-value) org-window: window) lineage-value)))
     (.o
       kind: 'context.query-observation.v1
       source-cut: src
@@ -569,7 +620,7 @@
       support-program: program-value
       journal: source-journal
       admission-sequence: seq
-      lineage: lineage-value
+      lineage: result-lineage
       semantic-digest: binding-value)))
 
 (def (context-query-execute host source-id query)
@@ -584,6 +635,12 @@
 
 (def (context-query-lineage observed)
   (.ref observed 'lineage))
+
+;; Catalog owners resolve retained receipts without reopening the source.
+(def (context-query-observation host reference)
+  (let (observed (find (lambda (q) (equal? (.ref q 'semantic-digest) reference))
+                       (owner-queries (state host))))
+    (and observed (copy-data observed))))
 
 
 ;;; Final-use defense is independent of subscription delivery. Even a deliberately

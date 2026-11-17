@@ -3789,3 +3789,27 @@ and declarative Context Feature extension using the existing Core Feature System
 These design additions do not requalify historical runtime results or claim a
 completed code migration. Teaching examples separate composition from recovery,
 with ASCENT-inferred layout and actual image-bound model readings.
+
+* Org Context module composition
+
+[[file:35-org-context-modules.org][35: Org Context as versioned composable modules]] and its
+[[file:35-org-context-modules.sysml][SysML model]] distinguish relative traversal leaves, derivation, imports,
+invocation, demand-led projection and downstream cache reuse. This is a proposed
+architecture with explicit runtime and formal correspondence obligations.
+
+[[file:36-scheme-rust-policy-ecosystem.org][36: Policy library and downstream execution]] and its
+[[file:36-scheme-rust-policy-ecosystem.sysml][SysML allocation]] place reusable POO Policy and Contract in Lab.
+Downstream packages select their implementation and own adaptation, physical
+execution and original evidence. Concrete ecosystems are optional consumers.
+
+[[file:37-worktree-gitops.org][37: Worktree Org Context to GitOps]] supplies an executable finite Quint
+protocol, seven deliberately broken variants, sixteen deterministic model traces
+and SysML ports and responsibility allocations. Lab's =modules/gitops= provides
+the Org-bound Policy and evidence interpretation, tested directly in Scheme.
+Physical fencing is an explicit obligation of the selected downstream owner;
+the earlier native coupling is superseded, not a required Lab dependency.
+
+[[file:38-gitops-library-refinement.org][38: What the library refinement checks]] defines the actual Scheme/Quint
+state relation through named business events, shared pure model functions,
+paired successor comparisons and original-object lineage controls. Package
+management and repository layout qualification remain separate responsibilities.
