@@ -55,7 +55,7 @@ jobs:
           )
           gerbil env just build-core
           gerbil env gerbil interactive packages/automation/runtime-dependencies.ss --rebuild-core-dependents
-          gerbil env just build-qualification-library build-test-workers
+          gerbil env just build-library build-test-workers
       - name: Realize locked Provider qualification inputs
         run: |
           inputs=$(nix-build --no-out-link t/fixtures/opentofu/ci.nix)

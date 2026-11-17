@@ -68,7 +68,7 @@ jobs:
         with:
           just-version: '1.56.0'
       - name: Prepare native Gerbil libraries
-        run: gerbil env just deps build-core build-qualification-library
+        run: gerbil env just deps build-core build-library
 
       - name: Build, test, and pack the package
         # Dependency actions are materialized and attributed by the preceding

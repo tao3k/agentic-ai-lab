@@ -274,7 +274,7 @@ jobs:
         run: |
           qualification="$RUNNER_TEMP/lab-qualification"
           mkdir -p "$qualification/lib"
-          gerbil env env GERBIL_PATH="$qualification" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" just build-qualification-library
+          gerbil env env GERBIL_PATH="$qualification" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" just build-library
 
       - name: Install optional development policy dependencies
         run: |
