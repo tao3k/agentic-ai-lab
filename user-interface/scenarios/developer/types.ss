@@ -1,8 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .cc .ref object?)
-        (only-in :clan/poo/mop Type.)
-        (only-in :clan/poo/type Record)
+        (only-in :clan/poo/type Record Type.)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-config? yuanxu-user-config-modules
                  yuanxu-user-config-settings yuanxu-user-module-selection?))

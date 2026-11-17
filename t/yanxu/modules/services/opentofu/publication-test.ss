@@ -90,7 +90,7 @@
               (string-append "(package: " (symbol->string (gensym 'opentofu-publication-)) ")"))
             (let (review (path-expand "modules/app/review" root))
                 (write-source (path-expand "types.ss" review)
-                  "(import :clan/poo/mop) (def ReviewScope (.cc Type. identity: 'app/review .element?: object?)) (export ReviewScope)")
+                  "(import (only-in :clan/poo/type Type.)) (def ReviewScope (.cc Type. identity: 'app/review .element?: object?)) (export ReviewScope)")
                 (write-source (path-expand "objects.ss" review) "(def Defaults (.o)) (export Defaults)")
                 (write-source (path-expand "config.ss" review) "(def Config (.o revision: 1))")
                 (write-source (path-expand "interface.ss" review)

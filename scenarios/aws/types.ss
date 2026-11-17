@@ -2,8 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Public value Types own data; Core adds evidence over its selected Context.
 (import :clan/poo/object :clan/poo/object-contract
-        (only-in :clan/poo/mop define-type)
-        (only-in :clan/poo/type True)
+        (only-in :clan/poo/type True define-type)
         (only-in :tao3k/yuanxu/modules/json-schema/contracts ProjectionContract.)
         (only-in :tao3k/yuanxu/types/contracts YuanxuContract. yuanxu-classification-evidence))
 (export AWSProfileContract. AWSScenarioContract. AWSAdmissionContract.
