@@ -10,8 +10,8 @@ repeating dependency names. Lab's executable downstream fixture is
 
 #+begin_src scheme
 (yuanxu!
-  :load-modules "../../../modules" rename: Lab mode: auto profile: deployment
-  :load-modules "../../../core/modules" rename: Core mode: auto profile: deployment)
+  :load-modules "../../../modules" mount: Lab mode: auto profile: deployment
+  :load-modules "../../../core/modules" mount: Core mode: auto profile: deployment)
 (.get yuanxu-deployment-consumer.init.exports Lab services opentofu)
 #+end_src
 

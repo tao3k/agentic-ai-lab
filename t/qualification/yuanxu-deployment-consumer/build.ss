@@ -2,21 +2,18 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :std/make make make-clean)
-        (only-in :clan/poo/object .o .get .call)
+        (only-in :clan/poo/object .get .call)
         (only-in "./init.ss" yuanxu-deployment-consumer.init.exports)
         (only-in :tao3k/yuanxu/module-system/building/products
                  build-output-directory current-build-source-directory artifact-files)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path))
 (export main)
 
-(def consumer
-  (.o projection: (.call yuanxu-deployment-consumer.init.exports .yuanxu-init '("main"))))
-
 (def (main (operation "compile") (observe-make (lambda (action) (action))))
   (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
-      (def projection (.get consumer projection))
+      (def projection (.get yuanxu-deployment-consumer.init.exports build))
       (def spec (.get projection std-make-spec))
       (case (string->symbol operation)
         ((spec)
