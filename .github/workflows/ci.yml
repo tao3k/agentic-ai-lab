@@ -564,8 +564,6 @@ jobs:
             packages/proofs/lean/.lake
             core/dev/proofs/lean/.lake
           key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
-          restore-keys: |
-            lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install elan
         shell: bash
@@ -624,11 +622,9 @@ jobs:
             packages/proofs/lean/.lake
             core/dev/proofs/lean/.lake
           key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
-          # Reuse the same Lake package and pinned native compiler.
+          # Reuse the Governance build only for the same Lake dependency lock.
           restore-keys: |
             lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
-            lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-
-            lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install Cedar Runtime Host toolchains
         shell: bash
