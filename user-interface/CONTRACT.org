@@ -7,7 +7,7 @@
 
 The repository root [[file:../init.ss][init.ss]] declares module windows through
 =yuanxu!=. There is no nested =user-interface/init.ss=, Profile registry, custom
-=load!=, or product =use-module= dispatcher. =rename: Profiles= names a module
+=load!=, or product =use-module= dispatcher. =mount: Profiles= names a module
 window; it does not change selection, admission, inheritance or loading rules.
 Native lexical =use-module= for an already acquired semantic value is distinct
 from loading a file or selecting another module graph.

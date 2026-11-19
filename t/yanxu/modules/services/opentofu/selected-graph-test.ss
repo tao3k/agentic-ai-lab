@@ -187,10 +187,10 @@
               (lambda (port)
                 (write `(yuanxu!
                           :load-modules ,(path-expand "core/modules" (current-directory))
-                          mode: explicit rename: Core (json-schema) (funflow)
+                          mode: explicit mount: Core (json-schema) (funflow)
                           :load-modules ,(path-expand "modules" (current-directory))
-                          mode: explicit rename: Lab (nix) :services (opentofu)
-                          :load-modules "./modules" mode: explicit rename: App
+                          mode: explicit mount: Lab (nix) :services (opentofu)
+                          :load-modules "./modules" mode: explicit mount: App
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
                         "(import :clan/poo/object (only-in :clan/poo/type Type.)) (def Scope (.cc Type. identity: 'scope .element?: object?)) (export Scope)")

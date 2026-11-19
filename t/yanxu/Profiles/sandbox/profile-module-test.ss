@@ -30,7 +30,7 @@
     (write-source (path-expand "gerbil.pkg" root)
       (string-append "(package: " (symbol->string (gensym 'profile-modules-)) ")\n"))
     (write-source (path-expand "init.ss" root)
-      "(import :tao3k/yuanxu/module-system/selection/init-syntax)\n(yuanxu! :load-modules \"./profiles\" mode: explicit rename: Profiles (sandbox))\n")
+      "(import :tao3k/yuanxu/module-system/selection/init-syntax)\n(yuanxu! :load-modules \"./profiles\" mode: explicit mount: Profiles (sandbox))\n")
     (write-source (path-expand "profiles/unselected/interface.ss" root)
       "(error \"unselected Profile was loaded\")\n")
     (.o (:: resource [workspace])

@@ -124,7 +124,7 @@ The selection uses the existing syntax:
 
 #+begin_src scheme
 (yuanxu!
-  :load-modules "./core/modules" mode: explicit rename: Modules
+  :load-modules "./core/modules" mode: explicit mount: Modules
   (json-schema)
   (funflow)
   (ops @ "./core/ops")

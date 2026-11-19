@@ -7,19 +7,19 @@
         (only-in :std/source this-source-file)
         (only-in :clan/poo/object .get .call .o)
         (only-in :gerbil/expander core-import-module)
+        (only-in :tao3k/yuanxu/module-system/building/build-projection yuanxu-project-source-spec)
         (only-in :tao3k/yuanxu/module-system/building/products
                  build-output-directory current-build-output-directory
                  current-build-source-directory)
         (only-in :tao3k/yuanxu/module-system/building/artifacts call-with-static-compiler-inputs)
         (only-in :tao3k/yuanxu/module-system/building/source-closure for-each-build-module)
         (only-in :tao3k/yuanxu/module-system/building/source-package call-with-build-input-path)
-        (only-in :tao3k/yuanxu/module-system/source/static-inputs module-static-compiler-inputs)
-        (rename-in (only-in "./init.ss" agentic-ai-lab-nix-qualification.init.exports)
-                   (agentic-ai-lab-nix-qualification.init.exports adapter-exports)))
+        (only-in :tao3k/yuanxu/module-system/source/static-inputs module-static-compiler-inputs))
 
 (export main)
 
-(def root (path-directory (this-source-file)))
+(def script (this-source-file))
+(def root (path-directory script))
 (def tool-target
   (list exe: "tools" bin: "build-publication-tools"
         "-ld-options" (pkg-config-libs "libcrypto" "libssl")))
@@ -28,7 +28,7 @@
   (def output (build-output-directory))
   (call-with-build-input-path output
     (lambda ()
-      (def projection (.call adapter-exports .yuanxu-init targets))
+      (def projection (yuanxu-project-source-spec (path-expand "init.ss" root) targets root script))
       (.call projection .with-compiler-inputs
         (lambda ()
           (with-inputs projection

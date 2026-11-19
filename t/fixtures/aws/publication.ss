@@ -156,12 +156,12 @@
       (lambda (port)
         (write `(yuanxu!
                   :load-modules ,(path-expand "core/modules" repository)
-                  mode: explicit rename: Core (funflow) (json-schema)
+                  mode: explicit mount: Core (funflow) (json-schema)
                   :load-modules ,(path-expand "modules" repository)
-                  mode: explicit rename: Lab
+                  mode: explicit mount: Lab
                   (nix) :services (opentofu)
                   :load-modules ,(path-expand "scenarios" repository)
-                  mode: explicit rename: scenarios (aws)) port))))
+                  mode: explicit mount: scenarios (aws)) port))))
   (.cc (.o) 'project project 'init init 'reader (module-publication-reader)
     'closure-inputs closure-inputs 'package-set canonical-package-set 'system system))
 (def (realize-aws-selection fixture directory (phase void))
