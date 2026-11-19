@@ -1,11 +1,12 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-# Install the dependency revisions declared by gerbil.pkg.
+# Install Lab dependencies, then restore the vendored Core dependency revisions.
 [group('dependency')]
 deps:
-    {{ gerbil_darwin_env }} gerbil env gxi packages/automation/runtime-dependencies.ss
-    {{ gerbil_darwin_env }} gerbil clean
+    {{ lab_build_env }} gerbil env gxi packages/automation/runtime-dependencies.ss
+    cd "{{ justfile_directory() }}/core" && {{ lab_build_env }} gerbil env gxi ../packages/automation/runtime-dependencies.ss
+    {{ lab_build_env }} gerbil clean
 
 # Rebuild one installed source without fetching or changing its dependencies.
 [group('dependency')]
