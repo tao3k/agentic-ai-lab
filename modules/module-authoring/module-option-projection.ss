@@ -9,8 +9,8 @@
 ;; | PooModuleOptionSchemaCandidate = Value
 ;; | PooModuleOptionValidationReceiptCandidate = Value
 
-(import (only-in :clan/poo/mop make-instance)
-        (only-in :clan/poo/object .o .all-slots .ref .slot?)
+(import (only-in :clan/poo/mop .new/checked)
+        (only-in :clan/poo/object object? .o .all-slots .ref .slot?)
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/projection/option-objects
@@ -30,9 +30,9 @@
 
 ;;; Effective runtime Slot descriptors own Type, presence, defaults and constants.
 ;;; The projection adds module identity; diagnostic metadata stays on the Slot.
-(def (agentic-ai-lab-module-schema-from-spec module-id-value option-id-value field)
-  (make-instance ModuleOptionSchema
-    id: option-id-value source-module: module-id-value field: field))
+(def (agentic-ai-lab-module-schema-from-spec module-id-value option-id-value field-value)
+  (.new/checked ModuleOptionSchema
+    id: option-id-value source-module: module-id-value field: field-value))
 
 ;;; Project final POO fields in their runtime order; receipts add source identity.
 (def (agentic-ai-lab-module-option-configs module)
@@ -68,24 +68,24 @@
 
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])
 (def (agentic-ai-lab-module-option-validation-receipts module)
-  (let* ((declaration (agentic-ai-lab-module-schemas module))
-         (config (agentic-ai-lab-module-config module))
-         (owner (agentic-ai-lab-module-name module))
-         (fields (and (object? declaration) (.ref declaration 'effective-slots)))
-         (field-ref
-          (lambda (id)
-            (and fields (string? id)
-              (let (name (string->symbol id))
-                (and (.slot? fields name) (.ref fields name)))))))
-    (if (and (object? declaration)
-             (or (object? config)
-                 (yuanxu-module-interface? (agentic-ai-lab-module-interface-object module))))
-      (yuanxu-module-config-validation-receipts declaration field-ref config owner)
-      (yuanxu-module-options-validate
-        (lambda (id)
-          (alet (field (field-ref id))
-            (agentic-ai-lab-module-schema-from-spec owner id field)))
-        (agentic-ai-lab-module-option-configs module)))))
+  (def declaration (agentic-ai-lab-module-schemas module))
+  (def config (agentic-ai-lab-module-config module))
+  (def owner (agentic-ai-lab-module-name module))
+  (def fields (and (object? declaration) (.ref declaration 'effective-slots)))
+  (def (field-ref id)
+    (and fields (string? id)
+      (let (name (string->symbol id))
+        (and (.slot? fields name) (.ref fields name)))))
+  ;; Core owns validation and diagnostic attribution for either input shape.
+  (if (and (object? declaration)
+           (or (object? config)
+               (yuanxu-module-interface? (agentic-ai-lab-module-interface-object module))))
+    (yuanxu-module-config-validation-receipts declaration field-ref config owner)
+    (yuanxu-module-options-validate
+      (lambda (id)
+        (alet (field (field-ref id))
+          (agentic-ai-lab-module-schema-from-spec owner id field)))
+      (agentic-ai-lab-module-option-configs module))))
 
 ;;; Boundary: module validation stays recursive over inline import profiles.
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])

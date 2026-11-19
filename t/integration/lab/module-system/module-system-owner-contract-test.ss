@@ -22,7 +22,8 @@
                  check-true
                  test-error
                  test-suite)
-        (only-in :clan/poo/object .o .def .cc .ref .get .call object-slots $constant-slot-spec? $self-slot-spec?)
+        (only-in :clan/poo/object .o .def .def! .cc .ref .get .call .all-slots
+                 object-slots $constant-slot-spec? $self-slot-spec?)
         :tao3k/yuanxu/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
@@ -233,6 +234,30 @@
       (check-equal? (map (cut .ref <> 'code) receipts) '(ok))
       (check-equal? (.ref (car receipts) 'metadata) '((owner . child)))
       (check-equal? (map (cut .ref <> 'code) cached) '(ok)))
+    (yuanxu-test-case "effective Slot override preserves Record receipt attribution and order"
+      (def interface (yuanxu-module-interface "Network" (Record endpoint: [String]) '()))
+      (def parent (agentic-ai-lab-modules interface (.o id: 'network config: (.o endpoint: "localhost"))))
+      (def child-config (.o endpoint: "child" unclaimed: (error "unclaimed payload forced")))
+      (def ChildEndpoint
+        (.cc String .diagnose:
+          (lambda (_ location)
+            (.def! child-config late () "added during diagnostics")
+            (list (.o kind: 'first-refusal path: location)
+                  (.o kind: 'second-refusal path: location)))))
+      (def expected-ids (map symbol->string (.all-slots child-config)))
+      (.def (child @ parent)
+        schemas: (Record endpoint: [ChildEndpoint metadata: '((owner . child))]
+                         late: [String optional: #t])
+        config: child-config)
+      (check-equal? (map (cut .ref <> 'code) (agentic-ai-lab-module-option-validation-receipts parent))
+                    '(ok))
+      (def receipts (agentic-ai-lab-module-option-validation-receipts child))
+      (check-equal? (map (cut .ref <> 'id) receipts) expected-ids)
+      (def endpoint (find (lambda (receipt) (equal? (.ref receipt 'id) "endpoint")) receipts))
+      (check-equal? (.ref endpoint 'source-module) 'network)
+      (check-equal? (.ref endpoint 'metadata) '((owner . child)))
+      (check-equal? (.ref endpoint 'code) 'first-refusal)
+      (check-equal? (map (cut .ref <> 'kind) (.ref endpoint 'messages)) '(first-refusal second-refusal)))
     (yuanxu-test-case "original whole Record membership is visible in product previews"
       (def checks 0)
       (def declaration
