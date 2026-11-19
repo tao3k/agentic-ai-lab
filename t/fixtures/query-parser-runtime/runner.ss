@@ -37,7 +37,7 @@
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
      :tao3k/yuanxu/testing
-     :gerbil-parser/src/modules/parser/graph-syntax
+     :gerbil-parser/graph-support/syntax
      :tao3k/agentic-ai-lab/modules/query/interface
      :tao3k/agentic-ai-lab/modules/query/orgize-source
      :tao3k/agentic-ai-lab/modules/evidence-assessment/interface))

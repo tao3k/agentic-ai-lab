@@ -9,7 +9,7 @@
         (only-in :clan/poo/mop clos-class)
         (only-in :clan/poo/type validate)
         (only-in :std/list/list every)
-        (only-in :gerbil-parser/graph-syntax-support
+        (only-in :gerbil-parser/graph-support/syntax
                  GraphSyntaxNode.
                  GraphSyntaxStep.
                  GraphSyntaxPath.
