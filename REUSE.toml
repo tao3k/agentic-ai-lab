@@ -579,3 +579,29 @@ path = [
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
 SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = [
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/35-org-context-descendants.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/35-org-context-links.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-dispatch.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-duplicate.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-foreign.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-intent.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-none.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-provider.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-result.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-gitops-widen.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/37-worktree-gitops.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/38-gitops-library.qnt",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/39-gitops-refinement-witnesses.qnt",
+  "modules/ai-agentic-context/org-contract/descendants.ss",
+  "modules/ai-agentic-context/org-contract/templates/gitops-worktree/worktree.org",
+  "modules/ai-agentic-context/org-contract/templates/worktree/design.org",
+  "modules/ai-agentic-context/org-contract/templates/worktree/reference.org",
+  "modules/ai-agentic-context/org-contract/templates/worktree/worktree.org",
+  "t/yanxu/modules/gitops/working-copy-test.ss",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
