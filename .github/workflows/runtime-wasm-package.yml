@@ -61,6 +61,10 @@ jobs:
           set -euo pipefail
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install gcc jq openssl pkg-config sqlite zlib emscripten binaryen
+          openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
+          zlib_prefix="$(brew --prefix zlib)"
+          sqlite_prefix="$(brew --prefix sqlite)"
+          echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$zlib_prefix/lib/pkgconfig:$sqlite_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
           test -x /opt/homebrew/bin/gcc-16
           python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/v0.19-1cfb032"
 

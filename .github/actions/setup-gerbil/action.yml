@@ -28,7 +28,9 @@ runs:
         # Case heap limits and watchdogs remain independent and unchanged.
         echo "GERBIL_BUILD_CORES=$(sysctl -n hw.logicalcpu)" >> "$GITHUB_ENV"
         openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
-        echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
+        zlib_prefix="$(brew --prefix zlib)"
+        sqlite_prefix="$(brew --prefix sqlite)"
+        echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$zlib_prefix/lib/pkgconfig:$sqlite_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
     - name: Install pinned Nix daemon for publication tests
       uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
       with:
