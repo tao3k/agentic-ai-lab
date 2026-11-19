@@ -1,0 +1,62 @@
+#+title: Agentic AI Context Repository Index
+#+language: en
+#+property: STATUS design-review
+
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Repository entry point
+
+A repository publishes two structured Org documents for Context discovery.
+This index declares the repository's Context entry points. The companion
+[[file:topology.org][topology]] records their relationships and Git provenance.
+The layout extends the existing [[file:35-org-context-modules.org][Org Context Module design]].
+
+| Owner | Responsibility |
+|-------+----------------|
+| Repository Context declaration | Supplies explicit entry points and declared source relationships as typed values. |
+| GitOps | Observes the repository binding, ref, Worktree and source cut. The remote route names the repository while the enrolled local binding identifies the observed checkout. |
+| Org projection | Generates property values and anchor IDs from the admitted declarations and observations. Orgize reads the resulting drawers, links and declared Contract structure. |
+| Top-level discovery index | Projects bounded locator and coverage records from repository-owned evidence. Original Org and other artifacts stay under their source owners. |
+| Context query | Admits visible sources, evaluates the selected Org windows and retains exact source and query lineage. |
+
+* Property generation
+
+The root drawer carries the document identity and the admitted Contract ID and
+revision. Entry headings carry local anchor IDs and declared references to the
+topology or an owned source cut. A publication stamps the observed Git input
+cut independently of the commit that later stores the generated Org bytes.
+Changing a property value that affects discovery produces a new source
+generation. The global index updates the corresponding locator and its owner
+change cursor together.
+
+| Record | Values carried in the Org projection |
+|--------+--------------------------------------|
+| Repository root | Document ID, Contract ID and revision, normalized repository route, registered producer binding and generation. |
+| Context entry | Local =ID=, optional readable =CUSTOM_ID=, intended Context purpose, qualified topology or source reference. |
+| Visibility and coverage | Scope and coverage references from the owning declaration. Current authority is checked when locating and opening a protected source. |
+
+The authoring path uses Org property drawers and declared Contracts. Concrete
+property names beyond Lab's existing =ID=, =CONTRACT_ID=, =CONTRACT_REVISION=
+and =CUSTOM_ID= belong to the versioned profile reviewed with this design.
+An Org value is a declared assertion whose binding still needs owner evidence.
+
+* Discovery and qualification
+
+The scoped lookup starts at the registered repository and the launch cut.
+Consumers can query related repositories through admitted topology relations.
+The global index keeps a rebuildable pointer to source-qualified facts.
+Repository-owned files supply the exact bytes and the relevant historical cut.
+
+The existing Lab Worktree and WorkTrunk Org fixtures qualify property drawers,
+Contract selection and declared relative =file:= hops within the selected
+Worktree. A link into another repository requires independent owner binding,
+an admitted relation and current grants on both sides. Repository discovery
+and typed link admission are separate operations.
+
+Review cases cover normalized route aliases, two local bindings at one route,
+stale source generations, hidden target locators, replay of a locator delta and
+single-owner reconstruction after index loss. The linked topology defines the
+merge and retention acceptance cases.

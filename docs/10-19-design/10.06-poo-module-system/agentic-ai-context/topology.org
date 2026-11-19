@@ -1,0 +1,68 @@
+#+title: Agentic AI Context Repository Topology
+#+language: en
+#+property: STATUS design-review
+
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Repository topology
+
+The topology is the structured Org document paired with the
+[[file:index.org][repository index]]. Its property drawers express typed
+Git and Context relationships. Repo, ref, Worktree, source and resource
+observations can occupy separate headings in this document. Generating a
+relationship populates the relevant properties on its heading.
+
+| Relationship | Source evidence |
+|--------------+-----------------|
+| Repository to Worktree | Current Git common directory and independently observed per-Worktree Git directory, both correlated with the registered repository binding. |
+| Worktree to checkout | Exact commit and an optional symbolic ref. Detached HEAD keeps the commit observation. |
+| Ref to source cut | Ref and tip at observation time. The captured lens identifies HEAD, index, working content or an explicitly selected untracked source. |
+| Context reference to source | Source identity, generation, digest, qualified anchor and owner locator. |
+| Derived Context to origin | Both admitted source bindings and the exact original anchor and generation. |
+| Repository to related repository | Explicit Project relation, both repository bindings and current visibility. Remote spelling alone cannot establish authority. |
+
+The Git source graph provides provenance. Lab Context composes selected Org
+sources with the applicable Contract and grants. A readable =CUSTOM_ID=
+selects a link within one declared source. Source identity and generation
+disambiguate equal local IDs. Cross-repository traversal also checks both
+actual repository bindings and the admitted relationship.
+
+* Policy and effect owners
+
+[[file:37-worktree-gitops.org][Lab GitOps]] publishes =working-copy-policy=
+in its core scope. =+worktrunk= refines the core policy by adding and
+preferring its provider. It inherits all other policy behavior. Task
+publication belongs to Context and consumes the selected GitOps dependency
+and admitted Org cuts.
+
+The consumer GitOps provider observes real Worktree and ref state. Lab
+interprets typed policy and receipt evidence. The resource owner holds and
+reclaims original bytes according to retention policy. The top-level index
+projects current and historical locators.
+
+* Retirement and retention
+
+| Observation | Transition |
+|-------------+------------|
+| Exact current tip merged into the observed target | Retire that cut from current selection and record the merge evidence. A newer tip remains independently eligible. |
+| Squash or rebase merge | Check a receipt binding source repo, ref and tip, target repo and ref, and the integrated target commit. |
+| Observed ref deletion | Record deletion as the reason for retirement. References retain their source identity and version. |
+| Historical source remains referenced | The producer keeps a durable hold. Git-backed sources can use an owner-controlled retention ref. Capture owners retain immutable verified bytes. |
+| Cleanup becomes eligible | Recheck owner, generation, policy and all live holds before the owner commits reclamation. A stale claim or unknown coverage retains the resource. |
+
+* Qualification
+
+The current Org fixture boundary covers Worktree/WorkTrunk Contract selection
+and declared in-Worktree file links with pinned target generation and grants.
+Cross-Repo qualification requires both independently observed Git bindings,
+generation substitution controls, and separate source- and target-scope
+authority checks. A Worktree label is insufficient evidence of a repository
+binding.
+
+Confirm that an older merge receipt cannot retire a later ref tip. Exercise
+the addition of a live hold between cleanup planning and commit. Check that
+a missing or revoked source grant prevents current adoption and that
+historical lineage remains addressable under its owner.
