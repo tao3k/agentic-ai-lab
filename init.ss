@@ -10,6 +10,7 @@
   (ai-agentic-context +memory)
   (gitops +worktrunk)
   (my-module @ "./user-interface/custom/my-module")
+  :load-modules "./modules/c-abi" mode: auto mount: CAbi
   :load-modules "./scenarios" mode: explicit mount: scenarios :test-dir "./t"
   (null)
   (aws-validation)
