@@ -9,15 +9,17 @@
         (only-in "./init.ss" tao3k/agentic-ai-lab.init.exports))
 
 (def build-modules
-  '(modules/ai-agentic-context modules/temporal-causality modules/nix))
+  '(modules/ai-agentic-context modules/temporal-causality modules/nix modules/gitops))
 
 (defvalues (main)
   (let ()
     ;; The Temporal Module contributes its declared FFI targets to native Make.
-    (defbuild-script (.call tao3k/agentic-ai-lab.init.exports .make-spec-for build-modules))
+    (defbuild-script (.call tao3k/agentic-ai-lab.init.exports .make-spec-for build-modules
+                       package-roots?: #t))
     (lambda arguments
       (match arguments
         (["clean"]
          (.call tao3k/agentic-ai-lab.init.exports .clean-selection build-modules '()
-           (lambda (targets root) (make-clean targets srcdir: root))))
+           (lambda (targets root) (make-clean targets srcdir: root))
+           package-roots?: #t))
         (else (apply main arguments))))))
