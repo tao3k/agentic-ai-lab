@@ -3,5 +3,7 @@
 (import (only-in :clan/poo/object .def .o))
 
 ;; Gerbil follows the Context contracts' imports to the Lab temporal types.
+;; The Worktree consumer also imports the query and authority libraries as
+;; ordinary compiled modules.
 (.def Build
-  defbuild-script: (.o spec: '("types")))
+  defbuild-script: (.o spec: '("types" "query-provider" "use-host")))

@@ -9,4 +9,6 @@
 
 (.def CAbi
   identity: 'clock
+  tags: '(c-abi)
+
   core: (.o scope-contract: CAbiScopeContract exports: CAbiScope))

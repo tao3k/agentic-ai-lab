@@ -6,4 +6,4 @@
 ;; It must not be evaluated while publishing the pure Temporal scope.
 (.def Build
   ffi: '("runtime/monotonic-clock")
-  defbuild-script: (.o spec: '()))
+  defbuild-script: (.o spec: '("runtime/durable-journal")))
