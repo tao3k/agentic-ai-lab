@@ -5,22 +5,23 @@
 ;;; Product-owned selection; Core prepares sources without runtime activation.
 (import :tao3k/yuanxu/module-system/selection/init-syntax)
 (yuanxu!
+  :build-roots ("modules/module-authoring/interface")
   :load-modules "./modules" mode: auto :test-dir "./t"
   (ai-agentic-context +memory)
   (gitops +worktrunk)
   (my-module @ "./user-interface/custom/my-module")
-  :load-modules "./scenarios" mode: explicit rename: scenarios :test-dir "./t"
+  :load-modules "./scenarios" mode: explicit mount: scenarios :test-dir "./t"
   (null)
   (aws-validation)
   (aws)
   (developer @ "./user-interface/scenarios/developer")
-  :load-modules "./profiles" mode: explicit rename: Profiles :test-dir "./t"
+  :load-modules "./profiles" mode: explicit mount: Profiles :test-dir "./t"
   (sandbox)
   (langchain @ "./user-interface/profiles/langchain")
   (langgraph @ "./user-interface/profiles/langgraph")
   (crewai @ "./user-interface/profiles/crewai")
   (tool-calling @ "./user-interface/profiles/tool-calling")
   :load-modules (from: :tao3k/yuanxu/init ModulesSource)
-  mode: explicit rename: YuanxuModules
+  mode: explicit mount: YuanxuModules
   (json-schema)
   (funflow))
