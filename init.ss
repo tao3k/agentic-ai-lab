@@ -6,7 +6,7 @@
 (import :tao3k/yuanxu/module-system/selection/init-syntax)
 (yuanxu!
   :build-roots ("modules/module-authoring/interface")
-  :load-modules "./modules" mode: auto :test-dir "./t"
+  :load-modules "./modules" mode: auto export: ModulesSource :test-dir "./t"
   (ai-agentic-context +memory)
   (gitops +worktrunk)
   (my-module @ "./user-interface/custom/my-module")
