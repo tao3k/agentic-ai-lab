@@ -7,7 +7,7 @@
         (only-in :std/source this-source-file)
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/build-script defbuild-script)
-        (only-in :std/make make make-clean)
+        (only-in :std/make make-clean)
         (only-in :tao3k/yuanxu/module-system/building/source-closure package-library-spec)
         (only-in :tao3k/yuanxu/module-system/building/source-package
                  call-with-build-input-path package-library-prefix)
@@ -34,23 +34,19 @@
             "modules/authorization/providers/cedar/objects.ss")) root))
     source-roots: (list root) make-source: root))
 
-(def (build-options flags)
-  (foldr (lambda (flag options)
-           (match flag
-             ("--release" (cons* build-release: #t options))
-             ("--optimized" (cons* build-optimized: #t options))
-             ("--debug" (cons* debug: #t options))
-             (else (error "Unexpected build option" flag))))
-         '() flags))
+(def (run-build targets root args)
+  (def (this-source-file) (path-expand "build.ss" root))
+  (defbuild-script targets libdir: (build-output-directory))
+  (apply main args))
 
 (def (compile flags)
-  (def options (build-options flags))
-  (with-public-library-spec
-    (lambda (targets root) (apply make targets srcdir: root options)))
-  ;; The admitted source view preserves each package's compiler identities.
+  (def args (cons "compile" flags))
+  ;; Selected Core Modules supply the public libraries' runtime prerequisites.
   (.call tao3k/agentic-ai-lab.init.exports .compile-selection build-modules '()
-    (lambda (targets root) (apply make targets srcdir: root options))
-    package-roots?: #t))
+    (lambda (targets root) (run-build targets root args))
+    package-roots?: #t)
+  (with-public-library-spec
+    (lambda (targets root) (run-build targets root args))))
 
 (def (main . arguments)
   (match arguments
@@ -59,10 +55,10 @@
     (["clean"]
      (with-public-library-spec
        (lambda (targets root)
+         (make-clean targets srcdir: root)
          (.call tao3k/agentic-ai-lab.init.exports .clean-selection build-modules '()
            (lambda (targets root) (make-clean targets srcdir: root))
-           package-roots?: #t)
-         (make-clean targets srcdir: root))))
+           package-roots?: #t))))
     (else
      (let ()
        (def public-targets

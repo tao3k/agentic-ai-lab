@@ -297,7 +297,10 @@ loop-Governor and Cedar libraries, as well as its selected Module products.
 Core's existing =package-library-spec= derives the native dependencies from
 their public entries; Gerbil STD Make owns compilation and cleanup. A package
 installation therefore supplies the public libraries needed by explicit native
-imports. Downstream packages can select further Lab owners through =yuanxu!=.
+imports. Selected Modules build first, supplying Core runtime prerequisites for
+the public libraries; cleanup uses the reverse order. Both phases delegate
+options to Gerbil's standard build script. Downstream packages can select
+further Lab owners through =yuanxu!=.
 
 The default =just clean/deps/build/test= recipes use Gerbil's build and test
 tools. =just build= incrementally compiles Core and Lab's development library.
