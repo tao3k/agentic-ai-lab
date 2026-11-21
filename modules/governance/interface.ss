@@ -9,6 +9,7 @@
         (import: "objects.ss")
         (import: "funs.ss")
         (import: "config.ss"))
+(export Governance)
 
 (.def Governance
   identity: 'governance
