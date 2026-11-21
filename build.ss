@@ -4,13 +4,35 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .call)
+        (only-in :std/source this-source-file)
+        (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/build-script defbuild-script)
         (only-in :std/make make make-clean)
+        (only-in :tao3k/yuanxu/module-system/building/source-closure package-library-spec)
+        (only-in :tao3k/yuanxu/module-system/building/source-package
+                 call-with-build-input-path package-library-prefix)
+        (only-in :tao3k/yuanxu/module-system/building/products build-output-directory)
         (only-in "./init.ss" tao3k/agentic-ai-lab.init.exports))
 
 (def build-modules
   '(modules/ai-agentic-context modules/temporal-causality modules/nix modules/gitops
     YuanxuModules/funflow YuanxuModules/json-schema))
+
+;; Public native libraries are not Module declarations. Gerbil's real import
+;; graph supplies their private dependencies; this is not a source-file inventory.
+(def (with-public-library-spec action)
+  (def root (path-directory (this-source-file)))
+  (call-with-build-input-path (build-output-directory)
+    (lambda ()
+      (action
+        (package-library-spec root 'tao3k/agentic-ai-lab
+          '("modules/governance/interface.ss"
+            "modules/session/objects-core.ss"
+            "modules/loop-engine/control/governor.ss"
+            "modules/loop-engine/control/strategy.ss"
+            "modules/loop-engine/control/descriptor.ss"
+            "modules/authorization/providers/cedar/objects.ss")) root))
+    source-roots: (list root) make-source: root))
 
 (def (build-options flags)
   (foldr (lambda (flag options)
@@ -23,6 +45,8 @@
 
 (def (compile flags)
   (def options (build-options flags))
+  (with-public-library-spec
+    (lambda (targets root) (apply make targets srcdir: root options)))
   ;; The admitted source view preserves each package's compiler identities.
   (.call tao3k/agentic-ai-lab.init.exports .compile-selection build-modules '()
     (lambda (targets root) (apply make targets srcdir: root options))
@@ -33,11 +57,22 @@
     ([] (compile '()))
     (["compile" . flags] (compile flags))
     (["clean"]
-     (.call tao3k/agentic-ai-lab.init.exports .clean-selection build-modules '()
-       (lambda (targets root) (make-clean targets srcdir: root))
-       package-roots?: #t))
+     (with-public-library-spec
+       (lambda (targets root)
+         (.call tao3k/agentic-ai-lab.init.exports .clean-selection build-modules '()
+           (lambda (targets root) (make-clean targets srcdir: root))
+           package-roots?: #t)
+         (make-clean targets srcdir: root))))
     (else
      (let ()
-       (defbuild-script (.call tao3k/agentic-ai-lab.init.exports .make-spec-for build-modules
-                          package-roots?: #t))
+       (def public-targets
+         (with-public-library-spec
+           (lambda (targets root)
+             (map (cut string-append (package-library-prefix root) <>) targets))))
+       (defbuild-script
+         (delete-duplicates/hash
+           (append (.call tao3k/agentic-ai-lab.init.exports .make-spec-for build-modules
+                     package-roots?: #t) public-targets)
+           key: (lambda (target) (if (string? target) target (cadr target)))
+           from-end?: #t))
        (apply main arguments)))))
