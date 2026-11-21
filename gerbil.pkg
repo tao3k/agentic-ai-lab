@@ -4,5 +4,5 @@
 
 (package: tao3k/agentic-ai-lab
  prelude: :tao3k/yuanxu/prelude
- depend: ("github.com/tao3k/orgize@8f74018939909187d050b9b6cd4bbb0784dbe3e7"
+ depend: ("github.com/tao3k/orgize@70320a3b1fda5c119a12cfcba317c8bf5973ee04"
           "github.com/tao3k/gerbil-ascent@2b733a60673e0c21e9704051e5fe7426e601f3e2"))
