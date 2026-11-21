@@ -1,0 +1,414 @@
+{
+  "archive_files": {
+    "preview/compute.native.txt": "3cd5e0c03e89b3350c426bd149cd8e19dc944b9029bfb2f3c7c2db17687feccc",
+    "preview/compute.seed.txt": "283b98feccf7874876c207e69fdbd5cd558fa8b12c8e5dabcc34eaaa8f1356aa",
+    "preview/compute.self.txt": "04a3722acb83eac43b3777d9cdf67aa741ca5cfbf92f8416eae5090bb084f7d5",
+    "preview/contract.sexp": "b51e5fdbb0eb5c3e17d619c41c77b4a09e5e5775fce66dc4f4252d3479439ba7",
+    "preview/filter.native.txt": "d60811e02e5878a5d00975c43890127866697722127e0b593771f7d083897202",
+    "preview/filter.seed.txt": "075a52fa2cf6043d5da849818402d578faffe04026bd1b9f4226cb06d5f3e11a",
+    "preview/filter.self.txt": "a4568e2a96ed0a406bf8fbe232104ad9a4432bedfb07568dcb860ede9ce191e6",
+    "preview/manifest.json": "8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781",
+    "preview/reference.tsv": "c40ab3c61b40b64d963c2f76b47f551290f159716ad6feff718da50e55b3ac76",
+    "results/compute.native.json": "62c5149f422568edb25a5de0d7414710105dba2024d8766fe22612cb563948a8",
+    "results/compute.native.tsv": "c40ab3c61b40b64d963c2f76b47f551290f159716ad6feff718da50e55b3ac76",
+    "results/compute.native.txt": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+    "results/compute.self.json": "aaa20afd1518075d5ba3aed504f131582d174ce10887f88fea2d4ce0ab0b41f2",
+    "results/compute.self.tsv": "c40ab3c61b40b64d963c2f76b47f551290f159716ad6feff718da50e55b3ac76",
+    "results/compute.self.txt": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+    "results/filter.native.json": "e9adde1aaff7a20f44645d929b2a398a36f8f4fdecae86af8acdd2dbf05fe045",
+    "results/filter.native.tsv": "c40ab3c61b40b64d963c2f76b47f551290f159716ad6feff718da50e55b3ac76",
+    "results/filter.native.txt": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+    "results/filter.self.json": "3a44e7d77449e48aed21c1af40acc738d4696ba9b0dedda851ce654cf34d3567",
+    "results/filter.self.tsv": "c40ab3c61b40b64d963c2f76b47f551290f159716ad6feff718da50e55b3ac76",
+    "results/filter.self.txt": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+    "results/preview-manifest.json": "8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781",
+    "results/scores.json": "92c555a4b96b42d2263a79041dc4e4b708488fa7546be0c92c946ab030c860ba"
+  },
+  "archive_location": "/Users/guangtao/ghq/github.com/tao3k/meta-relational-reasoning/.data/research-evidence/shared-seed-repair-0b7a6c52/archive",
+  "archive_manifest_sha256": "8843adf26bc2873635ab9910ea37fa44b095f2ed1aba9520ad95bec328278550",
+  "ascent_head": "cd6f60fe75cc12db6a0e5118fe8c71ff09e4b52b",
+  "calls": [
+    {
+      "candidate_sha256": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+      "name": "compute.self",
+      "record_sha256": "aaa20afd1518075d5ba3aed504f131582d174ce10887f88fea2d4ce0ab0b41f2",
+      "request_sha256": "0a4762531fae80f26c9dd2d5910203db2f6ed125b5d960faf041c184420e8966",
+      "response_id": "30067d08-43c4-4101-8bce-6d992f0ca205",
+      "seconds": 2.3919681669995043,
+      "usage": {
+        "input_tokens": 597,
+        "input_tokens_details": {
+          "cache_write_tokens": null,
+          "cached_tokens": 0
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 778
+      }
+    },
+    {
+      "candidate_sha256": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+      "name": "compute.native",
+      "record_sha256": "62c5149f422568edb25a5de0d7414710105dba2024d8766fe22612cb563948a8",
+      "request_sha256": "af03f587c16262d6b8a190a716e8a9793fc164fc4465eac7d6a6d665b73be452",
+      "response_id": "aa62eb9e-f8d4-4c01-8aa2-9aaee098038b",
+      "seconds": 1.26343208399976,
+      "usage": {
+        "input_tokens": 642,
+        "input_tokens_details": {
+          "cache_write_tokens": null,
+          "cached_tokens": 384
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 823
+      }
+    },
+    {
+      "candidate_sha256": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+      "name": "filter.native",
+      "record_sha256": "e9adde1aaff7a20f44645d929b2a398a36f8f4fdecae86af8acdd2dbf05fe045",
+      "request_sha256": "ab4c3669218e549751f458cb4202e75c7265a4033f98db2e7d67350cd1473311",
+      "response_id": "92ed8de6-d8ed-45b8-ab4d-ac1ee8a6cecf",
+      "seconds": 1.3289585840002474,
+      "usage": {
+        "input_tokens": 640,
+        "input_tokens_details": {
+          "cache_write_tokens": null,
+          "cached_tokens": 384
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 821
+      }
+    },
+    {
+      "candidate_sha256": "7d510b94c5fab7c122f17b2b139cfc700a56bd50530d59bcb9b65e983baa258e",
+      "name": "filter.self",
+      "record_sha256": "3a44e7d77449e48aed21c1af40acc738d4696ba9b0dedda851ce654cf34d3567",
+      "request_sha256": "5c7a6334d62adc64653fb421786c81e8cfbadfac148b93c2202eca7d8e4565a5",
+      "response_id": "faa6b272-c0c0-49ad-b3fc-b63a8af645fb",
+      "seconds": 1.0275344170004246,
+      "usage": {
+        "input_tokens": 596,
+        "input_tokens_details": {
+          "cache_write_tokens": null,
+          "cached_tokens": 384
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 777
+      }
+    }
+  ],
+  "date": "2026-10-03",
+  "format": "shared-seed-repair-result-v1",
+  "poo_head": "0b7a6c52e376dc78ac71c539eeac32319951f11f",
+  "preview_manifest_sha256": "8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781",
+  "scores": {
+    "compute.native": {
+      "candidate_readable": true,
+      "correct": true,
+      "matched_states": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "response_completed": true,
+      "stale_applicable": true,
+      "stale_invalid": true,
+      "states": [
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "0",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "1",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "2",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "3",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "4",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "5",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "6",
+          "output_matches": true,
+          "task_shape": true
+        }
+      ]
+    },
+    "compute.self": {
+      "candidate_readable": true,
+      "correct": true,
+      "matched_states": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "response_completed": true,
+      "stale_applicable": true,
+      "stale_invalid": true,
+      "states": [
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "0",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "1",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "2",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "3",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "4",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "5",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "6",
+          "output_matches": true,
+          "task_shape": true
+        }
+      ]
+    },
+    "filter.native": {
+      "candidate_readable": true,
+      "correct": true,
+      "matched_states": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "response_completed": true,
+      "stale_applicable": true,
+      "stale_invalid": true,
+      "states": [
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "0",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "1",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "2",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "3",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "4",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "5",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "6",
+          "output_matches": true,
+          "task_shape": true
+        }
+      ]
+    },
+    "filter.self": {
+      "candidate_readable": true,
+      "correct": true,
+      "matched_states": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "response_completed": true,
+      "stale_applicable": true,
+      "stale_invalid": true,
+      "states": [
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "0",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "1",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "2",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "3",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "4",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "5",
+          "output_matches": true,
+          "task_shape": true
+        },
+        {
+          "complete": true,
+          "finite_valid": true,
+          "founded_valid": true,
+          "generation": "6",
+          "output_matches": true,
+          "task_shape": true
+        }
+      ]
+    }
+  }
+}

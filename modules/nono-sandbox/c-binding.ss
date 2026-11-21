@@ -5,14 +5,14 @@
 
 ;;; Owner: public facade for nono-sandbox C binding contract projection.
 ;;; Boundary: C binding belongs to the sandbox/nono-sandbox module category.
-;;; Runtime contract: manifest owners emit data; native.ss owns gated FFI probes.
+;;; Runtime contract: manifest owners emit data; ffi.ss owns gated FFI probes.
 
-(import :poo-flow/modules/nono-sandbox/c-binding-build
-        :poo-flow/modules/nono-sandbox/c-binding-descriptor
-        :poo-flow/modules/nono-sandbox/c-binding-runtime
-        :poo-flow/modules/nono-sandbox/native)
+(import :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/ffi)
 
-(export (import: :poo-flow/modules/nono-sandbox/c-binding-build)
-        (import: :poo-flow/modules/nono-sandbox/c-binding-descriptor)
-        (import: :poo-flow/modules/nono-sandbox/c-binding-runtime)
-        (import: :poo-flow/modules/nono-sandbox/native))
+(export (import: :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build)
+        (import: :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
+        (import: :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-runtime)
+        (import: :tao3k/agentic-ai-lab/modules/nono-sandbox/ffi))

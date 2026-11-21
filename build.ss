@@ -1,102 +1,74 @@
 #!/usr/bin/env gxi
+;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; -*- Gerbil -*-
-;;; Unique native POO Flow package build entry.
+(import (only-in :clan/poo/object .call)
+        (only-in :std/source this-source-file)
+        (only-in :std/list/list delete-duplicates/hash)
+        (only-in :std/build-script defbuild-script)
+        (only-in :std/make make-clean)
+        (only-in :tao3k/yuanxu/module-system/building/source-closure package-library-spec)
+        (only-in :tao3k/yuanxu/module-system/building/source-package
+                 call-with-build-input-path package-library-prefix)
+        (only-in :tao3k/yuanxu/module-system/building/products build-output-directory)
+        (only-in "./init.ss" tao3k/agentic-ai-lab.init.exports))
 
-(import (only-in :std/build-script defbuild-script)
-        ;; Native package declaration only needs the latency-bounded PackageSpec
-        ;; facade. Optional profiles compose through PackageSpec POO slots and
-        ;; must not add another framework to the `gerbil build` startup closure.
-        (only-in :asp-gerbil-scheme/building-api
-                 asp-gerbil-scheme-package-spec!
-                 asp-gerbil-scheme-library-package-prototype
-                 default-exclude-dirs))
+(def build-modules
+  '(modules/ai-agentic-context modules/temporal-causality modules/nix modules/gitops
+    YuanxuModules/funflow YuanxuModules/json-schema))
 
-(def +poo-flow-build-exclude-dirs+
-  (append '("packages/lambda-episteme"
-            "core"
-            "bindings"
-            "packages"
-            "target"
-            "user-interface")
-          default-exclude-dirs))
+;; Public native libraries are not Module declarations. Gerbil's real import
+;; graph supplies their private dependencies; this is not a source-file inventory.
+(def (with-public-library-spec action)
+  (def root (path-directory (this-source-file)))
+  (call-with-build-input-path (build-output-directory)
+    (lambda ()
+      (action
+        (package-library-spec root 'tao3k/agentic-ai-lab
+          '("modules/governance/interface.ss"
+            "modules/session/objects-core.ss"
+            "modules/loop-engine/control/governor.ss"
+            "modules/loop-engine/control/strategy.ss"
+            "modules/loop-engine/control/descriptor.ss"
+            "modules/authorization/providers/cedar/objects.ss")) root))
+    source-roots: (list root) make-source: root))
 
-(def +nono-c-include-option+
-  (string-append
-   "-I"
-   (path-expand "bindings/nono-c" (current-directory))))
+(def (run-build targets root args)
+  (def (this-source-file) (path-expand "build.ss" root))
+  (defbuild-script targets libdir: (build-output-directory))
+  (apply main args))
 
-(def +nono-c-link-option+
-  (cond-expand
-   (darwin "-Wl,-undefined,dynamic_lookup")
-   (else "-ldl")))
+(def (compile flags)
+  (def args (cons "compile" flags))
+  ;; Selected Core Modules supply the public libraries' runtime prerequisites.
+  (.call tao3k/agentic-ai-lab.init.exports .compile-selection build-modules '()
+    (lambda (targets root) (run-build targets root args))
+    package-roots?: #t)
+  (with-public-library-spec
+    (lambda (targets root) (run-build targets root args))))
 
-;;; Gambit emits a loadable bundle for begin-ffi modules on Darwin.  The
-;;; process/AOT consumer supplies libc and runtime symbols at final link time.
-(def +runtime-v0-native-ffi-spec+
-  (cond-expand
-   (darwin
-    '(gxc: "src/ffi/runtime-v0-native"
-           "-ld-options" "-Wl,-undefined,dynamic_lookup"))
-   (else
-    '(gxc: "src/ffi/runtime-v0-native"))))
-
-(asp-gerbil-scheme-package-spec!
- (poo-flow-package-spec
- @ asp-gerbil-scheme-library-package-prototype)
- (spec poo-flow-native-spec)
- (public-entry-modules
-  '("src/core/api.ss"
-    "testing-api.ss"
-    "src/graph/interface.ss"
-    "src/authoring/module-descriptor.ss"
-    "src/user-interface/module-selection-syntax.ss"
-    "src/authoring/module-source-collection.ss"
-    "src/building/official-contributions.ss"
-    "src/user-interface/module-source-selection.ss"
-    "src/user-interface/module-source-tree.ss"
-    "src/authoring/source-authoring.ss"
-    "src/testing/source-admission.ss"
-    "src/user-interface/module-diagnostics.ss"
-    "src/user-interface/doctor-presentation.ss"
-    "src/building/build-projection.ss"
-    "src/proof/composition-facts.ss"
-    "src/scenario/profile-root.ss"
-    "src/scenario/composition-syntax.ss"
-    "src/scenario/case.ss"
-    "src/scenario/accessors.ss"
-    "src/scenario/workload.ss"
-    "src/scenario/plan-projection.ss"
-    "src/user-interface/profile-core.ss"
-    "src/user-interface/init-declaration-syntax.ss"
-    "modules/funflow/interface.ss"
-    "modules/funflow/runtime-load-projection.ss"
-    "src/profiles/human-ai-capability.ss"
-    "src/profiles/agentic-research.ss"
-    "modules/authorization/interface.ss"
-    "modules/authorization/providers/cedar/interface.ss"
-    "modules/governance/interface.ss"
-    "modules/proof/interface.ss"
-    "src/semantic/orgize-interface.ss"
-    "modules/query/interface.ss"
-    "modules/query/rust-ir.ss"
-    "modules/tla-plus/interface.ss"
-    "modules/standards/interface.ss"
-    "modules/temporal-causality/interface.ss"
-    "src/feature-system/interface.ss"))
- (exclude-dirs +poo-flow-build-exclude-dirs+)
- (exclude-modules '("modules/nono-sandbox/_nono.ss"
-                    "src/ffi/runtime-v0-native.ss"
-                    "observe-contribute-import.ss"
-                    "performance-tests.ss"
-                    "run-contribute-test.ss"))
- (native-prelude-spec
-  `((gxc: "modules/nono-sandbox/_nono"
-          "-cc-options" ,+nono-c-include-option+
-          "-ld-options" ,+nono-c-link-option+)))
- (extra-spec `(,+runtime-v0-native-ffi-spec+)))
-
-(defbuild-script (poo-flow-native-spec))
+(def (main . arguments)
+  (match arguments
+    ([] (compile '()))
+    (["compile" . flags] (compile flags))
+    (["clean"]
+     (with-public-library-spec
+       (lambda (targets root)
+         (make-clean targets srcdir: root)
+         (.call tao3k/agentic-ai-lab.init.exports .clean-selection build-modules '()
+           (lambda (targets root) (make-clean targets srcdir: root))
+           package-roots?: #t))))
+    (else
+     (let ()
+       (def public-targets
+         (with-public-library-spec
+           (lambda (targets root)
+             (map (cut string-append (package-library-prefix root) <>) targets))))
+       (defbuild-script
+         (delete-duplicates/hash
+           (append (.call tao3k/agentic-ai-lab.init.exports .make-spec-for build-modules
+                     package-roots?: #t) public-targets)
+           key: (lambda (target) (if (string? target) target (cadr target)))
+           from-end?: #t))
+       (apply main arguments)))))

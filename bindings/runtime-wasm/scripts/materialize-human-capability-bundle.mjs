@@ -3,12 +3,12 @@
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 import assert from "node:assert/strict";
-import { readFileSync, rmSync } from "node:fs";
+import { readFileSync, rmSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-import { runBazel } from "./bazel-runner.mjs";
+import { execFileSync } from "node:child_process";
 import { acquirePublicationLock } from "./publication-lock.mjs";
 import {
   publishFilePair,
@@ -17,13 +17,22 @@ import {
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const workspaceRoot = resolve(packageRoot, "../..");
-const primaryTarget = "//bindings/runtime-wasm:human_capability_bundle";
-const independentTarget =
-  "//bindings/runtime-wasm:human_capability_bundle_determinism";
-
-runBazel(["build", primaryTarget, independentTarget], { cwd: workspaceRoot });
-const bazelBin = runBazel(["info", "bazel-bin"], { cwd: workspaceRoot });
-const outputRoot = join(bazelBin, "bindings/runtime-wasm");
+const outputRoot = join(packageRoot, ".build/bundles");
+mkdirSync(outputRoot, { recursive: true });
+for (const suffix of ["", ".determinism"]) {
+  execFileSync("gerbil", ["env", "gerbil", "-:max-heap=1G,debug=q", "interactive",
+    "bindings/runtime-wasm/examples/human-capability.ss"], {
+    cwd: workspaceRoot,
+    stdio: "inherit",
+    env: {
+      ...process.env,
+      AGENTIC_AI_LAB_BUNDLE_V1_ID: "human-capability",
+      AGENTIC_AI_LAB_BUNDLE_V1_EPOCH: "1",
+      YUANXU_BUNDLE_V1_DESCRIPTOR_OUT: join(outputRoot, `human-capability${suffix}.descriptor.bin`),
+      YUANXU_BUNDLE_V1_ARENA_OUT: join(outputRoot, `human-capability${suffix}.arena.bin`),
+    },
+  });
+}
 
 assert.deepEqual(
   readFileSync(join(outputRoot, "human-capability.determinism.descriptor.bin")),

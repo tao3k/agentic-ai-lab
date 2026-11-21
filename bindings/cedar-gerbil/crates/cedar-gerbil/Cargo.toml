@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [package]
-name = "poo-flow-cedar-gerbil"
+name = "agentic-ai-lab-cedar-gerbil"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -14,15 +14,17 @@ license.workspace = true
 conformance = []
 
 [dependencies]
+cedar-poo-bridge = { git = "https://github.com/hardenedlinux/cedar-poo-spec", rev = "c8d1a0641120cf65e299e8a98f9fe7666ca96ab5", features = ["cedar-runtime"] }
 gerbil-scheme.workspace = true
 gerbil-scheme-sys.workspace = true
-poo-flow-cedar-authority.workspace = true
+agentic-ai-lab-cedar-authority.workspace = true
 serde.workspace = true
+serde_json.workspace = true
 tempfile.workspace = true
 
 [build-dependencies]
-gerbil-scheme-native-build.workspace = true
+gerbil-scheme-build.workspace = true
 
 [[test]]
-name = "native_authorization"
+name = "runtime_authorization"
 required-features = ["conformance"]

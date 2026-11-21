@@ -3,26 +3,26 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: public POO-native nono sandbox profile super object.
-;;; Invariant: native nono execution remains outside profile authoring.
+;;; Boundary: public POO nono sandbox profile super object.
+;;; Invariant: runtime nono execution remains outside profile authoring.
 
 (import (only-in :clan/poo/object .o)
-        :poo-flow/modules/sandbox-core/profile-interface)
+        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-interface)
 
 (export nono-sandbox-profile)
 
 ;;; Boundary: runtime dispatch keys stay symbolic so profile lookup can compare
-;;; backend families without loading native nono runtime modules.
+;;; backend families without loading runtime nono runtime modules.
 ;; : Symbol
 (def +nono-sandbox-profile-backend-kind+ 'nono)
 
 ;;; Boundary: capabilities describe the nono resource surface advertised to
-;;; profile inheritance; native ABI checks happen at runtime handoff.
+;;; profile inheritance; runtime ABI checks happen at runtime handoff.
 ;; : (Listof Symbol)
 (def +nono-sandbox-profile-capabilities+
   '(process-run filesystem-read tmpdir))
 
-;;; Boundary: metadata is inert POO profile evidence, not a native call plan.
+;;; Boundary: metadata is inert POO profile evidence, not a runtime call plan.
 ;; : Alist
 (def +nono-sandbox-profile-metadata+
   '((backend . nono-sandbox)))

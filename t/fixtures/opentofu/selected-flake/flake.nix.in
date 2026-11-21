@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+{
+  # Package setup reuses the repository's locked Git package-set input.
+  inputs.nixpkgs = { url = "@PACKAGE_SET@"; flake = false; };
+  outputs = { self, nixpkgs }:
+    let pkgs = import nixpkgs { system = "aarch64-darwin"; };
+    in {
+      lib.providerArtifacts = import ./lib/selected-provider-artifacts-flake.nix {
+        inherit pkgs;
+        schemas = import ./providers.nix { inherit pkgs; };
+      };
+    };
+}

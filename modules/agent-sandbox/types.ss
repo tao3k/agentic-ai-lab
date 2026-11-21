@@ -5,5 +5,13 @@
 
 ;;; Boundary: public agent-sandbox contracts and type predicates.
 
-(import "profile-native-contract.ss")
-(export (import: "profile-native-contract.ss"))
+(import "profile-contract.ss" (only-in :clan/poo/object .cc)
+        (only-in :clan/poo/type Record List))
+(export (import: "profile-contract.ss"))
+
+;; A Profile module publishes validated business values through the ordinary
+;; module protocol. This is a scope contract, not a Profile loader.
+(def SandboxProfilesScopeContract
+  (.cc (Record profiles: (list (List AgenticAILabSandboxProfileContract)))
+       identity: 'agent-sandbox/profiles-scope))
+(export SandboxProfilesScopeContract)

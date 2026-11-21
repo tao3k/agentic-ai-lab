@@ -1,0 +1,303 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Time Windows and Open Context Evolution
+#+LANGUAGE: en
+#+PROPERTY: STATUS proposed-semantic-design-not-runtime-qualification
+
+* Decision
+
+Context is the underlying information/relationship system. Time windows are
+bounded POO views over its experiences; graph views, Tasks and retained knowledge
+are roles within that system. A window is neither a new top-level manager nor
+a compulsory workflow. Windows can overlap, change scope, wait and be revisited.
+
+POO composes object behavior and policy. ASCENT derives relations over admitted,
+version-qualified premises. Models propose interpretations, experiments, Tasks,
+windows or abstractions. Existing Evidence, Temporal, Session and Host owners
+retain admission/execution authority. No rule pre-enumerates what a model may ask.
+
+This is a proposed integration, not a new public API or evidence that the joint
+runtime is implemented. Reuse the existing owners in
+[[file:00-design-map.org][the design map]],
+[[file:03-information-to-recall.sysml][the information-to-recall model]],
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][the temporal lifecycle design]], and
+[[file:../../../../core/module-system/design/43-session-memory-recovery/09-graph-context-research.org][graph Context composition]].
+
+* A window selects an experience; it does not decide truth
+
+A proposed Window role is an ordinary immutable POO object. Its effective
+declaration composes named pure selection/revisit functions and policies under
+the existing Query, temporal and source contracts. The following are semantic
+obligations, not a new record DSL:
+
+| Binding | Meaning |
+|---------+---------|
+| Identity and revision | Stable window identity; revisions retain their actual bases |
+| Purpose and scope | Why this experience is selected; relevant project/environment/consumer |
+| Event-time extent | Named time domain and bounded interval or causal cut |
+| Observation cut | Which source/receipt revisions were actually known for this view |
+| Membership | Source-qualified Element references; content is not copied into a second registry |
+| Boundary dependencies | Supporting premises outside the interval remain linked explicitly |
+| Coverage | Complete, partial or unknown inventory, scoped to the requested operation |
+| Revisit/retention policy | Which changes invite reconsideration; whether retaining experience is selected |
+
+Event time and observation time differ. An old experiment can arrive late and
+change today's assessment without pretending it was known yesterday. A window
+revision may reflect newly admitted input; the old view and its judgments remain
+historical. Timestamp order is not causal order, composition order or prompt order.
+Incomparable clocks and uncertain interval membership remain explicit uncertainty.
+
+Leaving the active window changes attention. It does not retract a premise,
+delete history or prove a claim false. A valid long-term interpretation can use
+older evidence through explicit references. Unknown boundary coverage forbids
+claims of exhaustive absence; it is not silently treated as an empty set.
+
+* POO provides carriers, not one status field
+
+Experience, observation, hypothesis, Task, assessment and reusable interpretation
+can share POO prototypes while retaining distinct identities and revisions.
+Task attempts and execution receipts do not inherit completion from a prototype.
+Evidence, retention, applicability and execution permission are independent axes.
+
+C4 applies when composing declared prototypes and policy contributions. It does
+not linearize time, decide graph traversal or schedule Tasks. A cyclic support or
+consumer relation does not imply that cyclic inheritance is allowed. A grounded
+support must not be fabricated from a positive cycle with no admitted premise.
+
+Reinterpretation proposes new objects/relations or new revisions. Changing a
+source/policy/window does not mutate an in-flight Attempt's original inputs.
+Reuse requires the appropriate applicability check; publication uses the current
+expected owner revisions. Concurrent proposals can be rebased/compared without
+merging unverified conclusions or overwriting another accepted revision.
+
+* Events drive different reactions
+
+The system reacts to an event according to its actual dependencies and policy.
+There is no mandatory traversal of the rows below:
+
+| Event | Possible semantic reaction |
+|-------+----------------------------|
+| New observation or actual outcome | Admit source bindings; update affected support/conflict relations |
+| Time boundary or revisit due | Recompute attention/applicability under the named clock policy |
+| Source correction or withdrawal | Reassess dependent conclusions; preserve original proof history |
+| New hypothesis or Task proposal | Check composition, scope and resource obligations; compare alternatives |
+| New window or changed purpose | Select another bounded view; do not promote copied conclusions |
+| Reusable abstraction proposal | Evaluate support, scope, counterexamples and review requirements |
+| Changed environment or new demand | Recheck whether retained knowledge still applies before use |
+
+The pure semantic reaction binds its input cuts and derives a bounded change
+proposal. Host handoff is needed only for actual effects/publication. The runtime
+can remain idle with unresolved hypotheses. A revisit does not always need a model
+call; a model call does not always produce a Task or a durable change.
+
+Use dependency-directed work where its coverage is known. Unknown impact coverage
+requires reassessing the affected scope or refusing a narrower completeness claim.
+Repeated identical receipts are idempotent; overlapping windows are not independent
+observations. Suppressing duplicate model wakeups must not suppress withdrawal,
+permission changes or newly admitted contrary evidence. Existing budgets remain
+in force; an unbounded chain of proposals is not a least-fixed-point guarantee.
+
+* ASCENT derives consequences; models open new directions
+
+Application relations may express source membership, support, contradiction,
+dependency, affected consumers, open obligations and candidate applicability.
+These are projections of POO facts, not another editable task/knowledge database.
+The generic ASCENT library does not acquire application-specific Task semantics.
+
+Each assessment binds object revisions, source/evidence cut, rule-program identity
+and applicable policy. A fixed admitted finite domain/program supports bounded
+relational inference. A model's new hypothesis expands that problem only after
+the relevant proposal admission; model creativity is not encoded as fact-generating
+rules inside an unbounded fixed point.
+
+WHY explains admitted derivations. WHY-NOT is scoped to supported query/contract
+semantics and declared coverage. Missing support, conflicting support and unknown
+coverage differ. Not finding a row does not establish truth, permission or absence
+unless the applicable inventory/negation semantics justify that conclusion.
+
+Rules do not emit a compulsory recommended next Task. Models may inspect raw
+source, notice a surprising pattern, introduce a third competing hypothesis or
+choose to leave a problem open. Any new rule program is itself a versioned
+proposal subject to source, safety and resource checks; it cannot self-authorize
+its premises, execution or promotion into reusable knowledge.
+
+* Consolidation creates a scoped abstraction
+
+Retaining an episode preserves what happened, including uncertainty and failure.
+Consolidation proposes a reusable interpretation: a mechanism, method, constraint
+or procedure with scope. It is neither an old episode relabeled as truth nor a
+summary that replaces the original evidence.
+
+The proposal must expose its supporting observations, actual use/outcomes,
+assumptions, environment/source applicability, competing explanations, known
+counterexamples and conditions that defeat or require review of the abstraction.
+Admission checks the relevant knowledge contract. It does not require every
+episode to become knowledge or every knowledge item to first wait in a short-term
+queue. Evidence strength and reuse obligations depend on the claim being made;
+no universal age, use-count or confidence threshold is introduced here.
+
+A hypothetical example: one clean rebuild fixes a failing worktree. That supports
+an episode, not the general claim that all failures require cleaning. A model
+can propose stale generated inputs as a mechanism alongside compiler/ABI hypotheses.
+Scoped experiments and actual outcomes can distinguish them. If qualified, the
+reusable result might be a diagnostic method for the identified generator and
+input family, retaining contrary cases. New evidence may narrow or defeat it.
+No particular experiment sequence is compulsory in this example.
+
+Knowledge admission, retention duration, source mutation and effect authorization
+remain separate. Recalling knowledge rechecks current applicability; it never
+automatically changes a module/prototype or executes a remembered procedure.
+
+* Time and the proposed entropy idea
+
+Time is a core organization axis and revisit input. The user's entropy idea
+remains a research concept, not a new scalar control mechanism. Information
+fragmentation, uncertainty among hypotheses and applicability decay are distinct.
+An honest counterexample may increase uncertainty while improving the explanation.
+Do not reward a model for hiding alternatives or making an unsupported conclusion
+merely to decrease a score. A window expiring cannot authenticate knowledge.
+
+* The same relations can drive explanation and rendering
+
+[[file:32-time-window-context-evolution.sysml][The native SysML companion]] expresses the Context parts and ten named
+connections. Its =BeginnerPerspective= holds the current model's reader
+questions as ordinary String attributes; it is editable design content, not an
+engine-wide question inventory. =ContextWindowFigures::evolution= is an
+=InterconnectionView= over that model. Named connections express the relations
+below without turning them into an activity sequence.
+
+Start with the learner's question in the current scene: what must this reader
+distinguish, and what prior concepts does that distinction require? POO Object
+identity is a semantic anchor, not a visual shape. For the same Evidence object,
+explaining provenance may call for a source trail; explaining a late arrival may
+call for separate event-time and known-time marks; explaining disagreement may
+call for two visible hypotheses with distinct support and opposition links.
+These are candidate teaching choices, not a mandatory image taxonomy.
+
+The model can propose the reader model, questions, concept dependencies,
+representations and counter-readings. ASCENT reasons across those relations to
+derive explanation needs, missing distinctions, stale state bindings and unresolved
+questions. An unfamiliar representation is useful only when it reduces the
+reader's inference burden. Keeping a familiar visual can help follow one object
+across changes. Novelty and low word count alone are not comprehension metrics.
+
+Image review must look at the actual rendered view. Useful observations include
+whether the learner can identify what changed, follow why it matters, distinguish
+an observation from a proposed explanation, and connect labels to visible actions.
+The model can introduce new questions when the scene exposes a misconception;
+there is no final question catalog. Feedback joins the relevant view revision and
+reopens affected explanation relations. This is event-driven reasoning rather
+than a compulsory generate-review-rewrite sequence.
+
+Visual quality is a comprehension objective, not a fixed card/page template.
+The model can select a teaching perspective, visual metaphor and composition.
+ASCENT can derive the relevant support/contradiction/change/dependency relations,
+required premise coverage and scoped explanation candidates. They form a read-only
+projection of the same Context, not a second hand-maintained visual graph.
+
+A proposed visual selection binds a source/evidence cut and declares what it
+explains. Relation admission preserves identities, direction, contrary evidence
+and any necessary qualifications. Mature layout tools measure text and arrange
+the selected diagram; they do not decide semantic truth. The model can revise the
+visual organization using actual readability/geometry feedback. Reviewing a view
+must not narrow what the Agent is allowed to investigate.
+
+This does not assert ASCENT is a typography or continuous geometry solver.
+New view organizations remain open; no fixed panel count, icon taxonomy, pixel
+coordinates or prewritten question inventory becomes a Context contract. English
+figure text, meaningful illustrations, low reading load, source fidelity and
+legibility are the current project rendering requirements.
+
+The =window-evolution= illustration reads this companion with the OpenSysML TS
+SDK. The SDK owns parsing, view membership, endpoints and source spans. Native
+symbol names recover connection captions omitted by its renderer; no second
+semantic edge catalog is introduced. A bounded POO projection goes to the public
+D2 Module for graph inference and source-bound authoring requests. The development
+compositor selects an illustrated expression for this particular design; it is
+not a global icon/layout policy. No custom JSON model/config or ASCII language
+is added.
+
+The surrounding model environment is already the author and reader of these
+artifacts. No extra model API is needed. Changed Org/SysML bytes change the
+Context source cut. Rendering contributes an image digest automatically; ASCENT
+then derives image-inspection obligations for the currently supplied questions.
+A successful render contributes no =understood=, learner check or approval bit.
+The current model reads the actual PNG and can change the design, questions or
+visual expression in response. This does not prescribe a number of iterations
+or force the model to choose a particular next investigation.
+
+The current model must continue those inspection obligations: return what the
+image actually communicates, the reader's remaining inference burden and concrete
+depiction concerns. =inspections= retain that prose; =image-evidence= locates
+quoted text against independently measured, image-bound anchors. ASCENT infers
+missing explanation facets, representation changes and actual layout overlap.
+It can derive a scoped =AnswerBasis= from grounded supplied needs and the absence
+of current discrepancies, without consuming a favorable review verdict. This
+remains an attributable model interpretation, not a learner-comprehension proof.
+
+In the native-source example, the first reading found that history and scope were
+captions without a visible version contrast or concrete method boundaries.
+ASCENT derived four explanation changes and three representation changes. The
+model added earlier/later views and SysML teaching attributes for a proposed
+method, applicability, counterexample and recheck condition. Its next actual
+reading located two crowded labels; measured rectangles confirmed their overlap
+and ASCENT derived a layout change. The same six explanation needs remain in
+force across these revisions; no pass flag or reduced question inventory closes
+the reading. This trace is an example response to findings, not a mandated order.
+
+#+begin_src sh
+cd dev/d2
+bun run window
+#+end_src
+
+* Required adverse scenarios before runtime claims
+
+| Scenario | Required distinction |
+|----------+----------------------|
+| Late old receipt | Event time vs knowledge cut; no retroactive fabricated judgment |
+| Overlapping windows | Shared evidence counted once; no fake independent confirmation |
+| Window expires with unresolved hypotheses | Waiting/attention change, not automatic falsehood or forced model call |
+| Contrary evidence after consolidation | Historical basis retained; current applicability reassessed |
+| Source changes during an Attempt | Original Attempt binding retained; result admission checked separately |
+| Two concurrent refinements | Expected revision conflict/rebase; no silent last-writer semantic merge |
+| Unknown impact or absence inventory | Scope reassessment/refusal, not a fabricated complete answer |
+| Model invents a new Task or rule | Bounded admission without pre-enumerating the research question |
+| Recalled method would cause an effect | Current permission/effect checks remain necessary |
+| Diagram omits an alternative | View rejected or qualified; semantic alternatives remain intact |
+
+These are design obligations, not completed proofs or a qualified Context runtime.
+Current verification includes finite ASCENT graph/window/authoring cases, SDK
+rendering, type checking, source-bound exports and actual model image inspection.
+Runtime integration, performance and cross-owner concurrency remain future
+qualification work.
+
+* Bounded Module implementation
+
+[[file:../../../../modules/d2/interface.ss][The D2 Module]] now owns the POO graph surface and ASCENT Scheme selection/
+projection rules. Its optional
+[[file:../../../../modules/d2/profiles/context-evolution.ss][Context profile]] implements the finite Window/support/opposition/impact/
+candidate example; it does not replace the existing Context/Evidence owners.
+[[file:../../../../dev/d2/init.ss][The development init]] selects the public scope, and
+[[file:../../../../dev/d2/drive.ss][the driver]] sends actual derived rows through that Module to D2.
+The earlier/later teaching views therefore have an executed inference basis.
+The larger explanatory illustrations still depict the proposed architecture,
+not an executed workflow or completed long-term knowledge runtime.
+
+The focused tests cover only the declared finite cases. The TS handoff currently
+uses generated D2 artifacts. C ABI dispatch and TS runtime calls are not added.
+
+The D2 core exposes =plan= for reader-relative explanation needs and state-bound
+representation candidates, and =review= for open reader Questions, critique and
+current-view review support. The public =author= operation composes these with
+source/image-bound feedback and derives outstanding requests without a stage
+machine. Six managed-entry test modules passed, including image-grounded reading;
+D2 artifact export also passed. An
+[[file:../../../../dev/d2/examples/time-window/README.org][executed model-host session]] generated and actually inspected three English
+illustrations, introduced questions from image critique and reached no unresolved
+declared model-review obligations for its final cut. These finite cases establish
+neither actual pupil comprehension nor complete Context runtime integration.
+The active assistant was the model host. The native SysML design path now uses
+that surrounding model environment directly and publishes render observations
+without hand-authored review-success records. An incrementally retained
+production authoring runtime remains outside this bounded design driver.

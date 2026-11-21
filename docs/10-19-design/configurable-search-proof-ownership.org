@@ -1,0 +1,79 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Configurable Search Producer Semantics and Proof Ownership
+#+language: en
+
+* Decision
+
+Agentic AI Lab owns the generic =search-engine=. It composes reusable POO Search
+stages with =temporal-causality= as its semantic core for readiness, evidence
+validity, invalidation and logical continuation. LeanPoo owns C3/C4 mathematics. Agentic AI Lab producer qualification uses
+those certificates together with Quint models of its own transitions. Rust MRR
+consumes the admitted Scheme plan and dispatches physical work through MRR Data;
+ASP configures particular scenarios such as code search.
+
+Public extension remains POO objects, prototypes and functional combinators.
+Serialized FFI packets and Rust structs are internal projections. A physical
+execution dispatcher must preserve Scheme readiness and composition decisions;
+it must not introduce an independent rule engine or public record DSL.
+
+* Producer and consumer checks
+
+Producer qualification must cover the actual stage parent graph and runtime C4
+order, compiled DAG correspondence (including nested branch contraction),
+invalid domains, cycles and malformed projections. Lean checks mathematical
+certificates; Quint explores the relevant finite producer protocol. Neither
+alone authenticates physical retrieval or proves compiler source refinement.
+
+MRR retains FFI lifetime/type/binding admission and received-evidence checks.
+Data retains physical identity, source and adapter checks. ASP retains public
+scenario and reflection packet checks. Upstream success cannot substitute for
+consumer qualification, and a consumer witness cannot substitute for producer
+qualification.
+
+Reusable certificate composition, typed stages and sequential/parallel algebra
+now live in =proofs/Composition/AgenticAILabComposition.lean=, with an independent
+Lake package and =just check-composition-proof= entrypoint. MRR imports the
+library and runs this gate before its own consumer checks. No MRR dependency or
+binding/scenario model was introduced into the producer package.
+
+The MRR publication Quint model, source/generation admission, reflection,
+received-order binding and actual execution witnesses stay in MRR. The per-stage Search attempt transition now has a producer Quint model and
+Lean admission proofs with actual Scheme controls. Physical dependent dispatch and
+source/graph refinement remain unproved; existing consumer state models
+cannot be relabeled as proof of Scheme execution. Standalone Scheme
+corruption controls, producer-specific Quint and merged release integration
+remain open gates. The proof package is published as an immutable consumer
+dependency with independent producer CI; downstream qualification stays separate.
+
+* Configurable composition
+
+Composition accepts explicit extensible candidate spaces, representation
+contracts and capability requirements. No file path or language-specific owner
+is a generic POO assumption. Different comparison units require an explicit
+source-bound mapping stage before merge. Ranked or approximate output cannot
+acquire exact absence authority merely because a task finished.
+
+MRR Rust owns physical resource dispatch and late-result admission; Scheme owns
+logical ordering and continuation. Current serialized Scheme worker ownership
+must be respected. Multimodal backend implementation and authenticity remain
+with Data and scenario consumers, rather than POO role-order certificates.
+
+* Cross-repository decision
+
+The reviewed implementation and acceptance sequence are recorded in MRR
+=docs/architecture/0037-configurable-search-execution.org=. This document records
+upstream ownership only; it adds no new runtime, relocated proof gate or backend.
+
+The engine configuration, logical state, execution request and returned
+observation contracts are specified in
+[[file:search-engine-temporal-design.org][Generic Search Engine with Temporal Causality]].
+That design distinguishes proposed transition APIs from the current static
+Search declarations and keeps physical dispatch in MRR/Data.
+
+The producer pure DAG controller now owns composition-derived prerequisites,
+frontier decisions and selective structural invalidation. Its Scheme controls,
+LeanPoo-backed DAG proofs and bounded Quint model ship together. Consumers must
+preserve these decisions when dispatching physical work; this producer increment
+does not certify the consumer runtime or the source-level graph projection.

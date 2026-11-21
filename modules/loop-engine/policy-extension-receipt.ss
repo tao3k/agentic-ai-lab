@@ -9,27 +9,27 @@
 (import (only-in :clan/poo/object .ref .slot?)
         "policy-extension-contract.ss")
 
-(export poo-flow-user-loop-engine-poo-policy-extensions->receipts)
+(export agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts)
 
 ;;; Boundary: user loop engine policy extension optional row is the policy-
 ;;; visible edge for module-system, loop behavior, keeping validation, lookup,
 ;;; or projection responsibilities centralized for callers.
-;; : (-> Symbol Value PooFlowPolicyExtensionReceiptRows)
-(def (poo-flow-user-loop-engine-policy-extension-optional-row key value)
+;; : (-> Symbol Value AgenticAILabPolicyExtensionReceiptRows)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-optional-row key value)
   (if value (list (cons key value)) '()))
 
 ;;; Boundary: user loop engine policy extension optional list row is the
 ;;; policy-visible edge for module-system, loop behavior, keeping validation,
 ;;; lookup, or projection responsibilities centralized for callers.
-;; : (-> Symbol Value PooFlowPolicyExtensionReceiptRows)
-(def (poo-flow-user-loop-engine-policy-extension-optional-list-row key value)
+;; : (-> Symbol Value AgenticAILabPolicyExtensionReceiptRows)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-optional-list-row key value)
   (if (null? value) '() (list (cons key value))))
 
 ;;; This slot table is the projection whitelist for all concrete policy
 ;;; extension families. Adding a new receipt field means adding it here and to
 ;;; the contract dispatch below.
 ;; : [Symbol]
-(def +poo-flow-user-loop-engine-policy-extension-slots+
+(def +agentic-ai-lab-user-loop-engine-policy-extension-slots+
   '(priority
     state-files
     acting-on-key
@@ -52,7 +52,7 @@
     max-attempts))
 
 ;; : (-> Symbol Boolean)
-(def (poo-flow-user-loop-engine-policy-extension-list-slot? slot)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-list-slot? slot)
   (or (eq? slot 'priority)
       (eq? slot 'state-files)
       (eq? slot 'run-log-schema)
@@ -67,8 +67,8 @@
 
 ;;; Slot dispatch is grouped by contract family so concrete extensions can
 ;;; compose the same validator surface without duplicating per-family code.
-;; : (-> PooFlowLoopEnginePolicyExtensionPrototype Symbol Value Unit)
-(def (poo-flow-user-loop-engine-require-policy-extension-slot
+;; : (-> AgenticAILabLoopEnginePolicyExtensionPrototype Symbol Value Unit)
+(def (agentic-ai-lab-user-loop-engine-require-policy-extension-slot
       policy-extension
       slot
       value)
@@ -80,19 +80,19 @@
         (eq? slot 'kill-signals)
         (eq? slot 'human-gates)
         (eq? slot 'connector-scopes))
-    (poo-flow-user-loop-engine-policy-extension-require-symbol-list-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-symbol-list-slot
      'loop-engine-policy-extension
      slot
      value))
    ((or (eq? slot 'state-files)
         (eq? slot 'run-log-schema))
-    (poo-flow-user-loop-engine-policy-extension-require-alist-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-alist-slot
      'loop-engine-policy-extension
      slot
      value))
    ((or (eq? slot 'denylist-paths)
         (eq? slot 'allowlist-paths))
-    (poo-flow-user-loop-engine-policy-extension-require-string-list-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-string-list-slot
      'loop-engine-policy-extension
      slot
      value))
@@ -101,19 +101,19 @@
         (eq? slot 'branch-lock-scope)
         (eq? slot 'retention-window)
         (eq? slot 'auto-merge))
-    (poo-flow-user-loop-engine-policy-extension-require-maybe-symbol-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-symbol-slot
      'loop-engine-policy-extension
      slot
      value))
    ((or (eq? slot 'human-inbox)
         (eq? slot 'run-log)
         (eq? slot 'budget-path))
-    (poo-flow-user-loop-engine-policy-extension-require-maybe-string-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-string-slot
      'loop-engine-policy-extension
      slot
      value))
    ((eq? slot 'max-attempts)
-    (poo-flow-user-loop-engine-policy-extension-require-maybe-integer-slot
+    (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-integer-slot
      'loop-engine-policy-extension
      slot
      value))
@@ -123,21 +123,21 @@
 ;;; Boundary: user loop engine policy extension slot to row is the policy-
 ;;; visible edge for module-system, loop behavior, keeping validation, lookup,
 ;;; or projection responsibilities centralized for callers.
-;; : (-> PooFlowLoopEnginePolicyExtensionPrototype Symbol PooFlowPolicyExtensionReceiptRows)
-(def (poo-flow-user-loop-engine-policy-extension-slot->row
+;; : (-> AgenticAILabLoopEnginePolicyExtensionPrototype Symbol AgenticAILabPolicyExtensionReceiptRows)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-slot->row
       policy-extension
       slot)
   (if (.slot? policy-extension slot)
     (let (value (.ref policy-extension slot))
-      (poo-flow-user-loop-engine-require-policy-extension-slot
+      (agentic-ai-lab-user-loop-engine-require-policy-extension-slot
        policy-extension
        slot
        value)
-      (if (poo-flow-user-loop-engine-policy-extension-list-slot? slot)
-        (poo-flow-user-loop-engine-policy-extension-optional-list-row
+      (if (agentic-ai-lab-user-loop-engine-policy-extension-list-slot? slot)
+        (agentic-ai-lab-user-loop-engine-policy-extension-optional-list-row
          slot
          value)
-        (poo-flow-user-loop-engine-policy-extension-optional-row
+        (agentic-ai-lab-user-loop-engine-policy-extension-optional-row
          slot
          value)))
     '()))
@@ -145,18 +145,18 @@
 ;;; Boundary: user loop engine policy extension slots to rows is the policy-
 ;;; visible edge for module-system, loop behavior, keeping validation, lookup,
 ;;; or projection responsibilities centralized for callers.
-;; : (-> PooFlowLoopEnginePolicyExtensionPrototype [Symbol] PooFlowPolicyExtensionReceiptRows)
-(def (poo-flow-user-loop-engine-policy-extension-slots->rows
+;; : (-> AgenticAILabLoopEnginePolicyExtensionPrototype [Symbol] AgenticAILabPolicyExtensionReceiptRows)
+(def (agentic-ai-lab-user-loop-engine-policy-extension-slots->rows
       policy-extension
       slots)
   (cond
    ((null? slots) '())
    ((pair? slots)
     (append
-     (poo-flow-user-loop-engine-policy-extension-slot->row
+     (agentic-ai-lab-user-loop-engine-policy-extension-slot->row
       policy-extension
       (car slots))
-     (poo-flow-user-loop-engine-policy-extension-slots->rows
+     (agentic-ai-lab-user-loop-engine-policy-extension-slots->rows
       policy-extension
       (cdr slots))))
    (else '())))
@@ -164,43 +164,43 @@
 ;;; Receipt lowering is intentionally generic: Scheme preserves POO extension
 ;;; inheritance, while Marlin only receives typed report-only receipt rows.
 ;; : (-> Value Alist)
-(def (poo-flow-user-loop-engine-poo-policy-extension->receipt
+(def (agentic-ai-lab-user-loop-engine-poo-policy-extension->receipt
       policy-extension)
   (cond
-   ((poo-flow-user-loop-engine-policy-extension-kind?
+   ((agentic-ai-lab-user-loop-engine-policy-extension-kind?
      policy-extension
-     +poo-flow-user-loop-engine-policy-extension-prototype-kind+)
+     +agentic-ai-lab-user-loop-engine-policy-extension-prototype-kind+)
     (let ((name (.ref policy-extension 'name))
           (receipt-kind (.ref policy-extension 'receipt-kind))
           (contract (.ref policy-extension 'contract))
           (scope (.ref policy-extension 'scope))
           (entries (.ref policy-extension 'entries)))
-      (poo-flow-user-loop-engine-policy-extension-require-slot
+      (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
        'loop-engine-policy-extension 'name 'symbol (symbol? name) name)
-      (poo-flow-user-loop-engine-policy-extension-require-slot
+      (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
        'loop-engine-policy-extension
        'receipt-kind
        'symbol
        (symbol? receipt-kind)
        receipt-kind)
-      (poo-flow-user-loop-engine-policy-extension-require-slot
+      (agentic-ai-lab-user-loop-engine-policy-extension-require-slot
        'loop-engine-policy-extension
        'contract
        'symbol
        (symbol? contract)
        contract)
-      (poo-flow-user-loop-engine-policy-extension-require-maybe-symbol-slot
+      (agentic-ai-lab-user-loop-engine-policy-extension-require-maybe-symbol-slot
        'loop-engine-policy-extension 'scope scope)
-      (poo-flow-user-loop-engine-policy-extension-require-alist-slot
+      (agentic-ai-lab-user-loop-engine-policy-extension-require-alist-slot
        'loop-engine-policy-extension 'entries entries)
       (append
        (list (cons 'kind receipt-kind)
              (cons 'contract contract)
              (cons 'name name))
-       (poo-flow-user-loop-engine-policy-extension-optional-row 'scope scope)
-       (poo-flow-user-loop-engine-policy-extension-slots->rows
+       (agentic-ai-lab-user-loop-engine-policy-extension-optional-row 'scope scope)
+       (agentic-ai-lab-user-loop-engine-policy-extension-slots->rows
         policy-extension
-        +poo-flow-user-loop-engine-policy-extension-slots+)
+        +agentic-ai-lab-user-loop-engine-policy-extension-slots+)
        entries
        (list (cons 'runtime-owner "marlin-agent-core")
              (cons 'runtime-executed #f)))))
@@ -213,15 +213,15 @@
 ;;; visible edge for module-system, loop behavior, keeping validation, lookup,
 ;;; or projection responsibilities centralized for callers.
 ;; : (-> [Value] [Alist])
-(def (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+(def (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
       policy-extensions)
   (cond
    ((null? policy-extensions) '())
    ((pair? policy-extensions)
     (cons
-     (poo-flow-user-loop-engine-poo-policy-extension->receipt
+     (agentic-ai-lab-user-loop-engine-poo-policy-extension->receipt
       (car policy-extensions))
-     (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+     (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
       (cdr policy-extensions))))
    (else
     (error "loop-engine profile policy-extensions slot must be a list"

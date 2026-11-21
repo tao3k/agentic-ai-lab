@@ -4,13 +4,13 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: hygienic macros for repeated session policy object families.
-;;; Invariant: macros expand to ordinary public constructors over POO-native
+;;; Invariant: macros expand to ordinary public constructors over POO
 ;;; session policy objects. They are internal generation helpers, not a user DSL.
 
 (export defpoo-session-policy-family)
 
 ;; : (-> List List List)
-(def (poo-flow-session-policy-rows/tail rows tail)
+(def (agentic-ai-lab-session-policy-rows/tail rows tail)
   (foldr cons tail rows))
 
 ;; defpoo-session-policy-family

@@ -23,15 +23,15 @@
  (optimizationFocus . "generate stable POO object predicates, accessors, and projection boundaries")
  (inputShape . "1,000 POO object constructions and boundary projections with integer refs")
  (expectedRepair . "declare slots once with defpoo-object-family and let Gerbil generate repeated accessors/projections")
- (expectedOutcome . "one macro declaration supports 1,000 ordinary POO-native constructions, accessors, and boundary projections")
+ (expectedOutcome . "one macro declaration supports 1,000 ordinary POO constructions, accessors, and boundary projections")
  (expectedQualitySignals generated-object-family-accessors
                          stable-poo-slot-access
                          bounded-boundary-projection
                          no-runtime-execution)
  (pooFormEvidence . (.o .def defpoo defpoo-object-family))
  (pooUsageCallEvidence . (.ref object<-alist))
- (nativePooPrimary . #t)
- (adapterBoundary . "alist projection remains a boundary value; object access stays POO-native")
+ (runtimePooPrimary . #t)
+ (adapterBoundary . "alist projection remains a boundary value; object access stays POO")
  (hotPathExemption . "no repeated hand-written slot traversal families in large object modules")
  (measurementPhases object-construction boundary-projection object-selection assert-time-gate observe-runtime-memory)
  (tags poo module-system performance macro object-family scenario))

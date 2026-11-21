@@ -3,9 +3,9 @@ SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 -->
 
-# `@poo-flow/runtime-wasm`
+# `@agentic-ai-lab/runtime-wasm`
 
-Browser WebAssembly runtime for canonical POO Flow Bundle v1 topologies.
+Browser WebAssembly runtime for canonical Agentic AI Lab Bundle v1 topologies.
 
 Scheme compositions lower to the language-neutral execution plan and Bundle v1
 tables. The package ships the resulting immutable descriptor and arena bytes;
@@ -14,37 +14,33 @@ and TypeScript provide binding APIs only and do not regenerate workflow meaning.
 
 ## Exports
 
-- `@poo-flow/runtime-wasm`: runtime loader, topology queries, and cursor API
-- `@poo-flow/runtime-wasm/wasm`: packaged WebAssembly module
-- `@poo-flow/runtime-wasm/workflows/human-capability/descriptor`: Bundle v1 descriptor
-- `@poo-flow/runtime-wasm/workflows/human-capability/arena`: immutable Bundle v1 arena
+- `@agentic-ai-lab/runtime-wasm`: runtime loader, topology queries, and cursor API
+- `@agentic-ai-lab/runtime-wasm/wasm`: packaged WebAssembly module
+- `@agentic-ai-lab/runtime-wasm/workflows/human-capability/descriptor`: Bundle v1 descriptor
+- `@agentic-ai-lab/runtime-wasm/workflows/human-capability/arena`: immutable Bundle v1 arena
 
-The package payload is built and tested from the POO Flow source repository.
+The package payload is built and tested from the Agentic AI Lab source repository.
 Generated `dist/`, Bundle assets, and package archives are published from the
 independent `npm-package` branch and are not committed to `main`.
 
 ## Downstream Scheme compositions
 
-Downstream projects own their composition source as Scheme. The public Bazel
-rule keeps lowering in the host build and emits immutable files for this browser
-runtime:
+Downstream projects own their composition source as Scheme. Generate immutable
+descriptor and arena files through the native Gerbil entrypoint:
 
-```starlark
-load("@poo_flow//packages/bazel:bundle_v1.bzl", "poo_flow_bundle_v1")
-
-poo_flow_bundle_v1(
-    name = "principles_bundle",
-    src = "human-capability.ss",
-    arena_out = "human-capability.arena.bin",
-    bundle_id = "human-capability",
-    descriptor_out = "human-capability.descriptor.bin",
-)
+```sh
+AGENTIC_AI_LAB_BUNDLE_V1_ID=principles \
+AGENTIC_AI_LAB_BUNDLE_V1_EPOCH=1 \
+YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=principles.descriptor.bin \
+YUANXU_BUNDLE_V1_ARENA_OUT=principles.arena.bin \
+  gerbil env gerbil human-capability.ss
 ```
 
 The Scheme entrypoint calls
-`poo-flow-write-composition-bundle-v1/from-environment!` with its composed POO
-value. Bazel supplies the bundle identity and declared output paths. No Scheme
-compiler or lowering implementation is added to the browser WASM surface.
+`agentic-ai-lab-write-composition-bundle-v1/from-environment!` with its composed
+POO value. The browser consumes those bytes without a Scheme compiler. The npm
+build performs two independent native generations and compares both outputs
+before publishing them.
 
 
 ## Guard metadata

@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import * as nodeFs from "node:fs";
 import { dirname, isAbsolute, resolve } from "node:path";
 
-const journalSchema = "poo-flow.runtime-wasm-publication.v1";
+const journalSchema = "agentic-ai-lab.runtime-wasm-publication.v1";
 const rollbackStates = new Set([
   "prepared",
   "member-1-published",

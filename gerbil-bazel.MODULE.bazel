@@ -1,9 +1,0 @@
-# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-#
-# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-
-git_override(
-    module_name = "gerbil_bazel",
-    commit = "e5296bf8c2c183c5e647d58fbb389570341a743d",
-    remote = "https://github.com/tao3k/gerbil-bazel.git",
-)

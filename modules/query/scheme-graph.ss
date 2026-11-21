@@ -1,0 +1,108 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+;;; Bounded GQL paths over the existing Yuanxu graph and canonical Query.
+;;; This evaluator admits no external source and grants no action authority.
+(import (only-in :clan/poo/object .o .ref .slot? object?)
+        (only-in :gerbil/core filter-map)
+        (only-in :std/list/list append-map)
+        (only-in :tao3k/yuanxu/graph/types
+                 yuanxu-graph? yuanxu-graph-id yuanxu-graph-nodes yuanxu-graph-edges
+                 yuanxu-graph-node-id yuanxu-graph-node-payload
+                 yuanxu-graph-edge-from yuanxu-graph-edge-to yuanxu-graph-edge-kind)
+        (only-in "types.ss" agentic-ai-lab-query?)
+        (only-in "funs.ss" agentic-ai-lab-query-admit)
+        (only-in "contracts.ss" agentic-ai-lab-query-source-content-identity))
+(export agentic-ai-lab-query-select-scheme-graph)
+
+(def (agentic-ai-lab-query-select-scheme-graph query element-space graph)
+  (unless (and (agentic-ai-lab-query? query) (yuanxu-graph? graph)
+               (eq? (.ref (.ref query 'language) 'runtime-owner) 'agentic-ai-lab)
+               (equal? (yuanxu-graph-id graph) (.ref element-space 'identity)))
+    (error "GQL graph selection requires its declared Graph and Scheme Query"))
+  (let (admission (agentic-ai-lab-query-admit query element-space))
+    (unless (.ref admission 'accepted?)
+      (error "GQL graph admission refused" (.ref admission 'diagnostics))))
+  (let* ((nodes (yuanxu-graph-nodes graph)) (edges (yuanxu-graph-edges graph))
+         (index (make-hash-table)) (adjacency (make-hash-table))
+         (allowed (make-hash-table)) (work 0)
+         (program (.ref query 'program)) (path (.ref program 'match))
+         (start (.ref path 'start)) (predicate (.ref program 'where)))
+    (unless (and (<= (length nodes) 4096) (<= (length edges) 8192))
+      (error "GQL graph inventory exceeds its finite bound"))
+    (for-each (lambda (id) (hash-put! allowed id #t))
+              (.ref query 'selected-element-identities))
+    (for-each
+     (lambda (node)
+       (let ((id (yuanxu-graph-node-id node)) (value (yuanxu-graph-node-payload node)))
+         (unless (and (not (hash-get index id)) (object? value)
+                      (.slot? value 'label) (symbol? (.ref value 'label))
+                      (.slot? value 'identity) (equal? id (.ref value 'identity))
+                      (member id (.ref element-space 'element-identities)))
+           (error "GQL graph has an invalid or duplicate node" id))
+         (hash-put! index id value)))
+     nodes)
+    (unless (= (length nodes) (length (.ref element-space 'element-identities)))
+      (error "GQL graph inventory differs from its ElementSpace"))
+    (for-each
+     (lambda (edge)
+       (let ((from (yuanxu-graph-edge-from edge)) (to (yuanxu-graph-edge-to edge)))
+         (unless (and (hash-get index from) (hash-get index to))
+           (error "GQL graph has a dangling relation" from to))
+         (hash-put! adjacency from (cons edge (or (hash-get adjacency from) '())))))
+     (reverse edges))
+    (def (bind environment pattern id)
+      (let* ((value (hash-get index id)) (name (.ref pattern 'binding))
+             (prior (assoc name environment)))
+        (and (hash-get allowed id)
+             (eq? (.ref value 'label) (.ref pattern 'label))
+             (or (not prior) (equal? (cdr prior) id))
+             (if prior environment (cons (cons name id) environment)))))
+    (def (property environment expression)
+      (let (binding (assoc (.ref expression 'binding) environment))
+        (unless binding (error "GQL projection references an unbound node"))
+        (let* ((node (hash-get index (cdr binding))) (key (.ref expression 'property)))
+          (unless (.slot? node key) (error "GQL node lacks the projected property" key))
+          (.ref node key))))
+    (def (where? environment)
+      (or (not predicate)
+          (equal? (property environment (.ref predicate 'left))
+                  (.ref (.ref predicate 'right) 'value))))
+    (def (project environment projection)
+      (if projection
+        (cons (property environment (.ref projection 'expression))
+              (project environment (.ref projection 'next)))
+        '()))
+    (def (walk environments previous step)
+      (if (not step) environments
+        (let (expanded
+              (append-map
+               (lambda (environment)
+                 (let (id (cdr (assoc previous environment)))
+                   (filter-map
+                    (lambda (edge)
+                      (set! work (+ work 1))
+                      (when (> work 16384) (error "GQL path expansion bound exceeded"))
+                      (and (eq? (yuanxu-graph-edge-kind edge) (.ref step 'relation))
+                           (let (target (yuanxu-graph-edge-to edge))
+                             (unless (hash-get allowed target)
+                               (error "GQL path crosses the selected Element boundary" target))
+                             (bind environment (.ref step 'target) target))))
+                    (or (hash-get adjacency id) '()))))
+               environments))
+          (walk expanded (.ref (.ref step 'target) 'binding) (.ref step 'next)))))
+    (let* ((seeds (filter-map (lambda (node) (bind '() start (yuanxu-graph-node-id node))) nodes))
+           (environments (walk seeds (.ref start 'binding) (.ref path 'next)))
+           (rows-value (map (lambda (environment) (project environment (.ref program 'project)))
+                            (filter where? environments))))
+      (when (> (length rows-value) (.ref query 'result-bound))
+        (error "GQL graph result bound exceeded"))
+      (.o kind: 'agentic-ai-lab.query.scheme-graph-selection
+          query-identity: (.ref query 'identity)
+          query-source-identity: (agentic-ai-lab-query-source-content-identity query)
+          element-space-identity: (.ref element-space 'identity)
+          semantic-revision: (.ref element-space 'semantic-revision)
+          complete?: (.ref element-space 'complete?) rows: rows-value
+          executed-in-scheme?: #t external-provenance-verified?: #f
+          mutation-authority?: #f action-authority?: #f))))

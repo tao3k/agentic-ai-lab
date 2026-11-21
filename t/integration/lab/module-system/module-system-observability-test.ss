@@ -1,0 +1,447 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;;
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+;;; Boundary: tests verify strict module-system observability traces.
+;;; Invariant: trace construction never dereferences POO slots.
+
+(import (only-in :tao3k/agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+         :gerbil/runtime/gambit
+        (only-in :clan/poo/object .ref object?)
+        (only-in :std/test
+                 check
+                 check-eq?
+                 check-equal?
+                 check-false
+                 check-not-equal?
+                 check-output
+                 test-error
+                 test-suite)
+        :tao3k/yuanxu/module-system/observability/presentation
+        :tao3k/yuanxu/module-system/authoring/observation
+        :tao3k/yuanxu/module-system/authoring/projection
+        (only-in :tao3k/yuanxu/observability/funcs
+                 yuanxu-debug-memory-policy
+                 yuanxu-debug-memory-sample
+                 yuanxu-debug-memory-receipt))
+
+(export module-system-observability-test)
+
+;; : (-> Symbol Alist Value)
+(def (module-observability-test-alist-value key rows)
+  (cdr (assoc key rows)))
+
+;; Runtime Scheme owns the source gate as well as the observations.  Callers
+;; choose bounded roots and read `.ss` files without expanding them.
+(def (module-observability-source-files directory)
+  (apply append
+         (map (lambda (name)
+                (let (path (path-expand name directory))
+                  (cond
+                   ((eq? (file-info-type (file-info path)) 'directory)
+                    (module-observability-source-files path))
+                   ((string-suffix? ".ss" name) (list path))
+                   (else '()))))
+              (directory-files directory))))
+
+(def (module-observability-source-observations path)
+  (yuanxu-poo-slot-authoring-file-observations
+   (string->symbol path)
+   path))
+
+;; : (-> PathString [Alist])
+(def (module-observability-source-lexical-shadow-observations path)
+  (yuanxu-scheme-lexical-call-shadow-file-observations
+   (string->symbol path)
+   path))
+
+(def (module-observability-source-inline-prototype-observations path)
+  (yuanxu-scheme-inline-prototype-file-observations
+   (string->symbol path) path))
+
+;; : (-> Unit TestSuite)
+;;; This suite protects module observability receipts used to debug expansion
+;;; and lazy-load decisions.
+(def module-system-observability-test
+  (test-suite "agentic-ai-lab module-system observability"
+    (yuanxu-test-case "reports aggregate owner imports before module admission"
+      (let* ((observations
+              (yuanxu-authoring-owner-import-port-observations
+               'modules/example/funs.ss
+               (open-input-string
+                "(import :tao3k/yuanxu/modules/funflow/control-plane/api)") AgenticAILabSourcePolicy))
+             (observation (car observations)))
+        (check-equal? (length observations) 1)
+        (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
+        (check-equal? (.ref observation 'owner) ':tao3k/yuanxu/modules/funflow/control-plane/api)
+        (check-equal? (.ref observation 'phase) 'module-admission)
+        (check-equal? (.ref observation 'status) 'aggregate-owner-import)
+        (check-equal? (.ref observation 'code)
+                      'module-owner-import-expands-aggregate-facade)
+        (check-equal? (.ref observation 'recommendation)
+                      'import-precise-owner)
+        (check-equal? (.ref observation 'accepted?) #f)
+        (check-equal? (.ref observation 'runtime-executed?) #f)
+        (check-equal?
+         (yuanxu-authoring-owner-import-port-observations
+          'modules/example/funs.ss
+         (open-input-string
+           "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy)
+         '())
+        (let* ((contribution-observations
+                (yuanxu-authoring-owner-import-port-observations
+                 'modules/example/objects.ss
+                 (open-input-string
+                  "(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/api make-task))") AgenticAILabSourcePolicy))
+               (contribution-observation
+                (car contribution-observations)))
+          (check-equal? (length contribution-observations) 1)
+          (check-equal?
+           (.ref contribution-observation 'owner)
+           ':tao3k/yuanxu/modules/funflow/control-plane/api)
+          (check-equal? (.ref contribution-observation 'accepted?) #f))))
+    (yuanxu-test-case "all maintained module sources import precise owners"
+      (let* ((paths (module-observability-source-files "modules"))
+             (observations
+              (apply append
+                     (map (lambda (path)
+                            (yuanxu-authoring-owner-import-file-observations
+                             (string->symbol path)
+                             path AgenticAILabSourcePolicy))
+                          paths))))
+        (check-equal? (> (length paths) 0) #t)
+        (check-equal? observations '())))
+    (yuanxu-test-case "package build bootstrap imports no package-local owner"
+      (check-equal?
+       (yuanxu-authoring-build-bootstrap-file-observations
+        'build.ss "build.ss" AgenticAILabSourcePolicy)
+       '())
+      (let* ((observations
+              (yuanxu-authoring-build-bootstrap-import-port-observations
+               'build.ss
+               (open-input-string
+                "(import (only-in \"./src/building/build-config.ss\" policy))") AgenticAILabSourcePolicy))
+             (observation (car observations)))
+        (check-equal? (.ref observation 'phase) 'build-bootstrap-admission)
+        (check-equal? (.ref observation 'status)
+                      'build-bootstrap-imports-package-owner)
+        (check-equal? (.ref observation 'code) 'build-bootstrap-self-import)
+        (check-equal? (.ref observation 'recommendation)
+                      'declare-package-spec-only)))
+    (yuanxu-test-case "package build bootstrap rejects parallel source projection"
+      (for-each
+       (lambda (form)
+         (let* ((observations
+                 (yuanxu-authoring-build-bootstrap-datum-observations
+                  'build.ss form AgenticAILabSourcePolicy))
+                (observation (car observations)))
+           (check-equal? (length observations) 1)
+           (check-equal? (.ref observation 'phase)
+                         'build-bootstrap-admission)
+           (check-equal? (.ref observation 'status)
+                         'build-bootstrap-reimplements-package-projection)
+           (check-equal? (.ref observation 'code)
+                         'build-bootstrap-parallel-projection)
+           (check-equal? (.ref observation 'recommendation)
+                         'declare-public-entry-modules)))
+       '((def roots (yuanxu-module-source-collection-interfaces maintained-source))
+         (def roots (all-gerbil-modules))
+         (asp-gerbil-scheme-package-spec!
+          (package @ prototype)
+          (spec std-make-spec)
+          (modules roots))))
+      ;; A quoted documentation example does not execute a projection.
+      (check-equal?
+       (yuanxu-authoring-build-bootstrap-datum-observations
+        'build.ss '(quote (yuanxu-module-source-collection-interfaces maintained-source)) AgenticAILabSourcePolicy)
+       '()))
+    (yuanxu-test-case "builds strict presentation trace rows"
+      (let* ((runtime-observation
+              (yuanxu-module-observation-stage/detail
+               'test-presentation 'selected-modules 2 '() '()))
+             (trace
+              (yuanxu-module-presentation-trace
+               'test-presentation
+               (list (cons 'selected-modules 2)
+                     (cons 'settings 1))))
+             (first-step (car trace))
+             (second-step (cadr trace)))
+        (check-equal? (and (object? runtime-observation)
+                           (yuanxu-module-observation? runtime-observation))
+                      #t)
+        (check-equal? (module-observability-test-alist-value 'kind first-step)
+                      yuanxu-module-observation-kind)
+        (check-equal? (module-observability-test-alist-value 'scope first-step)
+                      'test-presentation)
+        (check-equal? (module-observability-test-alist-value 'stage first-step)
+                      'selected-modules)
+        (check-equal? (module-observability-test-alist-value 'status first-step)
+                      'ok)
+        (check-equal? (module-observability-test-alist-value 'count first-step) 2)
+        (check-equal? (module-observability-test-alist-value 'depth first-step) 0)
+        (check-equal? (module-observability-test-alist-value 'path first-step)
+                      '(selected-modules))
+        (check-equal? (module-observability-test-alist-value
+                       'runtime-executed
+                       first-step)
+                      #f)
+        (check-equal? (module-observability-test-alist-value 'stage second-step)
+                      'settings)
+        (check-equal? (module-observability-test-alist-value 'path second-step)
+                      '(selected-modules settings))))
+    (yuanxu-test-case "marks repeated stages as recursive-stage"
+      (let* ((trace
+              (yuanxu-module-presentation-trace
+               'test-presentation
+               (list (cons 'selected-modules 2)
+                     (cons 'selected-modules 2))))
+             (repeat-step (cadr trace)))
+        (check-equal? (module-observability-test-alist-value
+                       'stage
+                       repeat-step)
+                      'selected-modules)
+        (check-equal? (module-observability-test-alist-value
+                       'status
+                       repeat-step)
+                      'recursive-stage)
+        (check-equal? (module-observability-test-alist-value
+                       'depth
+                       repeat-step)
+                      1)
+        (check-equal? (module-observability-test-alist-value
+                       'path
+                       repeat-step)
+                      '(selected-modules selected-modules))))
+    (yuanxu-test-case "observes POO slot initializer self references"
+      (let* ((runtime-observation
+              (make-yuanxu-poo-slot-authoring-observation
+               'poo-introspection-slot-receipt
+               'safe
+               'safe-value
+               'ok
+               '()
+               #f
+               #f))
+             (observations
+              (yuanxu-poo-slot-authoring-observations
+               'poo-introspection-slot-receipt
+               (list (cons 'slot 'slot)
+                     (cons 'object? 'poo-object?)
+                     (cons 'present? 'slot-present?)
+                     (cons 'value 'slot-current-value))))
+             (bad (car observations))
+             (shadow (cadr observations))
+             (good (caddr observations))
+             (detail (module-observability-test-alist-value 'detail bad)))
+        (check-equal?
+         (and (object? runtime-observation)
+              (yuanxu-poo-slot-authoring-observation? runtime-observation))
+         #t)
+        (check-equal? (module-observability-test-alist-value 'kind bad)
+                      yuanxu-poo-slot-authoring-observation-kind)
+        (check-equal? (module-observability-test-alist-value 'scope bad)
+                      'poo-introspection-slot-receipt)
+        (check-equal? (module-observability-test-alist-value 'slot bad)
+                      'slot)
+        (check-equal? (module-observability-test-alist-value 'initializer bad)
+                      'slot)
+        (check-equal? (module-observability-test-alist-value 'status bad)
+                      'self-referential-slot-initializer)
+        (check-equal? (module-observability-test-alist-value
+                       'code
+                       detail)
+                      'poo-slot-initializer-shadows-slot)
+        (check-equal? (module-observability-test-alist-value 'status shadow)
+                      'primitive-shadow-slot)
+        (check-equal? (module-observability-test-alist-value
+                       'code
+                       (module-observability-test-alist-value
+                        'detail
+                        shadow))
+                      'poo-slot-shadows-poo-primitive)
+        (check-equal? (module-observability-test-alist-value 'status good)
+                      'ok)
+        (check-equal? (module-observability-test-alist-value 'detail good)
+                      '())
+        (check-equal? (yuanxu-poo-slot-authoring-summary
+                       'poo-introspection-slot-receipt
+                       observations)
+                      (list
+                       (cons 'kind yuanxu-poo-slot-authoring-summary-kind)
+                       (cons 'scope 'poo-introspection-slot-receipt)
+                       (cons 'observation-count 4)
+                       (cons 'statuses
+                             '(self-referential-slot-initializer
+                               primitive-shadow-slot
+                               ok
+                               ok))
+                       (cons 'diagnostic-count 2)
+                       (cons 'diagnostics
+                             (list
+                              (module-observability-test-alist-value
+                               'detail
+                               bad)
+                              (module-observability-test-alist-value
+                               'detail
+                               shadow)))
+                       (cons 'descriptor-realized? #f)
+                       (cons 'runtime-executed #f)))
+        (check-equal? (yuanxu-poo-slot-authoring-diagnostics
+                       (list good))
+                      '())))
+    (yuanxu-test-case "reader-runtime source inspection catches both POO slot spellings"
+      (let* ((source
+              "(.o values: values safe: safe-value (before before) (after after-value) diagnostics: (reverse diagnostics))\n(.def Prototype policy: policy (result result-value))")
+             (observations
+              (yuanxu-poo-slot-authoring-port-observations
+               'synthetic-source
+               (open-input-string source))))
+        (check-equal?
+         (yuanxu-poo-slot-authoring-statuses observations)
+         '(self-referential-slot-initializer
+           ok
+           self-referential-slot-initializer
+           ok
+           self-referential-slot-initializer
+           self-referential-slot-initializer
+           ok))
+        (check-equal?
+         (map (lambda (diagnostic)
+                (module-observability-test-alist-value 'slot diagnostic))
+              (yuanxu-poo-slot-authoring-diagnostics observations))
+         '(values before diagnostics policy))))
+    (yuanxu-test-case "reader-POO bindings preserve nested source order"
+      (check-equal?
+       (yuanxu-poo-slot-authoring-datum-bindings
+        '(begin
+           (.o outer: outer-value
+               nested: (.o inner: inner-value))
+           '(.o ignored: ignored-value)
+           (.def Prototype final: final-value)))
+       '((outer . outer-value)
+         (nested . (.o inner: inner-value))
+         (inner . inner-value)
+         (final . final-value))))
+    (yuanxu-test-case "reader-runtime source inspection catches lexical values calls"
+      (let* ((source
+              (string-append
+               "(def (agentic-ai-lab-tool-unique-symbols/accumulate remaining seen values)\n"
+               "  (if (null? remaining) (values remaining values) values))\n"
+               "(def (safe values) (reverse values))\n"
+               "(def (safe-loop values)\n"
+               "  (let loop ((values values)) (if (null? values) '() (loop (cdr values)))))\n"
+               "(.o (values values-vector-value))\n"
+               "'(def (quoted values) (values values))\n"))
+             (observations
+              (yuanxu-scheme-lexical-call-shadow-port-observations
+               'synthetic-source
+               (open-input-string source)))
+             (observation (car observations))
+             (detail (module-observability-test-alist-value
+                      'detail observation)))
+        (check-equal? (length observations) 1)
+        (check-equal?
+         (module-observability-test-alist-value 'kind observation)
+         yuanxu-scheme-lexical-call-shadow-observation-kind)
+        (check-equal?
+         (module-observability-test-alist-value 'definition observation)
+         'agentic-ai-lab-tool-unique-symbols/accumulate)
+        (check-equal?
+         (module-observability-test-alist-value 'identifier observation)
+         'values)
+        (check-equal?
+         (module-observability-test-alist-value 'status observation)
+         'lexical-procedure-shadow)
+        (check-equal?
+         (module-observability-test-alist-value 'code detail)
+         'scheme-lexical-binding-shadows-procedure)
+        (check-equal?
+         (module-observability-test-alist-value 'runtime-executed observation)
+         #f)))
+    (yuanxu-test-case "projects one inline prototype lookup as runtime authoring advice"
+      (let* ((source
+              (string-append
+               "(.o (:: @ (.ref Contract 'proto)) value: 1)\n"
+               "(.o (:: @ Contract.) value: 2)\n"
+               "(.o . slots)\n"
+               "'(.o (:: @ (.ref Quoted 'proto)))\n"))
+             (observations
+              (yuanxu-authoring-inline-prototype-port-observations
+               'synthetic-source (open-input-string source)))
+             (observation (car observations)))
+        (check-equal? (length observations) 1)
+        (check-equal? (.ref observation 'owner) 'Contract)
+        (check-equal? (.ref observation 'code)
+                      'poo-prototype-lookup-inside-composition)
+        (check-equal? (.ref observation 'runtime-executed?) #f)))
+    (yuanxu-test-case "observability owner exposes development quality and performance evidence"
+      (let* ((policy
+              (yuanxu-debug-memory-policy
+               'runtime-module-system-test
+               heap-limit-bytes: 4096
+               live-growth-limit-bytes: 1024
+               fail-closed?: #t))
+             (before
+              (yuanxu-debug-memory-sample
+               'runtime-module-system-test 1024 512 256 128 128))
+             (after
+              (yuanxu-debug-memory-sample
+               'runtime-module-system-test 2048 1024 768 384 384))
+             (receipt
+              (yuanxu-debug-memory-receipt policy before after))
+             (observations
+              (yuanxu-authoring-inline-prototype-datum-observations
+               'runtime-module-system-test
+               '(.o (:: @ (.ref Contract 'proto)) value: 1))))
+        (check-equal? (.ref receipt 'accepted?) #t)
+        (check-equal? (.ref receipt 'heap-growth-bytes) 1024)
+        (check-equal? (.ref receipt 'live-growth-bytes) 512)
+        (check-equal? (length observations) 1)
+        (check-equal? (.ref (car observations) 'code)
+                      'poo-prototype-lookup-inside-composition)))
+    (yuanxu-test-case "runtime getter paths are literals but receivers remain expressions"
+      (for-each
+       (lambda (initializer)
+         (check-equal? (yuanxu-poo-slot-authoring-status 'pipeline initializer)
+                       'ok))
+       '((.get ff prototypes pipeline)
+         (.@ ff prototypes pipeline)
+         (.o (:: @ (.get ff prototypes pipeline)) checks: '())))
+      (for-each
+       (lambda (initializer)
+         (check-equal? (yuanxu-poo-slot-authoring-status 'pipeline initializer)
+                       'self-referential-slot-initializer))
+       '((.get pipeline checks)
+         (.@ pipeline checks)
+         (.get (.get pipeline source) checks)
+         (.ref ff pipeline))))
+    (yuanxu-test-case "production and performance POO slots pass the authoring gate"
+      (let* ((paths
+              (append
+               (module-observability-source-files "modules")
+               (module-observability-source-files "t/performance")))
+             (observations
+              (apply append
+                     (map module-observability-source-observations paths))))
+        (check-equal? (pair? paths) #t)
+        (check-equal?
+         (yuanxu-poo-slot-authoring-diagnostics observations)
+         '())))
+    (yuanxu-test-case "product module Scheme sources avoid lexical values calls"
+      (let* ((paths (module-observability-source-files "modules"))
+             (observations
+              (apply append
+                     (map module-observability-source-lexical-shadow-observations
+                          paths))))
+        (check-equal? (pair? paths) #t)
+        (check-equal? observations '())))
+    (yuanxu-test-case "product module constructors hoist stable prototype lookups"
+      (let* ((paths (module-observability-source-files "modules"))
+             (observations
+              (apply append
+                     (map module-observability-source-inline-prototype-observations
+                          paths))))
+        (check-equal? (pair? paths) #t)
+        (check-equal? observations '())))))

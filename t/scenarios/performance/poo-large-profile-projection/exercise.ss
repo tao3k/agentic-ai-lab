@@ -53,6 +53,6 @@
        (iterations . ,projection-iterations)
        (passed . ,passed)
        (elapsedMs . ,elapsed-ms)
-       (shape . native-poo-static-projection-specs)
+       (shape . poo-static-projection-specs)
        (hotPath . profile-projection-descriptor-boundary)))
     (newline)))

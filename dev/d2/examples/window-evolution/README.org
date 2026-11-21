@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Continue the two image-reading questions
+#+LANGUAGE: en
+
+* Actual model observations, not review-success records
+
+The current assistant read the actual exported PNGs and supplied the prose in
+=readings.ss=. Each inspection binds a question, source cut, revision and exact
+image digest. Its evidence locates exact text in independently measured anchors.
+No verdict, approval, learner check or =understood= value is supplied here.
+The model's semantic correspondence remains attributable interpretation; matching
+an excerpt verifies its rendered location, not a student's comprehension.
+
+The same six needs remain active: changed evidence, preserved history, proposed
+method, applicability, counterexample and recheck condition. No need was deleted
+to finish the run. They are content for these questions, not a fixed engine-wide
+question or concept inventory.
+
+* The executed feedback
+
+| Image | Actual reading | ASCENT consequence |
+|-------+----------------+--------------------|
+| Original | History and counterevidence were named in captions, but the single generic graph left the contrast implicit. Method/Scope/Limits were headings without concrete values. | Three illustration requests and four explanation requests |
+| Expanded | The earlier/later views show preserved support and added opposition. The notebook gives a candidate method and its bounds. The same-idea and second-support labels crowd each other. | One layout request, confirmed by actual rectangle intersection; the knowledge question has an answer basis |
+| Revised | The identity/support labels occupy separate regions. Earlier support remains beside the added failed control. The notebook retains a clean/control comparison, same-source/tool applicability, failing control and source/tool-change recheck condition. | Two scoped answer bases; no outstanding adjustment request for these supplied needs |
+
+The model addressed the derived changes instead of stopping at inspection
+requests. Native SysML teaching attributes supply the concrete strings used by
+the compositor. Earlier findings, including contrary depiction/layout findings,
+remain in the source history; they do not approve or reject different image bytes.
+The revised reading checks the same potentially overlapping anchor pair again.
+Measured separation, not a manually cleared concern, removes the layout request.
+
+* Evidence and replay
+
+The final inspected PNG digest is
+=dbe748513de4f4d46755e0efe986c578447d9f7f7e48ebe02e36850b057fc97e=.
+Local exports and their diagnostics are under ignored =output/=:
+
+- =window-evolution.png/svg/html/receipt.json=: image and source capture;
+- =window-evolution.anchors.json=: actual text/rectangle measurements;
+- =window-findings.org=: retained prose, grounded facets and derived changes;
+- =window-requests.org=: current outstanding requests;
+- =window-readings/before/= and =window-readings/expanded/=: earlier local images
+  and inference reports, retained separately from the revised image.
+
+From the repository root:
+
+#+begin_src sh
+cd dev/d2
+bun run window
+cd ../..
+just d2-design
+just test-d2
+#+end_src
+
+Re-evaluation joins exact current image/source bytes with the recorded findings.
+If a renderer produces different pixels or the design cut changes, the prior
+inspection cannot close the new question: the current model must look again and
+return new observations. A new question/facet or current discrepancy can reopen
+work. Replay is not permission to substitute stored text for actual new-image
+inspection. The bounded result covers these model answers, not a learner study,
+production Context runtime or general proof of graphical clarity.

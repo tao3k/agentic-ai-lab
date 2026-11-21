@@ -1,0 +1,72 @@
+#+title: Context Policy Library and Downstream Execution Responsibilities
+#+date: [2026-11-16]
+#+language: en
+#+property: STATUS library-boundary-with-explicit-downstream-obligations
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Responsibility allocation
+
+[[file:35-org-context-modules.org][Org Context composition]] consumes reusable Lab Modules. Lab owns their POO
+Policy, Contract, composition and evidence interpretation. Applications select
+capabilities and supply their own execution adapters. AITIA and Marlin are
+downstream packages; they do not own Lab's generic GitOps semantics. MRR/Data,
+jj, gix or another ecosystem can be selected through the applicable interface.
+Their presence in the ecosystem does not make them mandatory Lab dependencies.
+
+| Architectural owner | Responsibility | Public result |
+|---------------------+----------------+---------------|
+| Lab GitOps Module | Source-bound POO Policy derivation, capability restriction, provider selection and evidence interpretation | Derived Policy, selection and successor evidence state |
+| Org Context | Select module/source revisions and anchors; consume the resulting semantic binding | Qualified source and applicable Context |
+| Downstream package adapter | Map its native inputs and original receipts to the chosen library Contract | Contract-compatible POO observations and decisions |
+| Downstream execution owner | Observe actual versions, check grants and fences, execute, manage resources and establish custody | Authentic observations and original execution receipts |
+
+The [[file:36-scheme-rust-policy-ecosystem.sysml][SysML v2 model]] uses a =SemanticUse= port and its conjugate at the
+consumer. Its allocations place policy preservation in Lab, correspondence in
+the downstream adapter and physical admission in the downstream implementation.
+It deliberately leaves the concrete implementation unbound. There is no
+mandatory Lab-to-Marlin-to-GitOps call chain.
+
+* Higher order Policy
+
+The library accepts an existing POO Policy and a qualified Org source. Binding
+returns a derived object whose allowed capabilities are the intersection of
+parent restrictions and local declarations. Named selector behavior survives
+that derivation. A consumer can override the selector or extend capabilities
+with ordinary =.cc= composition. Availability is supplied as a POO observation;
+selection itself does not probe a process or launch an operation.
+
+The default working-copy Policy recognizes GitWorktree and Worktrunk capability
+names. These names describe selection semantics, not dependencies on concrete
+packages. A new consumer capability needs a parent Policy declaration and an
+availability slot; it does not require a new Lab registry, loader or transport.
+
+* Execution and evidence boundary
+
+A consumer may pass the selected capability to any compatible implementation.
+The implementation owns its actual Worktree, Worker, runtime, command driver,
+Git observations and receipts. In a Rust consumer those remain Rust values and
+Rust responsibilities. Lab does not create or manage them.
+
+On return, the adapter supplies current source/policy/request observations,
+authority and fence applicability, original receipt custody, actual outcome and
+actual returned binding. Lab checks the semantic correspondence and returns a
+new evidence state. A successful interpretation does not establish authenticity
+of caller-supplied facts and does not authorize a future effect.
+
+Duplicate or unusable receipts remain queryable. Withdrawing current use retains
+the receipt history and spent request identities. Physical retries, compensation,
+crash recovery, persistent deduplication and process cleanup remain with the
+consumer's execution protocol.
+
+* Source and verification correspondence
+
+[[file:37-worktree-gitops.org][The Create scenario]] maps these allocations to Lab's existing Yuanxu/POO
+publication route and a focused Scheme suite. Scheme tests verify the library
+without a downstream execution runtime, GitOps ABI binding or package build. The bounded Quint
+protocol retains independent counterexample controls; it states explicit
+assumptions about the external execution owner. SysML validation, Scheme tests,
+finite model checking and qualification of a particular downstream implementation
+are separate evidence dimensions.

@@ -5,10 +5,10 @@
 
 (import (only-in :clan/poo/object .o)
         "types.ss")
-(export poo-flow-custom-my-module-metadata)
+(export agentic-ai-lab-custom-my-module-metadata)
 
-(def poo-flow-custom-my-module-metadata
-  (.o identity: +poo-flow-custom-my-module-identity+
+(def agentic-ai-lab-custom-my-module-metadata
+  (.o identity: +agentic-ai-lab-custom-my-module-identity+
       owner: 'user
       public-entry: 'interface
       runtime-executed?: #f))

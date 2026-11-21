@@ -1,0 +1,16 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages":
+ [{"url": "https://github.com/tao3k/lean-poo.git",
+   "type": "git",
+   "subDir": null,
+   "scope": "",
+   "rev": "0a111f6c5de43b261de5bba9287b48540d9f7c2e",
+   "name": "LeanPoo",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "0a111f6c5de43b261de5bba9287b48540d9f7c2e",
+   "inherited": false,
+   "configFile": "lakefile.toml"}],
+ "name": "AgenticAILabCompositionProofs",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

@@ -1,0 +1,107 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: ASCENT core research: Datalog, BYODS, functional rules and real graph tasks
+#+STATUS: primary-source and code-anchored research; proposed experiments, no model-result claim
+#+DATE: 2026-10-04
+#+FILETAGS: :research:datalog:byods:datafun:knowledge-graph:llm:
+
+* Selection and the apparent AI-paper gap
+
+The previous [[file:index.org][agent-inference list]] was built around agent/tool feedback;
+the [[file:../scheme-dsl/index.org][Scheme DSL list]] and [[file:../../related-work-matrix.org][related-work matrix]] held the Datalog engine
+work separately. That organization made the AI-era core look smaller
+than it is. The literature appears under programming languages,
+databases, knowledge-graph question answering and static analysis,
+often without =Datalog= in the title. This is an explanation of our
+reading-list bias, not a measured publication-count claim.
+
+The priority here is substantive relevance to this repository:
+specified logic and source semantics; executable graph or real-code
+tasks; independent or held-out checks; meaningful baselines; public
+method/artifact; and a falsifiable seam in actual Gerbil code. Recency
+helps order a search, but does not override those criteria. The
+2025–2026 papers below sit on Ascent, BYODS and Datafun foundations.
+
+* Core reading order
+
+| Work | Strong evidence and task | Exact ASCENT seam and transfer limit |
+|------+--------------------------+--------------------------------------|
+| [[https://proceedings.mlr.press/v306/miao26e.html][scoped witness execution LLM-MatLogic]] (ICML 2026); [[file:scoped-witness.org][detailed reading]] | FB15k-237/NELL995 structured queries and 1,000 each CWQ/WebQSP Freebase test questions. Scope-local negation before witness loss; known-versus-generated constraint ablation isolates model specification error. | =candidate/program.ss=, =candidate/reasoning.ss= and finite provenance. This is our central *real-KG task* reading. Its matrix and retrieved-subgraph semantics differ from least-fixed-point Datalog; neither its score nor source completeness transfers. |
+| [[https://arxiv.org/html/2609.37233v1][candidate execution feedback DatalogBench]] (2026 arXiv v1); [[file:candidate-feedback.org][detailed reading]] | 136 tasks from Datalog artifacts, held-out execution variants and mutation-tested oracle; reports compilation and exact outputs separately. | Candidate rules and =program/scheme-language.ss=. Direct rule-generation discriminator, but Soufflé syntax, limited variants and preprint status bound the result. Its 96.4% raw mutant kill rate is for the tested mutation operators, not general equivalence. |
+| [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][recursive physical planning FlowLog]] (PVLDB 2025, VLDB 2026 presentation); [[file:../scheme-dsl/recursive-physical-planning.org][detailed reading]] | Public engine/artifact; per-rule relational IR, recursive planning, incremental execution and graph/program-analysis baselines with runtime and memory. | =program/planning.ss=, =core/positive-plan.ss=, =program/evaluate.ss= and Session. It informs an engine experiment; no Differential Dataflow or published performance ranking is inherited. |
+| [[https://kmicinski.com/assets/byods.pdf][Provider concretization BYODS]] (OOPSLA 2023); [[file:../scheme-dsl/provider-concretization.org][detailed reading]] | Formal concrete/delta semantics and real analyses using =eqrel= / =trrel=; the paper proves conditions for semi-naive equivalence. | =table/storage.ss=, =table/eqrel.ss=, =table/trrel.ss=. Core physical/logical relation boundary. A Provider implementation must be checked; the abstract theorem does not certify every custom Provider. |
+| [[https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ECOOP.2025.33][monotone containers Mono Types]] (ECOOP 2025); [[file:../scheme-dsl/monotone-containers.org][detailed reading]] | Rocq-checked monotone/order-independent =add/read= laws and dependency/interval analysis experiments, including an Ascent set variant. | =program/scheme-checked.ss=, =program/higher-order.ss= and Provider interfaces. A first-class container needs an admitted output order and a finite-height or explicit bounded-failure story; unoptimized map lowering regresses. |
+| [[https://thomas.gilray.org/pdf/seamless-deductive.pdf][rule planning Ascent]] (CC 2022); [[file:../scheme-dsl/rule-planning.org][existing reading]] | Macro-embedded rule and lattice system; real borrow-checker analysis. | =program/scheme-language.ss=, =program/planning.ss= and =core/dependency-graph.ss=. Historical Rust comparison, not the authority for the new Scheme grammar. |
+| [[https://www.cl.cam.ac.uk/~nk480/datafun.pdf][functional fixed points Datafun]] (ICFP 2016) + [[https://www.rntz.net/files/seminaive-datafun.pdf][higher-order change higher-order semi-naive]] (POPL 2020); [[file:../scheme-dsl/functional-fixed-points.org][functional fixed points]] / [[file:../scheme-dsl/higher-order-change.org][higher-order change]] | Typed monotonicity, finite-height fixed points, and a typed higher-order change transformation. | =program/higher-order.ss=, =program/operator.ss= and =program/operator-change.ss=. Admitted finite arrows lower to positive IR; arbitrary Scheme closures have no Datafun proof, and current insertion-change interpreter is not higher-order change's general function derivative. |
+| [[https://plg.uwaterloo.ca/~olhotak/pubs/oopsla25b.pdf][program lifecycle Flix]] (OOPSLA 2025); [[file:../scheme-dsl/program-lifecycle.org][existing reading]] | First-class program values, private predicate identity and explicit solve/query stages. | =program/scheme-language.ss= and =program/scheme-admission.ss=. Whole-program runtime admission is narrower than Flix static type/effect assurance. |
+
+* Real-task companion, with narrower claim
+
+[[https://proceedings.iclr.cc/paper_files/paper/2025/file/582d4e27fa24168f3af1f4582655034b-Paper-Conference.pdf][IRIS]] (ICLR 2025) is a strong adjacent *real-code* check of the same
+specifier/executor split: LLM-proposed taint sources and sinks feed
+CodeQL analysis over 120 manually validated Java CVEs. The paper
+reports 55/120 detected with GPT-4 plus IRIS versus CodeQL's 27/120,
+but also 84.82% average false-discovery rate by its coarse metric.
+It motivates independently checking candidate *meaning* and final
+alerts on real artifacts; CodeQL's QL, vulnerability labels and taint
+semantics are not ASCENT's language or evidence authority.
+
+[[https://www.vldb.org/pvldb/vol18/p651-micinski.pdf][Datalog with First-Class Facts]] (PVLDB 2024, VLDB 2025) is a
+substantive extension from the Ascent authors for tree-shaped facts,
+including AI and program-language cases. Its unique Skolem-fact and
+restricted-chase semantics can grow without a general finite-closure
+guarantee. [[file:../../../program/scheme-checked.ss][=program/scheme-checked.ss=]] currently restricts the checked
+source to immutable scalar atoms and finite mappings; admitting
+first-class nested facts would require a new domain/termination and
+identity contract. This is a research seam, not current ASCENT support.
+
+* Screened but not promoted
+
+- [[https://aclanthology.org/2026.eacl-long.114/][BRINK]] (EACL 2026) is a useful *evaluation design* for incomplete
+  real KGs: it deletes a direct fact while retaining an alternate rule
+  body on FB15k-237 and Wikidata5m, and distinguishes retrieval from
+  answer errors. It is not a rule-truth oracle for ASCENT. Its AMIE3
+  rules use confidence 0.3 and PCA confidence 0.4 thresholds; those are
+  empirical correlations, not universally valid implications. Use a
+  separately admitted rule set and exact snapshot to test deletion and
+  witness behavior.
+- [[https://aclanthology.org/2026.acl-long.1230/][FOLX-KG]] (ACL 2026) has a worthwhile finite-KG comparison/counting
+  semantics test, but its 43,821 DBpedia-based claims come from logical
+  templates and LLM rewriting. Its own limitation notes that incomplete
+  KGs can change universal and counting claims. It cannot establish
+  real-world truth or current ASCENT support for these operators.
+- [[https://arxiv.org/html/2606.24965][Project Auto-World]] and its [[https://papers.neurips.cc/paper_files/paper/2025/hash/167856a2bb094d44872c4a992bad49d0-Abstract-Datasets_and_Benchmarks_Track.html][NoRA predecessor]] offer finite off-path stress
+  generators, but their main tasks are synthetic. NoRA also contains
+  ASP answer-set cases. Neither substitutes for the real-KG and
+  real-program workloads above.
+- [[https://arxiv.org/html/2604.16021][LogicLoc]] runs Datalog queries on repositories, but its query gold
+  sets originated from model enumeration followed by author review;
+  completeness and raw first-pass program understanding are not
+  established. Its parser/mutation loop is a secondary test design.
+- [[https://aclanthology.org/2025.findings-emnlp.293/][Programmatic Graph Reasoning]] evaluates claims against DBpedia-derived
+  FactKG with sequential =MATCH/SEARCH/VERIFY= functions. It is useful
+  as an answer-task comparator, while scoped witness execution gives a more direct scope,
+  witness and executor boundary for this Datalog research.
+- Prolog/ASP/MCP tool papers can illustrate other logic semantics but
+  do not qualify the finite, stratified Scheme program boundary. Tool
+  connectivity or a parser pass is not semantic rule correctness.
+
+* Code-bound research program
+
+| Gate | Existing owner | Proposed falsifier |
+|------+----------------+--------------------|
+| G1: structured real-KG semantics | =candidate/program.ss=, =program/scheme-admission.ss=, =candidate/stratified-provenance.ss= | On one frozen KG extract, a branch-local exclusion and pre-projection witness query must match an independent exact finite model. Full rows and evidence are checked before final-answer wording. Unknown or incomplete source scope cannot validate global absence. |
+| G2: BYODS frontier and graph scale | =table/storage.ss=, =table/eqrel.ss=, =table/trrel.ss=, =program/evaluate.ss= | Eligible Set versus specialized Provider queries must match concrete closure after a bridge edge, two producers, duplicate, budget failure/retry and source withdrawal. Check new delta rows *before* final closure; preserve the pinned Rust grouped =eqrel= counterexample. |
+| G3: functional fixed point | =program/higher-order.ss=, =program/operator.ss=, =program/operator-change.ss= | Finite typed nested-arrow/fix descriptors must agree with an independent set model. Hidden mutable reads, escaped binders, infinite successor and rising lattice cases reject or fail with no completed publication. Compare insertion-change outputs to full recomputation without claiming a general higher-order change theorem. |
+| G4: logical/physical plan | =program/planning.ss=, =core/positive-plan.ss=, =table/provider.ss=, =program/session.ss= | Same admitted rules and source generations across plan/index choices must yield identical complete relations. Only then compare intermediate rows, work, memory, cold solve and retained update. A fast wrong plan fails. |
+| G5: model proposal on real tasks | =candidate/reasoning.ss= and the preceding gates | Freeze the model, prompt, source snapshot and budget; preserve the first raw candidate. Score syntax/admission, exact held-out relation, witness/absence fidelity and final answer separately against structured and NL queries. A model-generated constraint is not an oracle for itself. |
+
+The detailed [[file:scoped-witness.org][scoped witness execution]], [[file:../scheme-dsl/provider-concretization.org][Provider concretization]] and [[file:../scheme-dsl/recursive-physical-planning.org][recursive physical planning]] readings specify the
+first fixtures. The [[file:../../scheme-closure-contract.org][Scheme closure contract]] and
+[[file:../../scheme-research-proof-audit.org][proof audit]] delimit existing capability. These gates are proposed,
+not completed model, scale or proof receipts. ASCENT computes over an
+admitted snapshot; source ownership and real-world truth remain with
+the caller.
+
+[[file:index.org][Agent inference index]]; [[file:../scheme-dsl/index.org][Scheme DSL index]].

@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Admitting a second distinct dispatch
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-exact-two][recovery design]] owns the identity and publication conditions.
+This case supplies declarative presentation facts and local object art.
+The existing D2 ASCENT module derives the composition.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-exact-two/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-exact-two/case.ss --evaluate
+#+end_src
+
+The actual PNG was read across all three objects. R42 and R43 share the
+Attempt/effect/window frame, but retain distinct IDs. The sealed range
+caption scopes the count. The ASCENT closure and Temporal admission are
+visible separately, with the current-basis label on the publication link.
+The v3 sheet remains visible behind v4. The image has 46 visible English
+words and minimum measured text size 18.68 px.
+The identity authority, time boundaries and alias countercase are detailed
+in the design rather than expanded into image captions.
+
+PNG SHA-256: =31fbba89eb692e6473dcb8d18d586ddf24df5817c1ec6970f7440cf4818913d9=.
+
+ASCENT's first image readback measured intersections between each dispatch
+ID label and its source letter. The local ticket art separates those two
+baselines. The same scene, scope and assessment links remain in use.
+
+The revised PNG was viewed again. The measured ID and source-letter
+rectangles are now vertically separate on both tickets. ASCENT grounded
+seven image anchors across identity scope, count closure and publication
+history for the same rendered image. See
+[[file:../../output/recovery-dispatch-exact-two/findings.org][the bound readback]].
+
+Revised PNG SHA-256:
+=5d88634b0fe7fbe5b6f5055485d4007d11cfcb09098e4e757755a34457856826=.

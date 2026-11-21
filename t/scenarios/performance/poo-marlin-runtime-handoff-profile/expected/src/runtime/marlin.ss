@@ -10,7 +10,7 @@
 (def marlin-runtime-handoff-family
   (.o (kind 'marlin-runtime-handoff-family)
       (name 'marlin-runtime-handoff-family)
-      (source 'poo-flow.performance.marlin-runtime-handoff)))
+      (source 'agentic-ai-lab.performance.marlin-runtime-handoff)))
 
 (def (marlin-handoff-profile profile-value
                              abi-value

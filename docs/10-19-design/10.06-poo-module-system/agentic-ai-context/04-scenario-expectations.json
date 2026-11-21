@@ -1,0 +1,266 @@
+{
+  "package": "ContextExecutableScenarios",
+  "schedules": [
+    "declared",
+    "reverse"
+  ],
+  "cases": [
+    {
+      "case": "freshResult",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "accepted": "true",
+        "historyPreserved": "true",
+        "currentSource": "1",
+        "finished": "5"
+      }
+    },
+    {
+      "case": "staleSourceResult",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "accepted": "false",
+        "historyPreserved": "true",
+        "currentSource": "2",
+        "finished": "5"
+      }
+    },
+    {
+      "case": "revokedGrantResult",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "accepted": "false",
+        "historyPreserved": "true",
+        "currentSource": "1",
+        "finished": "5"
+      }
+    },
+    {
+      "case": "wrongRequestResult",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "accepted": "false",
+        "historyPreserved": "true",
+        "currentSource": "1",
+        "finished": "5"
+      }
+    },
+    {
+      "case": "unsafeStaleResult",
+      "expected_verdict": "fail",
+      "expected_outputs": {
+        "accepted": "true",
+        "historyPreserved": "true",
+        "currentSource": "2",
+        "finished": "5"
+      }
+    },
+    {
+      "case": "cancelStillPending",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "pending": "true",
+        "didResume": "false",
+        "revision": "7",
+        "generation": "3",
+        "lateHistory": "true",
+        "outcomeCount": "0",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "recoveredWithTerminalEvidence",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "pending": "false",
+        "didResume": "true",
+        "revision": "8",
+        "generation": "4",
+        "lateHistory": "true",
+        "outcomeCount": "1",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "foreignWorkerReceipt",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "pending": "true",
+        "didResume": "false",
+        "revision": "7",
+        "generation": "3",
+        "lateHistory": "true",
+        "outcomeCount": "0",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "closedSessionRecovery",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "pending": "false",
+        "didResume": "false",
+        "revision": "8",
+        "generation": "4",
+        "lateHistory": "true",
+        "outcomeCount": "1",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "deniedRecoveryFence",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "pending": "false",
+        "didResume": "false",
+        "revision": "7",
+        "generation": "3",
+        "lateHistory": "true",
+        "outcomeCount": "1",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "unsafeCancelAcknowledgement",
+      "expected_verdict": "fail",
+      "expected_outputs": {
+        "pending": "false",
+        "didResume": "true",
+        "revision": "8",
+        "generation": "4",
+        "lateHistory": "true",
+        "outcomeCount": "1",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "unsafeClosedResume",
+      "expected_verdict": "fail",
+      "expected_outputs": {
+        "pending": "false",
+        "didResume": "true",
+        "revision": "8",
+        "generation": "4",
+        "lateHistory": "true",
+        "outcomeCount": "1",
+        "restoredOldAllow": "false"
+      }
+    },
+    {
+      "case": "qualifiedConsolidation",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "promoted": "true",
+        "originalRetained": "true",
+        "derivedRevision": "102",
+        "grantGeneration": "5"
+      }
+    },
+    {
+      "case": "missingLineage",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "promoted": "false",
+        "originalRetained": "true",
+        "derivedRevision": "0",
+        "grantGeneration": "5"
+      }
+    },
+    {
+      "case": "erasedCounterevidence",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "promoted": "false",
+        "originalRetained": "true",
+        "derivedRevision": "0",
+        "grantGeneration": "5"
+      }
+    },
+    {
+      "case": "unmetConsolidationObligations",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "promoted": "false",
+        "originalRetained": "true",
+        "derivedRevision": "0",
+        "grantGeneration": "5"
+      }
+    },
+    {
+      "case": "unsafeSummaryPromotion",
+      "expected_verdict": "fail",
+      "expected_outputs": {
+        "promoted": "true",
+        "originalRetained": "true",
+        "derivedRevision": "102",
+        "grantGeneration": "5"
+      }
+    },
+    {
+      "case": "freshReviewForB",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "admittedForB": "true",
+        "originPreserved": "true",
+        "reviewOwner": "2",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    },
+    {
+      "case": "copiedReviewFromA",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "admittedForB": "false",
+        "originPreserved": "true",
+        "reviewOwner": "1",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    },
+    {
+      "case": "deniedPermissionForB",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "admittedForB": "false",
+        "originPreserved": "true",
+        "reviewOwner": "2",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    },
+    {
+      "case": "changedSourceOnRecall",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "admittedForB": "false",
+        "originPreserved": "true",
+        "reviewOwner": "2",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    },
+    {
+      "case": "changedPolicyOnRecall",
+      "expected_verdict": "pass",
+      "expected_outputs": {
+        "admittedForB": "false",
+        "originPreserved": "true",
+        "reviewOwner": "2",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    },
+    {
+      "case": "unsafeCopiedAdmission",
+      "expected_verdict": "fail",
+      "expected_outputs": {
+        "admittedForB": "true",
+        "originPreserved": "true",
+        "reviewOwner": "1",
+        "projectionOwner": "2",
+        "dispatched": "false"
+      }
+    }
+  ]
+}

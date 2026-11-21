@@ -6,14 +6,14 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime.durable_policy import (
+from agentic_ai_lab_runtime.durable_policy import (
     RuntimeDurablePolicyError,
     coerce_runtime_durable_policy_manifest,
 )
 from scheme_durable_fixtures import scheme_durable_policy_manifest_bytes
 
 
-SCHEME_DURABLE_MANIFEST = b"""schema=poo-flow.durable.runtime-policy-manifest.v1
+SCHEME_DURABLE_MANIFEST = b"""schema=agentic-ai-lab.durable.runtime-policy-manifest.v1
 owner=scheme
 policy-id=durable/runtime
 checkpoint-id-strategy=runtime-generated
@@ -23,8 +23,8 @@ checkpoint-store=runtime/checkpoint-store
 repair-mode=fail-closed
 action-classes=replayable,idempotent,compensatable,terminal,manual
 runtime-owner=marlin-agent-core
-receipt-schema=poo-flow.module-system.durable-policy.receipt.v1
-receipt-kind=poo-flow.durable.policy
+receipt-schema=agentic-ai-lab.module-system.durable-policy.receipt.v1
+receipt-kind=agentic-ai-lab.durable.policy
 receipt-valid=true
 receipt-diagnostic-count=0
 """
@@ -33,7 +33,7 @@ receipt-diagnostic-count=0
 def test_parses_scheme_durable_runtime_manifest_payload() -> None:
     manifest = coerce_runtime_durable_policy_manifest(SCHEME_DURABLE_MANIFEST)
 
-    assert manifest.manifest_schema == "poo-flow.durable.runtime-policy-manifest.v1"
+    assert manifest.manifest_schema == "agentic-ai-lab.durable.runtime-policy-manifest.v1"
     assert manifest.policy_id == "durable/runtime"
     assert manifest.owner == "scheme"
     assert manifest.checkpoint_store == "runtime/checkpoint-store"

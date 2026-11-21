@@ -7,12 +7,12 @@
 ;;; Invariant: descriptors project through the shared validation owner.
 
 (import (only-in :clan/poo/object .@ object?)
-        (only-in :poo-flow/src/core/roles execution-policy-role)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile-data
-        :poo-flow/modules/agent-sandbox/profile-validation)
+        (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        :tao3k/yuanxu/object/role-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-data
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation)
 
 (export agent-sandbox-profile-descriptor-prototype
         make-agent-sandbox-backend-profile-descriptor

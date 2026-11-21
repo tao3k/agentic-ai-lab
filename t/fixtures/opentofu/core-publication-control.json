@@ -1,0 +1,820 @@
+{
+  "status": "passed",
+  "scope": "One maintained Core OpenTofu publication; no Loader or runtime artifact injection",
+  "checkout": {
+    "root_head": "a74fc2fd63437252175b5a67649ee54b886d3bf4",
+    "core_head": "7595bedcc5347c7add6b9d3b7b2713d6ddc8a42e",
+    "state": "shared dirty worktree; checked source hashes identify the tested inputs"
+  },
+  "runtime": "default Gerbil; separate heap-fenced process per serial round",
+  "public_roles": [
+    "core/modules/services/opentofu/config.ss",
+    "core/modules/services/opentofu/types.ss",
+    "core/modules/services/opentofu/objects.ss",
+    "core/modules/services/opentofu/build.ss",
+    "core/modules/services/opentofu/interface.ss"
+  ],
+  "source_injection": "Config.source supplied upstream as a native Nix Source; shipped default #f; no fixed temporary path",
+  "infrastructure_build_ss": false,
+  "removed_entries": [
+    "flat module-interface reexport facade",
+    "OpenTofu package-contribution factory",
+    "test-generated tools/opentofu publisher"
+  ],
+  "focused_gates": [
+    {
+      "test": "core/t/opentofu-publication-test.ss",
+      "status": "passed",
+      "named_assertions": 14
+    },
+    {
+      "test": "core/t/module-authoring-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-configuration-build-test.ss",
+      "status": "passed",
+      "named_assertions": 18
+    },
+    {
+      "test": "core/t/module-config-role-test.ss",
+      "status": "passed",
+      "named_assertions": 11
+    },
+    {
+      "test": "core/t/module-build-role-test.ss",
+      "status": "passed",
+      "named_assertions": 15
+    },
+    {
+      "test": "core/t/module-publication-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-build-graph-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-source-admission-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-directory-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-configuration-source-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-source-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-nix-phase-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-nix-publication-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "core/t/module-build-entry-capture-test.ss",
+      "status": "passed",
+      "named_assertions": 0
+    },
+    {
+      "test": "t/opentofu-schema-test.ss",
+      "status": "passed",
+      "named_assertions": 57
+    },
+    {
+      "test": "t/opentofu-set-evidence-test.ss",
+      "status": "passed",
+      "named_assertions": 36
+    },
+    {
+      "test": "t/opentofu-aws-source-test.ss",
+      "status": "passed",
+      "named_assertions": 37
+    },
+    {
+      "test": "t/opentofu-provider-artifact-test.ss",
+      "status": "passed",
+      "named_assertions": 17
+    },
+    {
+      "test": "t/opentofu-provider-versions-test.ss",
+      "status": "passed",
+      "named_assertions": 84
+    },
+    {
+      "test": "t/opentofu-module-scope-test.ss",
+      "status": "passed",
+      "named_assertions": 20
+    },
+    {
+      "test": "t/opentofu-artifact-collection-test.ss",
+      "status": "passed",
+      "named_assertions": 21
+    },
+    {
+      "test": "t/opentofu-provider-families-test.ss",
+      "status": "passed",
+      "named_assertions": 64
+    },
+    {
+      "test": "t/opentofu-configuration-families-test.ss",
+      "status": "passed",
+      "named_assertions": 36
+    },
+    {
+      "test": "t/opentofu-configuration-discovery-test.ss",
+      "status": "passed",
+      "named_assertions": 49
+    },
+    {
+      "test": "t/opentofu-indexed-inputs-test.ss",
+      "status": "passed",
+      "named_assertions": 93
+    }
+  ],
+  "final_publication_gate": {
+    "test": "core/t/opentofu-publication-test.ss",
+    "named_assertions": 14,
+    "status": "passed",
+    "header_package_and_closer_package_rejection": true,
+    "private_helper_mutation_rejection": true
+  },
+  "selected_flake_control": {
+    "status": "passed",
+    "requested_rounds": 3,
+    "rounds": [
+      {
+        "parent-types": [
+          [
+            "aws",
+            1,
+            1
+          ]
+        ],
+        "phases": [
+          {
+            "phase": "aws-build",
+            "seconds": 6.1551830768585205,
+            "instantiate": 3,
+            "realize": 1,
+            "type-reads": 1,
+            "type-compiles": 1
+          },
+          {
+            "phase": "aws-first-admission",
+            "seconds": 1.0013580322265625e-05,
+            "instantiate": 0,
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0,
+            "phase": "aws-hot-slots",
+            "seconds": 3.814697265625e-06,
+            "instantiate": 0
+          },
+          {
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0,
+            "seconds": 1.7758219242095947,
+            "instantiate": 1,
+            "phase": "aws-explicit-recheck"
+          },
+          {
+            "phase": "aws-null-build",
+            "instantiate": 3,
+            "seconds": 8.019026041030884,
+            "realize": 1,
+            "type-compiles": 2,
+            "type-reads": 2
+          },
+          {
+            "seconds": 1.0967254638671875e-05,
+            "instantiate": 0,
+            "phase": "aws-null-first-admission",
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "seconds": 3.814697265625e-06,
+            "instantiate": 0,
+            "phase": "aws-null-hot-slots",
+            "type-compiles": 0,
+            "realize": 0,
+            "type-reads": 0
+          },
+          {
+            "realize": 0,
+            "type-compiles": 0,
+            "type-reads": 0,
+            "phase": "aws-null-explicit-recheck",
+            "instantiate": 1,
+            "seconds": 2.4168829917907715
+          }
+        ],
+        "child-types": [
+          [
+            "aws",
+            1,
+            1
+          ],
+          [
+            "null",
+            1,
+            1
+          ]
+        ],
+        "round": 1,
+        "assertions": 78
+      },
+      {
+        "phases": [
+          {
+            "phase": "aws-build",
+            "instantiate": 3,
+            "seconds": 6.493186950683594,
+            "realize": 1,
+            "type-compiles": 1,
+            "type-reads": 1
+          },
+          {
+            "realize": 0,
+            "phase": "aws-first-admission",
+            "instantiate": 0,
+            "seconds": 1.0013580322265625e-05,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "instantiate": 0,
+            "seconds": 3.814697265625e-06,
+            "phase": "aws-hot-slots",
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "phase": "aws-explicit-recheck",
+            "seconds": 2.0602829456329346,
+            "instantiate": 1,
+            "type-compiles": 0,
+            "realize": 0,
+            "type-reads": 0
+          },
+          {
+            "realize": 1,
+            "type-reads": 2,
+            "type-compiles": 2,
+            "seconds": 7.839364051818848,
+            "instantiate": 3,
+            "phase": "aws-null-build"
+          },
+          {
+            "type-reads": 0,
+            "type-compiles": 0,
+            "realize": 0,
+            "phase": "aws-null-first-admission",
+            "instantiate": 0,
+            "seconds": 1.0967254638671875e-05
+          },
+          {
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0,
+            "instantiate": 0,
+            "seconds": 5.0067901611328125e-06,
+            "phase": "aws-null-hot-slots"
+          },
+          {
+            "phase": "aws-null-explicit-recheck",
+            "seconds": 2.0051538944244385,
+            "instantiate": 1,
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          }
+        ],
+        "child-types": [
+          [
+            "aws",
+            1,
+            1
+          ],
+          [
+            "null",
+            1,
+            1
+          ]
+        ],
+        "parent-types": [
+          [
+            "aws",
+            1,
+            1
+          ]
+        ],
+        "round": 2,
+        "assertions": 78
+      },
+      {
+        "child-types": [
+          [
+            "aws",
+            1,
+            1
+          ],
+          [
+            "null",
+            1,
+            1
+          ]
+        ],
+        "parent-types": [
+          [
+            "aws",
+            1,
+            1
+          ]
+        ],
+        "phases": [
+          {
+            "phase": "aws-build",
+            "instantiate": 3,
+            "seconds": 6.4148969650268555,
+            "realize": 1,
+            "type-compiles": 1,
+            "type-reads": 1
+          },
+          {
+            "phase": "aws-first-admission",
+            "seconds": 1.0013580322265625e-05,
+            "instantiate": 0,
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "phase": "aws-hot-slots",
+            "seconds": 3.0994415283203125e-06,
+            "instantiate": 0,
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "phase": "aws-explicit-recheck",
+            "seconds": 2.020601987838745,
+            "instantiate": 1,
+            "type-compiles": 0,
+            "realize": 0,
+            "type-reads": 0
+          },
+          {
+            "seconds": 7.283783912658691,
+            "instantiate": 3,
+            "phase": "aws-null-build",
+            "realize": 1,
+            "type-reads": 2,
+            "type-compiles": 2
+          },
+          {
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0,
+            "instantiate": 0,
+            "seconds": 1.0013580322265625e-05,
+            "phase": "aws-null-first-admission"
+          },
+          {
+            "realize": 0,
+            "phase": "aws-null-hot-slots",
+            "instantiate": 0,
+            "seconds": 4.0531158447265625e-06,
+            "type-reads": 0,
+            "type-compiles": 0
+          },
+          {
+            "realize": 0,
+            "type-reads": 0,
+            "type-compiles": 0,
+            "seconds": 1.8927068710327148,
+            "instantiate": 1,
+            "phase": "aws-null-explicit-recheck"
+          }
+        ],
+        "round": 3,
+        "assertions": 78
+      }
+    ],
+    "flake_rounds": [],
+    "runtime": "default Gerbil; separate heap-fenced process per serial round",
+    "cold": "fresh Scheme process/scope; existing Nix store (not download/build cold)",
+    "hot": "five cached receiver accesses; currentness measured separately",
+    "process_scope": "owned Nix CLI starts, not descendant process totals",
+    "evaluators": {
+      "selected": "nix eval --apply",
+      "flake": "nix eval --raw output.drvPath"
+    },
+    "selected_flake": "/private/tmp/opentofu-selected-flake-20261017-c",
+    "excluded_setup": "fixture construction, explicit flake lock creation, and package-tool lookup; not download cold",
+    "type_scope": "successful indexed type input reads and Contract compilations",
+    "source_sha256": {
+      "core/Justfile": "90907014f1178d2ae78350137c269596c1f463bd9e4008dc95962233a8fdd9e6",
+      "core/build.ss": "be1cb908ae721cbc2186edbae58884675ae6a3f34c341125f95060a2552e8ed1",
+      "core/gerbil.pkg": "f5a64b1d4d1b7bb9442642e11e7f7d868d0e8dd37e9b21fff26a378dda1a15f3",
+      "core/module-system/authoring/roles.ss": "f63e3153d8ed50ce026d2a9dddab4eff928c87f61726c3d9e52b29b31b333919",
+      "core/module-system/building/build-projection.ss": "907eef49e2ca2d5d71fea9dd44798cf67713f11d130761ef95488f85e5d74259",
+      "core/module-system/building/configuration-source.ss": "d27053f4002ba4e7a29d9c866ce29ef8350f743afd8d743694505624b0619ab0",
+      "core/module-system/building/interface.ss": "d83edd878fca254577f3b36ed573b0952d7d6fee64d8476553f732272ada78f0",
+      "core/module-system/building/source-closure.ss": "ae96329d52e672a34094b284f493b4340aab2a7432963ca0d1c6538366045606",
+      "core/module-system/observability/presentation.ss": "41040e187e682ed1ff33a16deca67dfe7dd9c912b802119447e11e064e771efc",
+      "core/module-system/source/admission.ss": "c3cb8e783785542f3cd49f112cc5da08ad4dbb33adabde533079f2c596ee576b",
+      "core/module-system/source/build.ss": "be891132b291fd5cbe88bd4e318c315ab311be04ab8c387bd9ee05a021100dfa",
+      "core/module-system/source/collection.ss": "830fe5b8cea77536ecb67f02e5e7208692586700b05bbdda38dbe202aaa7adc9",
+      "core/module-system/source/config-prelude.ss": "0ac1ef3c2a7d29053b5c22b57a2e099779c651a5689629947c37755bdbd57c7f",
+      "core/module-system/source/declaration.ss": "baf9e27c2ee83b2466f9faf3d1819fd7b957d0bd2b0d4053ae7b315d40c85523",
+      "core/module-system/source/directory.ss": "6643b09c3543e21258cb7dbaf71e16aa50bcce0d3f40bda5c99539545d18979d",
+      "core/module-system/source/imports.ss": "64a80fb71ce1c9a5bde2c618400bbf1862484e7b9d007308da252bf0d67ebfb9",
+      "core/module-system/source/init.ss": "75663606e03512a968eec8d0aa63504090e2f2312b88e9fcd38ef2ed15a9cde1",
+      "core/module-system/source/interface.ss": "c90f38e937800acc4db1d1f3c092f1748a64cf4a92e3a833c06c380648cd6bf0",
+      "core/module-system/source/link.ss": "b6197c537f92f75d023fdd85f507f0d57f25e9de9bfed0c229b3fe17aa5646b9",
+      "core/module-system/source/objects.ss": "049eade9883529993d45c4e791fdf814ef420bb4fa378478cc9e3ef634a3550c",
+      "core/module-system/source/preparation.ss": "4127ad3bf1a5e5405f97769f57f8e8ef41b3b18fb61cbf60787292b5d44288b6",
+      "core/module-system/source/projection.ss": "c15f786fb4aa9c3c45aa94d87c45125d26b301a1037173592201f6b25762210f",
+      "core/module-system/source/publication.ss": "8372c49da69135b3466f2030c9a9c1b12f41bd7eef3e5d1eafa6ea2c32cedb35",
+      "core/module-system/source/reader.ss": "5f0f04f9312cfe0c263a0fd66eee402712a14ebd0a4f70dae6505d77278ca121",
+      "core/module-system/source/selection.ss": "91e39ec654c96cdb6ef7bdbed55958e0eee60bdecd4d7d3081244d61e73c683d",
+      "core/modules/json-schema/config.ss": "de93f14b314d625446b2605229cb37afc345dd297243d818555d27ae91730bb2",
+      "core/modules/json-schema/contracts.ss": "ab67b9ac2790c1d3f29e33f1685303f18d1fa842c58e5da7f249468c02ef9d9c",
+      "core/modules/json-schema/func.ss": "eb306086709b1722b1b51d06e8a5c4d7d4c29adae9bc26791facefd1f222a7a8",
+      "core/modules/json-schema/functional.ss": "dace21f19e3678b77c90aafa750ab90ad75b13936c70ab843e967bd512b552c1",
+      "core/modules/json-schema/interface.ss": "4d39769c88fe1feaf43d54221592dc6495eca8401509761abc00c8219d9483ed",
+      "core/modules/json-schema/json-schema-constraints.ss": "ab862d5d6e46eedbe748225649c9760b9f20ec2a52c6f343f66405bbeb3b4e1a",
+      "core/modules/json-schema/json-schema-contract.ss": "7ce161384d6e6e444af0fec19437a703846897a0e4568dcaf0c0c02523f17332",
+      "core/modules/json-schema/json-schema-diagnostics.ss": "9c1ba72289405c37d80bbf2fd71811b666efbad64eeaba1946abf3da70786acb",
+      "core/modules/json-schema/json-schema-emit-contracts.ss": "15526de58ed738c6961b93e772aded8421b111d75c2429296aa575b3303bb5b8",
+      "core/modules/json-schema/json-schema-emit-runtime.ss": "4a1ab176ac7d69baad2b5d233c314292e433d56bd17e86b7d5c2a6a3b7d72ce9",
+      "core/modules/json-schema/json-schema-emit.ss": "26a0111c8df919c4093253df94e0bdf7967092609b0397eabed13dfac5484d68",
+      "core/modules/json-schema/json-schema-ir.ss": "34dfea3da2b473c94ebd01b209d2a5fae5f63ee42b7ab9793aced2a5b23758c9",
+      "core/modules/json-schema/json-schema-node-validate.ss": "b1c7c6967ea8cdafb12d7db973db3a6a0963fbd98e7b20fa945a1f8edb114657",
+      "core/modules/json-schema/json-schema-normalize-core.ss": "12552b68a1094c6ca33872ac9c83f1fe21a8223452ba2dda3d41faeb45185d64",
+      "core/modules/json-schema/json-schema-normalize-parse.ss": "b8d7a534a91ff2a2538283f4cf9b7a497be6bcd196bbcfa0b02d4e93f23452eb",
+      "core/modules/json-schema/json-schema-normalize-resolve.ss": "5d4b581a5633600894f3f69c67eb737105b256174808571a3557ac3b9f23b213",
+      "core/modules/json-schema/json-schema-normalize.ss": "bf7281033af23eb623d55e98420a906a334b8a4f2f733aff2335d829df5591d3",
+      "core/modules/json-schema/json-schema-receipt.ss": "139c775841cd2900021a950a396c0674da0842ffc941665e1d2c376ab70320b7",
+      "core/modules/json-schema/json-schema-source.ss": "c17918b0c59a20cdde00620cae483703a517e71e1736226428eb591731861859",
+      "core/modules/json-schema/json-schema-valid.ss": "a6384037b53cb3c73a91d98cac03d2b9ea11a4c43bf73383086d1b998912f528",
+      "core/modules/json-schema/json-schema-validate.ss": "e32f32382e856207ae136c19aa4c660a6e05cc0bc4c788f88b3174ef67e8e846",
+      "core/modules/json-schema/json-schema-validation-core.ss": "908b2d55dd1429301b249d152ad29bdf6dfec2f114f764aa266dd8d21ee53a54",
+      "core/modules/json-schema/json-schema-values.ss": "b6480b56e7bc399ceb377d7c3e8f38816c8424275bca15d18d6eaa2981b205a2",
+      "core/modules/json-schema/objects.ss": "f8c62225767740bf027e470cffa8e6693d6e1feefdf704672bc5f57ce2952256",
+      "core/modules/json-schema/types.ss": "d1008dc24bee20fccba7a4080b262293b547dd0555865d25795dd0e4f43b0bff",
+      "core/modules/nix/config.ss": "9b6c436dd3d738aff84b6e4579259bb5effe244ac1b77f11f91e5bce32ab5463",
+      "core/modules/nix/func.ss": "e238856fb31551110222f17e30941290ad8845f643e86cc44523b9bdcca3d394",
+      "core/modules/nix/interface.ss": "0dfc03f78ce06e3208954a42c057c9513c75a4296f6028cc4517114b3318ece5",
+      "core/modules/nix/objects.ss": "410d7deeb78e33da3f26b8ad8fd5ab9ad849c3c732db433af15d76b1f8281a0d",
+      "core/modules/nix/types.ss": "1e34f1ba11b8a092455afb0ecde4c3c558ea91aa0270934a6fe7ffe43b8a57eb",
+      "core/modules/services/opentofu/aws-hash.ss": "7d86ae3f7467d9140c8ee1690145f3227c72d94cd870646691fbf55c2bd0adf5",
+      "core/modules/services/opentofu/build.ss": "c404d78d4f689ee503b105c0e2076fe25b15fdcfa9031e5de83ec22e73493c82",
+      "core/modules/services/opentofu/collections.ss": "805c267670dc8c346780bcbf0e0791058c7b443c6449645a55177ec532a285ad",
+      "core/modules/services/opentofu/config.ss": "595fee06070329bb484d56989db797cb961d21b691b879c47ce4e1043bf3b207",
+      "core/modules/services/opentofu/func.ss": "46bfa9e6a1cad4a3c2cd389473938edb563553cd2ceb9e861e4790b6b6a3eb3d",
+      "core/modules/services/opentofu/interface.ss": "4ec23ca8e8961ae82104fa4d7399fea693898b97e756a246bb30112ea9155648",
+      "core/modules/services/opentofu/nix/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+      "core/modules/services/opentofu/nix/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+      "core/modules/services/opentofu/nix/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+      "core/modules/services/opentofu/nix/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+      "core/modules/services/opentofu/objects.ss": "519f19b142f9bb4472df4fed6fc4641b952db326a27f84fc31b2f993bd055c3a",
+      "core/modules/services/opentofu/source.ss": "0a4bbd9a791d2028b2d14bb60f122e4a74bae43f6f6f3e8c1dee8a1c9ac85e65",
+      "core/modules/services/opentofu/types.ss": "5d0ebfdcc1d40e79a194279d693a8904fa7be2019582e69008e7b84b94537061",
+      "core/t/module-build-graph-test.ss": "d735fc788d2afdebd38c6999867d1c0f3751bd0fcd86a3ebe69f57de8f2106ca",
+      "core/t/module-build-role-test.ss": "c1b7443de67b209db2f23c02e2ec86991d31d43845592830435d62fa778c3115",
+      "core/t/module-config-role-test.ss": "9d6519765e269cd4bedb94fff339723cbf4e18d28bd63c14774329e7306401a8",
+      "core/t/module-configuration-build-test.ss": "2e6516b1c33d49ba60bd6a7a443d064fff4d0aabe671257210574bd8c0339a1c",
+      "core/t/module-publication-test.ss": "6ddd4b14880e5ed3641696e7caafe075db12ec4f3d6a71881cd0781f04e4a9ce",
+      "core/t/opentofu-publication-test.ss": "d620ca050b037b3d0dcc3e84df1d077eb0b9600dc88186255f19452607af1e73",
+      "core/types.ss": "0cbfe5c821bbaeb037177606d279a59a51fed595a4271457d66aa7baf4dd25a5",
+      "justfile": "459b1dc3121601f1a8cc0446a26efe6e1e1b5d1b8a0939a914fcac368796d7f7",
+      "t/fixtures/opentofu/aws-5.100.0/package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+      "t/fixtures/opentofu/build-selection-checks.nix": "503b3f547e89eeddfad22dd69b36fd2566d69cc646cbf6c85d8a98518c3fd9a4",
+      "t/fixtures/opentofu/family-artifacts.nix": "21a3f908be79674cc449aaf5592edb16d836611df8c61ad0ea93b0f194fa35b0",
+      "t/fixtures/opentofu/family-schemas.nix": "2a047830f93e32858ac28197863e3535fba17cdd77e583c96b3bf6b44b924be1",
+      "t/fixtures/opentofu/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+      "t/fixtures/opentofu/selected-artifacts.nix": "073588db1b5106281a4e01b1df364d05eadafb21a07fa49990e0356fad47f242",
+      "t/fixtures/opentofu/selected-flake/flake.nix.in": "8888937db9c097a6ec8e17c8bb5d78a784b03dae201348a82385dd26ac373582",
+      "t/fixtures/opentofu/selected-flake/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f",
+      "t/fixtures/opentofu/versioned-schemas.nix": "8d916467759520fee9484c7b0921fc0e65ec6e436aa7bdff5923a96244ef59e0",
+      "t/nix-flake-source-test.ss": "d8dcf961d5c26ff7c1188beaa3f095761510fb63b9baf6f2d27de95f6cf28dd4",
+      "t/opentofu-artifact-collection-test.ss": "7b84b8ae287753222e60bb8fdc50fd34835d76c68702b38abdbef43980955bde",
+      "t/opentofu-aws-binary-test.ss": "197e3c6bc9016311a24775a1b12ceda20286bbc92f38b970da3c0fc4e491c050",
+      "t/opentofu-aws-source-test.ss": "73a112900dc3923900c2c6e13d162995f7230767c016d866a729d415c65775dd",
+      "t/opentofu-build-selection-test.ss": "9a6ef932f3902c101b20f0e974e2fa48922996993bdc140b3229a8ed9d58b1aa",
+      "t/opentofu-configuration-discovery-test.ss": "70b30e9ca7b17eeb05b2a7e708116674918b88f15e1b45840be0c48edf456d74",
+      "t/opentofu-configuration-families-test.ss": "affe21ce079584904dffb6faa054884dc9d730940b847073a7867d0e0ea41597",
+      "t/opentofu-indexed-inputs-test.ss": "12b89e718270d51501a3f29ef7a410f2a23a57c5227639e9c60efbae2c7acede",
+      "t/opentofu-module-scope-test.ss": "4a26aabb0995d27d013128bf550ebb648ea0457d2a9dbf9f15e538aa9c73f4ac",
+      "t/opentofu-provider-artifact-test.ss": "4861f7937ddd84bb5f7a5dbb6b79d0cc6b1d052ae399f03f14e63a310587d094",
+      "t/opentofu-provider-families-test.ss": "426eff5d39345bb4459aab4f469843738f2cb5de6b582861c9c63fc05bc61b9b",
+      "t/opentofu-provider-versions-test.ss": "68ac74a266d35988971e95b10ca9c0d43d2e431aca433838c61bac4f9e67a290",
+      "t/opentofu-reselected-artifact-test.ss": "4af1323467a2ae9da5a52a07ba11eab62bd62ab79a0cdf6bec894668e6aded08",
+      "t/opentofu-schema-test.ss": "469d2df86a186835230cd7b81e00ccd48ea8b6a79a83b4bd66f39a29a65b16c2",
+      "t/opentofu-selected-graph-test.ss": "877864a2d22b86116d947e5d427bbe287703ccdaea97f79e671af611cd265e65",
+      "t/opentofu-set-evidence-test.ss": "fbad39133275e6a06665fab924b0da60d77a1e5c90550be6ddc888adbdc07e7d",
+      "tools/qualification/opentofu-rounds.py": "af03db7b63abb4e283f6d14c69d63623003f0e5fc92391f7a4daf25a5689bc9a",
+      "tools/qualification/prepare-opentofu-flake.py": "23a3bd1cfb2e6b7119997989ea7b200070838b42e6c55bcc009896753a472f95",
+      "/private/tmp/opentofu-selected-flake-20261017-c/aws-package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+      "/private/tmp/opentofu-selected-flake-20261017-c/flake.lock": "17fe1e2b3113e1402e3870b9fe0de68d670e000a7f498c8ed9f151c0fcc4ccb4",
+      "/private/tmp/opentofu-selected-flake-20261017-c/flake.nix": "7e2efc8a2295b0c76efa85a95bb27431973cf834fdcb64ec0b3cf7f5e85b8631",
+      "/private/tmp/opentofu-selected-flake-20261017-c/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+      "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+      "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+      "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+      "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+      "/private/tmp/opentofu-selected-flake-20261017-c/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f"
+    },
+    "nix_version": "nix (Nix) 2.34.4+1",
+    "nixpkgs": "/nix/store/cx86xlxyvlai8iwr7hkmg3pri4zynbyc-cb2gvzqf4lc8qzlrw1ywwviw7phvjyl5-source",
+    "flake_artifact": null,
+    "aggregate": {
+      "aws-build": {
+        "samples": 3,
+        "seconds": {
+          "min": 6.1551830768585205,
+          "median": 6.4148969650268555,
+          "max": 6.493186950683594
+        },
+        "instantiate": [
+          3,
+          3,
+          3
+        ],
+        "realize": [
+          1,
+          1,
+          1
+        ],
+        "type-reads": [
+          1,
+          1,
+          1
+        ],
+        "type-compiles": [
+          1,
+          1,
+          1
+        ]
+      },
+      "aws-first-admission": {
+        "samples": 3,
+        "seconds": {
+          "min": 1.0013580322265625e-05,
+          "median": 1.0013580322265625e-05,
+          "max": 1.0013580322265625e-05
+        },
+        "instantiate": [
+          0,
+          0,
+          0
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      },
+      "aws-hot-slots": {
+        "samples": 3,
+        "seconds": {
+          "min": 3.0994415283203125e-06,
+          "median": 3.814697265625e-06,
+          "max": 3.814697265625e-06
+        },
+        "instantiate": [
+          0,
+          0,
+          0
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      },
+      "aws-explicit-recheck": {
+        "samples": 3,
+        "seconds": {
+          "min": 1.7758219242095947,
+          "median": 2.020601987838745,
+          "max": 2.0602829456329346
+        },
+        "instantiate": [
+          1,
+          1,
+          1
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      },
+      "aws-null-build": {
+        "samples": 3,
+        "seconds": {
+          "min": 7.283783912658691,
+          "median": 7.839364051818848,
+          "max": 8.019026041030884
+        },
+        "instantiate": [
+          3,
+          3,
+          3
+        ],
+        "realize": [
+          1,
+          1,
+          1
+        ],
+        "type-reads": [
+          2,
+          2,
+          2
+        ],
+        "type-compiles": [
+          2,
+          2,
+          2
+        ]
+      },
+      "aws-null-first-admission": {
+        "samples": 3,
+        "seconds": {
+          "min": 1.0013580322265625e-05,
+          "median": 1.0967254638671875e-05,
+          "max": 1.0967254638671875e-05
+        },
+        "instantiate": [
+          0,
+          0,
+          0
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      },
+      "aws-null-hot-slots": {
+        "samples": 3,
+        "seconds": {
+          "min": 3.814697265625e-06,
+          "median": 4.0531158447265625e-06,
+          "max": 5.0067901611328125e-06
+        },
+        "instantiate": [
+          0,
+          0,
+          0
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      },
+      "aws-null-explicit-recheck": {
+        "samples": 3,
+        "seconds": {
+          "min": 1.8927068710327148,
+          "median": 2.0051538944244385,
+          "max": 2.4168829917907715
+        },
+        "instantiate": [
+          1,
+          1,
+          1
+        ],
+        "realize": [
+          0,
+          0,
+          0
+        ],
+        "type-reads": [
+          0,
+          0,
+          0
+        ],
+        "type-compiles": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "source_unchanged": true
+  },
+  "native_evidence_boundary": {
+    "provider_schema_configuration_admission": true,
+    "provider_rpc_plan_or_apply": false,
+    "cloud_deployment": false,
+    "loader_connected": false,
+    "runtime_scope_artifact_injection": false,
+    "full_core_suite": false
+  },
+  "preserved_earlier_failures": [
+    {
+      "boundary": "configuration role import",
+      "result": "private helper missing from role wrapper; corrected using the already observed publication closure"
+    },
+    {
+      "boundary": "source currentness",
+      "result": "concurrent source/init.ss edit rejected; retained separately from completed rounds"
+    },
+    {
+      "boundary": "existing Case duration watchdog",
+      "result": "real module traversal timed out; removed redundant context traversal and unchanged-body reparsing without widening budgets"
+    },
+    {
+      "boundary": "native dependency rebuild",
+      "result": "old JSON Schema diagnostic owner failed consumer regression; exact owning imports and rebuilt native dependencies passed final consumer gates"
+    }
+  ],
+  "expression_source_control": {
+    "status": "passed",
+    "named_assertions": 70,
+    "maintained_publication": true,
+    "source": "upstream native NixSource."
+  },
+  "source_current_at_receipt_publication": true
+}

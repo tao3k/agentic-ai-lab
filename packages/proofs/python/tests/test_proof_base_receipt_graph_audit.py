@@ -9,8 +9,8 @@ import json
 
 import pytest
 
-import poo_flow_proof.cli as proof_cli
-from poo_flow_proof.proof_base_receipt_graph import (
+import agentic_ai_lab_proof.cli as proof_cli
+from agentic_ai_lab_proof.proof_base_receipt_graph import (
     AcceptedProofBaseReceiptNodeV1,
     AcceptedReceiptEvidenceV1,
     CanonicalInterfaceV1,
@@ -21,13 +21,13 @@ from poo_flow_proof.proof_base_receipt_graph import (
     ReceiptInterfaceEdgeV1,
     sha256_digest,
 )
-from poo_flow_proof.proof_base_receipt_graph_audit import (
+from agentic_ai_lab_proof.proof_base_receipt_graph_audit import (
     PROOF_BASE_RECEIPT_GRAPH_AUDIT_SCHEMA_V1,
     ProofBaseReceiptGraphAuditError,
     decode_proof_base_receipt_graph_audit_v1,
     encode_proof_base_receipt_graph_audit_v1,
 )
-from poo_flow_proof.receipt_acceptance_authority import (
+from agentic_ai_lab_proof.receipt_acceptance_authority import (
     AuthorityVerifiedReceiptEvidenceV1,
     DeclaredReceiptEvidenceV1,
     ReceiptAcceptanceAuthorityError,
@@ -82,7 +82,7 @@ def accepted_graph() -> ProofBaseReceiptGraphV1:
         "base",
         provided=base_interface,
         assumptions=(),
-        declaration="PooFlowProof.Base.verified",
+        declaration="AgenticAILabProof.Base.verified",
     )
     terminal = graph_node(
         "terminal",
@@ -93,7 +93,7 @@ def accepted_graph() -> ProofBaseReceiptGraphV1:
                 interface=base_interface,
             ),
         ),
-        declaration="PooFlowProof.Terminal.verified",
+        declaration="AgenticAILabProof.Terminal.verified",
     )
     return ProofBaseReceiptGraphV1(
         schema_id=PROOF_BASE_RECEIPT_GRAPH_SCHEMA_V1,
@@ -202,7 +202,7 @@ def test_encoding_is_independent_of_input_node_order() -> None:
 
 def test_rejects_any_other_audit_schema() -> None:
     artifact = decoded_object()
-    artifact["schema_id"] = "poo-flow.proof-base-receipt-graph-audit"
+    artifact["schema_id"] = "agentic-ai-lab.proof-base-receipt-graph-audit"
 
     with pytest.raises(ProofBaseReceiptGraphAuditError) as error:
         decode_audit(canonical_json(artifact))

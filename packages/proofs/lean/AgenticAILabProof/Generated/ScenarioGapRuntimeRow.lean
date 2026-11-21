@@ -1,0 +1,25 @@
+-- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+--
+-- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+import AgenticAILabProof.PooC4.ScenarioGap
+
+namespace AgenticAILabProof
+
+def GeneratedScenarioGapRuntimeRowFacts : ScenarioRuntimeRowFacts :=
+  { planOk := true
+    rejectionsOk := true
+    acceptedOk := true }
+
+def GeneratedScenarioGapRuntimeRowComplete : Bool := true
+
+theorem GeneratedScenarioGapRuntimeRowComplete_ok :
+    GeneratedScenarioGapRuntimeRowComplete = true := by
+  rfl
+
+theorem GeneratedScenarioGapRuntimeRowMatches :
+    runtimeRowMatchesPlan GeneratedScenarioGapRuntimeRowFacts := by
+  unfold runtimeRowMatchesPlan GeneratedScenarioGapRuntimeRowFacts
+  decide
+
+end AgenticAILabProof

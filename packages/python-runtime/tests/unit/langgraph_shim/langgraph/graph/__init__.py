@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Test-only LangGraph graph module backed by POO Flow compat."""
+"""Test-only LangGraph graph module backed by Agentic AI Lab compat."""
 
-from poo_flow_runtime.compat.langgraph.graph import (
+from agentic_ai_lab_runtime.compat.langgraph.graph import (
     END,
     START,
     CompiledStateGraph,

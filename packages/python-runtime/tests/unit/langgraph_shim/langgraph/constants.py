@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Test-only LangGraph constants module backed by POO Flow compat."""
+"""Test-only LangGraph constants module backed by Agentic AI Lab compat."""
 
-from poo_flow_runtime.compat.langgraph.constants import END, START
+from agentic_ai_lab_runtime.compat.langgraph.constants import END, START
 
 __all__ = ["END", "START"]

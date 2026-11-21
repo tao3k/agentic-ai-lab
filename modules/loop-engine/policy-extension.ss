@@ -11,18 +11,18 @@
         "policy-extension-contract.ss"
         "policy-extension-receipt.ss")
 
-(export +poo-flow-user-loop-engine-policy-extension-prototype-kind+
+(export +agentic-ai-lab-user-loop-engine-policy-extension-prototype-kind+
         loop-engine-policy-extension
         loop-engine-coordination-policy-extension
         loop-engine-observability-policy-extension
         loop-engine-safety-policy-extension
-        poo-flow-user-loop-engine-poo-policy-extensions->receipts)
+        agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts)
 
 ;;; Policy extension objects let operational policy families project report-only
 ;;; receipts without teaching the runtime core about each concrete family.
-;; : PooFlowLoopEnginePolicyExtensionPrototype
+;; : AgenticAILabLoopEnginePolicyExtensionPrototype
 (def loop-engine-policy-extension
-  (.o kind: +poo-flow-user-loop-engine-policy-extension-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-policy-extension-prototype-kind+
       name: #f
       receipt-kind: #f
       contract: #f
@@ -32,11 +32,11 @@
 
 ;;; Coordination is a concrete policy-extension prototype over the generic
 ;;; receipt channel. Scheme declares collision intent; Marlin enforces it.
-;; : PooFlowLoopEngineCoordinationPolicyExtensionPrototype
+;; : AgenticAILabLoopEngineCoordinationPolicyExtensionPrototype
 (def loop-engine-coordination-policy-extension
   (.o (:: @ loop-engine-policy-extension)
       receipt-kind: 'coordination-receipt
-      contract: 'poo-flow.loop-engine.coordination-receipt.v1
+      contract: 'agentic-ai-lab.loop-engine.coordination-receipt.v1
       priority: '()
       state-files: '()
       acting-on-key: #f
@@ -46,11 +46,11 @@
 
 ;;; Observability extension declares run-log and lifecycle signals without
 ;;; scheduling, pausing, or killing loops from Scheme.
-;; : PooFlowLoopEngineObservabilityPolicyExtensionPrototype
+;; : AgenticAILabLoopEngineObservabilityPolicyExtensionPrototype
 (def loop-engine-observability-policy-extension
   (.o (:: @ loop-engine-policy-extension)
       receipt-kind: 'observability-receipt
-      contract: 'poo-flow.loop-engine.observability-receipt.v1
+      contract: 'agentic-ai-lab.loop-engine.observability-receipt.v1
       run-log: #f
       run-log-schema: '()
       budget-path: #f
@@ -62,11 +62,11 @@
 
 ;;; Safety extension declares path, connector, and human gate policy as
 ;;; report-only guardrail facts for the runtime owner.
-;; : PooFlowLoopEngineSafetyPolicyExtensionPrototype
+;; : AgenticAILabLoopEngineSafetyPolicyExtensionPrototype
 (def loop-engine-safety-policy-extension
   (.o (:: @ loop-engine-policy-extension)
       receipt-kind: 'safety-receipt
-      contract: 'poo-flow.loop-engine.safety-receipt.v1
+      contract: 'agentic-ai-lab.loop-engine.safety-receipt.v1
       denylist-paths: '()
       allowlist-paths: '()
       human-gates: '()

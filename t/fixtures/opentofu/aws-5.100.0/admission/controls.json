@@ -1,0 +1,46 @@
+{
+  "provider": "registry.terraform.io/hashicorp/aws",
+  "version": "5.100.0",
+  "command": "tofu validate -json",
+  "controls": [
+    {
+      "case": "valid",
+      "schema_admitted": true,
+      "provider_valid": true,
+      "provider_diagnostics": []
+    },
+    {
+      "case": "wrong-type",
+      "schema_admitted": false,
+      "provider_valid": false,
+      "provider_diagnostics": [
+        {
+          "summary": "Incorrect attribute value type",
+          "detail": "Inappropriate value for attribute \"from_port\": a number is required."
+        }
+      ]
+    },
+    {
+      "case": "cidr-host-bits",
+      "schema_admitted": true,
+      "provider_valid": false,
+      "provider_diagnostics": [
+        {
+          "summary": "\"10.0.0.1/16\" is not a valid IPv4 CIDR block; did you mean \"10.0.0.0/16\"?",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "case": "missing-port",
+      "schema_admitted": true,
+      "provider_valid": false,
+      "provider_diagnostics": [
+        {
+          "summary": "Missing required argument",
+          "detail": "The argument \"ingress.0.from_port\" is required, but no definition was found."
+        }
+      ]
+    }
+  ]
+}

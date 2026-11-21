@@ -1,0 +1,8 @@
+{
+  "name": "agentic-ai-lab-quint-proofs",
+  "private": true,
+  "dependencies": {
+    "@informalsystems/quint": "0.33.0"
+  },
+  "license": "Apache-2.0 AND LGPL-2.1-or-later"
+}

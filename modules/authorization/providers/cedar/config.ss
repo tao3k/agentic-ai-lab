@@ -3,27 +3,27 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import :core/poo-clos/interface
-        (only-in :poo-flow/modules/authorization/objects
+(import (only-in :clan/poo/mop clos-class clos-make-instance)
+        (only-in :tao3k/agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor
-                 poo-flow-authorization-provider))
+                 agentic-ai-lab-authorization-provider))
 
 (export CedarCapabilityContractExecutor
         CedarCapabilityContractProjector
         CedarAuthorizationProvider)
 
 (def CedarCapabilityContractExecutor
-  (poo-clos-class
+  (clos-class
    'authorization/cedar-capability-contract-executor
    direct-superclasses: (list AuthorizationCapabilityContractExecutor)))
 
 (def CedarCapabilityContractProjector
-  (poo-clos-make-instance CedarCapabilityContractExecutor))
+  (clos-make-instance CedarCapabilityContractExecutor))
 
 (def CedarAuthorizationProvider
-  (poo-flow-authorization-provider
-   "poo-flow/authorization/cedar"
+  (agentic-ai-lab-authorization-provider
+   "agentic-ai-lab/authorization/cedar"
    '("cedar-rust" "cedar-lean")
    'strict-lockstep
    CedarCapabilityContractProjector
-   'native.cedar-authority))
+   'runtime.cedar-authority))

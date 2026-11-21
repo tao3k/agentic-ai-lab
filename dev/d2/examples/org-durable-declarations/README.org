@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Reading the Org-to-Durable admission boundary
+#+language: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/org-durable-declarations.org][Org declaration design]] owns the declaration, trigger and admission rules.
+This case supplies declarative teaching facts and object art. The existing
+D2 ASCENT module derives the composition.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/org-durable-declarations/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/org-durable-declarations/case.ss --evaluate
+#+end_src
+
+The first reading located the nominal time in the clock and acceptance
+record, and distinguished the heading and clock as inputs to the owner.
+Some captions were too small. ASCENT identified ten text anchors below
+its reader threshold. The revision uses shorter captions and a wider
+canvas while keeping the same evidence relations.
+
+The revised PNG was viewed again. The smallest measured label is 19.19
+pixels and the text bounds do not intersect. ASCENT grounded 11 anchors
+in the [[file:../../output/org-durable-declarations/review.json][image-bound evaluation]].
+
+PNG SHA-256: =d6519672c442f593e13c8c78b24e0859bb28bf1b0d8328253584f8874ca38194=.

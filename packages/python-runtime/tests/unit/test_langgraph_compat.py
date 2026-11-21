@@ -6,10 +6,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from poo_flow_runtime.compat.langgraph import END, START, MemorySaver, Send, StateGraph
-from poo_flow_runtime.compat.langgraph.checkpoint.memory import MemorySaver as MemorySaverFromPath
-from poo_flow_runtime.compat.langgraph.graph import StateGraph as StateGraphFromGraphPath
-from poo_flow_runtime.compat.langgraph.types import Send as SendFromTypesPath
+from agentic_ai_lab_runtime.compat.langgraph import END, START, MemorySaver, Send, StateGraph
+from agentic_ai_lab_runtime.compat.langgraph.checkpoint.memory import MemorySaver as MemorySaverFromPath
+from agentic_ai_lab_runtime.compat.langgraph.graph import StateGraph as StateGraphFromGraphPath
+from agentic_ai_lab_runtime.compat.langgraph.types import Send as SendFromTypesPath
 
 
 def test_langgraph_compat_exposes_langgraph_shaped_module_paths() -> None:

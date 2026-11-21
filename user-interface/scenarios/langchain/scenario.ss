@@ -1,14 +1,18 @@
+(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/profile-composition/profile-bundle
+        (only-in :tao3k/yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :poo-flow/user-interface/profiles/langchain)
+        :tao3k/yuanxu/profile-composition/selection-syntax
+        )
+
 (export LangChainProductionProfile langchain-scenario)
 
 (.def LangChainProductionProfile
@@ -23,7 +27,9 @@
                parser-after-model: #t
                no-implicit-tool-branch: #t)))))
 
-(user-composition langchain-scenario
-  (compose profiles
+(def langchain-scenario
+  (.new Scenario name: 'langchain-scenario
+        config: (let ((LangChainModule (.get tao3k/agentic-ai-lab.init.exports Profiles langchain profile)))
+    (compose profiles
     (use-module LangChainModule as chain memory prompt model parser no-tool)
-    LangChainProductionProfile))
+    LangChainProductionProfile))))

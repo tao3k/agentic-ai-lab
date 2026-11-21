@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 210"><g font-family="Inter,Arial,sans-serif" text-anchor="middle" fill="#234358"><rect x="42" y="18" width="266" height="170" rx="24" fill="#E5F5EB" stroke="#3C8066" stroke-width="4"/>
+<circle cx="109" cy="96" r="45" fill="#28705A"/>
+<text data-visual-expression="commit-count" x="109" y="112" font-size="45" fill="white">1</text>
+<path d="m176 65 8 8 15-18m-23 59 8 8 15-18" fill="none" stroke="#28705A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="245" y="73" font-size="25">Append</text><text x="245" y="123" font-size="25">Once</text><text x="109" y="171" font-size="25">Commit</text></g></svg>

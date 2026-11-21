@@ -8,13 +8,13 @@ import json
 
 import pytest
 
-from poo_flow_proof.axle_receipt_authority import (
+from agentic_ai_lab_proof.axle_receipt_authority import (
     AXLE_RECEIPT_ENGINE_IDENTITY_V1,
     AxleClosureReceiptAuthorityV1,
     declare_axle_closure_receipt_v1,
     parse_axle_closure_artifact_v1,
 )
-from poo_flow_proof.receipt_acceptance_authority import (
+from agentic_ai_lab_proof.receipt_acceptance_authority import (
     ReceiptAcceptanceAuthorityError,
 )
 
@@ -42,7 +42,7 @@ def axle_artifact() -> dict:
             "proof_base_interface": [],
             "root_declarations": roots,
             "root_module": "Proof",
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         },
         "exact_bundle": {
             "bundle_digest": EXACT_DIGEST,
@@ -58,14 +58,14 @@ def axle_artifact() -> dict:
             "environment": "lean-4.31.0",
             "lean_closure_digest": SOURCE_DIGEST,
             "root_declarations": roots,
-            "schema_id": "poo-flow.axle-exact-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.axle-exact-declaration-closure.v1",
             "source_declarations": ["Proof.root"],
             "theorem2sorry": {
                 "messages": [],
                 "request": {},
                 "root_declaration_kinds": {"Proof.root": "theorem"},
                 "root_declarations": roots,
-                "schema_id": "poo-flow.axle-root-theorem-obligation.v1",
+                "schema_id": "agentic-ai-lab.axle-root-theorem-obligation.v1",
                 "status": "generated",
             },
             "verification": {
@@ -75,7 +75,7 @@ def axle_artifact() -> dict:
                 "request": {},
                 "roundtrip": {},
                 "schema_id": (
-                    "poo-flow.axle-root-declaration-validation.v1"
+                    "agentic-ai-lab.axle-root-declaration-validation.v1"
                 ),
                 "status": "accepted",
                 "theorem_proof": {},
@@ -99,14 +99,14 @@ def axle_artifact() -> dict:
             "resolved_sources": [
                 {
                     "lake_manifest_digest": SOURCE_DIGEST,
-                    "package_id": "poo-flow-proof",
+                    "package_id": "agentic-ai-lab-proof",
                     "revision": "test",
                     "source_tree_digest": SOURCE_DIGEST,
                 }
             ],
             "root_declarations": roots,
             "root_module": "Proof",
-            "schema_id": "poo-flow.independent-declaration-bundle.v1",
+            "schema_id": "agentic-ai-lab.independent-declaration-bundle.v1",
         },
         "independent_declaration_bundle_digest": INDEPENDENT_DIGEST,
         "preflight": {
@@ -121,7 +121,7 @@ def axle_artifact() -> dict:
             "proof_base_interface_count": 0,
             "root_declarations": roots,
             "root_module": "Proof",
-            "schema_id": "poo-flow.axle-closure-preflight.v1",
+            "schema_id": "agentic-ai-lab.axle-closure-preflight.v1",
         },
     }
 

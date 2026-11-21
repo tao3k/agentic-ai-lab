@@ -21,7 +21,7 @@
  (feature . poo-composition-lazy-demand)
  (rule . GERBIL-SCHEME-AGENT-R046)
  (optimizationFocus .
-  "native POO object reuse plus computed slot demand; no policy descriptor registry in the hot path")
+  "POO object reuse plus computed slot demand; no policy descriptor registry in the hot path")
  (inputPath .
   "t/scenarios/performance/poo-composition-lazy-demand/input/src/composition/incident-response.ss")
  (expectedPath .
@@ -41,7 +41,7 @@
  (expectedOutcome . "the poo-composition-lazy-demand scenario preserves its declared semantic result under the ASP P95 gate")
  (repairSteps
   "reuse peer POO objects across agent branches"
-  "push expensive route/image facts behind native lazy slots"
+  "push expensive route/image facts behind runtime lazy slots"
   "materialize only the requested object path until an explicit boundary")
  (expectedRepair . "reuse peer POO objects and defer expensive slots until an explicit demand boundary")
  (expectedQualitySignals
@@ -53,12 +53,12 @@
   (large-library-force-count . 0))
  (pooFormEvidence .o .def defpoo)
  (pooUsageCallEvidence .ref .get .mix .o .def .putdefault! .setslot! setslots! .all-slots)
- (nativePooPrimary . #t)
- (adapterBoundary . "benchmark descriptor is a harness boundary; runtime path stays POO-native")
+ (runtimePooPrimary . #t)
+ (adapterBoundary . "benchmark descriptor is a harness boundary; runtime path stays POO")
  (hotPathExemption . "no object<-alist, descriptor registry, or global memo cache in demand traversal")
  (hotPathEvidence .
   "t/module-system-poo-performance-test-support/composition-large-library.ss")
  (styleRewriteBoundary .
   "do not model the composition as policy descriptors; compose peer POO objects and let .ref force demand subgraphs")
  (measurementPhases selective-demand shared-object-cache explicit-boundary scenario-load assert-time-gate observe-runtime-memory)
- (tags module-system poo composition lazy-demand native-object performance scenario))
+ (tags module-system poo composition lazy-demand poo-object performance scenario))

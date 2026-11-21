@@ -1,0 +1,17 @@
+{
+  "candidate": {
+    "status": "rejected",
+    "rows": []
+  },
+  "receipt": {
+    "verification": "invalid",
+    "verdict": "consistent",
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "7b5a3f2ce5c70f0ec1c04d158607f3449fd551e5f45259f39b73f315f7ca9a2b",
+    "candidateValid": true,
+    "operation": "temporal.observe",
+    "requestDigest": "c60a511b0e2342deb09baa3d57fd5b9dfcdc6d233aeb798e022edbd2e1fa4bb6",
+    "difference": false
+  },
+  "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+}

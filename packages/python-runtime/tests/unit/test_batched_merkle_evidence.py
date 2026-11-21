@@ -4,7 +4,7 @@
 
 """Shared-vector and proof tests for AC-08 Batched Merkle evidence."""
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     batched_evidence_leaf,
     batched_merkle_proof,
     batched_merkle_proof_verify,

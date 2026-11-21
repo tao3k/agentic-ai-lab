@@ -1,0 +1,1477 @@
+#+title: Workspace Recovery After an Interrupted Write
+#+language: en
+:PROPERTIES:
+:ID: context-repeated-owner-recovery
+:STATUS: recovery-design-under-review; historical-qualification-scoped-separately
+:END:
+
+* Interrupted workspace write: the design contract
+:PROPERTIES:
+:CUSTOM_ID: interrupted-write-design
+:END:
+
+The workspace was changed, but the owner crashed before retaining the result
+receipt. That is the scenario author's knowledge. The recovering Context does
+not inherit that omniscient view: it retains the original Attempt and intended
+effect, while the effect's completion remains unknown. A fresh file observation
+can reveal changed bytes without establishing which action produced them.
+
+This section and the =InterruptedWriteRecoveryDesign= view in
+[[file:workspace-recovery.sysml][the existing SysML model]] define the current design discussion. They introduce
+no implementation or prescribed action sequence. The historical execution
+material below retains its original scope and does not validate this design.
+The historical READY/repeated-boot case and the interrupted workspace write
+are different cuts; owner readiness never proves workspace-effect completion.
+
+The [[#recovery-dispatch-count-mvp][current replay-count design and figure]] explain how one scoped question
+survives changes to evidence. The numbered summary examples are retained
+as case fixtures.
+
+** Evidence belongs to Temporal Causality
+
+Durable consumes the existing [[file:../../../../modules/temporal-causality/framework.org][Temporal Causality framework]] and its
+[[file:../../../../modules/temporal-causality/evidence/model.org][Evidence, Use, and Artifact Lineage contract]]. It does not own another Evidence
+store, revision mechanism or causal inference language. Context relates those
+objects to its tasks and exposes a scoped view. Durable supplies the domain
+claims about an Attempt, effect completion and safe repetition.
+
+Use the existing distinction between =EvidenceRetrieval=, =EvidenceUse= and
+=EvidenceAssessment=. Finding a file or receipt records a candidate source.
+Using it to support "this Attempt completed" binds exact source and claim
+versions. An assessment records its assessor, method, verdict and basis for
+that exact use. Neither retrieval, model confidence nor a supplied assessment
+alone admits the claim. Admission must satisfy the applicable evidence policy.
+
+Temporal revisions retain assertions, corrections and retractions. An as-of
+admission cut answers what Context knew then; valid time answers when the
+assertion applies. A late receipt can change today's assessment of the old
+Attempt without rewriting what was known on the first recovery observation.
+Time order alone does not establish a causal edge. Clock-domain uncertainty,
+unknown validity and conflicting revision heads remain explicit.
+
+** Objects and ownership in one scene
+
+| Object or existing contract | Meaning here | Relations retained |
+|----------------------------+--------------+--------------------|
+| Original Attempt | The particular attempt interrupted by the crash | Task, original effect identity, saved composition, unresolved responsibility |
+| Effect intent | The intended workspace modification and its scope | Target, operation and identity; separate from observations and results |
+| Saved/current composition | Which module contracts and domain policies interpret this state | Core Feature binding and independent Durable provider; revisions remain visible |
+| Temporal evidence lineage | File observations, receipt retrievals and their assessed uses | Source/claim digests, provenance, time, cut, assessment and correction dependencies |
+| Causal hypotheses | Competing explanations of the observed change | Proposed cause/effect relations, constraints, supporting and refuting uses |
+| Recovery judgment | A scoped conclusion about one question | Attempt/effect, premises, policy revision, Temporal cut and supersession |
+| Reconciliation obligation | A question that remains materially unresolved | Target claim, derivation reason, responsible role, discharge evidence and dependencies |
+| Exploration proposal | A model-selected way to distinguish explanations | Addressed obligation, expected distinctions, assumptions, cost and required authority |
+
+The last three are Durable/Context design roles over Temporal objects, not new
+Temporal evidence primitives. Core Feature assembles modules. Durable's POO
+composition chooses outcome interpretation and retry policies. Neither layer
+may bypass Temporal evidence admission or turn an exploration proposal into
+permission to act.
+
+** Unknown is scoped to a question
+
+Keep three judgments separate: composition interpretability, original-effect
+outcome, and eligibility for another dispatch. Each records its own reasons
+and evidence cut. A missing receipt is an observation about the searched
+inventory, not evidence of failure or of non-execution. Absence can support a
+stronger conclusion only with an admitted source-coverage claim for the relevant
+identity and interval. A timed-out search does not supply that coverage.
+
+An outcome may remain unknown because attribution is missing, the source is
+unavailable, the relevant cut is incomplete, clocks are incomparable, or uses
+are contested. Preserve these reasons rather than collapsing them to a retry
+Boolean. An unavailable or mismatched composition blocks interpretation under
+that composition; it does not erase the original Attempt or raw evidence.
+An admitted migration requires its own evidence and cannot silently relabel
+an old claim as a current one.
+
+** How evidence changes the same case
+
+These are possible evidence changes, not ordered stages or mandatory branches.
+
+| Newly available material | What it can change | What stays unresolved or prohibited |
+|--------------------------+--------------------+--------------------------------------|
+| File contains the intended text | Establish the observed content at the observed scope/time | Original writer and full effect completion remain unknown |
+| A candidate result receipt names the effect | Add a source and a proposed use for the completion claim | Authenticity, exact identity and applicability still need assessment/admission |
+| An admitted receipt establishes original-effect success | Revise outcome to succeeded and discharge its outcome obligation | Redispatch of that successful effect is vetoed; unrelated questions remain |
+| An admitted scoped non-execution finding | Revise the corresponding outcome claim under its explicit coverage | Current permission and safe repetition remain independent requirements |
+| A second writer could explain the same bytes | Retain an alternative causal hypothesis | Matching bytes cannot choose the original Attempt by themselves |
+| A source correction or conflicting assessment arrives | Reevaluate dependent uses and conclusions at a new cut | Retain previous judgments as history; do not settle disagreement by vote |
+| Permission expires while outcome evidence is unchanged | Reevaluate dispatch eligibility | Historical outcome evidence remains historical evidence |
+
+Temporal truth maintenance identifies the potential affected frontier from
+recorded uses and derivation edges. Reachability means "needs reevaluation",
+not "the conclusion is now false". A partial dependency inventory cannot
+certify that everything outside it is unaffected. Revised conclusions retain
+predecessors and exact premises; an obsolete eligibility judgment cannot
+remain currently applicable while those premises are unresolved.
+
+** ASCENT derives responsibility, not a next step
+
+ASCENT evaluates a finite, explicitly scoped Context snapshot containing the
+Temporal cut, candidate hypotheses, assessed uses and Durable relationships.
+Its derivations carry rule identity and premise identities. The following are
+semantic rule obligations, not executable rules or a new tuple-based API.
+
+| Premises in the scoped view | Derived responsibility | Discharge condition |
+|----------------------------+------------------------+---------------------|
+| Interrupted Attempt with unresolved effect outcome | Session/Task owner retains an outcome-reconciliation obligation | An admitted outcome for the exact effect under the applicable contract |
+| Changed bytes are used for completion, but causal attribution is unsupported | A capable evidence investigator must examine attribution | Admitted evidence resolves that use, or the use is withdrawn while the parent outcome question remains open |
+| Required evidence is unavailable or coverage is unestablished | Source owner/provider is asked for the scoped evidence or coverage | Admitted material resolves the gap; a failed retrieval only records an obstacle |
+| Competing assessments or corrected premises affect a judgment | Configured evidence evaluator must reconsider the affected claim | A new admissible conclusion or an explicit still-unresolved result |
+| Saved/current interpretation contracts do not match | Composition owner must explain compatibility or migration | Admitted compatibility/migration evidence for the retained state |
+| A retry is proposed without applicable authority or safe-repeat support | Authority owner and effect-contract owner have separate checks | Both checks hold for the proposed scope; successful-effect veto still applies |
+
+"Unsupported" and "unresolved" above are explicit scoped assessment statuses,
+not unrestricted negation over an open world. An obligation identity binds the
+Attempt, question and scope; repeated recovery retains it rather than adding
+another copy. New reasons attach to that question. Distinct questions retain
+distinct obligations. Responsibility identifies who can establish a fact; it
+neither grants that actor access nor assumes a provider is available. An
+unassigned or blocked obligation remains visible.
+
+Closing an exploration task does not discharge its parent obligation. Evidence
+correction can reopen a previously resolved question with a new revision while
+retaining the earlier resolution. ASCENT's candidate derivations cannot by
+themselves authenticate a receipt, admit an outcome or authorize an effect.
+
+** The model explores within this evolving Context
+
+The model sees unresolved questions, competing hypotheses, evidence lineage,
+known access constraints and why each judgment currently holds. It may propose
+inspecting a receipt source, comparing a scoped file history, asking a responsible
+owner, seeking a discriminator for another-writer hypothesis, or waiting for an
+unavailable source. These are examples, not a closed action vocabulary.
+
+Each proposal explains which uncertainty it addresses and how different possible
+findings would affect the hypotheses. The model can revise its explanation,
+branch, pursue independent observations concurrently, or stop when no authorized
+and useful observation is available. Budget exhaustion leaves an explicit open
+frontier; it does not establish success, failure or safe retry.
+
+Actual findings re-enter Temporal as source-bound observations and assessed
+uses. Corrections propagate through existing dependencies. ASCENT derives the
+resulting responsibilities over the revised Context, and the model chooses
+again from the available exploration space. No rule prescribes a universal
+"read file, fetch receipt, retry" order. Structural/causal relationships in the
+SysML view express dependencies, not a state-machine workflow.
+
+** Design boundaries and unresolved contracts
+
+Completion admission needs an effect-specific definition: observing the desired
+bytes may establish a postcondition while leaving historical attribution open.
+A domain contract must explicitly say which claim is sufficient; this case
+requires the original effect's outcome, not merely matching content. Hypotheses
+are an open family and have no automatic exhaustive/exclusive assumption.
+
+Safe repetition needs evidence covering the actual operation and target. A
+"deduplication supported" label without its scope and guarantees is insufficient.
+Current permission is checked independently. Even an eligible proposal is a
+design judgment, not an execution capability. An unknown effect may remain
+unknown indefinitely; eventual reconciliation requires sources that can answer
+and authorized opportunities to inspect them.
+
+The Temporal-to-ASCENT candidate exchange must bind the exact cut, source
+versions and provider completeness claims. The existing Temporal evidence
+contract describes that boundary as open. This design requires it and does
+not claim an implemented adapter. Source authenticity, effect-specific
+completion evidence, responsible-role resolution and scoped dependency
+completeness must be supplied explicitly by the composed system.
+
+* Historical implementation and qualification context
+
+The remaining sections preserve prior evidence and implementation discussion.
+They are background, not the action plan or acceptance evidence for the current
+ORG/SysML-only design revision.
+
+* Inherited boundary and new obligation
+
+This refines [[file:18-runtime-durable-source-commands.org][18: runtime durable source commands]]. That gate killed an initial
+owner and recovered it. It did not establish behavior when recovery itself
+dies repeatedly. The runtime protocol is unchanged in this slice; executable
+runtime probes enter the existing replay and readiness commit boundaries.
+
+The source command keeps its existing input identity and expected source cut.
+Every new owner acquires a new durable epoch. Session identity and original
+Attempt identity remain unchanged. Source applicability, current writer epoch,
+historical completion and outstanding worker obligations remain separate axes.
+
+* Readiness is current-epoch evidence
+
+A committed old =owner-recovery:<epoch>= record proves a historical decision.
+It does not certify the next owner or authorize opening before replay. A failed
+old readiness input must not be relabeled as an applied decision. Each new
+owner must complete its own reconstruction/replay and commit its own readiness
+before its reactor can return bootstrap success.
+
+Older failed readiness inputs remain historical bookkeeping in the retained
+inbox. They are not pending source/authority commands and cannot grant effects.
+Their cleanup/archival is separate from worker reconciliation. Removing such
+metadata cannot be used as evidence that an old worker terminated.
+
+| Recovery cut | Committed source state | Next owner's duty |
+|--------------+------------------------+-------------------|
+| Before source decision commit, repeatedly | Original source cut and original pending input | Reconstruct subscribers and retry the original command |
+| After source decision commit | Retired source, affected Context fences and obligations committed together | Retain that decision; do not rerun or overwrite it |
+| Before readiness commit | Source decision may already be committed; old readiness did not succeed | Retain fences and commit the new owner's readiness |
+| After readiness commit but before bootstrap returns | Historical ready decision exists for the dead owner | Acquire a new epoch and commit a fresh readiness decision |
+
+No result is published in these failed boots. The final successful boot still
+uses runtime Context/Session checks. Portable old worker data cannot recreate an
+observation capability. A/B lose current applicability, while unrelated C keeps
+its actual completed result. Source re-admission cannot restore the original
+proof or the captured original parent version.
+
+* Exact recovery obligations
+
+Recovering a live Attempt creates one unresolved obligation. Recovering a
+schedule that already contains that obligation must retain it once, not append
+another copy. Historical completed Attempts acquire no new worker obligation.
+Every injected runtime cut checks exact fixture obligation counts and at most
+one terminal per A/B Attempt. SQLite independently retains original terminal
+payload hashes through all failed recoveries and the final successful owner.
+
+The counts in this fixture are not a universal one-obligation limit for every
+Session. They follow from one original Attempt per participating Session. The
+production Session reducer continues to own scheduling/reconciliation.
+
+* Runtime original-image recovery chains
+
+[[file:run-runtime-query-recovery.py][The runtime gate]] uses three section-18 saved images: A/B pending with C
+completed, A/B/C already completed, and a source with no consumers or Query
+observations. It verifies image hashes and unchanged runtime/runtime dependencies;
+only the new crash-probe driver differs from the historical qualification.
+Historical seed receipts are not relabeled as current-build receipts.
+
+Each chain kills five independent recovery processes: source before-commit
+twice, source after-commit, readiness before-commit, readiness after-commit.
+A sixth owner must open successfully using its own ready decision. Every cut
+retains its original database image. The gate distinguishes provisional state
+read by a writer inside its transaction from the committed crash image checked
+after SIGKILL. This is crucial: a private invalidation is not durable delivery.
+
+[[file:audit-recovery-chains.py][The independent corpus audit]] requires all three profiles, identical current
+source/object cuts, immutable seed references and a current-epoch ready record.
+It checks that old failed readiness was not retroactively authorized and old
+committed readiness remains historical. It does not turn unexecuted suffixes
+from the source-prefix corpus into new concurrent executions.
+
+#+begin_src sh
+just build-test t/context-query-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-runtime-query-recovery.py" --seed-receipt /private/tmp/context-query-source-owner-final-20261025/query-durable-receipt.json --artifacts /private/tmp/context-query-recovery-run
+#+end_src
+
+Exact durable replay requires the seed's boot/clock enrollment. Process-death
+recovery on the same boot does not qualify host reboot or clock re-admission.
+The gate uses serial Just processes with the existing pre-import heap fence.
+
+* Executed SysML contract
+
+[[file:workspace-recovery.sysml][The SysML v2 model]] enumerates five failed boots with three abstract cuts per
+boot, three consumer profiles and five algorithm modes. It checks exactly one
+source decision, current-epoch readiness, A's exact pending obligation and B's
+captured-parent fence. Runtime probes additionally check B's worker obligation.
+Terminal bytes and raw evidence are immutable inputs in this bounded model;
+actual persistence and original proof replay remain runtime obligations.
+
+[[file:run-recovery-scenarios.py][The CLI runner]] checks actual execution outputs against independent trigger
+conditions and retains each unsafe witness with corrected replay. These are
+recovery-cut combinations, not all OS interleavings, source authenticity or a
+mechanical refinement proof of the Scheme implementation.
+
+#+begin_src sh
+python3 "$slice/run-recovery-scenarios.py" --artifacts /private/tmp/context-query-recovery-model
+python3 "$slice/run-recovery-scenarios.py" --replay /private/tmp/context-query-recovery-model/counterexample-0004.json --artifacts /private/tmp/context-query-recovery-model-replay
+#+end_src
+
+The full source/policy/grant/expiry event product, remote worker reconciliation,
+and physical checkpoint normalization remain open. Finite repeated crashes
+establish selected safety observations; eventual progress assumes that a writer
+eventually remains alive long enough to finish recovery.
+
+* Qualified local results: 2026-10-25
+
+All three final runtime chains passed: pending A/B, historically completed A/B,
+and zero consumers. Each chain contains five actual SIGKILLs during recovery
+and a sixth owner that completes normal startup. The runtime probes checked
+exact A/B obligation counts at every injected cut. Terminal payload digests and
+original evidence remained unchanged; the source input produced exactly one
+durable source decision across all six owner epochs.
+
+The independent audit confirmed that the failed old readiness was not marked
+applied, the committed old readiness remained historical, and the final owner
+committed its own ready record under its new epoch. Reopening the databases for
+that audit left every retained artifact hash unchanged.
+
+Final runtime evidence is
+=/private/tmp/context-query-recovery-final-20261025/recovery-receipt.json= and
+=corpus-audit.json=. The current runtime/runtime dependency cut matches the
+historical seed cut; only the crash-probe driver and gates changed. Each of the
+15 intermediate committed images remains independently retained.
+
+A current-build runtime unsafe control also restored the original pending-source
+image while omitting source replay. Cached A remained admitted, reproducing
+the missed-invalidation failure. It is retained separately at
+=/private/tmp/context-query-recovery-final-counter-20261025/counter-receipt.json=.
+This is a cached-invalidation witness, not a claim that an old endpoint
+capability survived process death.
+
+The SysML CLI executed 3,645 cases: 243 five-cut sequences, three profiles and
+five algorithm modes. All 729 safe-mode cases held. Of 2,916 unsafe-mode probes,
+2,087 exposed their expected violation and 829 lacked its triggering condition.
+There were zero unexpected verdicts. Four saved unsafe witnesses and their
+mode-zero corrections added eight executed replay cases, with four expected
+failures. The evidence is under
+=/private/tmp/context-query-recovery-model-v2-20261025/= and
+=/private/tmp/context-query-recovery-model-replay-20261025/=.
+
+The first assertion-successful runtime runs were rejected at artifact audit:
+their receipts included transient SQLite =-wal= / =-shm= coordination files.
+Final capture explicitly closes inspection handles, checkpoints committed data
+into self-contained WAL-mode main files, verifies that checkpointing preserves
+the logical committed state, and excludes transient files. Original application
+bytes and journal payload hashes are retained. The initial receipts remain
+capture diagnostics; they were not relabeled as final qualification. An early
+SysML reserved-word syntax diagnostic is likewise separate from executed cases.
+
+The combined index is
+=/private/tmp/context-query-recovery-evidence-20261025.json=.
+These are selected repeated-recovery observations and a bounded model. They do
+not establish all possible crash lengths or the complete concurrent product of
+source, authorization, strategy and expiry changes.
+
+* Read the existing recovery case as an object change
+
+This explanatory slice selects the existing after-commit/before-bootstrap-return
+boundary. It does not run a new crash or test. The runtime composition described
+in section 18 is a proposed ownership refinement; the historical observations
+above are not evidence that the new Module composition is implemented.
+
+The previous owner's READY record names the previous owner.
+The previous owner stops; the next owner has a different durable identity.
+The saved source decision survives; the same unresolved Attempt survives too.
+The new owner rebuilds from saved state before committing its own READY record.
+Ready to receive work does not mean that the old Attempt has completed.
+
+These sentences explain why the objects change. The committed journal is not a
+copy of a live process. Its old readiness is historical evidence, its source
+decision is retained without repeating that decision, and its unresolved worker
+responsibility belongs to the original Attempt rather than a newly duplicated
+Task. The final owner is current-ready while that responsibility can remain open.
+A changed owner does not prove that an external worker has stopped.
+
+The model may investigate missing worker evidence or competing explanations
+under a newly admitted Context. That inquiry is separate from reconstruction;
+neither the explanatory arrows nor a Feature profile prescribe its next action.
+
+The two teaching views use the existing SysML package: Module extension explains
+who contributes what, while recovery explains what changes and what stays. Each
+view is read as an actual exported image. Findings retain the image/source cut;
+a blank issue list does not establish that a young reader understood the design.
+
+** Research correspondence
+
+[[https://research.ibm.com/publications/reliable-actors-with-retry-orchestration][Reliable Actors with Retry Orchestration (PLDI 2023)]]
+distinguishes completed invocations from invocations eligible for retry and
+preserves call ordering across failures. For this design, a missing or
+incompatible composition binding is a separate recovery condition. It leaves
+the Attempt unresolved until the runtime can interpret its retained state.
+
+[[https://www.vldb.org/cidrdb/2026/consistency-and-correctness-in-data-oriented-workflow-systems.html][Consistency and Correctness in Data-Oriented Workflow Systems (CIDR 2026)]]
+provides a comparison for transaction boundaries and compensation. Our saved
+binding identifies the rules and provider that can interpret the checkpoint.
+Effect completion and compensation still require their own evidence.
+
+** Three judgments on the original Attempt
+
+Use the same cut after the old owner's readiness commit and before startup
+returns. Consider a design reading where Core finds the original binding, but
+the recovered evidence lacks a trusted result for an external effect. This is
+an illustrative evidence combination within the existing case.
+
+The original Attempt remains open across the owner change.
+Matching the saved binding lets Core interpret the checkpoint.
+Without a trusted outcome, the external effect remains unknown.
+Retry requires current permission and protection against repeating the effect.
+
+- Composition: compare the saved Feature revision, options, provider, contract
+  version and checkpoint schema with the current binding. A mismatch keeps
+  interpretation unresolved until an admitted binding or migration is available.
+- Effect: inspect the trusted outcome tied to the original effect identity.
+  A missing result leaves completion unknown. Historical READY and committed
+  source decisions cannot establish an external outcome.
+- Retry: ask whether present authority permits another dispatch and whether
+  reconciliation or an effect-specific deduplication guarantee makes repetition
+  safe. In this example neither is established, so retain the original
+  obligation and withhold redispatch. A known successful effect is consumed
+  as evidence rather than repeated. Compensation is a distinct authorized
+  effect with its own outcome.
+
+These are independent questions about a shared evidence cut. A successful
+binding is not a completion receipt or a dispatch grant. Evidence can arrive
+in any order. The runtime admits an action only against the applicable current
+evidence and authority. Models may propose observations or reconciliation
+without a fixed recovery workflow.
+
+Temporal Event History provides the comparison for using recorded Activity
+results during replay. Reliable Actors with Retry Orchestration provides the
+comparison for distinguishing completed calls from retries within its actor
+protocol. The CIDR workflow paper provides the comparison for durable
+transaction boundaries and compensation. None of those scoped guarantees
+establishes the outcome of an unobserved external effect in this case.
+
+** Two extension layers in the same recovery
+
+Core binds the Context recovery Feature to the independent Durable Module.
+The assembly supplies a POO configuration to the Durable engine.
+Durable interprets effect evidence and judges retry under its own contracts.
+
+The module assembly admits the Feature contribution and binds the provider.
+The engine configuration carries an outcome interpreter and a retry policy.
+These are domain extension points. An assembly contribution may supply their
+values. A standalone Durable consumer can provide the same values directly.
+
+In the existing readiness cut, the new owner recognizes the retained
+composition. The configured interpreter has no trusted evidence for the
+original effect, so its outcome remains unknown. The configured retry rule
+lacks current permission and safe repetition evidence, so the Attempt stays
+open without redispatch. An extension may propose a decision, while the
+engine retains admission and the host retains effect authority.
+
+The outcome interpreter reads admitted observations for the original effect.
+An admitted recorded outcome takes precedence over an interpretation. With no
+trusted result in this case, the interpreter leaves completion unknown.
+Current permission answers whether another dispatch is allowed now.
+Repeat safety answers whether another dispatch could duplicate the effect.
+A retry proposal must satisfy both guards. Neither guard is derived from a
+binding match, an outcome interpretation or the policy proposal. Eligibility
+is an inert decision tied to its evidence cut. Dispatch still requires a
+current host capability.
+
+For this evidence cut, project the original Attempt and effect, matching
+binding, empty outcome evidence, and absent current permission and repeat
+safety into the Scheme and Lean decision. The result remains ineligible
+even if the retry policy proposes retry. An admitted successful outcome
+for the same effect vetoes redispatch even when both guards are true.
+See [[file:18-runtime-durable-source-commands.org][the projection and host contract]]
+and [[file:workspace-recovery.qnt][the Quint recovery model]].
+
+** workspace recovery projection artifact
+
+The [[file:../../../../dev/durable/emit-recovery-projection.ss][projection producer]]
+imports the Durable public interface. It emits the admitted case input before
+running the policy and reads the actual decision slots afterward. The local
+numeric identities name the original Attempt, effect, policy revision and cut.
+Lean elaborates the emitted definitions and checks their projection. In this
+case the policy proposes retry, but the engine withholds eligibility because
+neither current permission nor repeat safety is established. The artifact
+exercises a pure decision and grants no host capability.
+
+** Host admission of a recovery decision
+
+The Context runtime service accepts a live scoped reader through
+=context-service-assess-workspace!=. The reader stays in the trusted
+embedding. The durable inbox receives only the assessment identity, original
+effect identity and expected owner epoch. In the owner transaction, the
+adapter checks the retained workspace intent, current epoch and original
+Session obligation, then captures a new observation with the live reader.
+
+The embedding supplies a revisioned Durable policy and admitted composition
+when constructing the adapter. The original handoff saves their portable
+identity. Historical handoffs without that identity cannot satisfy the
+binding check. The replacement owner binds its assessment cut to the current
+epoch, composition, observation, Session revision and execution receipt.
+Only a qualified original execution receipt supplies a recorded success.
+A coherent workspace read supplies effect evidence and leaves historical
+attribution to the outcome contract. It supplies neither current write
+permission nor repeat safety.
+
+The same transaction commits the observed state and Scheme decision to the
+existing journal. The service reads that exact decision after commit. An
+identical historical command returns the retained decision and a conflicting
+command identity is refused by the existing inbox verification. A decision
+receipt is inert. Positive dispatch requires the separate current authority,
+reconciliation and capability consumption boundary.
+
+The trusted service also exposes
+=context-service-workspace-recovery-projection=. It reads the exact applied
+assessment under the writer fence and compares the original Attempt, owner,
+composition, Session revision and generation, observation and receipt cut.
+An optional expected digest pins the receipt bytes. An obsolete or substituted
+receipt is ineligible for export through this current-evidence entry. The
+returned packed value is still portable evidence. Save those exact bytes and
+pass their path to =just emit-durable-recovery-projection= to produce a Lean
+module carrying the receipt digest and checked Scheme decision projection.
+
+The existing AuthorizedEffectToken and strict mediation code own token
+validation and nonce transitions. The latter already distinguishes a spent
+nonce with missing observation from a committed effect observation. Integration
+must persist the spend before invoking the effect endpoint and keep the
+obligation unresolved when that invocation lacks a qualified outcome. The
+existing Context grant observation describes current applicability. It does
+not itself grant external effect dispatch or establish repeat safety.
+
+The trusted embedding can optionally install an effect host with the Durable
+recovery configuration. Its =.retry-premises= operation supplies current
+permission and repeat-safety evidence for the retained intent. Its
+=.retry-authorization= operation must authenticate the issuer and return
+the current AuthorizedEffectToken validation context for the exact retry
+command. A read-only embedding supplies neither premise. The strict token
+binds the current epoch, original Attempt and Session, and the complete retry
+command digest. That command names the original effect and exact applied
+recovery decision digest. The owner compares the exact command digest in
+the binding and semantic root with the journal-derived value. The issuer
+decision has its own digest. The owner checks consistency of that digest
+between the binding and semantic root and reconstructs the root before
+asking the issuer to validate the capability.
+The owner passes the same POO request to issuer verification and
+consumption at the dispatch boundary. It contains the exact retry
+command, the original intent and the packed committed receipt with its
+digest, so the embedding can project the Cedar proposal from the
+owner-admitted values.
+Before issuance, =context-service-workspace-authorization-request= exposes
+that same request from the current journal cut, only for an eligible
+decision. The Cedar provider projects it into its existing request object.
+The intent digest covers the canonical retry command, and the handoff
+payload also names the original intent digest. The deployment supplies the
+Cedar subject and runtime roots. The projection leaves the execution root
+unchanged because it has observed no execution. This step produces an
+authorization request only.
+
+The Cedar runtime authority can check the signed grant against the exact
+reprojected proposal without spending it. The check and consume use the
+same signature, issuance, expiry, revocation and runtime/effect binding
+checks. A successful check leaves the grant unspent and cannot authorize
+an endpoint invocation by itself.
+
+=context-service-retry-workspace!= reserves a fresh local handoff only after
+the existing owner admits the command and commits the strict nonce spend.
+A second fenced owner transaction takes that handoff, checks the same token,
+receipt, current premises and authorization, and calls
+=.consume-retry-authorization!= against the live issuer. Only the returned
+consumed handoff reaches the configured =.dispatch-retry!= endpoint. Issuer
+refusal leaves the durable spend intact and the effect unresolved. The
+endpoint owns fresh execution admission and
+worker evidence, with the retry command and original intent supplied as
+separate values. Returning from that endpoint is not a completed effect or
+an original Attempt terminal. An old ACK cannot re-create the local handoff.
+A crash after consumption leaves the spend committed and the effect
+unresolved. A crash during endpoint acceptance also requires reconciliation.
+The dispatch transaction has a named inbox command tied to the consumption
+command. On takeover a pending dispatch remains an unresolved external
+handoff. It can neither recreate the live handoff nor block startup as an
+unidentified owner callback.
+
+The packaged Cedar port supplies the live application binding for the
+workspace recovery run below. The existing Cedar token projection and strict mediation
+are reused at their respective authorization and nonce boundaries.
+
+** Observed recovery from the retained workspace journal
+
+A read-only workspace embedding reopened a SQLite backup of the retained
+workspace incident. The original source and proof inputs were restored through
+their existing owners. The existing Context runtime service committed
+=doc19-assessment:4= under owner epoch 4 after reading the real workspace.
+The archived intent predates composition retention, so its binding comparison
+refused. The observation was admitted and the recorded outcome stayed unknown.
+The service declined the substituted receipt digest and exported the exact
+current receipt for Lean projection.
+
+| Observed item | Value |
+|---------------+-------|
+| Assessment inbox | doc19-assessment:4 applied at epoch 4 |
+| Original result inbox | workspace-result pending at epoch 1 |
+| Current workspace observation | admitted |
+| Retry eligibility | false |
+| Session terminal rows | 0 |
+| Retry nonce spend rows | 0 |
+| Committed receipt digest | sha256:026afd5e3b06b371bbd764a10815d921b50f1704ddc0a4ba40749e23fc41e227 |
+
+The exported Lean module elaborated against the existing recovery proof
+module. Its receipt digest matches the state row. This execution covers the
+restored legacy binding refusal and the actual host receipt projection. It
+does not exercise positive authorization, nonce consumption or endpoint
+dispatch. A second nonce also cannot reserve the same decision digest in the
+current runtime implementation. Both spend fences are written together.
+
+An additional assessment cannot erase an unresolved dispatch reservation.
+The owner records the latest spend for the retained effect in the same
+transaction as the nonce and decision fences. An assessment includes that
+predecessor in its cut. The trusted effect host receives the predecessor
+digest through =.retry-premises= and must name it as =reconciled-spend=
+before another assessment can claim repeat safety. A fresh nonce or a new
+observation alone cannot substitute for that reconciliation. The original
+live handoff can use only its own committed successor of that predecessor.
+
+The owner with the predecessor fence reopened another backup of the same
+journal and committed the updated assessment at epoch 4. Its receipt digest
+was =sha256:f62cc58a395b5ec3ff44c95a5595c59b44d41acc00922411a2bc3de4864e1cd9=.
+Lean checked the exported projection, and the digest matched the journal.
+The observation remained current, the legacy binding still refused,
+the original result remained pending, and both terminal and spend counts
+were zero. This trace exercises the updated cut encoding with no previous
+spend. It does not supply a positive predecessor reconciliation witness.
+
+The trusted service exposes =context-service-prepare-workspace!= for the
+original scoped handoff. The retry owner separately re-observes the current
+Session, Context source, proof and use grant at both consumption and dispatch.
+The original obligation must still be present. The effect host must match
+the original workspace, path and input scope. Its external authorization
+remains distinct from Context applicability.
+
+In a subsequent execution against a fresh backup of the retained journal,
+the same runtime service committed two dispatch refusals. With the exact
+assessment digest, =doc19-retry-ineligible= returned =recovery-ineligible=.
+With a substituted digest, =doc19-retry-mismatch= returned
+=stale-or-mismatched-decision=. Both commands were applied under epoch 4.
+Neither invoked an endpoint, consumed a nonce or wrote a Session terminal.
+The original result remained pending. The exported actual assessment
+also elaborated the Lean =doc19NoRedispatch= theorem for every host cut and
+capability. These observations cover the two refusal paths, with positive
+authorization and post-consumption interruption covered by the separate
+live runs below.
+
+** Matched composition with no dispatch authority
+
+A new isolated workspace used the same workspace recovery effect and existing service
+entry points. Owner 1 committed =workspace-edit= through
+=context-service-prepare-workspace!= with the admitted composition and policy
+revision present. The embedding closed before invoking the endpoint. Owner 2
+reopened the journal and admitted a real scoped read. The saved composition
+matched. The recorded outcome remained unknown. The policy proposed retry,
+but there was no current effect grant or repeat-safety witness.
+
+The existing service committed =doc19-retry-ineligible= and
+=doc19-retry-mismatch= under epoch 2, returning =recovery-ineligible= and
+=stale-or-mismatched-decision=. Terminal and nonce-spend counts stayed zero.
+The emitted Lean projection and its dispatch veto checked against the
+committed assessment digest
+=sha256:cb6ce450e30d3373f51e1b99680111cb53499d39ecfb46059893b590863806cb=.
+This is a reserved handoff followed by orderly owner replacement. The
+retained earlier incident supplies the distinct case where the workspace
+already changed before the receipt committed.
+
+The Lean dispatch contract now requires a current Context, a matching live
+endpoint, the original outstanding obligation and a process-local witness
+for the exact latest spend. That witness names the predecessor accepted by
+reconciliation. Its absence rules out dispatch after takeover even if the
+journal restores the spend record.
+
+Both consumption and dispatch also require a fresh coherent read from the
+scoped effect host. Its bytes must match the observation bound to the
+committed receipt. An unchanged journal cut alone cannot establish that
+the workspace is still unchanged. The Lean host cut carries this condition
+separately. In Quint, a changed read invalidates the cut used by
+=consumeCapability= and =finishHandoff=.
+
+A retry request with a new command identity and the same body as an applied
+spend at the current owner is refused as =decision-reuse=. The owner checks
+the original inbox body because the spend itself has already advanced the
+cut. An exact replay of the original command receives a historical
+acknowledgment from the policy clock and cannot recreate the live handoff.
+
+The trusted service accepts an original workspace result through
+=context-service-complete-workspace!=. The caller supplies the live joined
+Session observation. The owner checks that it belongs to the original
+Attempt and that the command, workspace, path and before/after digests
+match. The owner commits the Session terminal and the execution receipt in
+the same journal transaction. The service returns a command acknowledgment.
+Recovery reads the execution receipt from the journal when deciding whether
+the effect already succeeded.
+
+** Committed result vetoes retry after takeover
+
+In an isolated workspace, the workspace recovery Session bootstrap admitted the same
+single-file append. A real Session worker appended the line and read the
+file back. The trusted service joined the worker and committed
+=workspace-result= under owner 1. Owner 2 reopened the journal and observed
+the resulting bytes. With the same composition and the exact decision
+receipt, the retry request returned =effect-already-succeeded=. A substituted
+receipt returned =stale-or-mismatched-decision=.
+
+The journal retained one Session terminal and zero retry spends. The
+committed assessment recorded =succeeded= with matching composition and
+digest
+=sha256:4e9fee34f96fe69672bb8338322fd5ded374b864d55dce2f5e16d5a70759e77d=.
+The exported decision was checked in Lean against the success veto.
+
+** Signed permission with an invalidated Context
+
+An isolated embedding reopened the original reserved handoff and obtained
+a signed grant from the existing dual-engine Cedar Runtime Host for the
+canonical retry proposal. The owner still refused before spending the nonce.
+The Context Session reported =context-invalidated= at takeover, while
+the independent effect policy proposed retry and the file remained at
+its recorded preimage. No endpoint ran and the journal recorded no retry
+spend. The owner-2 decision projection elaborated in Lean from digest
+=sha256:817bd3d30222fa659bd694baa8c0c2a439e4f87253d56c0121d09b5d5d76cf62=.
+The embedding used the repository's Cedar bootstrap fixture for the
+isolated deployment. This is evidence of issuer signing and Context
+refusal, with positive dispatch still requiring current Context admission.
+
+** Signed dispatch and interruption before the workspace write
+
+The runtime assembly entry is =context-start-durable-service=. It opens the
+workspace journal on the serialized policy-clock owner, invokes the
+deployment's Context initializer, and constructs the existing Durable
+adapter with the supplied recovery composition. The initializer supplies
+the Session host, grant and policy owners, proof resolver, Query provider
+and recovery composition. The deployment supplies the clock profile and
+journal path.
+Startup and takeover use the same entry.
+If the initializer owns a Cedar issuer port, its =.close!= operation
+releases that port on startup failure or service shutdown.
+=context-service-issue-workspace-retry!= projects the owner-admitted
+request and asks the installed issuer for a live grant outside the
+journal transaction. Consumption and dispatch independently recheck it.
+
+For the workspace recovery deployment, =just workspace-recovery-host JOURNAL WORKSPACE SOURCE
+OPERATION= starts the service from the checked-in operator entry. Supply
+a private workspace containing =notes.txt= and an admitted Org source
+with the =work= ID. Each invocation is one operation on the journal:
+=reserve= reserves the original handoff, =complete= executes the original
+worker and commits its result, and =assess= reads current evidence on
+takeover. =retry= takes the optional issuer executable, Runtime Host
+socket, Host artifact and Cedar snapshot path. The deployment assigns
+the Cedar epoch from the current journal owner.
+=interrupt-write= and =interrupt-dispatch= exit at the documented
+interruption boundaries for an isolated run.
+
+=modules/durable/interface.ss= declares the Durable Module. The root
+=init.ss= discovers it in the =modules= auto window. The development
+launcher resolves that selection and calls its =workspace-recovery-host=
+export. The case
+assembly is owned by =modules/durable/workspace-recovery-host.ss=.
+=retry-audit= submits the exact retry, then exercises the historical
+command, a duplicate decision under a new command identity, and a
+substituted receipt on the same owner.
+
+Build the Runtime Host with =just build-cedar-runtime-host HOST_ARTIFACT=
+and the issuer with =cargo build --locked --manifest-path
+bindings/cedar-gerbil/Cargo.toml -p agentic-ai-lab-cedar-authority --bin
+cedar-authority-port=. Start the Host in a separate process with
+=cedar-authority-port serve-host HOST_ARTIFACT SOCKET= and wait for its
+ready record. The issuer command derives the linked component digests
+from the same crate as the authorization client.
+For the isolated workspace recovery deployment, the existing Cedar atomic-case
+manifest provides the bootstrap values and its =policies.cedar= provides
+the policy. Materialize the snapshot as follows:
+
+#+begin_src sh
+fixture=bindings/cedar-gerbil/fixtures/atomic-case
+jq --rawfile policy "$fixture/policies.cedar" \
+  '.bootstrap | .policies = [{identity:"doc19",source:$policy}]' \
+  "$fixture/manifest.json" > "$snapshot"
+#+end_src
+
+In the first run through this deployment entry, the worker committed its
+real write result under owner 1. Owner 2 refused retry as
+=effect-already-succeeded=, with one Session terminal and no dispatch.
+Lean checked the exported decision with digest
+=sha256:dcb206db524dd89684acb5cd4b3f026e9e61d9bcc23772c738f389b5b9566f4b=.
+
+In the write-before-receipt interruption, the file retained the added
+line and the journal had no result input, Session terminal or retry spend.
+Owner 2 retained the original Attempt as an obligation. It recorded
+=unknown= and refused retry as =recovery-ineligible= under digest
+=sha256:dcefe86b60a2ea22c09cb617924e7b8e281012005969d52da4d602dc8dd245f2=.
+
+The deployed =retry-audit= operation appended one line and committed one
+spend. The exact command replay produced no dispatch. The new command
+with the same decision returned =decision-reuse=, and the substituted
+receipt returned =stale-or-mismatched-decision=. The owner-2 assessment
+digest was
+=sha256:7020328d84b269298234f3cc33deceb9a6b80bf067fcc336db334b5a19aaa8ec=.
+
+In the deployed =interrupt-dispatch= run, Cedar consumed the grant
+before the process exited. Owner 3 observed the original bytes and
+retained the original Attempt, one spend and the pending dispatch
+command. It published no terminal and refused retry as
+=recovery-ineligible= with recorded outcome =unknown= and digest
+=sha256:dcf0e6e3ee1e8c21242f98a57833dd6d12c875c70b972f2b64c87b8df122cba3=.
+
+The single-file endpoint is =context-workspace-text-endpoint=. It binds
+the original Attempt's scope to one existing regular file, checks the
+preimage under the deployment's writer fence, publishes the replacement
+by rename, and reads the bytes back. The endpoint supplies a worker
+observation, which the existing Session owner can qualify and commit.
+Repeat-safety evidence comes from the deployment; the endpoint does not
+infer it from matching bytes alone. Use a private workspace or a writer
+fence shared by every writer.
+
+=context-service-start-workspace!= enrolls the actual Session worker in
+the original handoff transaction and releases it only after that
+transaction commits. The returned live worker can be awaited without
+publishing a result. Its =.commit!= operation joins and qualifies the
+observation in the named =workspace-result= transaction. A process
+interruption after the file write and before that transaction leaves the
+original effect unresolved.
+
+The Cedar Provider composes the scoped endpoint with
+=agentic-ai-lab-cedar-runtime-port= through
+=agentic-ai-lab-cedar-workspace-host=. The deployment supplies an admitted
+POO snapshot, subject, runtime coordinates and the existing linked
+Runtime Host. The packaged =cedar-authority-port= uses that Host through
+the existing Authority and keeps the signing key private. Scheme checks
+the local token digest against its issued value. The Lean dispatch contract
+also requires an issuer spend for that exact token.
+
+Two isolated runs used the same reserved append and a clock profile that
+kept the Context grant current through takeover. The embedding used the
+repository Cedar bootstrap fixture. The scoped endpoint checked the file
+preimage in an isolated workspace with no competing writers.
+
+| Run | Observed result | Journal |
+|-----+-----------------+---------|
+| Authorized dispatch | One line appended. Same receipt refused as =decision-reuse=. Substituted digest refused as =stale-or-mismatched-decision=. | One spend, applied dispatch, zero Session terminals |
+| Exit after issuer consumption | Owner 3 saw the original bytes and returned =recovery-ineligible=. The original effect stayed =unknown=. | One spend, pending dispatch, zero Session terminals |
+
+The dispatch assessment digest was
+=sha256:095d63ef52f3804a499e401426aace19d2b7bdd85b4e0567269507c5663932a6=.
+At the same epoch, the interrupted workspace had the same preimage but
+a distinct intent-bound digest
+=sha256:b7032856ec94e0baa752bdb06dac7bf8d01558d412bbc3d9e44709eb107c94df=.
+After takeover, its current decision digest was
+=sha256:4a36885e4c6bd0a09f5d38b57db3d166580f4ec6fe841bb3ec08f265d7606c87=.
+The exact dispatch and reopened interruption receipts were exported from
+the journal and checked in Lean. Returning from the write endpoint in the
+dispatch run did not publish a qualified execution receipt.
+
+* Shared scientific model: structure, behavior, proof and explanation
+:PROPERTIES:
+:CUSTOM_ID: recovery-scientific-model
+:END:
+
+The interrupted-write contract at the beginning of this document is the common
+semantic reference. Each artifact has a distinct job; none substitutes for the
+others or proves the whole system by itself.
+
+| Concept | SysML design | Quint design module | Lean design namespace | D2 explanation |
+|---------+--------------+---------------------+-----------------------+----------------|
+| Same original question | RetainedRecoveryAttempt and ReconciliationResponsibility | Stable original-attempt/outcome key | outcomeDuty | One Attempt across all columns |
+| Observed bytes | TemporalEvidenceLineageView | observeBytes | appearance_preserves_outcome | Added line, unknown writer |
+| Exact admitted success | RecoveryClaimView and evidenceComparison.admitted | admitSuccess | admitted_success_resolves | Cut B: succeeded and resolved |
+| Correction with or without surviving support | correctionComparison | correctAttribution, survivingSupportDeterminesDuty | copied_support_cannot_survive, independent_support_keeps_outcome_resolved | Same correction, two cut C outcomes |
+| Competing explanations | RecoveryHypothesisView | Finite clue vocabulary only | Arbitrary clue strings, no causal truth oracle | File appearance leaves attribution open |
+| Model freedom | ModelRecoveryExploration | Any enabled operation, including wait | InquiryTrace in arbitrary order | Example inquiries scoped to each cut |
+| Independent dispatch guards | repeatJudgment and domainPolicy | Existing DurableRecoveryExtension module | eligibility_requires_both_guards, successful_effect_veto | Outside this focused evidence view |
+
+[[file:workspace-recovery.qnt][RecoveryEvidenceInquiry]] is a bounded knowledge-change abstraction alongside the
+existing dispatch model. Its nondeterministic action relation is a verification
+vocabulary, not an Agent workflow. The three-revision bound and finite clue
+names bound analysis only. They are not product limits or a closed exploration
+API. =revise= assumes externally admitted, exact-effect evidence. It abstracts
+Temporal source verification, digests, assessment methods and dependency closure;
+it does not reimplement or prove them. Conflict blocks current success selection.
+Correction may reopen the question while the earlier success remains history.
+
+[[file:workspace-recovery.lean][The Lean companion]] states and proves properties of that abstract judgment:
+observations, proposals and candidate findings preserve the outcome; arbitrary
+inquiry traces preserve an initially unknown outcome; correction reopens its
+question; revision retains previous cuts; successful effects veto eligibility;
+and eligibility requires both current permission and safe repetition. The
+booleans represent qualified propositions at an explicit cut, not ordinary
+user-controlled feature switches. List membership in Lean corresponds to set
+membership in Quint; ordering and duplicate proposal entries are not semantic
+claims. A mechanically checked cross-language refinement is not supplied.
+
+The earlier [[file:../../../../dev/d2/examples/recovery-evidence/case.ss][relationship view case data]] references this ORG and the existing SysML design through the
+unchanged generic driver. Its inert POO presentation inputs choose local object
+depictions and source-qualified explanatory relations. They introduce no Scheme
+runtime implementation, new renderer, domain inference or per-case layout code.
+=modules/d2= owns ASCENT selection, reader questions and layout constraints;
+the existing SDK and ELK place objects and routes. Actual image readings are
+retained in the companion =readings.ss= with the source cut and image digest.
+
+The evidence diagram deliberately omits the dispatch mechanism to keep its
+question readable. A diagram arrow denotes evidential dependence, a question
+or feedback; it does not prescribe execution order. Actual source authenticity,
+full Temporal admission, dependency completeness, causal identification and
+runtime liveness remain outside the finite abstraction. No proof of reader
+understanding or real-world effect completion follows from a rendered image.
+
+
+** One Attempt across three evidence cuts
+
+The interrupted write left the expected line in the file. At cut A, the
+observation establishes the bytes and leaves the original effect's outcome open.
+At cut B, the result owner supplies receipt R1 and its use is admitted as exact
+support for this Attempt's effect. Context selects success and ASCENT resolves
+that outcome duty. At cut C, admitted correction R2 attributes R1 to another
+Attempt. R1 was the sole qualifying support in this example. Context returns to
+unknown and ASCENT reopens the same Task owner's duty, keyed by Attempt,
+question and scope. Cut B still records what the admitted evidence established
+at B. The file observation also survives the correction.
+
+| Cut | SysML evidenceComparison | Quint | Lean | Suggested model inquiry |
+|-----+--------------------------+-------+------+-------------------------|
+| A | initial | observeBytes leaves outcome unknown | appearance_preserves_outcome | Locate a receipt source or examine another writer |
+| B | admitted | admitSuccess resolves duties | admitted_success_resolves | Optionally inspect claims that use the result |
+| C | corrected | correctAttribution restores the same duty and retains B | attributed_success_then_correction | Compare Attempt identities or seek an independent effect record |
+
+The cut labels are the evidence history selected for this example. The open
+model can investigate alternatives in any order, wait, or use newly admitted
+material. Its proposed inquiries have no admission or dispatch authority.
+With independent success support after R2, the evaluator reassesses the claim
+on that basis. Unrelated corrections leave the original result support intact.
+
+The [[file:../../../../dev/d2/examples/recovery-evidence/evidence-cuts.d2][D2 comparison source]] places each cut beside the others so readers can compare
+what changes in each row. The [[file:../../../../dev/d2/output/recovery-evidence/evidence-cuts.svg][rendered figure]] is an English design projection of the table above.
+The earlier relationship picture remains available as a companion.
+
+
+** One correction, two surviving evidence sets
+:PROPERTIES:
+:CUSTOM_ID: recovery-correction-surviving-support
+:END:
+
+Keep the original Attempt and exact effect from the interrupted write. Both
+alternatives start with a successful judgment at B. In both, the source owner's
+admitted correction R2 changes the attribution of R1. R1-copy is a derived use
+of the receipt, even if another system stores it or renders it differently.
+Temporal uses dependency lineage to withdraw both R1 and R1-copy from current
+support. Their versions remain in history.
+
+W1 represents a separate workspace write record that was independently admitted
+for the same Attempt and exact effect. Independence is relative to the corrected
+premise. If W1's attribution uses a join, assertion or copied identifier that
+ultimately relies on the corrected R1 attribution, W1 also belongs in the
+affected set. A different source name or matching file bytes cannot establish
+independence. The two examples assume no unresolved competing admission.
+
+| At cut C | R1 and its copy were the only support | Independently admitted W1 also existed |
+|----------+---------------------------------------+----------------------------------------|
+| Temporal | Withdraw both active uses; keep history | Withdraw the same uses; W1 survives |
+| Context | Unknown for the same effect | Succeeded on W1 under the current cut |
+| ASCENT original outcome question | Reopen the existing Attempt/question/scope key | Keep that key resolved |
+| ASCENT review scope | Flag claims citing affected uses and their dependent conclusions | Same scope; a surviving outcome does not validate every downstream claim |
+| Model example inquiry | Compare Attempt identities or seek an independent write record | Check which affected claims W1 actually supports and seek separate evidence where useful |
+
+The design separates outcome reconciliation from review of a withdrawn basis.
+An affected claim may still stand on other admitted support, may require new
+evidence or may remain unresolved. ASCENT can derive affected candidates from
+the scoped dependency graph. Incomplete dependency information limits any
+claim that the affected set is complete. Reassessment and investigation can
+be combined, deferred or pursued concurrently.
+
+In SysML, =correctionComparison.copiedOnly= and =independentSurvives= hold
+the two readings. Quint's =correctAttribution= subtracts the uses reached from R1's corrected
+attribution from =successUses= and exposes the withdrawn premise set as
+=affectedUseReview=. The graph traversal is modeled over the finite dependency graph below.
+Authenticating and admitting W1 remain assumptions at this boundary. Lean checks the bounded cases with
+=copied_support_cannot_survive= and
+=independent_support_keeps_outcome_resolved=. The independent use membership
+lemma covers arbitrary lists of the three modeled use kinds. Historical
+success is represented by its prior cut; the archive itself belongs to Temporal.
+
+[[file:../../../../dev/d2/examples/recovery-evidence/correction-support.d2][D2 source]]
+and [[file:../../../../dev/d2/output/recovery-evidence/correction-support.svg][rendered comparison]]
+show the alternatives side by side at the same cut.
+
+
+** A separate source can inherit the same attribution
+:PROPERTIES:
+:CUSTOM_ID: recovery-indirect-attribution
+:END:
+
+W1 records a workspace write under a storage-local identifier. To cite it as
+proof for the original Attempt, the evaluator joins that identifier through
+an Attempt crosswalk. The crosswalk was derived from R1's attribution. W1
+therefore has two required premises: the raw write record and its binding to
+this exact Attempt and effect. The raw record comes from a separate system.
+The effect-specific use of it still depends on R1.
+
+At cut C, the source owner's admitted R2 targets the versioned R1 attribution.
+The evidence view follows premise-to-dependent edges from that seed. It
+reaches the R1 receipt use and the crosswalk. The crosswalk reaches the W1
+attribution, which reaches the W1 success use. Both active success uses at B
+are affected. The traversal also reaches B's successful outcome and the
+recovery summary that cited it. It leaves the W1 raw record untouched. The
+R1-copy node remains in the shared example graph and is reached if present;
+it was not an active use in this branch.
+
+| Status of the exact W1 use at C | Required basis | Decision |
+|---------------------------------+----------------+----------|
+| Affected | A recorded path from the corrected premise reaches the W1 use | Withdraw it from current support |
+| Pending | No such path is recorded, and dependency coverage for this use or its binding is incomplete | Keep it out of current success support and derive a binding question |
+| Independent for this correction | Exact effect binding and use are admitted at C, with adequate scoped lineage coverage and no path from the corrected premise | Retain W1 as support under the applicable conflict checks |
+
+An independence claim is relative to the corrected premise, the exact use
+version, its claim and the selected cut. Checking only a producer name,
+a raw record hash or a missing graph edge cannot establish it. Reachability
+identifies judgments whose basis must be reviewed. Reassessment can produce
+the same verdict when another independent basis survives. Past verdicts
+and records remain available at their original cuts.
+
+At C in this case, no valid success support remains. Context records an
+unknown outcome for the same effect. ASCENT reopens the original outcome
+question for its Task owner, derives a separate W1 binding question for an
+evidence custodian or scoped investigator, and flags the reached judgments
+for review. The dependency path provides the reason for each request. The
+model may inspect the crosswalk provenance, look for an authenticated direct
+binding between the storage identifier and the Attempt, or seek a separately
+admitted write record. A candidate investigation result can inform admission
+through Temporal. Neither the candidate nor an ASCENT question authorizes
+another write. These inquiries may be combined, deferred or run concurrently.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =indirectAttribution= declares the premise edges, prior judgments and responsibilities |
+| Quint | =impact= computes finite reachability; =correctAttribution= partitions current uses; =bindingReview= and =judgmentReview= expose obligations |
+| Lean | =indirect_binding_reopens_outcome= checks the dependent branch; =missing_lineage_cannot_supply_success= checks incomplete coverage; =correction_preserves_raw_w1_record= distinguishes the observation from its use |
+| D2 | The graph draws the active case, with the old judgments at B and the current response at C |
+
+The Quint and Lean abstractions share a nine-vertex graph. Their bounded
+expansion follows each recorded premise edge to its dependents. The
+verification assumes a trustworthy scoped inventory of admitted edges and
+uses. It checks the decisions for the modeled independent, indirect and
+unverified lineage states. The abstraction keeps the original versions and models exploration after
+correction. The next section adds a separate admission judgment for a new use
+version.
+
+[[file:../../../../dev/d2/examples/recovery-evidence/indirect-attribution.d2][D2 source]]
+and [[file:../../../../dev/d2/output/recovery-evidence/indirect-attribution.svg][rendered dependency view]].
+
+
+** Readmitting W1 on an independent binding
+:PROPERTIES:
+:CUSTOM_ID: recovery-w1-readmission
+:END:
+
+At C the evaluator still has the immutable raw W1 record, but its former use
+W1-v1 depends on the corrected R1 attribution. The model discovers D1, an
+assertion from the storage authority directly binding the original Attempt and
+append effect to storage write 42 and the retained W1 record digest. D1 enters
+as a candidate. Context stays unknown and the outcome and attribution questions
+remain open until Temporal selects a qualified use.
+
+| Check | What the authorized evaluator establishes |
+|-------+--------------------------------------------|
+| Exact subject | D1 identifies the original durable Attempt and the exact append effect, including the effect's target and intent |
+| Exact occurrence | D1 names the same storage-scoped write identity and immutable record digest found in W1. The scoped identity includes the storage namespace or epoch needed to avoid collisions |
+| Committed effect | The retained W1 record and admitted contract establish this write's commit and that it realizes the intended effect. Matching file content alone supplies no commit or identity proof |
+| Authority and lineage | D1's issuer is authorized to attest this binding. The candidate, verification basis and required premises have adequate scoped coverage. Neither the binding nor its verified effect use relies on the corrected R1 attribution |
+| Current use assessment | The verdict covers this exact candidate version, W1 record version and effect claim at the admission cut. If that cut advances before selection, verify again against the new basis |
+
+Temporal selects W1-v2 as a distinct use of the same immutable raw record,
+with D1 and the fresh assessment as its basis. W1-v2 references W1-v1 for
+version history. That reference carries no evidential authority. Selection is
+conditional on the assessment's basis cut still being current. If identity,
+authority, completeness, commit or independence cannot be established, W1-v2
+cannot supply active success support. The model can seek other evidence or
+defer. These checks form a conjunction over admitted facts. No prescribed
+order is required for their discovery.
+
+| Scope | At C after R2 | At D with W1-v2 |
+|-------+---------------+-----------------|
+| Context | Outcome unknown | Succeeded on the new basis if the result is uncontested; otherwise the outcome remains open |
+| ASCENT binding responsibility | Confirm whether W1 belongs to the original effect | Close the same binding question when W1-v2 is selected |
+| ASCENT outcome responsibility | Reconcile the original Attempt and effect | Close the same outcome question once Context selects uncontested success |
+| ASCENT downstream review | Review B's outcome and summary | The new outcome answers the effect question. Review of summary-B's other claims remains open until each affected claim has a current basis |
+| Temporal history | R1, R2, W1-v1, B's success and C's unknown are retained | Add D1, its assessment, W1-v2 and D's judgment. Past evidence, withdrawal reasons and judgments remain queryable at their original cuts |
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =directBindingAdmission= names the candidate, checks, new use, historical links and the three responsibility scopes |
+| Quint | =discoverBinding= records a candidate; =qualifies= checks exact identity and basis; =readmitW1= selects a distinct use; =bindingReview=, =duties= and =judgmentReview= project current responsibilities |
+| Lean | =AdmissionGate= states the verified conditions; =checked_direct_binding_can_admit= constructs a valid gate for D1; the readmission theorems prove conditional success, distinct closure and history retention |
+| D2 | The figure compares the two independent source references, the candidate and its assessment, and the current response at C and D |
+
+The model represents verified authority, lineage and commit checks as facts
+supplied by an authorized Temporal evaluator. It does not authenticate storage
+records or prove completeness of a real evidence inventory. Quint uses
+bounded alternative candidate and assessment records and a single new version.
+The key =W1= in the original graph denotes W1-v1. The separate
+=admittedBasis= records the assessment that selected W1-v2. An unresolved
+result conflict can coexist with a verified binding to the exact effect.
+Lean uses the same fixture identities with an explicit gate proof. The graph
+of the B-to-C correction continues to describe the old versions. W1-v2's
+proof basis is represented separately.
+
+[[file:../../../../dev/d2/examples/recovery-evidence/w1-readmission.d2][D2 source]]
+and [[file:../../../../dev/d2/output/recovery-evidence/w1-readmission.svg][rendered comparison]].
+
+
+** Reviewing each claim in the recovery summary
+:PROPERTIES:
+:CUSTOM_ID: recovery-summary-claim-review
+:END:
+
+The design now gives the previously abstract summary-B a three-claim
+inventory. These are illustrative claims for this case. Each old citation
+keeps its original version and basis, including any use of the superseded
+Attempt mapping. At D, the original append effect has an uncontested
+success judgment on W1-v2. That judgment supplies a possible basis for
+one summary claim. Temporal assesses the exact use against the exact
+claim version before it becomes a citation in the new summary.
+
+| Stable claim key | Claim in summary B | Required current basis | ASCENT responsibility |
+|------------------+--------------------+------------------------+-----------------------|
+| =append-committed= | The original append effect committed | W1-v2 and a fresh assessment for the same Attempt, effect and claim digest | Close this claim's review when the assessment is admitted |
+| =single-commit= | Exactly one commit for this effect in the recovery window | An independently scoped storage audit with complete coverage and one matching committed occurrence | Keep open until the audit proves the scoped count |
+| =no-replay-dispatch= | No replay dispatch for this effect in the recovery window | An independently scoped dispatch audit covering all relevant dispatchers and recording zero matching replay dispatches | Keep open until the audit proves the scoped absence |
+
+The recovery window is the declared interval of this case. The audits bind
+its endpoints, the original Attempt and exact effect, and the identities
+needed to reconcile occurrences across the relevant stores or dispatchers.
+A complete storage count can coexist with a replay that never committed.
+A dispatch audit and a storage audit therefore answer different questions.
+Incomplete, unverified or conflicting audit material leaves the corresponding
+claim unresolved in this design slice.
+
+ASCENT derives one open review per unchecked claim key. The key is scoped
+to the summary lineage, so replacing a citation can discharge the same
+question without duplicating it. The model may inspect coverage, compare
+audit identity mappings, prepare a scoped draft, or defer. Claims can be
+verified in any order. Drafting or publishing a summary leaves claim
+responsibilities unchanged.
+
+The selected publication policy for this example allows a partial revision
+containing the verified append claim. It carries every currently checked
+claim as an assertion and names every other manifest claim as unresolved.
+For example, with only the append claim checked, the partial revision
+asserts that claim and lists the count and dispatch questions separately.
+A full revision requires all three claims and can be admitted directly.
+If an audit contradicts a historical claim, a revised claim or explicit
+retraction requires its own assessment. The next section models a refuted historical claim and a scoped rewrite.
+
+At selection, Temporal checks the candidate version and predecessor,
+its current evidence cut and review revision, and the exact correspondence
+between assertions and verified claim bases. It verifies the unresolved
+inventory and the coverage label against the manifest. The checks are
+conjunctive and depend on the facts available at selection. An assessment
+change invalidates an older draft until it is re-evaluated. Admission appends
+an immutable version with its own references. The historical B payload and
+its citations remain queryable as of B. A partial version can satisfy
+publication for its declared scope while the aggregate review remains open.
+The aggregate review closes when all claim checks are satisfied and the
+full current revision is admitted.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =summaryReview= separates the three claim bases, the candidate selection and the historical predecessor |
+| Quint | =assessSummaryClaim= admits exact per-claim bases; =admitSummary= selects the current manifest and records predecessor and version history |
+| Lean | =w1_cannot_verify_audit_claim=, =other_claim_review_unchanged=, =admitted_summary_assertions_and_open_items_exact= and the partial/full review theorems check the separation and closure conditions |
+| D2 | The figure aligns each B claim with its required current basis and ASCENT review, then contrasts the two admissible scopes |
+
+The finite models hold the recovered effect cut fixed and add assessments
+bound to that cut. The review revision distinguishes successive inventories
+of checked claims. In a broader system, an advance of the Temporal evidence
+cut requires new current assessments. Evidence authority, audit coverage
+and content digests enter as verified facts. The archive represents B by its
+immutable reference and retains the full modeled records of later publications.
+Physical archival and authentication remain outside the abstraction.
+
+[[file:../../../../dev/d2/examples/recovery-evidence/summary-review.d2][D2 source]]
+and [[file:../../../../dev/d2/output/recovery-evidence/summary-review.svg][rendered comparison]].
+
+
+** A replay was dispatched and only one write committed
+:PROPERTIES:
+:CUSTOM_ID: recovery-summary-audit-refutation
+:END:
+
+The current Context outcome still succeeds on W1-v2. A complete storage audit
+confirms one commit for the original effect in the recovery window. The dispatch
+journal supplies a matching replay event in that window. Dispatch and commit
+are different observations. One replay dispatch and one commit can coexist.
+
+| Claim from B | Verified basis in this case | ASCENT and the revised summary |
+|--------------+-----------------------------+--------------------------------|
+| Original append committed | W1-v2 with a current assessment of this exact claim | Keep the claim. Close the review as supported. |
+| Exactly one commit | The complete storage audit counts one matching commit in scope | Keep the claim. Close the review as supported. |
+| No replay dispatch | An admitted matching replay event contradicts zero | Close the fact review as refuted. Disclose the withdrawal in the revision. |
+| Exactly one replay dispatch | Complete dispatch coverage and a separate assessment of this new claim digest | Include the rewrite if verified. Otherwise publish the withdrawal on its own. |
+
+A single admitted event disproves zero. An exact-one rewrite additionally
+requires complete coverage of the relevant dispatchers, the same recovery
+window and an independently verified effect binding. The diagram shows the
+observed replay count as a witness to refutation. Its count does not assert
+coverage for an exact-one replacement. The same audit can supply separate
+assessments for the old and new claim digests.
+
+ASCENT closes a fact review with a supported or refuted disposition. It keeps
+the summary publication duty open until Temporal selects a qualified revision.
+The selected draft binds the current cut, review revision, parent version and
+exact claim assessments. It asserts only supported claims, lists refuted claims
+as withdrawals, and lists unassessed claims as unresolved. A rewrite requires
+disclosure of the old claim's withdrawal. Full accounting for B can include
+a withdrawal without an exact replacement. Optional investigations and draft
+proposals can proceed independently.
+
+The new summary adds an immutable version and a predecessor reference to B.
+Summary B and its old evidence remain queryable at their original cut. The
+new version does not give the old zero-replay assertion current authority.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =auditRefutation= identifies the two audits, the retained claims, the refutation and the conditional rewrite |
+| Quint | =replayRefutation= records a positive witness against absence; =positiveClaims= and =refutedClaims= separate assertions and withdrawals; =admitSummary= checks coverage and preserves the archive |
+| Lean | =replay_refutation_closes_review_and_records_withdrawal=, =exact_replay_rewrite_requires_complete_coverage= and =replay_rewrite_requires_disclosed_withdrawal= check the distinct conditions |
+| D2 ASCENT | The evidence and revision objects are selected and composed by the existing D2 module. Pictograms carry the two counts and the dispositions. |
+
+The model holds the effect cut fixed and accepts one admitted disposition per
+claim version. The hypothetical zero-event audit and the witnessed replay
+branch represent alternative qualified observations. Reassessment of a later
+correction to an already current audit requires a new cut. Audit authenticity
+and coverage enter this design as authorized facts.
+
+[[file:../../../../dev/d2/output/recovery-audit-refutation/figure.svg][Rendered audit comparison]].
+
+
+** Closing dispatch coverage for an exact replay count
+:PROPERTIES:
+:CUSTOM_ID: recovery-dispatch-coverage
+:END:
+
+The fixture has two dispatchers, A and B. The authority attests the dispatcher
+inventory for the original Attempt, exact append effect and half-open recovery
+window. An admitted manifest fixes the required ranges A/early, A/late,
+B/early and B/late. Its real counterpart includes dispatcher identities,
+namespace and generation, and routing or ownership changes inside the window.
+The observed log sources cannot define the expected inventory.
+
+A qualified range binds that manifest scope and current evidence cut. Its
+authorized issuer seals the range with the applicable opening and terminal
+fences. It accounts for all sequence positions in the range, including a
+certified empty range, and reconciles duplicate deliveries or conflicting
+versions. A missing range, stale epoch, gap, unsealed end or unresolved
+conflict keeps coverage open. The finite model represents each verified range
+by one qualified slot receipt and uses a fixed authoritative manifest. An
+empty event field represents verified absence inside a sealed range.
+
+| View | What the evidence establishes | ASCENT and publication |
+|------+-------------------------------+------------------------|
+| A seen, B missing | A has an admitted replay event with ID replay-42. B has no qualified ranges yet. | Close the zero-replay fact review as refuted. Keep coverage and exact-count reviews open. A withdrawal revision may be admitted. |
+| A and B covered | The four distinct required slots are sealed for the same scope and cut. The union contains one distinct matching dispatch ID. | Close the coverage review. Close the exact-count review on admission of its own assessment. A revision may assert exactly one replay. |
+
+An admitted positive event is sufficient to refute zero. Exact cardinality
+requires an admitted complete manifest, a unique qualified receipt for every
+required range, and deduplication by authoritative dispatch identity. A
+forwarded copy of replay-42 counts once. A distinct replay-43 makes the
+exact-one claim fail even when coverage is complete. The storage commit count
+remains a separate judgment.
+
+ASCENT can ask for B's missing ranges, an authority-backed inventory, a
+watermark or reconciliation evidence. The investigation and draft choices
+remain independent where their premises allow. Once the coverage basis is
+complete, assessment checks the exact replay claim against the distinct
+event count. The summary draft binds that assessment, the manifest and
+range receipts, the current cut and review revision, and its predecessor.
+An older draft cannot silently inherit a new count.
+
+The illustrated path admits a withdrawal revision v2 while coverage is open.
+It then admits v3 with the exact-one claim after the separate assessment.
+B and the prior v2 remain queryable with their own bases. A design can also
+admit the exact revision directly when its complete basis is already available.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =dispatchCoverage= compares the two coverage cuts and preserves the version relation |
+| Quint | =admitDispatchManifest= and =admitDispatchRow= qualify evidence; =completeDispatchCoverage= checks all slots and =replayIds= deduplicates; =dispatchBasesAllowed= separates witness and exact gates |
+| Lean | =witnessed_replay_refutes_without_full_coverage=, =missing_b_late_blocks_exact_replay=, =complete_coverage_and_one_id_allow_exact_replay= and =two_distinct_replays_block_exact_one= check the scoped admission distinction |
+| D2 ASCENT | A and B use matching log-band objects to contrast missing and sealed coverage. The summary stack depicts the selected example history. |
+
+Range authentication, gap-free sealing, dispatcher inventory authority and
+canonical event identities are verified inputs. The bounded model compares
+coverage within one recovered effect cut as qualified receipts arrive. A
+later conflicting correction belongs to a new cut. Published revisions
+retain their exact manifest and range snapshot in the model.
+
+[[file:../../../../dev/d2/output/recovery-dispatch-coverage/figure.svg][Rendered coverage comparison]].
+
+
+** A previously sealed dispatch range is corrected
+:PROPERTIES:
+:CUSTOM_ID: recovery-dispatch-seal-correction
+:END:
+
+At the prior dispatch cut, summary v3 asserted exactly one replay on the
+complete manifest and all four sealed ranges. Later the dispatch authority
+admits a correction that withdraws B/late's seal because it omitted a sequence
+interval. The correction names the precise version and scope it affects.
+The current dispatch selection is cleared as the new cut is opened. The old
+snapshot and its basis remain in history. Context's separate success judgment
+for the committed append still has its original write evidence.
+
+| Current evidence | Current dispatch claim | ASCENT responsibility |
+|------------------+------------------------+-----------------------|
+| Seal revoked, A not yet requalified | No current replay assertion selected | Reopen coverage and exact-count review |
+| A's witness requalified, B gap remains | At least one replay can be assessed and selected | Keep coverage and exact count open; no zero-replay assertion follows from the gap |
+| Fresh B seal, full manifest, one distinct ID | Exact one can be selected after a fresh assessment | Close coverage and then resolve the exact-count question on its basis |
+| Fresh B seal also reveals replay-43 | The exact-one gate refuses; an exact-two claim needs its own assessment | Close coverage and keep count review open in this bounded exact-one model |
+
+The original exact-one assessment belonged to the original dispatch cut.
+No old log row becomes current by changing its label. Each carried range
+needs explicit requalification against the new cut and scope, or equivalent
+admitted evidence of unchanged applicability. The new B receipt must cover
+the corrected interval and complete the authoritative inventory. Counting
+deduplicates by event identity across qualified ranges. Independent
+requalification, manifest checks and candidate drafting can proceed in any
+available order.
+
+The active summary pointer loses its exact assertion on correction. A new
+withdrawal or lower-bound revision can be selected on its current basis;
+a later exact revision requires both complete coverage and a new exact
+assessment. Each admission adds an immutable snapshot. B, the withdrawal
+version and v3 remain queryable as of their own cuts. The prior exact wording
+has no fallback authority while the current basis is open.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =dispatchSealCorrection= separates the correction, the requalified witness, current duties and the historical exact snapshot |
+| Quint | =DispatchSealRevision= reuses the original coverage and identity functions, models separate requalification, assessment and selection, and retains the previous snapshot |
+| Lean | =correction_retires_selection_and_preserves_history=, =old_row_cannot_be_carried_without_current_qualification=, =witness_can_support_lower_bound_while_exact_is_blocked= and the reseal theorems check the gate distinctions |
+
+The abstraction holds the Attempt, effect and window fixed. Its dispatch cut
+advances independently of the effect outcome. Authorization of the correction,
+new seal, inventory and requalification are verified inputs. The fixture
+models one correction. The two-ID branch blocks exact one. The next section
+adds the separate assessment and publication gate for exact two.
+
+[[file:../../../../dev/d2/output/recovery-dispatch-seal-correction/figure.svg][Rendered correction comparison]].
+
+
+** Admitting exactly two replays after the corrected seal
+:PROPERTIES:
+:CUSTOM_ID: recovery-dispatch-exact-two
+:END:
+
+B's new sealed range contains a record labeled R43. A's qualified range
+contains R42. The labels in an export do not settle dispatch identity.
+The dispatch authority binds each observation to a canonical dispatch
+identity, scoped by authority, dispatcher namespace, incarnation and
+dispatch sequence or an equivalent collision-resistant identity. A forwarded
+copy or repeated observation retains the original identity. In this case
+the authority establishes two distinct identities.
+
+| Check | What must be verified |
+|-------+-----------------------|
+| Same subject | Both attestations bind the original durable Attempt, exact append effect and replay relation. A different Attempt or effect cannot contribute to this count. |
+| Same window | Each dispatch occurred within the same recovery window. The fixture uses symbolic times R42 at 12 and R43 at 18 in [10,20). Time 20 is excluded. The source clock, range and window basis must be compatible. |
+| Same cut and scope | Both identities are authenticated and bound to the matching event in a qualified sealed range at the current dispatch cut. R42 comes from A/early and R43 from B/late. |
+| Distinct and exhaustive | The two canonical IDs differ, and they are exactly the set of replay IDs across the complete qualified range inventory. A duplicate, another matching ID, stale assessment or missing range blocks this claim. |
+
+The model can propose a binding, compare records or defer. The checks are
+evidence conditions and can be investigated independently. If R43 is really
+a forwarded R42, the exact-two claim fails. Re-evaluating exact one would
+require a corrected normalized range basis and a fresh assessment. Merely
+seeing the string R43 supplies no new authority.
+
+ASCENT closes the original count responsibility when the exact-two
+assessment is admitted on this complete basis. Publication remains a
+separate responsibility. Temporal may select the new summary only while
+its assessment still names the current cut, exact manifest, qualified
+range snapshot and identity pair. If any basis changes, selection needs
+a refreshed assessment. The new snapshot keeps that basis and a predecessor
+reference in the summary lineage. v3's exact-one text and old evidence
+stay queryable as history. The figure calls the replacement v4 in the
+illustrated case where no intervening revision was selected.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =dispatchExactTwo= records both bindings, full coverage, the two responsibility scopes and the retained v3 |
+| Quint | =identityQualified= checks each binding; =validExactTwo= checks the complete distinct set; =assessExactTwo= and =publishRevision= preserve separate conditions and the selected basis |
+| Lean | The exact-two gate proofs exclude an alias, another Attempt, the end boundary and a stale basis. The assessment and selection theorems keep the identity evidence with the new snapshot. |
+
+The finite model uses one current window and trusted evidence for authority,
+time, scope and canonical identity. Source authentication and normalization
+are obligations of the evidence provider. The model checks their binding
+to the current decision and snapshot.
+
+[[file:../../../../dev/d2/output/recovery-dispatch-exact-two/figure.svg][Rendered exact-two design]].
+
+** Re-admitting exactly one after a forwarded copy is identified
+:PROPERTIES:
+:CUSTOM_ID: recovery-dispatch-alias-correction
+:END:
+
+v4 currently says exactly two. The dispatch authority corrects the identity
+binding of the B/late observation labeled R43. It authenticates a forward
+of the A/early dispatch R42 and names the two bindings in v4's basis.
+The correction has the original Attempt, append effect and recovery
+window as its scope. R43 keeps its own observation identity and receipt
+time. Its canonical dispatch identity is R42, whose occurrence time remains
+the dispatch time. The receipt of the copy adds no dispatch.
+
+Context withdraws the current exact-two claim as soon as Temporal admits
+this scoped correction against the selected v4 basis. That evidence change
+retires v4 from current selection and opens a fresh dispatch cut. v3 and v4
+remain immutable with their original claims and evidence. ASCENT reopens
+the count responsibility at withdrawal, even if replacement logs have not
+arrived. A duplicate binding removes one witness but does not establish
+that all dispatches in the window are accounted for.
+
+The new assessment requires the current manifest and all four requalified
+ranges for the same scope. A/early must substantiate R42. B/late must retain
+the copy observation in the correction lineage and contribute no separate
+dispatch in the normalized range. The complete, deduplicated replay set
+must be exactly {R42}. A missing range, a different dispatch, or a
+correction targeting another cut or scope leaves the exact count unresolved.
+The model can investigate the forward's lineage, qualify independent
+ranges in any order, or defer pending evidence.
+
+ASCENT closes the count responsibility on the fresh exact-one assessment.
+Temporal rechecks the current basis at publication and admits a new
+summary, v5 in the illustrated case. It keeps the correction, current
+manifest and normalized rows, and links back to v4's displaced basis.
+v3's earlier exact-one claim is historical; v5 has independently qualified
+support. The append-effect success judgment has its own evidence basis.
+
+| Artifact | Correspondence |
+|----------+----------------|
+| SysML | =dispatchAliasCorrection= shows the affected claim, reopened duty, fresh coverage and retained versions |
+| Quint | =correctAlias= retires the selected basis; =correctedExactOne= checks the current sealed set and the two source roles |
+| Lean | =admitAliasCorrection= requires a scoped attestation about the selected basis; =corrected_reselection_retains_both= preserves both historical snapshots on exact-one admission |
+
+The finite model assumes authenticated source normalization. A qualified
+empty B/late dispatch contribution records the absence of a separate
+dispatch there; the attestation preserves the raw observation lineage.
+
+[[file:../../../../dev/d2/output/recovery-dispatch-alias-correction/figure.svg][Rendered alias correction]].
+
+** Replay count: one question, evidence that can change the answer
+:PROPERTIES:
+:CUSTOM_ID: recovery-dispatch-count-mvp
+:END:
+
+Context keeps one question keyed by the original Attempt, append effect
+and occurrence window: how many distinct dispatches replayed this effect?
+Discovering a record later does not change that scope. An observation names
+a record; a canonical dispatch identity names the event it describes.
+Effect success is assessed separately.
+
+| Evidence | What the same question can say |
+|----------+--------------------------------|
+| Another record confirms an already known copy and changes no support | Temporal records or deduplicates observation provenance. The canonical set, assessment, count duty and selected answer stay put. |
+| R43 was counted separately, but authority establishes it was a forward of R42 | This corrects the basis rather than merely adding a duplicate. Context withdraws the contradicted exact answer and ASCENT reopens the existing count duty. |
+| Authority finds independent R44 within the original scope | R42 and R44 prove at least two even while coverage is open. If the current exact-one basis omitted R44, Context withdraws it and ASCENT reopens the same duty. |
+| All required ranges support the complete canonical set | ASCENT can close the count duty on a fresh exact assessment. Temporal selects it only against a still-current basis. |
+
+R44 occurred at 16 in the original half-open window [10,20). The late
+attestation contradicts the prior empty B/early contribution. An alias of
+R42, a different Attempt, or an event at time 20 cannot supply the second
+witness. Requalification requires all four ranges; if they exhaust
+{R42, R44}, the answer is exactly two. R43 remains in observation lineage.
+Each range can be examined independently.
+
+The current answer and the evidence history are different views. The
+history answers which basis was used and what evidence displaced it.
+Publishing the same claim on the same basis adds no history entry. A new
+basis can explain the same wording for a different reason. Earlier
+numbered examples elsewhere in this document are illustrative
+history fixtures. The question, predicates and figure do not depend on
+those labels.
+
+| Artifact | Check |
+|----------+-------|
+| SysML | =dispatchCountRevision= connects one scope and count duty to observation provenance, assessment and decision history. |
+| Quint | =observeKnownCopy= updates provenance alone; correction and discovery can retire exact support; publication requires a current basis. |
+| Lean | =copy_keeps_count_and_selection= and =same_basis_does_not_append_history= separate observation and publication from a change of judgment. The retraction and coverage proofs retain their existing boundaries. |
+
+The finite model uses four ranges and two exact cardinalities. The evidence
+owner validates scope, clock and authority. An internal evidence cut
+identifies a basis for freshness; the count question survives across cuts.
+
+[[file:../../../../dev/d2/output/recovery-dispatch-count-mvp/figure.svg][Current replay-count explanation]].

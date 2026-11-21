@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#include "poo_flow/runtime_wasm.h"
+#include "agentic_ai_lab/runtime_wasm.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -10,14 +10,14 @@
 #define PFW_HANDLE_CAPACITY UINT32_C(1024)
 
 typedef struct {
-  poo_flow_runtime_v0_handle value;
+  agentic_ai_lab_runtime_v0_handle value;
   uint8_t occupied;
 } pfw_handle_slot;
 
 static pfw_handle_slot pfw_handles[PFW_HANDLE_CAPACITY];
-static poo_flow_bundle_v1_arena *pfw_topologies[PFW_HANDLE_CAPACITY];
+static agentic_ai_lab_bundle_v1_arena *pfw_topologies[PFW_HANDLE_CAPACITY];
 
-static poo_flow_runtime_v0_handle *pfw_handle_get(uint32_t slot) {
+static agentic_ai_lab_runtime_v0_handle *pfw_handle_get(uint32_t slot) {
   if (slot == 0 || slot >= PFW_HANDLE_CAPACITY || !pfw_handles[slot].occupied) {
     return NULL;
   }
@@ -25,7 +25,7 @@ static poo_flow_runtime_v0_handle *pfw_handle_get(uint32_t slot) {
 }
 
 static uint32_t pfw_handle_store(
-    poo_flow_runtime_v0_handle value,
+    agentic_ai_lab_runtime_v0_handle value,
     uint32_t *slot_out) {
   uint32_t slot;
   if (slot_out == NULL) {
@@ -53,20 +53,20 @@ uint32_t pfw_handle_capacity(void) {
 }
 
 uint32_t pfw_instance_create(uint32_t *instance_slot_out) {
-  poo_flow_runtime_v0_handle instance;
+  agentic_ai_lab_runtime_v0_handle instance;
   uint32_t status;
   memset(&instance, 0, sizeof(instance));
-  status = poo_flow_runtime_v0_instance_create(&instance);
+  status = agentic_ai_lab_runtime_v0_instance_create(&instance);
   return status == 0 ? pfw_handle_store(instance, instance_slot_out) : status;
 }
 
 uint32_t pfw_instance_release(uint32_t instance_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
   uint32_t status;
   if (instance == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_instance_release(*instance);
+  status = agentic_ai_lab_runtime_v0_instance_release(*instance);
   if (status == 0) {
     pfw_handle_clear(instance_slot);
   }
@@ -75,10 +75,10 @@ uint32_t pfw_instance_release(uint32_t instance_slot) {
 
 uint32_t pfw_negotiate(
     uint32_t instance_slot,
-    const poo_flow_runtime_v0_negotiate_request *request,
-    poo_flow_runtime_v0_negotiate_result *result,
+    const agentic_ai_lab_runtime_v0_negotiate_request *request,
+    agentic_ai_lab_runtime_v0_negotiate_result *result,
     uint32_t *profile_slot_out) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
   uint32_t status;
   if (instance == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
@@ -86,18 +86,18 @@ uint32_t pfw_negotiate(
   if (request == NULL || result == NULL || profile_slot_out == NULL) {
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
-  status = poo_flow_runtime_v0_negotiate(*instance, request, result);
+  status = agentic_ai_lab_runtime_v0_negotiate(*instance, request, result);
   return status == 0 ? pfw_handle_store(result->profile, profile_slot_out) : status;
 }
 
 uint32_t pfw_profile_release(uint32_t instance_slot, uint32_t profile_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *profile = pfw_handle_get(profile_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *profile = pfw_handle_get(profile_slot);
   uint32_t status;
   if (instance == NULL || profile == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_profile_release(*instance, *profile);
+  status = agentic_ai_lab_runtime_v0_profile_release(*instance, *profile);
   if (status == 0) {
     pfw_handle_clear(profile_slot);
   }
@@ -107,11 +107,11 @@ uint32_t pfw_profile_release(uint32_t instance_slot, uint32_t profile_slot) {
 uint32_t pfw_bundle_open(
     uint32_t instance_slot,
     uint32_t profile_slot,
-    const poo_flow_runtime_v0_bundle_descriptor *descriptor,
+    const agentic_ai_lab_runtime_v0_bundle_descriptor *descriptor,
     uint32_t *bundle_slot_out) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *profile = pfw_handle_get(profile_slot);
-  poo_flow_runtime_v0_handle bundle;
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *profile = pfw_handle_get(profile_slot);
+  agentic_ai_lab_runtime_v0_handle bundle;
   uint32_t status;
   if (instance == NULL || profile == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
@@ -120,18 +120,18 @@ uint32_t pfw_bundle_open(
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
   memset(&bundle, 0, sizeof(bundle));
-  status = poo_flow_runtime_v0_bundle_open(*instance, *profile, descriptor, &bundle);
+  status = agentic_ai_lab_runtime_v0_bundle_open(*instance, *profile, descriptor, &bundle);
   return status == 0 ? pfw_handle_store(bundle, bundle_slot_out) : status;
 }
 
 uint32_t pfw_bundle_release(uint32_t instance_slot, uint32_t bundle_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *bundle = pfw_handle_get(bundle_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *bundle = pfw_handle_get(bundle_slot);
   uint32_t status;
   if (instance == NULL || bundle == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_bundle_release(*instance, *bundle);
+  status = agentic_ai_lab_runtime_v0_bundle_release(*instance, *bundle);
   if (status == 0) {
     pfw_handle_clear(bundle_slot);
   }
@@ -141,11 +141,11 @@ uint32_t pfw_bundle_release(uint32_t instance_slot, uint32_t bundle_slot) {
 uint32_t pfw_session_open(
     uint32_t instance_slot,
     uint32_t bundle_slot,
-    const poo_flow_runtime_v0_session_descriptor *descriptor,
+    const agentic_ai_lab_runtime_v0_session_descriptor *descriptor,
     uint32_t *session_slot_out) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *bundle = pfw_handle_get(bundle_slot);
-  poo_flow_runtime_v0_handle session;
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *bundle = pfw_handle_get(bundle_slot);
+  agentic_ai_lab_runtime_v0_handle session;
   uint32_t status;
   if (instance == NULL || bundle == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
@@ -154,37 +154,37 @@ uint32_t pfw_session_open(
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
   memset(&session, 0, sizeof(session));
-  status = poo_flow_runtime_v0_session_open(*instance, *bundle, descriptor, &session);
+  status = agentic_ai_lab_runtime_v0_session_open(*instance, *bundle, descriptor, &session);
   return status == 0 ? pfw_handle_store(session, session_slot_out) : status;
 }
 
 uint32_t pfw_session_cancel(uint32_t instance_slot, uint32_t session_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
   return instance == NULL || session == NULL
       ? PFW_WASM_STATUS_INVALID_SLOT
-      : poo_flow_runtime_v0_session_cancel(*instance, *session);
+      : agentic_ai_lab_runtime_v0_session_cancel(*instance, *session);
 }
 
 uint32_t pfw_session_close(
     uint32_t instance_slot,
     uint32_t session_slot,
     uint32_t disposition) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
   return instance == NULL || session == NULL
       ? PFW_WASM_STATUS_INVALID_SLOT
-      : poo_flow_runtime_v0_session_close(*instance, *session, disposition);
+      : agentic_ai_lab_runtime_v0_session_close(*instance, *session, disposition);
 }
 
 uint32_t pfw_session_release(uint32_t instance_slot, uint32_t session_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
   uint32_t status;
   if (instance == NULL || session == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_session_release(*instance, *session);
+  status = agentic_ai_lab_runtime_v0_session_release(*instance, *session);
   if (status == 0) {
     pfw_handle_clear(session_slot);
   }
@@ -193,10 +193,10 @@ uint32_t pfw_session_release(uint32_t instance_slot, uint32_t session_slot) {
 
 uint32_t pfw_arena_register(
     uint32_t instance_slot,
-    const poo_flow_runtime_v0_arena_descriptor *descriptor,
+    const agentic_ai_lab_runtime_v0_arena_descriptor *descriptor,
     uint32_t *arena_slot_out) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle arena;
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle arena;
   uint32_t status;
   if (instance == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
@@ -205,7 +205,7 @@ uint32_t pfw_arena_register(
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
   memset(&arena, 0, sizeof(arena));
-  status = poo_flow_runtime_v0_arena_register(*instance, descriptor, &arena);
+  status = agentic_ai_lab_runtime_v0_arena_register(*instance, descriptor, &arena);
   return status == 0 ? pfw_handle_store(arena, arena_slot_out) : status;
 }
 
@@ -214,22 +214,22 @@ uint32_t pfw_arena_recycle(
     uint32_t arena_slot,
     uint64_t expected_generation,
     uint64_t next_generation) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
   return instance == NULL || arena == NULL
       ? PFW_WASM_STATUS_INVALID_SLOT
-      : poo_flow_runtime_v0_arena_recycle(
+      : agentic_ai_lab_runtime_v0_arena_recycle(
             *instance, *arena, expected_generation, next_generation);
 }
 
 uint32_t pfw_arena_release(uint32_t instance_slot, uint32_t arena_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
   uint32_t status;
   if (instance == NULL || arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_arena_release(*instance, *arena);
+  status = agentic_ai_lab_runtime_v0_arena_release(*instance, *arena);
   if (status == 0) {
     pfw_handle_clear(arena_slot);
   }
@@ -240,12 +240,12 @@ uint32_t pfw_publish_batch(
     uint32_t instance_slot,
     uint32_t session_slot,
     uint32_t arena_slot,
-    const poo_flow_runtime_v0_publish_request *request,
-    poo_flow_runtime_v0_publish_result *result) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
-  poo_flow_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
-  poo_flow_runtime_v0_publish_request bridged;
+    const agentic_ai_lab_runtime_v0_publish_request *request,
+    agentic_ai_lab_runtime_v0_publish_result *result) {
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
+  agentic_ai_lab_runtime_v0_publish_request bridged;
   if (instance == NULL || session == NULL || arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
@@ -254,20 +254,20 @@ uint32_t pfw_publish_batch(
   }
   bridged = *request;
   bridged.arena = *arena;
-  return poo_flow_runtime_v0_publish_batch(*instance, *session, &bridged, result);
+  return agentic_ai_lab_runtime_v0_publish_batch(*instance, *session, &bridged, result);
 }
 
 uint32_t pfw_poll_batch(
     uint32_t instance_slot,
     uint32_t session_slot,
     uint32_t arena_slot,
-    const poo_flow_runtime_v0_poll_request *request,
-    poo_flow_runtime_v0_poll_result *result,
+    const agentic_ai_lab_runtime_v0_poll_request *request,
+    agentic_ai_lab_runtime_v0_poll_result *result,
     uint32_t *lease_slot_out) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
-  poo_flow_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
-  poo_flow_runtime_v0_poll_request bridged;
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
+  agentic_ai_lab_runtime_v0_poll_request bridged;
   uint32_t status;
   if (instance == NULL || session == NULL || arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
@@ -277,7 +277,7 @@ uint32_t pfw_poll_batch(
   }
   bridged = *request;
   bridged.arena = *arena;
-  status = poo_flow_runtime_v0_poll_batch(*instance, *session, &bridged, result);
+  status = agentic_ai_lab_runtime_v0_poll_batch(*instance, *session, &bridged, result);
   return status == 0 ? pfw_handle_store(result->lease, lease_slot_out) : status;
 }
 
@@ -285,12 +285,12 @@ uint32_t pfw_submit_batch(
     uint32_t instance_slot,
     uint32_t session_slot,
     uint32_t arena_slot,
-    const poo_flow_runtime_v0_submit_request *request,
-    poo_flow_runtime_v0_submit_result *result) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
-  poo_flow_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
-  poo_flow_runtime_v0_submit_request bridged;
+    const agentic_ai_lab_runtime_v0_submit_request *request,
+    agentic_ai_lab_runtime_v0_submit_result *result) {
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *arena = pfw_handle_get(arena_slot);
+  agentic_ai_lab_runtime_v0_submit_request bridged;
   if (instance == NULL || session == NULL || arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
@@ -299,28 +299,28 @@ uint32_t pfw_submit_batch(
   }
   bridged = *request;
   bridged.arena = *arena;
-  return poo_flow_runtime_v0_submit_batch(*instance, *session, &bridged, result);
+  return agentic_ai_lab_runtime_v0_submit_batch(*instance, *session, &bridged, result);
 }
 
 uint32_t pfw_batch_ack(
     uint32_t instance_slot,
     uint32_t session_slot,
     uint32_t lease_slot) {
-  poo_flow_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
-  poo_flow_runtime_v0_handle *session = pfw_handle_get(session_slot);
-  poo_flow_runtime_v0_handle *lease = pfw_handle_get(lease_slot);
+  agentic_ai_lab_runtime_v0_handle *instance = pfw_handle_get(instance_slot);
+  agentic_ai_lab_runtime_v0_handle *session = pfw_handle_get(session_slot);
+  agentic_ai_lab_runtime_v0_handle *lease = pfw_handle_get(lease_slot);
   uint32_t status;
   if (instance == NULL || session == NULL || lease == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  status = poo_flow_runtime_v0_batch_ack(*instance, *session, *lease);
+  status = agentic_ai_lab_runtime_v0_batch_ack(*instance, *session, *lease);
   if (status == 0) {
     pfw_handle_clear(lease_slot);
   }
   return status;
 }
 
-static poo_flow_bundle_v1_arena *pfw_topology_get(uint32_t slot) {
+static agentic_ai_lab_bundle_v1_arena *pfw_topology_get(uint32_t slot) {
   if (slot == 0u || slot >= PFW_HANDLE_CAPACITY) {
     return NULL;
   }
@@ -328,7 +328,7 @@ static poo_flow_bundle_v1_arena *pfw_topology_get(uint32_t slot) {
 }
 
 static uint32_t pfw_topology_store(
-    poo_flow_bundle_v1_arena *arena,
+    agentic_ai_lab_bundle_v1_arena *arena,
     uint32_t *slot_out) {
   uint32_t slot;
   if (arena == NULL || slot_out == NULL) {
@@ -347,22 +347,22 @@ static uint32_t pfw_topology_store(
 static uint32_t pfw_topology_slice(
     uint32_t topology_slot,
     uint32_t region_kind,
-    poo_flow_bundle_v1_slice *slice_out) {
-  poo_flow_bundle_v1_arena *arena = pfw_topology_get(topology_slot);
+    agentic_ai_lab_bundle_v1_slice *slice_out) {
+  agentic_ai_lab_bundle_v1_arena *arena = pfw_topology_get(topology_slot);
   if (arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
   if (slice_out == NULL) {
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
-  return poo_flow_bundle_v1_arena_slice(arena, region_kind, slice_out);
+  return agentic_ai_lab_bundle_v1_arena_slice(arena, region_kind, slice_out);
 }
 
 static uint32_t pfw_topology_count(
     uint32_t topology_slot,
     uint32_t region_kind,
     uint32_t *count_out) {
-  poo_flow_bundle_v1_slice slice;
+  agentic_ai_lab_bundle_v1_slice slice;
   uint32_t status;
   if (count_out == NULL) {
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
@@ -373,7 +373,7 @@ static uint32_t pfw_topology_count(
   }
   if (slice.stride == 0u || slice.length % slice.stride != 0u ||
       slice.length / slice.stride > UINT32_MAX) {
-    return POO_FLOW_BUNDLE_V1_REGION_LAYOUT;
+    return AGENTIC_AI_LAB_BUNDLE_V1_REGION_LAYOUT;
   }
   *count_out = (uint32_t)(slice.length / slice.stride);
   return 0u;
@@ -385,7 +385,7 @@ static uint32_t pfw_topology_row_at(
     uint32_t index,
     uint32_t expected_stride,
     void *entry_out) {
-  poo_flow_bundle_v1_slice slice;
+  agentic_ai_lab_bundle_v1_slice slice;
   uint64_t offset;
   uint32_t status;
   if (entry_out == NULL) {
@@ -396,11 +396,11 @@ static uint32_t pfw_topology_row_at(
     return status;
   }
   if (slice.stride != expected_stride) {
-    return POO_FLOW_BUNDLE_V1_REGION_LAYOUT;
+    return AGENTIC_AI_LAB_BUNDLE_V1_REGION_LAYOUT;
   }
   offset = (uint64_t)index * slice.stride;
   if (offset > slice.length || slice.length - offset < slice.stride) {
-    return POO_FLOW_BUNDLE_V1_NOT_FOUND;
+    return AGENTIC_AI_LAB_BUNDLE_V1_NOT_FOUND;
   }
   memcpy(entry_out, (const uint8_t *)slice.data + offset, slice.stride);
   return 0u;
@@ -412,20 +412,20 @@ uint32_t pfw_topology_open_packed(
     const void *arena_bytes,
     uint32_t arena_length,
     uint32_t *topology_slot_out) {
-  poo_flow_bundle_v1_arena *arena = NULL;
+  agentic_ai_lab_bundle_v1_arena *arena = NULL;
   uint32_t status;
   if (descriptor_bytes == NULL || arena_bytes == NULL ||
       topology_slot_out == NULL) {
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
-  status = poo_flow_bundle_v1_arena_create_packed(
+  status = agentic_ai_lab_bundle_v1_arena_create_packed(
       descriptor_bytes, descriptor_length, arena_bytes, arena_length, &arena);
   if (status != 0u) {
     return status;
   }
   status = pfw_topology_store(arena, topology_slot_out);
   if (status != 0u) {
-    poo_flow_bundle_v1_arena_release(arena);
+    agentic_ai_lab_bundle_v1_arena_release(arena);
   }
   return status;
 }
@@ -434,47 +434,47 @@ uint32_t pfw_topology_component_count(
     uint32_t topology_slot,
     uint32_t *count_out) {
   return pfw_topology_count(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_COMPONENTS, count_out);
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_COMPONENTS, count_out);
 }
 
 uint32_t pfw_topology_edge_count(
     uint32_t topology_slot,
     uint32_t *count_out) {
   return pfw_topology_count(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_EDGES, count_out);
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_EDGES, count_out);
 }
 
 uint32_t pfw_topology_symbol_count(
     uint32_t topology_slot,
     uint32_t *count_out) {
   return pfw_topology_count(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_SYMBOLS, count_out);
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_SYMBOLS, count_out);
 }
 
 uint32_t pfw_topology_component_at(
     uint32_t topology_slot,
     uint32_t index,
-    poo_flow_bundle_v1_component_entry *entry_out) {
+    agentic_ai_lab_bundle_v1_component_entry *entry_out) {
   return pfw_topology_row_at(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_COMPONENTS, index,
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_COMPONENTS, index,
       sizeof(*entry_out), entry_out);
 }
 
 uint32_t pfw_topology_edge_at(
     uint32_t topology_slot,
     uint32_t index,
-    poo_flow_bundle_v1_edge_entry *entry_out) {
+    agentic_ai_lab_bundle_v1_edge_entry *entry_out) {
   return pfw_topology_row_at(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_EDGES, index,
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_EDGES, index,
       sizeof(*entry_out), entry_out);
 }
 
 uint32_t pfw_topology_symbol_at(
     uint32_t topology_slot,
     uint32_t index,
-    poo_flow_bundle_v1_symbol_entry *entry_out) {
+    agentic_ai_lab_bundle_v1_symbol_entry *entry_out) {
   return pfw_topology_row_at(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_SYMBOLS, index,
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_SYMBOLS, index,
       sizeof(*entry_out), entry_out);
 }
 
@@ -483,30 +483,30 @@ uint32_t pfw_topology_metadata_copy(
     uint32_t offset,
     uint32_t length,
     void *bytes_out) {
-  poo_flow_bundle_v1_slice slice;
+  agentic_ai_lab_bundle_v1_slice slice;
   uint32_t status;
   if (bytes_out == NULL) {
     return PFW_WASM_STATUS_INVALID_ARGUMENT;
   }
   status = pfw_topology_slice(
-      topology_slot, POO_FLOW_BUNDLE_V1_REGION_METADATA_BYTES, &slice);
+      topology_slot, AGENTIC_AI_LAB_BUNDLE_V1_REGION_METADATA_BYTES, &slice);
   if (status != 0u) {
     return status;
   }
   if ((uint64_t)offset > slice.length ||
       slice.length - (uint64_t)offset < (uint64_t)length) {
-    return POO_FLOW_BUNDLE_V1_REGION_BOUNDS;
+    return AGENTIC_AI_LAB_BUNDLE_V1_REGION_BOUNDS;
   }
   memcpy(bytes_out, (const uint8_t *)slice.data + offset, length);
   return 0u;
 }
 
 uint32_t pfw_topology_release(uint32_t topology_slot) {
-  poo_flow_bundle_v1_arena *arena = pfw_topology_get(topology_slot);
+  agentic_ai_lab_bundle_v1_arena *arena = pfw_topology_get(topology_slot);
   if (arena == NULL) {
     return PFW_WASM_STATUS_INVALID_SLOT;
   }
-  poo_flow_bundle_v1_arena_release(arena);
+  agentic_ai_lab_bundle_v1_arena_release(arena);
   pfw_topologies[topology_slot] = NULL;
   return 0u;
 }

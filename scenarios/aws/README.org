@@ -1,0 +1,81 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: AWS Profile Contribution
+
+The [[file:../../docs/10-19-design/12-contracts-types/12.25-aws-contextual-publication-validation.org][AWS contextual publication control]] runs real versioned provider Schemas
+through the maintained publication and unified admission producer. It checks
+final Profile child evidence, Context refusal and stale-Schema/receipt refusal
+without deploying cloud resources. Run =just test-aws-context-publication= from
+Core in the repository dependency environment with local Nix daemon access.
+#+language: en
+
+* User configuration
+
+The selected AWS scope supplies WebProfile and Scenario. Ordinary users change
+values on those maintained objects:
+
+#+begin_src scheme
+(.def (Production @ WebProfile) instance_type: "t3.medium")
+(.def (ProductionScenario @ Scenario) profile: Production)
+#+end_src
+
+The second declaration makes the Scenario use that final Profile. Its resource
+projection follows the effective profile slot, including after a parent projection
+has been cached. Neither declaration asks the user to construct admission evidence.
+
+* Maintainer source map
+
+| Source | Single responsibility |
+|--------+-----------------------|
+| [[file:types.ss][types.ss]] | Provider-backed value Contracts, Scenario relationship and Core admission adapter |
+| [[file:objects.ss][objects.ss]] | Profile defaults and receiver-aware Scenario projection |
+| [[file:config.ss][config.ss]] | Profile-shaped resource demand consumed by the selected build Graph |
+| [[file:func.ss][func.ss]] | Lazy scope from the realized Tofu dependency |
+| [[file:interface.ss][interface.ss]] | Publication and one export-to-Contract association |
+| [[file:tests/atomic-test.ss][tests/atomic-test.ss]] | Small Contract controls; no Nix package resolution |
+| [[file:tests/integration/context-publication-test.ss][tests/integration/context-publication-test.ss]] | Explicit real-package upgrade and contextual publication qualification |
+
+The pure Provider capability belongs to [[file:../../modules/services/opentofu/interface.ss][OpenTofu]]. This contribution does not
+implement a second Schema library. The selected package realization supplies
+the Tofu dependency scope; AWS reads its provider and Schema from that one
+realized package. It does not choose a version implicitly. The AMI default is a
+structural fixture, not deployable input.
+Obsolete parallel recipes were removed; Git history retains their earlier design.
+
+* Platform boundary and evidence
+
+Read [[file:../../docs/10-19-design/12-contracts-types/12.20-aws-alignment-and-dynamic-typing.org][AWS alignment and dynamic typing]] for value checking versus contextual
+admission, field discovery gaps and prototype identity. The platform resolves the
+actual Contract and Schema observations from selected publication; users do not
+assemble Context or descriptor lists. This is not AWS execution authorization.
+
+[[file:tests/atomic-test.ss][Focused Contract controls]] cover final receiver identity, field diagnostics and cold
+scope inspection. [[file:../../t/aws-context-publication-test.ss][The AWS integration gate]] retains real Schema package updates
+and stale evidence refusal. [[file:../../t/opentofu-admission-execution-test.ss][The operational gate]] owns Null hello-world execution. Null is an execution
+fixture, not a production AWS deployment capability. This cleanup adds no Loader.
+
+#+begin_src scheme
+(import (only-in "../../init.ss" init.Scenarios))
+(.call (.get init.Scenarios aws tests) .run)             ; atomic controls
+(.call (.get init.Scenarios aws tests integration) .run) ; explicit package integration
+#+end_src
+
+The original integration timeout is retained in the
+[[file:../../docs/10-19-design/12-contracts-types/12.26-selected-packages-and-owned-aws-tests.org][same-Graph performance investigation]]. A historical integration run
+passed after derivation construction and currentness checks were separated:
+construction registers drvPath; checks evaluate it without repeated registration.
+The same Graph and realized package remain reused. Source/Schema guards and
+failure retention remain enforced. Cold Scheme startup and consistent latency
+are still open performance work; a cached Nix output does not establish either.
+No timeout was increased. An initial requalification after the reader and actual
+child heap-fence corrections reached parent publication but hit the unchanged
+60-second Ops deadline. After adjacent pure source guards were coalesced, the
+same init-owned integration passed naturally, including the Schema transition,
+old evidence refusal and retaining the old value on failure. Its instrumented
+business body took about 35.9 seconds; child imports precede that measurement.
+The separate multi-process startup control still hit its outer deadline, so
+consistent startup latency is not qualified by this functional pass.
+
+For executable consumers, see [[file:../aws-validation/README.org][AWS configuration validation]] and
+[[file:../null/README.org][Null local execution]]. Their shared OpenTofu adapter owns resource rendering
+and Ops orchestration; the ordinary Profile surface remains value assignment.

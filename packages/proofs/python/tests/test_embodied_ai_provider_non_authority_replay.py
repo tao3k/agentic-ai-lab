@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from poo_flow_proof.embodied_ai_provider_non_authority_replay import (
+from agentic_ai_lab_proof.embodied_ai_provider_non_authority_replay import (
     build_ease005_replay_receipt,
 )
 
@@ -27,7 +27,7 @@ def test_ease005_replay_receipt_is_deterministic_and_self_bound() -> None:
     assert first["traceRoot"] == f"sha256:{expected}"
     implementation = (
         Path(__file__).parents[1]
-        / "src/poo_flow_proof/embodied_ai_provider_non_authority.py"
+        / "src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py"
     )
     implementation_digest = hashlib.sha256(implementation.read_bytes()).hexdigest()
     assert first["implementationArtifactDigest"] == (
@@ -55,7 +55,7 @@ def test_module_entrypoint_replays_the_same_receipt() -> None:
         [
             sys.executable,
             "-m",
-            "poo_flow_proof.embodied_ai_provider_non_authority_replay",
+            "agentic_ai_lab_proof.embodied_ai_provider_non_authority_replay",
         ],
         check=True,
         capture_output=True,

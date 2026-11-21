@@ -8,23 +8,23 @@
  (regression_budget . 75ms)
  (expected_over_input_budget . 8ms)
  (sampleCount . 20)
- (targetRationale . "custom user-interface scenario aggregation is the public acceptance surface for downstream POO-native cases and must stay bounded.")
+ (targetRationale . "custom user-interface scenario aggregation is the public acceptance surface for downstream POO cases and must stay bounded.")
  (maxRssMb . 512)
  (memoryMetric . resident-set-size)
  (memoryUnit . "MB")
  (iterations . 3)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/user-interface-custom-scenario-batch/benchmark.ss")
- (rule . POO-FLOW-USER-INTERFACE-PERFORMANCE-002)
+ (rule . AGENTIC-AI-LAB-USER-INTERFACE-PERFORMANCE-002)
  (feature . user-interface-custom-scenario-batch)
  (optimizationFocus . "batch aggregation of custom user-interface scenario rows without executing runtime, sandbox, provider, tool, or durable store work")
  (inputShape . "custom/my-module scenarios spanning cicd, funflow, loop-engine, session transform/policy/topology/materialization, durable session memory, tool-core, memory-core, and durable recovery/store handoff cases")
  (expectedOutcome . pass)
- (expectedRepair . "keep scenario fixtures in t/scenarios/performance, keep user-interface declarations POO-native, and summarize final report rows without moving benchmark contracts into user modules")
- (nativePooAuthoring . #t)
+ (expectedRepair . "keep scenario fixtures in t/scenarios/performance, keep user-interface declarations POO, and summarize final report rows without moving benchmark contracts into user modules")
+ (runtimePooAuthoring . #t)
  (runtimeExecuted . #f)
  (hotPathExemption . user-interface-custom-scenario-batch)
- (hotPathEvidence native-poo-authoring
+ (hotPathEvidence poo-authoring
                   custom-user-interface-scenarios
                   report-only-runtime-boundary
                   batch-scenario-aggregation

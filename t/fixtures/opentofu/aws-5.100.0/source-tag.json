@@ -1,0 +1,24 @@
+{
+  "node_id": "TA_kwDOBZHaB9oAKDllNzM3MWU0ZjllM2VhNzk2M2MwYWM0MTY1ZjVlYzIwNGEyOGE5N2I",
+  "sha": "9e7371e4f9e3ea7963c0ac4165f5ec204a28a97b",
+  "url": "https://api.github.com/repos/hashicorp/terraform-provider-aws/git/tags/9e7371e4f9e3ea7963c0ac4165f5ec204a28a97b",
+  "tagger": {
+    "name": "Jared Baker",
+    "email": "jared.baker@hashicorp.com",
+    "date": "2025-06-12T17:42:12Z"
+  },
+  "object": {
+    "sha": "f7a3b98da589ab1d52756b0dcee0dbf2de83d635",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hashicorp/terraform-provider-aws/git/commits/f7a3b98da589ab1d52756b0dcee0dbf2de83d635"
+  },
+  "tag": "v5.100.0",
+  "message": "v5.100.0\n",
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null,
+    "verified_at": null
+  }
+}

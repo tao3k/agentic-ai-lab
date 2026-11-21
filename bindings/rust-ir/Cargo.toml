@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [package]
-name = "poo-flow-rust-ir"
+name = "agentic-ai-lab-rust-ir"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
 license = "Apache-2.0 AND LGPL-2.1-or-later"
-description = "Scheme-owned POO Flow function IR for build-time Rust consumers"
-repository = "https://github.com/tao3k/poo-flow"
+description = "Scheme-owned Agentic AI Lab function IR for build-time Rust consumers"
+repository = "https://github.com/tao3k/agentic-ai-lab"
 publish = false
 
 [lib]

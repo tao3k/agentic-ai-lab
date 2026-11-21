@@ -4,7 +4,7 @@
 
 from dataclasses import replace
 
-from poo_flow_runtime.protocol_person_abi import (
+from agentic_ai_lab_runtime.protocol_person_abi import (
     ContractArtifactProjectionReceipt,
     RuntimeLanguageAdmissionReceipt,
     SourceQueryReceipt,
@@ -62,9 +62,9 @@ def test_runtime_language_admission_requires_poo_contract() -> None:
     query = source_query_receipt()
     python = RuntimeLanguageAdmissionReceipt(
         source_query_receipt=query,
-        contract_id="poo-flow.runtime-language.promotion-request.1",
+        contract_id="agentic-ai-lab.runtime-language.promotion-request.1",
         contract_version="1",
-        adapter_id="poo-flow-python-runtime",
+        adapter_id="agentic-ai-lab-python-runtime",
         adapter_version="0.1",
         target_language="python",
         normalized_semantic_digest="normalized-contract-semantics-1",
@@ -72,7 +72,7 @@ def test_runtime_language_admission_requires_poo_contract() -> None:
     )
     marlin = RuntimeLanguageAdmissionReceipt(
         source_query_receipt=query,
-        contract_id="poo-flow.runtime-language.promotion-request.1",
+        contract_id="agentic-ai-lab.runtime-language.promotion-request.1",
         contract_version="1",
         adapter_id="marlin-gerbil-scheme",
         adapter_version="0.1",
@@ -84,7 +84,7 @@ def test_runtime_language_admission_requires_poo_contract() -> None:
         source_query_receipt=query,
         contract_id="",
         contract_version="1",
-        adapter_id="poo-flow-python-runtime",
+        adapter_id="agentic-ai-lab-python-runtime",
         adapter_version="0.1",
         target_language="python",
         normalized_semantic_digest="normalized-contract-semantics-1",
@@ -104,10 +104,10 @@ def test_runtime_language_admission_requires_poo_contract() -> None:
 def test_contract_artifact_projection_does_not_require_source_query() -> None:
     vector = ContractArtifactProjectionReceipt(
         projection_id="promotion-request-vector-v1",
-        contract_id="poo-flow.runtime-language.promotion-request.1",
+        contract_id="agentic-ai-lab.runtime-language.promotion-request.1",
         contract_version="1",
         source_contract_digest="poo-contract-digest-1",
-        projector_id="poo-flow-runtime-v0-abi-projector",
+        projector_id="agentic-ai-lab-runtime-v0-abi-projector",
         projector_version="0.3",
         artifact_kind="abi-vector",
         artifact_id=(
@@ -117,23 +117,23 @@ def test_contract_artifact_projection_does_not_require_source_query() -> None:
     )
     header = ContractArtifactProjectionReceipt(
         projection_id="runtime-v0-c-header-v3",
-        contract_id="poo-flow.runtime-v0.abi-schema.1",
+        contract_id="agentic-ai-lab.runtime-v0.abi-schema.1",
         contract_version="1",
         source_contract_digest="runtime-v0-contract-digest-1",
-        projector_id="poo-flow-runtime-v0-abi-projector",
+        projector_id="agentic-ai-lab-runtime-v0-abi-projector",
         projector_version="0.3",
         artifact_kind="c-header",
         artifact_id=(
-            "bindings/runtime-c/include/poo_flow/runtime_v0_contract.h"
+            "bindings/runtime-c/include/agentic_ai_lab/runtime_v0_contract.h"
         ),
         output_digest="runtime-v0-header-digest-1",
     )
     invalid = ContractArtifactProjectionReceipt(
         projection_id="invalid-projection",
-        contract_id="poo-flow.runtime-language.promotion-request.1",
+        contract_id="agentic-ai-lab.runtime-language.promotion-request.1",
         contract_version="1",
         source_contract_digest="poo-contract-digest-1",
-        projector_id="poo-flow-runtime-v0-abi-projector",
+        projector_id="agentic-ai-lab-runtime-v0-abi-projector",
         projector_version="0.3",
         artifact_kind="raw-text",
         artifact_id="invalid-artifact",
@@ -142,7 +142,7 @@ def test_contract_artifact_projection_does_not_require_source_query() -> None:
     assert vector.valid
     assert header.valid
     assert vector.semantic_source_identity == (
-        "poo-flow.runtime-language.promotion-request.1",
+        "agentic-ai-lab.runtime-language.promotion-request.1",
         "1",
         "poo-contract-digest-1",
     )

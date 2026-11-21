@@ -5,7 +5,7 @@
 
 """Digest-bound replay for an AI security framework mapping bundle.
 
-This is an internal proof verifier, not a public POO Flow module API.  It
+This is an internal proof verifier, not a public Agentic AI Lab module API.  It
 recomputes bundle metrics from claims and checks the versioned receipt without
 treating digest integrity as issuer authentication or transparency inclusion.
 """

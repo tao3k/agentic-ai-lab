@@ -1,0 +1,193 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: First observation after a workspace write loses its receipt
+#+LANGUAGE: en
+#+PROPERTY: STATUS proposed-integration-with-bounded-rule-probe
+:PROPERTIES:
+:ID: context-recovery-first-observation
+:END:
+
+* Decision and qualification
+
+A durable Task continues through retained identity, exact inputs, evidence and
+unresolved responsibilities. Recovery does not resume an imagined instruction
+pointer or interpret a missing receipt as a failed write. Context keeps current
+content, historical effect, writer reconciliation and Task acceptance separate.
+
+This is a proposed integration with an executable pure ASCENT design probe and
+an explanatory SysML/D2 view. It does not implement a workspace recovery service,
+a crash-injection test, external exactly-once execution or a production admission
+boundary. The illustration's file contents are a teaching example, not a real
+workspace edit performed by this design exercise.
+
+The existing owners remain authoritative: [[file:14-runtime-durable-recovery.org][durable Context recovery]],
+[[file:16-query-durable-owner-handoff.org][Query/Context source handoff]], [[file:32-time-window-context-evolution.org][Context window evolution]] and
+[[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Task/Attempt/Turn granularity]]. C4 composes POO behavior/policy; it supplies no
+execution order. Relation graphs may express dependencies and competing
+interpretations without becoming a compulsory workflow.
+
+* The crash example and the observer's knowledge
+
+The example assumes a durable intent exists before the attempted external write.
+It binds command identity, Task/specification revision, original Attempt, owner
+epoch, workspace Scope, the admitted before-image and expected whole change.
+The toy edit changes =mode: slow= to =mode: fast=.
+
+For the scenario narrator, the write reached the workspace and the process died
+before its execution receipt was durably committed. The recovered Agent does
+not inherit this narrator knowledge. Its first view contains the retained intent
+and a qualified missing-receipt observation; the historical effect is unresolved.
+A missing receipt is not proof that a write did not happen.
+
+A read can reveal current content without proving who wrote it.
+The example fresh read finds =mode: fast=. The original write, a different writer,
+or only the inspected part of a larger change can explain that observation.
+The matching content does not complete the Task.
+
+If no durable intent survives, do not invent a command/Attempt identity from a
+file difference. An admitted workspace discrepancy may invite investigation,
+but cannot be silently attached to an imagined pending operation.
+
+* Context objects and independent axes
+
+All carriers are ordinary versioned POO objects. A recovered view is a new
+immutable assessment over retained sources; it does not edit the old Attempt.
+
+| Carrier | Required meaning |
+|---------+------------------|
+| Retained intent | Exact command bytes/digest, Task/spec revision, Attempt, origin epoch, workspace identity, before-image and desired change, declared effect/result ports |
+| Journal observation | Complete/partial/unknown coverage, exact command, recovered journal cut and current durable owner epoch; absence is scoped to that inventory |
+| Workspace observation | Source identity/path resolution, admitted read scope, coherent snapshot/version cut, observed bytes/digest and coverage over the intended change |
+| Historical witness | Authenticated original operation/Attempt/epoch binding and qualified effect evidence; current file contents cannot substitute for it |
+| Reconciliation obligation | Subject, original lineage, reason, responsible owner, required evidence and discharge condition; outstanding responsibility survives replacement |
+| Model hypothesis/proposal | Open explanation/question and evidence lineage; proposing a probe or Task does not execute it |
+
+Content knowledge may become =observed= while historical effect remains
+=unresolved=. A known historical effect can coexist with open Task acceptance.
+Opposing historical witnesses remain conflicting, with both sources retained.
+
+The stable Task survives. A recovery observation has its own observation identity
+and read cut. Retrying an effect requires a fresh Attempt/claim under current
+admission; it cannot reuse or relabel an old Attempt's terminal receipt. Returning
+an already committed historical decision is separate from executing again.
+
+* Responsibility owners and possible acceptance
+
+| Responsibility | Existing owner and discharge boundary |
+|----------------+---------------------------------------|
+| Journal coverage | Durable owner; qualified complete command inventory at the recovered journal head/epoch |
+| Current content | Context source owner and workspace Host; admitted coherent observation at its own scope/cut |
+| Historical effect | Original Session/Attempt effect owner; operation-bound qualified historical witnesses, retaining conflicts |
+| Writer reconciliation | Existing effect Host and Session owner; actual termination/isolation or qualified reconciliation, not merely a durable epoch increment |
+| Whole change | Existing Task contract owner; independently admitted evidence for the complete required change/ports |
+| Task acceptance | Existing Task/Session publication owner; current applicable acceptance contract and receipt bindings |
+
+Unknown historical effect is not automatically a permanent block on the logical
+Task. If its acceptance contract permits adopting a freshly verified present
+state, the existing owner may admit that result using new observation lineage
+and current applicable writer/effect conditions. The old Attempt's unknown effect
+and remaining obligations survive; no historical success is fabricated. The
+pictured Task is open because independent acceptance evidence is absent. The
+pure probe separately checks that an admitted acceptance receipt can discharge
+that responsibility without rewriting historical uncertainty.
+
+* The first observation is a bounded question
+
+Recovery first establishes what its retained evidence actually covers. A complete
+journal scan at the recovered head can establish a receipt gap. A partial scan,
+old journal head or stale owner epoch leaves journal-result knowledge unknown.
+This is an epistemic dependency, not a mandatory sequence of model/tool calls.
+
+A proposed workspace read must pass the existing current read/disclosure policy.
+An old write grant is not a current read grant. Use a coherent snapshot or
+version-qualified read; a raced or unstable multi-file read remains unqualified.
+The observation states what was true at its cut, not that other writers stopped.
+A durable owner fence alone cannot physically fence an external workspace writer.
+
+Reading =mode: fast= narrows the current-content question. It does not resolve
+whether the original Attempt wrote the file, whether every planned path changed,
+whether another writer can still act, or whether the Task's acceptance checks hold.
+
+* ASCENT derives obligations, not a next-action instruction
+
+The bounded pure design oracle is
+[[file:../../../../modules/ai-agentic-context/recovery-observation.ss][modules/ai-agentic-context/recovery-observation.ss]]. Its normal input is an extensible POO
+=RecoveryObservation.= value. Its internal relations are projections, not another
+editable Task database. Journal/read/history witnesses must already satisfy their
+source contracts; the oracle does not authenticate model-generated assertions.
+
+| Supplied facts at this cut | Derived relation / responsibility |
+|----------------------------+--------------------------------------|
+| Retained intent; no qualified historical witness | =Unknown(command,historical-effect)= and a historical-effect obligation |
+| No complete current-head journal scan | Journal-result unknown; obtain adequate journal coverage |
+| Retained intent and its declared remaining contract requirements | =Obligation= for each undischargeable requirement, independently of journal scan order |
+| Complete current-head scan finds no receipt | =ReceiptGap=; a qualified explanation for the unresolved original decision |
+| Fresh coherent read matches the admitted desired content | =CurrentContent(matches-desired)=; discharge current-content observation only |
+| Old cut, wrong scope or unstable read | Does not discharge the current-content question |
+| Matching content and unresolved history | Retain all proposed competing hypotheses and their questions |
+| Original qualified historical witness | May resolve history; does not resolve independent acceptance |
+| Opposing qualified historical witnesses | Preserve both witnesses and =ConflictingHistory=; history remains unresolved |
+
+Requirements are retained from the admitted Task/effect contract. They are not
+created only after finding a receipt gap, and their relation does not prescribe
+an inspection order. New declared contract ports need no new rule program.
+
+=Discharged= describes one obligation in this view. It is neither Task success
+nor execution permission. Only the corresponding typed admission boundary may
+supply writer, whole-change or acceptance reconciliation receipts. A generic
+receipt cannot substitute for a current read or historical witness.
+
+The probe has no rule deriving replay permission or Task success. The model can
+add another hypothesis without changing its program. A current view can leave
+responsibilities open indefinitely while recording why; elapsed time alone does
+not settle them. A changed cut is evaluated as another view and preserves history.
+
+* Model exploration remains open
+
+After the content match, useful questions include: Did our write reach disk?
+Did another writer make the same change? Is the inspected file only a partial
+result? What evidence could distinguish these explanations?
+
+The model can propose checking admitted history, inspecting the remaining diff,
+asking an owner for evidence, or another bounded observation. It can compare
+alternatives or wait when evidence cannot be acquired. These examples do not form
+an exhaustive action catalog. ASCENT exposes missing evidence, dependencies and
+contradictions; current owners admit any proposed read, delegation or effect.
+
+If the journal instead restores a committed original decision, return its
+historical acknowledgement under the existing identity checks. If a rollback,
+repair or retry is proposed, assess current inputs, ownership, workspace writer
+state and acceptance separately. Never blindly replay because a receipt is absent.
+
+* Explanation and figure correspondence
+
+The figure asks: =The file says fast. Did our edit do it?=
+The retained plan, unknown recovery view and fresh read converge at an inspection
+point. Matching text is visibly distinguished from proven history. Competing
+explanations and outstanding responsibilities branch from that comparison; these
+edges express evidence and obligations, not compulsory transitions.
+
+Local action illustrations depict a saved edit, an unfilled dashed receipt
+and an unresolved old-action question, a read lens, a content comparison, competing traces and an unfinished obligation
+folder. Repeated file marks preserve the identity of what is being compared.
+No child characters, numbered steps or case-specific TS layout are required.
+
+=modules/d2= owns source-qualified explanation, uncertainty-sensitive reader
+questions and native composition preferences. =dev/d2= supplies inert POO source
+bindings, local object illustrations and the existing generic driver. The current
+model reads the actual exported image and returns image-bound findings; an empty
+request list is not a learner-interest verdict.
+
+* Required adverse examples and current evidence
+
+The design probe is exercised by =t/recovery-first-observation-test.ss= through
+the unchanged heap-fenced =just test-file= entrypoint. Missing receipts, matching
+current content, incomplete journal coverage, stale cuts, unstable reads, wrong
+Attempt lineage, independent acceptance, conflicting history and an additional
+model hypothesis are separate controls. These are semantic design checks, not
+actual workspace crash/recovery or authority qualification.
+
+The SysML companion expresses the same ownership and independent knowledge axes.
+OpenSysML parsing/rendering checks model syntax and exposure; it does not prove
+that the eventual runtime satisfies these contracts. Image evidence is retained
+under the ignored D2 output directory and in the case's =readings.ss=.

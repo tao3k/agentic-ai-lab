@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+# Product-owned preparation; Core Ops and TestingScript own execution gates.
+set shell := ["bash", "-euo", "pipefail", "-c"]
+heap := "-:max-heap=2G,debug=q"
+
+dependencies:
+    timeout --signal=TERM --kill-after=5s 120s gxi {{ heap }} "{{ justfile_directory() }}/qualify.ss" dependencies
+
+# Preparation and test remain separately capped at 120 seconds by Core Ops.
+test backend="embedded-preload":
+    timeout --signal=TERM --kill-after=5s 240s gxi {{ heap }} "{{ justfile_directory() }}/qualify.ss" "{{ backend }}"

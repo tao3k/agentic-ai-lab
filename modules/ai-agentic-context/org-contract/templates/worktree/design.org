@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID: example-design
+:CONTRACT_ID: context.design.v1
+:CONTRACT_REVISION: 1
+:END:
+#+title: Example Design
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.design.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "design.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID") (property value "context.design.v1"))
+  (expect exactly 1))
+#+end_src
+
+* Design evidence
+:PROPERTIES:
+:ID: design-record
+:CUSTOM_ID: design-evidence
+:END:
+
+Placeholder design rationale.
+See [[file:reference.org::#reference-evidence][evidence]].

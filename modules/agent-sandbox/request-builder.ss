@@ -12,11 +12,11 @@
 ;;; Policy evidence:
 ;;; - The named-field macro and profiled flow both call these constructors.
 
-(import :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/request-field
-        :poo-flow/modules/agent-sandbox/request-validation)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-field
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/request-validation)
 
 (export make-agent-sandbox-request-with
         make-agent-sandbox-request-from-fields)

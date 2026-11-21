@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-17",
+  "runtime": "default native Gerbil; heap-fenced Justfile entrypoints; serial",
+  "tf_ncl_reference": {
+    "pr": "https://github.com/nickel-lang/tf-ncl/pull/83",
+    "head": "6f62152b359497e0a9435d30adb4c13efc35711c",
+    "reused_principle": "one selector for plugin and Schema build inputs"
+  },
+  "selection": {
+    "providers": [
+      "aws"
+    ]
+  },
+  "closure": {
+    "selected_drv": "/nix/store/r7gpynsqgl4kdvs7a0ym00bgxbb9b9x0-opentofu-artifacts.drv",
+    "selected_out": "/nix/store/aw9dlhhxs5lkgpr3yrqp7h07mly21rxa-opentofu-artifacts",
+    "all_drv": "/nix/store/wnd3bpa8vyqkxgj45007n5nxdmwafw5f-opentofu-artifacts.drv",
+    "providers": [
+      "aws"
+    ],
+    "excluded": {
+      "awscc": {
+        "schema_drv": "/nix/store/a003cv39lwl64ngrgk8nwjckd4863sq1-terraform-provider-awscc-1.77.0-schema.drv",
+        "excluded_dependency_paths": 5
+      },
+      "null": {
+        "schema_drv": "/nix/store/hf2vvfn8jgwxgj525gdcycjgqqxccz2m-terraform-provider-null-3.2.4-schema.drv",
+        "excluded_dependency_paths": 5
+      }
+    },
+    "derivation_closure_verified": true,
+    "cache_hit_used_as_evidence": false
+  },
+  "real_packages": {
+    "aws": {
+      "drv": "/nix/store/1389gpb02d5fd8s48dhdf57c0yna3xgg-terraform-provider-aws-5.100.0-schema.drv",
+      "out": "/nix/store/g79zf5kxy8778bsiq3iagvhl4qww7pbc-terraform-provider-aws-5.100.0-schema"
+    },
+    "awscc": {
+      "drv": "/nix/store/a003cv39lwl64ngrgk8nwjckd4863sq1-terraform-provider-awscc-1.77.0-schema.drv",
+      "out": "/nix/store/5yag978db1m9w853817z8z10d43gz4mm-terraform-provider-awscc-1.77.0-schema"
+    },
+    "null": {
+      "drv": "/nix/store/hf2vvfn8jgwxgj525gdcycjgqqxccz2m-terraform-provider-null-3.2.4-schema.drv",
+      "out": "/nix/store/pn9vvfwwajj67n54p1d9vi92jgxl1dga-terraform-provider-null-3.2.4-schema"
+    }
+  },
+  "nix_evaluation_controls": {
+    "unselected_throwing_catalog_entries_not_evaluated": true,
+    "missing_package_rejected": true,
+    "duplicate_selection_rejected": true,
+    "unsafe_name_rejected": true,
+    "empty_selection_accepted": true
+  },
+  "gates": {
+    "demand-without-artifacts": {
+      "test": "t/opentofu-build-selection-test.ss",
+      "explicit_assertions": 10,
+      "passed": true
+    },
+    "selected-real-aws": {
+      "test": "t/opentofu-build-selection-test.ss",
+      "explicit_assertions": 22,
+      "passed": true
+    },
+    "configuration-discovery": {
+      "test": "t/opentofu-configuration-discovery-test.ss",
+      "explicit_assertions": 49,
+      "passed": true
+    },
+    "indexed-inputs": {
+      "test": "t/opentofu-indexed-inputs-test.ss",
+      "explicit_assertions": 93,
+      "passed": true
+    },
+    "artifact-collection": {
+      "test": "t/opentofu-artifact-collection-test.ss",
+      "explicit_assertions": 21,
+      "passed": true
+    },
+    "provider-versions": {
+      "test": "t/opentofu-provider-versions-test.ss",
+      "explicit_assertions": 84,
+      "passed": true
+    }
+  },
+  "native_additional_exception_controls": {
+    "demand-without-artifacts": 3,
+    "selected-real-aws": 3
+  },
+  "source_sha256": {
+    "core/modules/services/opentofu/objects.ss": "badbd487076353b537b15a370344ae8b1611400e77c3e690c8b260908a74821e",
+    "core/modules/services/opentofu/nix/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+    "t/opentofu-build-selection-test.ss": "97cf430ff527c4a47208585d3f0ff522abbd3c278284755b22a9c4f04fcbf832",
+    "t/fixtures/opentofu/build-selection-checks.nix": "503b3f547e89eeddfad22dd69b36fd2566d69cc646cbf6c85d8a98518c3fd9a4",
+    "t/fixtures/opentofu/selected-artifacts.nix": "073588db1b5106281a4e01b1df364d05eadafb21a07fa49990e0356fad47f242",
+    "t/fixtures/opentofu/family-schemas.nix": "2a047830f93e32858ac28197863e3535fba17cdd77e583c96b3bf6b44b924be1",
+    "t/fixtures/opentofu/check-build-selection.py": "ecdd0b660d3a6ab90d0983e416a87eb5539b840e80c7f2c4710b5bcb48ba6866"
+  },
+  "limitations": [
+    "Local Nixpkgs environment and existing locked fixture packages; no new production lockfile.",
+    "Selected Provider package still exports and splits its entire Schema during its package build.",
+    "No measured 100-Provider scaling or cold-machine performance claim.",
+    "No Loader, Module-graph external-package adapter, acquisition, provider RPC or plan/apply.",
+    "Demand JSON has no source-revision currentness receipt yet.",
+    "Existing first-prefix ownership only; no Provider alias or per-instance override resolution."
+  ],
+  "retained_local_failures": [
+    "Native lexical slot shadowing in initial demands accumulator; repaired before final gates.",
+    "Initial test JSON writer used reversed arguments; repaired.",
+    "Two-version test invoked with upgrade paths reversed once; failed version assertion, corrected invocation only."
+  ]
+}

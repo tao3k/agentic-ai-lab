@@ -19,7 +19,7 @@
 (def (standard-resolution-catalog-shell? catalog)
   (and (object? catalog)
        (.slot? catalog 'kind)
-       (eq? (.ref catalog 'kind) +poo-flow-standard-catalog-kind+)
+       (eq? (.ref catalog 'kind) +agentic-ai-lab-standard-catalog-kind+)
        (.slot? catalog 'edition-index)
        (hash-table? (.ref catalog 'edition-index))
        (.slot? catalog 'artifact-index)
@@ -53,7 +53,7 @@
                 artifact-values artifact-count-value
                 (.ref catalog-value 'artifact-index)))
     (error "resolved Standard bundle contains a non-catalog member"))
-  (.o kind: +poo-flow-standard-bundle-kind+
+  (.o kind: +agentic-ai-lab-standard-bundle-kind+
       root-identities: root-identities-value
       editions: edition-values
       artifacts: artifact-values
@@ -68,7 +68,7 @@
       runtime-executed?: #f))
 
 (def (standard-resolution-admitted-receipt root-identities-value bundle-value)
-  (.o kind: +poo-flow-standard-resolution-receipt-kind+
+  (.o kind: +agentic-ai-lab-standard-resolution-receipt-kind+
       valid?: #t
       roots: root-identities-value
       bundle: bundle-value

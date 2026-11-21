@@ -1,4 +1,5 @@
 ;;; Inert negative fixture: raw self/super hooks belong to maintained behavior.
-(user-composition raw-hook
-  (compose profiles
-    (lambda (self super) (super self))))
+(def raw-hook
+  (.new Scenario name: 'raw-hook
+        config: (compose profiles
+    (lambda (self super) (super self)))))

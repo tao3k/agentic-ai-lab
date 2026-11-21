@@ -8,7 +8,7 @@ use crate::runtime::{
     HOST_READY_SCHEMA, HOST_SCHEMA, REPLY_SCHEMA, RuntimeHello, RuntimeReady, RuntimeReply,
     RuntimeWitness, read_frame, write_frame,
 };
-use crate::wire::{CEDAR_VERSION, LEAN_REVISION, Outcome, evaluate_rust, validate_native_input};
+use crate::wire::{CEDAR_VERSION, LEAN_REVISION, Outcome, evaluate_rust, validate_runtime_input};
 use crate::{Error, Result, canonical};
 use serde::{Deserialize, Serialize};
 use std::ffi::{CStr, c_char, c_int};
@@ -23,13 +23,13 @@ const INPUT_LIMIT: u64 = canonical::MAX_PROJECTION_BYTES as u64;
 const OUTPUT_LIMIT: u64 = canonical::MAX_PROJECTION_BYTES as u64;
 
 unsafe extern "C" {
-    fn poo_flow_cedar_lean_authorize(
+    fn agentic_ai_lab_cedar_lean_authorize(
         bytes: *const u8,
         length: usize,
         output: *mut *mut c_char,
         error: *mut *mut c_char,
     ) -> c_int;
-    fn poo_flow_cedar_lean_string_free(value: *mut c_char);
+    fn agentic_ai_lab_cedar_lean_string_free(value: *mut c_char);
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -64,7 +64,7 @@ impl Drop for SocketGuard {
 /// # Safety
 /// `argv` must be the ordinary process argument array for `argc` entries.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn poo_flow_cedar_runtime_host_main(
+pub unsafe extern "C" fn agentic_ai_lab_cedar_runtime_host_main(
     argc: c_int,
     argv: *const *const c_char,
 ) -> c_int {
@@ -257,7 +257,7 @@ fn evaluate(
     executable: &Path,
 ) -> RuntimeReply {
     let result = (|| {
-        validate_native_input(bytes)?;
+        validate_runtime_input(bytes)?;
         let mut input = tempfile::NamedTempFile::new()
             .map_err(|e| Error::new("cedar-input-io-failed", e.to_string()))?;
         input
@@ -425,9 +425,9 @@ fn evaluate_lean(bytes: &[u8]) -> Result<Outcome> {
     let mut output = std::ptr::null_mut();
     let mut error = std::ptr::null_mut();
     // SAFETY: the C bridge copies the input and returns separately allocated,
-    // NUL-terminated strings owned by `poo_flow_cedar_lean_string_free`.
+    // NUL-terminated strings owned by `agentic_ai_lab_cedar_lean_string_free`.
     let status = unsafe {
-        poo_flow_cedar_lean_authorize(bytes.as_ptr(), bytes.len(), &mut output, &mut error)
+        agentic_ai_lab_cedar_lean_authorize(bytes.as_ptr(), bytes.len(), &mut output, &mut error)
     };
     let text = unsafe {
         let pointer = if status == 0 { output } else { error };
@@ -438,7 +438,7 @@ fn evaluate_lean(bytes: &[u8]) -> Result<Outcome> {
             ));
         }
         let value = CStr::from_ptr(pointer).to_string_lossy().into_owned();
-        poo_flow_cedar_lean_string_free(pointer);
+        agentic_ai_lab_cedar_lean_string_free(pointer);
         value
     };
     if status != 0 {

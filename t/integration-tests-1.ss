@@ -9,4 +9,4 @@
         "./funflow-tutorial-alignment-report-test"
         "./workflow-cicd-check-map-test"
         "./workflow-cicd-runtime-handoff-test"
-        "./agent-sandbox-profile-user-interface-test")
+        "./sandbox-profile-module-test")

@@ -39,19 +39,19 @@
 
 (def (static-poo-prototype-lowering-benchmark)
   (parameterize ((current-expander-compiling? #f))
-    (let* ((native-ms
+    (let* ((runtime-ms
             (static-poo-prototype-expansion-elapsed-ms
-             (static-poo-prototype-source-path "native-case.ss")))
+             (static-poo-prototype-source-path "runtime-case.ss")))
            (lowered-ms
             (static-poo-prototype-expansion-elapsed-ms
              (static-poo-prototype-source-path "lowered-case.ss")))
-           (ratio (if (zero? native-ms) 1.0 (/ lowered-ms native-ms))))
+           (ratio (if (zero? runtime-ms) 1.0 (/ lowered-ms runtime-ms))))
       (list (cons 'prototype-count +static-poo-prototype-count+)
             (cons 'slots-per-prototype 24)
-            (cons 'native-ms native-ms)
+            (cons 'runtime-ms runtime-ms)
             (cons 'lowered-ms lowered-ms)
-            (cons 'lowered/native-ratio ratio)
+            (cons 'lowered/runtime-ratio ratio)
             (cons 'same-source-shape #t)
             (cons 'writes-compiled-artifacts #f)
-            (cons 'pass (and (< lowered-ms native-ms)
+            (cons 'pass (and (< lowered-ms runtime-ms)
                              (< ratio 0.75)))))))

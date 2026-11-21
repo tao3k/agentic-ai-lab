@@ -9,3 +9,14 @@
         (import: "objects.ss")
         (import: "funs.ss")
         (import: "config.ss"))
+(export Governance)
+
+(.def Governance
+  identity: 'governance
+  tags: '(governance)
+  core: (.o
+            scope-contract: GovernanceScope
+            exports: (.o library: 'tao3k/agentic-ai-lab/modules/governance/interface
+                         Profile: AgenticAILabGovernanceProfile.
+                         evaluate: agentic-ai-lab-governance-evaluate))
+  features: (.o))

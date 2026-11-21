@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: One dispatch, two records
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-alias-correction][recovery design]] owns the conditions. The D2 case supplies
+declarative teaching facts and object artwork. The existing D2 ASCENT
+module derives the composition.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-alias-correction/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-alias-correction/case.ss --evaluate
+#+end_src
+
+The first PNG made the alias visible through the arrow from R43 to R42,
+but the evidence arrow that resolved the count pointed at a card titled
+“Count open again.” The image-bound review records this ambiguity. The
+revision names the shared ASCENT question on that card and gives the
+two incoming evidence relations opposite labels: “Reopens review” and
+“Closes review.” The third relation leads from fresh coverage to
+Temporal selection only while that basis remains current.
+
+The revised PNG was viewed again. ASCENT grounded 9 visible anchors
+across the four explanation facets. The revised label bounds do not
+intersect. See [[file:../../output/recovery-dispatch-alias-correction/findings.org][the image-bound readback]].
+
+Revised PNG SHA-256: =8a48fcb6e7fc133b933cec84157d076ee43f9276ebe7abd13ca171e0efb7da23=.

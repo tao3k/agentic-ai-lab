@@ -1,0 +1,25 @@
+#+title: Session-bound Context Consumer
+:PROPERTIES:
+:ID: context-consumer-document-template
+:CONTRACT_ID: context.consumer.v1
+:CONTRACT_REVISION: 1
+:SESSION_ID: <session-owner-hash>
+:END:
+#+language: en
+
+* TODO Context demand
+:PROPERTIES:
+:ID: work
+:ROLE: consumer
+:END:
+Keep the document ID as its content anchor. Set SESSION_ID from the independent
+Session owner's persisted creation identity. Re-querying or changing a source never changes it.
+
+The admitted Context binding belongs in a separate journal/receipt artifact.
+Its digest covers Session scope, Query, result, source and Contract cuts.
+Do not insert a receipt's own hash into the source bytes that it hashes.
+
+* Reassessment obligations
+
+Keep original evidence references, competing hypotheses and open questions.
+Retraction invalidates applicability; it does not erase historical evidence.

@@ -7,8 +7,8 @@
 ;;; Boundary: this module emits candidate data only; it never promotes profiles.
 ;;; Runtime contract: JSON decoding and nono execution belong to CLI/Marlin.
 
-(import :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile-candidate)
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-candidate)
 
 (export make-nono-agent-sandbox-profile-candidate-descriptor
         make-nono-agent-sandbox-profile-candidate

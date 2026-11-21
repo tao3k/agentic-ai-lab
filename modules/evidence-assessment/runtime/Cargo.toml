@@ -1,0 +1,37 @@
+[package]
+name = "agentic-ai-lab-reasoning"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0 AND LGPL-2.1-or-later"
+description = "Agentic AI Lab evidence assessment and agent context over the ASCENT rules Library"
+
+[lib]
+name = "agentic_ai_lab_reasoning"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+gerbil-ascent = { git = "https://github.com/tao3k/gerbil-ascent", rev = "0f99da9e3a3baf1a272ba58fe0769ed8278ae746" }
+num-bigint = "=0.4.8"
+num-rational = "=0.4.2"
+num-traits = "=0.2.19"
+sha2 = "=0.10.9"
+pyo3 = { version = "=0.27.2", features = ["abi3-py310", "num-bigint"], optional = true }
+gerbil-scheme-python = { git = "https://github.com/tao3k/gerbil-scheme-rust", rev = "8c23217d1f838e71a972e606d6e38e6386f3b0a7", default-features = false, features = ["python", "owned-values"], optional = true }
+serde_json = { version = "=1.0.151", features = ["arbitrary_precision"] }
+
+[build-dependencies]
+sha2 = "=0.10.9"
+serde_json = "=1.0.151"
+
+[workspace]
+
+[workspace.package]
+license = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[test]]
+name = "assessment"
+path = "tests/assessment.rs"
+
+[features]
+python = ["dep:pyo3", "dep:gerbil-scheme-python"]
+extension-module = ["python", "pyo3/extension-module"]

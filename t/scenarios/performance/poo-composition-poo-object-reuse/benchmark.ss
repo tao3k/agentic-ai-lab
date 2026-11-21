@@ -1,0 +1,28 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;;
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+((benchmarkKind . scenario-e2e)
+ (max_total . 100ms)
+ (target_total . 25ms)
+ (regression_budget . 75ms)
+ (expected_over_input_budget . 5ms)
+ (sampleCount . 20)
+ (targetRationale . "Guards `(profile existing-poo-object)` as the direct community contribution path.")
+ (maxRssMb . 512)
+ (memoryMetric . resident-set-size)
+ (memoryUnit . "MB")
+ (iterations . 1000)
+ (unit . "ms")
+ (purpose . "Guard direct POO object reuse through composition profile collection.")
+ (sourcePath . "t/scenarios/performance/poo-composition-poo-object-reuse/benchmark.ss")
+ (feature . poo-composition-poo-object-reuse)
+ (rule . GERBIL-SCHEME-AGENT-R049)
+ (optimizationFocus . "direct POO object reuse through profile collection")
+(inputShape . "predefined POO object contributed into a composition module")
+(expectedOutcome . "predefined POO object remains the shared profile object in the composition")
+(expectedRepair . "avoid wrapping runtime profile objects in ad hoc alist or record adapters")
+ (pooFormEvidence . (.o .def defpoo))
+ (pooUsageCallEvidence . (.ref .get .mix .o .def .putdefault! .setslot! setslots! .all-slots))
+ (measurementPhases poo-object profile-reuse payload-projection assert-time-gate observe-runtime-memory)
+ (tags poo composition poo-object reuse performance))

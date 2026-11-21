@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Small upstream-derived LangGraph cases routed through POO Flow compat."""
+"""Small upstream-derived LangGraph cases routed through Agentic AI Lab compat."""
 
 from __future__ import annotations
 
