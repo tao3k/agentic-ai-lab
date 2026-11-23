@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The service declaration boundary is a closed, extensible POO Type.
 (import :clan/poo/object
-        (only-in :clan/poo/object-contract ObjectContract.))
+        (only-in :clan/poo/types/object-contract ObjectContract.))
 (export Services)
 
 ;; A service becomes legal by contributing a typed responsibility. Deriving

@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The declaration tree is authoritative before package or process effects.
 (import :std/test :clan/poo/object
-        (only-in :clan/poo/object-contract ObjectContract.)
+        (only-in :clan/poo/types/object-contract ObjectContract.)
         (only-in :clan/poo/type TypeError?)
         (only-in :clan/poo/type String)
         (only-in :tao3k/yuanxu/types/contracts yuanxu-validation-evidence-accepted?)

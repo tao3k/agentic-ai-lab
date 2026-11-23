@@ -250,7 +250,7 @@
               (newline))
             '((OPENTOFU-RUNTIME-OBSERVATIONS . "tao3k/yuanxu/module-system/source/observations~0")
               (OPENTOFU-RUNTIME-POO . "clan/poo/object~0")
-              (OPENTOFU-RUNTIME-READ-ROUTE . "clan/poo/read-route~0")))
+              (OPENTOFU-RUNTIME-READ-ROUTE . "clan/poo/object/read-route~0")))
           (def walls
             (map (lambda (round)
                    (measure recipe (.call fixture .workspace (number->string round)) round paired?))

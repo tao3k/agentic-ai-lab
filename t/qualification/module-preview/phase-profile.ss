@@ -5,7 +5,7 @@
 (import :std/test :clan/poo/object
         (only-in :std/test/base test-suite! TestResult-result)
         (only-in :std/list/list every)
-        (only-in :clan/poo/slot-observation without-observation slot-read-dependencies)
+        (only-in :clan/poo/object/slot-observation without-observation slot-read-dependencies)
         (only-in :tao3k/yuanxu/observability/memory yuanxu-debug-memory-snapshot)
         (only-in :tao3k/yuanxu/module-system/source/admission current-module-source-phase)
         (only-in :tao3k/agentic-ai-lab/t/qualification/module-preview/process-accounting

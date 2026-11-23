@@ -8,7 +8,7 @@
         (only-in "./directory.ss" DirectoryFixture write-source)
         (only-in :std/test check-equal?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-checkpoint)
-        (prefix-in :clan/poo/declarative-metadata metadata.)
+        (prefix-in :clan/poo/mop/declarative-metadata metadata.)
         (only-in :tao3k/yuanxu/admission/publication AdmissionPublication.)
         (only-in :tao3k/yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :tao3k/yuanxu/module-system/source/admission module-source-read))

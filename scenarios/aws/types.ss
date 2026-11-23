@@ -1,7 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Public value Types own data; Core adds evidence over its selected Context.
-(import :clan/poo/object :clan/poo/object-contract
+(import :clan/poo/object :clan/poo/types/object-contract
         (only-in :clan/poo/type True define-type)
         (only-in :tao3k/yuanxu/modules/json-schema/contracts ProjectionContract.)
         (only-in :tao3k/yuanxu/types/contracts YuanxuContract. yuanxu-classification-evidence))

@@ -6,7 +6,7 @@
 ;;; Boundary: module owner contracts stay separate from activation tests.
 
 (import (only-in :clan/poo/type Record String List)
-        (only-in :clan/poo/object-contract diagnose)
+        (only-in :clan/poo/types/object-contract diagnose)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in "../../../fixtures/nix/directory.ss" write-source)
         (only-in "../../../fixtures/nix/services.ss" ServicesFixture refused)

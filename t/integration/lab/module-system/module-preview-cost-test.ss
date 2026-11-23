@@ -3,10 +3,10 @@
 ;;; One dataflow cohort. Instrumented timings are diagnostic, not capacity gates.
 (import :std/test :clan/poo/object
         (only-in :std/error Error-message)
-        (only-in :clan/poo/declarative-metadata failure? failure-phase failure-cause)
+        (only-in :clan/poo/mop/declarative-metadata failure? failure-phase failure-cause)
         (only-in :clan/poo/type Record String)
-        (only-in :clan/poo/object-contract diagnose)
-        (only-in :clan/poo/slot-observation %call-with-recorded-slot-reads
+        (only-in :clan/poo/types/object-contract diagnose)
+        (only-in :clan/poo/object/slot-observation %call-with-recorded-slot-reads
                  call-with-slot-read-observer slot-read-dependencies slot-read-receiver slot-read-key)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/yuanxu/observability/testing-fixture yuanxu-test-fixture)
