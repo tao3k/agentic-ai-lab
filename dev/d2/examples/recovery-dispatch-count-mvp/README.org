@@ -3,7 +3,7 @@
 #+TITLE: One replay-count question
 #+LANGUAGE: en
 
-The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-count-mvp][replay-count design]] keeps one question across evidence changes. The
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery--offload-02-shared-scientific-model.org::#recovery-dispatch-count-mvp][replay-count design]] keeps one question across evidence changes. The
 case supplies object art and evidence relations to the existing D2 ASCENT
 module. The figure shows three different effects on the same question.
 

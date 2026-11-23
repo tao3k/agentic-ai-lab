@@ -1,0 +1,76 @@
+#+title: Durable Agenda Wakes, Session Attempt Crash Fencing and Sandbox Lethal-Trifecta Governance
+#+date: [2026-11-20]
+#+language: en
+#+property: STATUS design-and-formal-models-verified-no-scheme-changes
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Orthogonal runtime control axes without collapsing Context, Session or Sandbox
+
+Scheduled ORG =Agenda= triggers, independent =Session= retry scheduling, and
+=Sandbox= isolation regularly collapse into implicit privilege escalation when
+an overdue timer is mistaken for execution permission, a crashed provider call
+is blindly retried, or a sandbox allows outbound network egress while holding
+both untrusted external input and restricted private data. Building on
+[[file:13-runtime-background-clock.org][Slice 13]], [[file:14-runtime-durable-recovery.org][Slice 14]], [[file:org-durable-declarations.org][ORG Durable Declarations]],
+[[file:35-org-context-modules.org][Slice 35]] and [[file:40-context-governance-boundary.org][Slice 40]], this slice formalizes the joint
+governance invariant across those three runtime axes. No Scheme sources are
+modified.
+
+* Architecture: Alarm Clock, Foggy-Crash Scout and Locked Carrier-Pigeon Cage
+
+| Control axis | Semantic owner | Operation and capability | Governance invariant |
+|--------------+----------------+--------------------------+----------------------|
+| 1. Durable Agenda & Watch Wakes | =ORG Durable Agenda= | =SCHEDULED= / =DEADLINE= rows and evidence watches emit due occurrence wakes | =WakeCarriesExecutionAuthority = false=; every wake re-checks live source cut and Cedar/runtime grants at the handoff fence |
+| 2. Crash-Ambiguous Attempt Fencing | Independent =Session= (=Task= / =Attempt= / =Turn=) | Separates consumed handoff fences from observed provider receipts; runs read-only reconciliation probes after crashes | =outcome = unknownAfterCrash= blocks non-idempotent redispatch until attested final non-acceptance (=confirmedNoSend=), and any retry strictly advances =attemptGen= |
+| 3. Sandbox Intersection & Lethal-Trifecta Lock | =Context= $\times$ =Sandbox= Governance Gate | Intersects Context capability bounds with the selected Sandbox profile allowlist | $\mathrm{Cap}_{\mathrm{eff}} \subseteq \mathrm{Cap}_{\mathrm{ctx}} \cap \mathrm{Cap}_{\mathrm{sandbox}}$, and $(\mathrm{UntrustedInput} \land \mathrm{PrivateData} \land \neg \mathrm{EndorsedEgress}) \implies \neg \mathrm{ExternalEgress}$ |
+
+#+begin_src typst
+$ upright("EffectiveCap")(C_(upright("ctx")), C_(upright("sb")))(c) equiv
+  C_(upright("ctx"))(c) and C_(upright("sb"))(c),
+  quad not upright("LethalTrifecta")(upright("ctx"), upright("noEgressSandbox")) $
+#+end_src
+
+* Orthogonal SysML v2 Verification Allocation and Local Verification
+
+| Artifact | Disjoint formal ownership under =FormalVerificationTaxonomy= |
+|----------+--------------------------------------------------------------|
+| [[file:46-durable-agenda-session-sandbox-governance.sysml][46-durable-agenda-session-sandbox-governance.sysml]] | Structural ports across =DurableAgendaPlane=, =IndependentSessionAndReconciler= and =SandboxTrifectaGovernanceGate=, plus disjoint allocation to =leanEngine= XOR =quintEngine= (=ControlAxesDispatchAndBoundaryContract=) |
+| [[file:46-durable-agenda-session-sandbox-governance.lean][46-durable-agenda-session-sandbox-governance.lean]] | Pure capability-set & map-frame algebra ONLY: =effectiveCap_idem=, =effectiveCap_comm=, =effectiveCap_monotone_ctx=, =noEgressProfile_eliminates_lethal_trifecta=, and =recordOutcome_frame_preserves_other_recipients= |
+| [[file:46-durable-agenda-session-sandbox-governance.qnt][46-durable-agenda-session-sandbox-governance.qnt]] | Nondeterministic (=nondet=) wake & crash races ONLY: =fireAgendaWake= vs =revokeGrantMidFlight=, =crashAfterHandoffBeforeReceipt= leaving =outcome = "unknown"=, =arriveLateProviderReceipt=, and =reconcileConfirmedNoSendFence= advancing =attemptGen= |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/46-sandbox-trifecta.{svg,png,html,receipt.json}=) |
+
+Reproduce all checks locally without touching Scheme sources:
+
+#+begin_src sh
+lean docs/10-19-design/10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.lean
+
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context/40-context-governance-boundary.sysml \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.sysml \
+  -engine run \
+  -analysis 'DurableAgendaSessionSandboxGovernance::ControlAxesDispatchAndBoundaryContract(true,true,true,true,0)' \
+  -analysis 'DurableAgendaSessionSandboxGovernance::ControlAxesDispatchAndBoundaryContract(true,true,false,true,1)' \
+  -analysis 'DurableAgendaSessionSandboxGovernance::ControlAxesDispatchAndBoundaryContract(true,true,true,true,2)'
+
+quint typecheck docs/10-19-design/10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.qnt
+quint test docs/10-19-design/10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.qnt \
+  --main DurableAgendaSessionSandbox
+quint verify docs/10-19-design/10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.qnt \
+  --main DurableAgendaSessionSandbox --max-steps 8 --invariant safety
+
+cd dev/d2 && bun run check && bun run governance-figures
+#+end_src
+
+Local verification results on 2026-11-20:
+
+- Lean checked all capability-intersection, Lethal-Trifecta elimination and
+  per-recipient frame theorems with zero errors, warnings or =sorry=.
+- Strict SysML validation passed with zero violations; =run= passed guarded
+  =mode = 0= and rejected modes =1..2=.
+- Quint passed all deterministic runs and symbolic =verify= held =safety= across
+  8 =nondet= transitions with =NoError=.
+- =@deterministic-engineering/render= + OpenSysML exported =46-sandbox-trifecta=
+  with =minimumTextSize = 16px= across 31 measured text samples.

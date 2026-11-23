@@ -110,7 +110,10 @@ SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
 SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
 
 [[annotations]]
-path = ["proofs/Composition/lean-toolchain"]
+path = [
+  "proofs/Composition/lean-toolchain",
+  "proofs/ContextGovernance/lean-toolchain",
+]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
 SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
@@ -597,6 +600,9 @@ path = [
   "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/39-gitops-refinement-witnesses.qnt",
   "modules/ai-agentic-context/org-contract/descendants.ss",
   "modules/ai-agentic-context/org-contract/templates/gitops-worktree/worktree.org",
+  "modules/ai-agentic-context/org-contract/templates/governance/topology.org",
+  "modules/ai-agentic-context/org-contract/templates/governance/work.org",
+  "modules/ai-agentic-context/org-contract/templates/seed/session-seed.org",
   "modules/ai-agentic-context/org-contract/templates/worktree/design.org",
   "modules/ai-agentic-context/org-contract/templates/worktree/reference.org",
   "modules/ai-agentic-context/org-contract/templates/worktree/worktree.org",

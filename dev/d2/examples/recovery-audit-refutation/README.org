@@ -3,7 +3,7 @@
 #+TITLE: Replay audit and recovery summary revision
 #+LANGUAGE: en
 
-The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-summary-audit-refutation][recovery design]] owns the claim, scope and admission definitions.
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery--offload-02-shared-scientific-model.org::#recovery-summary-audit-refutation][recovery design]] owns the claim, scope and admission definitions.
 The case declares POO presentation facts, local object art and a native SysML
 view. The existing =modules/d2= ASCENT implementation chooses the explanatory
 relations and layout constraints. The generic renderer exports the result.

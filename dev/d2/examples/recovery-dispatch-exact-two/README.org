@@ -3,7 +3,7 @@
 #+TITLE: Admitting a second distinct dispatch
 #+LANGUAGE: en
 
-The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-exact-two][recovery design]] owns the identity and publication conditions.
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery--offload-02-shared-scientific-model.org::#recovery-dispatch-exact-two][recovery design]] owns the identity and publication conditions.
 This case supplies declarative presentation facts and local object art.
 The existing D2 ASCENT module derives the composition.
 

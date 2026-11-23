@@ -3,7 +3,7 @@
 #+TITLE: Dispatch coverage and an exact replay count
 #+LANGUAGE: en
 
-The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-coverage][recovery design]] owns the inventory, range, identity and admission rules.
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery--offload-02-shared-scientific-model.org::#recovery-dispatch-coverage][recovery design]] owns the inventory, range, identity and admission rules.
 This case supplies declarative scene facts and local object art to the existing
 D2 module. Its comparison depicts evidence cuts, with a withdrawal revision
 and a later exact revision in the illustrated history.

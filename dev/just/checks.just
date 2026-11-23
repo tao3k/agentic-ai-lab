@@ -36,6 +36,16 @@ check-license-contract:
 check-version-contract:
     python3 packages/automation/check_version_contract.py
 
+# Enforce the repository ORG modularity budget (<=1000 lines; frozen REUSE paths exempt).
+[group('check')]
+check-org-modularity threshold="1000":
+    python3 packages/automation/org_modularization.py scan --max-lines "{{ threshold }}" --fail-on-unmodularized
+
+# Generate an ASCENT competing-branch modularization plan (read-only) for one oversized ORG document.
+[group('check')]
+plan-org-modularization file threshold="1000":
+    python3 packages/automation/org_modularization.py plan "{{ file }}" --max-lines "{{ threshold }}"
+
 # Bootstrap the expander in Gxi, then use the upstream GxTest entry point.
 # No private assertion runner; require all Cases and the final harness receipt.
 [group('check')]

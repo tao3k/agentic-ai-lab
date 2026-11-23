@@ -1,0 +1,728 @@
+#+title: Process exit and Ops dependency ownership (part 2)
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Extracted module of [[file:00-design-map.org][Agentic AI Context: Existing Org Design to SysML Allocation]].
+
+* Process exit and Ops dependency ownership (part 2)
+The exact native target sets agree across rounds. Base and withdrawal
+each dispatch the same 12 targets. Enablement adds 15 targets. Hot build
+and clean dispatch zero targets. The suite retains the receiver/refinement,
+zero-scope, refusal, withdrawal cleanup, and enabled-product digest checks.
+Every round reports module, Harness and final success. In the enabled
+builds, the first two rounds enter Make at 24.09 and 4.40 seconds, while
+the build process reports 7.92 and 7.76 CPU seconds through =main=
+return. The excess wall time is already present in selected-graph
+projection. The available timers do not identify the blocking syscall.
+
+The Linux Runtime job on the published Lab =c27f62cb= base completed the
+Memory downstream case with 12 base, 27 enabled, and 12 withdrawn
+targets, zero hot dispatches, and zero scopes during build. The same job
+later hit the 180-second =build-library= timeout while native compiler
+jobs were still being dispatched. The Linux source-build and package
+jobs reached the 12-minute dependency-build action limit, and the macOS
+package job reported a native Make barrier stack overflow. These are
+separate failures from Memory acceptance.
+
+The macOS Runtime job on the same Lab commit stops before its first
+selected downstream Suite. Under Bash 3.2, the optional observation array
+is empty in default mode, and =set -u= rejects its ordinary expansion.
+The Lab recipe uses Core's existing guarded array expansion so the default
+supplies no flags and the explicit observation modes retain theirs. The
+same =just test-file= command and heap and time limits apply. Under system
+Bash 3.2, the previously failing governance downstream Suite completes
+with default, observation and trace settings in 104.07, 71.17 and 69.03
+seconds, respectively.
+
+The separate Yuanxu Linux dense-selection gate still fails on the
+=ccbafee= pull request head. Fixture materialization takes 3.83 seconds,
+init import 0.04 seconds and first namespace demand 1.52 seconds. The
+first selected graph remains incomplete after 174.61 seconds of its own
+interval, with 171.41 user CPU seconds and 17.29 seconds in GC. The
+180-second Case deadline interrupts Gerbil identifier expansion. The
+worker reports failed status 42. This CI case exercises ten thousand
+declarations and has a different workload and budget from the Memory
+downstream gate.
+
+The Linux and macOS bootstrap suites also report an unexpected Interface
+dispatch on the second Core build at =ccbafee=. During cold bootstrap
+the prepared input observes the source prelude. In the next process the
+native prelude is available and the two descriptor sets differ. The
+isolated correction keeps the source observation in admission and leaves
+that transient compiler input out of the shared view. If an older view
+already exists, the source route invalidates the old product before
+removing its descriptor under the existing output lock. A consumer still
+requires a matching descriptor. The corrected full Core cold/hot pair
+dispatches 275/0 targets in 97.48/22.90 seconds.
+On that same output prefix, the Lab selection dispatches 35 targets
+in 48.77 seconds, including the two Core Interfaces. The 23 tracked
+records and native markers keep their bytes and mtimes. A new Lab
+process and the return to ordinary Core dispatch zero targets in
+19.27 and 29.81 seconds, respectively.
+
+The corrected candidate passes the four isolated compiler-input mutations
+and both source-admission suites. The lifecycle test first reaches the
+60-second idle limit inside native object loading, before any Case runs.
+The involved POO artifact bytes match the passing prefix. The same-source
+recheck completes in 77.31 seconds. The first Memory environment omitted
+Parser's independently named prelude and fails before the enabled build.
+After adding the existing artifact from the same pinned Parser build,
+the run reaches all three independent first reads, hot build, withdrawal
+cleanup and the expected refusal marker. The outer deadline interrupts the
+refusal child's output collection before the Suite returns, so the
+124.53-second run fails with status 124. Its enabled cold action takes
+26.61 seconds and its zero-dispatch enabled hot action takes 19.26 seconds.
+Keep both failed attempts separate from the three passing runs of the
+preceding candidate.
+
+The 124.53-second run reports 112/198/112 module-projection contexts
+for base, enabled and withdrawn. The additional enabled library walk
+creates 86 contexts in both the cold and hot process and selects 15
+targets. Its sampled contexts include compiled Parser dependencies.
+That walk takes 13.72 seconds cold and 1.79 seconds hot in the failed
+round. In the earlier passing round of the preceding candidate, the same
+86-context work takes 0.75 and 0.73 seconds. The counts describe new
+Gerbil process contexts and do not identify duplicate work within a
+process. The enabled hot process still dispatches zero compilations.
+
+The refusal command reaches its expected Contract rejection. At the
+aggregate deadline the parent is still waiting for output or EOF. The
+second refusal line in the failed transcript is Ops replaying its captured
+partial output on interruption. The transcript does not establish the
+child's native exit state.
+
+On published Core =9445717=, the same default Suite completes one fresh
+round in 86.34 seconds. The following independent round emits every success
+marker and completes the refusal action, but the outer command exits 124
+at 120.27 seconds. This is a failed deadline check. Both rounds have
+identical target sets and expansion counts. The enabled cold action grows
+from 13.74 to 30.46 seconds and the withdrawn cold action from 9.97 to
+24.73 seconds. The hot and clean actions remain near 9–10 and 7.6 seconds.
+The regression in wall time therefore precedes final Harness collection,
+although the timeout itself occurs during that collection. Process CPU
+through the enabled build's =main= return rises from 7.51 to 9.32 seconds.
+This bounds the observed work difference without attributing the remaining
+wall interval to a specific scheduler or syscall.
+
+The four retained trials of Core =9445717= use the same Lab migration
+checkout based on =ecda4d1d=, Gerbil =1cfb032=, Gambit =ea114fc=, POO
+=cd4de644=, 12 build workers and a 2 GiB Scheme heap. The local test uses
+the native Ops progress reader without the legacy compiler-line relay.
+The Case, assertions and 120/120/60-second limits are unchanged. Each
+trial starts with three independent empty consumer output prefixes.
+
+| Trial | Harness (s) | Exit | Cold build base / enabled / withdrawn (s) | First .get base / enabled / withdrawn (s) |
+|-------+-------------+------+--------------------------------------------+-------------------------------------------|
+|     1 |       86.34 |    0 | 11.15 / 13.74 / 9.97 | 1.50 / 1.97 / 1.95 |
+|     2 |      120.27 |  124 | 11.77 / 30.46 / 24.73 | 3.07 / 2.13 / 2.07 |
+|     3 |       94.79 |    0 | 10.91 / 14.07 / 14.08 | 2.59 / 2.36 / 2.36 |
+|     4 |      111.32 |    0 | 11.66 / 23.53 / 21.29 | 2.08 / 2.65 / 2.06 |
+
+The three natural exits report every required Suite, Module and Harness
+marker. All four trials record identical compiler target identities and
+counts of 12/27/12, with zero hot and clean dispatches. Base's build
+=main= return to parent collection takes 2.46, 3.39, 2.51 and 2.56 seconds
+across the four trials. This local candidate qualification remains
+separate from Lab's published Core pin and remote CI.
+
+The separate B-product deployment Suite reaches its final marker and
+verifies the 46-target A/B build, runtime use, hot reuse and clean isolation.
+Its outer command still exits 124 in 120.49 seconds. Compared with the
+preceding 85.68-second pass, =test-start= moves from 57.98 to 92.59 seconds.
+The child-OK-to-return interval changes from 3.27 to 3.32 seconds. The
+selected-graph measurement grows from 36.20 to 53.88 seconds with the
+same four Interface reads and 216 native import calls. The two runs
+report 93.61/97.20 user CPU seconds and 33.15/34.54 system CPU seconds.
+The additional wall time accumulates before the selected tests. This
+deadline failure remains separate from the three passing Memory trials.
+The same-source deployment recheck completes in 59.24 seconds with the
+original 46-target receipt, B-product runtime use and a natural Harness
+exit. The first selected test starts at 29.97 seconds.
+
+The remote bootstrap control on Core =9445717= now passes Linux,
+including the zero-dispatch second build and clean/rebuild checks. The
+macOS Case times out in its first cold action before reaching the hot
+assertion. Both cold actions dispatch the same 43 distinct targets.
+The first dispatch follows command start by 13.18 seconds on Linux and
+16.90 seconds on macOS. The remaining observed interval is 24.66 seconds
+on Linux and 45.51 seconds on macOS, where the command reaches status
+124 with native work outstanding. The runners use four and three build
+workers respectively, so this is an attribution of their actual CI
+intervals. It is not a controlled platform-speed comparison.
+The same Core commit passes the local empty-output bootstrap, hot build,
+clean and rebuild Case with three workers and the existing action limits.
+The two cold actions take 24.71 and 48.79 seconds, and the hot action
+takes 10.63 seconds with zero dispatches. The 134.10-second total spans
+several separately bounded actions. It is not the Lab Memory Suite's
+120-second aggregate measurement.
+
+A local macOS check of published Lab =ecda4d1d= with its actual Core
+pin =cd794638= uses system Bash 3.2 and the checked-in progress adapter.
+It passes shell startup, the three cold builds and independent first
+reads, and the zero-dispatch hot build. The outer deadline interrupts
+withdrawn-output clean at 122.39 seconds with status 124. The base and
+enabled cold actions take 29.80 and 37.79 seconds. This run does not
+count toward the three natural exits on the migration candidate.
+
+On Lab =ecda4d1d=, the Linux job completes Memory before running the
+full development build. The first native dispatch appears 81.55 seconds
+after the development command starts. The 180-second watchdog interrupts
+compilation after 189 distinct dispatches, 174 Lab and 15 Core. All 15
+Core identities occur in the 23-target reuse comparison above. That
+comparison covers the selected build with the new Core producer. It does
+not establish the full development build time on the published Lab pin.
+
+The Linux Bazel package artifact for =ecda4d1d= distinguishes dependency
+preparation from Lab's compile failure. All six dependency receipts have
+status =ok=. Bazel's compile profile attributes 284.59 seconds of its
+285.35-second build interval to =//:compile=. The native log records
+542 distinct dispatches, 498 Lab and 44 Core, then reports heap overflow.
+The resource guard reports four build workers and 3.60 GB peak Linux
+process-tree PSS. All 23 known reusable Core targets appear in those
+44 dispatches. This does not show that the selected-build change would
+by itself resolve the full action's heap overflow. The external Bzlmod
+job reaches its separate 12-minute limit with =gerbil_parser_package=
+still running. Its progress shows POO then Yuanxu, followed by overlapping
+Parser and Ascent actions. It never reaches Lab compilation. This job
+supplies no comparable per-action profile in this run.
+
+The macOS package job reaches its 12-minute dependency-action limit
+after POO completes and Yuanxu starts. POO's Linux and macOS receipts
+carry the same pinned source digest and both logs dispatch 91 targets.
+The native guard admits three build workers on Linux and one on macOS
+from requests for four and three. The POO receipts report 146 and 701
+seconds respectively. The separate macOS source-build job also expires
+during the dependency phase. None of these receipts establish that the
+two workflows can reuse an action result. That requires matching action
+inputs and toolchain ABI as well as source identity.
+
+The macOS Runtime job on Lab =ecda4d1d= completed the three cold
+builds in 20.33, 28.62 and 17.74 seconds with 12, 27 and 12 distinct
+dispatches. Of the 15 enabled-only targets, 11 live under Memory and
+four are its additional dependency closure (one authoring and three
+Session targets). The three independent first reads took 8.66, 6.87
+and 6.62 seconds. The enabled hot build dispatched zero targets and
+the withdrawn clean completed. The refusal process started
+at 117.34 seconds. The aggregate watchdog interrupted collection with
+status 124 before the required refusal marker arrived. The build main
+return to parent action return intervals were 3.84, 4.12 and 3.50
+seconds for base, enabled and withdrawn. Each contains both the native
+CLI's remaining work and parent collection. In Gerbil =1cfb032=,
+=pkg-build= emits its status before invoking =build.ss= with inherited
+stdout. That status appears about 2.9 seconds after base main returns in
+the captured log, so the display timestamp cannot locate CLI work. A
+process trace is needed to split child exit from the parent wait. The
+failed refusal is not evidence of a semantic rejection.
+
+To attribute the local base tail, run the same default Suite against
+Core =9445717= and the Lab migration checkout. Poll the Harness process
+tree with =ps= through the first build and use macOS =sample= for one
+second on the =build.ss compile= child when the first =main return=
+arrives. Compare the timestamps from the process snapshots with the
+recorded =main return= and Lab action return. This is a diagnostic run.
+In the observed run, the base action returned 3.61 seconds after main.
+The compiler child remained present 2.95 seconds after main and was gone
+by 3.22 seconds. The outer Gerbil CLI was still present 3.50 seconds
+after main. All 85 child main-thread samples were in Gambit
+=___cleanup_dyn_module= calling =dlclose=. Of those, 57 were in dyld
+debugger notifications, so sampling itself can affect that distribution.
+The trace establishes that the child remained in native teardown.
+It gives no basis for changing Ops collection or bypassing the CLI.
+The diagnostic Suite exited naturally in 88.05 seconds with every
+required marker, zero business scopes during build and 12/27/12 cold
+targets. The three independent processes reported 1.58, 2.11 and 2.36
+seconds for first reads. This sampled run is separate from the three
+unsampled qualification rounds above.
+
+For a separate image-ownership diagnostic, use the same Suite and collect
+=lsof -nP -a -p PID -d txt -Fn= from each =build.ss compile= child after
+its first compiler dispatch. Compare sorted unique =.oN= paths. Base and
+withdrawn contain the same 485 paths: 265 standard library, 66 Gerbil,
+111 Yuanxu and 43 gerbil-poo images. Enabled retains those paths and adds
+31: 26 Parser library, one Parser prelude, three Yuanxu observability
+and one gerbil-poo debug image. The Memory Org selection imports Orgize
+element types, values and query. The installed Orgize interface records
+=:tao3k/parser/prelude=, and Parser's runtime observability imports
+Yuanxu's debug entry. This is a mapped-image count during compilation,
+separate from the 15 additional compiler dispatches and from CPU spent
+in =dlclose=. The diagnostic Suite exited naturally in 84.12 seconds.
+Base returned 2.52 seconds after main without a sampling attachment.
+Removing the Org import edge would change the selected Memory facade.
+
+The Lab migration based on =ecda4d1d= was qualified against Core
+=a313862= using the default Memory test, Gerbil =1cfb032=, Gambit
+=ea114fc=, POO =cd4de644= and the unchanged 120/120/60-second bounds.
+Every round starts with three empty consumer output prefixes.
+
+| Round | Harness (s) | Cold build base / enabled / withdrawn (s) | First read base / enabled / withdrawn (s) |
+|-------+-------------+--------------------------------------------+--------------------------------------------|
+|     1 |       97.92 | 12.76 / 24.23 / 10.71 | 1.62 / 2.05 / 1.99 |
+|     2 |       80.27 | 10.10 / 13.37 / 10.30 | 1.50 / 1.98 / 1.96 |
+|     3 |       80.31 | 10.90 / 13.87 / 10.40 | 1.54 / 2.01 / 1.97 |
+
+All three runs exited naturally with the full success markers. The actual
+target sets match by identity across runs: 12/27/12, zero hot and clean
+dispatches, zero business scopes during projection. Module projection
+opened 112/198/112 new Gerbil Contexts, with 198 in the enabled hot process.
+The enabled-only library walk took 11.11 seconds in the first cold
+process and 0.72/0.74 seconds in the next two. It had 86 new Contexts and
+15 targets each time. The first two enabled builds consumed 7.71 and
+7.33 CPU seconds through main return. The delay is in the library walk's
+wall interval. The counts and CPU do not show additional Scheme work,
+and these timings do not identify the underlying host wait.
+
+The published Lab gitlinks select Aitia =9bc08170= and Episteme
+=a84e54cd=. With those exact sources and the installed Core =a313862=
+cohort, the existing multi-industry Profile test refuses the old Feature
+import in Episteme's FHIR source lock. In an isolated source checkout,
+change only the seven Aitia and four Episteme import occurrences from
+=:yuanxu/feature-system/= to =:yuanxu/module-system/feature/=. Run
+=just test-file t/integration/standards-multi-industry/profile-composition-test.ss=
+against the same Core and source roots. It completes with the Module,
+Harness and final success markers. This proves the focused consumer
+path with the existing contribution identities. It does not qualify
+Aitia's later standalone package identity or publish new gitlinks.
+The current Aitia PR's native workflow stops earlier, during dependency
+installation, when Git cannot check out Parser =e2ef6a33= through its
+older Lab pin. That failure is independent of the Feature import.
+The same focused test also passes with the exact open PR sources
+Aitia =df12d0f7= and Episteme =65b6c178= in a local source checkout.
+Apply the same Feature import migration there and read the Aitia
+provider under its declared =:lambda-aitia/= package identity. This
+qualifies that consumer import with the newer identity. The installed
+dependency workflow and publication of those source revisions remain
+separate gates.
+
+The tested contribution imports are available as detached local commits
+=fa7fc692= (Aitia, seven files) and =98762ece= (Episteme, four files).
+The isolated Lab index now records those exact gitlinks with Core
+=a313862=. The namespace contract and multi-industry Profile test pass
+against checkouts of all three pins. The contribution commits are local;
+the Lab index is a reviewable publication candidate.
+
+The exact three-gitlink candidate was retested with the ordinary
+=just test-file t/yuanxu-context-memory-downstream-test.ss= entry.
+Use a private prefix with regular installed Core and dependency
+artifacts and no installed Lab output. The Suite creates fresh base,
+enabled and withdrawn consumer prefixes in every round. Keep the
+existing 120/120/60-second limits, 2 GiB heap and 12 build workers.
+
+| Round | Exit | Total (s) | Before first build (s) | First read base / enabled / withdrawn (s) |
+|-------+------+-----------+------------------------+--------------------------------------------|
+|     1 |  124 |    122.23 |                  43.20 | 1.57 / 2.11 / 2.04 |
+|     2 |    0 |     83.24 |                   2.52 | 1.57 / 2.09 / 1.97 |
+|     3 |    0 |     84.17 |                   2.57 | 1.56 / 2.08 / 2.09 |
+|     4 |    0 |     83.81 |                   2.65 | 1.57 / 2.19 / 2.03 |
+
+Round one reached the deadline during the enabled hot-build action.
+The other three completed every check and returned naturally. All
+four recorded the same exact cold compiler target identities, with
+12/27/12 distinct targets, and no hot compile dispatch. The passing
+rounds also completed the withdrawal clean, refusal and enabled-product
+digest checks. The common installed dependency paths persist across
+rounds; the consumer outputs do not.
+
+The FHIR consumer exercises a further source-lock check that the
+multi-industry Profile test does not reach. With the import-only
+Episteme revision =98762ece=, the FHIR test rejects the aggregate lock
+digest. The seven locked JSON files, their per-entry digests and their
+paths match. The existing lock generator produces the same result on
+two runs because Yuanxu now uses the =yuanxu.sources-lock.v1= digest
+domain. Regenerate from the tracked JSON with
+=just update-fhir-sources-lock= in Episteme. Only the aggregate digest
+changes in =43667cac=. With that corrected pin, the FHIR, Aitia NASA
+provider and multi-industry Profile tests pass through Lab's
+=just test-file= entry.
+
+The corrected three-gitlink tree uses Core =a313862=, Aitia =fa7fc692=
+and Episteme =43667cac=. Its installed cohort uses Gerbil =1cfb032=,
+Gambit =ea114fc= and gerbil-poo =cd4de644=. Run the same default test
+serially three times, retaining the preceding failed round from the
+earlier pin. Each run uses new consumer prefixes with the same installed
+prerequisites. The corrected tree exits naturally after 84.51, 84.16
+and 84.14 seconds. Each run completes the compiled first-read controls,
+receiver identity and consumer refinement isolation, withdrawal clean,
+qualified refusal, and the enabled-product digest check. The exact
+native compiler target sets agree with the earlier candidate. Enabling
+Memory adds eleven targets under the Feature and four supporting targets.
+
+| Cold mode | Launch to main (s) | Main to Make (s) | Make entry to main return (s) | Main return to parent collection (s) | First read (s) |
+|-----------+--------------------+------------------+-------------------------------+--------------------------------------+----------------|
+| Base      | 3.57–3.73          | 1.68–1.72        | 3.07–3.13                     | 2.50–2.52                            | 1.57–1.59      |
+| +memory   | 3.53–3.58          | 2.47–2.56        | 5.28–5.38                     | 2.76–2.79                            | 2.02–2.08      |
+| -memory   | 3.54–3.55          | 1.65–1.68        | 2.97–3.24                     | 2.52–2.54                            | 2.02–2.19      |
+
+Use the existing build and action stage markers for these intervals.
+The Make interval includes the checks through main return. The
+collection interval includes native teardown and the parent's receipt
+of the completed child. Projection creates 112/198/112 Gerbil Contexts
+and zero business scopes. The enabled hot build emits zero compiler
+targets but still opens 198 projection Contexts in its new process.
+
+These local runs do not replace the exact-head CI gates. Lab
+=ecda4d1d= timed out during the macOS refusal action. Linux timed out
+inside Make in the runtime job and hit a compiler heap overflow in the
+Bazel package job. The macOS Bazel dependency job used approximately
+seven hundred seconds in the POO producer before reaching Yuanxu, and
+the external Linux Bazel job reached its deadline in the Parser producer.
+Core =a313862= still has failing dense selection and declaration gates
+on both platforms and a failing macOS contracts gate.
+
+The macOS package and Runtime WASM jobs for Lab =ecda4d1d= both
+completed the native =//:gerbil_poo_package= action before the
+dependency step timed out. Compare the existing
+=bazel-scheme-compile-evidence-macOS-ARM64= and
+=runtime-wasm-native-source-evidence-macOS-ARM64= artifacts. The two
+receipts bind the same =cd4de644= source snapshot, the jobs report the
+same Gerbil ABI, and the native logs contain the same ordered 91
+compiler targets. The resource guard reports 697.65 and 619.05 seconds
+respectively. On both runners it selected one Make worker from three
+logical cores under the declared 4 GiB per-core estimate and the
+observed 5,282,809,774-byte RSS ceiling. The observed single-worker
+peaks were 2,964,930,560 and 3,083,599,872 bytes. These runs provide no
+two-worker peak measurement.
+
+Run Bazel =aquery= on the candidate with the expression below.
+It resolves one POO compile action for the dependency aggregate, the
+Lab compilation and the WASM bundle in a single configured build.
+The action key is unchanged under the WASM =--jobs=2= invocation, the
+package =--jobs=1 --sandbox_debug= invocation and the package compiler's
+1440-second action environment. The remote jobs use distinct disk-cache
+namespaces. This identifies duplicate production across jobs. Cross-job
+reuse still requires validation of the configured action and its output
+receipt under the consumer's actual runner configuration.
+
+#+begin_src text
+mnemonic("GerbilProjectCompile",
+  filter(":gerbil_poo_package$",
+    deps(set(//:dependency_packages
+             //:compile
+             //bindings/runtime-wasm:human_capability_bundle))))
+#+end_src
+
+An isolated native producer experiment kept the CI RSS ceiling and
+dependency deadline fixed, used two empty Bazel output bases with disk
+cache disabled, and built =//:gerbil_poo_package= and its existing receipt
+target. Set =max_rss_bytes= to 5,282,809,774 in the copied producer rule
+for both runs. Use the existing per-core estimate of 4 GiB for the
+one-worker control and 2304 MiB for the two-worker candidate. The
+source receipt and Gerbil ABI fingerprint match the macOS CI evidence.
+The local machine reports twelve logical cores and 32 GiB system memory,
+while the recorded CI runners report three cores and 7 GiB.
+
+| Effective Make workers | Bazel wall (s) | Peak process-tree footprint (bytes) | Guard outcome |
+|------------------------+----------------+-------------------------------------+---------------|
+|                      1 |          51.84 |                       5,795,011,952 | RSS limit     |
+|                      2 |          41.53 |                       5,291,679,424 | RSS limit     |
+
+Both actions were terminated by the resource guard and returned no
+completed producer. The one-worker log reached GCC optimisation of
+=testing/property/generator=, whose generated function reported 12,198
+basic blocks. These are failure durations. They cannot rank build speed
+or identify the independent peak of that translation unit. The trial
+does not qualify a lower per-core estimate for the production rule.
+
+The saved Bazel-generated =generator~0.c= has 3,010 Gambit labels.
+Gambit's installed =gambit.h= selects multiple host functions only
+when the label count exceeds =___SINGLE_HOST_LIMIT=. The existing
+10,000-label threshold used for the POO table would leave this file
+in single-host mode. Preprocessing the saved file with a threshold of
+2,500 switches it to multiple host functions.
+
+Compile the same saved C bytes through the installed =gambuild-C dyn=
+driver and GCC 16.2.0, with =-O2= in both arms. Keep the previous
+process-tree RSS ceiling and use a 120-second diagnostic guard. The
+candidate adds only =-D___SINGLE_HOST_LIMIT=2500=. Both arms emit an
+arm64 Mach-O bundle and the same exported linker symbol.
+
+| Generator C backend | Guard wall (s) | Peak process-tree footprint (bytes) |
+|---------------------+----------------+-------------------------------------|
+| Single host         |          20.92 |                       3,485,679,616 |
+| Multiple hosts      |           8.36 |                         515,194,880 |
+
+These times cover C compilation and linking for one translation unit.
+They exclude Scheme expansion and establish neither a complete POO
+producer result nor a Memory runtime result.
+Direct substitution into the previously compiled cohort is unsuitable:
+its canonical bundle exposes a different linker alias set. Recompile
+the complete module in each private prefix through the installed Gerbil
+compiler, retaining =std/make='s default Scheme optimisation. An
+unoptimised module substitution produced missing generated bindings
+in both control and candidate and failed the PBT process before the
+harness could report success.
+
+The paired =gerbil compile -O= runs both emitted complete module
+products with the same exported linker symbols. Their guarded wall
+times were 28.51 seconds for the default backend and 12.86 seconds for
+multiple hosts. Peak process-tree footprints were 4,853,350,400 and
+862,797,824 bytes respectively. The subsequent PBT runs both reached
+the same failed replay case because the private prefixes lacked
+=bin/representation-main=. The pinned package's existing
+=examples/build.ss= owns that executable. Build it with the standard
+=gerbil build= entry before rerunning the unchanged PBT suite. The
+private prefix needs the existing static closure alongside its dynamic
+module products. Use the pinned Justfile's macOS platform environment
+and the installed OpenSSL =pkg-config= directory. An executable link
+under the inherited shell environment failed on native macOS symbols.
+
+After preparing both replay executables, run the pinned package's
+=just test-file t/representations/property-testing-test.ss= in each
+private prefix. The default and multiple-host builds exit naturally
+in 56.41 and 55.48 seconds. Both report the same ordered 541 successful
+cases, including fresh-process counterexample recovery, with the
+official Module, Harness and final success markers.
+The timings qualify the behaviour of the focused comparison. They do
+not establish a runtime performance improvement.
+
+In a separate empty prefix, use the complete POO package's standard
+=gerbil build= entry with the generator-only flag in the copied
+=build.ss=. Keep the single worker, 2 GiB Gambit heap, 12-minute
+producer deadline and 5,282,809,774-byte process-tree ceiling.
+The build produced the generator bundles and progressed through the
+table. It dispatched 76 targets before the RSS guard terminated it
+at 330.42 seconds with a 6,223,864,064-byte peak. The outer wall time
+was 332.10 seconds. The final GCC diagnostics follow the
+=testing/type= dispatch. Its retained =type~0.c= has 3,256 labels and
+reported a 12,415-basic-block function. The earlier =type= module
+compiled and emitted its own bundle. The guard peak belongs to the
+whole process tree. This native run did not produce a complete POO
+package or qualify a Bazel producer.
+
+The retained =testing/type= C input also passes the guarded one-unit
+comparison with identical exported linker symbols. The default build
+took 24.53 seconds and peaked at 4,516,085,760 bytes. The
+2,500-label variant took 11.70 seconds and peaked at 1,068,433,408
+bytes. This is compiler evidence for a second candidate. The paired
+541-case PBT result above changed only the generator backend.
+
+The combined local POO candidate =daab535d= changes only the two
+compiler rows in =build.ss=. Re-run the same guarded standard build
+in another empty prefix. It exits naturally with all 91 ordered
+compiler targets and the same target-stream digest as macOS CI.
+The guard records 354.07 seconds and 5,277,057,024 bytes at peak,
+only 5,752,750 bytes below the unchanged ceiling. The outer wall
+time is 355.69 seconds. This is one completed local cold build.
+Neither the headroom on the CI runner nor a complete Bazel
+producer result has been established.
+
+To exercise the combined cold products, add the previously prepared
+example fixtures and the replay executable to the private prefix.
+The executable has no statically linked generator or testing Type
+module. Run the unchanged PBT command against that prefix without
+an alternate POO load path. It exits naturally in 116.04 seconds
+and reproduces the same ordered 541 successful cases, including the
+fresh-process recovery check and the final Module, Harness and
+success markers.
+
+For the local Bazel control, archive the same detached commit with a
+revision-qualified root. Point the existing =source_package= declaration
+in a private Lab snapshot at that file URI and record its SHA-256.
+Resolve it with the native repository rule and refresh the lock only in
+that snapshot. The original rule reports 683 source files, revision
+=daab535d= and =hermetic-archive= provenance. Build the existing
+=//:gerbil_poo_package= and receipt target in the initially empty
+output base with lockfile mode =error=, one worker, no disk cache and
+the same producer limits.
+
+The Bazel cold command exits in 373.39 seconds with an =ok= producer
+receipt and the same ordered 91 compile targets. The guard peaks at
+5,089,148,928 bytes under the 5,282,809,774-byte ceiling. A fresh Bazel
+client in the same output base exits in 3.06 seconds with 25 action
+cache hits, one internal action, no POO compile, and unchanged producer
+receipt and compiler log bytes. This proves local reuse of the existing
+Bazel action. The archive URI is private to the experiment and cannot
+serve a remote runner.
+
+In that same private Bazel output base, align Core's dependency
+declaration with the local POO candidate and build
+=//:yuanxu_package= and its receipt target with the same Bazel flags.
+Yuanxu exits naturally in 106.28 seconds after dispatching 275 native
+targets. The Bazel report contains one Gerbil sandbox action and 25
+action cache hits. The POO log and receipt retain their original
+digests. The Yuanxu and POO receipts contain the same source-resolution
+record for =daab535d=.
+
+The downstream Gerbil package entry also requires package-manager
+manifests. Linking the three checkouts in a copied Bazel output prefix
+alone causes the first base build to refuse the missing
+=gerbil-poo.manifest= before compilation. The native
+=gerbil pkg build= entry creates that manifest without recompiling
+POO in this prefix. The copied Yuanxu output contains its Bazel
+source view and read-only output lock. The native package build needs
+to republish its source view for the native checkout. Retain these
+failed relocation controls. Start native Yuanxu preparation in a fresh
+writable prefix with the verified POO products instead of rewriting
+the immutable Bazel output.
+
+A direct =gerbil pkg build= of Core in an empty native prefix hit
+its 120-second limit after dispatching 89 targets. That diagnostic
+was launched without =GERBIL_BUILD_CORES=. The installed =std/make=
+defaults to serial compilation in that case. The Lab's ordinary
+=just build-core= recipe supplies its existing automatic worker
+count. Use a different empty Core prefix for that paired run. The
+interrupted serial output cannot qualify as a cold build.
+
+With the normal =just build-core= recipe, the empty Core prefix
+builds all 275 targets in 78.68 seconds at the automatically detected
+12 workers. Register Lab through =gerbil pkg build= and verify that
+no Lab library output is installed. Compare the POO testing Type
+bundle against the immutable Bazel tree before proceeding. The first
+Memory attempt on this prefix refused the missing =dev/.gerbil/lib=
+directory while checking its source inputs. The existing CI setup
+creates this empty directory before invoking downstream tests. Create
+it in the private snapshot and retain the refused attempt separately.
+
+Run the default Memory test three times with the existing CI directory
+layout, the copied POO =daab535d= producer, and native Core
+=329e776=. The Core revision differs from =a313862= only by its
+POO dependency declaration. The 12-worker, 2 GiB and 120/120/60-second
+budgets stay fixed. Each run creates fresh base, enabled and withdrawn
+outputs. The runs exit naturally in 103.74, 85.46 and 88.13 seconds,
+with the exact 51 ordered-by-mode compiler target identities from the
+original qualified cohort. All three finish the first-read, receiver
+and refinement isolation, withdrawal, qualified refusal and enabled
+product digest checks, with zero business scopes during projection and
+zero hot compilation.
+
+| Cold mode | Launch to main (s) | Main to Make (s) | Make entry to main return (s) | Main return to parent collection (s) | First read (s) |
+|-----------+--------------------+------------------+-------------------------------+--------------------------------------+----------------|
+| Base      | 3.48–3.71          | 1.69–6.65        | 2.72–3.06                     | 2.41–2.55                            | 1.58–1.65      |
+| +memory   | 3.39–3.63          | 2.46–17.89       | 4.74–6.15                     | 2.70–2.92                            | 2.15–2.54      |
+| -memory   | 3.51–3.84          | 1.72–1.75        | 2.92–3.14                     | 2.50–2.66                            | 2.07–2.39      |
+
+Projection opens 112/198/112 contexts in every run. The first enabled
+library walk takes 16.17 seconds compared with 0.72 and 0.76 seconds
+in the following runs. The corresponding CPU times through main
+return are 7.71, 7.64 and 7.80 seconds. The first base selected
+graph also takes 5.72 seconds versus 0.79 and 0.80 seconds later.
+The wall differences occur before Make and do not coincide with extra
+compiler targets, Contexts or CPU consumption. These runs do not
+identify the native wait in those specific intervals.
+
+On the same =daab535d= cohort, repeat the default Memory test in
+two fresh diagnostic runs. Poll the compiler interpreter, Gerbil CLI
+and watchdog in both. Attach the one-second macOS sampler only in
+the second run, after base =main return=. The process census bounds
+compiler exit to 1.90–2.06 seconds after main without attachment,
+and to 2.70–2.86 seconds with attachment. Parent action return is
+at 2.54 and 3.34 seconds respectively. The interpreter-to-parent
+interval stays at approximately 0.48–0.64 seconds in both runs.
+The CLI and watchdog exits fall in the same final polling window
+as parent return, so the interval does not resolve pure collection.
+
+All 85 sampled interpreter frames are in Gambit dynamic-module
+cleanup calling =dlclose=. Of these, 81 are in dyld debugger-unload
+notification. The extra wall time of the sampled run occurs before
+interpreter exit. The pair does not establish how long the unsampled
+stack occupies, or that attaching caused every timing difference.
+Both diagnostic suites exit naturally in 84.56 and 84.92 seconds
+with the full acceptance markers. Keep the earlier unsampled
+three-run series as the primary qualification.
+
+Use the same native prefix for Core's
+=just test-build-input-context-mutations <artifact-dir>= and the
+focused =t/module-publication-test.ss= and
+=t/module-testing-source-admission-test.ss= suites. The mutation gate
+passes the order and admission suites before and after the isolated
+faults, rejects all four mutations with their expected diagnostics,
+and confirms unchanged source bytes. Both focused suites exit
+naturally with the Module, Harness and final success markers.
+
+The ordinary deployment test also passes with this candidate prefix
+in 101.27 seconds. Both cold builds produce the same 46 selected
+targets, cleaning A preserves the B product digests, and the hot
+build and selected tests dispatch no compilation. The first read
+from B's compiled product takes 4.90 seconds. The child Harness
+emits its final success marker at 94.04 seconds and returns at
+97.28 seconds in the suite clock.
+
+Run =just test-file t/yanxu/modules/services/opentofu/deployment-test.ss= with the
+same corrected dependency tree and regular installed prerequisites.
+The deployment gate exits naturally in 105.53 seconds. Both cold
+outputs build, cleaning A leaves B's product digests intact, the hot
+B build and selected tests dispatch no compilation, and the first
+business read from B's compiled product takes 4.84 seconds. The child
+harness emits its final success marker at 98.31 seconds in the suite
+clock and returns to its parent at 101.61 seconds.
+
+An earlier regular-prefix deployment with Core =a313862= reached the
+existing deadline before cold A returned. Its spec took 74.04 seconds
+wall and 6.02 CPU seconds. The corrected run's spec took 49.36 seconds
+wall and 6.20 CPU seconds. Both recorded four interface entries and
+216 native imports. A one-second macOS sample of the corrected run
+during spec found 799 main-thread samples in =dlopen=, including 765
+in dyld's segment-mapping =fcntl= call. This identifies a native wait
+in the sampled interval. The timing difference does not establish a
+Scheme speedup or account for every unsampled interval.
+
+The Lab release index binds the Core gitlink and the Lake dependency
+declaration to =a313862=. Run =lake update YuanxuProof= from
+=packages/proofs/lean= to generate the corresponding lock. The existing
+=packages/automation/check_namespace_contract.py= gate refuses a stale
+proof declaration and passes after Lake's update. The other locked
+dependency revisions are unchanged. =lake build AgenticAILabProof=
+completes with 459 jobs using that lock.
+
+A separate full development build used the same candidate source with
+the locally migrated contribution PR snapshots. It copied the installed
+Core and dependency products into a private prefix with no Lab output
+and invoked =GERBIL_BUILD_VERBOSE=2 gerbil env just build-library=.
+The native build reached its 180-second watchdog before Make entered.
+The watchdog returned 124 and the enclosing CLI returned 70 after 187.02
+seconds. Ordinary library projection took 92.75 seconds for 445 rows
+and 923 new Contexts. The selected-graph stage began at 140.42 seconds
+in the child clock. A one-second sample there found 48 of 86 main-thread
+samples in =dlopen=, including 46 in dyld's =fcntl= segment-mapping
+path. The total command used 28.82 user and 3.03 system CPU seconds.
+This locates one native wait in the selected-graph stage and does not
+attribute the whole library interval to the same syscall. There were
+no native Make target dispatches in this full-build attempt. Its
+timeout remains independent of the three passing Memory rounds.
+
+The native registry census is narrower than the expansion counter. Use
+the existing development entry's =spec= action in an isolated checkout.
+Take a read-only snapshot of Gerbil's =__module-registry= at build entry,
+after the ordinary =package-library-spec=, and after the selected
+projection if it completes. First deduplicate by Context object
+identity, then group by module identity and actual Context path. Count
+the registry keys separately, since Gerbil registers multiple aliases
+for one Context.
+
+At entry the diagnostic found 614 module keys and 232 distinct
+Contexts. Ordinary projection returned 445 targets in 72.78 seconds.
+It left 4,431 keys and 1,155 Contexts. At both checkpoints there were
+zero duplicate Context objects for the same identity and path, and
+zero module identities retained under distinct paths. This rules out
+retained mirror Contexts as an explanation for that ordinary phase. It
+does not measure work that was discarded before either checkpoint.
+The interval from ordinary return to selected-graph entry was 25.88
+seconds. In a one-second native sample taken after the ordinary
+checkpoint and before selected-graph entry, 85 of 85 main-thread
+samples were in =dlopen= and 79 were in its =__fcntl= path. The probe
+only observes state. It does not replace any of the source checks or
+qualify the compile path. The existing watchdog sent TERM and KILL
+before selected-graph return. The outer command ended after 185.04
+seconds, so this run supplies no completed selected-registry checkpoint.
+
+A second isolated =spec= diagnostic times the existing
+=module-binding-action= around native import, binding lookup and the
+call of the resolved procedure. Recompile only its diagnostic owner
+=module-system/source/deferred-declaration.ss= in the private prefix.
+The ordinary library returned at 130.163 seconds; the import of
+=:yuanxu/module-system/interface= for =yuanxu-load-modules= began less
+than a millisecond later. That import took 30.95 wall seconds and
+0.78 CPU seconds. Binding lookup took under a millisecond and the
+resolved call took 4.47 milliseconds. The subsequent import of the
+build projector took 1.89 wall seconds and 0.06 CPU seconds. The
+selected graph began only after both imports.
+
+The one-second sample taken inside the first import found all 85
+main-thread samples in =dlopen=, with 82 in its =__fcntl= path.
+The outer diagnostic returned 124 after 184.41 seconds, before
+selected-graph completion. These numbers isolate the handoff cost in
+this run. The probe is not a speed comparison between the two checkouts
+and gives no reason to replace native binding lookup or cache a
+successful source check.

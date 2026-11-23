@@ -36,6 +36,9 @@ jobs:
           python3 packages/automation/check_namespace_contract.py
           python3 -m unittest discover -s packages/automation/tests -p 'test_*.py'
 
+      - name: Enforce ORG modularity budget (<=1000 lines)
+        run: python3 packages/automation/org_modularization.py scan --max-lines 1000 --fail-on-unmodularized
+
   runtime-gerbil-tests:
     name: Runtime Gerbil unit tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}

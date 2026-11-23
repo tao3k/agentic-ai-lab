@@ -1,0 +1,104 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+#
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Org Elements, ISO GQL, ASCENT Progressive Disclosure, Declarative POO/Durable Orchestration, and Two-Stage AST Repair
+#+LANGUAGE: en
+#+OPTIONS: toc:2
+
+* 1. Scope and Boundary
+
+=tao3k/orgize= owns native Scheme Org parsing, =Org Elements= S-expression
+selectors, and =OrgContract= evaluation. =tao3k/agentic-ai-lab=
+(=modules/ai-agentic-context=, =modules/durable=, =modules/query=, and
+=gerbil-ascent=) owns the pure generic Context and Durable Orchestration
+library:
+
+1. **=Org Elements -> YuanxuGraph= & ISO =GQL= Compiler**: Projects native Org
+   elements (=OrgSource=, =OrgHeadline=, =OrgListItem=, =OrgSrcBlock=,
+   =OrgDrawer=, =OrgLink=) and compiles =(org-elements ...)= selectors into
+   governed =AgenticAILabQuery.= / =GraphSyntaxProgram.= expressions.
+2. **=ASCENT= Progressive Disclosure (=L0..L3=) & Dynamic Facet Deduction**:
+   Evaluates fixed-point deductive rules in-VM at zero LLM token cost to:
+   - Derive per-element disclosure depths (=L0= skeleton, =L1= properties +
+     checklists, =L2= =#+RESULTS:= body with =#+BEGIN_THINKING= folded, =L3=
+     full raw span on active defeaters or explicit drill-down requests);
+   - Derive minimal case-specific Org facets (=inline-checklist=,
+     =scheduled-todo-dag=, =invariant-section=, =competing-hypotheses=,
+     =attach-media=, =sod-reviewer=, =gitops-split=) so downstream Flash models
+     grow Org structure dynamically from a minimal seed instead of static
+     boilerplate templates;
+   - Derive durable orchestration predicates (=ready_to_schedule=,
+     =needs_recovery=, =ready_to_auto_archive=, =tab_visible=).
+3. **Two-Stage Org Repair Pipeline**:
+   - **Stage 1 (Deterministic AST Auto-Repair, ~90%, 0 Tokens)**: Rewrites
+     accidental nested =:THINKING:= drawers inside =:RESULTS:= into
+     =#+BEGIN_THINKING ... #+END_THINKING= special blocks, closes unclosed
+     drawers/blocks, normalizes checkbox and tag tokens, recomputes
+     =[done/total]= / =[pct%]= statistics cookies, and stamps deterministic
+     origin/root properties before re-parsing via =org-source-element-graph=.
+   - **Stage 2 (Diagnostic-Guided Flash Repair Request, ~10%)**: Packages only
+     the failing subtree slice and structured =OrgContract= / =ASCENT=
+     diagnostics when semantic repair is needed.
+
+* 2. Declarative Interface Plane: =gerbil-poo= C4 Linearization, Tweag-Inspired =FunFlow= CAS DAG, Governance Isolation, and Durable Orchestrator
+
+Declarativity is the primary contract of the library =interface.ss= surface
+(inspired by Doom Emacs's clean separation between core engine mechanisms and
+thin declarative configuration):
+
+1. **=gerbil-poo= C4 Linearization & Objectified Tasks**:
+   - =Repo.= models a Git repository as the root prototype =A= of a
+     =gerbil-poo= **C4 linearization** chain (=A -> B -> C -> D=), owning the
+     shared parsed =OrgElementGraph= reference, Plan-A =index.org=, default
+     policies, and default =OrchestratorStrategy.=.
+   - =Worktree.= derives directly from =Repo.= via =(:: @ RepoA.)=, inheriting
+     the shared context object, =index.org= authority, and defaults while
+     overriding only worktree-specific bindings (=worktree=, =branch=,
+     =source-cut=, local write grants).
+   - =Task.= and =SubTask.= / =Extension.= objects derive via multi-prototype
+     C4 linearization (=(:: @ WorktreeB. OrgTaskBase.)=, =(:: @ TaskC. Mixin...)=),
+     supporting deterministic **Override** and =super= **Extension** while
+     sharing one underlying parsed Org Context graph at zero copy cost.
+   - Compile-time hygienic macros expand declarative repository, worktree,
+     task, and strategy definitions into validated POO values with zero runtime
+     =eval=.
+2. **Tweag-Inspired =FunFlow= CAS DAG & Epoch-Bounded Replanning**:
+   - Building on Tweag's Haskell =FunFlow= (Arrow static inspectability,
+     content-addressed store caching, crash resumability) and Yuanxu's
+     =core/modules/funflow/= (=dependency-graph=, =scc=, =job-graph=,
+     =after-start= finalizers, =flow-compose=, =strategy=), complex Org task
+     trees map 1-to-1 to POO =FunFlow= DAGs.
+   - **Static Pre-Check (0 Tokens)**: Validates acyclicity (=scc=),
+     =:DEPENDS_ON:= closure, =after-start= finalizers, and per-node
+     =ContextScope= / =RestrictionEnvelope= / =UseGrant= before execution.
+   - **CAS Resumability**: Computes deterministic node fingerprints
+     =sha256(source-cut, input-org-slice-digest, node-contract-digest, policy-digest)=
+     against =durable-journal=; already-verified nodes skip at zero token cost
+     on restart or re-run.
+   - **Epoch-Bounded Dynamic Replanning**: Each generation =g= is 100%
+     statically verified; when an agent appends a newly discovered blocker to
+     shared Org (=g+1=), unchanged completed nodes stay satisfied from CAS
+     while affected downstream frontier waves re-sequence.
+3. **Shared Context + Governance Scope Isolation**:
+   - All Task and Agent objects share one authoritative Org Context graph,
+     while Lab's Governance plane (Slices 40–45: =ContextScope=, 6-tuple
+     =RestrictionEnvelope= lower-semilattice =meet=, 5-level =TrustLattice=
+     non-self-review promotion, disjoint =:ID:= subtree leases, and one-shot
+     =AuthorizedEffectToken=) isolates read/write authority across roles and
+     worktrees — eliminating the fleet-memory leakage, stale propagation, and
+     worktree-drift failures observed in conventional coding agents.
+4. **MOP =.defgeneric= Dispatch Protocols & Generic =Durable= Orchestrator**:
+   - Extensible MOP generics: =node-effective-rules=, =task-artifact-path=,
+     =task-funflow-dag=, =task-orchestration-plan=, =task-archive-transition=,
+     and =project-workbench-tabs=.
+   - =modules/durable= generalizes =agenda.ss= over =durable-journal=,
+     =policy-clock=, =use-host=, and =session-host= to drive objectified
+     =OrchestratorStrategy.= execution, crash-safe replay, and atomic
+     Auto-Archive (requiring =root=DONE=, every reachable =FunFlow= DAG node
+     and child TODO =DONE=, all checklists =[X]=, zero pending finalizers, and
+     zero in-flight journal attempts before archiving, with zero TUI coupling).
+
+See also [[file:10.06-poo-module-system/agentic-ai-context/43-ascent-security-branch-omission-refinement.org][Slice 43 (ASCENT branch admissibility)]],
+[[file:10.06-poo-module-system/agentic-ai-context/45-org-sexpr-gql-candidate-exchange-search.org][Slice 45 (Org S-expr + GQL + CandidateExchange)]], and
+[[file:10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.org][Slice 46 (Durable Agenda & Session Governance)]].

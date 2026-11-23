@@ -11,6 +11,7 @@
     "reuse": "bun run reuse.ts",
     "ascent": "cd ../.. && just d2-export && cd dev/d2 && bun run render.ts --example ascent-early && bun run render.ts --example ascent-later",
     "session": "bun run render.ts --example session",
+    "governance-figures": "bun run governance-illustrations.ts",
     "check": "tsc --noEmit"
   },
   "dependencies": {

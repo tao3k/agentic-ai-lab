@@ -204,3 +204,23 @@ check-assessment-lean:
 [group('proof')]
 check-core-lean:
     cd "{{ justfile_directory() }}/core" && just proofs-lean
+
+# Independent Lake proof package + full-namespace axiom audit for Context Governance (Slices 40-48).
+[group('proof')]
+check-context-governance-lake:
+    cd "{{ justfile_directory() }}/proofs/ContextGovernance" && lake build && lake env lean ContextGovernanceAxioms.lean
+
+# Fast static SHA-256 anti-drift gate against the pinned Context Governance source-binding lockfile.
+[group('proof')]
+check-context-governance-bindings:
+    python3 "{{ justfile_directory() }}/docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py" --bindings-only
+
+# End-to-end ORG -> SysML v2 -> Lean 4 DAG & Lake AxiomAudit -> Quint (TLC + Apalache + ITF Replay) -> SysML run chain (Slices 40-48).
+[group('proof')]
+check-context-governance-chain artifacts="" max_steps="8":
+    python3 "{{ justfile_directory() }}/docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py" --check-lake --verify-bindings --max-steps "{{ max_steps }}" {{ if artifacts == "" { "" } else { "--artifacts " + quote(artifacts) } }}
+
+# Recompute and pin 40-48-source-bindings-v1.json only after the full formal verification chain passes.
+[group('proof')]
+refresh-context-governance-bindings artifacts="" max_steps="8":
+    python3 "{{ justfile_directory() }}/docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py" --check-lake --write-bindings --max-steps "{{ max_steps }}" {{ if artifacts == "" { "" } else { "--artifacts " + quote(artifacts) } }}

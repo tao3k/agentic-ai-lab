@@ -1,0 +1,504 @@
+#+title: Read the existing recovery case as an object change
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Extracted module of [[file:workspace-recovery.org][Workspace Recovery After an Interrupted Write]].
+* Read the existing recovery case as an object change
+
+This explanatory slice selects the existing after-commit/before-bootstrap-return
+boundary. It does not run a new crash or test. The runtime composition described
+in section 18 is a proposed ownership refinement; the historical observations
+above are not evidence that the new Module composition is implemented.
+
+The previous owner's READY record names the previous owner.
+The previous owner stops; the next owner has a different durable identity.
+The saved source decision survives; the same unresolved Attempt survives too.
+The new owner rebuilds from saved state before committing its own READY record.
+Ready to receive work does not mean that the old Attempt has completed.
+
+These sentences explain why the objects change. The committed journal is not a
+copy of a live process. Its old readiness is historical evidence, its source
+decision is retained without repeating that decision, and its unresolved worker
+responsibility belongs to the original Attempt rather than a newly duplicated
+Task. The final owner is current-ready while that responsibility can remain open.
+A changed owner does not prove that an external worker has stopped.
+
+The model may investigate missing worker evidence or competing explanations
+under a newly admitted Context. That inquiry is separate from reconstruction;
+neither the explanatory arrows nor a Feature profile prescribe its next action.
+
+The two teaching views use the existing SysML package: Module extension explains
+who contributes what, while recovery explains what changes and what stays. Each
+view is read as an actual exported image. Findings retain the image/source cut;
+a blank issue list does not establish that a young reader understood the design.
+
+** Research correspondence
+
+[[https://research.ibm.com/publications/reliable-actors-with-retry-orchestration][Reliable Actors with Retry Orchestration (PLDI 2023)]]
+distinguishes completed invocations from invocations eligible for retry and
+preserves call ordering across failures. For this design, a missing or
+incompatible composition binding is a separate recovery condition. It leaves
+the Attempt unresolved until the runtime can interpret its retained state.
+
+[[https://www.vldb.org/cidrdb/2026/consistency-and-correctness-in-data-oriented-workflow-systems.html][Consistency and Correctness in Data-Oriented Workflow Systems (CIDR 2026)]]
+provides a comparison for transaction boundaries and compensation. Our saved
+binding identifies the rules and provider that can interpret the checkpoint.
+Effect completion and compensation still require their own evidence.
+
+** Three judgments on the original Attempt
+
+Use the same cut after the old owner's readiness commit and before startup
+returns. Consider a design reading where Core finds the original binding, but
+the recovered evidence lacks a trusted result for an external effect. This is
+an illustrative evidence combination within the existing case.
+
+The original Attempt remains open across the owner change.
+Matching the saved binding lets Core interpret the checkpoint.
+Without a trusted outcome, the external effect remains unknown.
+Retry requires current permission and protection against repeating the effect.
+
+- Composition: compare the saved Feature revision, options, provider, contract
+  version and checkpoint schema with the current binding. A mismatch keeps
+  interpretation unresolved until an admitted binding or migration is available.
+- Effect: inspect the trusted outcome tied to the original effect identity.
+  A missing result leaves completion unknown. Historical READY and committed
+  source decisions cannot establish an external outcome.
+- Retry: ask whether present authority permits another dispatch and whether
+  reconciliation or an effect-specific deduplication guarantee makes repetition
+  safe. In this example neither is established, so retain the original
+  obligation and withhold redispatch. A known successful effect is consumed
+  as evidence rather than repeated. Compensation is a distinct authorized
+  effect with its own outcome.
+
+These are independent questions about a shared evidence cut. A successful
+binding is not a completion receipt or a dispatch grant. Evidence can arrive
+in any order. The runtime admits an action only against the applicable current
+evidence and authority. Models may propose observations or reconciliation
+without a fixed recovery workflow.
+
+Temporal Event History provides the comparison for using recorded Activity
+results during replay. Reliable Actors with Retry Orchestration provides the
+comparison for distinguishing completed calls from retries within its actor
+protocol. The CIDR workflow paper provides the comparison for durable
+transaction boundaries and compensation. None of those scoped guarantees
+establishes the outcome of an unobserved external effect in this case.
+
+** Two extension layers in the same recovery
+
+Core binds the Context recovery Feature to the independent Durable Module.
+The assembly supplies a POO configuration to the Durable engine.
+Durable interprets effect evidence and judges retry under its own contracts.
+
+The module assembly admits the Feature contribution and binds the provider.
+The engine configuration carries an outcome interpreter and a retry policy.
+These are domain extension points. An assembly contribution may supply their
+values. A standalone Durable consumer can provide the same values directly.
+
+In the existing readiness cut, the new owner recognizes the retained
+composition. The configured interpreter has no trusted evidence for the
+original effect, so its outcome remains unknown. The configured retry rule
+lacks current permission and safe repetition evidence, so the Attempt stays
+open without redispatch. An extension may propose a decision, while the
+engine retains admission and the host retains effect authority.
+
+The outcome interpreter reads admitted observations for the original effect.
+An admitted recorded outcome takes precedence over an interpretation. With no
+trusted result in this case, the interpreter leaves completion unknown.
+Current permission answers whether another dispatch is allowed now.
+Repeat safety answers whether another dispatch could duplicate the effect.
+A retry proposal must satisfy both guards. Neither guard is derived from a
+binding match, an outcome interpretation or the policy proposal. Eligibility
+is an inert decision tied to its evidence cut. Dispatch still requires a
+current host capability.
+
+For this evidence cut, project the original Attempt and effect, matching
+binding, empty outcome evidence, and absent current permission and repeat
+safety into the Scheme and Lean decision. The result remains ineligible
+even if the retry policy proposes retry. An admitted successful outcome
+for the same effect vetoes redispatch even when both guards are true.
+See [[file:18-runtime-durable-source-commands.org][the projection and host contract]]
+and [[file:workspace-recovery.qnt][the Quint recovery model]].
+
+** workspace recovery projection artifact
+
+The [[file:../../../../dev/durable/emit-recovery-projection.ss][projection producer]]
+imports the Durable public interface. It emits the admitted case input before
+running the policy and reads the actual decision slots afterward. The local
+numeric identities name the original Attempt, effect, policy revision and cut.
+Lean elaborates the emitted definitions and checks their projection. In this
+case the policy proposes retry, but the engine withholds eligibility because
+neither current permission nor repeat safety is established. The artifact
+exercises a pure decision and grants no host capability.
+
+** Host admission of a recovery decision
+
+The Context runtime service accepts a live scoped reader through
+=context-service-assess-workspace!=. The reader stays in the trusted
+embedding. The durable inbox receives only the assessment identity, original
+effect identity and expected owner epoch. In the owner transaction, the
+adapter checks the retained workspace intent, current epoch and original
+Session obligation, then captures a new observation with the live reader.
+
+The embedding supplies a revisioned Durable policy and admitted composition
+when constructing the adapter. The original handoff saves their portable
+identity. Historical handoffs without that identity cannot satisfy the
+binding check. The replacement owner binds its assessment cut to the current
+epoch, composition, observation, Session revision and execution receipt.
+Only a qualified original execution receipt supplies a recorded success.
+A coherent workspace read supplies effect evidence and leaves historical
+attribution to the outcome contract. It supplies neither current write
+permission nor repeat safety.
+
+The same transaction commits the observed state and Scheme decision to the
+existing journal. The service reads that exact decision after commit. An
+identical historical command returns the retained decision and a conflicting
+command identity is refused by the existing inbox verification. A decision
+receipt is inert. Positive dispatch requires the separate current authority,
+reconciliation and capability consumption boundary.
+
+The trusted service also exposes
+=context-service-workspace-recovery-projection=. It reads the exact applied
+assessment under the writer fence and compares the original Attempt, owner,
+composition, Session revision and generation, observation and receipt cut.
+An optional expected digest pins the receipt bytes. An obsolete or substituted
+receipt is ineligible for export through this current-evidence entry. The
+returned packed value is still portable evidence. Save those exact bytes and
+pass their path to =just emit-durable-recovery-projection= to produce a Lean
+module carrying the receipt digest and checked Scheme decision projection.
+
+The existing AuthorizedEffectToken and strict mediation code own token
+validation and nonce transitions. The latter already distinguishes a spent
+nonce with missing observation from a committed effect observation. Integration
+must persist the spend before invoking the effect endpoint and keep the
+obligation unresolved when that invocation lacks a qualified outcome. The
+existing Context grant observation describes current applicability. It does
+not itself grant external effect dispatch or establish repeat safety.
+
+The trusted embedding can optionally install an effect host with the Durable
+recovery configuration. Its =.retry-premises= operation supplies current
+permission and repeat-safety evidence for the retained intent. Its
+=.retry-authorization= operation must authenticate the issuer and return
+the current AuthorizedEffectToken validation context for the exact retry
+command. A read-only embedding supplies neither premise. The strict token
+binds the current epoch, original Attempt and Session, and the complete retry
+command digest. That command names the original effect and exact applied
+recovery decision digest. The owner compares the exact command digest in
+the binding and semantic root with the journal-derived value. The issuer
+decision has its own digest. The owner checks consistency of that digest
+between the binding and semantic root and reconstructs the root before
+asking the issuer to validate the capability.
+The owner passes the same POO request to issuer verification and
+consumption at the dispatch boundary. It contains the exact retry
+command, the original intent and the packed committed receipt with its
+digest, so the embedding can project the Cedar proposal from the
+owner-admitted values.
+Before issuance, =context-service-workspace-authorization-request= exposes
+that same request from the current journal cut, only for an eligible
+decision. The Cedar provider projects it into its existing request object.
+The intent digest covers the canonical retry command, and the handoff
+payload also names the original intent digest. The deployment supplies the
+Cedar subject and runtime roots. The projection leaves the execution root
+unchanged because it has observed no execution. This step produces an
+authorization request only.
+
+The Cedar runtime authority can check the signed grant against the exact
+reprojected proposal without spending it. The check and consume use the
+same signature, issuance, expiry, revocation and runtime/effect binding
+checks. A successful check leaves the grant unspent and cannot authorize
+an endpoint invocation by itself.
+
+=context-service-retry-workspace!= reserves a fresh local handoff only after
+the existing owner admits the command and commits the strict nonce spend.
+A second fenced owner transaction takes that handoff, checks the same token,
+receipt, current premises and authorization, and calls
+=.consume-retry-authorization!= against the live issuer. Only the returned
+consumed handoff reaches the configured =.dispatch-retry!= endpoint. Issuer
+refusal leaves the durable spend intact and the effect unresolved. The
+endpoint owns fresh execution admission and
+worker evidence, with the retry command and original intent supplied as
+separate values. Returning from that endpoint is not a completed effect or
+an original Attempt terminal. An old ACK cannot re-create the local handoff.
+A crash after consumption leaves the spend committed and the effect
+unresolved. A crash during endpoint acceptance also requires reconciliation.
+The dispatch transaction has a named inbox command tied to the consumption
+command. On takeover a pending dispatch remains an unresolved external
+handoff. It can neither recreate the live handoff nor block startup as an
+unidentified owner callback.
+
+The packaged Cedar port supplies the live application binding for the
+workspace recovery run below. The existing Cedar token projection and strict mediation
+are reused at their respective authorization and nonce boundaries.
+
+** Observed recovery from the retained workspace journal
+
+A read-only workspace embedding reopened a SQLite backup of the retained
+workspace incident. The original source and proof inputs were restored through
+their existing owners. The existing Context runtime service committed
+=doc19-assessment:4= under owner epoch 4 after reading the real workspace.
+The archived intent predates composition retention, so its binding comparison
+refused. The observation was admitted and the recorded outcome stayed unknown.
+The service declined the substituted receipt digest and exported the exact
+current receipt for Lean projection.
+
+| Observed item | Value |
+|---------------+-------|
+| Assessment inbox | doc19-assessment:4 applied at epoch 4 |
+| Original result inbox | workspace-result pending at epoch 1 |
+| Current workspace observation | admitted |
+| Retry eligibility | false |
+| Session terminal rows | 0 |
+| Retry nonce spend rows | 0 |
+| Committed receipt digest | sha256:026afd5e3b06b371bbd764a10815d921b50f1704ddc0a4ba40749e23fc41e227 |
+
+The exported Lean module elaborated against the existing recovery proof
+module. Its receipt digest matches the state row. This execution covers the
+restored legacy binding refusal and the actual host receipt projection. It
+does not exercise positive authorization, nonce consumption or endpoint
+dispatch. A second nonce also cannot reserve the same decision digest in the
+current runtime implementation. Both spend fences are written together.
+
+An additional assessment cannot erase an unresolved dispatch reservation.
+The owner records the latest spend for the retained effect in the same
+transaction as the nonce and decision fences. An assessment includes that
+predecessor in its cut. The trusted effect host receives the predecessor
+digest through =.retry-premises= and must name it as =reconciled-spend=
+before another assessment can claim repeat safety. A fresh nonce or a new
+observation alone cannot substitute for that reconciliation. The original
+live handoff can use only its own committed successor of that predecessor.
+
+The owner with the predecessor fence reopened another backup of the same
+journal and committed the updated assessment at epoch 4. Its receipt digest
+was =sha256:f62cc58a395b5ec3ff44c95a5595c59b44d41acc00922411a2bc3de4864e1cd9=.
+Lean checked the exported projection, and the digest matched the journal.
+The observation remained current, the legacy binding still refused,
+the original result remained pending, and both terminal and spend counts
+were zero. This trace exercises the updated cut encoding with no previous
+spend. It does not supply a positive predecessor reconciliation witness.
+
+The trusted service exposes =context-service-prepare-workspace!= for the
+original scoped handoff. The retry owner separately re-observes the current
+Session, Context source, proof and use grant at both consumption and dispatch.
+The original obligation must still be present. The effect host must match
+the original workspace, path and input scope. Its external authorization
+remains distinct from Context applicability.
+
+In a subsequent execution against a fresh backup of the retained journal,
+the same runtime service committed two dispatch refusals. With the exact
+assessment digest, =doc19-retry-ineligible= returned =recovery-ineligible=.
+With a substituted digest, =doc19-retry-mismatch= returned
+=stale-or-mismatched-decision=. Both commands were applied under epoch 4.
+Neither invoked an endpoint, consumed a nonce or wrote a Session terminal.
+The original result remained pending. The exported actual assessment
+also elaborated the Lean =doc19NoRedispatch= theorem for every host cut and
+capability. These observations cover the two refusal paths, with positive
+authorization and post-consumption interruption covered by the separate
+live runs below.
+
+** Matched composition with no dispatch authority
+
+A new isolated workspace used the same workspace recovery effect and existing service
+entry points. Owner 1 committed =workspace-edit= through
+=context-service-prepare-workspace!= with the admitted composition and policy
+revision present. The embedding closed before invoking the endpoint. Owner 2
+reopened the journal and admitted a real scoped read. The saved composition
+matched. The recorded outcome remained unknown. The policy proposed retry,
+but there was no current effect grant or repeat-safety witness.
+
+The existing service committed =doc19-retry-ineligible= and
+=doc19-retry-mismatch= under epoch 2, returning =recovery-ineligible= and
+=stale-or-mismatched-decision=. Terminal and nonce-spend counts stayed zero.
+The emitted Lean projection and its dispatch veto checked against the
+committed assessment digest
+=sha256:cb6ce450e30d3373f51e1b99680111cb53499d39ecfb46059893b590863806cb=.
+This is a reserved handoff followed by orderly owner replacement. The
+retained earlier incident supplies the distinct case where the workspace
+already changed before the receipt committed.
+
+The Lean dispatch contract now requires a current Context, a matching live
+endpoint, the original outstanding obligation and a process-local witness
+for the exact latest spend. That witness names the predecessor accepted by
+reconciliation. Its absence rules out dispatch after takeover even if the
+journal restores the spend record.
+
+Both consumption and dispatch also require a fresh coherent read from the
+scoped effect host. Its bytes must match the observation bound to the
+committed receipt. An unchanged journal cut alone cannot establish that
+the workspace is still unchanged. The Lean host cut carries this condition
+separately. In Quint, a changed read invalidates the cut used by
+=consumeCapability= and =finishHandoff=.
+
+A retry request with a new command identity and the same body as an applied
+spend at the current owner is refused as =decision-reuse=. The owner checks
+the original inbox body because the spend itself has already advanced the
+cut. An exact replay of the original command receives a historical
+acknowledgment from the policy clock and cannot recreate the live handoff.
+
+The trusted service accepts an original workspace result through
+=context-service-complete-workspace!=. The caller supplies the live joined
+Session observation. The owner checks that it belongs to the original
+Attempt and that the command, workspace, path and before/after digests
+match. The owner commits the Session terminal and the execution receipt in
+the same journal transaction. The service returns a command acknowledgment.
+Recovery reads the execution receipt from the journal when deciding whether
+the effect already succeeded.
+
+** Committed result vetoes retry after takeover
+
+In an isolated workspace, the workspace recovery Session bootstrap admitted the same
+single-file append. A real Session worker appended the line and read the
+file back. The trusted service joined the worker and committed
+=workspace-result= under owner 1. Owner 2 reopened the journal and observed
+the resulting bytes. With the same composition and the exact decision
+receipt, the retry request returned =effect-already-succeeded=. A substituted
+receipt returned =stale-or-mismatched-decision=.
+
+The journal retained one Session terminal and zero retry spends. The
+committed assessment recorded =succeeded= with matching composition and
+digest
+=sha256:4e9fee34f96fe69672bb8338322fd5ded374b864d55dce2f5e16d5a70759e77d=.
+The exported decision was checked in Lean against the success veto.
+
+** Signed permission with an invalidated Context
+
+An isolated embedding reopened the original reserved handoff and obtained
+a signed grant from the existing dual-engine Cedar Runtime Host for the
+canonical retry proposal. The owner still refused before spending the nonce.
+The Context Session reported =context-invalidated= at takeover, while
+the independent effect policy proposed retry and the file remained at
+its recorded preimage. No endpoint ran and the journal recorded no retry
+spend. The owner-2 decision projection elaborated in Lean from digest
+=sha256:817bd3d30222fa659bd694baa8c0c2a439e4f87253d56c0121d09b5d5d76cf62=.
+The embedding used the repository's Cedar bootstrap fixture for the
+isolated deployment. This is evidence of issuer signing and Context
+refusal, with positive dispatch still requiring current Context admission.
+
+** Signed dispatch and interruption before the workspace write
+
+The runtime assembly entry is =context-start-durable-service=. It opens the
+workspace journal on the serialized policy-clock owner, invokes the
+deployment's Context initializer, and constructs the existing Durable
+adapter with the supplied recovery composition. The initializer supplies
+the Session host, grant and policy owners, proof resolver, Query provider
+and recovery composition. The deployment supplies the clock profile and
+journal path.
+Startup and takeover use the same entry.
+If the initializer owns a Cedar issuer port, its =.close!= operation
+releases that port on startup failure or service shutdown.
+=context-service-issue-workspace-retry!= projects the owner-admitted
+request and asks the installed issuer for a live grant outside the
+journal transaction. Consumption and dispatch independently recheck it.
+
+For the workspace recovery deployment, =just workspace-recovery-host JOURNAL WORKSPACE SOURCE
+OPERATION= starts the service from the checked-in operator entry. Supply
+a private workspace containing =notes.txt= and an admitted Org source
+with the =work= ID. Each invocation is one operation on the journal:
+=reserve= reserves the original handoff, =complete= executes the original
+worker and commits its result, and =assess= reads current evidence on
+takeover. =retry= takes the optional issuer executable, Runtime Host
+socket, Host artifact and Cedar snapshot path. The deployment assigns
+the Cedar epoch from the current journal owner.
+=interrupt-write= and =interrupt-dispatch= exit at the documented
+interruption boundaries for an isolated run.
+
+=modules/durable/interface.ss= declares the Durable Module. The root
+=init.ss= discovers it in the =modules= auto window. The development
+launcher resolves that selection and calls its =workspace-recovery-host=
+export. The case
+assembly is owned by =modules/durable/workspace-recovery-host.ss=.
+=retry-audit= submits the exact retry, then exercises the historical
+command, a duplicate decision under a new command identity, and a
+substituted receipt on the same owner.
+
+Build the Runtime Host with =just build-cedar-runtime-host HOST_ARTIFACT=
+and the issuer with =cargo build --locked --manifest-path
+bindings/cedar-gerbil/Cargo.toml -p agentic-ai-lab-cedar-authority --bin
+cedar-authority-port=. Start the Host in a separate process with
+=cedar-authority-port serve-host HOST_ARTIFACT SOCKET= and wait for its
+ready record. The issuer command derives the linked component digests
+from the same crate as the authorization client.
+For the isolated workspace recovery deployment, the existing Cedar atomic-case
+manifest provides the bootstrap values and its =policies.cedar= provides
+the policy. Materialize the snapshot as follows:
+
+#+begin_src sh
+fixture=bindings/cedar-gerbil/fixtures/atomic-case
+jq --rawfile policy "$fixture/policies.cedar" \
+  '.bootstrap | .policies = [{identity:"doc19",source:$policy}]' \
+  "$fixture/manifest.json" > "$snapshot"
+#+end_src
+
+In the first run through this deployment entry, the worker committed its
+real write result under owner 1. Owner 2 refused retry as
+=effect-already-succeeded=, with one Session terminal and no dispatch.
+Lean checked the exported decision with digest
+=sha256:dcb206db524dd89684acb5cd4b3f026e9e61d9bcc23772c738f389b5b9566f4b=.
+
+In the write-before-receipt interruption, the file retained the added
+line and the journal had no result input, Session terminal or retry spend.
+Owner 2 retained the original Attempt as an obligation. It recorded
+=unknown= and refused retry as =recovery-ineligible= under digest
+=sha256:dcefe86b60a2ea22c09cb617924e7b8e281012005969d52da4d602dc8dd245f2=.
+
+The deployed =retry-audit= operation appended one line and committed one
+spend. The exact command replay produced no dispatch. The new command
+with the same decision returned =decision-reuse=, and the substituted
+receipt returned =stale-or-mismatched-decision=. The owner-2 assessment
+digest was
+=sha256:7020328d84b269298234f3cc33deceb9a6b80bf067fcc336db334b5a19aaa8ec=.
+
+In the deployed =interrupt-dispatch= run, Cedar consumed the grant
+before the process exited. Owner 3 observed the original bytes and
+retained the original Attempt, one spend and the pending dispatch
+command. It published no terminal and refused retry as
+=recovery-ineligible= with recorded outcome =unknown= and digest
+=sha256:dcf0e6e3ee1e8c21242f98a57833dd6d12c875c70b972f2b64c87b8df122cba3=.
+
+The single-file endpoint is =context-workspace-text-endpoint=. It binds
+the original Attempt's scope to one existing regular file, checks the
+preimage under the deployment's writer fence, publishes the replacement
+by rename, and reads the bytes back. The endpoint supplies a worker
+observation, which the existing Session owner can qualify and commit.
+Repeat-safety evidence comes from the deployment; the endpoint does not
+infer it from matching bytes alone. Use a private workspace or a writer
+fence shared by every writer.
+
+=context-service-start-workspace!= enrolls the actual Session worker in
+the original handoff transaction and releases it only after that
+transaction commits. The returned live worker can be awaited without
+publishing a result. Its =.commit!= operation joins and qualifies the
+observation in the named =workspace-result= transaction. A process
+interruption after the file write and before that transaction leaves the
+original effect unresolved.
+
+The Cedar Provider composes the scoped endpoint with
+=agentic-ai-lab-cedar-runtime-port= through
+=agentic-ai-lab-cedar-workspace-host=. The deployment supplies an admitted
+POO snapshot, subject, runtime coordinates and the existing linked
+Runtime Host. The packaged =cedar-authority-port= uses that Host through
+the existing Authority and keeps the signing key private. Scheme checks
+the local token digest against its issued value. The Lean dispatch contract
+also requires an issuer spend for that exact token.
+
+Two isolated runs used the same reserved append and a clock profile that
+kept the Context grant current through takeover. The embedding used the
+repository Cedar bootstrap fixture. The scoped endpoint checked the file
+preimage in an isolated workspace with no competing writers.
+
+| Run | Observed result | Journal |
+|-----+-----------------+---------|
+| Authorized dispatch | One line appended. Same receipt refused as =decision-reuse=. Substituted digest refused as =stale-or-mismatched-decision=. | One spend, applied dispatch, zero Session terminals |
+| Exit after issuer consumption | Owner 3 saw the original bytes and returned =recovery-ineligible=. The original effect stayed =unknown=. | One spend, pending dispatch, zero Session terminals |
+
+The dispatch assessment digest was
+=sha256:095d63ef52f3804a499e401426aace19d2b7bdd85b4e0567269507c5663932a6=.
+At the same epoch, the interrupted workspace had the same preimage but
+a distinct intent-bound digest
+=sha256:b7032856ec94e0baa752bdb06dac7bf8d01558d412bbc3d9e44709eb107c94df=.
+After takeover, its current decision digest was
+=sha256:4a36885e4c6bd0a09f5d38b57db3d166580f4ec6fe841bb3ec08f265d7606c87=.
+The exact dispatch and reopened interruption receipts were exported from
+the journal and checked in Lean. Returning from the write endpoint in the
+dispatch run did not publish a qualified execution receipt.

@@ -3,7 +3,7 @@
 #+TITLE: One dispatch, two records
 #+LANGUAGE: en
 
-The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-alias-correction][recovery design]] owns the conditions. The D2 case supplies
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery--offload-02-shared-scientific-model.org::#recovery-dispatch-alias-correction][recovery design]] owns the conditions. The D2 case supplies
 declarative teaching facts and object artwork. The existing D2 ASCENT
 module derives the composition.
 
