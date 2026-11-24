@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object object<-alist)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/config
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-config-cicd-intents agentic-ai-lab-user-module-selection-workflow-cicd-check-map agentic-ai-lab-user-config-workflow-cicd-functional-dag-rows agentic-ai-lab-user-config-workflow-cicd-runtime-projection agentic-ai-lab-user-alist-ref)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-pipeline-run-config agentic-ai-lab-user-config-workflow-cicd-pipeline-runs agentic-ai-lab-user-config-workflow-cicd-pipeline-results)
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface

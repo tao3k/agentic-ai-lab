@@ -3,7 +3,7 @@
 ;;; The init-owned atomic endpoint, with no external package realization.
 (import :std/test :clan/poo/object
         (only-in :std/source this-source-file)
-        (only-in "../../../../init.ss" tao3k/agentic-ai-lab.init.exports))
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports))
 (export aws-module-test)
 (def aws-module-test
   (test-suite "AWS atomic endpoint"

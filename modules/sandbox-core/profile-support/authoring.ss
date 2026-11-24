@@ -14,7 +14,7 @@
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
         :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/projection-syntax
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/prototype)
 
 (export agentic-ai-lab-sandbox-profile-object-row-slot

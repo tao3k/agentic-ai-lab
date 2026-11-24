@@ -24,7 +24,7 @@
         
         :tao3k/agentic-ai-lab/modules/agent-sandbox/config
         :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
                  agentic-ai-lab-sandbox-backend-capability/backend-kind))
 
 (def (check-error thunk)

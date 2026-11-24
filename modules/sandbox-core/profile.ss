@@ -8,7 +8,7 @@
 
 (import :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/prototype
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/authoring
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/derivation
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/resolve
@@ -16,7 +16,7 @@
 
 (export (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/interface)
         (import: :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract)
-        (import: :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy)
+        (import: :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy)
         agentic-ai-lab-sandbox-profile?
         agentic-ai-lab-sandbox-profile-name
         agentic-ai-lab-sandbox-profile-backend-kind

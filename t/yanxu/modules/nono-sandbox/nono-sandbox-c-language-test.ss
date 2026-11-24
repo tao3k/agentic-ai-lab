@@ -20,7 +20,7 @@
         (only-in :std/misc/process run-process)
         (only-in :clan/poo/object .get)
         (only-in :tao3k/yuanxu/module-system/building/products current-build-module-roots)
-        (only-in "../../../../init.ss" tao3k/agentic-ai-lab.init.exports)
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build
         :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
 

@@ -12,7 +12,7 @@
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :tao3k/agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
-        (only-in :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy-backend-validation
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-valid?
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostic-count
                  agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostics)

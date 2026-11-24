@@ -16,7 +16,7 @@
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
         :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/prototype
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/authoring
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/derivation)
 

@@ -13,7 +13,7 @@
                  test-suite)
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/agentic-ai-lab/modules/sandbox-core/objects
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
         :tao3k/agentic-ai-lab/modules/nono-sandbox/objects
         :tao3k/agentic-ai-lab/modules/cubeSandbox/objects
         :tao3k/agentic-ai-lab/modules/docker-sandbox/objects)

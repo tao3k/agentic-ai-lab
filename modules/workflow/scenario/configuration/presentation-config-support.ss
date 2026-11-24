@@ -26,7 +26,7 @@
         agentic-ai-lab-user-config-presentation-loop-engine-slots
         +agentic-ai-lab-user-config-presentation-loop-engine-fields+)
 
-(import :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
+(import :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy
         
         (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check-map-name)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-alist-ref)

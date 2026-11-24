@@ -8,7 +8,7 @@
 
 (import
         :clan/poo/object
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/projection-syntax)
 
 (export #t
         (import: :clan/poo/object))

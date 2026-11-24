@@ -13,7 +13,7 @@
         (only-in :clan/poo/object .ref .slot? object?)
         (only-in :tao3k/agentic-ai-lab/modules/session/durable-policy
                  agentic-ai-lab-durable-policy)
-        :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/policy-support/policy)
 
 (export sandbox-profile-policy-test)
 

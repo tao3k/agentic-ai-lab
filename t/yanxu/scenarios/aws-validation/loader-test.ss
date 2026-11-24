@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :clan/poo/object .get .ref/cached .slot?)
-        (only-in "../../../../init.ss" tao3k/agentic-ai-lab.init.exports))
+        (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports))
 (export aws-validation-loader-test)
 
 (def aws-validation-loader-test

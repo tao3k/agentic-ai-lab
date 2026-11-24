@@ -22,9 +22,9 @@ _SCHEME_LOAD_DEPENDENCIES = (
     Path("core/profile-composition/selection-syntax.ss"),
     Path("core/profile-composition/profile-bundle.ss"),
     Path("core/profile-composition/bindings.ss"),
-    Path("core/modules/funflow/scenario.ss"),
-    Path("core/modules/funflow/config.ss"),
-    Path("core/modules/funflow/config-prototypes.ss"),
+    Path("modules/funflow/scenario.ss"),
+    Path("modules/funflow/config.ss"),
+    Path("modules/funflow/config-prototypes.ss"),
 )
 
 
