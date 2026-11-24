@@ -40,8 +40,8 @@ budget $B \in \mathbb{N}$, compaction is governed by two strict invariants:
 #+begin_src typst
 $ upright("ProjectGoverned")(R, cal(H), S, B) = cases(
   upright("RefusedOverBudget") & "if" upright("Cost")(R) + upright("Cost")(S) + |upright("Defeat")(S)| > B,
-  upright("Admitted")(S, upright("Defeat")(S), upright("none"), upright("exhaustive"): #t) & "if within budget and" cal(H)_(upright("live")) backslash S = emptyset,
-  upright("Admitted")(S, upright("Defeat")(S), upright("some")(cal(H)_(upright("live")) backslash S), upright("exhaustive"): #f) & "otherwise"
+  upright("Admitted")(S, upright("Defeat")(S), upright("none"), upright("exhaustive"): "#t") & "if within budget and" cal(H)_(upright("live")) backslash S = emptyset,
+  upright("Admitted")(S, upright("Defeat")(S), upright("some")(cal(H)_(upright("live")) backslash S), upright("exhaustive"): "#f") & "otherwise"
 ) $
 #+end_src
 

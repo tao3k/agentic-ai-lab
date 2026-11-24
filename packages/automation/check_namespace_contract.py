@@ -43,13 +43,6 @@ def issues(path: Path, owner: Path | None = None) -> list[str]:
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
         return failures
-    if path.name == "runtime_load_imports.json":
-        manifest = json.loads(text)
-        if any(name.startswith("core/") for name in manifest["modules"]):
-            failures.append(f"{relative}: obsolete compiler module identity")
-        for source in manifest["roots"]:
-            if not (ROOT / source).is_file():
-                failures.append(f"{relative}: missing compiler root {source}")
     for number, line in enumerate(text.splitlines(), 1):
         # An existing PR's Git ref is immutable identity, not an import/export.
         line = line.replace("research/ascent-" + "poo" + "-flow", "existing-pr-ref")

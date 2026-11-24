@@ -13,7 +13,6 @@ MRR Data owns physical backends.
 | =differential.py= | Call the installed Python Runtime and the Scheme artifact; emit 21 original Scheme results for Rust to compare. |
 | =deepseek_adapter.py= | Perform model HTTP IO and invoke the supplied runtime consumer executable; preserve bounded Scheme task/result records. |
 | =watch.py= | Supervise the supplied command; five seconds without genuine output fails. |
-| =generate-runtime-imports.py= | Generate the Python package's runtime import projection. |
 
 The differential entrypoint uses the existing Python test scenarios. Run it
 with an interpreter that has this package and its test dependencies installed:

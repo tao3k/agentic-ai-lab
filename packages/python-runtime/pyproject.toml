@@ -43,7 +43,6 @@ agentic_ai_lab_runtime = [
   "reasoning_rules/*.ss",
   "projections/*.ss",
   "projections/*.sexp",
-  "projections/runtime_load_imports.json",
 ]
 
 [tool.pytest.ini_options]

@@ -6,7 +6,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import selectors
 import subprocess
@@ -17,6 +16,15 @@ from pathlib import Path
 from typing import NamedTuple
 
 from ._scheme_datum import SchemeRows, parse_scheme_datum
+
+
+_RUNTIME_AUTHORING_IMPORTS: tuple[tuple[str, str], ...] = (
+    ("tao3k/yuanxu/profile-composition/selection-syntax", ":tao3k/yuanxu/profile-composition/selection-syntax"),
+    ("tao3k/yuanxu/profile-composition/profile-bundle", ":tao3k/yuanxu/profile-composition/profile-bundle"),
+    ("clan/poo/mop", "(only-in :clan/poo/mop .new)"),
+    ("tao3k/agentic-ai-lab/modules/funflow/scenario", "(only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)"),
+    ("tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library", ":tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library"),
+)
 
 
 def run_scheme_projection(
@@ -39,34 +47,31 @@ def run_scheme_projection(
 def runner_source(module_path: Path, projection_path: Path) -> str:
     source_path = scheme_string(str(module_path))
     projection_source_path = scheme_string(str(projection_path))
+    import_entries = "\n".join(
+        f"   ({scheme_string(label)} . {spec})"
+        for label, spec in _RUNTIME_AUTHORING_IMPORTS
+    )
     return (
-        "(for-each (lambda (module)\n"
-        " (display (string-append \"IMPORT \" (symbol->string module) \"\\n\") (current-error-port))\n"
-        " (force-output (current-error-port))\n"
-        " (eval `(import ,module))\n"
-        " (display (string-append \"MODULE-OK \" (symbol->string module) \"\\n\") (current-error-port))\n"
-        " (force-output (current-error-port)))\n"
-        " '(" + " ".join(":" + name for name in _runtime_authoring_imports()) + "))\n"
+        "(for-each (lambda (entry)\n"
+        " (let ((label (car entry)) (spec (cdr entry)))\n"
+        "  (display (string-append \"IMPORT \" label \"\\n\") (current-error-port))\n"
+        "  (force-output (current-error-port))\n"
+        "  (eval `(import ,spec))\n"
+        "  (display (string-append \"MODULE-OK \" label \"\\n\") (current-error-port))\n"
+        "  (force-output (current-error-port))))\n"
+        f" '(\n{import_entries}))\n"
         f"(eval '(include {projection_source_path}))\n"
         "(eval '(agentic-ai-lab-runtime-load-write!\n"
         f" (let () (include {source_path}))))\n"
     )
 
 
-def _runtime_authoring_imports():
-    manifest = Path(__file__).parent / 'projections' / 'runtime_load_imports.json'
-    return json.loads(manifest.read_text())['modules']
-
-
 def aot_runner_source(module_path: Path, projection_path: Path) -> str:
     source_path = scheme_string(str(module_path))
     projection_source_path = scheme_string(str(projection_path))
+    imports = "\n        ".join(spec for _, spec in _RUNTIME_AUTHORING_IMPORTS)
     return (
-        "(import :tao3k/yuanxu/profile-composition/selection-syntax\n"
-        "        :tao3k/yuanxu/profile-composition/profile-bundle\n"
-        "        (only-in :clan/poo/mop .new)\n"
-        "        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)\n"
-        "        :tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
+        f"(import {imports})\n"
         f"(include {projection_source_path})\n"
         "(export main)\n"
         "(def (main . args)\n"

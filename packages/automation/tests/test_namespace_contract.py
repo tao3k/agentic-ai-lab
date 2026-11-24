@@ -40,10 +40,6 @@ class NamespaceContractTests(unittest.TestCase):
         old = ":" + "core/types"
         self.assertTrue(self.check_source("config.ss", "(import " + old + ")"))
 
-    def test_compiler_projection_refuses_obsolete_module_identity(self):
-        self.assertTrue(self.check_source("runtime_load_imports.json",
-            '{"roots": [], "modules": ["core/types"]}'))
-
     def test_core_source_path_is_not_a_module_namespace(self):
         self.assertEqual(self.check_source("README.org", "[[file:core/types.ss]]"), [])
         self.assertEqual(self.check_source("Justfile", '"core/gerbil.pkg"'), [])

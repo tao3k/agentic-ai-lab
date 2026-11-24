@@ -26,12 +26,12 @@ and =Temporal Causality=. No Scheme sources are modified.
 
 #+begin_src typst
 $ upright("ExchangeEligible")(sigma) equiv
-  (sigma.upright("requiredProviders") != emptyset)
-  and forall p in sigma.upright("requiredProviders"),
-    exists r in sigma.upright("receipts"):
+  (sigma "." upright("requiredProviders") != emptyset)
+  and forall p in sigma "." upright("requiredProviders"),
+    exists r in sigma "." upright("receipts"):
       (r.upright("provider") = p)
-      and (r.upright("generation") = sigma.upright("activeGeneration"))
-      and (r.upright("complete") = #t) $
+      and (r.upright("generation") = sigma "." upright("activeGeneration"))
+      and (r.upright("complete") = "#t") $
 #+end_src
 
 During symbolic model checking in Quint/Apalache, an unguarded provider retry

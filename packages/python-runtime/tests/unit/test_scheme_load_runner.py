@@ -88,3 +88,33 @@ def test_total_deadline_stops_child_even_with_continuous_output(tmp_path, monkey
     )
     with pytest.raises(RuntimeError, match='total time limit'):
         runner._run_with_runtime_progress(command, tmp_path)
+
+
+def test_runner_and_aot_sources_share_canonical_authoring_imports(tmp_path: Path) -> None:
+    from agentic_ai_lab_runtime._scheme_load_runner import (
+        aot_runner_source,
+        runner_source,
+    )
+
+    module_path = tmp_path / "scenario.ss"
+    projection_path = tmp_path / "runtime-funflow.ss"
+    interpreted = runner_source(module_path, projection_path)
+    compiled = aot_runner_source(module_path, projection_path)
+
+    for expected in (
+        ":tao3k/yuanxu/profile-composition/selection-syntax",
+        ":tao3k/yuanxu/profile-composition/profile-bundle",
+        "(only-in :clan/poo/mop .new)",
+        "(only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)",
+        ":tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library",
+    ):
+        assert expected in interpreted
+        assert expected in compiled
+    assert ":tao3k/yuanxu/modules/funflow/scenario" not in compiled
+    assert not (
+        Path(__file__).resolve().parents[2]
+        / "src"
+        / "agentic_ai_lab_runtime"
+        / "projections"
+        / "runtime_load_imports.json"
+    ).exists()

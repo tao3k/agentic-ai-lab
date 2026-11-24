@@ -96,12 +96,12 @@ $R = (P_{\mathrm{read}}, D_{\mathrm{dest}}, K_{\mathrm{cap}}, [t_0, t_1), \tau_{
 Composing slices $a$ and $b$ forms the meet $a \sqcap b$:
 
 #+begin_src typst
-$ a sqcap b = (
+$ a inter.sq b = (
   P_a inter P_b,
   D_a inter D_b,
   K_a inter K_b,
   [max(t_(0,a), t_(0,b)), min(t_(1,a), t_(1,b))),
-  min_(preceq)(tau_a, tau_b),
+  min_(prec.eq)(tau_a, tau_b),
   Omega_a union Omega_b
 ) $
 #+end_src
@@ -121,7 +121,7 @@ $ upright("HandoffEligible")(sigma, p, a) equiv
   upright("CutAndGrantCurrent")(sigma, p)
   and upright("RoleTransitionValid")(sigma, p)
   and (forall t in a.upright("threats"), not upright("IsBlocking")(t))
-  and (forall t in a.upright("threats"), t.upright("phase") = upright("accepted") => t.upright("acceptedAtCut") = sigma.upright("liveCut"))
+  and (forall t in a.upright("threats"), t.upright("phase") = upright("accepted") => t.upright("acceptedAtCut") = sigma "." upright("liveCut"))
   and upright("SoD")(a.upright("proposer"), a.upright("approver"), a.upright("executor"))
   and not upright("CarriesActionAuthority")(a) $
 #+end_src

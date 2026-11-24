@@ -84,7 +84,7 @@ coordinator forwarding and admitted dual-binding redacted declassification.
 Under [[file:40-context-governance-boundary.org][Slice 40]]'s ordinary restriction meet, reader sets intersect:
 
 #+begin_src typst
-$ upright("Readers")(R_(upright("core")) sqcap R_(upright("sdk"))) = upright("Readers")(R_(upright("core"))) inter upright("Readers")(R_(upright("sdk"))) $
+$ upright("Readers")(R_(upright("core")) inter.sq R_(upright("sdk"))) = upright("Readers")(R_(upright("core"))) inter upright("Readers")(R_(upright("sdk"))) $
 #+end_src
 
 Whenever $\mathrm{agent\text{-}sdk} \notin \mathrm{Readers}(R_{\mathrm{core}})$,

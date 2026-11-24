@@ -5,22 +5,22 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "fa88a8f5e614dde297dabb49841045fbde658b8cde8d6852cdd94a2df2fb0300",
+  "aggregate_bundle_sha256": "d90fcce81a278d9ebad1ff96f8e76b534ee052442b93169ade5b5a53105e02bc",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "63945365b6b68ef71097aed4bf6cbab2614b66ba4709b31ece4d19b595f3af04",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "af2f886e12e21b517ce78d1ea9b5af44b9fcfdf484f6f45f06f6076b15e0b10e",
-    "proofs/ContextGovernance/lakefile.lean": "deca9e42498150ec99166eb0bfe65a729bfc3bba3d086b81f2d36088fe4a19b6",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "3e293f446b4b25fc8bdb382f8915f294d705da670327d2293112aa431af4544f",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "12f5d54b0f171de45ecd27f7ac0ac3595db0f52ae8e0dacea5ed00a78b51978a",
+    "proofs/ContextGovernance/lakefile.lean": "2bf3e8be3b5ac89d102f38cc32853c0c5e905629c1999c90973806d37ad8f612",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "7b55299051f40c8b42a5e1eedbd19749f33fb4b976561f108c34fad910d76905",
-    "dev/d2/governance-figures.sysml": "92ab0be0eab44c55cb2c6a5980699c39e8c67849ffe6e89f0c0249fe7ee523e4",
-    "dev/d2/governance-illustrations.ts": "6fd8c2e582cf13e9986f7842539a767ab7f354aa8c901f4e7a96574df7c9181f"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "fe1e95fa70e05f08415cd60c3927958ede4ddfffebf4f543035975c3cf6737b3",
+    "dev/d2/governance-figures.sysml": "2783116be4a08c31dab26cb60afafe8a195a60f9019521ee3c19a88087c89f77",
+    "dev/d2/governance-illustrations.ts": "82783aec036e7009c642c62fc9f5b3e4a4e4207527ed07a0b19cc63ccba8af84"
   },
   "slices": {
     "40-context-governance-boundary": {
       "slice_id": 40,
-      "bundle_sha256": "e42872f503546e8f1b8ff2460d80fff5f3c05f779391cdfc0ea97942693e319a",
+      "bundle_sha256": "92f9bf2c287dce20bd631f5d1cd752de64cb922f4b6fae89a9bd6bb2070b2925",
       "files": {
-        "org": "ba5afbe6031101a91c9d9b99b06fc062b9918253e5ac0caf1276c56d5465eaf7",
+        "org": "158504f1bca750430ae7ef0359f5806a1e0008e0d0636a08c4083c6c036e1ef8",
         "sysml": "cfb0cd3b88c52d4ae60804ddd3b0901731e458121eff05eb60bb9cd36fc3f975",
         "lean": "f45b9947f41c05d89cea2d999cba7785df6419c949da2397bbbb2d53667c8e35",
         "qnt": "ff70e3299dd4f8490fd182783872e4867f26e00585d0f73d09659a52bd26f53c"
@@ -43,9 +43,9 @@
     },
     "41-epistemic-consolidation-governance": {
       "slice_id": 41,
-      "bundle_sha256": "cc620ccd82456ea0d7c629ac2a6e3e3590429c41b3a67026eddcb8519b83df9d",
+      "bundle_sha256": "1a81014abfd243a1a31fd9103c0fc18c92d445405a26d1e5702c4c4c605d027b",
       "files": {
-        "org": "d856af72b858e5ca223c5469e0ff358d0460f8b0d0666bb18d98d278db768c9c",
+        "org": "74d79285db4f98cf3067a524242f7bf53b8e004e029fdf75e38443d4d429326b",
         "sysml": "a22fb1b4482e6afbd1cd44bd63eafa25d52ef58775d61d3a1741334aa3baf73c",
         "lean": "dc39e877ab29ed9963bd86fd0284a863b85ac5c02b3ef246de395a56c7ddb195",
         "qnt": "9d0f8d0d696e605c133c932a03b9de418f5abfa047a2e81628654f280ea2b6b6"
@@ -65,9 +65,9 @@
     },
     "42-multi-repo-multi-agent-declassification": {
       "slice_id": 42,
-      "bundle_sha256": "bea9c8d48f8466146f2a52ebdf67109c40c43769b7e59b8b6f0ef6466d8dd9c6",
+      "bundle_sha256": "957a6814c6be109846c4cd11e7a455e1d2e5ca147717006ef6f09a3e3e62b75c",
       "files": {
-        "org": "9a37c7bcdafd771925670ca2554ac6b6d78c9f30b9edc39bf01487694e4a380f",
+        "org": "246f1e7734eba7c58717de58daca0d50e240647bfda90321c6580cb5a0d44a1f",
         "sysml": "9e3cc65174791f9b7a651c6c1cc6d4fbd0a61deec61081fe7d19086463029b18",
         "lean": "1ffdc493d5c5876a09c3317054e65d03132fac574c88fad8f2b60e9c3a552d2c",
         "qnt": "2009b89e39d80e45dd519949546847762eafe3711f2dc68e4ed15756aede112c"
@@ -133,9 +133,9 @@
     },
     "45-org-sexpr-gql-candidate-exchange-search": {
       "slice_id": 45,
-      "bundle_sha256": "7c9af927902ee614858ef053d8dbb96c7127b4517bf888a396f5c53627f94630",
+      "bundle_sha256": "d8ab06bab5dfc1e8c6118f804fd4d1fd678376185c800a46333622ecb75c9027",
       "files": {
-        "org": "f8f2a12825da86e4e7d0c1766d52917a17a059bee91aff045211b44963ef10e9",
+        "org": "2792be1836b41a9e35a74d44506f6f00cc83d4d5eb902852a18834e31cf90bc0",
         "sysml": "4492e36957faca72da0b79035c2f4381c6f528f289de0b5a7603819183338327",
         "lean": "765823b8c4eca35b3550a0dba5c4745a92da835606b9a8dea921b9f48fa4b327",
         "qnt": "501e0928219b2a4bef04ad01d406c79a00a31bb185b9f8bbddf839f2bde6c1f2"
@@ -430,14 +430,39 @@
         "sameHolePremiseNeverReinvokesOracle"
       ]
     },
+    "58-delegation-attenuation-and-cedar-toctou-fence": {
+      "slice_id": 58,
+      "bundle_sha256": "3e2a12d9b95d5e4babfefce4b9fa10ef8756e508191f0378eddd4b20af39b197",
+      "files": {
+        "org": "4559e57151905ba7cba451758925d0f3c1ed9dd85fe6e518ca096b849e276741",
+        "sysml": "dc4a55b6821ef0a3c5175c23ed408feb9bb314450a2dadff2fd527dbaaa1609c",
+        "lean": "d7c332b3571c9bf3fa325b92646406d0fc2212c9ed8e4c1f56bb6f489c562018",
+        "qnt": "732f05d514a272ae23c626fa4e2836278483966b6b1889bcec81c73a17117dc6"
+      },
+      "lean_theorems": [
+        "delegatedCapability_never_exceeds_parent",
+        "grantEpochAdvance_invalidates_inflight_delegation",
+        "multiHopDelegation_never_escalates",
+        "parentDenylist_dominates_child_delegation",
+        "revokedParentGrant_immediately_blocks_child_toctou",
+        "staleChildContextCut_rejected_fail_closed",
+        "unclosedSubagentAttempt_blocks_silent_hang_or_completion"
+      ],
+      "quint_invariants": [
+        "childBoundEpochNeverExceedsLiveGrantEpoch",
+        "delegatedChildNeverBypassesParentDenylist",
+        "parentNeverCompletesWhileChildAttemptUnclosed",
+        "revokedGrantOrStaleCutNeverAdmitsChildToctou"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "b5582c7351bb8e2df29c24e760b03e9f66a550b48e7916bb89da7fcb8cdcf463",
+      "bundle_sha256": "0587e793e9a5ddf24b4a5d5f40414bad877b90aa40d121736aa0043beac39456",
       "files": {
-        "org": "7e207c7f76657fb8b8f583eaea49a0011c00a756f6aaad0abf98a337ea5162f7",
-        "sysml": "55a9873d1fc71cbdfa2f3d6c7e69eede369a500e7e61c225cd6f8c3adaa8383e",
-        "lean": "2955b1e78848b1d64a33e6090da06d0bfd1a72c66ea502cdad1ade28ca0765c7",
-        "qnt": "901c5a3ba367ef8dd09ebfa165b151cbddd184a2f34cffb1b1f14d817e178e53"
+        "org": "5d816fa20f31e13b28adac87a986e4dfa2969712e6c69df1d3bff3fb619225e3",
+        "sysml": "751f68109721999c4e20328777d401368918b8fb0d3cfca9fc09bc0b8d484f86",
+        "lean": "bef808cc08398756a6298d456f5cc08219496b1c986612f9530dfa8f2a3e445e",
+        "qnt": "97bf0a1d68eaf0c44991ade6a318df518f1d9c1d7d3d1376991f2eb273827fa2"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -449,7 +474,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allSeventeenUpstreamSliceInvariantsHold",
+        "allEighteenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]
