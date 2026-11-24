@@ -669,10 +669,19 @@ decision-dependence auditing.
 [[file:56-ascent-governed-loop-termination.org][56: ASCENT-Governed Loop Engine Termination, Anti-Oscillation & Safety Dominance]]
 and its [[file:56-ascent-governed-loop-termination.sysml][SysML]], [[file:56-ascent-governed-loop-termination.qnt][Quint]],
 and [[file:56-ascent-governed-loop-termination.lean][Lean]] artifacts formally prove universal bounded termination of the
-redesigned ASCENT-driven Loop Engine against arbitrary adversarial LLM policies,
-covering exact state cycles, $A \leftrightarrow B$ oscillations, repeated-failure
-and zero-progress stalls, upstream governance dominance, and absorbing halt
-reopen discipline.
+ASCENT verdict lattice against arbitrary adversarial LLM policies, covering
+exact state cycles, $A \leftrightarrow B$ oscillations, repeated-failure and
+zero-progress stalls, upstream governance dominance, and absorbing halt reopen
+discipline.
+
+[[file:57-obligation-fixpoint-reconciler.org][57: Post-ReAct Declarative Obligation-Fixpoint Reconciler (ASCENT × FunFlow × POO)]]
+and its [[file:57-obligation-fixpoint-reconciler.sysml][SysML]], [[file:57-obligation-fixpoint-reconciler.qnt][Quint]],
+and [[file:57-obligation-fixpoint-reconciler.lean][Lean]] artifacts replace imperative ReAct loops completely with an ASCENT
+Datalog fixed-point reconciler over typed Obligation & Epistemic Graphs
+(=modules/loop-engine/{obligation-graph,ascent-reconciler,synthesis-oracle}.ss=),
+proving =(holeId, premiseDigest)= idempotence, deterministic-first FunFlow
+precedence (=0 LLM calls=), strict rejection of raw single-step tool calls,
+competing-hypothesis preservation, and selective bitemporal premise retraction.
 
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
@@ -683,11 +692,11 @@ reopen discipline.
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=56= both
-horizontally (=47= imports all sixteen upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=57= both
+horizontally (=47= imports all seventeen upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 17-namespace axiom audit + 116 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all sixteen single-plane models + 8-step Apalache on
+Lake 18-namespace axiom audit + 123 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all seventeen single-plane models + 8-step Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).

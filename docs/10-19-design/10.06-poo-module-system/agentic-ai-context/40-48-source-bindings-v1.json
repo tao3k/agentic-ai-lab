@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "90971ef29c97662fc21923be3be22ea6e72ba490d9edd7a21cf54c9e16aca6b7",
+  "aggregate_bundle_sha256": "fa88a8f5e614dde297dabb49841045fbde658b8cde8d6852cdd94a2df2fb0300",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "f027e7b6abbe8e3d24b1f09e4cb8924162f530dbe51975c987184eb042b5116f",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "cce10f8cd4f446a1adfb05939e9ecc0fdc4474dd7bef8459c23d33adf53b6b3e",
-    "proofs/ContextGovernance/lakefile.lean": "f4b09a6b8496e00e82dcf3f3dbc6cbfe74dc08399da5dcd495d362ce37bc24e6",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "63945365b6b68ef71097aed4bf6cbab2614b66ba4709b31ece4d19b595f3af04",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "af2f886e12e21b517ce78d1ea9b5af44b9fcfdf484f6f45f06f6076b15e0b10e",
+    "proofs/ContextGovernance/lakefile.lean": "deca9e42498150ec99166eb0bfe65a729bfc3bba3d086b81f2d36088fe4a19b6",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "7b16eb56431b91feb443d4cf10679911b6c75bbb2abbd9e1b2cb2b692fa31eb4",
-    "dev/d2/governance-figures.sysml": "327988c669a5319d885c90e2256c25366fe54ac41739f1495fecb5f944ee58db",
-    "dev/d2/governance-illustrations.ts": "aed3e3b7cc69a078bc55c8c91c72fce9ea222d8a6e16f35dabe43c1a150f127c"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "7b55299051f40c8b42a5e1eedbd19749f33fb4b976561f108c34fad910d76905",
+    "dev/d2/governance-figures.sysml": "92ab0be0eab44c55cb2c6a5980699c39e8c67849ffe6e89f0c0249fe7ee523e4",
+    "dev/d2/governance-illustrations.ts": "6fd8c2e582cf13e9986f7842539a767ab7f354aa8c901f4e7a96574df7c9181f"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -405,14 +405,39 @@
         "stepsTakenNeverExceedsInitialBudget"
       ]
     },
+    "57-obligation-fixpoint-reconciler": {
+      "slice_id": 57,
+      "bundle_sha256": "50c1c5fd7eb4a2cf769e480be3624bf26777c995474752f68e109b01e9504a9e",
+      "files": {
+        "org": "86161799fe4fed19b8d7482fcd2f731cb8bc512cf70f6b0bbe4e14de371219e0",
+        "sysml": "408c503e6d84258706085a603ff00e0f8af1ae6dfccf27bc70047158e58196a2",
+        "lean": "e15e48f40a392eb6147c66cd77fa45eb556b595afcb11e020d1175c5eed61467",
+        "qnt": "180f91a2ac1ba0ccfcc39a47027fac428a539de22f92ecb7bef3b39d685e3745"
+      },
+      "lean_theorems": [
+        "attemptedHole_idempotent_on_unchanged_premises",
+        "competingHypotheses_preserved_without_greedy_collapse",
+        "deterministicFrontier_takes_strict_precedence_over_llm",
+        "premiseRetraction_preserves_independent_nodes",
+        "rawToolCallOracleOutput_rejected_fail_closed",
+        "reconciler_reaches_quiescent_fixed_point_on_all_holes",
+        "refutedHypothesis_never_discharges_obligation"
+      ],
+      "quint_invariants": [
+        "competingHypothesesNeverCollapsedWhenUnrefuted",
+        "llmOracleNeverCalledWhileDeterministicFrontierNonEmpty",
+        "rawSingleStepToolCallNeverAdmittedFromOracle",
+        "sameHolePremiseNeverReinvokesOracle"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "535e9d3abb79d68cb76ea0d487ce1f68a428a7bd2a22b8830ed447f7653e914f",
+      "bundle_sha256": "b5582c7351bb8e2df29c24e760b03e9f66a550b48e7916bb89da7fcb8cdcf463",
       "files": {
-        "org": "5326e56a5c49d457dd1c70ee9b6d893078c876dc88459dcaf66c4a8475f70ba6",
-        "sysml": "c61c86bf404fbe059a2295f545e65b2033fb5700cb0fa20260273b667476438a",
-        "lean": "2ac10a6f9ae194da292088954f918d016c8a24de32c46c6f5c15403614664882",
-        "qnt": "4601dba44ec3191f55fa7d8d8cfd7b1e135cbfd38e651ea773b152f66c9ad851"
+        "org": "7e207c7f76657fb8b8f583eaea49a0011c00a756f6aaad0abf98a337ea5162f7",
+        "sysml": "55a9873d1fc71cbdfa2f3d6c7e69eede369a500e7e61c225cd6f8c3adaa8383e",
+        "lean": "2955b1e78848b1d64a33e6090da06d0bfd1a72c66ea502cdad1ade28ca0765c7",
+        "qnt": "901c5a3ba367ef8dd09ebfa165b151cbddd184a2f34cffb1b1f14d817e178e53"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -424,7 +449,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allSixteenUpstreamSliceInvariantsHold",
+        "allSeventeenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

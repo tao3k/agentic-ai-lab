@@ -17,6 +17,7 @@ import «53-yuanxu-c4-profile-convergence-and-interface-slots»
 import «54-durable-work-engine-core-challenge»
 import «55-mcp-tool-poisoning-and-camel-capability-flow»
 import «56-ascent-governed-loop-termination»
+import «57-obligation-fixpoint-reconciler»
 import «47-end-to-end-context-governance-assurance-closure»
 import Lean.Util.CollectAxioms
 import Lean.Elab.Command
@@ -43,6 +44,7 @@ run_cmd do
     `DurableWorkEngineCoreChallenge,
     `McpToolPoisoningAndCamelCapabilityFlow,
     `AscentGovernedLoopTermination,
+    `AscentObligationFixpointReconciler,
     `EndToEndContextGovernanceClosure
   ]
   let mut declCount : Nat := 0
@@ -54,4 +56,4 @@ run_cmd do
           throwError "{name} depends on disallowed axiom {axiomName}"
   if declCount == 0 then
     throwError "Context Governance declarations were not loaded"
-  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 17 namespaces"
+  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 18 namespaces"

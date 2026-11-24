@@ -49,6 +49,7 @@ SLICES = [
     (54, "54-durable-work-engine-core-challenge", "DurableWorkEngineCoreChallenge", "DurableWorkChallengeDispatchContract", 2, "tlc"),
     (55, "55-mcp-tool-poisoning-and-camel-capability-flow", "McpToolPoisoningAndCamelCapabilityFlow", "McpToolPoisoningDispatchContract", 2, "tlc"),
     (56, "56-ascent-governed-loop-termination", "AscentGovernedLoopTermination", "AscentLoopTerminationDispatchContract", 2, "tlc"),
+    (57, "57-obligation-fixpoint-reconciler", "AscentObligationFixpointReconciler", "ObligationReconcilerDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -69,6 +70,7 @@ QUINT_MAINS = {
     "54-durable-work-engine-core-challenge": "DurableWorkEngineCoreChallenge",
     "55-mcp-tool-poisoning-and-camel-capability-flow": "McpToolPoisoningAndCamelCapabilityFlow",
     "56-ascent-governed-loop-termination": "AscentGovernedLoopTermination",
+    "57-obligation-fixpoint-reconciler": "AscentObligationFixpointReconciler",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -91,6 +93,7 @@ STORY_SLUGS = (
     "54-durable-work-core-challenge",
     "55-mcp-tool-poisoning-camel",
     "56-ascent-loop-termination",
+    "57-obligation-fixpoint-reconciler",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -390,6 +393,20 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         )
         grant_ok = (not bool(st["admittedAfterGovBlock"])) and (not bool(st["selfResetSucceeded"]))
         epistemic_ok = not bool(st["admittedAfterCycle"])
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 57:
+        st = last["s57"]
+        consumed = (
+            (itf_int(st["oracleInvocationsOnSamePremise"]) > 0)
+            or bool(st["oracleCalledWithDetPending"])
+            or bool(st["rawToolCallAdmitted"])
+            or bool(st["collapsedCompetingHypotheses"])
+            or bool(st["quiescent"])
+        )
+        cut_ok = itf_int(st["oracleInvocationsOnSamePremise"]) <= 1
+        grant_ok = (not bool(st["oracleCalledWithDetPending"])) and (not bool(st["rawToolCallAdmitted"]))
+        epistemic_ok = not bool(st["collapsedCompetingHypotheses"])
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:

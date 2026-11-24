@@ -68,4 +68,8 @@ package ContextGovernanceFigures {
     view ascentLoopTermination : InterconnectionView {
         expose AscentGovernedLoopTermination::AscentLoopTerminationSystem;
     }
+
+    view obligationFixpointReconciler : InterconnectionView {
+        expose AscentObligationFixpointReconciler::ObligationFixpointReconcilerSystem;
+    }
 }

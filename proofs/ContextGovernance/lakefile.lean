@@ -28,5 +28,6 @@ lean_lib ContextGovernanceChain where
     `«54-durable-work-engine-core-challenge»,
     `«55-mcp-tool-poisoning-and-camel-capability-flow»,
     `«56-ascent-governed-loop-termination»,
+    `«57-obligation-fixpoint-reconciler»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]
