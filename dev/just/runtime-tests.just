@@ -63,8 +63,8 @@ rebuild-poo backup:
     cd "$package_root"
     export GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}"
     export GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}"
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 60s gerbil clean
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gerbil build
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 60s gerbil clean
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 300s gerbil build
 
 # Run the existing C4 identity/performance witness under the test heap fence.
 [group('test')]

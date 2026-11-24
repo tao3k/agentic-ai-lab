@@ -103,4 +103,4 @@ check-search-evidence-scheme:
 # Runtime Core build projection must load without an ASP build facade.
 [group('check')]
 check-production-build:
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} build.ss spec
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} build.ss spec

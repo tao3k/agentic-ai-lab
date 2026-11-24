@@ -29,7 +29,7 @@ test: build-testing build-test-workers prepare-test-inputs build-library
 # Run the development suites through the standard Scheme test entry.
 [group('test')]
 test-dev:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test dev.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test dev.ss
 
 # Run Lab test batches with the existing fixture environment and aggregate deadline.
 [group('test')]
@@ -49,7 +49,7 @@ test-testing-integration:
 [group('test')]
 test-package-file path:
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test "{{ path }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test "{{ path }}"
 
 # Keep the official Harness receipts and add process wall/user/system timing.
 [group('test')]
@@ -83,7 +83,7 @@ test-file path observe="false":
 # Run performance Suites serially through the same official test entry.
 [group('test')]
 test-performance:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test 't/performance/...' t/module-system-poo-performance-test-support
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} test 't/performance/...' t/module-system-poo-performance-test-support
 
 # Run the focused composition-lifecycle Python gate.
 [group('test')]

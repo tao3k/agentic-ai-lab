@@ -74,7 +74,7 @@
              (not (cond-expand
                     (darwin (equal? (getenv "LAB_MACOS_QUALIFICATION_TIMING" #f) "1"))
                     (else #f))))
-      ["timeout" "--signal=TERM" "--kill-after=5s" file-budget . test-command]
+      ["timeout" "--foreground" "--signal=TERM" "--kill-after=5s" file-budget . test-command]
       test-command))
   (def expected (filter (cut string-suffix? "-test.ss" <>) files))
   (def harness-receipt (string-append "HARNESS-OK " (object->string files)))

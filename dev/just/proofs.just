@@ -79,11 +79,11 @@ emit-proof-case-vector:
 # Emit the workspace recovery recovery projection from the actual Durable decision.
 [group('proof')]
 emit-durable-recovery-projection receipt="":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/emit-recovery-projection.ss {{ quote(receipt) }}
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/emit-recovery-projection.ss {{ quote(receipt) }}
 
 [group('runtime')]
 workspace-recovery-host journal workspace source operation issuer="" socket="" artifact="" snapshot="":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/workspace-recovery.ss {{ quote(journal) }} {{ quote(workspace) }} {{ quote(source) }} {{ quote(operation) }} {{ if issuer == "" { "" } else { quote(issuer) + " " + quote(socket) + " " + quote(artifact) + " " + quote(snapshot) } }}
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/workspace-recovery.ss {{ quote(journal) }} {{ quote(workspace) }} {{ quote(source) }} {{ quote(operation) }} {{ if issuer == "" { "" } else { quote(issuer) + " " + quote(socket) + " " + quote(artifact) + " " + quote(snapshot) } }}
 
 [group('check')]
 check-session-context-quint:

@@ -10,7 +10,7 @@ build:
 # Compile the full product library and its declared Core module dependencies.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ lab_build_env }} timeout --signal=TERM --kill-after=5s 600s ./build.ss compile
+    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ lab_build_env }} timeout --foreground --signal=TERM --kill-after=5s 600s ./build.ss compile
 
 # Compile the pinned local Core using Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
