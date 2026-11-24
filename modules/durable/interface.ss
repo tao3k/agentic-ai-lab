@@ -4,17 +4,17 @@
         (only-in "./config.ss" DurableConfig)
         (only-in "./types.ss" DurableScopeContract)
         (only-in "./func.ss" durable-recovery-decision durable-workspace-recovery-host
-                 durable-agenda-start DurableOrchestratorExports))
+                 durable-agenda-start DurableWorkExports))
 (export Durable)
 
 (.def Durable
   identity: 'durable
-  tags: '(engine policy)
+  tags: '(engine policy durable)
   core:
   (.o scope-contract: DurableScopeContract
       exports: (.o recovery-policy: DurableConfig
                    decide-recovery: durable-recovery-decision
                    workspace-recovery-host: durable-workspace-recovery-host
                    agenda-start: durable-agenda-start
-                   orchestrator: DurableOrchestratorExports))
-  features: (.o))
+                   work: DurableWorkExports))
+  features: '())

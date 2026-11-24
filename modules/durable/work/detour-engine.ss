@@ -2,30 +2,21 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Scoped Detour Prototypes, Fail-Closed CLOS 4-Exit Reconciler
-;;; (.defmethod-bundle), Monotonic OrgOverlay(g) Lens, and Zero-Token
-;;; Org-Elements Mainline Re-Anchoring Engine (Slice 49).
+;;; Pure Scoped Detour 4-Exit Fail-Closed CLOS Reconciler (.defmethod-bundle),
+;;; Monotonic Overlay Lens, and Pure Mainline Re-Anchoring over WorkSnapshot.
+;;; INVARIANT: ZERO orgize imports, ZERO ai-agentic-context imports.
 
 (import (only-in :clan/poo/object .def .o .ref)
         (only-in :clan/poo/mop .defgeneric .defmethod .defmethod-bundle
                  clos-call clos-compose-method-bundles
                  clos-generic-function clos-generic-protocol)
-        (only-in :std/list/list filter delete-duplicates/hash)
-        (only-in :orgize/languages/org/modules/org-elements/values
-                 org-element-graph-records)
-        (only-in :orgize/languages/org/modules/org-elements/query
-                 make-org-element-query-context org-element-property)
-        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface
-                 org-source-element-graph)
+        (only-in :std/list/list delete-duplicates/hash)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
                  funflow-envelope-meet)
         "contracts.ss"
-        "ascent-planner.ss")
+        "entities.ss")
 
-(export DetourNode.
-        BlockerDetourNode.
-        SideQuestDetourNode.
-        DetourExitState.
+(export DetourExitState.
         CompletedExit.
         ParkedExit.
         CancelledExit.
@@ -37,21 +28,8 @@
         DetourExitMethods
         reconcile-detour-exit
         durable-reconcile-detour-exit
-        task-apply-org-overlay
-        task-reanchor-mainline)
-
-(.def (DetourNode. @ SubTaskNode.)
-  role: 'detour
-  detour-kind: 'side-quest
-  return-anchor: #f
-  detour-depth: 1
-  max-detour-depth: 2)
-
-(.def (BlockerDetourNode. @ DetourNode.)
-  detour-kind: 'blocker)
-
-(.def (SideQuestDetourNode. @ DetourNode.)
-  detour-kind: 'side-quest)
+        work-apply-overlay
+        work-reanchor-mainline)
 
 (.def DetourExitState.
   exit-kind: 'abstract-exit)
@@ -189,11 +167,11 @@
 (def (durable-reconcile-detour-exit detour exit-state anchor)
   (clos-call detour-exit-dispatcher detour exit-state anchor))
 
-(def (task-apply-org-overlay task overlay)
+(def (work-apply-overlay task overlay)
   (let* ((parent-env (opt-ref task 'restriction-envelope #f))
          (overlay-env (opt-ref overlay 'restriction-envelope #f))
          (next-env (funflow-envelope-meet parent-env overlay-env))
-         (parent-policy (opt-ref task 'policy DurableTaskPolicy.))
+         (parent-policy (opt-ref task 'policy DurableWorkPolicy.))
          (next-policy
           (.o (:: @ parent-policy)
               bind-these: #f
@@ -206,70 +184,27 @@
         restriction-envelope: next-env
         overlay-epoch: (+ 1 (opt-ref task 'overlay-epoch 0)))))
 
-(def (task-reanchor-mainline task org-source-text
+(def (work-reanchor-mainline task snapshot
                              mainline-core: (mainline-core '())
                              max-detour-depth: (max-detour-depth 2))
-  (let* ((graph (org-source-element-graph org-source-text))
-         (qctx (make-org-element-query-context graph))
-         (records (org-element-graph-records graph))
-         (headlines (list-sort (lambda (a b) (< (.ref a 'start) (.ref b 'start)))
-                               (filter (lambda (r) (equal? (.ref r 'kind) "headline")) records)))
-         (mainline-done 0)
-         (mainline-total 0)
-         (open-blockers '())
-         (open-side-quests '())
-         (completed-detours '())
-         (unsatisfied-invariants '())
-         (max-observed-depth 0)
-         (return-anchor #f))
-    (for-each
-     (lambda (h)
-       (let* ((hid (or (org-element-property qctx h "property:ID") ""))
-              (role (or (org-element-property qctx h "property:ROLE") "mainline"))
-              (dkind (or (org-element-property qctx h "property:DETOUR_KIND") "side-quest"))
-              (anchor (org-element-property qctx h "property:RETURN_ANCHOR"))
-              (depth (parse-positive-int (org-element-property qctx h "property:DETOUR_DEPTH")
-                                         (if (equal? role "detour") 1 0)))
-              (inv (org-element-property qctx h "property:INVARIANT"))
-              (todo (or (org-element-property qctx h "todo-keyword") ""))
-              (done? (or (equal? todo "DONE") (equal? todo "CANCELLED"))))
-         (when (> depth max-observed-depth)
-           (set! max-observed-depth depth))
-         (when (and inv (not done?))
-           (set! unsatisfied-invariants (cons (if (> (string-length hid) 0) hid inv) unsatisfied-invariants)))
-         (cond
-          ((equal? role "detour")
-           (when (and anchor (not return-anchor))
-             (set! return-anchor anchor))
-           (cond
-            (done?
-             (set! completed-detours (cons hid completed-detours)))
-            ((equal? dkind "blocker")
-             (set! open-blockers (cons hid open-blockers)))
-            (else
-             (set! open-side-quests (cons hid open-side-quests)))))
-          ((> (or (org-element-property qctx h "level") 1) 1)
-           (set! mainline-total (+ mainline-total 1))
-           (when done?
-             (set! mainline-done (+ mainline-done 1)))))))
-     headlines)
-    (let* ((open-b (reverse open-blockers))
-           (open-sq (reverse open-side-quests))
-           (comp-d (reverse completed-detours))
-           (unsat-inv (reverse unsatisfied-invariants))
-           (depth-exceeded? (> max-observed-depth max-detour-depth))
-           (archive-blocked? (or (pair? open-b) (pair? unsat-inv))))
-      (.o bind-these: #f
-          kind: 'agentic-ai-lab.durable.mainline-alignment.v1
-          task-id: (opt-ref task 'task-id "task")
-          mainline-done: mainline-done
-          mainline-total: mainline-total
-          open-blocker-detours: open-b
-          open-side-quests: open-sq
-          completed-detours: comp-d
-          unsatisfied-invariants: unsat-inv
-          max-detour-depth-observed: max-observed-depth
-          depth-guard-triggered?: depth-exceeded?
-          return-anchor-id: return-anchor
-          counterexample-core: mainline-core
-          auto-archive-blocked?: archive-blocked?))))
+  (let* ((open-b (.ref snapshot 'open-blocker-detours))
+         (open-sq (.ref snapshot 'open-side-quests))
+         (comp-d (.ref snapshot 'completed-detours))
+         (unsat-inv (.ref snapshot 'unsatisfied-invariants))
+         (max-obs (.ref snapshot 'max-detour-depth-observed))
+         (depth-exceeded? (> max-obs max-detour-depth))
+         (archive-blocked? (or (pair? open-b) (pair? unsat-inv))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.durable.mainline-alignment.v1
+        task-id: (opt-ref task 'task-id (.ref snapshot 'task-id))
+        mainline-done: (.ref snapshot 'mainline-done)
+        mainline-total: (.ref snapshot 'mainline-total)
+        open-blocker-detours: open-b
+        open-side-quests: open-sq
+        completed-detours: comp-d
+        unsatisfied-invariants: unsat-inv
+        max-detour-depth-observed: max-obs
+        depth-guard-triggered?: depth-exceeded?
+        return-anchor-id: (.ref snapshot 'return-anchor-id)
+        counterexample-core: mainline-core
+        auto-archive-blocked?: archive-blocked?)))

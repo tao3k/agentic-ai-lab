@@ -11,4 +11,4 @@
   core:
   (.o scope-contract: ContextScopeContract
       exports: (.o (:: @ ContextOperations) config: Config profile: ContextCoreProfile))
-  features: '(memory worktree work worktrunk))
+  features: '(memory worktree work worktrunk durable))

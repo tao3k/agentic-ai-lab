@@ -26,7 +26,10 @@
                  org-image-link? org-link-kind org-link-protocol
                  org-link-attachment-path org-link-target-key)
         (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface
-                 org-source-element-graph org-source-element-field)
+                 org-source-element-graph org-source-element-field
+                 org-apply-edit org-extract-subtree
+                 org-edit-set-todo org-edit-set-checkbox
+                 org-edit-upsert-babel-results)
         (only-in :tao3k/agentic-ai-lab/modules/query/objects
                  AgenticAILabQuery. AgenticAILabQueryElementSpace.
                  AgenticAILabSchemeGqlQueryLanguage. AgenticAILabGqlQueryProgram.
@@ -1057,238 +1060,32 @@
       (.o kind gql slices action-authorized?))))
 
 ;;; ---------------------------------------------------------------------------
-;;; Pillar 4: Pure Parser-Verified Org Structural Updaters
+;;; Pillar 4: Thin Domain Wrappers Delegating to Parser-Owned `orgize/org-edit`
 ;;; ---------------------------------------------------------------------------
-
-(def (format-babel-results block-name body-text thinking-text)
-  (let ((clean-body (string-trim body-text))
-        (clean-thinking (and thinking-text (string-trim thinking-text))))
-    (string-append
-     "#+RESULTS: " block-name "\n"
-     ":RESULTS:\n"
-     (if (and clean-thinking (not (string-empty? clean-thinking)))
-       (string-append "#+BEGIN_THINKING\n" clean-thinking "\n#+END_THINKING\n")
-       "")
-     clean-body
-     (if (string-empty? clean-body) "" "\n")
-     ":END:\n")))
 
 (def (agentic-ai-lab-ai-agentic-context-babel-upsert-results
       source-text block-name body-text (thinking-text #f))
-  (unless (and (string? source-text) (string? block-name)
-               (not (string-empty? (string-trim block-name)))
-               (string? body-text)
-               (or (not thinking-text) (string? thinking-text)))
-    (error "Invalid Org-Babel results upsert inputs"))
-  (let* ((target-name (string-trim block-name))
-         (bytes (string->utf8 source-text))
-         (total (u8vector-length bytes))
-         (view (org-source-element-graph source-text))
-         (records (list-sort (lambda (a b) (< (.ref a 'start) (.ref b 'start)))
-                             (org-element-graph-records view)))
-         (keywords (filter (lambda (r) (equal? (.ref r 'kind) "keyword")) records))
-         (drawers (filter (lambda (r) (equal? (.ref r 'kind) "drawer")) records))
-         (src-blocks (filter (lambda (r) (equal? (.ref r 'kind) "src-block")) records))
-         (matched-block
-          (find (lambda (sb)
-                  (find (lambda (kw)
-                          (and (equal? (.ref kw 'parent) (.ref sb 'parent))
-                               (string-ci=? (or (org-source-element-field kw "key") "") "NAME")
-                               (equal? (string-trim (or (org-source-element-field kw "value") ""))
-                                       target-name)
-                               (<= (.ref kw 'end) (.ref sb 'start))
-                               (string-empty? (string-trim (utf8-slice bytes (.ref kw 'end) (.ref sb 'start))))))
-                        keywords))
-                src-blocks)))
-    (unless matched-block
-      (error "Named Org-Babel source block not found" target-name))
-    (let* ((res-kw
-            (find (lambda (kw)
-                    (and (equal? (.ref kw 'parent) (.ref matched-block 'parent))
-                         (string-ci=? (or (org-source-element-field kw "key") "") "RESULTS")
-                         (equal? (string-trim (or (org-source-element-field kw "value") ""))
-                                 target-name)
-                         (>= (.ref kw 'start) (.ref matched-block 'end))))
-                  keywords))
-           (res-drawer
-            (and res-kw
-                 (find (lambda (dr)
-                         (and (equal? (.ref dr 'parent) (.ref matched-block 'parent))
-                              (string-ci=? (or (org-source-element-field dr "name") "") "RESULTS")
-                              (>= (.ref dr 'start) (.ref res-kw 'end))
-                              (string-empty? (string-trim (utf8-slice bytes (.ref res-kw 'end) (.ref dr 'start))))))
-                       drawers)))
-           (formatted (format-babel-results target-name body-text thinking-text))
-           (updated
-            (if (and res-kw res-drawer)
-              (string-append (utf8-slice bytes 0 (.ref res-kw 'start))
-                             formatted
-                             (utf8-slice bytes (.ref res-drawer 'end) total))
-              (let* ((insert-pos (.ref matched-block 'end))
-                     (prefix (utf8-slice bytes 0 insert-pos))
-                     (suffix (utf8-slice bytes insert-pos total))
-                     (sep (if (and (> (string-length prefix) 0)
-                                   (char=? (string-ref prefix (- (string-length prefix) 1)) #\newline))
-                            "\n" "\n\n")))
-                (string-append prefix sep formatted suffix)))))
-      (org-source-element-graph updated)
-      updated)))
+  (org-apply-edit
+   source-text
+   (org-edit-upsert-babel-results block-name body-text thinking-text: thinking-text)))
 
 (def (agentic-ai-lab-ai-agentic-context-checklist-set
       source-text headline-property-id item-index checked?)
-  (unless (and (string? source-text) (string? headline-property-id)
-               (not (string-empty? headline-property-id))
-               (exact-integer? item-index) (>= item-index 0)
-               (boolean? checked?))
+  (unless (and (string? headline-property-id)
+               (not (string-empty? headline-property-id)))
     (error "Invalid Org checklist update inputs"))
-  (let* ((bytes (string->utf8 source-text))
-         (total (u8vector-length bytes))
-         (view (org-source-element-graph source-text))
-         (ctx (make-org-element-query-context view))
-         (records (list-sort (lambda (a b) (< (.ref a 'start) (.ref b 'start)))
-                             (org-element-graph-records view)))
-         (by-id (make-hash-table)))
-    (for-each (lambda (r) (hash-put! by-id (.ref r 'id) r)) records)
-    (let (target-h
-          (find (lambda (r)
-                  (and (member (.ref r 'kind) '("headline" "inlinetask"))
-                       (equal? (org-element-property ctx r "property:ID")
-                               headline-property-id)))
-                records))
-      (unless target-h
-        (error "Headline ID not found for checklist update" headline-property-id))
-      (let* ((checkbox-items
-              (filter (lambda (r)
-                        (and (equal? (.ref r 'kind) "item")
-                             (org-source-element-field r "checkbox")
-                             (let (eh (enclosing-headline-record r by-id))
-                               (and eh (= (.ref eh 'id) (.ref target-h 'id))))))
-                      records)))
-        (unless (< item-index (length checkbox-items))
-          (error "Checklist item index out of range" item-index (length checkbox-items)))
-        (let* ((item-rec (list-ref checkbox-items item-index))
-               (item-slice (utf8-slice bytes (.ref item-rec 'start) (.ref item-rec 'end)))
-               (new-mark (if checked? "[X]" "[ ]"))
-               (patched-item
-                (let ((len (string-length item-slice)))
-                  (let loop ((i 0))
-                    (if (> (+ i 3) len)
-                      (error "Malformed checkbox token in item" item-slice)
-                      (if (and (char=? (string-ref item-slice i) #\[)
-                               (char=? (string-ref item-slice (+ i 2)) #\]))
-                        (string-append (substring item-slice 0 i)
-                                       new-mark
-                                       (substring item-slice (+ i 3) len))
-                        (loop (+ i 1)))))))
-               (done-count
-                (let loop ((its checkbox-items) (idx 0) (acc 0))
-                  (if (null? its) acc
-                    (let-values (((_cb _raw st)
-                                  (normalize-checkbox (org-source-element-field (car its) "checkbox"))))
-                      (let (done? (if (= idx item-index) checked? (equal? st "checked")))
-                        (loop (cdr its) (+ idx 1) (if done? (+ acc 1) acc)))))))
-               (total-count (length checkbox-items))
-               (cookie
-                (find (lambda (r)
-                        (and (equal? (.ref r 'kind) "statistics-cookie")
-                             (equal? (.ref r 'parent) (.ref target-h 'id))))
-                      records))
-               (step1
-                (string-append (utf8-slice bytes 0 (.ref item-rec 'start))
-                               patched-item
-                               (utf8-slice bytes (.ref item-rec 'end) total)))
-               (updated
-                (if (not cookie)
-                  step1
-                  (let* ((cval (or (org-source-element-field cookie "value") ""))
-                         (pct? (string-contains cval "%"))
-                         (new-cookie
-                          (if pct?
-                            (string-append "[" (number->string (quotient (* done-count 100) total-count)) "%]")
-                            (string-append "[" (number->string done-count) "/" (number->string total-count) "]")))
-                         (step1-bytes (string->utf8 step1)))
-                    (string-append (utf8-slice step1-bytes 0 (.ref cookie 'start))
-                                   new-cookie
-                                   (utf8-slice step1-bytes (.ref cookie 'end)
-                                               (u8vector-length step1-bytes)))))))
-          (org-source-element-graph updated)
-          updated)))))
+  (org-apply-edit
+   source-text
+   (org-edit-set-checkbox headline-property-id item-index checked?)))
 
 (def (agentic-ai-lab-ai-agentic-context-headline-set-todo
       source-text headline-property-id new-keyword)
-  (unless (and (string? source-text) (string? headline-property-id)
-               (not (string-empty? headline-property-id))
-               (string? new-keyword) (not (string-empty? (string-trim new-keyword))))
+  (unless (and (string? headline-property-id)
+               (not (string-empty? headline-property-id)))
     (error "Invalid headline TODO state update inputs"))
-  (let* ((kw (string-trim new-keyword))
-         (bytes (string->utf8 source-text))
-         (total (u8vector-length bytes))
-         (view (org-source-element-graph source-text))
-         (ctx (make-org-element-query-context view))
-         (records (org-element-graph-records view))
-         (target-h
-          (find (lambda (r)
-                  (and (member (.ref r 'kind) '("headline" "inlinetask"))
-                       (equal? (org-element-property ctx r "property:ID")
-                               headline-property-id)))
-                records)))
-    (unless target-h
-      (error "Headline ID not found for TODO transition" headline-property-id))
-    (let* ((h-slice (utf8-slice bytes (.ref target-h 'start) (.ref target-h 'end)))
-           (nl (or (string-index h-slice #\newline) (string-length h-slice)))
-           (first-line (substring h-slice 0 nl))
-           (rest-slice (substring h-slice nl (string-length h-slice)))
-           (markers (or (org-element-property ctx target-h "markers") "*"))
-           (stars (make-string (count-stars markers) #\*))
-           (old-kw (or (org-element-property ctx target-h "todo-keyword") ""))
-           (after-stars (string-trim (substring first-line (string-length stars) (string-length first-line))))
-           (after-old-kw
-            (if (and (not (string-empty? old-kw)) (string-prefix? old-kw after-stars))
-              (string-trim (substring after-stars (string-length old-kw) (string-length after-stars)))
-              after-stars))
-           (new-first-line (string-append stars " " kw " " after-old-kw))
-           (updated
-            (string-append (utf8-slice bytes 0 (.ref target-h 'start))
-                           new-first-line rest-slice
-                           (utf8-slice bytes (.ref target-h 'end) total))))
-      (org-source-element-graph updated)
-      updated)))
-
-(def (inject-origin-properties subtree-text origin-module origin-source origin-id origin-gen)
-  (let* ((props (agentic-ai-lab-ai-agentic-context-org-properties subtree-text))
-         (sec-props (filter (lambda (p)
-                              (and (eq? (.ref p 'container-kind) 'OrgSection)
-                                   (= (.ref p 'container-start) 0)))
-                            props)))
-    (unless (pair? sec-props)
-      (error "Promoted subtree requires a leading OrgSection property drawer"))
-    (let* ((drawer-end (.ref (car sec-props) 'drawer-end))
-           (bytes (string->utf8 subtree-text))
-           (total (u8vector-length bytes))
-           (drawer-slice (utf8-slice bytes 0 drawer-end))
-           (end-pos (let loop ((i (- (string-length drawer-slice) 1)))
-                      (cond
-                       ((< i 0) (error "Malformed property drawer in promoted subtree"))
-                       ((and (<= (+ i 5) (string-length drawer-slice))
-                             (string-ci=? (substring drawer-slice i (+ i 5)) ":END:"))
-                        i)
-                       (else (loop (- i 1))))))
-           (has-key? (lambda (k)
-                       (find (cut agentic-ai-lab-ai-agentic-context-org-property-key? <> k) sec-props)))
-           (extra
-            (string-append
-             (if (has-key? "CONTEXT_ORIGIN_MODULE") ""
-               (string-append ":CONTEXT_ORIGIN_MODULE: " origin-module "\n"))
-             (if (has-key? "CONTEXT_ORIGIN_SOURCE") ""
-               (string-append ":CONTEXT_ORIGIN_SOURCE: " origin-source "\n"))
-             (if (has-key? "CONTEXT_ORIGIN_ID") ""
-               (string-append ":CONTEXT_ORIGIN_ID: " origin-id "\n"))
-             (if (has-key? "CONTEXT_ORIGIN_GENERATION") ""
-               (string-append ":CONTEXT_ORIGIN_GENERATION: " (number->string origin-gen) "\n")))))
-      (string-append (substring drawer-slice 0 end-pos)
-                     extra
-                     (substring drawer-slice end-pos (string-length drawer-slice))
-                     (utf8-slice bytes drawer-end total)))))
+  (org-apply-edit
+   source-text
+   (org-edit-set-todo headline-property-id new-keyword)))
 
 (def (agentic-ai-lab-ai-agentic-context-fission-subtree
       scratch-cut target-org-text target-property-id
@@ -1318,29 +1115,26 @@
       (when streaming-block
         (error "Refusing mid-stream Org subtree fission: unevaluated llm block"
                (.ref streaming-block 'blockName))))
-    (let* ((scratch-text (.ref scratch-cut 'source))
-           (sbytes (string->utf8 scratch-text))
-           (stotal (u8vector-length sbytes))
-           (raw-subtree (utf8-slice sbytes (.ref target-h 'byteStart) (.ref target-h 'byteEnd)))
-           (promotedSubtree
-            (inject-origin-properties
-             raw-subtree origin-module
-             (.ref scratch-cut 'identity)
-             target-property-id
-             (.ref scratch-cut 'generation)))
-           (scratchOrg
-            (string-append (utf8-slice sbytes 0 (.ref target-h 'byteStart))
-                           (utf8-slice sbytes (.ref target-h 'byteEnd) stotal)))
-           (sep (if (or (string-empty? target-org-text)
-                        (char=? (string-ref target-org-text (- (string-length target-org-text) 1)) #\newline))
-                  "\n" "\n\n"))
-           (targetOrg (string-append target-org-text sep promotedSubtree))
-           (kind 'agentic-ai-lab.ai-agentic-context.org-fission-result.v1)
-           (promotedPropertyId (string-copy target-property-id))
-           (originSource (string-copy (.ref scratch-cut 'identity)))
-           (originGeneration (.ref scratch-cut 'generation))
-           (action-authorized? #f))
-      (org-source-element-graph scratchOrg)
-      (org-source-element-graph targetOrg)
-      (.o kind promotedPropertyId originSource originGeneration
-          scratchOrg targetOrg promotedSubtree action-authorized?))))
+    (let-values
+        (((scratchOrg promotedSubtree)
+          (org-extract-subtree
+           (.ref scratch-cut 'source)
+           target-property-id
+           extra-properties: (list (cons "CONTEXT_ORIGIN_MODULE" origin-module)
+                                   (cons "CONTEXT_ORIGIN_SOURCE" (.ref scratch-cut 'identity))
+                                   (cons "CONTEXT_ORIGIN_ID" target-property-id)
+                                   (cons "CONTEXT_ORIGIN_GENERATION"
+                                         (number->string (.ref scratch-cut 'generation))))
+           preserve-existing?: #t)))
+      (let* ((sep (if (or (string-empty? target-org-text)
+                          (char=? (string-ref target-org-text (- (string-length target-org-text) 1)) #\newline))
+                    "\n" "\n\n"))
+             (targetOrg (string-append target-org-text sep promotedSubtree))
+             (kind 'agentic-ai-lab.ai-agentic-context.org-fission-result.v1)
+             (promotedPropertyId (string-copy target-property-id))
+             (originSource (string-copy (.ref scratch-cut 'identity)))
+             (originGeneration (.ref scratch-cut 'generation))
+             (action-authorized? #f))
+        (org-source-element-graph targetOrg)
+        (.o kind promotedPropertyId originSource originGeneration
+            scratchOrg targetOrg promotedSubtree action-authorized?)))))

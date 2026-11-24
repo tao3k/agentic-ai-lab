@@ -2,61 +2,52 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Declarative POO Object Contracts (.new/checked) and shared pure utilities
-;;; for the modularized Durable Orchestrator subsystem (RFC 40.183 + Slice 49).
+;;; Pure, domain-agnostic POO ObjectContracts (.new/checked), MOP .defgeneric
+;;; protocols, and fenced WAL helpers for the Durable Work Engine Core.
+;;; INVARIANT: ZERO orgize imports, ZERO ai-agentic-context imports.
 
 (import (only-in :clan/poo/object .def .o .cc .ref .slot? object?)
         (only-in :clan/poo/mop .defgeneric .new/checked)
-        (only-in :clan/poo/type Record String Symbol Bool OrFalse Any)
+        (only-in :clan/poo/type Record String Symbol Bool OrFalse Any List)
         (only-in :clan/poo/number Integer)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :std/list/list filter)
-        (only-in :std/string/misc string-trim string-split)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-active? journal-receive! journal-begin!
                  journal-put! journal-commit! journal-abort!))
 
-(export DurableTaskPolicyContract
-        SharedContextClaimContract
+(export DurableWorkPolicyContract
+        WorkClaimContract
+        WorkSnapshotContract
         DetourReconcileContract
-        DurableTaskPolicy.
-        make-checked-task-policy
-        make-checked-shared-claim
-        node-effective-rules
-        task-artifact-path
-        task-funflow-dag
-        task-orchestration-plan
-        task-archive-transition
+        DurableWorkPolicy.
+        make-checked-work-policy
+        make-checked-work-claim
+        make-checked-work-snapshot
+        work-effective-rules
+        work-artifact-path
+        work-funflow-dag
+        work-orchestration-plan
         project-workbench-tabs
         opt-ref
         canonical-sha256
-        utf8-slice
-        split-whitespace-tokens
-        string-find-substr
-        string-join-with
-        string-trim-right
-        parse-positive-int
         journal-put-fenced!)
 
 ;;; ---------------------------------------------------------------------------
 ;;; 1. MOP .defgeneric Protocol Surface (Single Receiver Axis)
 ;;; ---------------------------------------------------------------------------
 
-(.defgeneric (node-effective-rules node org-source-text)
+(.defgeneric (work-effective-rules node rule-overrides)
   slot: .effective-rules)
 
-(.defgeneric (task-artifact-path task)
+(.defgeneric (work-artifact-path task)
   slot: .artifact-path)
 
-(.defgeneric (task-funflow-dag task org-source-text)
+(.defgeneric (work-funflow-dag task snapshot)
   slot: .funflow-dag)
 
-(.defgeneric (task-orchestration-plan task org-source-text journal-state)
+(.defgeneric (work-orchestration-plan task snapshot journal-state)
   slot: .orchestration-plan)
-
-(.defgeneric (task-archive-transition task org-source-text index-source-text timestamp)
-  slot: .archive-transition)
 
 (.defgeneric (project-workbench-tabs owner task-records journal-state peek-set focused-task-id)
   slot: .project-workbench-tabs)
@@ -65,7 +56,7 @@
 ;;; 2. Declarative POO Object Contracts & Checked Constructors (.new/checked)
 ;;; ---------------------------------------------------------------------------
 
-(def DurableTaskPolicyContract
+(def DurableWorkPolicyContract
   (.cc (Record kind: [Symbol]
                split-line-watermark: [Integer]
                default-focus-depth: [Integer]
@@ -75,10 +66,12 @@
                focused-tab-archive: [Symbol]
                scratch-promotion: [Symbol]
                reopen-mode: [Symbol]
-               max-concurrency: [Integer])
-       identity: 'durable/task-policy))
+               max-concurrency: [Integer]
+               retry-budget: [Integer]
+               max-detour-depth: [Integer])
+       identity: 'durable/work-policy))
 
-(def SharedContextClaimContract
+(def WorkClaimContract
   (.cc (Record kind: [Symbol]
                node-id: [String]
                owner-actor: [(OrFalse String)]
@@ -89,7 +82,29 @@
                worktree: [String]
                extends-id: [(OrFalse String)]
                span: [Any])
-       identity: 'durable/shared-context-claim))
+       identity: 'durable/work-claim))
+
+(def WorkSnapshotContract
+  (.cc (Record kind: [Symbol]
+               task-id: [String]
+               root-id: [String]
+               root-title: [String]
+               root-status: [Symbol]
+               root-archived?: [Bool]
+               checklist-done: [Integer]
+               checklist-total: [Integer]
+               dag-nodes: [(List Any)]
+               mainline-done: [Integer]
+               mainline-total: [Integer]
+               open-blocker-detours: [(List Any)]
+               open-side-quests: [(List Any)]
+               completed-detours: [(List Any)]
+               unsatisfied-invariants: [(List Any)]
+               max-detour-depth-observed: [Integer]
+               return-anchor-id: [(OrFalse String)]
+               claims: [(List Any)]
+               rule-overrides: [Any])
+       identity: 'durable/work-snapshot))
 
 (def DetourReconcileContract
   (.cc (Record kind: [Symbol]
@@ -98,8 +113,8 @@
                reason: [Symbol])
        identity: 'durable/detour-reconcile))
 
-(.def DurableTaskPolicy.
-  kind: 'agentic-ai-lab.durable.task-policy.v1
+(.def DurableWorkPolicy.
+  kind: 'agentic-ai-lab.durable.work-policy.v1
   split-line-watermark: 800
   default-focus-depth: 2
   require-sod-reviewer: #f
@@ -108,9 +123,11 @@
   focused-tab-archive: 'on-blur
   scratch-promotion: 'on-plan
   reopen-mode: 'peek-until-edit
-  max-concurrency: 4)
+  max-concurrency: 4
+  retry-budget: 2
+  max-detour-depth: 2)
 
-(def (make-checked-task-policy
+(def (make-checked-work-policy
       split-line-watermark: (wm 800)
       default-focus-depth: (fd 2)
       require-sod-reviewer: (sod #f)
@@ -119,9 +136,11 @@
       focused-tab-archive: (fta 'on-blur)
       scratch-promotion: (sp 'on-plan)
       reopen-mode: (rm 'peek-until-edit)
-      max-concurrency: (mc 4))
-  (.new/checked DurableTaskPolicyContract
-    kind: 'agentic-ai-lab.durable.task-policy.v1
+      max-concurrency: (mc 4)
+      retry-budget: (rb 2)
+      max-detour-depth: (md 2))
+  (.new/checked DurableWorkPolicyContract
+    kind: 'agentic-ai-lab.durable.work-policy.v1
     split-line-watermark: wm
     default-focus-depth: fd
     require-sod-reviewer: sod
@@ -130,11 +149,13 @@
     focused-tab-archive: fta
     scratch-promotion: sp
     reopen-mode: rm
-    max-concurrency: mc))
+    max-concurrency: mc
+    retry-budget: rb
+    max-detour-depth: md))
 
-(def (make-checked-shared-claim nid owner cstate epoch hb ttl wt ext sp)
-  (.new/checked SharedContextClaimContract
-    kind: 'agentic-ai-lab.durable.shared-context-claim.v1
+(def (make-checked-work-claim nid owner cstate epoch hb ttl wt ext sp)
+  (.new/checked WorkClaimContract
+    kind: 'agentic-ai-lab.durable.work-claim.v1
     node-id: nid
     owner-actor: owner
     claim-state: cstate
@@ -145,8 +166,48 @@
     extends-id: ext
     span: sp))
 
+(def (make-checked-work-snapshot
+      task-id: (tid "task-default")
+      root-id: (rid "root")
+      root-title: (rtitle "Task")
+      root-status: (rstatus 'todo)
+      root-archived?: (rarch #f)
+      checklist-done: (cdone 0)
+      checklist-total: (ctotal 0)
+      dag-nodes: (dnodes '())
+      mainline-done: (mdone 0)
+      mainline-total: (mtotal 0)
+      open-blocker-detours: (oblockers '())
+      open-side-quests: (osq '())
+      completed-detours: (cdetours '())
+      unsatisfied-invariants: (uinv '())
+      max-detour-depth-observed: (mdepth 0)
+      return-anchor-id: (ranchor #f)
+      claims: (cl '())
+      rule-overrides: (rov #f))
+  (.new/checked WorkSnapshotContract
+    kind: 'agentic-ai-lab.durable.work-snapshot.v1
+    task-id: tid
+    root-id: rid
+    root-title: rtitle
+    root-status: rstatus
+    root-archived?: rarch
+    checklist-done: cdone
+    checklist-total: ctotal
+    dag-nodes: dnodes
+    mainline-done: mdone
+    mainline-total: mtotal
+    open-blocker-detours: oblockers
+    open-side-quests: osq
+    completed-detours: cdetours
+    unsatisfied-invariants: uinv
+    max-detour-depth-observed: mdepth
+    return-anchor-id: ranchor
+    claims: cl
+    rule-overrides: rov))
+
 ;;; ---------------------------------------------------------------------------
-;;; 3. Pure Shared Utilities & Fenced Journal Helper
+;;; 3. Pure Utilities & Fenced Journal Helper
 ;;; ---------------------------------------------------------------------------
 
 (def (opt-ref obj key default)
@@ -161,44 +222,6 @@
     (sha256
      (string->utf8
       (call-with-output-string (lambda (port) (write payload port))))))))
-
-(def (utf8-slice bytes start end)
-  (utf8->string (subu8vector bytes start end)))
-
-(def (split-whitespace-tokens text)
-  (if (and (string? text) (> (string-length (string-trim text)) 0))
-    (filter (lambda (tok) (> (string-length tok) 0))
-            (map string-trim (string-split (string-trim text) #\space)))
-    '()))
-
-(def (string-join-with items sep)
-  (if (null? items)
-    ""
-    (let loop ((rest (cdr items)) (acc (car items)))
-      (if (null? rest)
-        acc
-        (loop (cdr rest) (string-append acc sep (car rest)))))))
-
-(def (string-find-substr str sub (start-at 0))
-  (let ((slen (string-length str))
-        (sublen (string-length sub)))
-    (if (= sublen 0)
-      start-at
-      (let loop ((i start-at))
-        (cond
-         ((> (+ i sublen) slen) #f)
-         ((string=? (substring str i (+ i sublen)) sub) i)
-         (else (loop (+ i 1))))))))
-
-(def (string-trim-right s)
-  (let loop ((i (string-length s)))
-    (if (and (> i 0) (char-whitespace? (string-ref s (- i 1))))
-      (loop (- i 1))
-      (substring s 0 i))))
-
-(def (parse-positive-int s default)
-  (let ((n (and (string? s) (string->number (string-trim s)))))
-    (if (and (exact-integer? n) (>= n 0)) n default)))
 
 (def (journal-put-fenced! journal tx-id key value)
   (if (journal-active? journal)

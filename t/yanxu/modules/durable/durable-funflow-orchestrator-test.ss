@@ -36,8 +36,8 @@
                  funflow-dag-build
                  funflow-resume-plan
                  funflow-replan-epoch)
-        (only-in :tao3k/agentic-ai-lab/modules/durable/orchestrator
-                 DurableTaskPolicy.
+        (only-in :tao3k/agentic-ai-lab/modules/durable/work
+                 DurableWorkPolicy.
                  RepoNode.
                  WorktreeNode.
                  TaskNode.
@@ -51,26 +51,49 @@
                  PromotedToTaskExit.
                  MainlineStepAnchor.
                  durable-reconcile-detour-exit
-                 task-apply-org-overlay
-                 task-reanchor-mainline
-                 shared-context-perceive-claims
-                 shared-context-assert-write-owner
-                 shared-context-claim!
-                 shared-context-extend!
-                 shared-context-handover!
-                 node-effective-rules
-                 task-artifact-path
-                 task-funflow-dag
-                 task-orchestration-plan
-                 task-archive-transition
+                 work-apply-overlay
+                 work-artifact-path
                  project-workbench-tabs
-                 durable-orchestrator-record-cas!
-                 durable-orchestrator-completed-cas
-                 durable-orchestrator-commit-archive!
-                 durable-orchestrator-reopen!
-                 durable-orchestrator-recover))
+                 durable-work-record-cas!
+                 durable-work-completed-cas)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/durable/org-adapter
+                 org-work-funflow-dag
+                 org-work-reanchor-mainline
+                 org-work-archive-transition
+                 org-work-commit-archive!
+                 org-work-reopen!
+                 org-work-recover
+                 org-shared-context-perceive-claims
+                 org-shared-context-assert-write-owner
+                 org-shared-context-claim!
+                 org-shared-context-extend!
+                 org-shared-context-handover!)
+        (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/durable/objects
+                 EnableContextDurable
+                 ContextDurableFeatureContract
+                 context-durable-effective-rules
+                 context-durable-orchestration-plan))
 
 (export durable-funflow-orchestrator-test)
+
+(def node-effective-rules context-durable-effective-rules)
+(def task-artifact-path work-artifact-path)
+(def task-funflow-dag org-work-funflow-dag)
+(def task-orchestration-plan context-durable-orchestration-plan)
+(def task-archive-transition org-work-archive-transition)
+(def durable-orchestrator-record-cas! durable-work-record-cas!)
+(def durable-orchestrator-completed-cas durable-work-completed-cas)
+(def durable-orchestrator-commit-archive! org-work-commit-archive!)
+(def durable-orchestrator-reopen! org-work-reopen!)
+(def durable-orchestrator-recover org-work-recover)
+(def task-apply-org-overlay work-apply-overlay)
+(def task-reanchor-mainline org-work-reanchor-mainline)
+(def shared-context-perceive-claims org-shared-context-perceive-claims)
+(def shared-context-assert-write-owner org-shared-context-assert-write-owner)
+(def shared-context-claim! org-shared-context-claim!)
+(def shared-context-extend! org-shared-context-extend!)
+(def shared-context-handover! org-shared-context-handover!)
+(def DurableTaskPolicy. DurableWorkPolicy.)
 
 (.def (TestRepo. @ RepoNode.)
   repo-id: "marlin-agent-core"

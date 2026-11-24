@@ -15,5 +15,5 @@
          (procedure? (.ref scope 'agenda-start))
          (.slot? scope 'workspace-recovery-host)
          (procedure? (.ref scope 'workspace-recovery-host))
-         (.slot? scope 'orchestrator)
-         (object? (.ref scope 'orchestrator)))))
+         (.slot? scope 'work)
+         (object? (.ref scope 'work)))))

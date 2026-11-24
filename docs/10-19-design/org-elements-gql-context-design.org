@@ -122,20 +122,70 @@ thin declarative configuration):
      span, cleanly rebased via =funs-subtree-mediation= + =funs-delta=), or via
      explicit fenced handover incrementing =:CLAIM_LEASE_EPOCH:= (preserving
      =A='s partial edits in GitOps =custody=).
-5. **MOP =.defgeneric= Protocols & Generic =Durable= Orchestrator**:
-   - Extensible MOP generics: =node-effective-rules=, =task-artifact-path=,
-     =task-funflow-dag=, =task-orchestration-plan=, =task-archive-transition=,
-     and =project-workbench-tabs=.
-   - =modules/durable= generalizes =agenda.ss= over =durable-journal=,
-     =policy-clock=, =use-host=, and =session-host= to drive objectified
-     =OrchestratorStrategy.= execution, crash-safe replay, and atomic
-     Auto-Archive (requiring =root=DONE=, every reachable =FunFlow= DAG node
-     and blocker detour =DONE=, all mainline invariants satisfied, all
-     checklists =[X]=, zero pending finalizers, and zero in-flight journal
-     attempts before archiving, with zero TUI coupling).
+5. **Pure Durable Work Engine Core + Yuanxu Feature System (=+org= / =+durable=)**:
+   - =modules/durable= Core (=modules/durable/work.ss= + =work/{contracts,entities,scheduler,detour-engine,claims-engine}.ss=)
+     is a **100% pure, domain-agnostic Durable Work Engine** with **zero
+     =orgize= and zero =ai-agentic-context= imports**, operating over typed POO
+     =WorkSnapshot= and =ClaimTable= contracts (=.new/checked=).
+   - Org-mode projection attaches strictly via Yuanxu Feature
+     =modules/durable/features/org= (=(durable +org)=, =EnableDurableOrg=).
+   - Context integration attaches strictly via Yuanxu Feature
+     =modules/ai-agentic-context/features/durable=
+     (=(ai-agentic-context +memory +durable)=, =requires: '(durable/org)=),
+     and in Marlin via =(context-system +causal +durable)= in =scheme/init.ss=.
 
 See also [[file:10.06-poo-module-system/agentic-ai-context/43-ascent-security-branch-omission-refinement.org][Slice 43 (ASCENT branch admissibility)]],
 [[file:10.06-poo-module-system/agentic-ai-context/45-org-sexpr-gql-candidate-exchange-search.org][Slice 45 (Org S-expr + GQL + CandidateExchange)]],
 [[file:10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.org][Slice 46 (Durable Agenda & Session Governance)]],
 [[file:10.06-poo-module-system/agentic-ai-context/48-progressive-disclosure-and-two-stage-org-repair.org][Slice 48 (Progressive Disclosure & Two-Stage Repair)]], and
+* Three-Layer Parser / Orgize / Domain Engineering Boundary
+
+Downstream domain modules (=modules/durable/features/org= and
+=modules/ai-agentic-context=) MUST NOT own Org syntax parsing, ad hoc line
+splitting, or manual =:END:= drawer slicing:
+
+- *Layer 0 (=tao3k/gerbil-parser= — =graph-support/edit.ss=)*: Language-neutral
+  UTF-8 byte-span structural edit algebra (=SpanEdit=, =apply-span-edits=,
+  =apply-span-edits/verified=) rejecting overlapping or out-of-bounds spans
+  fail-closed.
+- *Layer 1 (=tao3k/orgize= — =org-elements= + =org-edit=)*:
+  - =org-elements= owns typed structural projection (=org-source-element-graph=,
+    computed headline =level=, declarative =property:*= query fields in
+    =(org-elements ...)=, and typed view helpers in =view-helpers.ss=).
+  - =org-edit= owns canonical Org syntax formatting (=emit.ss=), parser-span
+    structural rewrites (=org-edit-set-todo=, =org-edit-add-tag=,
+    =org-edit-remove-tag=, =org-edit-set-planning=, =org-edit-remove-planning=,
+    =org-edit-upsert-properties=, =org-edit-delete-properties=,
+    =org-edit-set-checkbox=, =org-edit-upsert-babel-results=,
+    =org-edit-upsert-section=, =org-edit-append-section=,
+    =org-extract-subtree=), and the hygienic =(org-edit ...)= value DSL —
+    every edit batch applied via =apply-span-edits/verified= with fail-closed
+    =org-source-element-graph= re-parse verification.
+- *Layer 2 (=tao3k/agentic-ai-lab= — =durable/+org= & =ai-agentic-context=)*:
+  Pure, thin declarative schema codecs mapping typed =org-elements= records to
+  pure =WorkSnapshot= / =ClaimTable= values and emitting declarative
+  =(org-edit ...)= operations with zero string-slicing surgery.
+
+* Feature Ownership and Two-Tier Yuanxu C4 Conditional Mixin Direction
+
+See [[file:../../core/module-system/design/165-two-tier-yuanxu-interface-c4-conditional-mixins-and-specialisations.org][Yuanxu Design 165 (Two-Tier Interface & C4 Conditional Mixin Specialisations)]]
+for the upcoming module-system refinement:
+
+- =modules/durable= is a 100% pure, domain-agnostic Durable Work Engine and
+  should own *no* Org-mode feature (=features: '()=); =(durable +org)= is an
+  ownership inversion because Org persistence belongs to Context, not Durable.
+- The thin =Org <-> Durable= bridge belongs under
+  =modules/ai-agentic-context/features/durable/= using a single native POO
+  dotted-path slot (=enabled?: durable.enabled?=) tracked by =gerbil-poo='s
+  =slot-observation= so that selecting both =(durable)= and
+  =(ai-agentic-context)= in =yuanxu!= auto-activates the bridge in Band 1
+  without redundant flags, while explicit =-durable= overrides =enabled?: #f=
+  cleanly in Band 4b.
+- Conditional *Profiles* use *zero synthetic condition DSLs and zero =case=/=if=
+  boilerplate*: modules declare a plain POO =.o= dispatch table keyed by typed
+  Interface slot paths (=profiles: (.o env.mode: (.o ci-hermetic: ...)
+  durable.detour-state: (.o blocker-active: ...))=), directly extensible
+  downstream via native POO path assignment (=profiles.env.mode.staging: ...=),
+  with CLOS =.defmethod= reserved only for multi-axis crossings.
+
 [[file:10.06-poo-module-system/agentic-ai-context/49-scoped-detour-funflow-concurrent-shared-context.org][Slice 49 (Scoped Detours, Three-State FunFlow, and Concurrent Shared-Context Ownership)]].

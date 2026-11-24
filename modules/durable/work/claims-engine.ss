@@ -2,62 +2,33 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Zero-SubAgent Concurrent Shared-Context `:ID:` Ownership Engine (Slice 49):
-;;; - Ambient L0/L1 peer claim perception (`shared-context-perceive-claims`)
-;;; - Extend-Never-Overwrite enforcement (`shared-context-assert-write-owner`,
-;;;   `shared-context-extend!`)
-;;; - Fenced WAL claims & heartbeat-expiry custody takeover
-;;;   (`shared-context-claim!`, `shared-context-handover!`)
+;;; Pure Concurrent `:ID:` Ownership & Heartbeat-Expiry Custody Takeover Engine
+;;; operating over abstract ClaimTable + fenced durable-journal (Slice 49).
+;;; INVARIANT: ZERO orgize imports, ZERO ai-agentic-context imports.
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :std/list/list filter find filter-map)
-        (only-in :orgize/languages/org/modules/org-elements/values
-                 org-element-graph-records)
-        (only-in :orgize/languages/org/modules/org-elements/query
-                 make-org-element-query-context org-element-property)
-        (only-in :tao3k/agentic-ai-lab/modules/query/semantic/orgize-source-interface
-                 org-source-element-graph)
-        "contracts.ss"
-        "org-projection.ss")
+        (only-in :std/list/list filter find)
+        "contracts.ss")
 
-(export shared-context-perceive-claims
-        shared-context-assert-write-owner
-        shared-context-claim!
-        shared-context-extend!
-        shared-context-handover!)
+(export work-find-claim
+        work-assert-write-owner
+        work-claim!
+        work-extend!
+        work-handover!)
 
 (def (claim-journal-key task-id node-id)
   (string-append "orchestrator:claim:" task-id ":" node-id))
 
-(def (shared-context-perceive-claims org-source-text)
-  (let* ((graph (org-source-element-graph org-source-text))
-         (qctx (make-org-element-query-context graph))
-         (records (org-element-graph-records graph))
-         (headlines (list-sort (lambda (a b) (< (.ref a 'start) (.ref b 'start)))
-                               (filter (lambda (r) (equal? (.ref r 'kind) "headline")) records))))
-    (filter-map
-     (lambda (h)
-       (let ((hid (org-element-property qctx h "property:ID"))
-             (owner (org-element-property qctx h "property:OWNER_ACTOR"))
-             (cstate (org-element-property qctx h "property:CLAIM_STATE"))
-             (epoch (parse-positive-int (org-element-property qctx h "property:CLAIM_LEASE_EPOCH") 0))
-             (hb (parse-positive-int (org-element-property qctx h "property:CLAIM_HEARTBEAT_AT") 0))
-             (ttl (parse-positive-int (org-element-property qctx h "property:CLAIM_TTL_SEC") 120))
-             (wt (or (org-element-property qctx h "property:CLAIM_WORKTREE") "main"))
-             (extends-id (org-element-property qctx h "property:EXTENDS_ID")))
-         (and hid
-              (or owner cstate extends-id)
-              (make-checked-shared-claim
-               hid owner (or cstate "unclaimed") epoch hb ttl wt extends-id
-               (cons (.ref h 'start) (.ref h 'end))))))
-     headlines)))
+(def (work-find-claim claims node-id)
+  (find (lambda (c) (equal? (.ref c 'node-id) node-id)) claims))
 
-(def (find-claim-in-org org-source-text node-id)
-  (find (lambda (c) (equal? (.ref c 'node-id) node-id))
-        (shared-context-perceive-claims org-source-text)))
+(def (replace-or-append-claim claims next-claim)
+  (let ((nid (.ref next-claim 'node-id)))
+    (append (filter (lambda (c) (not (equal? (.ref c 'node-id) nid))) claims)
+            (list next-claim))))
 
-(def (shared-context-assert-write-owner org-source-text node-id actor)
-  (let ((claim (find-claim-in-org org-source-text node-id)))
+(def (work-assert-write-owner claims node-id actor)
+  (let ((claim (work-find-claim claims node-id)))
     (cond
      ((or (not claim)
           (not (.ref claim 'owner-actor))
@@ -86,13 +57,12 @@
           actor: actor
           current-owner: (.ref claim 'owner-actor))))))
 
-(def (shared-context-claim! journal task-id node-id actor
-                            worktree: (worktree "main")
-                            scope-digest: (scope-digest "")
-                            now: (now 0)
-                            ttl: (ttl 120)
-                            org-source: (org-source ""))
-  (let ((check (shared-context-assert-write-owner org-source node-id actor)))
+(def (work-claim! journal task-id claims node-id actor
+                  worktree: (worktree "main")
+                  now: (now 0)
+                  ttl: (ttl 120)
+                  span: (span #f))
+  (let ((check (work-assert-write-owner claims node-id actor)))
     (if (not (.ref check 'admitted?))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.claim-result.v1
@@ -101,19 +71,14 @@
           node-id: node-id
           actor: actor
           current-owner: (.ref check 'current-owner)
-          next-org-source: org-source)
-      (let* ((existing (find-claim-in-org org-source node-id))
+          next-claims: claims)
+      (let* ((existing (work-find-claim claims node-id))
              (next-epoch (+ 1 (if existing (.ref existing 'claim-lease-epoch) 0)))
-             (next-org
-              (upsert-property-in-drawer
-               org-source node-id
-               (list (cons "OWNER_ACTOR" actor)
-                     (cons "CLAIM_STATE" "claimed-active")
-                     (cons "CLAIM_LEASE_EPOCH" (number->string next-epoch))
-                     (cons "CLAIM_HEARTBEAT_AT" (number->string now))
-                     (cons "CLAIM_TTL_SEC" (number->string ttl))
-                     (cons "CLAIM_SCOPE_DIGEST" scope-digest)
-                     (cons "CLAIM_WORKTREE" worktree))))
+             (next-claim (make-checked-work-claim
+                          node-id actor "claimed-active" next-epoch now ttl worktree
+                          (and existing (.ref existing 'extends-id))
+                          (or span (and existing (.ref existing 'span)))))
+             (next-claims (replace-or-append-claim claims next-claim))
              (receipt (.o bind-these: #f
                           kind: 'agentic-ai-lab.durable.claim-receipt.v1
                           task-id: task-id
@@ -133,40 +98,36 @@
             node-id: node-id
             actor: actor
             claim-lease-epoch: next-epoch
-            next-org-source: next-org
+            claim: next-claim
+            next-claims: next-claims
             receipt: receipt)))))
 
-(def (shared-context-extend! journal task-id parent-node-id new-node-id actor title
-                             body: (body "")
-                             role: (role "extension")
-                             now: (now 0)
-                             org-source: (org-source ""))
-  (if (equal? parent-node-id new-node-id)
+(def (work-extend! journal task-id claims parent-node-id new-node-id actor
+                   worktree: (worktree "main")
+                   role: (role "extension")
+                   now: (now 0)
+                   ttl: (ttl 120))
+  (cond
+   ((equal? parent-node-id new-node-id)
     (.o bind-these: #f
         kind: 'agentic-ai-lab.durable.extend-result.v1
         extended?: #f
         reason: 'extension-id-must-be-disjoint-from-parent
         parent-node-id: parent-node-id
         new-node-id: new-node-id
-        next-org-source: org-source)
-    (let* ((sep (if (and (> (string-length org-source) 0)
-                         (not (char=? (string-ref org-source (- (string-length org-source) 1)) #\newline)))
-                  "\n" ""))
-           (ext-block
-            (string-append
-             sep
-             "*** TODO " title "\n"
-             ":PROPERTIES:\n"
-             ":ID: " new-node-id "\n"
-             ":ROLE: " role "\n"
-             ":EXTENDS_ID: " parent-node-id "\n"
-             ":OWNER_ACTOR: " actor "\n"
-             ":CLAIM_STATE: claimed-active\n"
-             ":CLAIM_LEASE_EPOCH: 1\n"
-             ":CLAIM_HEARTBEAT_AT: " (number->string now) "\n"
-             ":END:\n"
-             (if (> (string-length body) 0) (string-append body "\n") "")))
-           (next-org (string-append org-source ext-block))
+        next-claims: claims))
+   ((work-find-claim claims new-node-id)
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.durable.extend-result.v1
+        extended?: #f
+        reason: 'extension-id-already-exists
+        parent-node-id: parent-node-id
+        new-node-id: new-node-id
+        next-claims: claims))
+   (else
+    (let* ((ext-claim (make-checked-work-claim
+                       new-node-id actor "claimed-active" 1 now ttl worktree parent-node-id #f))
+           (next-claims (append claims (list ext-claim)))
            (receipt (.o bind-these: #f
                         kind: 'agentic-ai-lab.durable.extend-receipt.v1
                         task-id: task-id
@@ -185,22 +146,22 @@
           parent-node-id: parent-node-id
           new-node-id: new-node-id
           actor: actor
-          next-org-source: next-org
-          receipt: receipt))))
+          claim: ext-claim
+          next-claims: next-claims
+          receipt: receipt)))))
 
-(def (shared-context-handover! journal task-id node-id next-actor
-                               now: (now 0)
-                               force-explicit?: (force-explicit? #f)
-                               custody-oid: (custody-oid #f)
-                               org-source: (org-source ""))
-  (let ((claim (find-claim-in-org org-source node-id)))
+(def (work-handover! journal task-id claims node-id next-actor
+                     now: (now 0)
+                     force-explicit?: (force-explicit? #f)
+                     custody-oid: (custody-oid #f))
+  (let ((claim (work-find-claim claims node-id)))
     (if (not claim)
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.handover-result.v1
           handed-over?: #f
           reason: 'node-not-claimed
           node-id: node-id
-          next-org-source: org-source)
+          next-claims: claims)
       (let* ((hb (.ref claim 'heartbeat-at))
              (ttl (.ref claim 'lease-ttl))
              (expired? (>= now (+ hb ttl)))
@@ -214,24 +175,20 @@
               node-id: node-id
               current-owner: (.ref claim 'owner-actor)
               expires-at: (+ hb ttl)
-              next-org-source: org-source))
+              next-claims: claims))
          ((not has-custody?)
           (.o bind-these: #f
               kind: 'agentic-ai-lab.durable.handover-result.v1
               handed-over?: #f
               reason: 'handover-requires-custody-snapshot
               node-id: node-id
-              next-org-source: org-source))
+              next-claims: claims))
          (else
           (let* ((next-epoch (+ 1 (.ref claim 'claim-lease-epoch)))
-                 (next-org
-                  (upsert-property-in-drawer
-                   org-source node-id
-                   (list (cons "OWNER_ACTOR" next-actor)
-                         (cons "CLAIM_STATE" "claimed-active")
-                         (cons "CLAIM_LEASE_EPOCH" (number->string next-epoch))
-                         (cons "CLAIM_HEARTBEAT_AT" (number->string now))
-                         (cons "CUSTODY_OID" custody-oid))))
+                 (next-claim (make-checked-work-claim
+                              node-id next-actor "claimed-active" next-epoch now ttl
+                              (.ref claim 'worktree) (.ref claim 'extends-id) (.ref claim 'span)))
+                 (next-claims (replace-or-append-claim claims next-claim))
                  (receipt (.o bind-these: #f
                               kind: 'agentic-ai-lab.durable.handover-receipt.v1
                               task-id: task-id
@@ -255,5 +212,6 @@
                 next-owner: next-actor
                 claim-lease-epoch: next-epoch
                 custody-oid: custody-oid
-                next-org-source: next-org
+                claim: next-claim
+                next-claims: next-claims
                 receipt: receipt))))))))
