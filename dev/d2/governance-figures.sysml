@@ -48,4 +48,8 @@ package ContextGovernanceFigures {
     view memoryQuarantineKvPrefix : InterconnectionView {
         expose MemoryQuarantineAndKvPrefixSerialization::MemoryQuarantineAndKvPrefixSystem;
     }
+
+    view funflowCasSandbox : InterconnectionView {
+        expose FunflowCasSingleflightAndExternalSandbox::FunflowCasSandboxSystem;
+    }
 }

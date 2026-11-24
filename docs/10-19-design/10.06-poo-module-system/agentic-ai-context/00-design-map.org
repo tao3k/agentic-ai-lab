@@ -631,6 +631,16 @@ poisoning gap (Quarantine-Before-Recall + independent endorsement) and the
 RadixAttention/Request-Order-Matters KV-cache context-rot gap (Two-Zone
 Frozen-Canonical-Prefix ++ Dynamic-Suffix serialization).
 
+[[file:52-funflow-cas-singleflight-and-external-sandbox-binding.org][52: FunFlow CAS Singleflight, Fail-Closed Premise Invalidation, Finalizer Closure and External Sandbox Binding]]
+and its [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.sysml][SysML]], [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.qnt][Quint]],
+and [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.lean][Lean]] artifacts formally challenge =modules/funflow/{durable-dag,store,control-plane/*}.ss=,
+surfacing and repairing five concrete logical flaws (=BUG-F1=..=BUG-F5=):
+=after-start= finalizer topo/SCC ordering, fail-closed retracted-premise
+invalidation, canonical 5-tuple CAS keys & =EffectClass=-gated reuse, disjoint
+lease unsatisfiability + =ExternalTask= Lethal-Trifecta binding, multi-agent
+=lookupOrWait= singleflight, crash-atomic temp-rename publish, and
+=AuditCapsule=-pinned CAS GC.
+
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
 [[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
@@ -640,11 +650,11 @@ Frozen-Canonical-Prefix ++ Dynamic-Suffix serialization).
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=51= both
-horizontally (=47= imports all eleven upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=52= both
+horizontally (=47= imports all twelve upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 12-namespace axiom audit + 80 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all eleven single-plane models + 8-step Apalache on
+Lake 13-namespace axiom audit + 87 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all twelve single-plane models + 8-step Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).

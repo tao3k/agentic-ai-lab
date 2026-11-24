@@ -1090,6 +1090,119 @@ const composeMemoryQuarantineKvPrefixStory: FigureComposer = context => {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Story 52: FunFlow CAS Singleflight, Premise Retraction, Pinned GC & Sandbox
+// ---------------------------------------------------------------------------
+const composeFunflowCasSandboxStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="FunFlow CAS Singleflight, Fail-Closed Premise Invalidation, AuditCapsule-Pinned GC and ExternalTask Sandbox Binding">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect width="1520" height="1120" fill="#FBF8F1"/>
+      ${txt(48, 64, 'FunFlow Formal Challenge: 5 Real Bugs Found & Repaired (Slice 52)', 30, '#1B3B4B', 800)}
+      ${txt(48, 102, 'Formal contracts challenge modules/funflow/{durable-dag,store,control-plane/*}.ss across CAS, GC, finalizers, and sandbox.', 19, '#496370', 500)}
+
+      <g data-subject-ref="${subjectId('casCompilerAndKeyGate')}">
+        <rect x="48" y="138" width="930" height="450" rx="22" fill="#FFFFFF" stroke="#2874A6" stroke-width="2.5"/>
+        ${pill(72, 160, 680, 36, '#EEF4FC', '#2874A6', '1. CANONICAL 5-TUPLE CAS KEY, PREMISE & FINALIZER CLOSURE', '#1B4F72')}
+        ${txt(72, 224, 'Repairs BUG-F1 (dropped finalizer), BUG-F2 (fail-open premise), BUG-F3 (stale/Fenced CAS):', 18, '#1B3B4B', 700)}
+
+        <rect x="72" y="250" width="280" height="310" rx="16" fill="#EBF5FB" stroke="#2874A6" stroke-width="2"/>
+        ${txt(92, 286, '5-Tuple CAS Key', 18, '#1B4F72', 800)}
+        ${txt(92, 322, '1. schemaVersion', 16, '#2C3E50')}
+        ${txt(92, 352, '2. stepCodeDigest', 16, '#1B4F72', 700)}
+        ${txt(92, 382, '3. envDigest (Nix/OCI)', 16, '#1B4F72', 700)}
+        ${txt(92, 412, '4. sortedInputHashes', 16, '#2C3E50')}
+        ${txt(92, 442, '5. sortedPremises', 16, '#2C3E50')}
+        ${txt(92, 484, '✓ Code/Env drift busts', 16, '#1B5E20', 700)}
+        ${txt(92, 514, '✓ Order-invariant key', 16, '#1B5E20', 700)}
+
+        ${arrow('M352 405H392', '#2874A6')}
+
+        <rect x="392" y="250" width="268" height="310" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(412, 286, 'BUG-F2 & F3 Fixes', 18, '#922B21', 800)}
+        ${txt(412, 324, 'Premise Retracted:', 16, '#922B21', 700)}
+        ${txt(412, 354, 'live = none → DRIFT!', 16, '#922B21', 700)}
+        ${txt(412, 384, '(was fail-open #f)', 15, '#496370')}
+        ${txt(412, 428, 'FencedEffect. Skip:', 16, '#922B21', 700)}
+        ${txt(412, 458, '✗ Plain CAS hit NEVER', 16, '#2C3E50')}
+        ${txt(412, 488, '  skips FencedEffect', 16, '#2C3E50')}
+        ${txt(412, 518, '✓ Needs idem receipt', 16, '#1B5E20', 700)}
+
+        ${arrow('M660 405H700', '#2E7D32')}
+
+        <rect x="700" y="250" width="254" height="310" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(720, 286, 'BUG-F1 Finalizer', 18, '#1B5E20', 800)}
+        ${txt(720, 324, 'Include after-start in', 16, '#2C3E50')}
+        ${txt(720, 354, 'Tarjan SCC + topo', 16, '#2C3E50')}
+        ${txt(720, 384, 'scheduling order.', 16, '#2C3E50')}
+        ${txt(720, 428, 'Failed trigger ALWAYS', 16, '#1B5E20', 700)}
+        ${txt(720, 458, 'records pending', 16, '#1B5E20', 700)}
+        ${txt(720, 488, 'finalizer before', 16, '#1B5E20', 700)}
+        ${txt(720, 518, 'archive can succeed.', 16, '#1B5E20', 700)}
+      </g>
+
+      <g data-subject-ref="${subjectId('externalSandboxGate')}">
+        <rect x="1014" y="138" width="458" height="450" rx="22" fill="#FFFFFF" stroke="#8C5A2B" stroke-width="2.5"/>
+        ${pill(1038, 160, 410, 36, '#FDF1E4', '#8C5A2B', '2. EXTERNAL SANDBOX & LEASE GATE', '#784212')}
+        ${txt(1038, 224, 'Repairs BUG-F4 (lease & task.ss):', 18, '#1B3B4B', 700)}
+
+        <rect x="1038" y="250" width="410" height="142" rx="14" fill="#FFF9F2" stroke="#8C5A2B" stroke-width="2"/>
+        ${txt(1058, 284, 'Disjoint Lease Meet = Bottom', 17, '#784212', 800)}
+        ${txt(1058, 318, 'leaseStart > leaseEnd admits 0 times', 16, '#2C3E50')}
+        ${txt(1058, 350, '(Lean: disjointLeaseMeet_is_unsatisfiable)', 15, '#784212', 700)}
+
+        <rect x="1038" y="410" width="410" height="150" rx="14" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(1058, 444, 'ExternalTask Sandbox Binding', 17, '#922B21', 800)}
+        ${txt(1058, 478, '• Requires pinned Nix/OCI envDigest', 16, '#2C3E50')}
+        ${txt(1058, 508, '• Refuses unendorsed Lethal Trifecta', 16, '#922B21', 700)}
+        ${txt(1058, 538, '  (untrusted ∧ private ∧ egress)', 15, '#496370')}
+      </g>
+
+      <g data-subject-ref="${subjectId('singleflightStoreAndGc')}">
+        <rect x="48" y="620" width="1424" height="410" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 642, 740, 36, '#EFEBF9', '#5B4B8A', '3. MULTI-AGENT SINGLEFLIGHT, CRASH-ATOMIC PUBLISH & PINNED CAS GC', '#4A3B99')}
+        ${txt(72, 706, 'Repairs BUG-F5 (store.ss / durable-dag.ss concurrency, crash atomicity, and cold-replay survival):', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="734" width="424" height="264" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2"/>
+        ${txt(94, 772, 'lookupOrWait Singleflight', 19, '#4A3B99', 800)}
+        ${txt(94, 810, 'Agent A acquires key lock (active = 1)', 16, '#2C3E50')}
+        ${txt(94, 842, 'Agent B arrives → waits (no double-run)', 16, '#2C3E50')}
+        ${txt(94, 882, 'If Agent A crashes before rename,', 16, '#4A3B99', 700)}
+        ${txt(94, 914, 'Agent B takes over cleanly.', 16, '#4A3B99', 700)}
+        ${txt(94, 954, 'Invariant: activeComputeCount <= 1', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 866H548', '#5B4B8A')}
+
+        <rect x="548" y="734" width="424" height="264" rx="16" fill="#EEF4FC" stroke="#2874A6" stroke-width="2"/>
+        ${txt(570, 772, 'Atomic Temp → Rename', 19, '#1B4F72', 800)}
+        ${txt(570, 810, '1. Stage bytes in private temp path', 16, '#2C3E50')}
+        ${txt(570, 842, '2. Crash mid-write leaves CAS clean', 16, '#2C3E50')}
+        ${txt(570, 882, '3. Atomic rename publishes entry +', 16, '#1B4F72', 700)}
+        ${txt(570, 914, '   records livePremiseGen atomically', 16, '#1B4F72', 700)}
+        ${txt(570, 954, 'Invariant: corruptCasVisible = false', 16, '#1B5E20', 800)}
+
+        ${arrow('M972 866H1024', '#2E7D32')}
+
+        <rect x="1024" y="734" width="424" height="264" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 772, 'AuditCapsule-Pinned GC', 19, '#1B5E20', 800)}
+        ${txt(1046, 810, 'Sealed cut=1 AuditCapsule pins its', 16, '#2C3E50')}
+        ${txt(1046, 842, 'forensic CAS artifacts (pinned = true).', 16, '#2C3E50')}
+        ${txt(1046, 882, 'GC sweeps only unpinned stale entries;', 16, '#1B5E20', 700)}
+        ${txt(1046, 914, 'cold forensic replay always survives!', 16, '#1B5E20', 700)}
+        ${txt(1046, 954, 'Lean + TLC verified (queue = 0)', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 52 Closure: Formal challenge surfaced 5 real FunFlow bugs (BUG-F1..F5) and proved the repaired contract in Lean & TLC.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -1176,6 +1289,13 @@ const stories: readonly StorySpec[] = [
     title: 'Memory Poisoning Quarantine and Two-Zone KV-Prefix-Stable Serialization',
     composer: composeMemoryQuarantineKvPrefixStory,
   },
+  {
+    slug: '52-funflow-cas-sandbox',
+    view: 'ContextGovernanceFigures::funflowCasSandbox',
+    modelFile: '52-funflow-cas-singleflight-and-external-sandbox-binding.sysml',
+    title: 'FunFlow CAS Singleflight, Fail-Closed Premise Invalidation, Pinned GC and External Sandbox',
+    composer: composeFunflowCasSandboxStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1200,6 +1320,7 @@ const allChainModelFiles = [
   '49-scoped-detour-funflow-concurrent-shared-context.sysml',
   '50-literature-frontier-detour-confinement-and-causal-audit.sysml',
   '51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml',
+  '52-funflow-cas-singleflight-and-external-sandbox-binding.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

@@ -44,6 +44,7 @@ SLICES = [
     (49, "49-scoped-detour-funflow-concurrent-shared-context", "ScopedDetourFunflowConcurrentContext", "ScopedDetourAndConcurrentSharedContextContract", 2, "tlc"),
     (50, "50-literature-frontier-detour-confinement-and-causal-audit", "DetourTaintConfinementAndCausalAudit", "LiteratureAbsorptionDispatchAndBoundaryContract", 2, "tlc"),
     (51, "51-memory-poisoning-quarantine-and-kv-prefix-serialization", "MemoryQuarantineAndKvPrefixSerialization", "MemoryQuarantineAndKvPrefixContract", 2, "tlc"),
+    (52, "52-funflow-cas-singleflight-and-external-sandbox-binding", "FunflowCasSingleflightAndExternalSandbox", "FunflowCasSandboxDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -59,6 +60,7 @@ QUINT_MAINS = {
     "49-scoped-detour-funflow-concurrent-shared-context": "ScopedDetourFunflowConcurrentContext",
     "50-literature-frontier-detour-confinement-and-causal-audit": "DetourTaintConfinementAndCausalAudit",
     "51-memory-poisoning-quarantine-and-kv-prefix-serialization": "MemoryQuarantineAndKvPrefixSerialization",
+    "52-funflow-cas-singleflight-and-external-sandbox-binding": "FunflowCasSingleflightAndExternalSandbox",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -76,6 +78,7 @@ STORY_SLUGS = (
     "49-shared-context-detours",
     "50-detour-confinement-audit",
     "51-memory-quarantine-kv-prefix",
+    "52-funflow-cas-sandbox",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -276,6 +279,27 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         cut_ok = (not bool(st["kvPrefixFractured"])) and (itf_int(st["frozenPrefixEpoch"]) == 1)
         grant_ok = not bool(st["untrustedAutoPromoted"])
         epistemic_ok = (not bool(st["recalledPoisonedOrQuarantined"])) and (not bool(st["recallableContainsPoison"]))
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 52:
+        st = last["s52"]
+        consumed = (
+            bool(st["casPublished"])
+            or bool(st["archivedWorkflow"])
+            or (itf_int(st["activeComputeCount"]) > 1)
+            or (itf_int(st["fencedExecCount"]) > 0)
+            or bool(st["pinnedEntryEvictedByGc"])
+            or bool(st["corruptCasVisible"])
+        )
+        cut_ok = (itf_int(st["activeComputeCount"]) <= 1) and (not bool(st["corruptCasVisible"]))
+        grant_ok = (not bool(st["pinnedEntryEvictedByGc"])) and (
+            (not bool(st["capsulePinned"])) or bool(st["casPublished"])
+        )
+        epistemic_ok = (
+            (itf_int(st["fencedExecCount"]) <= 1)
+            and (not bool(st["archivedWithDroppedFinalizer"]))
+            and ((not (bool(st["archivedWorkflow"]) and bool(st["fencedFailed"]))) or bool(st["finalizerCompleted"]))
+        )
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:

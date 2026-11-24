@@ -12,10 +12,11 @@ import «48-progressive-disclosure-and-two-stage-org-repair»
 import «49-scoped-detour-funflow-concurrent-shared-context»
 import «50-literature-frontier-detour-confinement-and-causal-audit»
 import «51-memory-poisoning-quarantine-and-kv-prefix-serialization»
+import «52-funflow-cas-singleflight-and-external-sandbox-binding»
 
 /-!
-Slice 47 — Master Imported Lean DAG (`40..46, 48..50 -> 47`) & Quotient Bridge:
-1. Imports all ten upstream Lean modules (`40`–`46`, `48`–`50`) and composes
+Slice 47 — Master Imported Lean DAG (`40..46, 48..52 -> 47`) & Quotient Bridge:
+1. Imports all twelve upstream Lean modules (`40`–`46`, `48`–`52`) and composes
    their pure functional operators into one end-to-end pipeline
    `executePureGovernanceChain`.
 2. Proves `pureGovernanceChain_end_to_end_sound`: any admitted pipeline output
@@ -233,6 +234,8 @@ structure QuintBoundaryGuardFlags where
   pureCasAdmittedWithoutExhaustiveness : Bool
   stallAdvisoryAuthorizesMutation : Bool
   frozenKvPrefixPreserved : Bool
+  fencedEffectPlainCasRejected : Bool
+  retractedPremiseFailClosed : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -253,6 +256,10 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     (DetourTaintConfinementAndCausalAudit.evaluateStallAdvisory 2 0 2).authorizesAutoMutation
   frozenKvPrefixPreserved :=
     (MemoryQuarantineAndKvPrefixSerialization.serializeTwoZone [1, 2] [3]).take 2 == [1, 2]
+  fencedEffectPlainCasRejected :=
+    !(FunflowCasSingleflightAndExternalSandbox.casSkipAdmitted .fencedEffect true true false)
+  retractedPremiseFailClosed :=
+    FunflowCasSingleflightAndExternalSandbox.premiseDriftedFailClosed ([] : List (Nat × Nat)) 1 1
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -268,12 +275,17 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     q.defeaterForcesL3Disclosure = true ∧
     q.pureCasAdmittedWithoutExhaustiveness = true ∧
     q.stallAdvisoryAuthorizesMutation = false ∧
-    q.frozenKvPrefixPreserved = true := by
+    q.frozenKvPrefixPreserved = true ∧
+    q.fencedEffectPlainCasRejected = true ∧
+    q.retractedPremiseFailClosed = true := by
   dsimp [projectToQuintGuardFlags]
   refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
           ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
           DetourTaintConfinementAndCausalAudit.advisoryTrigger_never_authorizes_auto_mutation 2 0 2,
-          rfl⟩
+          rfl,
+          by simp [FunflowCasSingleflightAndExternalSandbox.fencedEffect_never_reused_by_plain_cas],
+          FunflowCasSingleflightAndExternalSandbox.retractedPremise_always_invalidates_fail_closed
+            ([] : List (Nat × Nat)) 1 1 rfl⟩
   rw [List.all_eq_true]
   intro f hf
   exact bne_iff_ne.mpr (redactFields_strips_all_secrets rawFields f hf)

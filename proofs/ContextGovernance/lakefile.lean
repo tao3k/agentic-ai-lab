@@ -23,5 +23,7 @@ lean_lib ContextGovernanceChain where
     `«49-scoped-detour-funflow-concurrent-shared-context»,
     `«50-literature-frontier-detour-confinement-and-causal-audit»,
     `«51-memory-poisoning-quarantine-and-kv-prefix-serialization»,
+    `«52-funflow-cas-singleflight-and-external-sandbox-binding»,
+    `«53-yuanxu-c4-profile-convergence-and-interface-slots»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]
