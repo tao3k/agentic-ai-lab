@@ -15,7 +15,13 @@
         agentic-ai-lab-ai-agentic-context-handoff-assess
         agentic-ai-lab-ai-agentic-context-kv-prefix-admit
         agentic-ai-lab-ai-agentic-context-declassification-cert
-        agentic-ai-lab-ai-agentic-context-admit-declassification)
+        agentic-ai-lab-ai-agentic-context-admit-declassification
+        agentic-ai-lab-ai-agentic-context-serialize-two-zone-prompt
+        agentic-ai-lab-ai-agentic-context-admit-confined-detour-return
+        agentic-ai-lab-ai-agentic-context-causal-counterfactual-audit
+        agentic-ai-lab-ai-agentic-context-evaluate-stall-advisory
+        agentic-ai-lab-ai-agentic-context-verify-tool-schema-pin
+        agentic-ai-lab-ai-agentic-context-replay-audit-capsule)
 
 (def digest agentic-ai-lab-ai-agentic-context-digest)
 
@@ -242,3 +248,172 @@
           (action-authorized? #f))
       (.o admitted? reason delivered-digest effective-role
           certificate-digest action-authorized?)))))
+
+;;; ---------------------------------------------------------------------------
+;;; Slice 51: Two-Zone KV-Prefix-Stable Prompt Serializer
+;;; (`Frozen Canonical Prefix ++ Dynamic Suffix`)
+;;; ---------------------------------------------------------------------------
+
+(def (prefix-entry<? a b)
+  (let ((ea (.ref a 'epoch))
+        (eb (.ref b 'epoch)))
+    (or (< ea eb)
+        (and (= ea eb)
+             (string<? (.ref a 'node-id) (.ref b 'node-id))))))
+
+;; Serializes prompt context into two strictly separated zones:
+;; - Zone A (`frozen-prefix-frames`): canonically sorted by `(epoch, node-id)`,
+;;   invariant to peer arrival order and immutable within an epoch;
+;; - Zone B (`dynamic-suffix-frames`): rolling L2/L3 drill-downs & Scoped Detours.
+;; Modifying Zone B NEVER alters `frozen-prefix-bytes` or `frozen-prefix-digest`.
+(def (agentic-ai-lab-ai-agentic-context-serialize-two-zone-prompt
+      epoch frozen-entries dynamic-suffix-frames)
+  (unless (and (exact-integer? epoch) (>= epoch 0)
+               (list? frozen-entries)
+               (list? dynamic-suffix-frames)
+               (every string? dynamic-suffix-frames))
+    (error "Invalid Two-Zone KV-Prefix serialization inputs"))
+  (let* ((sorted-frozen (list-sort prefix-entry<? frozen-entries))
+         (frozen-frames
+          (map (lambda (e)
+                 (string-append "[E" (number->string (.ref e 'epoch))
+                                ":" (.ref e 'node-id) "] "
+                                (.ref e 'content)))
+               sorted-frozen))
+         (frozen-bytes (string-join frozen-frames "\n"))
+         (frozen-digest (digest (list 'two-zone-frozen-prefix.v1 epoch frozen-frames)))
+         (suffix-frames (map string-copy dynamic-suffix-frames))
+         (all-frames (append frozen-frames suffix-frames))
+         (full-prompt (string-join all-frames "\n")))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.two-zone-prompt-frame.v1
+        epoch: epoch
+        frozen-prefix-frames: frozen-frames
+        frozen-prefix-count: (length frozen-frames)
+        frozen-prefix-bytes: frozen-bytes
+        frozen-prefix-digest: frozen-digest
+        dynamic-suffix-frames: suffix-frames
+        dynamic-suffix-count: (length suffix-frames)
+        all-frames: all-frames
+        full-prompt: full-prompt
+        action-authorized?: #f)))
+
+;;; ---------------------------------------------------------------------------
+;;; Slice 50: APPA ConfinedDetour, NeuroTaint Offline Counterfactual Audit,
+;;; Zero-Authority Stall Advisory & MindGuard Tool Schema-Digest Pinning
+;;; ---------------------------------------------------------------------------
+
+;; APPA-style Scoped Detour Taint Confinement:
+;; - Inside a tainted detour, any external egress attempt is strictly blocked.
+;; - Returning into a clean mainline requires EITHER bounded `attest-schema`
+;;   passing OR a verified active 3-party SoD DeclassificationCert.
+;; - Admitted returns preserve `mainline-tainted?: #f` (prevents label creep).
+(def (agentic-ai-lab-ai-agentic-context-admit-confined-detour-return
+      detour-tainted?: (detour-tainted? #t)
+      egress-attempted?: (egress-attempted? #f)
+      schema-attested?: (schema-attested? #f)
+      declass-cert: (declass-cert #f)
+      declass-cert-active?: (declass-cert-active? #f)
+      live-source-cut: (live-source-cut #f)
+      live-target-cut: (live-target-cut #f))
+  (let* ((cert-ok?
+          (and declass-cert
+               declass-cert-active?
+               (agentic-ai-lab-ai-agentic-context-declassification-cert-shape? declass-cert)
+               live-source-cut live-target-cut
+               (equal? (.ref declass-cert 'bound-source-cut) live-source-cut)
+               (equal? (.ref declass-cert 'bound-target-cut) live-target-cut)))
+         (reason
+          (cond
+           ((and detour-tainted? egress-attempted?) 'confined-detour-tainted-egress-blocked)
+           ((and detour-tainted? (not schema-attested?) (not cert-ok?))
+            'unattested-detour-return-blocked)
+           (else 'confined-detour-return-admitted)))
+         (admitted? (eq? reason 'confined-detour-return-admitted)))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.confined-detour-decision.v1
+        admitted?: admitted?
+        reason: reason
+        detour-tainted?: (and detour-tainted? #t)
+        mainline-tainted?: #f
+        egress-blocked?: (and detour-tainted? egress-attempted? #t)
+        action-authorized?: #f)))
+
+;; NeuroTaint-style Zero-LLM Offline Counterfactual Causal Dependence Audit:
+;; Detects implicit secret leaks where an LLM flips a control/tool decision
+;; without copying literal secret substrings.
+(def (agentic-ai-lab-ai-agentic-context-causal-counterfactual-audit
+      decision-with-secret decision-without-secret declass-certified?)
+  (let* ((flipped? (not (equal? decision-with-secret decision-without-secret)))
+         (certified? (and declass-certified? #t))
+         (leak? (and flipped? (not certified?)))
+         (reason (cond
+                  (leak? 'uncertified-secret-flipped-decision)
+                  (flipped? 'certified-causal-dependence)
+                  (else 'counterfactual-invariant-clean))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.causal-counterfactual-audit.v1
+        decision-flipped?: flipped?
+        declass-certified?: certified?
+        implicit-causal-leak?: leak?
+        reason: reason
+        llm-calls-used: 0
+        action-authorized?: #f)))
+
+;; Memento / SagaLLM-inspired deterministic stall & divergence advisory.
+;; Hard invariant (Slice 50 Lean proven): NEVER authorizes automatic mutation.
+(def (agentic-ai-lab-ai-agentic-context-evaluate-stall-advisory
+      repeated-failures consecutive-invalidations threshold)
+  (unless (and (exact-integer? repeated-failures) (>= repeated-failures 0)
+               (exact-integer? consecutive-invalidations) (>= consecutive-invalidations 0)
+               (exact-integer? threshold) (> threshold 0))
+    (error "Invalid stall advisory inputs"))
+  (let ((trigger? (or (>= repeated-failures threshold)
+                      (>= consecutive-invalidations threshold))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.stall-advisory.v1
+        suggest-park-or-cancel?: trigger?
+        repeated-failures: repeated-failures
+        consecutive-invalidations: consecutive-invalidations
+        threshold: threshold
+        authorizes-auto-mutation?: #f
+        action-authorized?: #f)))
+
+;; MindGuard-style Tool / MCP schema-digest pinning gate.
+(def (agentic-ai-lab-ai-agentic-context-verify-tool-schema-pin
+      tool-id pinned-schema-digest live-schema-descriptor)
+  (unless (and (text? tool-id) (text? pinned-schema-digest))
+    (error "Tool schema pin verification requires tool-id and pinned-schema-digest"))
+  (let* ((live-digest (if (string? live-schema-descriptor)
+                        live-schema-descriptor
+                        (digest (list 'tool-schema-pin.v1 tool-id live-schema-descriptor))))
+         (matched? (equal? pinned-schema-digest live-digest))
+         (reason (if matched? 'tool-schema-pin-verified 'tool-schema-drift-blocked)))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.tool-schema-pin-decision.v1
+        tool-id: (string-copy tool-id)
+        admitted?: matched?
+        reason: reason
+        pinned-digest: (string-copy pinned-schema-digest)
+        live-digest: live-digest
+        action-authorized?: #f)))
+
+;; Capstone 47: Executable Zero-LLM DeterministicAuditCapsule Cold Replay Verifier.
+(def (agentic-ai-lab-ai-agentic-context-replay-audit-capsule
+      org-bytes journal-entries bound-cut live-cut expected-commitment)
+  (unless (and (string? org-bytes) (list? journal-entries)
+               (text? bound-cut) (text? live-cut) (text? expected-commitment))
+    (error "Invalid AuditCapsule cold replay inputs"))
+  (let* ((recomputed (digest (list 'deterministic-audit-capsule.v1
+                                   bound-cut org-bytes journal-entries)))
+         (cold-ok? (equal? recomputed expected-commitment))
+         (hot-ok? (and cold-ok? (equal? bound-cut live-cut))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.audit-capsule-replay.v1
+        bound-cut: (string-copy bound-cut)
+        live-cut: (string-copy live-cut)
+        recomputed-commitment: recomputed
+        cold-forensic-verified?: cold-ok?
+        hot-applicable?: hot-ok?
+        llm-calls-used: 0
+        action-authorized?: #f)))

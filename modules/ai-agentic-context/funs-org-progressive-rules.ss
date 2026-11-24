@@ -644,13 +644,18 @@
         (let* ((line (car rest))
                (trimmed (string-trim line)))
           (cond
-           ;; Inside `#+BEGIN_SRC ... #+END_SRC`: preserve verbatim until `#+END_SRC` or headline escape
+           ;; Inside `#+BEGIN_SRC ... #+END_SRC`: preserve verbatim until `#+END_SRC`.
+           ;; Only treat a `* ` line as an escaped headline if NO closing `#+END_SRC`
+           ;; exists later before EOF (avoids corrupting Markdown/Org bullets inside src blocks).
            (in-src?
             (cond
              ((string-prefix? "#+end_src" (string-downcase trimmed))
               (loop (cdr rest) #f open-drawer in-nested-thinking? in-special-thinking?
                     (cons line out)))
-             ((headline-line? trimmed)
+             ((and (headline-line? trimmed)
+                   (not (ormap (lambda (ahead)
+                                 (string-prefix? "#+end_src" (string-downcase (string-trim ahead))))
+                               (cdr rest))))
               (set-box! fixes-box (cons 'closed-unterminated-src-block (unbox fixes-box)))
               (loop rest #f open-drawer in-nested-thinking? in-special-thinking?
                     (cons "#+END_SRC" out)))

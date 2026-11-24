@@ -10,7 +10,10 @@
         agentic-ai-lab-ai-agentic-context-admit-security-branch
         agentic-ai-lab-ai-agentic-context-admit-consolidation
         agentic-ai-lab-ai-agentic-context-quotient-survives?
-        agentic-ai-lab-ai-agentic-context-join-provider-receipts)
+        agentic-ai-lab-ai-agentic-context-join-provider-receipts
+        agentic-ai-lab-ai-agentic-context-memory-candidate
+        agentic-ai-lab-ai-agentic-context-admit-memory-promotion
+        agentic-ai-lab-ai-agentic-context-recall-memories)
 
 (def digest agentic-ai-lab-ai-agentic-context-digest)
 
@@ -204,3 +207,113 @@
          (retained-history-count (length receipts))
          (action-authorized? #f))
     (.o kind published? reason active-generation retained-history-count action-authorized?)))
+
+;;; ---------------------------------------------------------------------------
+;;; Slice 51: Quarantine-Before-Recall & Typed MemoryContract (MINJA / MemoryGraft)
+;;; ---------------------------------------------------------------------------
+
+;; Constructs a typed MemoryContract candidate.
+;; Any `untrusted-ingest` (or non-`trusted-internal`) candidate is ALWAYS forced
+;; into `memory-tier: 'quarantined`, even if `self-claimed-success?: #t`.
+(def (agentic-ai-lab-ai-agentic-context-memory-candidate
+      candidate-id origin-trust payload-digest
+      self-claimed-success?: (self-claimed-success? #f)
+      open-defeaters: (open-defeaters '())
+      proposer: (proposer "agent-proposer"))
+  (unless (and (text? candidate-id)
+               (memq origin-trust '(trusted-internal untrusted-ingest))
+               (text? payload-digest)
+               (text? proposer)
+               (list? open-defeaters)
+               (every text? open-defeaters))
+    (error "Invalid MemoryContractCandidate inputs"))
+  (let* ((cid (string-copy candidate-id))
+         (pdig (string-copy payload-digest))
+         (prop (string-copy proposer))
+         (defs (list-sort string<? (delete-duplicates/hash (map string-copy open-defeaters))))
+         (self-ok? (and self-claimed-success? #t))
+         (tier (if (and (eq? origin-trust 'trusted-internal) (null? defs))
+                 'recallable
+                 'quarantined))
+         (semantic-digest (digest (list 'memory-contract-candidate.v1 cid origin-trust pdig prop defs))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.memory-contract-candidate.v1
+        candidate-id: cid
+        origin-trust: origin-trust
+        payload-digest: pdig
+        proposer: prop
+        self-claimed-success?: self-ok?
+        open-defeaters: defs
+        memory-tier: tier
+        semantic-digest: semantic-digest
+        action-authorized?: #f)))
+
+;; Promotes a quarantined MemoryContract candidate into `recallable` ONLY when
+;; backed by an independent EndorsementReceipt (`proposer != endorser`) on
+;; `live-cut` AND zero open defeaters. Self-claimed success NEVER auto-promotes.
+(def (agentic-ai-lab-ai-agentic-context-admit-memory-promotion
+      candidate live-cut (endorsement #f) (reject? #f))
+  (unless (and (object? candidate)
+               (.slot? candidate 'kind)
+               (eq? (.ref candidate 'kind)
+                    'agentic-ai-lab.ai-agentic-context.memory-contract-candidate.v1)
+               (text? live-cut))
+    (error "Memory promotion requires a valid MemoryContractCandidate and live-cut"))
+  (let* ((orig-tier (.ref candidate 'memory-tier))
+         (defs (.ref candidate 'open-defeaters))
+         (pdig (.ref candidate 'payload-digest))
+         (prop (.ref candidate 'proposer))
+         (reason
+          (cond
+           (reject? 'quarantined-candidate-rejected)
+           ((eq? orig-tier 'rejected) 'already-rejected)
+           ((pair? defs) 'open-defeaters-block-promotion)
+           ((not endorsement)
+            (if (and (eq? (.ref candidate 'origin-trust) 'untrusted-ingest)
+                     (.ref candidate 'self-claimed-success?))
+              'untrusted-self-claimed-success-blocked
+              'missing-independent-endorsement))
+           ((not (agentic-ai-lab-ai-agentic-context-endorsement-receipt-shape? endorsement))
+            'invalid-endorsement-receipt)
+           ((equal? (.ref endorsement 'proposer) (.ref endorsement 'endorser))
+            'self-endorsement-forbidden)
+           ((not (equal? (.ref endorsement 'proposer) prop))
+            'endorsement-proposer-mismatch)
+           ((not (equal? (.ref endorsement 'content-digest) pdig))
+            'endorsement-digest-mismatch)
+           ((not (equal? (.ref endorsement 'bound-cut) live-cut))
+            'stale-endorsement-cut)
+           (else 'promoted-to-recallable)))
+         (promoted? (eq? reason 'promoted-to-recallable))
+         (next-tier (cond
+                     (reject? 'rejected)
+                     (promoted? 'recallable)
+                     (else orig-tier)))
+         (updated (.o (:: @ candidate)
+                      bind-these: #f
+                      memory-tier: next-tier)))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.memory-promotion-decision.v1
+        promoted?: promoted?
+        reason: reason
+        memory-tier: next-tier
+        candidate: updated
+        action-authorized?: #f)))
+
+;; Production recall strictly queries `memory-tier == 'recallable`, guaranteeing
+;; zero quarantined or rejected (MINJA / MemoryGraft) leakage into agent context.
+(def (agentic-ai-lab-ai-agentic-context-recall-memories candidates)
+  (unless (list? candidates)
+    (error "Memory recall expects a list of MemoryContractCandidate objects"))
+  (let* ((recalled (filter (lambda (c)
+                             (and (object? c)
+                                  (.slot? c 'memory-tier)
+                                  (eq? (.ref c 'memory-tier) 'recallable)))
+                           candidates))
+         (excluded-count (- (length candidates) (length recalled))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.memory-recall-view.v1
+        recalled: recalled
+        recalled-count: (length recalled)
+        quarantined-or-rejected-excluded: excluded-count
+        action-authorized?: #f)))

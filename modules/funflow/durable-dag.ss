@@ -20,6 +20,8 @@
         PureCAS.
         VerifiedEpistemic.
         FencedEffect.
+        ExternalSandboxProfile.
+        funflow-admit-external-task-sandbox
         EffectAdmissionProtocol
         FunflowEffectMethods
         admit-node-effect
@@ -40,6 +42,8 @@
         funflow-dag-build
         funflow-dag?
         funflow-cas-fingerprint
+        funflow-pure-cas-content-key
+        funflow-canonical-sha256
         funflow-admit-frontier-with
         funflow-resume-plan
         funflow-replan-epoch
@@ -57,13 +61,66 @@
 (.defgeneric (strategy-archive-guard strategy dag resume-plan journal-state)
   slot: .archive-guard)
 
+(def (canonical-join sep strs)
+  (if (null? strs)
+    ""
+    (let loop ((rest (cdr strs)) (acc (car strs)))
+      (if (null? rest)
+        acc
+        (loop (cdr rest) (string-append acc sep (car rest)))))))
+
+;; Deterministic canonical encoder (Slice 52 / BUG-F3a):
+;; Replaces raw `(write payload port)` so hash-tables, pairs, vectors, strings,
+;; symbols, numbers, booleans, and nested structures hash identically regardless
+;; of insertion or hash-bucket order.
+(def (canonical-encode value)
+  (cond
+   ((null? value) "()")
+   ((boolean? value) (if value "#t" "#f"))
+   ((number? value) (string-append "num:" (number->string value)))
+   ((symbol? value) (string-append "sym:" (symbol->string value)))
+   ((string? value)
+    (string-append "str:" (number->string (string-length value)) ":" value))
+   ((hash-table? value)
+    (let* ((pairs (map (lambda (kv)
+                         (cons (canonical-encode (car kv))
+                               (canonical-encode (cdr kv))))
+                       (hash->list value)))
+           (sorted (list-sort (lambda (a b) (string<? (car a) (car b))) pairs)))
+      (string-append
+       "hash{"
+       (canonical-join "," (map (lambda (p) (string-append (car p) "=>" (cdr p))) sorted))
+       "}")))
+   ((vector? value)
+    (string-append
+     "vec["
+     (canonical-join "," (map canonical-encode (vector->list value)))
+     "]"))
+   ((list? value)
+    (string-append
+     "list("
+     (canonical-join "," (map canonical-encode value))
+     ")"))
+   ((pair? value)
+    (string-append
+     "pair("
+     (canonical-encode (car value))
+     "."
+     (canonical-encode (cdr value))
+     ")"))
+   (else
+    (string-append
+     "opaque:"
+     (call-with-output-string (lambda (port) (write value port)))))))
+
 (def (canonical-sha256 payload)
   (string-append
    "sha256:"
    (hex-encode
     (sha256
-     (string->utf8
-      (call-with-output-string (lambda (port) (write payload port))))))))
+     (string->utf8 (canonical-encode payload))))))
+
+(def funflow-canonical-sha256 canonical-sha256)
 
 (def (opt-ref obj key default)
   (if (and (object? obj) (.slot? obj key))
@@ -102,6 +159,61 @@
   requires-exhaustiveness?: #t
   requires-token?: #t)
 
+;;; ExternalTask Sandbox Profile & Lethal-Trifecta / Lease Gate (Slice 46 & Slice 52 / BUG-F4)
+
+(.def ExternalSandboxProfile.
+  kind: 'agentic-ai-lab.funflow.external-sandbox-profile.v1
+  env-digest: ""
+  has-untrusted-input?: #f
+  has-private-data?: #f
+  egress-enabled?: #f
+  egress-endorsed?: #f
+  lease-valid?: #t)
+
+(def (funflow-admit-external-task-sandbox profile (now-tick #f))
+  (let* ((env-dig (opt-ref profile 'env-digest ""))
+         (env-pinned? (and (string? env-dig) (> (string-length env-dig) 0)))
+         (lease-flag (opt-ref profile 'lease-valid? #t))
+         (l-start (opt-ref profile 'lease-start #f))
+         (l-end (opt-ref profile 'lease-end #f))
+         (lease-bounds-ok?
+          (and lease-flag
+               (if (and (exact-integer? l-start) (exact-integer? l-end))
+                 (and (<= l-start l-end)
+                      (or (not (exact-integer? now-tick))
+                          (and (<= l-start now-tick) (<= now-tick l-end))))
+                 #t)))
+         (untrusted? (and (opt-ref profile 'has-untrusted-input? #f) #t))
+         (private? (and (opt-ref profile 'has-private-data? #f) #t))
+         (egress? (and (opt-ref profile 'egress-enabled? #f) #t))
+         (endorsed? (and (opt-ref profile 'egress-endorsed? #f) #t))
+         (trifecta-exposed? (and untrusted? private? egress? (not endorsed?)))
+         (reason
+          (cond
+           ((not env-pinned?) 'unpinned-external-env-digest)
+           ((not lease-bounds-ok?) 'restriction-lease-invalid-or-expired)
+           (trifecta-exposed? 'lethal-trifecta-sandbox-blocked)
+           (else 'external-sandbox-admitted))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.funflow.external-sandbox-admission.v1
+        admitted?: (eq? reason 'external-sandbox-admitted)
+        reason: reason
+        env-pinned?: env-pinned?
+        lease-valid?: lease-bounds-ok?
+        lethal-trifecta-exposed?: trifecta-exposed?)))
+
+(def (envelope-lease-ok? envelope)
+  (let ((flag (opt-ref envelope 'lease-valid? #t))
+        (l-start (opt-ref envelope 'lease-start #f))
+        (l-end (opt-ref envelope 'lease-end #f))
+        (now-tick (opt-ref envelope 'now-tick #f)))
+    (and flag
+         (if (and (exact-integer? l-start) (exact-integer? l-end))
+           (and (<= l-start l-end)
+                (or (not (exact-integer? now-tick))
+                    (and (<= l-start now-tick) (<= now-tick l-end))))
+           #t))))
+
 (def EffectAdmissionProtocol
   (clos-generic-protocol 'funflow/node-effect-admission))
 
@@ -125,7 +237,7 @@
         admitted?: #t
         effect-kind: 'pure-cas
         reason: 'pure-cas-deterministic))
-  ;; VerifiedEpistemic: Semantic CAS requires Verifier/Endorsement on live cut.
+  ;; VerifiedEpistemic: Semantic CAS requires Verifier/Endorsement on live cut + valid lease.
   (.defmethod (admit-node-effect (node (prototype FunflowNode.))
                                  (effect-class (prototype VerifiedEpistemic.))
                                  envelope)
@@ -133,8 +245,14 @@
            (live-cut (opt-ref envelope 'live-cut #f))
            (node-cut (opt-ref node 'source-cut ""))
            (cut-ok? (or (not live-cut) (equal? live-cut node-cut)))
+           (lease-ok? (envelope-lease-ok? envelope))
+           (sandbox (opt-ref node 'sandbox-profile #f))
+           (sandbox-res (and sandbox (funflow-admit-external-task-sandbox sandbox (opt-ref envelope 'now-tick #f))))
+           (sandbox-ok? (or (not sandbox-res) (.ref sandbox-res 'admitted?)))
            (reason (cond
                     ((not cut-ok?) 'stale-source-cut)
+                    ((not lease-ok?) 'restriction-lease-invalid-or-expired)
+                    ((not sandbox-ok?) (.ref sandbox-res 'reason))
                     ((not endorsed?) 'missing-endorsement-or-verifier-receipt)
                     (else 'verified-epistemic-admitted))))
       (.o bind-these: #f
@@ -142,7 +260,7 @@
           admitted?: (eq? reason 'verified-epistemic-admitted)
           effect-kind: 'verified-epistemic
           reason: reason)))
-  ;; FencedEffect: Asymmetric safety gate (Slice 43 + Slice 49).
+  ;; FencedEffect: Asymmetric safety gate (Slice 43, Slice 49 & Slice 52).
   (.defmethod (admit-node-effect (node (prototype FunflowNode.))
                                  (effect-class (prototype FencedEffect.))
                                  envelope)
@@ -152,10 +270,16 @@
            (live-cut (opt-ref envelope 'live-cut #f))
            (node-cut (opt-ref node 'source-cut ""))
            (cut-ok? (or (not live-cut) (equal? live-cut node-cut)))
+           (lease-ok? (envelope-lease-ok? envelope))
+           (sandbox (opt-ref node 'sandbox-profile #f))
+           (sandbox-res (and sandbox (funflow-admit-external-task-sandbox sandbox (opt-ref envelope 'now-tick #f))))
+           (sandbox-ok? (or (not sandbox-res) (.ref sandbox-res 'admitted?)))
            (idem (opt-ref node 'idempotency-key #f))
            (idem-ok? (and (string? idem) (> (string-length idem) 0)))
            (reason (cond
                     ((not cut-ok?) 'stale-source-cut)
+                    ((not lease-ok?) 'restriction-lease-invalid-or-expired)
+                    ((not sandbox-ok?) (.ref sandbox-res 'reason))
                     ((not exhaustive?) 'fenced-effect-blocked-by-omitted-alternatives)
                     ((not has-token?) 'missing-authorized-effect-token)
                     ((not endorsed?) 'missing-endorsement-receipt)
@@ -217,33 +341,42 @@
            (next-trust (min p-trust o-trust))
            (next-start (max p-start o-start))
            (next-end (min p-end o-end))
-           (next-write (and p-write o-write #t))
-           (next-push (and p-push o-push #t)))
+           (p-valid (opt-ref parent 'lease-valid? (<= p-start p-end)))
+           (o-valid (opt-ref overlay 'lease-valid? (<= o-start o-end)))
+           (next-lease-valid (and p-valid o-valid (<= next-start next-end) #t))
+           (next-write (and p-write o-write next-lease-valid #t))
+           (next-push (and p-push o-push next-lease-valid #t)))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.funflow.restriction-envelope.v1
           domain: (opt-ref parent 'domain (opt-ref overlay 'domain "default"))
           trust-ceiling: next-trust
           lease-start: next-start
           lease-end: next-end
+          lease-valid?: next-lease-valid
           can-write?: next-write
           can-push?: next-push
           allowed-scopes: next-scopes
           readers: next-readers
           digest: (canonical-sha256
-                   (list 'restriction-envelope-meet.v1
-                         next-trust next-start next-end next-write next-push
-                         next-scopes next-readers)))))))
+                   (list 'restriction-envelope-meet.v2
+                         next-trust next-start next-end next-lease-valid
+                         next-write next-push next-scopes next-readers)))))))
 
 (def (funflow-dag-node id
                        needs: (needs '())
                        after-start: (after-start #f)
                        source-cut: (source-cut "cut-0")
+                       schema-version: (schema-version "agentic-ai-lab.funflow.cas-node.v2")
+                       step-code-digest: (step-code-digest "")
+                       env-digest: (env-digest "")
                        input-digest: (input-digest "")
+                       input-hashes: (input-hashes '())
                        contract-digest: (contract-digest "")
                        policy-digest: (policy-digest "")
                        effect-class: (effect-class PureCAS.)
                        premise-digests: (premise-digests '())
                        idempotency-key: (idempotency-key #f)
+                       sandbox-profile: (sandbox-profile #f)
                        status: (status 'todo)
                        checklists-done?: (checklists-done? #t)
                        span: (span #f)
@@ -256,12 +389,17 @@
         (needs-syms (map node-id-symbol needs))
         (after-sym (and after-start (node-id-symbol after-start)))
         (cut-val (if (string? source-cut) (string-copy source-cut) (object->string source-cut)))
+        (ver-val (if (string? schema-version) (string-copy schema-version) "agentic-ai-lab.funflow.cas-node.v2"))
+        (code-dig (if (string? step-code-digest) (string-copy step-code-digest) ""))
+        (env-dig (if (string? env-digest) (string-copy env-digest) ""))
         (in-dig (if (string? input-digest) (string-copy input-digest) ""))
+        (in-hashes (if (list? input-hashes) input-hashes '()))
         (con-dig (if (string? contract-digest) (string-copy contract-digest) ""))
         (pol-dig (if (string? policy-digest) (string-copy policy-digest) ""))
         (eff-val effect-class)
         (prem-val premise-digests)
         (idem-val idempotency-key)
+        (sbx-val sandbox-profile)
         (st-val status)
         (chk-val (and checklists-done? #t))
         (span-val span)
@@ -277,12 +415,17 @@
         needs: needs-syms
         after-start: after-sym
         source-cut: cut-val
+        schema-version: ver-val
+        step-code-digest: code-dig
+        env-digest: env-dig
         input-digest: in-dig
+        input-hashes: in-hashes
         contract-digest: con-dig
         policy-digest: pol-dig
         effect-class: eff-val
         premise-digests: prem-val
         idempotency-key: idem-val
+        sandbox-profile: sbx-val
         status: st-val
         checklists-done?: chk-val
         span: span-val
@@ -292,23 +435,55 @@
         facets: facets-val
         metadata: meta-val)))
 
-(def (funflow-cas-fingerprint node dep-fingerprints)
-  (let ((sorted-deps
-         (list-sort (lambda (a b) (string<? (car a) (car b)))
-                    (map (lambda (pair)
-                           (cons (symbol->string (car pair)) (cdr pair)))
-                         dep-fingerprints)))
-        (sorted-premises
-         (list-sort (lambda (a b) (string<? (car a) (car b)))
-                    (map (lambda (pair)
-                           (cons (if (symbol? (car pair)) (symbol->string (car pair)) (car pair))
-                                 (cdr pair)))
-                         (opt-ref node 'premise-digests '())))))
+(def (canonical-sort-strings xs)
+  (list-sort string<?
+             (map (lambda (x)
+                    (cond ((string? x) x)
+                          ((symbol? x) (symbol->string x))
+                          (else (canonical-encode x))))
+                  xs)))
+
+(def (canonical-sort-kv-pairs pairs)
+  (list-sort (lambda (a b)
+               (or (string<? (car a) (car b))
+                   (and (equal? (car a) (car b))
+                        (string<? (canonical-encode (cdr a))
+                                  (canonical-encode (cdr b))))))
+             (map (lambda (pair)
+                    (cons (if (symbol? (car pair)) (symbol->string (car pair)) (car pair))
+                          (cdr pair)))
+                  pairs)))
+
+;; Label-free canonical 5-tuple PureCAS content key (Slice 52 / BUG-F3a):
+;; `(schemaVersion, stepCodeDigest, envDigest, sortedInputHashes, sortedPremiseDigests)`
+;; Enables cross-DAG pure deduplication independent of node label `id`.
+(def (funflow-pure-cas-content-key node dep-fingerprints)
+  (let ((sorted-inputs (canonical-sort-strings
+                        (append (if (> (string-length (opt-ref node 'input-digest "")) 0)
+                                  (list (opt-ref node 'input-digest ""))
+                                  '())
+                                (opt-ref node 'input-hashes '())
+                                (map cdr dep-fingerprints))))
+        (sorted-premises (canonical-sort-kv-pairs (opt-ref node 'premise-digests '()))))
     (canonical-sha256
-     (list 'agentic-ai-lab.funflow.cas-node.v1
+     (list (opt-ref node 'schema-version "agentic-ai-lab.funflow.cas-node.v2")
+           (opt-ref node 'step-code-digest "")
+           (opt-ref node 'env-digest "")
+           sorted-inputs
+           sorted-premises))))
+
+(def (funflow-cas-fingerprint node dep-fingerprints)
+  (let ((sorted-deps (canonical-sort-kv-pairs dep-fingerprints))
+        (sorted-inputs (canonical-sort-strings (opt-ref node 'input-hashes '())))
+        (sorted-premises (canonical-sort-kv-pairs (opt-ref node 'premise-digests '()))))
+    (canonical-sha256
+     (list (opt-ref node 'schema-version "agentic-ai-lab.funflow.cas-node.v2")
            (symbol->string (.ref node 'id))
+           (opt-ref node 'step-code-digest "")
+           (opt-ref node 'env-digest "")
            (.ref node 'source-cut)
            (.ref node 'input-digest)
+           sorted-inputs
            (.ref node 'contract-digest)
            (.ref node 'policy-digest)
            (opt-ref (opt-ref node 'effect-class PureCAS.) 'effect-kind 'pure-cas)
@@ -521,12 +696,20 @@
                         id-list)
               (delete-duplicates/hash (reverse dups)))))
          (node-map (make-hash-table-eq))
-         (dep-map (make-hash-table-eq)))
+         (dep-map (make-hash-table-eq))
+         (order-edge-map (make-hash-table-eq)))
     (for-each (lambda (n)
-                (let ((id (.ref n 'id)))
+                (let ((id (.ref n 'id))
+                      (needs (.ref n 'needs))
+                      (after (.ref n 'after-start)))
                   (unless (hash-key? node-map id)
                     (hash-put! node-map id n)
-                    (hash-put! dep-map id (.ref n 'needs)))))
+                    (hash-put! dep-map id needs)
+                    ;; BUG-F1 fix: include `after-start` edges in cycle detection and
+                    ;; topological order so triggers always precede finalizers and
+                    ;; `after-start` cycles cannot bypass Tarjan SCC!
+                    (hash-put! order-edge-map id
+                               (if after (cons after needs) needs)))))
               node-list)
     (let* ((unresolved-edges
             (let ((missing '()))
@@ -548,12 +731,12 @@
              (lambda (n)
                (and (.ref n 'after-start) (pair? (.ref n 'needs))))
              node-list))
-           (cycle-nodes (find-cycle-nodes unique-ids node-map dep-map))
+           (cycle-nodes (find-cycle-nodes unique-ids node-map order-edge-map))
            (valid? (and (null? duplicate-ids)
                         (null? unresolved-edges)
                         (null? invalid-finalizers)
                         (null? cycle-nodes)))
-           (topo (if valid? (topological-order unique-ids dep-map) '()))
+           (topo (if valid? (topological-order unique-ids order-edge-map) '()))
            (fingerprints (make-hash-table-eq)))
       (when valid?
         (for-each
@@ -591,7 +774,7 @@
             invalid-finalizers: inv-fin-val
             cycle-nodes: cyc-val)))))
 
-(def (cas-hit? node fp completed-cas-table)
+(def (raw-cas-hit? node fp completed-cas-table)
   (and completed-cas-table
        (let ((id (.ref node 'id)))
          (cond
@@ -603,13 +786,42 @@
              (and entry (equal? (cdr entry) fp))))
           (else #f)))))
 
-(def (node-settled? node fp completed-cas-table)
+(def (idempotency-committed? idem-key idempotency-commits)
+  (and (string? idem-key)
+       (> (string-length idem-key) 0)
+       idempotency-commits
+       (cond
+        ((hash-table? idempotency-commits) (and (hash-get idempotency-commits idem-key) #t))
+        ((list? idempotency-commits) (and (member idem-key idempotency-commits) #t))
+        (else #f))))
+
+;; BUG-F3b fix (Slice 52): EffectClass-gated CAS skip admission.
+;; - PureCAS.: settled by plain CAS fingerprint hit.
+;; - VerifiedEpistemic.: requires plain CAS hit + endorsement on live cut + zero premise drift.
+;; - FencedEffect.: NEVER bypassed by plain CAS hit; requires authoritative idempotency commit receipt.
+(def (cas-hit? node fp completed-cas-table (idempotency-commits #f) (context (.o)))
+  (let ((eff-kind (opt-ref (opt-ref node 'effect-class PureCAS.) 'effect-kind 'pure-cas)))
+    (case eff-kind
+      ((pure-cas)
+       (raw-cas-hit? node fp completed-cas-table))
+      ((verified-epistemic)
+       (and (raw-cas-hit? node fp completed-cas-table)
+            (and (opt-ref context 'has-endorsement? #f) #t)
+            (not (opt-ref context 'premise-drifted? #f))
+            (let ((live-cut (opt-ref context 'live-cut #f)))
+              (or (not live-cut) (equal? live-cut (.ref node 'source-cut))))))
+      ((fenced-effect)
+       (idempotency-committed? (opt-ref node 'idempotency-key #f) idempotency-commits))
+      (else #f))))
+
+(def (node-settled? node fp completed-cas-table (idempotency-commits #f) (context (.o)))
   (or (and (eq? (.ref node 'status) 'done)
            (.ref node 'checklists-done?))
-      (cas-hit? node fp completed-cas-table)))
+      (cas-hit? node fp completed-cas-table idempotency-commits context)))
 
 (def (funflow-resume-plan dag
                           completed-cas-table: (completed-cas-table #f)
+                          idempotency-commits: (idempotency-commits #f)
                           in-flight-ids: (in-flight-ids '())
                           strategy: (strategy DurableGovernedStrategy.)
                           context: (context (.o)))
@@ -629,6 +841,14 @@
          (blocked-rev '())
          (pending-fin-rev '()))
     (when valid?
+      ;; Pass 1 (BUG-F1 defense-in-depth): collect all failed/cancelled triggers first
+      ;; so finalizer scheduling is order-independent even on hand-constructed DAGs.
+      (for-each
+       (lambda (id)
+         (let ((st (.ref (hash-ref node-map id) 'status)))
+           (when (memq st '(failed cancelled))
+             (hash-put! failed-set id #t))))
+       (.ref dag 'topological-order))
       (for-each
        (lambda (id)
          (let* ((node (hash-ref node-map id))
@@ -638,14 +858,13 @@
            (cond
             (fin-trigger
              (when (and (hash-key? failed-set fin-trigger)
-                        (not (node-settled? node fp completed-cas-table)))
+                        (not (node-settled? node fp completed-cas-table idempotency-commits context)))
                (set! pending-fin-rev (cons id pending-fin-rev))))
             ((memq id in-flight-syms)
              (set! in-flight-rev (cons id in-flight-rev)))
             ((memq st '(failed cancelled))
-             (hash-put! failed-set id #t)
              (set! failed-rev (cons id failed-rev)))
-            ((cas-hit? node fp completed-cas-table)
+            ((cas-hit? node fp completed-cas-table idempotency-commits context)
              (hash-put! settled-set id #t)
              (set! skipped-rev (cons id skipped-rev)))
             ((and (eq? st 'done) (.ref node 'checklists-done?))
@@ -693,6 +912,7 @@
 (def (funflow-replan-epoch prior-dag
                            next-dag
                            completed-cas-table: (completed-cas-table #f)
+                           idempotency-commits: (idempotency-commits #f)
                            in-flight-ids: (in-flight-ids '())
                            strategy: (strategy DurableGovernedStrategy.)
                            context: (context (.o)))
@@ -710,7 +930,8 @@
            (cond
             ((not old-fp)
              (set! added-rev (cons id added-rev)))
-            ((and (equal? old-fp new-fp) (cas-hit? node new-fp completed-cas-table))
+            ((and (equal? old-fp new-fp)
+                  (cas-hit? node new-fp completed-cas-table idempotency-commits context))
              (set! preserved-rev (cons id preserved-rev)))
             ((not (equal? old-fp new-fp))
              (set! invalidated-rev (cons id invalidated-rev)))
@@ -718,6 +939,7 @@
        (.ref next-dag 'topological-order)))
     (let ((plan (funflow-resume-plan next-dag
                                      completed-cas-table: completed-cas-table
+                                     idempotency-commits: idempotency-commits
                                      in-flight-ids: in-flight-ids
                                      strategy: strategy
                                      context: context))
@@ -751,7 +973,9 @@
                          (live (or (assoc k live-premise-alist)
                                    (and (symbol? k) (assoc (symbol->string k) live-premise-alist))
                                    (and (string? k) (assoc (string->symbol k) live-premise-alist)))))
-                    (and live (not (equal? (cdr live) expected)))))
+                    ;; BUG-F2 fix (Slice 52): Fail-closed on retracted/missing premise!
+                    ;; When `live` is `#f`, the premise was deleted/retracted and MUST invalidate.
+                    (or (not live) (not (equal? (cdr live) expected)))))
                 premises))
               (dep-stale?
                (let loop ((ds (.ref node 'needs)))
@@ -838,6 +1062,8 @@
       PureCAS: PureCAS.
       VerifiedEpistemic: VerifiedEpistemic.
       FencedEffect: FencedEffect.
+      ExternalSandboxProfile: ExternalSandboxProfile.
+      admit-external-task-sandbox: funflow-admit-external-task-sandbox
       EffectAdmissionProtocol: EffectAdmissionProtocol
       FunflowEffectMethods: FunflowEffectMethods
       admit-node-effect: funflow-admit-node-effect
@@ -857,6 +1083,8 @@
       dag-build: funflow-dag-build
       dag?: funflow-dag?
       node-cas-fingerprint: funflow-cas-fingerprint
+      pure-cas-content-key: funflow-pure-cas-content-key
+      canonical-sha256: funflow-canonical-sha256
       admit-frontier-with: funflow-admit-frontier-with
       resume-plan: funflow-resume-plan
       replan-epoch: funflow-replan-epoch))
