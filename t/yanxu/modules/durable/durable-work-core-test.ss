@@ -127,9 +127,100 @@
               (check-equal? (.ref early 'handed-over?) #f)
               (check-equal? (.ref early 'reason) 'active-lease-not-expired)
               (check-equal? (.ref expired 'handed-over?) #t)
-              (check-equal? (.ref expired 'claim-lease-epoch) 2)
-              (check-equal? (.ref cancelled 'admitted?) #t)
-              (check-equal? (length (.ref cancelled 'next-counterexample-core)) 2)))
+               (check-equal? (.ref expired 'claim-lease-epoch) 2)
+               (check-equal? (.ref cancelled 'admitted?) #t)
+               (check-equal? (length (.ref cancelled 'next-counterexample-core)) 2)))
+           (lambda ()
+             (journal-close! journal)
+             (when (file-exists? jpath) (delete-file jpath))))))
+
+    (test-case "Slice 54 regressions: BUG-D1 monotonic overlay, BUG-D2 tainted CompletedExit, BUG-D3 authorized handover/CAS, BUG-D4 unclosed-attempt archive block"
+      (let* ((jpath (string-append (make-temporary-file-name "slice54-durable-") ".sqlite"))
+             (journal (journal-open jpath)))
+        (dynamic-wind
+          (lambda () (void))
+          (lambda ()
+            ;; BUG-D1: hot overlay CANNOT escalate parent max-concurrency/retry-budget/max-detour-depth/drill-down
+            (let* ((strict-task (.o (:: @ PureTask.)
+                                    bind-these: #f
+                                    policy: (make-checked-work-policy max-concurrency: 2 retry-budget: 1
+                                                                      max-detour-depth: 1 allow-agent-drill-down: #f)))
+                   (escalating-ov (.o bind-these: #f max-parallel: 10 retry-budget: 9
+                                      max-detour-depth: 8 allow-agent-drill-down: #t))
+                   (narrowed-ov (.o bind-these: #f max-parallel: 1 retry-budget: 1 max-detour-depth: 1))
+                   (res-esc (work-apply-overlay strict-task escalating-ov))
+                   (res-nar (work-apply-overlay strict-task narrowed-ov))
+                   (pol-esc (.ref res-esc 'policy))
+                   (pol-nar (.ref res-nar 'policy)))
+              (check-equal? (.ref pol-esc 'max-concurrency) 2)
+              (check-equal? (.ref pol-esc 'retry-budget) 1)
+              (check-equal? (.ref pol-esc 'max-detour-depth) 1)
+              (check-equal? (.ref pol-esc 'allow-agent-drill-down) #f)
+              (check-equal? (.ref pol-nar 'max-concurrency) 1))
+            ;; BUG-D2: tainted detour CompletedExit refuses unattested merge, admits with schema-attested? or 3-party cert
+            (let* ((tainted-detour (.o (:: @ BlockerDetourNode.) bind-these: #f return-anchor: "step-a" tainted?: #t))
+                   (anchor (.o (:: @ MainlineStepAnchor.) bind-these: #f anchor-id: "step-a"))
+                   (r-deny (durable-reconcile-detour-exit tainted-detour
+                             (.o (:: @ CompletedExit.) bind-these: #f outcome-receipt-digest: "sha256:raw-tainted")
+                             anchor))
+                   (r-schema (durable-reconcile-detour-exit tainted-detour
+                               (.o (:: @ CompletedExit.) bind-these: #f outcome-receipt-digest: "sha256:attested" schema-attested?: #t)
+                               anchor))
+                   (r-self-cert (durable-reconcile-detour-exit tainted-detour
+                                  (.o (:: @ CompletedExit.) bind-these: #f outcome-receipt-digest: "sha256:bad-cert"
+                                      declassification-cert: (.o bind-these: #f proposer: "a" declassifier: "a" recipient: "b"))
+                                  anchor))
+                   (r-cert (durable-reconcile-detour-exit tainted-detour
+                             (.o (:: @ CompletedExit.) bind-these: #f outcome-receipt-digest: "sha256:good-cert"
+                                 declassification-cert: (.o bind-these: #f proposer: "a" declassifier: "rev" recipient: "b"))
+                             anchor)))
+              (check-equal? (.ref r-deny 'admitted?) #f)
+              (check-equal? (.ref r-deny 'reason) 'tainted-detour-requires-attestation-or-declassification)
+              (check-equal? (.ref r-schema 'admitted?) #t)
+              (check-equal? (.ref r-self-cert 'admitted?) #f)
+              (check-equal? (.ref r-cert 'admitted?) #t))
+            ;; BUG-D3: force-explicit?: #t requires non-self endorsement; expected-epoch rejects ABA; expired owner fails check
+            (let* ((c1 (work-claim! journal "work-54" '() "step-a" "agent:alpha" now: 10 ttl: 20))
+                   (claims1 (.ref c1 'next-claims))
+                   (hijack (work-handover! journal "work-54" claims1 "step-a" "agent:beta"
+                                           now: 15 force-explicit?: #t custody-oid: "custody:1"))
+                   (self-end (work-handover! journal "work-54" claims1 "step-a" "agent:beta"
+                                             now: 15 force-explicit?: #t endorsed-by: "agent:beta" custody-oid: "custody:1"))
+                   (stale-cas (work-handover! journal "work-54" claims1 "step-a" "agent:beta"
+                                              now: 15 force-explicit?: #t endorsed-by: "human:rev"
+                                              expected-epoch: 99 custody-oid: "custody:1"))
+                   (good-ho (work-handover! journal "work-54" claims1 "step-a" "agent:beta"
+                                            now: 15 force-explicit?: #t endorsed-by: "human:rev"
+                                            expected-epoch: 1 custody-oid: "custody:1"))
+                   (expired-owner (work-assert-write-owner claims1 "step-a" "agent:alpha" now: 35))
+                   (stale-write (work-assert-write-owner claims1 "step-a" "agent:alpha" expected-epoch: 2)))
+              (check-equal? (.ref hijack 'handed-over?) #f)
+              (check-equal? (.ref hijack 'reason) 'explicit-early-handover-requires-non-self-endorsement)
+              (check-equal? (.ref self-end 'handed-over?) #f)
+              (check-equal? (.ref stale-cas 'handed-over?) #f)
+              (check-equal? (.ref stale-cas 'reason) 'stale-lease-epoch-cas-mismatch)
+              (check-equal? (.ref good-ho 'handed-over?) #t)
+              (check-equal? (.ref good-ho 'claim-lease-epoch) 2)
+              (check-equal? (.ref expired-owner 'admitted?) #f)
+              (check-equal? (.ref expired-owner 'reason) 'active-lease-expired)
+              (check-equal? (.ref stale-write 'admitted?) #f)
+              (check-equal? (.ref stale-write 'reason) 'stale-lease-epoch-cas-mismatch))
+            ;; BUG-D4: unclosed-attempts MUST block ready-to-auto-archive even when in-flight & pending-effects are empty
+            (let* ((n1 (funflow-dag-node 'build effect-class: PureCAS. status: 'done source-cut: "cut-54"))
+                   (snap-done (make-checked-work-snapshot
+                               task-id: "work-54" root-id: "work-54" root-title: "Crash Quiescence"
+                               root-status: 'done checklist-done: 1 checklist-total: 1
+                               dag-nodes: (list n1) mainline-done: 1 mainline-total: 1))
+                   (plan-unclosed (work-orchestration-plan PureTask. snap-done (.o unclosed-attempts: '("att-crashed-1"))))
+                   (arch-denied (durable-work-commit-archive! journal PureTask. snap-done
+                                                              (.o unclosed-attempts: '("att-crashed-1"))
+                                                              "2026-11-24 Tue 14:00"))
+                   (reopen-never-arch (durable-work-reopen! journal PureTask. snap-done "2026-11-24 Tue 14:05")))
+              (check-equal? (.ref plan-unclosed 'needs-recovery) '("att-crashed-1"))
+              (check-equal? (.ref plan-unclosed 'ready-to-auto-archive?) #f)
+              (check-equal? (.ref arch-denied 'committed?) #f)
+              (check-equal? (.ref reopen-never-arch 'reopened?) #f)
+              (check-equal? (.ref reopen-never-arch 'reason) 'task-not-archived)))
           (lambda ()
             (journal-close! journal)
             (when (file-exists? jpath) (delete-file jpath))))))))

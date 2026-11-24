@@ -27,19 +27,45 @@
     (append (filter (lambda (c) (not (equal? (.ref c 'node-id) nid))) claims)
             (list next-claim))))
 
-(def (work-assert-write-owner claims node-id actor)
+(def (work-assert-write-owner claims node-id actor
+                              now: (now #f)
+                              expected-epoch: (expected-epoch #f))
   (let ((claim (work-find-claim claims node-id)))
     (cond
      ((or (not claim)
           (not (.ref claim 'owner-actor))
           (not (equal? (.ref claim 'claim-state) "claimed-active")))
+      (if (and expected-epoch (not (= expected-epoch (if claim (.ref claim 'claim-lease-epoch) 0))))
+        (.o bind-these: #f
+            kind: 'agentic-ai-lab.durable.write-ownership-check.v1
+            admitted?: #f
+            reason: 'stale-lease-epoch-cas-mismatch
+            node-id: node-id
+            actor: actor
+            current-owner: (and claim (.ref claim 'owner-actor)))
+        (.o bind-these: #f
+            kind: 'agentic-ai-lab.durable.write-ownership-check.v1
+            admitted?: #t
+            reason: 'node-unclaimed-or-inactive
+            node-id: node-id
+            actor: actor
+            current-owner: (and claim (.ref claim 'owner-actor)))))
+     ((and expected-epoch (not (= expected-epoch (.ref claim 'claim-lease-epoch))))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.write-ownership-check.v1
-          admitted?: #t
-          reason: 'node-unclaimed-or-inactive
+          admitted?: #f
+          reason: 'stale-lease-epoch-cas-mismatch
           node-id: node-id
           actor: actor
-          current-owner: (and claim (.ref claim 'owner-actor))))
+          current-owner: (.ref claim 'owner-actor)))
+     ((and (exact-integer? now) (>= now (+ (.ref claim 'heartbeat-at) (.ref claim 'lease-ttl))))
+      (.o bind-these: #f
+          kind: 'agentic-ai-lab.durable.write-ownership-check.v1
+          admitted?: #f
+          reason: 'active-lease-expired
+          node-id: node-id
+          actor: actor
+          current-owner: (.ref claim 'owner-actor)))
      ((equal? (.ref claim 'owner-actor) actor)
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.write-ownership-check.v1
@@ -61,8 +87,9 @@
                   worktree: (worktree "main")
                   now: (now 0)
                   ttl: (ttl 120)
-                  span: (span #f))
-  (let ((check (work-assert-write-owner claims node-id actor)))
+                  span: (span #f)
+                  expected-epoch: (expected-epoch #f))
+  (let ((check (work-assert-write-owner claims node-id actor expected-epoch: expected-epoch)))
     (if (not (.ref check 'admitted?))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.claim-result.v1
@@ -138,7 +165,7 @@
                         digest: (canonical-sha256 (list task-id parent-node-id new-node-id actor now))))
            (key (claim-journal-key task-id new-node-id)))
       (when journal
-        (journal-put-fenced! journal (string-append key ":ext") key receipt))
+        (journal-put-fenced! journal (string-append key ":ext:" (.ref receipt 'digest)) key receipt))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.extend-result.v1
           extended?: #t
@@ -153,6 +180,8 @@
 (def (work-handover! journal task-id claims node-id next-actor
                      now: (now 0)
                      force-explicit?: (force-explicit? #f)
+                     endorsed-by: (endorsed-by #f)
+                     expected-epoch: (expected-epoch #f)
                      custody-oid: (custody-oid #f))
   (let ((claim (work-find-claim claims node-id)))
     (if (not claim)
@@ -164,9 +193,23 @@
           next-claims: claims)
       (let* ((hb (.ref claim 'heartbeat-at))
              (ttl (.ref claim 'lease-ttl))
+             (cur-epoch (.ref claim 'claim-lease-epoch))
              (expired? (>= now (+ hb ttl)))
+             (epoch-ok? (or (not expected-epoch) (= expected-epoch cur-epoch)))
+             (valid-endorser? (and (string? endorsed-by)
+                                   (> (string-length endorsed-by) 0)
+                                   (not (equal? endorsed-by next-actor))))
              (has-custody? (and (string? custody-oid) (> (string-length custody-oid) 0))))
         (cond
+         ((not epoch-ok?)
+          (.o bind-these: #f
+              kind: 'agentic-ai-lab.durable.handover-result.v1
+              handed-over?: #f
+              reason: 'stale-lease-epoch-cas-mismatch
+              node-id: node-id
+              current-owner: (.ref claim 'owner-actor)
+              current-epoch: cur-epoch
+              next-claims: claims))
          ((and (not force-explicit?) (not expired?))
           (.o bind-these: #f
               kind: 'agentic-ai-lab.durable.handover-result.v1
@@ -176,6 +219,14 @@
               current-owner: (.ref claim 'owner-actor)
               expires-at: (+ hb ttl)
               next-claims: claims))
+         ((and force-explicit? (not expired?) (not valid-endorser?))
+          (.o bind-these: #f
+              kind: 'agentic-ai-lab.durable.handover-result.v1
+              handed-over?: #f
+              reason: 'explicit-early-handover-requires-non-self-endorsement
+              node-id: node-id
+              current-owner: (.ref claim 'owner-actor)
+              next-claims: claims))
          ((not has-custody?)
           (.o bind-these: #f
               kind: 'agentic-ai-lab.durable.handover-result.v1
@@ -184,7 +235,7 @@
               node-id: node-id
               next-claims: claims))
          (else
-          (let* ((next-epoch (+ 1 (.ref claim 'claim-lease-epoch)))
+          (let* ((next-epoch (+ 1 cur-epoch))
                  (next-claim (make-checked-work-claim
                               node-id next-actor "claimed-active" next-epoch now ttl
                               (.ref claim 'worktree) (.ref claim 'extends-id) (.ref claim 'span)))
@@ -195,21 +246,23 @@
                               node-id: node-id
                               prior-owner: (.ref claim 'owner-actor)
                               next-owner: next-actor
+                              endorsed-by: endorsed-by
                               claim-lease-epoch: next-epoch
                               custody-oid: custody-oid
                               via-expiry?: expired?
                               digest: (canonical-sha256
-                                       (list task-id node-id next-actor next-epoch custody-oid))))
+                                       (list task-id node-id next-actor endorsed-by next-epoch custody-oid))))
                  (key (claim-journal-key task-id node-id)))
             (when journal
               (journal-put-fenced! journal (string-append key ":ho:" (number->string next-epoch)) key receipt))
             (.o bind-these: #f
                 kind: 'agentic-ai-lab.durable.handover-result.v1
                 handed-over?: #t
-                reason: (if expired? 'expired-lease-custody-takeover 'explicit-custody-handover)
+                reason: (if expired? 'expired-lease-custody-takeover 'explicit-endorsed-custody-handover)
                 node-id: node-id
                 prior-owner: (.ref claim 'owner-actor)
                 next-owner: next-actor
+                endorsed-by: endorsed-by
                 claim-lease-epoch: next-epoch
                 custody-oid: custody-oid
                 claim: next-claim

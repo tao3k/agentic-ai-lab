@@ -382,6 +382,8 @@
         (check-equal? (.ref eff-env 'lease-start) 10)
         (check-equal? (.ref eff-env 'lease-end) 50)
         (check-equal? (.ref eff-env 'can-push?) #f)
+        ;; BUG-D1 regression: overlay max-parallel: 6 must stay monotonically clamped to parent max-concurrency: 2
+        (check-equal? (.ref (.ref overlaid 'policy) 'max-concurrency) 2)
         (check-equal? (.ref ws-plan 'valid?) #t)
         (check-equal? (.ref ws-plan 'any-remote-drift?) #t)
         (check-equal? (.ref ws-plan 'push-order) '(yuanxu lab marlin))))
@@ -476,4 +478,42 @@
               (check-equal? (.ref expired-takeover 'next-owner) "agent:beta")))
           (lambda ()
             (journal-close! journal)
-            (when (file-exists? jpath) (delete-file jpath))))))))
+            (when (file-exists? jpath) (delete-file jpath)))))
+
+    (test-case "Slice 54 BUG-D5 regression: CANCELLED :INVARIANT: stays unsatisfied and Org DAG forwards EffectClass/code/env digests"
+      (let* ((bug-d5-org
+              (string-append
+               "* DONE Mainline With Cancelled Invariant [1/1]\n"
+               ":PROPERTIES:\n"
+               ":ID: task-d5\n"
+               ":END:\n"
+               "- [X] Done\n\n"
+               "** CANCELLED Critical Safety Invariant\n"
+               ":PROPERTIES:\n"
+               ":ID: inv-1\n"
+               ":INVARIANT: zero-data-loss\n"
+               ":END:\n\n"
+               "** CANCELLED Blocker Without Defeat Conditions\n"
+               ":PROPERTIES:\n"
+               ":ID: blk-1\n"
+               ":ROLE: detour\n"
+               ":DETOUR_KIND: blocker\n"
+               ":END:\n\n"
+               "** TODO Deploy Step\n"
+               ":PROPERTIES:\n"
+               ":ID: step-deploy\n"
+               ":EFFECT_CLASS: FencedEffect\n"
+               ":STEP_CODE_DIGEST: sha256:code-v2\n"
+               ":ENV_DIGEST: sha256:nix-v2\n"
+               ":PREMISE_DIGESTS: pkg=sha-v2\n"
+               ":END:\n"))
+             (align (task-reanchor-mainline AuthRefactorTask. bug-d5-org))
+             (dag-proj (task-funflow-dag AuthRefactorTask. bug-d5-org))
+             (deploy-node (hash-ref (.ref (.ref dag-proj 'dag) 'node-table) 'step-deploy)))
+        (check-equal? (.ref align 'unsatisfied-invariants) '("inv-1"))
+        (check-equal? (.ref align 'open-blocker-detours) '("blk-1"))
+        (check-equal? (.ref align 'auto-archive-blocked?) #t)
+        (check-equal? (.ref (.ref deploy-node 'effect-class) 'effect-kind) 'fenced-effect)
+        (check-equal? (.ref deploy-node 'step-code-digest) "sha256:code-v2")
+        (check-equal? (.ref deploy-node 'env-digest) "sha256:nix-v2")
+        (check-equal? (.ref deploy-node 'premise-digests) '(("pkg" . "sha-v2"))))))))

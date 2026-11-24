@@ -13,6 +13,7 @@
         (only-in "store-flow.ss" put-dir-flow get-dir-flow store-flow)
         (only-in "durable-dag.ss" FunflowDurableDagExports)
         (only-in "cas-store.ss" FunflowCasStoreExports)
+        (only-in "governed-runner.ss" GovernedFunflowRunnerExports)
         "config-prototypes.ss" "graph-projection.ss"
         (only-in "scenario.ss" Scenario))
 (export Task. Job. FunflowModule.)
@@ -25,6 +26,8 @@
   flow: (.o (flow-arr) (flow-then) (flow-fanout) (flow-map) (flow-bind)
             (flow-first) (flow-second) (conditional-flow) (try-flow)
             (return-flow) (cached-pure-flow))
-  durable-dag: (.o (:: @ FunflowDurableDagExports) cas-store: FunflowCasStoreExports)
+  durable-dag: (.o (:: @ FunflowDurableDagExports)
+                   cas-store: FunflowCasStoreExports
+                   governed-runner: GovernedFunflowRunnerExports)
   pipeline-graph: yuanxu-funflow-poo-pipeline->functional-dag
   prototypes: (.o Task: Task. Job: Job. check: funflow-check pipeline: funflow-pipeline))

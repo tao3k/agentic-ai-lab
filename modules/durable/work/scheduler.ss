@@ -45,7 +45,8 @@
          (req-sod (or (opt-ref policy 'require-sod-reviewer #f)
                       (ov-ref 'require-sod-reviewer #f)))
          (fold-th (ov-ref 'fold-thinking-by-default (opt-ref policy 'fold-thinking-by-default #t)))
-         (drill (ov-ref 'allow-agent-drill-down (opt-ref policy 'allow-agent-drill-down #t)))
+         (drill (and (opt-ref policy 'allow-agent-drill-down #t)
+                     (ov-ref 'allow-agent-drill-down #t)))
          (focused-arch (opt-ref policy 'focused-tab-archive 'on-blur))
          (scratch-prom (opt-ref policy 'scratch-promotion 'on-plan))
          (reopen-m (opt-ref policy 'reopen-mode 'peek-until-edit))
@@ -116,7 +117,11 @@
          (checklists-done-rows (if all-checklists-done? tid-rows '()))
          (no-blockers-rows (if no-open-blockers? tid-rows '()))
          (invariants-met-rows (if no-open-invariants? tid-rows '()))
-         (quiescent-rows (if (and (null? in-flight-ids) (null? pending-effects)) tid-rows '()))
+         (quiescent-rows (if (and (null? in-flight-ids)
+                                  (null? pending-effects)
+                                  (null? recovery-ids))
+                           tid-rows
+                           '()))
          (active-rows (if (not already-archived?) tid-rows '()))
          (focused-keep-rows (if focused-on-blur? tid-rows '()))
          (peeked-rows (if peeked? tid-rows '()))
@@ -376,25 +381,33 @@
 
 (def (durable-work-reopen! journal task snapshot timestamp)
   (let* ((task-id (.ref snapshot 'task-id))
-         (ts (if (and (string? timestamp) (> (string-length timestamp) 0))
-               timestamp
-               "2026-11-24 Tue 00:00"))
-         (digest (canonical-sha256 (list 'agentic-ai-lab.durable.reopen-receipt.v1 task-id ts)))
-         (receipt (.o bind-these: #f
-                      kind: 'agentic-ai-lab.durable.reopen-receipt.v1
-                      task-id: task-id
-                      timestamp: ts
-                      digest: digest))
-         (key (reopen-journal-key task-id))
-         (tx-id (string-append key ":" digest)))
-    (when journal
-      (journal-put-fenced! journal tx-id key receipt))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.durable.reopen-result.v1
-        reopened?: #t
-        task-id: task-id
-        timestamp: ts
-        receipt: receipt)))
+         (archived-in-snap? (opt-ref snapshot 'root-archived? #f))
+         (archived-in-journal? (and journal (object? (journal-get journal (archive-journal-key task-id))))))
+    (if (and journal (not archived-in-snap?) (not archived-in-journal?))
+      (.o bind-these: #f
+          kind: 'agentic-ai-lab.durable.reopen-result.v1
+          reopened?: #f
+          reason: 'task-not-archived
+          task-id: task-id)
+      (let* ((ts (if (and (string? timestamp) (> (string-length timestamp) 0))
+                   timestamp
+                   "2026-11-24 Tue 00:00"))
+             (digest (canonical-sha256 (list 'agentic-ai-lab.durable.reopen-receipt.v1 task-id ts)))
+             (receipt (.o bind-these: #f
+                          kind: 'agentic-ai-lab.durable.reopen-receipt.v1
+                          task-id: task-id
+                          timestamp: ts
+                          digest: digest))
+             (key (reopen-journal-key task-id))
+             (tx-id (string-append key ":" digest)))
+        (when journal
+          (journal-put-fenced! journal tx-id key receipt))
+        (.o bind-these: #f
+            kind: 'agentic-ai-lab.durable.reopen-result.v1
+            reopened?: #t
+            task-id: task-id
+            timestamp: ts
+            receipt: receipt)))))
 
 (def (durable-work-recover journal task snapshot
                            in-flight-ids: (in-flight-ids '())

@@ -37,6 +37,7 @@
                  upsert-properties upsert-section append-section
                  org-apply-edit org-apply-edits)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
+                 PureCAS. VerifiedEpistemic. FencedEffect.
                  funflow-dag-node)
         "../../../durable/work.ss")
 
@@ -74,6 +75,23 @@
 (def (parse-uint-or s default)
   (let ((n (and (string? s) (string->number (string-trim s)))))
     (if (and (exact-integer? n) (>= n 0)) n default)))
+
+(def (parse-effect-class raw)
+  (let ((s (and (string? raw) (string-downcase (string-trim raw)))))
+    (cond
+     ((or (equal? s "fenced-effect") (equal? s "fencedeffect") (equal? s "fenced")) FencedEffect.)
+     ((or (equal? s "verified-epistemic") (equal? s "verifiedepistemic") (equal? s "epistemic")) VerifiedEpistemic.)
+     (else PureCAS.))))
+
+(def (parse-premise-digests raw)
+  (if (and (string? raw) (> (string-length (string-trim raw)) 0))
+    (filter-map
+     (lambda (tok)
+       (let ((parts (string-split tok #\=)))
+         (and (= (length parts) 2)
+              (cons (string-trim (car parts)) (string-trim (cadr parts))))))
+     (split-ws-ids raw))
+    '()))
 
 (def (status-symbol->org-todo status)
   (case status
@@ -135,6 +153,11 @@
                   ((fin-for) (org-headline-property ctx h "FINALIZER_FOR"))
                   ((tier-str) (org-headline-property ctx h "MODEL_TIER"))
                   ((tier) (if tier-str (string->symbol (string-downcase tier-str)) 'builder))
+                  ((eff-cls) (parse-effect-class (org-headline-property ctx h "EFFECT_CLASS")))
+                  ((code-dig) (or (org-headline-property ctx h "STEP_CODE_DIGEST") "sha256:code-default"))
+                  ((env-dig) (or (org-headline-property ctx h "ENV_DIGEST") "sha256:env-default"))
+                  ((prem-digs) (parse-premise-digests (org-headline-property ctx h "PREMISE_DIGESTS")))
+                  ((idem-key) (org-headline-property ctx h "IDEMPOTENCY_KEY"))
                   ((h-start) (.ref h 'start))
                   ((h-end) (.ref h 'end))
                   ((h-text) (org-source-slice bytes h-start h-end))
@@ -144,6 +167,11 @@
                 prop-id
                 needs: deps
                 after-start: fin-for
+                effect-class: eff-cls
+                step-code-digest: code-dig
+                env-digest: env-dig
+                premise-digests: prem-digs
+                idempotency-key: idem-key
                 source-cut: source-cut
                 input-digest: (canonical-sha256 h-text)
                 contract-digest: (canonical-sha256 (list prop-id deps fin-for))
@@ -170,19 +198,24 @@
               (role (or (org-headline-property ctx h "ROLE") "mainline"))
               (dkind (or (org-headline-property ctx h "DETOUR_KIND") "side-quest"))
               (anchor (org-headline-property ctx h "RETURN_ANCHOR"))
+              (defeat-raw (org-headline-property ctx h "DEFEAT_CONDITIONS"))
+              (has-defeat? (and (string? defeat-raw) (> (string-length (string-trim defeat-raw)) 0)))
               (depth (parse-uint-or (org-headline-property ctx h "DETOUR_DEPTH")
                                     (if (equal? role "detour") 1 0)))
               (inv (org-headline-property ctx h "INVARIANT"))
               (st (org-headline-todo-state ctx h))
               (done? (or (eq? st 'done) (eq? st 'cancelled))))
          (when (> depth max-depth) (set! max-depth depth))
-         (when (and inv (not done?))
+         ;; BUG-D5 fix: ONLY 'done satisfies an :INVARIANT: (never 'cancelled).
+         (when (and inv (not (eq? st 'done)))
            (set! unsat-inv (cons (if (> (string-length hid) 0) hid inv) unsat-inv)))
          (cond
           ((equal? role "detour")
            (when (and anchor (not return-anchor)) (set! return-anchor anchor))
            (cond
-            (done? (set! comp-detours (cons hid comp-detours)))
+            ((eq? st 'done) (set! comp-detours (cons hid comp-detours)))
+            ((and (eq? st 'cancelled) (or (not (equal? dkind "blocker")) has-defeat?))
+             (set! comp-detours (cons hid comp-detours)))
             ((equal? dkind "blocker") (set! open-blockers (cons hid open-blockers)))
             (else (set! open-sq (cons hid open-sq)))))
           ((> (org-headline-level ctx h) 1)
@@ -348,18 +381,23 @@
 (def (org-shared-context-perceive-claims org-source-text)
   (org->claim-table org-source-text))
 
-(def (org-shared-context-assert-write-owner org-source-text node-id actor)
-  (work-assert-write-owner (org->claim-table org-source-text) node-id actor))
+(def (org-shared-context-assert-write-owner org-source-text node-id actor
+                                            now: (now #f)
+                                            expected-epoch: (expected-epoch #f))
+  (work-assert-write-owner (org->claim-table org-source-text) node-id actor
+                           now: now expected-epoch: expected-epoch))
 
 (def (org-shared-context-claim! journal task-id node-id actor
                                 worktree: (worktree "main")
                                 scope-digest: (scope-digest "")
                                 now: (now 0)
                                 ttl: (ttl 120)
+                                expected-epoch: (expected-epoch #f)
                                 org-source: (org-source ""))
   (let* ((claims (org->claim-table org-source))
          (res (work-claim! journal task-id claims node-id actor
-                           worktree: worktree now: now ttl: ttl)))
+                           worktree: worktree now: now ttl: ttl
+                           expected-epoch: expected-epoch)))
     (if (not (.ref res 'claimed?))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.claim-result.v1
@@ -428,11 +466,16 @@
 (def (org-shared-context-handover! journal task-id node-id next-actor
                                    now: (now 0)
                                    force-explicit?: (force-explicit? #f)
+                                   endorsed-by: (endorsed-by #f)
+                                   expected-epoch: (expected-epoch #f)
                                    custody-oid: (custody-oid #f)
                                    org-source: (org-source ""))
   (let* ((claims (org->claim-table org-source))
          (res (work-handover! journal task-id claims node-id next-actor
-                              now: now force-explicit?: force-explicit? custody-oid: custody-oid)))
+                              now: now force-explicit?: force-explicit?
+                              endorsed-by: endorsed-by
+                              expected-epoch: expected-epoch
+                              custody-oid: custody-oid)))
     (if (not (.ref res 'handed-over?))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.handover-result.v1

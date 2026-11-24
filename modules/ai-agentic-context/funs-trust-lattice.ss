@@ -21,6 +21,9 @@
         agentic-ai-lab-ai-agentic-context-causal-counterfactual-audit
         agentic-ai-lab-ai-agentic-context-evaluate-stall-advisory
         agentic-ai-lab-ai-agentic-context-verify-tool-schema-pin
+        agentic-ai-lab-ai-agentic-context-admit-mcp-tool-registration
+        agentic-ai-lab-ai-agentic-context-admit-camel-sensitive-sink
+        agentic-ai-lab-ai-agentic-context-audit-tool-metadata-decision-dependence
         agentic-ai-lab-ai-agentic-context-replay-audit-capsule)
 
 (def digest agentic-ai-lab-ai-agentic-context-digest)
@@ -396,6 +399,87 @@
         reason: reason
         pinned-digest: (string-copy pinned-schema-digest)
         live-digest: live-digest
+        action-authorized?: #f)))
+
+;;; ---------------------------------------------------------------------------
+;;; Slice 55: MCP Cross-Server Shadowing Rejection, CaMeL Sensitive Sink
+;;; Provenance Gate & MindGuard Zero-LLM Tool-Metadata Decision Audit
+;;; ---------------------------------------------------------------------------
+
+(def (agentic-ai-lab-ai-agentic-context-admit-mcp-tool-registration
+      registry server-id tool-id description-text schema-descriptor)
+  (unless (and (list? registry) (text? server-id) (text? tool-id) (string? description-text))
+    (error "Invalid MCP tool registration inputs"))
+  (let* ((conflict (let loop ((rest registry))
+                     (cond
+                      ((null? rest) #f)
+                      ((and (object? (car rest))
+                            (equal? (.ref (car rest) 'tool-id) tool-id)
+                            (not (equal? (.ref (car rest) 'server-id) server-id)))
+                       (car rest))
+                      (else (loop (cdr rest))))))
+         (manifest-digest (digest (list 'mcp-tool-manifest.v1
+                                        server-id tool-id description-text schema-descriptor))))
+    (if conflict
+      (.o bind-these: #f
+          kind: 'agentic-ai-lab.ai-agentic-context.mcp-tool-registration.v1
+          admitted?: #f
+          reason: 'cross-server-tool-shadowing-rejected
+          server-id: (string-copy server-id)
+          tool-id: (string-copy tool-id)
+          conflicting-server: (.ref conflict 'server-id)
+          manifest-digest: manifest-digest
+          metadata-trust-tier: 'untrusted-data
+          action-authorized?: #f)
+      (.o bind-these: #f
+          kind: 'agentic-ai-lab.ai-agentic-context.mcp-tool-registration.v1
+          admitted?: #t
+          reason: 'mcp-tool-manifest-pinned
+          server-id: (string-copy server-id)
+          tool-id: (string-copy tool-id)
+          manifest-digest: manifest-digest
+          metadata-trust-tier: 'untrusted-data
+          action-authorized?: #f))))
+
+(def (agentic-ai-lab-ai-agentic-context-admit-camel-sensitive-sink
+      sink-kind arg-origin manifest-pin-valid?
+      declass-cert: (declass-cert #f)
+      declass-cert-active?: (declass-cert-active? #f))
+  (let* ((sensitive? (eq? sink-kind 'sensitive))
+         (untrusted? (and (memq arg-origin '(untrusted-metadata raw-tool-output untrusted-data)) #t))
+         (cert-ok? (and declass-cert
+                        declass-cert-active?
+                        (agentic-ai-lab-ai-agentic-context-declassification-cert-shape? declass-cert)))
+         (reason (cond
+                  ((not manifest-pin-valid?) 'tool-manifest-rug-pull-blocked)
+                  ((and sensitive? untrusted? (not cert-ok?)) 'camel-untrusted-origin-blocked-at-sensitive-sink)
+                  (else 'camel-sink-invocation-admitted)))
+         (admitted? (eq? reason 'camel-sink-invocation-admitted)))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.camel-sink-decision.v1
+        admitted?: admitted?
+        reason: reason
+        sink-kind: sink-kind
+        arg-origin: arg-origin
+        manifest-pin-valid?: (and manifest-pin-valid? #t)
+        declass-certified?: (and cert-ok? #t)
+        action-authorized?: #f)))
+
+(def (agentic-ai-lab-ai-agentic-context-audit-tool-metadata-decision-dependence
+      decision-with-metadata decision-without-metadata metadata-endorsed?)
+  (let* ((flipped? (not (equal? decision-with-metadata decision-without-metadata)))
+         (endorsed? (and metadata-endorsed? #t))
+         (hijack? (and flipped? (not endorsed?))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.ai-agentic-context.tool-metadata-decision-audit.v1
+        decision-flipped?: flipped?
+        metadata-endorsed?: endorsed?
+        decision-hijack-flagged?: hijack?
+        reason: (cond
+                 (hijack? 'unendorsed-tool-metadata-flipped-decision)
+                 (flipped? 'endorsed-tool-metadata-influence)
+                 (else 'tool-decision-metadata-invariant))
+        llm-calls-used: 0
         action-authorized?: #f)))
 
 ;; Capstone 47: Executable Zero-LLM DeterministicAuditCapsule Cold Replay Verifier.

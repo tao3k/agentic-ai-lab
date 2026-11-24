@@ -8,6 +8,7 @@
         "funs-governance-graph.ss" "funs-org-elements-gql.ss"
         "funs-org-progressive-rules.ss" "funs-subtree-mediation.ss"
         "funs-trust-lattice.ss" "funs-epistemic-consolidation.ss"
+        "funs-assembly-pipeline.ss"
         "org-contract/elements.ss")
 (export Config ContextOperations)
 (def ContextOperations
@@ -57,4 +58,17 @@
       admit-security-branch: agentic-ai-lab-ai-agentic-context-admit-security-branch
       admit-consolidation: agentic-ai-lab-ai-agentic-context-admit-consolidation
       quotient-survives?: agentic-ai-lab-ai-agentic-context-quotient-survives?
-      join-provider-receipts: agentic-ai-lab-ai-agentic-context-join-provider-receipts))
+      join-provider-receipts: agentic-ai-lab-ai-agentic-context-join-provider-receipts
+      memory-candidate: agentic-ai-lab-ai-agentic-context-memory-candidate
+      admit-memory-promotion: agentic-ai-lab-ai-agentic-context-admit-memory-promotion
+      recall-memories: agentic-ai-lab-ai-agentic-context-recall-memories
+      serialize-two-zone-prompt: agentic-ai-lab-ai-agentic-context-serialize-two-zone-prompt
+      admit-confined-detour-return: agentic-ai-lab-ai-agentic-context-admit-confined-detour-return
+      causal-counterfactual-audit: agentic-ai-lab-ai-agentic-context-causal-counterfactual-audit
+      evaluate-stall-advisory: agentic-ai-lab-ai-agentic-context-evaluate-stall-advisory
+      verify-tool-schema-pin: agentic-ai-lab-ai-agentic-context-verify-tool-schema-pin
+      admit-mcp-tool-registration: agentic-ai-lab-ai-agentic-context-admit-mcp-tool-registration
+      admit-camel-sensitive-sink: agentic-ai-lab-ai-agentic-context-admit-camel-sensitive-sink
+      audit-tool-metadata-decision-dependence: agentic-ai-lab-ai-agentic-context-audit-tool-metadata-decision-dependence
+      replay-audit-capsule: agentic-ai-lab-ai-agentic-context-replay-audit-capsule
+      assemble-governed-turn: agentic-ai-lab-ai-agentic-context-assemble-governed-turn))

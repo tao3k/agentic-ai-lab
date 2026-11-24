@@ -75,6 +75,25 @@
 (.defgeneric reconcile-detour-exit (detour exit-state anchor)
   (protocol DetourExitProtocol))
 
+(def (valid-declass-cert? cert)
+  (cond
+   ((eq? cert #t) #t)
+   ((and (string? cert) (> (string-length cert) 0)) #t)
+   ((object? cert)
+    (let ((p (opt-ref cert 'proposer #f))
+          (d (opt-ref cert 'declassifier #f))
+          (r (opt-ref cert 'recipient #f)))
+      (and (opt-ref cert 'admitted? #t)
+           (if (and p d r)
+             (and (not (equal? p d)) (not (equal? d r)) (not (equal? p r)))
+             #t))))
+   (else #f)))
+
+(def (monotonic-min-nat parent-val overlay-val default-val)
+  (let* ((p (if (and (exact-integer? parent-val) (>= parent-val 0)) parent-val default-val))
+         (o (if (and (exact-integer? overlay-val) (>= overlay-val 0)) overlay-val #f)))
+    (if o (min p o) p)))
+
 (.defmethod-bundle DetourExitMethods DetourExitProtocol
   (.defmethod (reconcile-detour-exit detour exit-state anchor)
     (.o bind-these: #f
@@ -87,17 +106,26 @@
                                      (anchor (prototype AnchorKind.)))
     (let* ((receipt (opt-ref exit-state 'outcome-receipt-digest #f))
            (has-receipt? (and (string? receipt) (> (string-length receipt) 0)))
+           (tainted? (and (opt-ref detour 'tainted? #f) #t))
+           (schema-attested? (and (opt-ref exit-state 'schema-attested? #f) #t))
+           (has-declass? (valid-declass-cert? (opt-ref exit-state 'declassification-cert #f)))
+           (confinement-ok? (or (not tainted?) schema-attested? has-declass?))
+           (admitted? (and has-receipt? confinement-ok?))
            (next-core (merge-counterexample-core
                        (opt-ref anchor 'mainline-counterexample-core '())
                        (opt-ref exit-state 'defeat-conditions '()))))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.durable.detour-reconcile.v1
-          admitted?: has-receipt?
+          admitted?: admitted?
           exit-kind: 'completed
-          reason: (if has-receipt? 'detour-completed-and-reanchored 'missing-outcome-receipt-digest)
+          reason: (cond
+                   ((not has-receipt?) 'missing-outcome-receipt-digest)
+                   ((not confinement-ok?) 'tainted-detour-requires-attestation-or-declassification)
+                   (else 'detour-completed-and-reanchored))
           return-anchor: (or (opt-ref detour 'return-anchor #f) (opt-ref anchor 'anchor-id #f))
           folded-disclosure-depth: 0
-          unblocks-mainline?: has-receipt?
+          unblocks-mainline?: admitted?
+          mainline-taint-preserved?: admitted?
           next-counterexample-core: next-core
           custody-oid: #f
           promoted-task-id: #f)))
@@ -172,12 +200,18 @@
          (overlay-env (opt-ref overlay 'restriction-envelope #f))
          (next-env (funflow-envelope-meet parent-env overlay-env))
          (parent-policy (opt-ref task 'policy DurableWorkPolicy.))
+         (ov-conc (opt-ref overlay 'max-parallel (opt-ref overlay 'max-concurrency #f)))
+         (ov-retry (opt-ref overlay 'retry-budget #f))
+         (ov-depth (opt-ref overlay 'max-detour-depth #f))
+         (ov-drill (opt-ref overlay 'allow-agent-drill-down #t))
          (next-policy
           (.o (:: @ parent-policy)
               bind-these: #f
-              max-concurrency: (opt-ref overlay 'max-parallel (opt-ref parent-policy 'max-concurrency 4))
-              retry-budget: (opt-ref overlay 'retry-budget (opt-ref parent-policy 'retry-budget 2))
-              max-detour-depth: (opt-ref overlay 'max-detour-depth (opt-ref parent-policy 'max-detour-depth 2)))))
+              max-concurrency: (monotonic-min-nat (opt-ref parent-policy 'max-concurrency 4) ov-conc 4)
+              retry-budget: (monotonic-min-nat (opt-ref parent-policy 'retry-budget 2) ov-retry 2)
+              max-detour-depth: (monotonic-min-nat (opt-ref parent-policy 'max-detour-depth 2) ov-depth 2)
+              allow-agent-drill-down: (and (opt-ref parent-policy 'allow-agent-drill-down #t)
+                                           (and ov-drill #t)))))
     (.o (:: @ task)
         bind-these: #f
         policy: next-policy
