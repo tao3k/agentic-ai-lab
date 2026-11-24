@@ -292,15 +292,14 @@ just deps
 just build
 #+end_src
 
-The default package =build.ss= publishes the native Governance, Session,
-loop-Governor and Cedar libraries, as well as its selected Module products.
-Core's existing =package-library-spec= derives the native dependencies from
-their public entries; Gerbil STD Make owns compilation and cleanup. A package
-installation therefore supplies the public libraries needed by explicit native
-imports. Selected Modules build first, supplying Core runtime prerequisites for
-the public libraries; cleanup uses the reverse order. Both phases delegate
-options to Gerbil's standard build script. Downstream packages can select
-further Lab owners through =yuanxu!=.
+The default package =build.ss= compiles only a minimal two-module baseline
+(=modules/ai-agentic-context= and =modules/temporal-causality=) through
+=init.exports= and Gerbil STD Make. Because Lab is structured to scale to
+thousands of modules, default package installation does not compile the entire
+repository or bypass Yuanxu ownership with ad hoc native-library lists.
+Downstream packages declare and compile only the Lab modules they need on
+demand through their own =yuanxu!= declaration; =just test= verifies all
+modules independently of default package compilation.
 
 The default =just clean/deps/build/test= recipes use Gerbil's build and test
 tools. =just build= incrementally compiles Core and Lab's development library.

@@ -5,7 +5,6 @@
 ;;; Product-owned selection; Core prepares sources without runtime activation.
 (import :tao3k/yuanxu/module-system/selection/init-syntax)
 (yuanxu!
-  :build-roots ("modules/module-authoring/interface")
   :load-modules "./modules" mode: auto export: ModulesSource :test-dir "./t"
   (ai-agentic-context +memory)
   (gitops +worktrunk)

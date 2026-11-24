@@ -8,12 +8,20 @@
         (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
-(export agentic-ai-lab-authorization-provider-kind
+(export AuthorizationScope
+        agentic-ai-lab-authorization-provider-kind
         agentic-ai-lab-authorization-capability-kind
         AgenticAILabAuthorizationProvider
         AgenticAILabAuthorizationCapability
         agentic-ai-lab-authorization-provider?
         agentic-ai-lab-authorization-capability?)
+
+(define-type (AuthorizationScope @ Type.)
+  identity: 'authorization/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/authorization/interface))))
 
 (def agentic-ai-lab-authorization-provider-kind
   'agentic-ai-lab.authorization-provider)

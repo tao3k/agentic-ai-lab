@@ -18,6 +18,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+# Keep this workflow thin: environment setup, caches, and artifact uploads live
+# here; dynamic gate logic, receipt checks, and target discovery live in
+# `dev/just/ci.just` and `packages/automation/ci_gates.py`.
 jobs:
   license-contract:
     name: License contract
@@ -29,15 +32,13 @@ jobs:
         with:
           submodules: true
 
-      - name: Validate repository license, version, and dependency contracts
+      - name: Validate repository contracts and ORG modularity budget
         run: |
           python3 packages/automation/check_license_contract.py
           python3 packages/automation/check_version_contract.py
           python3 packages/automation/check_namespace_contract.py
           python3 -m unittest discover -s packages/automation/tests -p 'test_*.py'
-
-      - name: Enforce ORG modularity budget (<=1000 lines)
-        run: python3 packages/automation/org_modularization.py scan --max-lines 1000 --fail-on-unmodularized
+          python3 packages/automation/org_modularization.py scan --max-lines 1000 --fail-on-unmodularized
 
   runtime-gerbil-tests:
     name: Runtime Gerbil unit tests (${{ matrix.os }})
@@ -52,7 +53,6 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
-      # Heap capacity is per test process; compiler capacity follows the runner.
       GERBIL_TEST_MAX_HEAP: 2G
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
@@ -81,22 +81,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential \
-            ca-certificates \
-            git \
-            libsqlite3-dev \
-            libssl-dev \
-            openjdk-17-jre-headless \
-            openssl \
-            pkg-config \
-            sqlite3 \
-            zlib1g-dev
-          # Preserve caller limits; package/test serialization does not cap
-          # the native compiler's own runner-derived backend capacity.
+            build-essential ca-certificates git libsqlite3-dev libssl-dev \
+            openjdk-17-jre-headless openssl pkg-config sqlite3 zlib1g-dev
           workers="${GERBIL_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}"
           [[ "$workers" =~ ^[1-9][0-9]*$ ]]
           echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
-          echo "Native compiler workers: $workers"
 
       - name: Install macOS system dependencies
         if: runner.os == 'macOS'
@@ -110,24 +99,11 @@ jobs:
           [[ "$workers" =~ ^[1-9][0-9]*$ ]]
           echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
-          "$(brew --prefix coreutils)/libexec/gnubin/timeout" --version
-
-          gcc_prefix="$(brew --prefix gcc)"
-          gcc_bin="$(
-            find "$gcc_prefix/bin" -maxdepth 1 -type f -name 'gcc-[0-9]*' \
-              | awk -F- '{print $NF "\t" $0}' \
-              | sort -n \
-              | tail -n 1 \
-              | cut -f2-
-          )"
+          gcc_bin="$(find "$(brew --prefix gcc)/bin" -maxdepth 1 -type f -name 'gcc-[0-9]*' | sort -V | tail -n 1)"
           test -x "$gcc_bin"
           echo "GERBIL_GCC=$gcc_bin" >> "$GITHUB_ENV"
-
           openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
-          zlib_prefix="$(brew --prefix zlib)"
-          sqlite_prefix="$(brew --prefix sqlite)"
-          echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$zlib_prefix/lib/pkgconfig:$sqlite_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
-          "$gcc_bin" --version
+          echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig:$(brew --prefix zlib)/lib/pkgconfig:$(brew --prefix sqlite)/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
 
       - name: Install pinned recipe runner
         run: |
@@ -149,26 +125,8 @@ jobs:
             .gerbil/bin
           key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
-      - name: Install Gerbil package dependencies
-        run: |
-          mkdir -p "$HOME/.gerbil/pkg"
-          gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          rebuild_dependents=false
-          if [ "${{ steps.runtime-gerbil-pkg-cache.outputs.cache-hit }}" != "true" ] ||
-             ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependency-cache-ready"))' >/tmp/gerbil-dependency-cache-check.log 2>&1; then
-            gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
-            # Restore the vendored Core pin after recursive dependency installation.
-            (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
-            rebuild_dependents=true
-          fi
-          gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
-          # Clean the vendored package through its native build declaration.
-          # Its development cleanup script imports the previously built Core.
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil clean)
-          gerbil env just build-core
-          if "$rebuild_dependents"; then
-            gerbil env gerbil interactive packages/automation/runtime-dependencies.ss --rebuild-core-dependents
-          fi
+      - name: Prepare Gerbil dependencies, Core build, and Lab link
+        run: just ci-prepare-gerbil-deps "${{ steps.runtime-gerbil-pkg-cache.outputs.cache-hit || 'false' }}"
 
       - name: Save Gerbil package cache
         if: steps.runtime-gerbil-pkg-cache.outputs.cache-hit != 'true'
@@ -180,41 +138,15 @@ jobs:
             .gerbil/bin
           key: gerbil-deps-v4-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ steps.runtime-core-source.outputs.revision }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
-      - name: Link the Lab source package for downstream qualification
-        run: |
-          gerbil env gerbil pkg link github.com/tao3k/agentic-ai-lab "$GITHUB_WORKSPACE"
-          mkdir -p dev/.gerbil/lib
-
       - name: Reject Core build input context regressions
-        working-directory: core
-        env:
-          GERBIL_PATH: ${{ github.workspace }}/.gerbil
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: |
-          just test-build-input-context-mutations "$RUNNER_TEMP/build-input-context"
-          just test-file t/module-publication-test.ss
-          just test-file t/module-testing-source-admission-test.ss
+        run: just ci-core-gates "$RUNNER_TEMP/build-input-context"
 
       - name: Check Authoring zero-carrier assertions
         if: runner.os == 'macOS'
-        working-directory: core
-        env:
-          GERBIL_PATH: ${{ github.workspace }}/.gerbil
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        shell: bash
-        run: |
-          set -euo pipefail
-          log="$RUNNER_TEMP/lab-authoring-carriers.log"
-          /usr/bin/time -p just test-file t/module-authoring-dispatch-work-test.ss 2>&1 | tee "$log"
-          grep -q '^MODULE-OK ' "$log"
-          grep -q '^HARNESS-OK ' "$log"
-          grep -qx 'OK' "$log"
-          if grep -Eq 'ERROR (CASE|CHECK|HARNESS)|Heap overflow|Stack overflow' "$log"; then
-            exit 1
-          fi
+        run: just ci-authoring-carriers "$RUNNER_TEMP/lab-authoring-carriers.log"
 
-      # Downstreams build their own selected products. Run this gate before
-      # the development library can supply precompiled Lab modules.
+      # Downstreams build their own selected products before the development
+      # library can supply precompiled Lab modules.
       - name: Qualify real selected downstreams
         id: downstreams
         continue-on-error: ${{ runner.os == 'macOS' }}
@@ -222,68 +154,12 @@ jobs:
           LAB_MACOS_QUALIFICATION_TIMING: ${{ runner.os == 'macOS' && '1' || '' }}
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
           LAB_TRACE_PRELUDE_CONTEXT: ${{ runner.os == 'macOS' && '1' || '' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Keep Gerbil’s linked-package manifest for Memory, then clean the Lab products.
-          gerbil env gerbil pkg build github.com/tao3k/agentic-ai-lab
-          gerbil env just clean
-          # Measure Memory before the other independent downstreams use this runner.
-          # Run every gate even if an earlier gate fails, then preserve the failure.
-          downstream_status=0
-          for category in context-memory governance deployment; do
-            suite="t/integration/lab/dependencies/yuanxu-$category-downstream-test.ss"
-            if [[ "$category" == deployment ]]; then
-              suite="t/yanxu/modules/services/opentofu/deployment-test.ss"
-            fi
-            /usr/bin/time -p gerbil env just test-file "$suite" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log" || downstream_status=$?
-          done
-          if (( downstream_status != 0 )); then
-            exit "$downstream_status"
-          fi
-          python3 - <<'PY'
-          import os
-          from pathlib import Path
-          import re
-          selections = {
-              "governance": ("LAB-GOVERNANCE-PRODUCT-USE-OK",
-                             "profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"),
-              "deployment": ("LAB-DEPLOYMENT-PRODUCT-USE-OK",
-                             "profile=deployment roots=1 owners=4 discovered-tests=3 lab-tests=1 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
-              "context-memory": ("LAB-CONTEXT-USE-OK mode=base",
-                                 "LAB-CONTEXT-USE-OK mode=enabled",
-                                 "LAB-CONTEXT-USE-OK mode=withdrawn",
-                                 "LAB-CONTEXT-REFUSAL-OK owner=ai-agentic-context feature=memory",
-                                 "LAB-CONTEXT-MEMORY-DOWNSTREAM-OK",
-                                 "hot=0 clean-isolation=ok scopes-during-build=0"),
-          }
-          forbidden = ("ERROR CASE", "ERROR CHECK", "ERROR HARNESS", "Heap overflow", "Stack overflow")
-          for category, markers in selections.items():
-              text = (Path(os.environ["RUNNER_TEMP"]) / f"lab-{category}-downstream.log").read_text()
-              required = ("MODULE-OK", "HARNESS-OK", *markers)
-              if (not all(marker in text for marker in required)
-                      or any(marker in text for marker in forbidden)
-                      or not re.search(r"^OK\s*$", text, re.M)):
-                  raise SystemExit(f"{category} downstream receipt is incomplete or failed")
-              # Scheme compares the exact selected targets with both cold
-              # outputs. Installed prerequisites can change their count.
-              if category == "deployment" and not re.search(
-                      r"^LAB-DEPLOYMENT-DOWNSTREAM-OK targets=[1-9][0-9]* "
-                      + re.escape(markers[1]) + r"\s*$", text, re.M):
-                  raise SystemExit("deployment downstream target receipt is missing")
-          PY
+        run: just ci-qualify-downstreams "$RUNNER_TEMP"
 
-      - name: Build the development library
+      - name: Build development library and install optional dev dependencies
         run: |
-          qualification="$RUNNER_TEMP/lab-qualification"
-          mkdir -p "$qualification/lib"
-          gerbil env env GERBIL_PATH="$qualification" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" just build-library
-
-      - name: Install optional development policy dependencies
-        run: |
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
-          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib:$RUNNER_TEMP/lab-qualification/lib"
-          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
+          just ci-build-dev-qualification "$RUNNER_TEMP/lab-qualification"
+          echo "GERBIL_LOADPATH=$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib:$RUNNER_TEMP/lab-qualification/lib" >> "$GITHUB_ENV"
 
       - name: Qualify selected Agentic Context memory
         run: gerbil env just test-file t/yanxu/modules/ai-agentic-context/core-test.ss
@@ -369,15 +245,7 @@ jobs:
           retention-days: 7
 
       - name: Build Scheme semantic AOT byte boundary
-        env:
-          GERBIL_PATH: ${{ github.workspace }}/.gerbil
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: |
-          mkdir -p .ci/semantic
-          extension=so
-          if [ "$RUNNER_OS" = macOS ]; then extension=dylib; fi
-          python3 bindings/runtime-c/tools/build-semantic.py \
-            --output ".ci/semantic/libagentic_ai_lab_semantic.$extension"
+        run: just ci-semantic-aot .ci/semantic
 
       - name: Upload immutable semantic AOT producer artifact
         if: runner.os == 'Linux'
@@ -390,30 +258,11 @@ jobs:
 
       - name: Run declared ASCENT package integration
         if: runner.os == 'Linux'
-        run: |
-          gerbil env just test-ascent-integration
-          # The native worker already owns its five-second progress watchdog.
-          # Its Just entry retains the 45-second total cap, source guards and
-          # strict Harness/Case admission; preparation has no duplicate watcher.
-          gerbil env just test-ascent-temporal
-          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m agentic_ai_lab_testing run \
-              --case ascent.source-withdrawal
-          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m agentic_ai_lab_testing run \
-              --case evidence-ascent.hypothesis-status
-          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m agentic_ai_lab_testing run \
-              --case model-study.runtime-fixtures
+        run: just ci-ascent-integration
 
       - name: Run runtime performance scenarios without unit-batch contention
         if: runner.os == 'Linux'
-        run: |
-          gerbil env gxc -O modules/workflow/qualification/ascent-table-expression.ss t/scenarios/performance/ascent-table-expression/baseline.ss
-          gerbil env just test-performance
-          gerbil env gxi t/scenarios/performance/ascent-table-expression/scenario.ss
-          gerbil env gxi t/scenarios/performance/ascent-table-expression-membership/scenario.ss
-          gerbil env gxi t/scenarios/performance/ascent-reachability-closure/scenario.ss
+        run: just ci-performance
 
       - name: Upload failed natural-exit stack
         if: failure() && runner.os == 'macOS'
@@ -436,8 +285,6 @@ jobs:
   quint-proof:
     name: ${{ matrix.phase == 'typecheck' && 'Quint types and source binding' || 'Quint finite proof models' }}
     runs-on: ubuntu-latest
-    # Typechecking and verification retain their complete inventories but do
-    # not consume the same job deadline. Per-case fences remain unchanged.
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -510,47 +357,28 @@ jobs:
           build: true
           build-args: AgenticAILabSessionProof AgenticAILabContextProof AgenticAILabAttemptProof
 
+  lean-matrix:
+    name: Discover Lean proof targets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - name: Checkout agentic-ai-lab
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Discover targets from packages/proofs/lean/lakefile.lean
+        id: discover
+        run: echo "matrix=$(python3 packages/automation/ci_gates.py lean-matrix)" >> "$GITHUB_OUTPUT"
+
   lean-proof:
     name: Lean module / ${{ matrix.owner }}
+    needs: [lean-matrix]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - owner: governance
-            target: AgenticAILabModuleGovernanceProof
-            ffi: true
-          - owner: temporal-causality
-            target: AgenticAILabModuleTemporalCausalityProof
-            ffi: false
-          - owner: healthcare-scenario
-            target: AgenticAILabScenarioHealthcareProof
-            ffi: false
-          - owner: authorization
-            target: AgenticAILabModuleAuthorizationProof
-            ffi: false
-          - owner: loop-engine
-            target: AgenticAILabModuleLoopEngineProof
-            ffi: false
-          - owner: session
-            target: AgenticAILabModuleSessionProof
-            ffi: false
-          - owner: sandbox-core
-            target: AgenticAILabModuleSandboxCoreProof
-            ffi: false
-          - owner: funflow
-            target: AgenticAILabModuleFunflowProof
-            ffi: false
-          - owner: workflow
-            target: AgenticAILabModuleWorkflowProof
-            ffi: false
-          - owner: evidence-assessment
-            target: AgenticAILabModuleEvidenceAssessmentProof
-            ffi: false
-          - owner: memory-core
-            target: AgenticAILabModuleMemoryCoreProof
-            ffi: false
+      matrix: ${{ fromJson(needs.lean-matrix.outputs.matrix) }}
     steps:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -625,7 +453,6 @@ jobs:
             packages/proofs/lean/.lake
             core/dev/proofs/lean/.lake
           key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
-          # Reuse the Governance build only for the same Lake dependency lock.
           restore-keys: |
             lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
@@ -641,36 +468,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y protobuf-compiler
 
-      - name: Build Cedar AOT Runtime Host
+      - name: Build, test, and replay Cedar AOT Runtime Host
         shell: bash
         run: |
           set -euo pipefail
           host="$RUNNER_TEMP/cedarRuntimeHost"
-          AGENTIC_AI_LAB_CEDAR_BUILD_PROFILE=dev \
-            python3 packages/automation/build_cedar_runtime_host.py "$host"
-          echo "AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=$host" >> "$GITHUB_ENV"
-
-      - name: Run Cedar Rust Runtime Host tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          cargo test --locked \
+          AGENTIC_AI_LAB_CEDAR_BUILD_PROFILE=dev python3 packages/automation/build_cedar_runtime_host.py "$host"
+          AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="$host" cargo test --locked \
             --manifest-path bindings/cedar-gerbil/Cargo.toml \
-            -p agentic-ai-lab-cedar-authority \
-            --features runtime-host-qualification \
-            --test runtime_host \
-            --test authorization \
-            --test case_check
-
-      - name: Replay generic Cedar artifact cases
-        shell: bash
-        run: |
-          set -euo pipefail
+            -p agentic-ai-lab-cedar-authority --features runtime-host-qualification \
+            --test runtime_host --test authorization --test case_check
           cargo run --locked --quiet \
             --manifest-path bindings/cedar-gerbil/Cargo.toml \
             -p agentic-ai-lab-cedar-authority --bin cedar-case-check -- \
-            bindings/cedar-gerbil/fixtures/atomic-case/manifest.json \
-            "$AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST" \
+            bindings/cedar-gerbil/fixtures/atomic-case/manifest.json "$host" \
             bindings/cedar-gerbil/fixtures/atomic-case/policies.cedar
 
       - name: Save Lean Runtime Host cache
