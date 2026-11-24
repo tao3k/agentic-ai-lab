@@ -9,6 +9,7 @@ default:
 # Recipes share the root environment and working directory.
 import 'dev/just/build.just'
 import 'dev/just/checks.just'
+import 'dev/just/ci.just'
 import 'dev/just/contributions.just'
 import 'dev/just/dependencies.just'
 import 'dev/just/environment.just'
