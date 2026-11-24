@@ -31,7 +31,7 @@ SUPPORTING_BINDING_PATHS = (
     "dev/d2/governance-illustrations.ts",
 )
 
-# Topological order: all eight upstream planes (40-46 + 48) compile before capstone 47.
+# Topological order: all ten upstream planes (40-46 + 48-50) compile before capstone 47.
 SLICES = [
     (40, "40-context-governance-boundary", "ContextGovernanceBoundary", "GovernanceArchitectureAndDispatchContract", 2, "tlc"),
     (41, "41-epistemic-consolidation-governance", "ContextEpistemicConsolidationGovernance", "EpistemicDispatchAndBoundaryContract", 2, "tlc"),
@@ -41,6 +41,9 @@ SLICES = [
     (45, "45-org-sexpr-gql-candidate-exchange-search", "OrgSexprGqlCandidateExchange", "HybridSearchDispatchAndBoundaryContract", 2, "tlc"),
     (46, "46-durable-agenda-session-sandbox-governance", "DurableAgendaSessionSandboxGovernance", "ControlAxesDispatchAndBoundaryContract", 2, "tlc"),
     (48, "48-progressive-disclosure-and-two-stage-org-repair", "ProgressiveDisclosureAndOrgRepair", "ProgressiveDisclosureDispatchAndBoundaryContract", 2, "tlc"),
+    (49, "49-scoped-detour-funflow-concurrent-shared-context", "ScopedDetourFunflowConcurrentContext", "ScopedDetourAndConcurrentSharedContextContract", 2, "tlc"),
+    (50, "50-literature-frontier-detour-confinement-and-causal-audit", "DetourTaintConfinementAndCausalAudit", "LiteratureAbsorptionDispatchAndBoundaryContract", 2, "tlc"),
+    (51, "51-memory-poisoning-quarantine-and-kv-prefix-serialization", "MemoryQuarantineAndKvPrefixSerialization", "MemoryQuarantineAndKvPrefixContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -53,6 +56,9 @@ QUINT_MAINS = {
     "45-org-sexpr-gql-candidate-exchange-search": "OrgSexprGqlCandidateExchange",
     "46-durable-agenda-session-sandbox-governance": "DurableAgendaSessionSandbox",
     "48-progressive-disclosure-and-two-stage-org-repair": "ProgressiveDisclosureAndOrgRepair",
+    "49-scoped-detour-funflow-concurrent-shared-context": "ScopedDetourFunflowConcurrentContext",
+    "50-literature-frontier-detour-confinement-and-causal-audit": "DetourTaintConfinementAndCausalAudit",
+    "51-memory-poisoning-quarantine-and-kv-prefix-serialization": "MemoryQuarantineAndKvPrefixSerialization",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -67,6 +73,9 @@ STORY_SLUGS = (
     "46-sandbox-trifecta",
     "47-end-to-end-capsule",
     "48-progressive-disclosure",
+    "49-shared-context-detours",
+    "50-detour-confinement-audit",
+    "51-memory-quarantine-kv-prefix",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -225,6 +234,48 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
             (not bool(st["defeaterWasActiveAtConsume"]) or itf_int(st["consumedDepth"]) == 3)
             and (not bool(st["activeDefeaterPresent"]) or itf_int(st["consumedDepth"]) == 3)
         )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 49:
+        st = last["s49"]
+        consumed = bool(st["fencedEffectCommitted"]) or bool(st["archived"]) or bool(st["overwrittenByNonOwner"])
+        cut_ok = (not bool(st["fencedEffectCommitted"])) or bool(st["fencedEffectWasSafe"])
+        grant_ok = not bool(st["overwrittenByNonOwner"])
+        epistemic_ok = (
+            (not bool(st["archived"]) or not bool(st["archivedWhileUnsafe"]))
+            and (itf_int(st["defeatersRetained"]) >= itf_int(st["discoveredDefeaters"]))
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 50:
+        st = last["s50"]
+        consumed = (
+            (itf_int(st["mergedReceiptCount"]) > 0)
+            or bool(st["detourEgressAttempted"])
+            or bool(st["offlineAuditExecuted"])
+        )
+        cut_ok = (not bool(st["unattestedMergeOccurred"])) and (not bool(st["mainlineTainted"]))
+        grant_ok = (not bool(st["detourEgressAttempted"])) or (not bool(st["detourEgressWasTainted"]))
+        epistemic_ok = (
+            (
+                (not bool(st["offlineAuditExecuted"]))
+                or (not (bool(st["decisionFlippedBySecret"]) and not bool(st["auditDeclassCertified"])))
+                or bool(st["causalLeakFlagged"])
+            )
+            and (not bool(st["advisoryAutoMutatedMainline"]))
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 51:
+        st = last["s51"]
+        consumed = (
+            (itf_int(st["recalledCount"]) > 0)
+            or bool(st["untrustedAutoPromoted"])
+            or bool(st["kvPrefixFractured"])
+        )
+        cut_ok = (not bool(st["kvPrefixFractured"])) and (itf_int(st["frozenPrefixEpoch"]) == 1)
+        grant_ok = not bool(st["untrustedAutoPromoted"])
+        epistemic_ok = (not bool(st["recalledPoisonedOrQuarantined"])) and (not bool(st["recallableContainsPoison"]))
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:
@@ -981,9 +1032,8 @@ def main() -> None:
             json.dumps(summary, indent=2) + "\n", encoding="utf-8"
         )
         shutil.rmtree(ROOT / "_apalache-out", ignore_errors=True)
-        tlc_total_distinct = sum(
-            m["distinct_states"] for m in quint_info["verified_models"] if m["backend"] == "tlc"
-        )
+        tlc_models = [m for m in quint_info["verified_models"] if m["backend"] == "tlc"]
+        tlc_total_distinct = sum(m["distinct_states"] for m in tlc_models)
         lake_suffix = (
             f" lake_audited_decls={lake_info['audited_declarations']}" if lake_info is not None else ""
         )
@@ -996,7 +1046,7 @@ def main() -> None:
             f"CONTEXT-GOVERNANCE-CHAIN-OK "
             f"sysml_checks={sysml_info['checks']} "
             f"lean_theorems={lean_info['verified_theorems_count']}{lake_suffix} "
-            f"tlc_exhaustive_models=8(distinct={tlc_total_distinct},queue=0) "
+            f"tlc_exhaustive_models={len(tlc_models)}(distinct={tlc_total_distinct},queue=0) "
             f"composed_apalache=1 "
             f"sysml_dispatch_runs={run_info['sysml_dispatch_runs']} "
             f"sysml_itf_replays={run_info['sysml_itf_replay_runs']}{bind_suffix}",

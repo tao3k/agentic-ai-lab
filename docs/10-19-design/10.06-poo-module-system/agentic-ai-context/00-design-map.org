@@ -608,6 +608,29 @@ join-semilattice, mandatory $L_3$ defeater floor, $L_2$ thinking-block folding
 preservation and Stage-1 AST repair idempotence in Lean while checking late
 defeater override and Stage-2 re-parse cut races exhaustively in TLC.
 
+[[file:49-scoped-detour-funflow-concurrent-shared-context.org][49: Scoped Detours, Three-State FunFlow Effects and Zero-SubAgent Shared Context]]
+and its [[file:49-scoped-detour-funflow-concurrent-shared-context.sysml][SysML]], [[file:49-scoped-detour-funflow-concurrent-shared-context.qnt][Quint]],
+and [[file:49-scoped-detour-funflow-concurrent-shared-context.lean][Lean]] artifacts formalize monotonic C4 =OrgOverlay(g)= meet, asymmetric
+=PureCAS.= / =VerifiedEpistemic.= / =FencedEffect.= admission, four-exit CLOS
+detour reconciliation (preserving =defeat-conditions= on =CancelledExit.=), and
+Zero-SubAgent per-=:ID:= ownership (=Extend-Never-Overwrite= and heartbeat-expiry
+fenced custody handover).
+
+[[file:50-literature-frontier-detour-confinement-and-causal-audit.org][50: 2025–2026 Literature Positioning, Scoped Detour Taint Confinement and Offline Causal Audit]]
+and its [[file:50-literature-frontier-detour-confinement-and-causal-audit.sysml][SysML]], [[file:50-literature-frontier-detour-confinement-and-causal-audit.qnt][Quint]],
+and [[file:50-literature-frontier-detour-confinement-and-causal-audit.lean][Lean]] artifacts benchmark Slices =40=–=49= against DeLM, FoldGRPO,
+SagaLLM, FIDES, APPA, NeuroTaint, FLOWSEAL, SemanticALLI, APDMem, and Zep, and
+formally absorb APPA-style confined-detour taint isolation (=attestSchema=),
+NeuroTaint-style zero-LLM offline counterfactual causal auditing, and
+zero-authority deterministic stall advisories.
+
+[[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.org][51: Memory Poisoning Quarantine, Typed Memory Contracts and KV-Prefix-Stable Serialization]]
+and its [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml][SysML]], [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.qnt][Quint]],
+and [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.lean][Lean]] artifacts close the AgentPoison/MINJA/MemoryGraft experience-imitation
+poisoning gap (Quarantine-Before-Recall + independent endorsement) and the
+RadixAttention/Request-Order-Matters KV-cache context-rot gap (Two-Zone
+Frozen-Canonical-Prefix ++ Dynamic-Suffix serialization).
+
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
 [[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
@@ -617,14 +640,14 @@ defeater override and Stage-2 re-parse cut races exhaustively in TLC.
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48= both
-horizontally (=47= imports all eight upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=51= both
+horizontally (=47= imports all eleven upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 9-namespace axiom audit + 54 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all eight single-plane models + 8-step Apalache on composed
-=47.qnt=, real Quint ITF JSON trace replay into SysML
+Lake 12-namespace axiom audit + 80 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all eleven single-plane models + 8-step Apalache on
+composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
-verification). None of slices 40–48 claims Scheme runtime changes.
+verification).
 
 * Modularized child ORG modules
 

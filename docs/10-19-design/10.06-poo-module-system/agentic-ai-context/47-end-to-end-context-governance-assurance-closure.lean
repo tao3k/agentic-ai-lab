@@ -9,20 +9,26 @@ import «44-temporal-causal-survival-and-memory-quotient»
 import «45-org-sexpr-gql-candidate-exchange-search»
 import «46-durable-agenda-session-sandbox-governance»
 import «48-progressive-disclosure-and-two-stage-org-repair»
+import «49-scoped-detour-funflow-concurrent-shared-context»
+import «50-literature-frontier-detour-confinement-and-causal-audit»
+import «51-memory-poisoning-quarantine-and-kv-prefix-serialization»
 
 /-!
-Slice 47 — Master Imported Lean DAG (`40..46, 48 -> 47`) & Quotient Bridge:
-1. Imports all eight upstream Lean modules (`40`–`46` + `48`) and composes their
-   pure functional operators into one end-to-end pipeline `executePureGovernanceChain`.
+Slice 47 — Master Imported Lean DAG (`40..46, 48..50 -> 47`) & Quotient Bridge:
+1. Imports all ten upstream Lean modules (`40`–`46`, `48`–`50`) and composes
+   their pure functional operators into one end-to-end pipeline
+   `executePureGovernanceChain`.
 2. Proves `pureGovernanceChain_end_to_end_sound`: any admitted pipeline output
    simultaneously satisfies AST source-block pruning (`45`), historical cut
    append-invariance (`44`), active-defeater kernel retention (`41`), progressive
    disclosure `L3` defeater floor & Stage-1 repair idempotence (`48`), complete
    secret stripping & idempotence (`42`), semilattice restriction refinement
-   (`40`), and universal Lethal-Trifecta elimination (`46`).
+   (`40`), universal Lethal-Trifecta elimination (`46`), shared-context
+   `PureCAS`/`FencedEffect` & non-archive guards (`49`), and confined-detour
+   taint isolation & zero-authority stall advisories (`50`).
 3. Proves `leanToQuintBoundaryQuotient_sound`: exact quotient homomorphism `α`
    connecting unbounded Lean data structures to the finite boolean guard inputs
-   consumed by Quint's concurrent state machines (`40`–`48.qnt`).
+   consumed by Quint's concurrent state machines (`40`–`50.qnt`).
 4. Proves pipeline conjunction monoid laws (`allStagesHold_append`,
    `any_refuted_stage_refutes_pipeline`) and zero-LLM deterministic replay
    purity (`replayCapsule_deterministic_without_llm`).
@@ -224,6 +230,9 @@ structure QuintBoundaryGuardFlags where
   capsuleCutMatchesLive : Bool
   redactedContainsZeroSecrets : Bool
   defeaterForcesL3Disclosure : Bool
+  pureCasAdmittedWithoutExhaustiveness : Bool
+  stallAdvisoryAuthorizesMutation : Bool
+  frozenKvPrefixPreserved : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -238,6 +247,12 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     (redactFields rawFields).all (fun f => f.sensitivity != .restrictedSecret)
   defeaterForcesL3Disclosure :=
     deriveDisclosureDepth requestedDepth explicitDrillDown true == .L3_fullRawSpan
+  pureCasAdmittedWithoutExhaustiveness :=
+    ScopedDetourFunflowConcurrentContext.admitNodeEffect .pureCAS false false false
+  stallAdvisoryAuthorizesMutation :=
+    (DetourTaintConfinementAndCausalAudit.evaluateStallAdvisory 2 0 2).authorizesAutoMutation
+  frozenKvPrefixPreserved :=
+    (MemoryQuarantineAndKvPrefixSerialization.serializeTwoZone [1, 2] [3]).take 2 == [1, 2]
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -250,9 +265,15 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (q.omissionReceiptActive = true ↔ omittedIds ≠ []) ∧
     (q.capsuleCutMatchesLive = true ↔ cap.boundCut = liveCut) ∧
     q.redactedContainsZeroSecrets = true ∧
-    q.defeaterForcesL3Disclosure = true := by
+    q.defeaterForcesL3Disclosure = true ∧
+    q.pureCasAdmittedWithoutExhaustiveness = true ∧
+    q.stallAdvisoryAuthorizesMutation = false ∧
+    q.frozenKvPrefixPreserved = true := by
   dsimp [projectToQuintGuardFlags]
-  refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl⟩
+  refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
+          ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
+          DetourTaintConfinementAndCausalAudit.advisoryTrigger_never_authorizes_auto_mutation 2 0 2,
+          rfl⟩
   rw [List.all_eq_true]
   intro f hf
   exact bne_iff_ne.mpr (redactFields_strips_all_secrets rawFields f hf)

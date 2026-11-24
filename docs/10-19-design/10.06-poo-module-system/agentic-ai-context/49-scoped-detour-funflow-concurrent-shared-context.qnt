@@ -166,6 +166,7 @@ module ScopedDetourFunflowConcurrentContext {
   // Parking a detour snapshots dirty work into GitOps custody and leaves mainline clean.
   action parkSideQuestToCustody: bool = all {
     s49.sideQuestActive,
+    s49.custodySnapshots < 3,
     s49' = {
       ...s49,
       sideQuestActive: false,

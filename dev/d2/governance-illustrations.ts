@@ -802,6 +802,294 @@ const composeProgressiveDisclosureStory: FigureComposer = context => {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Story 49: Zero-SubAgent Shared Context, Scoped Detours & 3-State FunFlow
+// ---------------------------------------------------------------------------
+const composeSharedContextDetoursStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Zero-SubAgent Shared Org Context, 4-Exit Detours, and 3-State FunFlow">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect width="1520" height="1120" fill="#FBF8F1"/>
+      ${txt(48, 64, 'One Shared Org Desk — Zero SubAgent Silos, 4-Exit Detours & 3-State FunFlow', 30, '#1B3B4B', 800)}
+      ${txt(48, 102, 'Humans and peer Agents share one live Org tree (Extend, Never Overwrite) with 3-state FunFlow admission.', 19, '#496370', 500)}
+
+      <g data-subject-ref="${subjectId('ownershipArbiter')}">
+        <rect x="48" y="138" width="690" height="440" rx="22" fill="#FFFFFF" stroke="#2D7E8A" stroke-width="2.5"/>
+        ${pill(72, 160, 410, 36, '#E4F4F5', '#2D7E8A', '1. ZERO-SUBAGENT SHARED ORG CONTEXT', '#1B5E68')}
+        ${txt(72, 226, 'No isolated child chats re-reading the repo O(K × N)!', 19, '#1B3B4B', 700)}
+        <rect x="72" y="248" width="642" height="116" rx="14" fill="#F2FAFA" stroke="#2D7E8A" stroke-width="2"/>
+        ${txt(92, 282, ':ID: TASK-42  →  :OWNER_ACTOR: agentA  |  :CLAIM_LEASE_EPOCH: 1', 16, '#1B5E68', 700)}
+        ${txt(92, 314, 'Peer agentB or Human sees this claim at L0/L1 in 0 tokens:', 16, '#2C3E50')}
+        ${txt(92, 344, '✗ Direct overwrite by agentB REJECTED (Lean + Rust Ledger)', 16, '#B03A2E', 700)}
+        <rect x="72" y="384" width="642" height="166" rx="14" fill="#F6FBF7" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(92, 418, '✓ Safe Peer Contribution = EXTEND via Disjoint Child :ID: Y', 17, '#1B5E20', 700)}
+        ${txt(92, 452, ':EXTENDS_ID: TASK-42  →  leaves TASK-42 owner & bytes invariant', 16, '#2C3E50')}
+        ${txt(92, 484, '✓ Explicit Handover or Heartbeat Expiry → increments epoch +', 16, '#2C3E50')}
+        ${txt(92, 514, '  saves dirty edits in GitOps custody (zero split-brain!)', 16, '#1B5E20', 600)}
+      </g>
+
+      <g data-subject-ref="${subjectId('detourArbiter')}">
+        <rect x="782" y="138" width="690" height="440" rx="22" fill="#FFFFFF" stroke="#8C5A2B" stroke-width="2.5"/>
+        ${pill(806, 160, 410, 36, '#FDF1E4', '#8C5A2B', '2. SCOPED DETOURS & 4 CLOS EXIT STATES', '#784212')}
+        ${txt(806, 226, 'Side-quests stay scoped; 0-token Org re-anchors mainline:', 19, '#1B3B4B', 700)}
+        <rect x="806" y="248" width="310" height="140" rx="14" fill="#EEF8EE" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(824, 280, 'CompletedExit.', 17, '#1B5E20', 700)}
+        ${txt(824, 310, 'Distill receipts to anchor,', 15, '#2C3E50')}
+        ${txt(824, 336, 'fold detour to L0, unblock', 15, '#2C3E50')}
+        ${txt(824, 362, 'mainline dependencies.', 15, '#2C3E50')}
+
+        <rect x="1136" y="248" width="312" height="140" rx="14" fill="#EEF4FC" stroke="#2874A6" stroke-width="2"/>
+        ${txt(1154, 280, 'ParkedExit.', 17, '#1B4F72', 700)}
+        ${txt(1154, 310, 'Snapshot dirty worktree to', 15, '#2C3E50')}
+        ${txt(1154, 336, 'GitOps custody-oid; keep', 15, '#2C3E50')}
+        ${txt(1154, 362, 'mainline tree clean.', 15, '#2C3E50')}
+
+        <rect x="806" y="408" width="310" height="142" rx="14" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(824, 440, 'CancelledExit.', 17, '#922B21', 700)}
+        ${txt(824, 470, 'Discard dirty code, BUT', 15, '#2C3E50')}
+        ${txt(824, 496, 'MUST keep defeat-conditions', 15, '#922B21', 700)}
+        ${txt(824, 522, 'in Counterexample Core!', 15, '#922B21', 700)}
+
+        <rect x="1136" y="408" width="312" height="142" rx="14" fill="#F5F0FA" stroke="#6C3483" stroke-width="2"/>
+        ${txt(1154, 440, 'PromotedToTaskExit.', 17, '#4A235A', 700)}
+        ${txt(1154, 470, 'Depth/scope exceeded →', 15, '#2C3E50')}
+        ${txt(1154, 496, 'fission into top-level Task', 15, '#2C3E50')}
+        ${txt(1154, 522, 'Tab in index.org.', 15, '#2C3E50')}
+      </g>
+
+      ${arrow('M738 358H782', '#2A586B')}
+
+      <g data-subject-ref="${subjectId('effectGate')}">
+        <rect x="48" y="612" width="1424" height="420" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 634, 600, 36, '#EFEBF9', '#5B4B8A', '3. THREE-STATE FUNFLOW EFFECTS & MONOTONIC OVERLAY', '#4A3B99')}
+        ${txt(72, 702, 'Asymmetric CLOS (admit-node-effect) + 0-Token Premise Invalidation + Monotonic C4 OrgOverlay(g):', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="728" width="430" height="270" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(94, 766, 'PureCAS.', 20, '#1B5E20', 800)}
+        ${txt(94, 804, 'Deterministic parses, builds, checks', 16, '#2C3E50')}
+        ${txt(94, 838, '✓ Admitted unconditionally', 16, '#1B5E20', 700)}
+        ${txt(94, 872, '✓ Skipped on exact input CAS hit', 16, '#2C3E50')}
+        ${txt(94, 906, '✓ 0-token premise-digest invalidation', 16, '#2C3E50')}
+        ${txt(94, 940, '  marks ONLY affected sub-DAG stale', 16, '#2C3E50')}
+
+        <rect x="545" y="728" width="430" height="270" rx="16" fill="#EEF4FC" stroke="#2874A6" stroke-width="2"/>
+        ${txt(567, 766, 'VerifiedEpistemic.', 20, '#1B4F72', 800)}
+        ${txt(567, 804, 'Stochastic LLM reasoning steps', 16, '#2C3E50')}
+        ${txt(567, 838, '✓ Semantic CAS reuse ONLY if bound', 16, '#1B4F72', 700)}
+        ${txt(567, 872, '  to live source-cut + Endorsement', 16, '#2C3E50')}
+        ${txt(567, 906, '✓ Premise shift forces re-plan epoch', 16, '#2C3E50')}
+        ${txt(567, 940, '  (g → g+1) without losing clean CAS', 16, '#2C3E50')}
+
+        <rect x="1018" y="728" width="430" height="270" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(1040, 766, 'FencedEffect.', 20, '#922B21', 800)}
+        ${txt(1040, 804, 'Irreversible external side-effects', 16, '#2C3E50')}
+        ${txt(1040, 838, '✓ Requires claimsExhaustive = true', 16, '#922B21', 700)}
+        ${txt(1040, 872, '✓ One-shot AuthorizedEffectToken', 16, '#2C3E50')}
+        ${txt(1040, 906, '✓ Non-self Endorsement + finalizer', 16, '#2C3E50')}
+        ${txt(1040, 940, '✓ TLC: 1,379,280 states, queue = 0!', 16, '#922B21', 700)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 49 Closure: DeLM-class shared-context speed with formal Extend-Never-Overwrite, 4-exit detours, and 3-state FunFlow.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
+// ---------------------------------------------------------------------------
+// Story 50: APPA Detour Taint Confinement & NeuroTaint Offline Causal Audit
+// ---------------------------------------------------------------------------
+const composeDetourConfinementAuditStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="APPA Scoped Detour Taint Confinement and NeuroTaint Offline Causal Audit">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect width="1520" height="1120" fill="#FBF8F1"/>
+      ${txt(48, 64, 'Absorbing 2026 Research: APPA Taint Confinement & NeuroTaint Causal Audit', 30, '#1B3B4B', 800)}
+      ${txt(48, 102, 'Read untrusted web data without poisoning the mainline, catch implicit secret leaks offline, and advise without auto-mutating.', 19, '#496370', 500)}
+
+      <g data-subject-ref="${subjectId('taintMonitor')}">
+        <rect x="48" y="138" width="930" height="460" rx="22" fill="#FFFFFF" stroke="#2D7E8A" stroke-width="2.5"/>
+        ${pill(72, 160, 560, 36, '#E4F4F5', '#2D7E8A', '1. APPA-STYLE SCOPED DETOUR TAINT CONFINEMENT', '#1B5E68')}
+        ${txt(72, 226, 'Solves monotone taint "label creep" without weakening isolation:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="250" height="312" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(92, 290, 'Clean Mainline', 19, '#1B5E20', 800)}
+        ${txt(92, 326, 'tainted = false', 16, '#1B5E20', 700)}
+        ${txt(92, 362, 'Opens a confined', 16, '#2C3E50')}
+        ${txt(92, 390, 'no-egress detour', 16, '#2C3E50')}
+        ${txt(92, 418, 'to inspect untrusted', 16, '#2C3E50')}
+        ${txt(92, 446, 'web / external docs.', 16, '#2C3E50')}
+        ${txt(92, 502, 'Mainline stays', 16, '#1B5E20', 700)}
+        ${txt(92, 530, '100% clean!', 16, '#1B5E20', 700)}
+
+        ${arrow('M322 408H372', '#C0392B')}
+
+        <rect x="372" y="252" width="268" height="312" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(392, 290, 'Confined Detour', 19, '#922B21', 800)}
+        ${txt(392, 326, 'detourTainted = true', 16, '#922B21', 700)}
+        ${txt(392, 362, 'egressAllowed = false', 16, '#922B21', 700)}
+        ${txt(392, 402, '✗ External egress', 16, '#2C3E50')}
+        ${txt(392, 430, '  blocked (Lean proof)', 16, '#2C3E50')}
+        ${txt(392, 470, '✗ Raw unattested', 16, '#2C3E50')}
+        ${txt(392, 498, '  return REJECTED', 16, '#922B21', 700)}
+
+        ${arrow('M640 408H690', '#2E7D32')}
+
+        <rect x="690" y="252" width="264" height="312" rx="16" fill="#EEF4FC" stroke="#2874A6" stroke-width="2"/>
+        ${txt(710, 290, 'Attested Return', 19, '#1B4F72', 800)}
+        ${txt(710, 328, 'Requires EITHER:', 16, '#1B4F72', 700)}
+        ${txt(710, 364, '• attestSchema pass', 16, '#2C3E50')}
+        ${txt(710, 394, '  (bounded fields)', 15, '#496370')}
+        ${txt(710, 430, '• 3-party SoD', 16, '#2C3E50')}
+        ${txt(710, 460, '  DeclassificationCert', 15, '#496370')}
+        ${txt(710, 512, '✓ Mainline taint', 16, '#1B5E20', 700)}
+        ${txt(710, 540, '  never escalates!', 16, '#1B5E20', 700)}
+      </g>
+
+      <g data-subject-ref="${subjectId('stallAdvisor')}">
+        <rect x="1014" y="138" width="458" height="460" rx="22" fill="#FFFFFF" stroke="#8C5A2B" stroke-width="2.5"/>
+        ${pill(1038, 160, 380, 36, '#FDF1E4', '#8C5A2B', '3. STALL & DIVERGENCE ADVISOR', '#784212')}
+        ${txt(1038, 226, 'Memento / SagaLLM-inspired signal:', 18, '#1B3B4B', 700)}
+        <rect x="1038" y="252" width="410" height="142" rx="14" fill="#FFF9F2" stroke="#8C5A2B" stroke-width="2"/>
+        ${txt(1058, 286, 'Triggers deterministically when:', 16, '#784212', 700)}
+        ${txt(1058, 320, '• repeatedFailures >= threshold', 16, '#2C3E50')}
+        ${txt(1058, 354, '• consecutiveInvalidations >= threshold', 16, '#2C3E50')}
+        <rect x="1038" y="414" width="410" height="150" rx="14" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1058, 448, 'Strict Zero-Authority Guarantee:', 17, '#1B5E20', 700)}
+        ${txt(1058, 482, '• Emits suggestParkOrCancel to', 16, '#2C3E50')}
+        ${txt(1058, 510, '  ASCENT / Human ONLY', 16, '#2C3E50')}
+        ${txt(1058, 542, '• authorizesAutoMutation = false', 16, '#922B21', 700)}
+      </g>
+
+      <g data-subject-ref="${subjectId('causalAuditor')}">
+        <rect x="48" y="632" width="1424" height="398" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 654, 600, 36, '#EFEBF9', '#5B4B8A', '2. NEUROTAINT-STYLE ZERO-LLM OFFLINE CAUSAL AUDIT', '#4A3B99')}
+        ${txt(72, 720, 'Catches implicit secret leaks (where an LLM flips a decision without copying secret strings):', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="748" width="420" height="246" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2"/>
+        ${txt(94, 786, 'Counterfactual Replay Pair', 18, '#4A3B99', 700)}
+        ${txt(94, 824, 'Run A: decisionWithSecret', 16, '#2C3E50')}
+        ${txt(94, 858, 'Run B: decisionWithoutSecret', 16, '#2C3E50')}
+        ${txt(94, 898, 'Zero LLM calls during offline', 16, '#4A3B99', 600)}
+        ${txt(94, 928, 'AuditCapsule replay check.', 16, '#4A3B99', 600)}
+
+        ${arrow('M492 871H552', '#5B4B8A')}
+
+        <rect x="552" y="748" width="420" height="246" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2"/>
+        ${txt(574, 786, 'Unendorsed Decision Flip', 18, '#922B21', 700)}
+        ${txt(574, 824, 'Run A != Run B  AND', 16, '#922B21', 700)}
+        ${txt(574, 858, 'auditDeclassCertified = false', 16, '#922B21', 700)}
+        ${txt(574, 902, '→ implicitCausalLeakFlag = TRUE', 17, '#922B21', 800)}
+        ${txt(574, 940, 'Proven in Lean + TLC (555 states)!', 16, '#2C3E50')}
+
+        ${arrow('M972 871H1032', '#2E7D32')}
+
+        <rect x="1032" y="748" width="416" height="246" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1054, 786, 'Clean Audit Verdict', 18, '#1B5E20', 700)}
+        ${txt(1054, 824, 'Either Run A == Run B', 16, '#2C3E50')}
+        ${txt(1054, 858, '(counterfactual invariant), OR', 16, '#2C3E50')}
+        ${txt(1054, 892, 'auditDeclassCertified = true', 16, '#1B5E20', 700)}
+        ${txt(1054, 932, '→ implicitCausalLeakFlag = FALSE', 17, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 50 Closure: Bridges APPA (arXiv:2607.24625) + NeuroTaint (arXiv:2604.23374) + Memento into Lean & TLC.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
+// ---------------------------------------------------------------------------
+// Story 51: Memory Poisoning Quarantine & KV-Prefix-Stable Serialization
+// ---------------------------------------------------------------------------
+const composeMemoryQuarantineKvPrefixStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Memory Poisoning Quarantine and Two-Zone KV-Prefix-Stable Serialization">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect width="1520" height="1120" fill="#FBF8F1"/>
+      ${txt(48, 64, 'Memory Poisoning Quarantine & KV-Prefix-Stable Prompt Serialization', 30, '#1B3B4B', 800)}
+      ${txt(48, 102, 'Blocks MINJA / MemoryGraft experience hijacking and stops rolling-detour context edits from fracturing KV radix caches.', 19, '#496370', 500)}
+
+      <g data-subject-ref="${subjectId('quarantineGate')}">
+        <rect x="48" y="138" width="1424" height="440" rx="22" fill="#FFFFFF" stroke="#C0392B" stroke-width="2.5"/>
+        ${pill(72, 160, 680, 36, '#FDF2F2', '#C0392B', '1. QUARANTINE-BEFORE-RECALL (MINJA / MEMORYGRAFT DEFENSE)', '#922B21')}
+        ${txt(72, 226, 'Even with Extend-Never-Overwrite, untrusted experience recipes cannot auto-enter recall:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="380" height="292" rx="16" fill="#FFF6F6" stroke="#C0392B" stroke-width="2"/>
+        ${txt(94, 290, 'Untrusted Artifact Turn', 19, '#922B21', 800)}
+        ${txt(94, 328, 'e.g. Poisoned README / Web doc', 16, '#2C3E50')}
+        ${txt(94, 362, 'induces agent to log a fake', 16, '#2C3E50')}
+        ${txt(94, 396, '"successful" procedural recipe:', 16, '#2C3E50')}
+        ${txt(94, 434, 'origin = untrustedIngest', 16, '#922B21', 700)}
+        ${txt(94, 468, 'selfClaimedSuccess = true', 16, '#922B21', 700)}
+        ${txt(94, 506, '→ Forced into QUARANTINED tier', 16, '#922B21', 800)}
+
+        ${arrow('M452 398H524', '#C0392B')}
+
+        <rect x="524" y="252" width="420" height="292" rx="16" fill="#FFF9F2" stroke="#8C5A2B" stroke-width="2"/>
+        ${txt(546, 290, 'Quarantine Staging Gate', 19, '#784212', 800)}
+        ${txt(546, 328, '✗ Strictly invisible to recall()', 16, '#922B21', 700)}
+        ${txt(546, 364, '✗ Self-claimed success CANNOT', 16, '#922B21', 700)}
+        ${txt(546, 394, '  auto-promote (Lean proven!)', 16, '#922B21', 700)}
+        ${txt(546, 436, 'Promotion requires BOTH:', 16, '#1B3B4B', 700)}
+        ${txt(546, 470, '✓ independentEndorsement = true', 16, '#1B5E20', 700)}
+        ${txt(546, 504, '✓ openDefeaters == 0', 16, '#1B5E20', 700)}
+
+        ${arrow('M944 398H1016', '#2E7D32')}
+
+        <rect x="1016" y="252" width="432" height="292" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1038, 290, 'Recallable Memory Pool', 19, '#1B5E20', 800)}
+        ${txt(1038, 328, 'Production recall() queries', 16, '#2C3E50')}
+        ${txt(1038, 362, 'ONLY tier == recallable.', 16, '#1B5E20', 700)}
+        ${txt(1038, 404, '✓ Poisoned entries rejected', 16, '#2C3E50')}
+        ${txt(1038, 438, '  before imitation ever fires', 16, '#2C3E50')}
+        ${txt(1038, 480, '✓ Typed MemoryContract +', 16, '#1B5E20', 700)}
+        ${txt(1038, 512, '  non-self provenance verified', 16, '#1B5E20', 700)}
+      </g>
+
+      <g data-subject-ref="${subjectId('prefixSerializer')}">
+        <rect x="48" y="612" width="1424" height="420" rx="22" fill="#FFFFFF" stroke="#2874A6" stroke-width="2.5"/>
+        ${pill(72, 634, 580, 36, '#EEF4FC', '#2874A6', '2. TWO-ZONE KV-PREFIX-STABLE PROMPT SERIALIZATION', '#1B4F72')}
+        ${txt(72, 700, 'Prevents RadixAttention / Request-Order-Matters KV cache collapse (99.6% → 10.1%) & Context Rot:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="730" width="660" height="266" rx="16" fill="#EBF5FB" stroke="#2874A6" stroke-width="2.5"/>
+        ${txt(96, 770, 'ZONE A — FROZEN CANONICAL PREFIX (Epoch g)', 19, '#1B4F72', 800)}
+        ${txt(96, 810, '• Immutable Org policy & Goal spine + sealed L0/L1 skeleton', 16, '#2C3E50')}
+        ${txt(96, 846, '• Sorted canonically by (epoch, nodeId) — invariant to peer', 16, '#2C3E50')}
+        ${txt(96, 876, '  arrival order (canonicalPrefixSort_order_invariant)', 16, '#1B4F72', 700)}
+        ${txt(96, 916, '• NEVER edited or evicted mid-epoch → 100% KV radix hit!', 16, '#1B5E20', 700)}
+        ${txt(96, 954, 'take(|Prefix|, serialize(Prefix, Suffix)) = Prefix', 16, '#1B4F72', 800)}
+
+        ${arrow('M732 863H796', '#2874A6')}
+
+        <rect x="796" y="730" width="652" height="266" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 770, 'ZONE B — DYNAMIC APPEND-ONLY SUFFIX', 19, '#4A3B99', 800)}
+        ${txt(820, 810, '• Active L2/L3 progressive drill-downs (Slice 48)', 16, '#2C3E50')}
+        ${txt(820, 846, '• Active Scoped Detour & peer :ID: extensions (Slice 49)', 16, '#2C3E50')}
+        ${txt(820, 882, '• Opening, swapping, or folding detours touches ONLY Zone B', 16, '#4A3B99', 700)}
+        ${txt(820, 918, '• Zone A token prefix digest remains bit-for-bit identical', 16, '#1B5E20', 700)}
+        ${txt(820, 954, '✓ Zero prefill stalls, zero mid-prefix cache fracturing!', 16, '#1B5E20', 700)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 51 Closure: Defeats MemoryGraft/MINJA poisoning and eliminates KV-cache fracturing across rolling agent loops.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -867,6 +1155,27 @@ const stories: readonly StorySpec[] = [
     title: 'ASCENT Progressive Disclosure (L0-L3) and Two-Stage ORG AST Repair',
     composer: composeProgressiveDisclosureStory,
   },
+  {
+    slug: '49-shared-context-detours',
+    view: 'ContextGovernanceFigures::sharedContextDetours',
+    modelFile: '49-scoped-detour-funflow-concurrent-shared-context.sysml',
+    title: 'Zero-SubAgent Shared Org Context, 4-Exit Scoped Detours, and 3-State FunFlow',
+    composer: composeSharedContextDetoursStory,
+  },
+  {
+    slug: '50-detour-confinement-audit',
+    view: 'ContextGovernanceFigures::detourConfinementAudit',
+    modelFile: '50-literature-frontier-detour-confinement-and-causal-audit.sysml',
+    title: 'APPA Scoped Detour Taint Confinement and NeuroTaint Offline Causal Audit',
+    composer: composeDetourConfinementAuditStory,
+  },
+  {
+    slug: '51-memory-quarantine-kv-prefix',
+    view: 'ContextGovernanceFigures::memoryQuarantineKvPrefix',
+    modelFile: '51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml',
+    title: 'Memory Poisoning Quarantine and Two-Zone KV-Prefix-Stable Serialization',
+    composer: composeMemoryQuarantineKvPrefixStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -888,6 +1197,9 @@ const allChainModelFiles = [
   '45-org-sexpr-gql-candidate-exchange-search.sysml',
   '46-durable-agenda-session-sandbox-governance.sysml',
   '48-progressive-disclosure-and-two-stage-org-repair.sysml',
+  '49-scoped-detour-funflow-concurrent-shared-context.sysml',
+  '50-literature-frontier-detour-confinement-and-causal-audit.sysml',
+  '51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

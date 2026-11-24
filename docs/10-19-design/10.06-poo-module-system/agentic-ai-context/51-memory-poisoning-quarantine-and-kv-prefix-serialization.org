@@ -1,0 +1,78 @@
+#+title: Memory Poisoning Quarantine, Typed Memory Contracts, and KV-Prefix-Stable Serialization
+#+date: [2026-11-24]
+#+language: en
+#+property: STATUS design-and-formal-models-verified
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope: Closing the Last Two Open Gaps in the 2025–2026 Literature
+
+[[file:50-literature-frontier-detour-confinement-and-causal-audit.org][Slice 50]] absorbed APPA confined-detour taint isolation, NeuroTaint offline
+causal auditing, and deterministic stall advisories. Deepening our literature
+survey reveals **two remaining structural gaps** actively studied in 2025–2026
+systems and security research that directly affect long-horizon Shared Org
+Context:
+
+1. **Persistent Memory Poisoning & Experience Imitation Hijacking**
+   (*AgentPoison*, NeurIPS 2024; *MINJA*, 2025, >95% query-only memory
+   injection; *MemoryGraft*, Dec 2025, persistent compromise via poisoned
+   "successful" procedural experience templates):
+   - Even with [[file:49-scoped-detour-funflow-concurrent-shared-context.org][Slice 49]]'s =Extend-Never-Overwrite= per-=:ID:= ownership, an
+     agent exposed to an untrusted artifact (e.g., a malicious README) can
+     legitimately append a *new* child subtree =:ID: Y= claiming a "successful
+     procedural recipe". If future sessions retrieve and imitate =Y=, the
+     compromise persists indefinitely across sessions without overwriting any
+     existing node.
+   - **Resolution — Quarantine-Before-Recall & Typed Memory Contracts**: Every
+     memory or experience candidate originating from an untrusted or
+     taint-exposed turn enters a =quarantined= staging tier that is **strictly
+     excluded from production recall**. Self-claimed success from an untrusted
+     origin can never auto-promote; promotion to =recallable= requires a typed
+     =MemoryContract= check plus non-self =EndorsementReceipt= and zero open
+     =defeat-conditions=.
+2. **KV-Cache Radix Fracturing, Request-Order Sensitivity & Context Rot**
+   (*RadixAttention / SGLang*; *CacheBlend*; *KVCOMM / TokenDance*; *Request
+   Order Matters: Cache-History Sensitivity in Selective KV-Cache Reuse for
+   Rolling Agents*, 2026):
+   - Deleting, compacting, or reordering an early summary block inside a rolling
+     agent prompt shifts downstream tokens, fracturing the KV radix tree
+     (observed hit-rate collapse from 99.6% down to 10.1%), triggering
+     multi-second prefill stalls, and inducing order-dependent context rot.
+   - [[file:35-org-context-modules.org][Slice 35]] already states that *final prompt order is a separate, explicit
+     serialization policy, not inheritance order*. Here we formalize a
+     **Two-Zone Prefix-Stable Serialization Law**:
+     - *Frozen Canonical Prefix Zone*: immutable policy/goal spine + sealed
+       =L0/L1= skeleton serialized in canonical =(epoch, nodeId)= order (never
+       mutated mid-epoch and invariant to peer arrival order).
+     - *Dynamic Suffix Zone*: active =L2/L3= drill-downs, =Scoped Detours=, and
+       live peer =:ID:= extensions appended strictly *after* the frozen prefix
+       boundary so opening/folding detours preserves 100% token-identical KV
+       prefix alignment.
+
+* Unified 4-Axis Governance Benchmark Positioning
+
+To evaluate =agentic-ai-lab= honestly against community suites without
+conflating recall accuracy with security authority, we separate evaluation into
+four orthogonal axes:
+
+| Evaluation axis | Community reference benchmarks | Mechanized =agentic-ai-lab= contract |
+|-----------------+--------------------------------+--------------------------------------|
+| 1. Long-horizon temporal recall | *LongMemEval / V2*, *LoCoMo* | Bitemporal cut invariance ([[file:44-temporal-causal-survival-and-memory-quotient.org][Slice 44]]), =SourceWatermark= for =Why-Not=, 0-token =L0..L3= progressive disclosure ([[file:48-progressive-disclosure-and-two-stage-org-repair.org][Slice 48]]) |
+| 2. Prompt injection, taint & memory poisoning | *AgentDojo*, *TaintBench*, *MINJA*, *MemoryGraft* | 3-party SoD declassification ([[file:42-multi-repo-multi-agent-declassification.org][42]]), APPA confined detours + NeuroTaint offline causal audit ([[file:50-literature-frontier-detour-confinement-and-causal-audit.org][50]]), Quarantine-Before-Recall (this slice) |
+| 3. Multi-agent token & KV-cache efficiency | *SWE-bench Verified* (*DeLM*, *FoldGRPO*) | Zero-SubAgent Shared Org Context ([[file:49-scoped-detour-funflow-concurrent-shared-context.org][49]]), Two-Zone KV-Prefix-Stable Serialization (this slice) |
+| 4. Transactional durability & offline audit | *SagaLLM*, *ContainmentBench* | Three-state =FunFlow= CAS + 4-exit CLOS detours ([[file:49-scoped-detour-funflow-concurrent-shared-context.org][49]]), zero-LLM =DeterministicAuditCapsule= ([[file:47-end-to-end-context-governance-assurance-closure.org][47]]) |
+
+#+begin_src typst
+$ upright("take")(|P|, upright("serialize")(P, S)) = P, quad
+  upright("origin")(m) = upright("untrusted") and not upright("endorsed")(m) => upright("tier")(m) = upright("quarantined") $
+#+end_src
+
+* Orthogonal SysML v2 Verification Allocation
+
+| Artifact | Disjoint formal ownership under =FormalVerificationTaxonomy= |
+|----------+--------------------------------------------------------------|
+| [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml][51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml]] | Quarantine-Before-Recall memory contract & Two-Zone KV-prefix serializer ports + strict XOR allocation to =leanEngine= vs =quintEngine= (=MemoryQuarantineAndKvPrefixContract=) |
+| [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.lean][51-memory-poisoning-quarantine-and-kv-prefix-serialization.lean]] | Unbounded algebraic & list-prefix laws ONLY: =quarantinedCandidate_never_recalled=, =untrustedOrigin_selfClaimedSuccess_cannot_promote=, =endorsedAndDefeaterFree_promotes_to_recallable=, =appendDynamicSuffix_preserves_frozen_kv_prefix=, =detourSuffixSwap_preserves_prefix_commitment=, =canonicalPrefixSort_order_invariant= |
+| [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.qnt][51-memory-poisoning-quarantine-and-kv-prefix-serialization.qnt]] | Nondeterministic concurrent MemoryGraft/MINJA quarantine, promotion, recall, and rolling detour suffix races ONLY (exhaustive TLC =queue = 0= + negative-control counterexamples) |

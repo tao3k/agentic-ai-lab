@@ -5,7 +5,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-8]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-9]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-1]-*'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py'
       - 'proofs/ContextGovernance/**'
@@ -17,7 +18,8 @@ on:
       - '.github/workflows/context-governance-proof.yml'
   pull_request:
     paths:
-      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-8]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-9]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-1]-*'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py'
       - 'proofs/ContextGovernance/**'
@@ -168,6 +170,9 @@ jobs:
               "46-sandbox-trifecta",
               "47-end-to-end-capsule",
               "48-progressive-disclosure",
+              "49-shared-context-detours",
+              "50-detour-confinement-audit",
+              "51-memory-quarantine-kv-prefix",
           ]
           for slug in slugs:
               p = Path("dev/d2/output") / f"{slug}.receipt.json"

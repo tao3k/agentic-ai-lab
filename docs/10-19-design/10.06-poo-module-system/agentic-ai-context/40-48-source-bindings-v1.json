@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "9b63c7a74d3ab9f0deb761493af08b31086f6ec585b71b69dfc672e98f88110c",
+  "aggregate_bundle_sha256": "d0cdf269766a6eb00db8a46019bf589d4b12260c3c1939688ab30f93dc183e19",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "1f423d67949776fd0fb9a2f3588ade045f8e0696ef58c634f9ed51ade52578d7",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "1505428b59f7ddf675068e66e54d245ff4b9812893e3befd4e66eeb89e38c090",
-    "proofs/ContextGovernance/lakefile.lean": "ff6eb8c6d9cd30e65944344035a9a8afa92b8170ddf7acb2cc105762d23f6269",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "83644c5240418b74e1b6e423daa1d57533d5eb6446a093c1d92611ea5da28b2b",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "af3da5a5473dd05b596557258e4540b06ad4c3220d86167d36f02a291e08e3e3",
+    "proofs/ContextGovernance/lakefile.lean": "ccb7f31f570d2b091320c49b03f18740948afe4043749630204e80a143a01ea6",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "bf49ce532fea895f6047387bf550ea88690133c889181e0092deb28392aa9519",
-    "dev/d2/governance-figures.sysml": "ba68a385f60837178ae3485dc80c7779bc2b741081270fc2d3b4d4fa7abaede7",
-    "dev/d2/governance-illustrations.ts": "8c33e4589abd981d21f31e2dd7737ce6b4783fcdbcd265f7d59655c40f2d28a3"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "b2965f248b23a11f8af832908e24cb0ef4884fa1cab5c3b2d510f8def80d4815",
+    "dev/d2/governance-figures.sysml": "aecfff917454bac77caa20d3c224e3e44a656be1ae5636291ef74116ee1384ee",
+    "dev/d2/governance-illustrations.ts": "ba1e919863d0550ccfe6f3c03dd75d95475b01f2fe40e504ad8176fa49d07504"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -198,14 +198,93 @@
         "stageTwoPatchRequiresCurrentCutAndReParse"
       ]
     },
+    "49-scoped-detour-funflow-concurrent-shared-context": {
+      "slice_id": 49,
+      "bundle_sha256": "ae33ca187d5f261ee1bc427072377841725ed215212ce9e9ac0f6d213b6cd479",
+      "files": {
+        "org": "98da9ee5677ce0f0a6bfc8bfa9466c3eb40234f009e8bb36c053db68a2b7ab50",
+        "sysml": "fdfb3d229c99056917640164e996de163d09560865e4a5a6a93a308e069f2daf",
+        "lean": "e7e2d81a72c39042b7a4019771ff0fc81a0d7a252e520d7d5f5cd278bc439fff",
+        "qnt": "56c816d69b63a97f28bde65cc476a75bc3a0aacdd21282821fd188df018e6c84"
+      },
+      "lean_theorems": [
+        "activeLeaseTakeover_rejected_before_expiry",
+        "cancelledDetour_preserves_mainline_and_new_defeaters",
+        "directWrite_nonOwner_rejected",
+        "expiredLeaseTakeover_strictly_advances_epoch",
+        "extendChild_preserves_claimed_node_invariant",
+        "fencedEffect_requires_exhaustive_token_and_endorsement",
+        "orgOverlayMeet_capabilities_monotonic",
+        "orgOverlayMeet_lease_contained",
+        "orgOverlayMeet_no_trust_escalation",
+        "pureCAS_admitted_without_exhaustiveness",
+        "reanchorMainline_blocks_archive_if_blocker_or_invariant_open"
+      ],
+      "quint_invariants": [
+        "autoArchiveRequiresNoBlockerAndAllInvariants",
+        "cancelledDetourNeverDropsDefeaters",
+        "fencedEffectRequiresExhaustiveAndValidPremise",
+        "noNonOwnerOverwrite"
+      ]
+    },
+    "50-literature-frontier-detour-confinement-and-causal-audit": {
+      "slice_id": 50,
+      "bundle_sha256": "c11c487a7564ba7384d6803f583bb7de8256ce50a38bc0ff56e8f9dc947f5861",
+      "files": {
+        "org": "726e070f15eff967e7591faeb737ddaffb1ea847441bf422f200aecd25cd263e",
+        "sysml": "aead09ca66eb63715fd1a2b9473df94d19a4171ca6c488b111dca17e5a3e37a2",
+        "lean": "e1c9407ef33c69041e73717106042bd0a6d5ac98ea5eaf96af947a0ccb6b4ccd",
+        "qnt": "c9d1b1763d29eda9f785dc26e0e65e67ab778edcd68b020916769b668051c2e3"
+      },
+      "lean_theorems": [
+        "advisoryTrigger_fires_on_stall_threshold",
+        "advisoryTrigger_never_authorizes_auto_mutation",
+        "attestedDetourReturn_preserves_mainline_taint_without_label_creep",
+        "causalAudit_clean_when_counterfactual_invariant",
+        "causalAudit_clean_when_declassification_certified",
+        "causalAudit_flags_unendorsed_branch_flip",
+        "confinedDetour_isolates_untrusted_read_from_mainline",
+        "confinedDetour_no_egress_when_tainted",
+        "unattestedDetourReturn_rejected"
+      ],
+      "quint_invariants": [
+        "confinedDetourNeverLeaksUnattestedToMainline",
+        "stallAdvisoryNeverAutoMutatesMainline",
+        "taintedConfinedDetourNeverEgresses",
+        "unendorsedCausalFlipAlwaysFlaggedByAudit"
+      ]
+    },
+    "51-memory-poisoning-quarantine-and-kv-prefix-serialization": {
+      "slice_id": 51,
+      "bundle_sha256": "44ec05a33b0e8afdcaca56765ed37ba111c21a50ef6a9276c7522990bbf5092f",
+      "files": {
+        "org": "c82df947dc099ef975b46706435aaf71702150c6aa5d8fa7f7ee7b9b2ac2a2f8",
+        "sysml": "c9858b3fa9e15ab5e743a7aff96b3213b7fe2556f7152f030e4c79d8cca4e94e",
+        "lean": "7fe98cdfd1712f99b2a20f792255744fd7cc549cc12f964d9e4aa77c8336c77a",
+        "qnt": "4eb231d54c4434701010944d9ed94121a28a8a07d27b6080f2332807897ed55b"
+      },
+      "lean_theorems": [
+        "appendDynamicSuffix_preserves_frozen_kv_prefix",
+        "canonicalPrefixSort_order_invariant",
+        "detourSuffixSwap_preserves_prefix_commitment",
+        "endorsedAndDefeaterFree_promotes_to_recallable",
+        "quarantinedCandidate_never_recalled",
+        "untrustedOrigin_selfClaimedSuccess_cannot_promote"
+      ],
+      "quint_invariants": [
+        "productionRecallNeverContainsQuarantinedOrPoisoned",
+        "rollingDetourSuffixNeverFracturesFrozenKvPrefix",
+        "untrustedExperienceNeverAutoPromotes"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "51f10d3b395ce710b1719cd1f82421c679eef1d0df19cd98e50a1420e170809a",
+      "bundle_sha256": "c01d8ee99f19c97ae1fcac1d916d7b69b4a31dc66bda424ea802489f8ae68d6e",
       "files": {
-        "org": "2c142ca2d920ede151620abea8146ad5e5854436f8bdec3993ce9d3c2696fa4c",
-        "sysml": "75288589888aab1b2be856d397237dbe6a5f83b17e003d4669b225cddae6c653",
-        "lean": "2e762d76cfd31d06e2e560f3c06e9d8d80178a9932baca31ca8c1b40d6a65d4a",
-        "qnt": "ea46979d1aa3a2b6c7e344b921ec9edd9d5709e36a1734105f012d9bc21f1094"
+        "org": "b5b1a0ae80b26773a96c5fa7a75c75c6c71479b618cbe524379a2083a111695d",
+        "sysml": "05f136c2200ee2a86fc0c644d0e536f55cfafb3708c8c43088526711cbd0e6c2",
+        "lean": "c602206bb7d67a5ee7e0d7daaca872efd6382caea59a54bdc484a3dcfe1c2b41",
+        "qnt": "39ab625fc814d1607ccfca01844feb6eb7fe55d52c0e45188073f491e2c93c44"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -217,7 +296,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allEightUpstreamSliceInvariantsHold",
+        "allElevenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

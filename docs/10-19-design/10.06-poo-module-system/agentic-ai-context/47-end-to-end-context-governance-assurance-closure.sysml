@@ -12,16 +12,19 @@ package EndToEndContextGovernanceClosure {
     private import OrgSexprGqlCandidateExchange::*;
     private import DurableAgendaSessionSandboxGovernance::*;
     private import ProgressiveDisclosureAndOrgRepair::*;
+    private import ScopedDetourFunflowConcurrentContext::*;
+    private import DetourTaintConfinementAndCausalAudit::*;
+    private import MemoryQuarantineAndKvPrefixSerialization::*;
 
-    doc /* Capstone SysML v2 horizontal & vertical chain closure across all eight
-           upstream planes (Slices 40-46 + Slice 48):
-           1. Horizontally imports and instantiates all eight upstream Context
+    doc /* Capstone SysML v2 horizontal & vertical chain closure across all eleven
+           upstream planes (Slices 40-46 + Slices 48-51):
+           1. Horizontally imports and instantiates all eleven upstream Context
               Governance subsystem models inside the five-station pipeline.
            2. Defines `AuditCapsuleLifecycle` governing hot O(1) cut-stamp use,
               push invalidation on source-cut advance, and zero-LLM cold replay.
            3. Vertically dispatches composed pure pipeline and quotient bridge
-              theorems to `47-*.lean` (importing `40..46, 48`) and cross-plane
-              concurrent races to `47-*.qnt` (importing `s40..s46, s48`), plus
+              theorems to `47-*.lean` (importing `40..46, 48..51`) and cross-plane
+              concurrent races to `47-*.qnt` (importing `s40..s46, s48..s51`), plus
               real Quint ITF trace-replay verification (`QuintTraceScalarReplayContract`). */
 
     item def DeterministicAuditCapsule {
@@ -74,6 +77,7 @@ package EndToEndContextGovernanceClosure {
         part epistemicSubsystem : GovernedEpistemicSystem;
         part branchSubsystem : GovernedSecurityInvestigation;
         part disclosureSubsystem : ProgressiveDisclosureGovernanceSystem;
+        part memoryKvSubsystem : MemoryQuarantineAndKvPrefixSystem;
         port prev : ~StageChainPort;
         port next : StageChainPort;
     }
@@ -82,6 +86,8 @@ package EndToEndContextGovernanceClosure {
         part boundarySubsystem : GovernedContextSystem;
         part multiRepoSubsystem : MultiRepoCollaborativeSystem;
         part controlAxesSubsystem : GovernedRuntimeControlAxes;
+        part concurrentContextSubsystem : ConcurrentSharedContextOrchestrationSystem;
+        part absorptionSubsystem : LiteratureAbsorptionGovernanceSystem;
         port prev : ~StageChainPort;
         port handoff : ~FinalHostIntakePort;
     }
@@ -129,12 +135,13 @@ package EndToEndContextGovernanceClosure {
     // 2. Quint Cross-Module Composed Push-Invalidation, Host CAS & Cold-Replay Race
     requirement composedMultiPlaneCasAndColdReplayRace : QuintInterleavingObligation {
         attribute :>> quintArtifact = "47-end-to-end-context-governance-assurance-closure.qnt";
-        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allEightUpstreamSliceInvariantsHold";
-        doc /* Importing all eight upstream Quint protocol modules (s40..s46, s48),
+        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allElevenUpstreamSliceInvariantsHold";
+        doc /* Importing all eleven upstream Quint protocol modules (s40..s46, s48..s51),
                concurrent source-cut advances, generation advances, omitted-hypothesis
-               discoveries, active-defeater disclosure arrivals, cited-evidence
-               retractions or grant revocations block stale Host CAS while cold
-               forensic replay at cut 1 remains valid without reopening live execution. */
+               discoveries, active-defeater disclosure arrivals, shared-context claims,
+               confined-detour taint checks, memory-poisoning quarantine, KV-prefix
+               stability, cited-evidence retractions or grant revocations block stale
+               Host CAS while cold forensic replay at cut 1 remains valid. */
     }
 
     allocation ownPipelineChainDomain allocate crossSlicePurePipelineCompositionLaw to pipelineSystem.stageGovernance;

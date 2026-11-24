@@ -36,4 +36,16 @@ package ContextGovernanceFigures {
     view progressiveDisclosure : InterconnectionView {
         expose ProgressiveDisclosureAndOrgRepair::ProgressiveDisclosureGovernanceSystem;
     }
+
+    view sharedContextDetours : InterconnectionView {
+        expose ScopedDetourFunflowConcurrentContext::ConcurrentSharedContextOrchestrationSystem;
+    }
+
+    view detourConfinementAudit : InterconnectionView {
+        expose DetourTaintConfinementAndCausalAudit::LiteratureAbsorptionGovernanceSystem;
+    }
+
+    view memoryQuarantineKvPrefix : InterconnectionView {
+        expose MemoryQuarantineAndKvPrefixSerialization::MemoryQuarantineAndKvPrefixSystem;
+    }
 }
