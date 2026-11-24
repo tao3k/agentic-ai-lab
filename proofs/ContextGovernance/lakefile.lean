@@ -25,5 +25,7 @@ lean_lib ContextGovernanceChain where
     `«51-memory-poisoning-quarantine-and-kv-prefix-serialization»,
     `«52-funflow-cas-singleflight-and-external-sandbox-binding»,
     `«53-yuanxu-c4-profile-convergence-and-interface-slots»,
+    `«54-durable-work-engine-core-challenge»,
+    `«55-mcp-tool-poisoning-and-camel-capability-flow»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]

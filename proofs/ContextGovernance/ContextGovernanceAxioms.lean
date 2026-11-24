@@ -14,6 +14,8 @@ import «50-literature-frontier-detour-confinement-and-causal-audit»
 import «51-memory-poisoning-quarantine-and-kv-prefix-serialization»
 import «52-funflow-cas-singleflight-and-external-sandbox-binding»
 import «53-yuanxu-c4-profile-convergence-and-interface-slots»
+import «54-durable-work-engine-core-challenge»
+import «55-mcp-tool-poisoning-and-camel-capability-flow»
 import «47-end-to-end-context-governance-assurance-closure»
 import Lean.Util.CollectAxioms
 import Lean.Elab.Command
@@ -37,6 +39,8 @@ run_cmd do
     `MemoryQuarantineAndKvPrefixSerialization,
     `FunflowCasSingleflightAndExternalSandbox,
     `YuanxuC4ProfileConvergence,
+    `DurableWorkEngineCoreChallenge,
+    `McpToolPoisoningAndCamelCapabilityFlow,
     `EndToEndContextGovernanceClosure
   ]
   let mut declCount : Nat := 0
@@ -48,4 +52,4 @@ run_cmd do
           throwError "{name} depends on disallowed axiom {axiomName}"
   if declCount == 0 then
     throwError "Context Governance declarations were not loaded"
-  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 14 namespaces"
+  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 16 namespaces"

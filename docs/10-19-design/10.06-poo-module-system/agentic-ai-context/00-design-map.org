@@ -649,6 +649,23 @@ explicit =-feature= veto dominance, fail-closed same-band peer exclusive
 conflict detection, Band 5 monotonic =GovernanceFloor= meet, and stage
 separation (zero compile expansion from runtime-stage detour overlays).
 
+[[file:54-durable-work-engine-core-challenge.org][54: Pure Durable Work Engine Core Formal Challenge]]
+and its [[file:54-durable-work-engine-core-challenge.sysml][SysML]], [[file:54-durable-work-engine-core-challenge.qnt][Quint]],
+and [[file:54-durable-work-engine-core-challenge.lean][Lean]] artifacts formally challenge =modules/durable/work/= and
+=modules/ai-agentic-context/features/durable/org-adapter.ss=, surfacing and
+repairing five concrete logical flaws (=BUG-D1=..=BUG-D5=): monotonic overlay
+budget meet, APPA confined tainted-detour =CompletedExit.= gating, authorized
+non-self explicit early handover & =expected-epoch= CAS fencing, unclosed-attempt
+archive quiescence fencing, and fail-closed cancelled =:INVARIANT:= projection.
+
+[[file:55-mcp-tool-poisoning-and-camel-capability-flow.org][55: MCP Tool Poisoning, Rug-Pull Pinning, Cross-Server Shadowing, and CaMeL Capability-Provenance Flow]]
+and its [[file:55-mcp-tool-poisoning-and-camel-capability-flow.sysml][SysML]], [[file:55-mcp-tool-poisoning-and-camel-capability-flow.qnt][Quint]],
+and [[file:55-mcp-tool-poisoning-and-camel-capability-flow.lean][Lean]] artifacts formalize 2025–2026 MCP security defenses (*MCPTox*, *CaMeL*,
+*MindGuard*): cryptographic manifest pinning against post-approval rug-pulls,
+cross-server tool-shadowing namespace isolation, CaMeL value-level argument
+provenance gating at sensitive sinks, and zero-LLM counterfactual
+decision-dependence auditing.
+
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
 [[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
@@ -658,11 +675,11 @@ separation (zero compile expansion from runtime-stage detour overlays).
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=53= both
-horizontally (=47= imports all thirteen upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=55= both
+horizontally (=47= imports all fifteen upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 14-namespace axiom audit + 97 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all thirteen single-plane models + 8-step Apalache on
+Lake 16-namespace axiom audit + 109 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all fifteen single-plane models + 8-step Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).

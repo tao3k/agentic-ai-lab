@@ -17,6 +17,8 @@ package EndToEndContextGovernanceClosure {
     private import MemoryQuarantineAndKvPrefixSerialization::*;
     private import FunflowCasSingleflightAndExternalSandbox::*;
     private import YuanxuC4ProfileConvergence::*;
+    private import DurableWorkEngineCoreChallenge::*;
+    private import McpToolPoisoningAndCamelCapabilityFlow::*;
 
     doc /* Capstone SysML v2 horizontal & vertical chain closure across all thirteen
            upstream planes (Slices 40-46 + Slices 48-53):
@@ -92,6 +94,8 @@ package EndToEndContextGovernanceClosure {
         part absorptionSubsystem : LiteratureAbsorptionGovernanceSystem;
         part funflowCasSandboxSubsystem : FunflowCasSandboxSystem;
         part c4ConvergenceSubsystem : YuanxuC4ProfileConvergenceSystem;
+        part durableWorkChallengeSubsystem : DurableWorkChallengeSystem;
+        part mcpToolGovernanceSubsystem : McpToolPoisoningGovernanceSystem;
         port prev : ~StageChainPort;
         port handoff : ~FinalHostIntakePort;
     }
@@ -139,7 +143,7 @@ package EndToEndContextGovernanceClosure {
     // 2. Quint Cross-Module Composed Push-Invalidation, Host CAS & Cold-Replay Race
     requirement composedMultiPlaneCasAndColdReplayRace : QuintInterleavingObligation {
         attribute :>> quintArtifact = "47-end-to-end-context-governance-assurance-closure.qnt";
-        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allThirteenUpstreamSliceInvariantsHold";
+        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allFifteenUpstreamSliceInvariantsHold";
         doc /* Importing all thirteen upstream Quint protocol modules (s40..s46, s48..s53),
                concurrent source-cut advances, generation advances, omitted-hypothesis
                discoveries, active-defeater disclosure arrivals, shared-context claims,

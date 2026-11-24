@@ -56,4 +56,12 @@ package ContextGovernanceFigures {
     view c4ProfileConvergence : InterconnectionView {
         expose YuanxuC4ProfileConvergence::YuanxuC4ProfileConvergenceSystem;
     }
+
+    view durableWorkCoreChallenge : InterconnectionView {
+        expose DurableWorkEngineCoreChallenge::DurableWorkChallengeSystem;
+    }
+
+    view mcpToolPoisoningCamel : InterconnectionView {
+        expose McpToolPoisoningAndCamelCapabilityFlow::McpToolPoisoningGovernanceSystem;
+    }
 }

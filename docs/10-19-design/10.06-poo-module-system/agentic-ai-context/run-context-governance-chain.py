@@ -46,6 +46,8 @@ SLICES = [
     (51, "51-memory-poisoning-quarantine-and-kv-prefix-serialization", "MemoryQuarantineAndKvPrefixSerialization", "MemoryQuarantineAndKvPrefixContract", 2, "tlc"),
     (52, "52-funflow-cas-singleflight-and-external-sandbox-binding", "FunflowCasSingleflightAndExternalSandbox", "FunflowCasSandboxDispatchContract", 2, "tlc"),
     (53, "53-yuanxu-c4-profile-convergence-and-interface-slots", "YuanxuC4ProfileConvergence", "YuanxuC4ProfileConvergenceContract", 2, "tlc"),
+    (54, "54-durable-work-engine-core-challenge", "DurableWorkEngineCoreChallenge", "DurableWorkChallengeDispatchContract", 2, "tlc"),
+    (55, "55-mcp-tool-poisoning-and-camel-capability-flow", "McpToolPoisoningAndCamelCapabilityFlow", "McpToolPoisoningDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -63,6 +65,8 @@ QUINT_MAINS = {
     "51-memory-poisoning-quarantine-and-kv-prefix-serialization": "MemoryQuarantineAndKvPrefixSerialization",
     "52-funflow-cas-singleflight-and-external-sandbox-binding": "FunflowCasSingleflightAndExternalSandbox",
     "53-yuanxu-c4-profile-convergence-and-interface-slots": "YuanxuC4ProfileConvergence",
+    "54-durable-work-engine-core-challenge": "DurableWorkEngineCoreChallenge",
+    "55-mcp-tool-poisoning-and-camel-capability-flow": "McpToolPoisoningAndCamelCapabilityFlow",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -82,6 +86,8 @@ STORY_SLUGS = (
     "51-memory-quarantine-kv-prefix",
     "52-funflow-cas-sandbox",
     "53-c4-profile-convergence",
+    "54-durable-work-core-challenge",
+    "55-mcp-tool-poisoning-camel",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -330,6 +336,41 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         )
         epistemic_ok = (not bool(st["silentPeerOverwrite"])) and (
             (not (left != "" and right != "" and left != right)) or bool(st["conflictDetected"])
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 54:
+        st = last["s54"]
+        consumed = (
+            bool(st["archived"])
+            or bool(st["leaseHijacked"])
+            or bool(st["mainlineTainted"])
+            or (itf_int(st["leaseEpoch"]) > 1)
+            or (itf_int(st["effectiveMaxConcurrency"]) != itf_int(st["parentMaxConcurrency"]))
+        )
+        cut_ok = (not bool(st["staleEpochAccepted"])) and (
+            itf_int(st["effectiveMaxConcurrency"]) <= itf_int(st["parentMaxConcurrency"])
+        )
+        grant_ok = not bool(st["leaseHijacked"])
+        epistemic_ok = (not bool(st["mainlineTainted"])) and (
+            (not bool(st["archived"]))
+            or (itf_int(st["unclosedAttemptCount"]) == 0 and itf_int(st["openBlockerCount"]) == 0)
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 55:
+        st = last["s55"]
+        consumed = (
+            (itf_int(st["safeInvocationCount"]) > 0)
+            or bool(st["rugPullInvoked"])
+            or bool(st["shadowDispatched"])
+            or bool(st["sensitiveSinkAcceptedUntrusted"])
+            or bool(st["offlineAuditExecuted"])
+        )
+        cut_ok = not bool(st["rugPullInvoked"])
+        grant_ok = (not bool(st["shadowDispatched"])) and (not bool(st["sensitiveSinkAcceptedUntrusted"]))
+        epistemic_ok = (not (bool(st["offlineAuditExecuted"]) and bool(st["metadataFlippedDecision"]))) or bool(
+            st["decisionHijackFlagged"]
         )
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 

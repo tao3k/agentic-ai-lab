@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "3a7ae36a752e90e162e443a922cdca2386fcade32c3c0f5ccf757daf416d713e",
+  "aggregate_bundle_sha256": "89fd66d6038f183971f693da7162e159e69cdfab2ec793abb21515f841c9c1a3",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "d0b2b9b250e130d1ed9b88f78a657b27118fd471b5acc524a11d6f39ba11eaeb",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "09fbcce3f464754ef29c618cdd2db10af6bb42aac61fa939ace161f8a50489c1",
-    "proofs/ContextGovernance/lakefile.lean": "2a635214b3a28277aecdfba0bd37ac7fdbf8f6e51f48c1d0f25afe22dd69039e",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "262f7814ef72691b0891b42932ff9ae9ae5c41cd12c2cbb963bd3074f789af99",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "67b01395836556c5ffebeed5d3dabe4e48a2802b38b92c1ea4c04435f79e44a3",
+    "proofs/ContextGovernance/lakefile.lean": "f02176134d22944d6e8ec2036e49df1d2f4f99968e790c217269b52dca60c32b",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "696572455f48d8a780696b4914744b929f212c74b70abd5e4e0f6ecdd08e6ad2",
-    "dev/d2/governance-figures.sysml": "63e27bb7386d2db1c06a8d86679f626ddd9d6667ed8f44aab80b1dbbc444e63b",
-    "dev/d2/governance-illustrations.ts": "0bb33faf42e652d4bf57800614d840869792070c0a409f0fae36f0110d7d12ef"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "9400d2a6f33ccd2675692f5273e85baf2ca573d195a0c391a5f6020bf508125a",
+    "dev/d2/governance-figures.sysml": "4b38143c3e1e83b9aa9e25888462e07cf3af2bbf1dffac07199a868084492c51",
+    "dev/d2/governance-illustrations.ts": "b51667028209c619aa82e79505b77794835cc27c543edead4df4e4e5f8af8d78"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -331,14 +331,63 @@
         "invVetoDominance"
       ]
     },
+    "54-durable-work-engine-core-challenge": {
+      "slice_id": 54,
+      "bundle_sha256": "31a120d8100a8dee2311bb1df652fda6dd02eb54b46c4d4624ef3851590dd33f",
+      "files": {
+        "org": "44b3eb5d8d05820fa8fb2db0f98e88660e7f42d29cc83367f826b40906bf477a",
+        "sysml": "fdb02f66f3065d456837095794acba480fd0c93fe59e663cffec16bba101bb58",
+        "lean": "3b21bb0d5ecdf8c8b36e6588b66bfaad854fdca65c712b5ee7fda2bbd4145796",
+        "qnt": "a56344ce460ecb232356675d74c928c403182646bc76dba8656ca25a450a1c54"
+      },
+      "lean_theorems": [
+        "cancelledInvariant_remains_unsatisfied_fail_closed",
+        "explicitEarlyHandover_requires_nonSelf_endorsement",
+        "overlayBudgetMeet_never_escalates",
+        "staleEpochCas_rejected_by_claim_and_handover",
+        "taintedDetourCompletedExit_requires_attestation_or_cert",
+        "unclosedAttempt_blocks_autoArchive_fail_closed"
+      ],
+      "quint_invariants": [
+        "activeLeaseNeverHijackedWithoutExpiryOrEndorsement",
+        "archiveNeverCommitsWithUnclosedAttemptOrOpenBlocker",
+        "overlayBudgetNeverExceedsParentPolicyFloor",
+        "staleEpochWriteOrHandoverAlwaysRejected",
+        "taintedDetourNeverMergesUnattestedIntoMainline"
+      ]
+    },
+    "55-mcp-tool-poisoning-and-camel-capability-flow": {
+      "slice_id": 55,
+      "bundle_sha256": "dea6f761e424c973a231c53aa6f1734132ec1b51583a9ee0671e884637551c8b",
+      "files": {
+        "org": "87005522491cdcd648ea91e4908bc86e4b1f8a3c320b1415bbbeccbaa2e8c8a1",
+        "sysml": "189ecf742ea7648335577eb01024e06f299a853177acddf0b22b51b7fe1702b6",
+        "lean": "594e1436a3e5b7e6d89ee01523f7a20a6e7a5fb54397a9c37673144a02e7d742",
+        "qnt": "0cdd75c07dcb3d9e174d72b5b402d6b55bbfec29f82cc02371dbef010d79e34d"
+      },
+      "lean_theorems": [
+        "crossServerShadowing_rejected_fail_closed",
+        "decisionDependenceAudit_flags_unendorsed_metadata_hijack",
+        "metadataSegregation_keeps_description_untrusted",
+        "rugPullMutation_breaks_manifest_pin",
+        "untrustedOriginArgument_blocked_at_sensitive_sink",
+        "userIntentArgument_admitted_at_sensitive_sink"
+      ],
+      "quint_invariants": [
+        "crossServerShadowedToolNeverDispatched",
+        "poisonedMetadataDecisionHijackAlwaysFlaggedOffline",
+        "rugPullMutatedToolNeverInvoked",
+        "sensitiveSinkNeverAcceptsUntrustedOriginWithoutCert"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "2334091dcc181590a029f68f11f2b4551ee3371d5ffcff4f08225f5b23d7d00e",
+      "bundle_sha256": "a23c2e6ffe06cac6804708f63da11935f8d68c63456dcce0cd50d77b40896168",
       "files": {
-        "org": "2f82ebbe3e4a157433016c8b2be24c20d23ab02d3ac4f07a89563f30dab6eb75",
-        "sysml": "ad39b03df95b9af421846129dcc1df83f77d17d333d231573758b47c8976ae07",
-        "lean": "80dfe85addacfc03eb03eacc59518a8d16dec1253462d6629178d26322820ec2",
-        "qnt": "863a340c87c8f1e3c0cf44dcc94740d69ed676bb7e3d1893a97732f9361a8da3"
+        "org": "6294a597b134afbcfd3d1a4d27c61f83139c90e397a6c5480f116f673c575ce2",
+        "sysml": "3f7e111965378e3731d95e97d50d4f542ba86ad5da137dbf5ccca684e6f91951",
+        "lean": "a6639d1492c01cb8055c681e667add83989c6ccbd7b198e38c0f3b28e40810bd",
+        "qnt": "f4dc1c05785c8e7251b29a7220666c44ddb104c076e69a9857a79d1998a40be8"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -350,7 +399,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allThirteenUpstreamSliceInvariantsHold",
+        "allFifteenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

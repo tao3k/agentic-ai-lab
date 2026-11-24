@@ -1282,7 +1282,173 @@ const composeC4ProfileConvergenceStory: FigureComposer = context => {
         ${txt(820, 968, '✓ 10 Lean theorems + exhaustive TLC (queue = 0)', 16, '#1B5E20', 800)}
       </g>
 
-      ${txt(48, 1084, 'Slice 53 Closure: Unifies Yuanxu Design 165 Two-Tier C4 Profile Convergence into the 14-Slice Assurance Chain.', 19, '#244957', 700)}
+      ${txt(48, 1084, 'Slice 53 Closure: Unifies Yuanxu Design 165 Two-Tier C4 Profile Convergence into the 15-Slice Assurance Chain.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
+// Story 54: Pure Durable Work Engine Core Challenge (BUG-D1..BUG-D5)
+const composeDurableWorkCoreChallengeStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Durable Work Engine Core Formal Challenge">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="1120" fill="#FAF8F2"/>
+      ${txt(48, 64, 'Durable Work Engine Core Challenge: 5 Real Bugs Found & Repaired (Slice 54)', 32, '#102A3A', 800)}
+      ${txt(48, 102, 'Formal contracts challenge modules/durable/work/* & org-adapter.ss across overlays, detours, leases & archive.', 20, '#3C5B6B', 500)}
+
+      <g data-subject-ref="${subjectId('overlayAndDetourGate')}">
+        <rect x="48" y="138" width="1424" height="422" rx="22" fill="#FFFFFF" stroke="#1E6091" stroke-width="2.5"/>
+        ${pill(72, 160, 820, 36, '#EBF5FB', '#1E6091', '1. MONOTONIC OVERLAY FLOOR, CONFINED DETOUR EXIT & INVARIANT PROJECTION', '#154360')}
+        ${txt(72, 224, 'Repairs BUG-D1 (overlay escalation), BUG-D2 (tainted CompletedExit leak), and BUG-D5 (cancelled invariant drop):', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="424" height="274" rx="16" fill="#F0F8FF" stroke="#1E6091" stroke-width="2"/>
+        ${txt(94, 290, 'BUG-D1: Monotonic Budget Meet', 19, '#154360', 800)}
+        ${txt(94, 328, 'Was: overlay overwrote max-parallel,', 16, '#922B21', 700)}
+        ${txt(94, 358, 'retry-budget, detour-depth & drill-down', 16, '#2C3E50')}
+        ${txt(94, 396, 'Now: min(parent, overlay) >= 0 and', 16, '#1B5E20', 700)}
+        ${txt(94, 426, 'parent.allowDrill && overlay.allowDrill', 16, '#1B5E20', 700)}
+        ${txt(94, 464, 'Lean: overlayBudgetMeet_never_escalates', 15, '#154360', 700)}
+        ${txt(94, 496, '✓ Zero resource/capability escalation', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 389H548', '#1E6091')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FEF5E7" stroke="#9C640C" stroke-width="2"/>
+        ${txt(570, 290, 'BUG-D2: Tainted CompletedExit Gate', 19, '#784212', 800)}
+        ${txt(570, 328, 'Was: CompletedExit checked ONLY', 16, '#922B21', 700)}
+        ${txt(570, 358, 'non-empty receipt digest (taint escaped)', 16, '#2C3E50')}
+        ${txt(570, 396, 'Now: if detour.tainted? = #t, MUST carry', 16, '#1B5E20', 700)}
+        ${txt(570, 426, 'schema-attested? OR 3-party DeclassCert', 16, '#1B5E20', 700)}
+        ${txt(570, 464, 'Lean: taintedDetourCompletedExit_requires', 15, '#784212', 700)}
+        ${txt(570, 496, '✓ Closes Slice 50 APPA return boundary', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'BUG-D5: Org Projection Closure', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, 'Was: CANCELLED :INVARIANT: counted', 16, '#922B21', 700)}
+        ${txt(1046, 358, 'as done? & dropped 5-tuple CAS fields', 16, '#2C3E50')}
+        ${txt(1046, 396, 'Now: ONLY DONE satisfies :INVARIANT:', 16, '#1B5E20', 700)}
+        ${txt(1046, 426, 'Forwards EffectClass, code & env digests', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, 'Lean: cancelledInvariant_remains_unsat', 15, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Cancelled blockers keep defeat log', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('schedulerAndClaims')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 880, 36, '#EFEBF9', '#5B4B8A', '2. QUIESCENT ARCHIVE FENCE & AUTHORIZED EPOCH-CAS LEASE HANDOVER', '#4A3B99')}
+        ${txt(72, 678, 'Repairs BUG-D4 (unclosed-attempt premature archive) and BUG-D3 (unendorsed force-explicit hijack & ABA):', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'BUG-D4: Unclosed Attempts Block Auto-Archive', 19, '#922B21', 800)}
+        ${txt(96, 786, '• Was: journal_quiescent checked ONLY in-flight & effects,', 16, '#2C3E50')}
+        ${txt(96, 820, '  omitting unclosed-attempts -> archived crashed turns!', 16, '#922B21', 700)}
+        ${txt(96, 860, '✓ Now: journal_quiescent requires (null? recovery-ids)', 16, '#1B5E20', 700)}
+        ${txt(96, 896, '✓ Any crash-ambiguous attempt unconditionally blocks', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '  ready_to_auto_archive until reconciled', 16, '#1B5E20', 700)}
+        ${txt(96, 968, 'Lean: unclosedAttempt_blocks_autoArchive_fail_closed', 16, '#922B21', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'BUG-D3: Authorized Handover & Expected-Epoch CAS', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Was: force-explicit?: #t hijacked active leases with', 16, '#2C3E50')}
+        ${txt(820, 820, '  zero endorsement; no expected-epoch CAS or expiry check', 16, '#922B21', 700)}
+        ${txt(820, 860, '✓ Early explicit handover requires non-self endorser', 16, '#1B5E20', 700)}
+        ${txt(820, 896, '✓ expected-epoch rejects stale ABA claims/handovers', 16, '#1B5E20', 700)}
+        ${txt(820, 932, '✓ work-assert-write-owner rejects expired leases', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 10 Lean theorems + exhaustive TLC (360 states, q=0)', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 54 Closure: Formal challenge surfaced 5 real Durable Work Engine bugs (BUG-D1..D5) in Lean 4 & TLC.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
+// Story 55: MCP Tool Poisoning, Rug-Pull Pinning, Shadowing & CaMeL Capability Flow
+const composeMcpToolPoisoningCamelStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="MCP Tool Poisoning, Rug-Pull Pinning, Shadowing and CaMeL Capability Flow">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="1120" fill="#FAF8F2"/>
+      ${txt(48, 64, 'MCP Tool Poisoning, Rug-Pull Pinning & CaMeL Capability Flow (Slice 55)', 32, '#102A3A', 800)}
+      ${txt(48, 102, 'Absorbs MCPTox (2025), CaMeL (Google/DeepMind/ETHZ) & MindGuard into zero-LLM formal tool gates.', 20, '#3C5B6B', 500)}
+
+      <g data-subject-ref="${subjectId('manifestRegistryGate')}">
+        <rect x="48" y="138" width="1424" height="422" rx="22" fill="#FFFFFF" stroke="#1E6091" stroke-width="2.5"/>
+        ${pill(72, 160, 740, 36, '#EBF5FB', '#1E6091', '1. MANIFEST PINNING, SHADOW BLOCK & METADATA SEGREGATION', '#154360')}
+        ${txt(72, 224, 'Blocks MCPTox post-approval rug-pulls, cross-server tool shadowing, and description-as-instruction injection:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="424" height="274" rx="16" fill="#F0F8FF" stroke="#1E6091" stroke-width="2"/>
+        ${txt(94, 290, 'Cryptographic Manifest Pin', 19, '#154360', 800)}
+        ${txt(94, 328, 'Pins (serverId, toolId,', 16, '#2C3E50')}
+        ${txt(94, 358, 'descriptionDigest, schemaDigest)', 16, '#154360', 700)}
+        ${txt(94, 396, '✗ Post-approval rug-pull mutation', 16, '#922B21', 700)}
+        ${txt(94, 426, '  breaks pin equality immediately', 16, '#922B21', 700)}
+        ${txt(94, 464, 'Lean: rugPullMutation_breaks_pin', 15, '#154360', 700)}
+        ${txt(94, 496, '✓ Refuses invocation fail-closed', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 389H548', '#1E6091')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FEF5E7" stroke="#9C640C" stroke-width="2"/>
+        ${txt(570, 290, 'Cross-Server Shadow Block', 19, '#784212', 800)}
+        ${txt(570, 328, 'Registry enforces unique owner', 16, '#2C3E50')}
+        ${txt(570, 358, 'serverId per registered toolId.', 16, '#2C3E50')}
+        ${txt(570, 396, '✗ Untrusted server CANNOT shadow', 16, '#922B21', 700)}
+        ${txt(570, 426, '  trusted git / deploy / mail tools', 16, '#922B21', 700)}
+        ${txt(570, 464, 'Lean: crossServerShadowing_rejected', 15, '#784212', 700)}
+        ${txt(570, 496, '✓ Namespace collision fail-closed', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'Metadata Trust Segregation', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, 'External tool descriptions stay', 16, '#2C3E50')}
+        ${txt(1046, 358, 'in untrustedMetadata (rank 0).', 16, '#1B5E20', 700)}
+        ${txt(1046, 396, '• Strictly below userIntent (rank 3)', 16, '#2C3E50')}
+        ${txt(1046, 426, '• Never promoted to systemPolicy', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, 'Lean: metadataSegregation_keeps_...', 15, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Zero instruction-lane leakage', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('camelSinkAuditGate')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 880, 36, '#EFEBF9', '#5B4B8A', '2. CAMEL VALUE-LEVEL CAPABILITY PROVENANCE & MINDGUARD ZERO-LLM AUDIT', '#4A3B99')}
+        ${txt(72, 678, 'Separates control/data flows at sensitive sinks and audits poisoned tool-metadata decision hijacks offline:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'CaMeL Sensitive Sink Provenance Gate', 19, '#922B21', 800)}
+        ${txt(96, 786, '• High-impact sinks: recipient, remoteUrl, shellCmd', 16, '#2C3E50')}
+        ${txt(96, 820, '✗ Refuses untrustedMetadata / rawToolOutput args', 16, '#922B21', 700)}
+        ${txt(96, 856, '  unless backed by active 3-party DeclassificationCert', 16, '#922B21', 700)}
+        ${txt(96, 896, '✓ Admits userIntent args with valid manifest pin', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '✓ Blocks exfiltration by design (no LLM alignment trust)', 16, '#1B5E20', 700)}
+        ${txt(96, 968, 'Lean: untrustedOriginArgument_blocked_at_sensitive_sink', 15, '#922B21', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'MindGuard Counterfactual Decision Audit', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Compares selected tool with vs without untrusted', 16, '#2C3E50')}
+        ${txt(820, 820, '  external MCP tool-description metadata', 16, '#2C3E50')}
+        ${txt(820, 860, '✓ Any unendorsed decision flip flags hijack offline', 16, '#1B5E20', 700)}
+        ${txt(820, 896, '✓ llmCallsUsed = 0 (deterministic cold forensic check)', 16, '#1B5E20', 700)}
+        ${txt(820, 932, '✓ 6 Lean theorems + exhaustive TLC (144 states, q=0)', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 4 negative-control ITF counterexamples replayed', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 55 Closure: Seals MCP rug-pull, shadowing & CaMeL sink provenance inside the 16-Slice Assurance Chain.', 19, '#244957', 700)}
     </svg>`,
     css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
   };
@@ -1388,6 +1554,20 @@ const stories: readonly StorySpec[] = [
     title: 'Two-Tier Yuanxu Interface, POO Slot-Observation and C4 Profile Convergence',
     composer: composeC4ProfileConvergenceStory,
   },
+  {
+    slug: '54-durable-work-core-challenge',
+    view: 'ContextGovernanceFigures::durableWorkCoreChallenge',
+    modelFile: '54-durable-work-engine-core-challenge.sysml',
+    title: 'Pure Durable Work Engine Core Formal Challenge: 5 Real Bugs Repaired',
+    composer: composeDurableWorkCoreChallengeStory,
+  },
+  {
+    slug: '55-mcp-tool-poisoning-camel',
+    view: 'ContextGovernanceFigures::mcpToolPoisoningCamel',
+    modelFile: '55-mcp-tool-poisoning-and-camel-capability-flow.sysml',
+    title: 'MCP Tool Poisoning, Rug-Pull Pinning, Shadowing & CaMeL Capability Flow',
+    composer: composeMcpToolPoisoningCamelStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1414,6 +1594,8 @@ const allChainModelFiles = [
   '51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml',
   '52-funflow-cas-singleflight-and-external-sandbox-binding.sysml',
   '53-yuanxu-c4-profile-convergence-and-interface-slots.sysml',
+  '54-durable-work-engine-core-challenge.sysml',
+  '55-mcp-tool-poisoning-and-camel-capability-flow.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));
