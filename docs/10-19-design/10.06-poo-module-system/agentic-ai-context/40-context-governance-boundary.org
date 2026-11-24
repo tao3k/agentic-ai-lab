@@ -143,7 +143,10 @@ disjoint verification engines (=verifierSuite.leanEngine= XOR
 | [[file:40-context-governance-boundary.sysml][40-context-governance-boundary.sysml]] | =FormalVerificationTaxonomy= (=LeanAlgebraicObligation= vs =QuintInterleavingObligation=), 3-plane ports, disjoint allocations and =GovernanceArchitectureAndDispatchContract= | Re-implementing Quint state machines or Lean induction |
 | [[file:40-context-governance-boundary.lean][40-context-governance-boundary.lean]] | Unbounded algebra & induction ONLY: =minRole_idem=, =minRole_comm=, =minRole_assoc=, =foldRoles_le_every_premise=, =composeRestrictions_refines_every_member=, =kvDomainKey_injective=, and =governance_value_carries_zero_authority= | Single-step boolean state-transition wrappers |
 | [[file:40-context-governance-boundary.qnt][40-context-governance-boundary.qnt]] | Nondeterministic (=nondet=) concurrency ONLY: endorsement inbox vs =advanceSourceCut= races, =exposeCriticalThreat= vs prepared handoffs, residual cut invalidation, and KV revocation fences | Static =control= bypass flags or lattice algebra |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= view =output/40-verification-dispatch.{svg,png,html,receipt.json}= | Runtime Scheme execution |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= view [[file:figures/40-verification-dispatch.png][40-verification-dispatch.png]] (=output/40-verification-dispatch.{svg,png,webp,html,receipt.json}=) | Runtime Scheme execution |
+
+#+CAPTION: Slice 40 — FormalVerificationTaxonomy & Orthogonal Lean/Quint Dispatch
+[[file:figures/40-verification-dispatch.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

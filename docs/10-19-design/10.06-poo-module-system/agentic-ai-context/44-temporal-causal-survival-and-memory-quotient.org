@@ -73,7 +73,10 @@ snapshot is distinct from temporal premise survival:
 | [[file:44-temporal-causal-survival-and-memory-quotient.sysml][44-temporal-causal-survival-and-memory-quotient.sysml]] | Bitemporal ports + disjoint allocation to =leanEngine= XOR =quintEngine= (=TemporalSurvivalDispatchAndBoundaryContract=) |
 | [[file:44-temporal-causal-survival-and-memory-quotient.lean][44-temporal-causal-survival-and-memory-quotient.lean]] | Unbounded bitemporal journal & citation frame algebra ONLY: =append_later_revision_preserves_historical_cut=, =filterUpToCut_monotone_in_cut=, =unused_retrieved_mutation_creates_zero_invalidation_burden=, =post_admission_citation_invalidates_prior_review=, and =trajectoryImpact_subsumed_by_potentialFrontier= |
 | [[file:44-temporal-causal-survival-and-memory-quotient.qnt][44-temporal-causal-survival-and-memory-quotient.qnt]] | Nondeterministic (=nondet=) bitemporal races ONLY: =closeSourceWatermark= vs =admitAscentWhyNotGem=, out-of-order late valid-time retraction advancing live cut without mutating =cut1Snapshot=, and uncited churn vs cited eviction |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/44-causal-survival.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/44-causal-survival.png][44-causal-survival.png]] (=output/44-causal-survival.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 44 — Bitemporal Causal Survival, SourceWatermark & Memory Quotient
+[[file:figures/44-causal-survival.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

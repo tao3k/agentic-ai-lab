@@ -103,3 +103,10 @@ imports =FunflowCasSingleflightAndExternalSandbox= as the twelfth upstream
 plane (=40..46, 48..52 -> 47=), ensuring live Host CAS admission fails closed
 if CAS corruption, pinned-GC eviction, or finalizer drop occurs, while cold
 forensic replay at =cut = 1= remains intact.
+
+* Illustrated Architecture View
+
+Rendered via OpenSysML + =@deterministic-engineering/render= ([[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]]):
+
+#+CAPTION: Slice 52 — FunFlow Formal Challenge: 5 Real Bugs Found & Repaired (CAS, Singleflight, Pinned GC & External Sandbox)
+[[file:figures/52-funflow-cas-sandbox.png]]

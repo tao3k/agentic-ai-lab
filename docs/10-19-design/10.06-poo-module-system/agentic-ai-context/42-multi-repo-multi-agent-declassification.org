@@ -127,7 +127,10 @@ $ upright("ValidDeclassificationSoD")(C) equiv
 | [[file:42-multi-repo-multi-agent-declassification.sysml][42-multi-repo-multi-agent-declassification.sysml]] | Dual topology & declassification ports + disjoint allocation to =leanEngine= XOR =quintEngine= (=MultiRepoDispatchAndBoundaryContract=) |
 | [[file:42-multi-repo-multi-agent-declassification.lean][42-multi-repo-multi-agent-declassification.lean]] | Pure redaction operator & set algebra ONLY: =redactFields_idem=, =redactFields_preserves_defeaters=, =redactFields_strips_all_secrets=, =redactFields_length_le=, =commit_redacted_ne_raw=, and =ordinary_intersection_never_adds_ungranted_subagent= |
 | [[file:42-multi-repo-multi-agent-declassification.qnt][42-multi-repo-multi-agent-declassification.qnt]] | Nondeterministic (=nondet=) multi-agent concurrency ONLY: asynchronous certificate issuance vs nested-subagent forwarding races, and =advanceRepoCoreCut= / =revokeCert= cascading withdrawals |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/42-declassification.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/42-declassification.png][42-declassification.png]] (=output/42-declassification.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 42 — Multi-Repo Multi-Agent Redacted Declassification & 3-Party SoD
+[[file:figures/42-declassification.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

@@ -52,7 +52,7 @@ to select drawings/captions; it does not redo the inference.
 * SDK and rendering boundary
 
 The fixed rendering dependency is
-https://github.com/hardenedlinux/deterministic-engineering/tree/1fe20380441a0cd85055695c2adcc55ce699a369/packages/render
+https://github.com/hardenedlinux/deterministic-engineering/tree/6f588d7cf078f6c9aab32022bc21107f6adf2e74/packages/render
 with its dependency closure pinned in =bun.lock=.
 
 - D2 artifacts go through the official D2 SDK via upstream =compileModel=.

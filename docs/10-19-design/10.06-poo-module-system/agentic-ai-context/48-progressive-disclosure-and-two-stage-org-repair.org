@@ -49,7 +49,10 @@ $ upright("deriveDepth")(d_(upright("req")), upright("drill"), upright("defeater
 | [[file:48-progressive-disclosure-and-two-stage-org-repair.sysml][48-progressive-disclosure-and-two-stage-org-repair.sysml]] | Disclosure & Two-Stage Repair ports + disjoint allocation to =leanEngine= XOR =quintEngine= (=ProgressiveDisclosureDispatchAndBoundaryContract=) |
 | [[file:48-progressive-disclosure-and-two-stage-org-repair.lean][48-progressive-disclosure-and-two-stage-org-repair.lean]] | Unbounded join-semilattice, L2 folding preservation & Stage-1 repair idempotence ONLY: =maxDepth_idem=, =maxDepth_comm=, =maxDepth_assoc=, =activeDefeater_forces_full_L3_disclosure=, =foldThinking_preserves_defeaters_and_results=, =stageOneRepair_idem=, =stageOneRepair_preserves_ids_and_defeaters=, and =stageTwoRequest_carries_zero_write_authority= |
 | [[file:48-progressive-disclosure-and-two-stage-org-repair.qnt][48-progressive-disclosure-and-two-stage-org-repair.qnt]] | Exhaustive TLC + =nondet= concurrency ONLY: asynchronous =arriveActiveDefeater= overriding folded =L0..L2= views, and =advanceSourceCut= racing against =escalateToStageTwoFlash= / =reParseStageTwoCandidate= / =publishStageTwoPatchFence= |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/48-progressive-disclosure.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/48-progressive-disclosure.png][48-progressive-disclosure.png]] (=output/48-progressive-disclosure.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 48 — ASCENT L0–L3 Progressive Disclosure Lattice & Two-Stage ORG AST Repair
+[[file:figures/48-progressive-disclosure.png]]
 
 Reproduce via the unified chain gate:
 

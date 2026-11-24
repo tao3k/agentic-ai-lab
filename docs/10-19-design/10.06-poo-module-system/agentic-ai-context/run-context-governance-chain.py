@@ -655,7 +655,7 @@ def verify_quint_tlc_apalache_and_export_itf(
             cwd=str(qwork),
             capture_output=True,
             text=True,
-            timeout=240,
+            timeout=240 if backend == "tlc" else 480,
             check=False,
         )
         vout = vres.stdout + vres.stderr

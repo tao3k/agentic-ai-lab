@@ -31,3 +31,7 @@ Yuanxu Design 165 (=core/module-system/design/165-two-tier-yuanxu-interface-c4-c
 - OpenSysML v2: [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.sysml][53-yuanxu-c4-profile-convergence-and-interface-slots.sysml]]
 - Lean 4: [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.lean][53-yuanxu-c4-profile-convergence-and-interface-slots.lean]]
 - Quint: [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.qnt][53-yuanxu-c4-profile-convergence-and-interface-slots.qnt]]
+- Illustrated View ([[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]]): [[file:figures/53-c4-profile-convergence.png][53-c4-profile-convergence.png]]
+
+#+CAPTION: Slice 53 — Two-Tier Yuanxu Interface, POO Slot-Observation & C4 Profile Convergence
+[[file:figures/53-c4-profile-convergence.png]]

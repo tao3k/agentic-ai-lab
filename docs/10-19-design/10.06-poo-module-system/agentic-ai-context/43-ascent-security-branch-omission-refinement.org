@@ -123,7 +123,10 @@ and perturbing =missingClaims= or =hypotheticalFit= on any hypothesis leaves bot
 | [[file:43-ascent-security-branch-omission-refinement.sysml][43-ascent-security-branch-omission-refinement.sysml]] | ASCENT branch-gate ports + disjoint allocation to =leanEngine= XOR =quintEngine= (=SecurityBranchDispatchAndBoundaryContract=) |
 | [[file:43-ascent-security-branch-omission-refinement.lean][43-ascent-security-branch-omission-refinement.lean]] | Pure matrix algebra & decidable reflection ONLY: =safeForAll_antitone_in_hypotheses=, =missing_claim_count_irrelevant_to_discriminator=, =hypothetical_fit_irrelevant_to_safety=, =all_projected_evaluated_iff_matrix_complete=, and =omissionFlag_true_iff_nonempty_gap= |
 | [[file:43-ascent-security-branch-omission-refinement.qnt][43-ascent-security-branch-omission-refinement.qnt]] | Nondeterministic (=nondet=) investigation race ONLY: dynamic discovery of 3rd undefeated hypothesis =H3= racing against prepared =destructiveRemediation=, resolved by read-only discriminator =B1= |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/43-security-branches.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/43-security-branches.png][43-security-branches.png]] (=output/43-security-branches.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 43 — ASCENT Security Branch Matrix & OmittedAlternativesReceipt Gate
+[[file:figures/43-security-branches.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

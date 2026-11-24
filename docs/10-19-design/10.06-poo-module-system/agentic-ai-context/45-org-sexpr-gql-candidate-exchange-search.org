@@ -49,7 +49,10 @@ a new generation) discharged that counterexample and matches the upstream
 | [[file:45-org-sexpr-gql-candidate-exchange-search.sysml][45-org-sexpr-gql-candidate-exchange-search.sysml]] | Structural ports across S-expr selector, GQL engine and =CandidateExchange=, plus disjoint allocation to =leanEngine= XOR =quintEngine= (=HybridSearchDispatchAndBoundaryContract=) |
 | [[file:45-org-sexpr-gql-candidate-exchange-search.lean][45-org-sexpr-gql-candidate-exchange-search.lean]] | Unbounded recursive AST & multi-hop path induction ONLY: =selectAstTree_excludes_source_blocks= (pruning =sourceBlock= subtrees at any depth), =selectAstTree_preserves_byte_bounds=, =admittedWalk_stays_in_element_space=, and =walkFuel_append= |
 | [[file:45-org-sexpr-gql-candidate-exchange-search.qnt][45-org-sexpr-gql-candidate-exchange-search.qnt]] | Nondeterministic (=nondet=) multi-provider concurrency ONLY: asynchronous GQL/ASCENT receipt arrivals, =ReceiptUniqueness= retry collisions, and =advanceTemporalGen= mid-join / post-publication resets |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/45-hybrid-search.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/45-hybrid-search.png][45-hybrid-search.png]] (=output/45-hybrid-search.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 45 — ORG S-Expression AST Selector, ISO GQL Traversal & CandidateExchange
+[[file:figures/45-hybrid-search.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

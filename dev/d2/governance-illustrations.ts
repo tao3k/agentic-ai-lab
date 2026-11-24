@@ -1455,6 +1455,7 @@ try {
     const result = await exportFigure(figure, browser, {
       scale: 1,
       minimumTextSize: 12,
+      pngCompression: {palette: true, quality: 95, effort: 7},
       attribution: {
         copyright: [
           '2026 tao3k team and Contributors',
@@ -1468,6 +1469,10 @@ try {
     await mkdir(path.dirname(outPrefix), {recursive: true});
     await writeFile(outPrefix + '.svg', result.svg[0]!);
     await writeFile(outPrefix + '.png', result.png);
+    const docFigure = path.join(contextDir, 'figures', story.slug + '.png');
+    await mkdir(path.dirname(docFigure), {recursive: true});
+    await writeFile(docFigure, result.png);
+    if (result.webp) await writeFile(outPrefix + '.webp', result.webp);
     await writeFile(outPrefix + '.html', result.html);
     await writeFile(
       outPrefix + '.receipt.json',
@@ -1479,6 +1484,9 @@ try {
         readability: result.receipt.readability,
         width: result.receipt.width,
         height: result.receipt.height,
+        pngCompression: result.receipt.pngCompression.figure,
+        webp: result.receipt.webp?.encoding,
+        preferredRaster: result.receipt.preferredRaster,
       }),
     );
   }

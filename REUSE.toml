@@ -563,6 +563,7 @@ path = [
   "dev/d2/examples/time-window/r1.svg",
   "dev/d2/examples/time-window/r2.svg",
   "dev/d2/examples/time-window/r3.svg",
+  "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/figures/*.png",
   "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/org-durable-declarations.lean",
   "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/org-durable-declarations.qnt",
   "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.lean",

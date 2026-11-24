@@ -40,7 +40,10 @@ $ upright("EffectiveCap")(C_(upright("ctx")), C_(upright("sb")))(c) equiv
 | [[file:46-durable-agenda-session-sandbox-governance.sysml][46-durable-agenda-session-sandbox-governance.sysml]] | Structural ports across =DurableAgendaPlane=, =IndependentSessionAndReconciler= and =SandboxTrifectaGovernanceGate=, plus disjoint allocation to =leanEngine= XOR =quintEngine= (=ControlAxesDispatchAndBoundaryContract=) |
 | [[file:46-durable-agenda-session-sandbox-governance.lean][46-durable-agenda-session-sandbox-governance.lean]] | Pure capability-set & map-frame algebra ONLY: =effectiveCap_idem=, =effectiveCap_comm=, =effectiveCap_monotone_ctx=, =noEgressProfile_eliminates_lethal_trifecta=, and =recordOutcome_frame_preserves_other_recipients= |
 | [[file:46-durable-agenda-session-sandbox-governance.qnt][46-durable-agenda-session-sandbox-governance.qnt]] | Nondeterministic (=nondet=) wake & crash races ONLY: =fireAgendaWake= vs =revokeGrantMidFlight=, =crashAfterHandoffBeforeReceipt= leaving =outcome = "unknown"=, =arriveLateProviderReceipt=, and =reconcileConfirmedNoSendFence= advancing =attemptGen= |
-| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view (=output/46-sandbox-trifecta.{svg,png,html,receipt.json}=) |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/46-sandbox-trifecta.png][46-sandbox-trifecta.png]] (=output/46-sandbox-trifecta.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 46 — Durable Agenda Wakes, Session Crash Fencing & Sandbox Lethal-Trifecta Lock
+[[file:figures/46-sandbox-trifecta.png]]
 
 Reproduce all checks locally without touching Scheme sources:
 

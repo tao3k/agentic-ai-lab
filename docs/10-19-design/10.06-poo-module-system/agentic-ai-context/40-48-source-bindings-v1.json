@@ -5,22 +5,22 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "95962fc2552cb3dc7d9410a889dd7f9bf895848ffe93367e360c8e4eefb7a50f",
+  "aggregate_bundle_sha256": "3a7ae36a752e90e162e443a922cdca2386fcade32c3c0f5ccf757daf416d713e",
   "supporting_files": {
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "d0b2b9b250e130d1ed9b88f78a657b27118fd471b5acc524a11d6f39ba11eaeb",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "6ae5c8f1dcd510bfee40cbb48a1f8941f7b4959428b71d7c14770844db5e3d16",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "09fbcce3f464754ef29c618cdd2db10af6bb42aac61fa939ace161f8a50489c1",
     "proofs/ContextGovernance/lakefile.lean": "2a635214b3a28277aecdfba0bd37ac7fdbf8f6e51f48c1d0f25afe22dd69039e",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
     "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "696572455f48d8a780696b4914744b929f212c74b70abd5e4e0f6ecdd08e6ad2",
     "dev/d2/governance-figures.sysml": "63e27bb7386d2db1c06a8d86679f626ddd9d6667ed8f44aab80b1dbbc444e63b",
-    "dev/d2/governance-illustrations.ts": "aed950d4d66ea075af18e1589670b8915b59a411522e1f642546143bc02cac64"
+    "dev/d2/governance-illustrations.ts": "0bb33faf42e652d4bf57800614d840869792070c0a409f0fae36f0110d7d12ef"
   },
   "slices": {
     "40-context-governance-boundary": {
       "slice_id": 40,
-      "bundle_sha256": "f4880f0f32036cfbb089a2a81bdc2d4584e1a0fe6e40018e36e5d23e373b4541",
+      "bundle_sha256": "e42872f503546e8f1b8ff2460d80fff5f3c05f779391cdfc0ea97942693e319a",
       "files": {
-        "org": "9e054ad9d9033cb36c660ed9207f164d6ebb7ca0e7e0a437fdf32709e9c2296a",
+        "org": "ba5afbe6031101a91c9d9b99b06fc062b9918253e5ac0caf1276c56d5465eaf7",
         "sysml": "cfb0cd3b88c52d4ae60804ddd3b0901731e458121eff05eb60bb9cd36fc3f975",
         "lean": "f45b9947f41c05d89cea2d999cba7785df6419c949da2397bbbb2d53667c8e35",
         "qnt": "ff70e3299dd4f8490fd182783872e4867f26e00585d0f73d09659a52bd26f53c"
@@ -65,9 +65,9 @@
     },
     "42-multi-repo-multi-agent-declassification": {
       "slice_id": 42,
-      "bundle_sha256": "72147dc887652fcdab5e24feb591c49a8466c1e1215a46893e5674ee6569e103",
+      "bundle_sha256": "bea9c8d48f8466146f2a52ebdf67109c40c43769b7e59b8b6f0ef6466d8dd9c6",
       "files": {
-        "org": "d0ebc13b491251eeced2c16eaeaa182b36a0b74f9ca121d474bf3821028f2a3b",
+        "org": "9a37c7bcdafd771925670ca2554ac6b6d78c9f30b9edc39bf01487694e4a380f",
         "sysml": "9e3cc65174791f9b7a651c6c1cc6d4fbd0a61deec61081fe7d19086463029b18",
         "lean": "1ffdc493d5c5876a09c3317054e65d03132fac574c88fad8f2b60e9c3a552d2c",
         "qnt": "2009b89e39d80e45dd519949546847762eafe3711f2dc68e4ed15756aede112c"
@@ -89,9 +89,9 @@
     },
     "43-ascent-security-branch-omission-refinement": {
       "slice_id": 43,
-      "bundle_sha256": "35fe3ee0150aa534f34339ed1793fe0d411258f8e2f9e279f328c51d82ecd8f7",
+      "bundle_sha256": "dc486650c7fa0aeaad4b5e2c924cc0eb67c87128e5443a3771ddbf911809cfec",
       "files": {
-        "org": "e466cb458a68b379436db56d9d0a0fe182e8ed00baa4c6c6bd66931c26b92ba7",
+        "org": "810c1b1bcc97e7a75d7b54b5894f01ec43e88ab24f72d5de22c35b807026a286",
         "sysml": "9faedd628e275fcc0d8cde31ec997abcd817807b2c65c8e5af39749ac374f9e6",
         "lean": "e728d53c7cb2d237ec1ddf6317e53601bde946ff2da643fd18679b176b55080e",
         "qnt": "54c3dee516714d7da5679ee54c7c6d42584be0a837eaabfa24f63645504b73a7"
@@ -111,9 +111,9 @@
     },
     "44-temporal-causal-survival-and-memory-quotient": {
       "slice_id": 44,
-      "bundle_sha256": "a0fae3fdad838f28d17a3249f584f82c10bd7f29e7f44ddc14041b16647ead1f",
+      "bundle_sha256": "91aa862de5c090f5b1e8b73b95d3c3ebced6abf798299ef853b8a559e7ea0e35",
       "files": {
-        "org": "49777faafbf8e6af92b9e7d01be4d60998f5f1109294c2f4ea8bfc03446054c1",
+        "org": "0d856c0e8f43b152253aa4033cd23d15c90032014746300b90801a7898eaf106",
         "sysml": "8354ba790c7f99196361667b19b899e5297129251ee02a242ada9cbfd4d339b2",
         "lean": "b12f8c7a6383020f75ac0e26fcf13e493b0dfc74806353721664024a2cd4e7a3",
         "qnt": "b5d4120cdb3ae2eacc561d949dfc9f0eaa4cad45ee4069104196b820ac621249"
@@ -133,9 +133,9 @@
     },
     "45-org-sexpr-gql-candidate-exchange-search": {
       "slice_id": 45,
-      "bundle_sha256": "849c5b507b50363f022319df65e688cd487aca5f7627c3e7dfc2362b8de57f3b",
+      "bundle_sha256": "7c9af927902ee614858ef053d8dbb96c7127b4517bf888a396f5c53627f94630",
       "files": {
-        "org": "e3d4fc8c5b50ca741460982bcfac74f7f2d1fe037c7934aa0b565e09821d38fa",
+        "org": "f8f2a12825da86e4e7d0c1766d52917a17a059bee91aff045211b44963ef10e9",
         "sysml": "4492e36957faca72da0b79035c2f4381c6f528f289de0b5a7603819183338327",
         "lean": "765823b8c4eca35b3550a0dba5c4745a92da835606b9a8dea921b9f48fa4b327",
         "qnt": "501e0928219b2a4bef04ad01d406c79a00a31bb185b9f8bbddf839f2bde6c1f2"
@@ -154,9 +154,9 @@
     },
     "46-durable-agenda-session-sandbox-governance": {
       "slice_id": 46,
-      "bundle_sha256": "050e97d72d907c8a8c27c41466d747adf1e1f36abe22d791a41489411a01aee3",
+      "bundle_sha256": "87e3a5f010aa12d60cc4af7186e6e8cd719eeca4d1f4200141ea034e2db2c0bd",
       "files": {
-        "org": "ff7bffa0866cef58bc3d56fd21ca608c4b10bd4f587e6837568a5e06ddf4b00c",
+        "org": "1b20911829bf15e201801502e2cc207b3ad66197fb2351350146ce0bcfd9f73f",
         "sysml": "97aa7fd6b46a6eccfc0771569fc83f03db7892c214701c7b126f8c17bc2c0994",
         "lean": "a9d778d17cdf7830dc6f7e9c123804b62d024ff0679e57790216b586d631217f",
         "qnt": "6dbf51c8a537a39c9c815ef0ea3277bf8dad4322c3b7ca78715e94f1d20d6689"
@@ -176,9 +176,9 @@
     },
     "48-progressive-disclosure-and-two-stage-org-repair": {
       "slice_id": 48,
-      "bundle_sha256": "5bec6955140cd7d7734a0f3da44adba67c81d03b315f2d0cf3f0395ce3144972",
+      "bundle_sha256": "d808c8d8850af6d67e73bd7cd90da957166c67ce3ae10c82d0362ac0dec0f99c",
       "files": {
-        "org": "c2c02c5e79f7b4b0bbbb5dc31e533564e17adf247c98e068a5e7fe7b8d533e18",
+        "org": "03b14e89e22c1a627a294899e0cbbb3fb2e8ecac906d45b73944e47d13856d56",
         "sysml": "c9aba0542a3520bc5685c52ebffdcecf0beafe8053e03983949d165a7b5d2793",
         "lean": "bb255a0291bee2f10bb02798a048f10def9008e7e0da88e9662d8407e57e55cc",
         "qnt": "f930529a6ca74ddd39cc5aef0e1ead5ea191d764b540d3b55618c7da2868d815"
@@ -200,9 +200,9 @@
     },
     "49-scoped-detour-funflow-concurrent-shared-context": {
       "slice_id": 49,
-      "bundle_sha256": "ae33ca187d5f261ee1bc427072377841725ed215212ce9e9ac0f6d213b6cd479",
+      "bundle_sha256": "61cad10f30735a4b2718f49fbfcdcb7029383b4ae83d475b929402b3bc5d24a5",
       "files": {
-        "org": "98da9ee5677ce0f0a6bfc8bfa9466c3eb40234f009e8bb36c053db68a2b7ab50",
+        "org": "483699dc27e0f7b6aeb51225457bb6c24a89dd0ba045c0b3029a596de672c115",
         "sysml": "fdfb3d229c99056917640164e996de163d09560865e4a5a6a93a308e069f2daf",
         "lean": "e7e2d81a72c39042b7a4019771ff0fc81a0d7a252e520d7d5f5cd278bc439fff",
         "qnt": "56c816d69b63a97f28bde65cc476a75bc3a0aacdd21282821fd188df018e6c84"
@@ -229,9 +229,9 @@
     },
     "50-literature-frontier-detour-confinement-and-causal-audit": {
       "slice_id": 50,
-      "bundle_sha256": "c11c487a7564ba7384d6803f583bb7de8256ce50a38bc0ff56e8f9dc947f5861",
+      "bundle_sha256": "f7ba7bd52d9248145575e44e8fabdefb975fe6814c7fab4869a2db0c80aef82a",
       "files": {
-        "org": "726e070f15eff967e7591faeb737ddaffb1ea847441bf422f200aecd25cd263e",
+        "org": "44351b0a8d5b7a72c9751600629ac78e4399008dd320ec71de0dcd437d5f13e2",
         "sysml": "aead09ca66eb63715fd1a2b9473df94d19a4171ca6c488b111dca17e5a3e37a2",
         "lean": "e1c9407ef33c69041e73717106042bd0a6d5ac98ea5eaf96af947a0ccb6b4ccd",
         "qnt": "c9d1b1763d29eda9f785dc26e0e65e67ab778edcd68b020916769b668051c2e3"
@@ -256,9 +256,9 @@
     },
     "51-memory-poisoning-quarantine-and-kv-prefix-serialization": {
       "slice_id": 51,
-      "bundle_sha256": "44ec05a33b0e8afdcaca56765ed37ba111c21a50ef6a9276c7522990bbf5092f",
+      "bundle_sha256": "906694098fb5ccec73c5267a9246915513087341f2acbba9f336bce612821e60",
       "files": {
-        "org": "c82df947dc099ef975b46706435aaf71702150c6aa5d8fa7f7ee7b9b2ac2a2f8",
+        "org": "d1a202667a4f1fe5d2fbb86765890385f6a802e9bfba8dcc3bcfee8c638ab914",
         "sysml": "c9858b3fa9e15ab5e743a7aff96b3213b7fe2556f7152f030e4c79d8cca4e94e",
         "lean": "7fe98cdfd1712f99b2a20f792255744fd7cc549cc12f964d9e4aa77c8336c77a",
         "qnt": "4eb231d54c4434701010944d9ed94121a28a8a07d27b6080f2332807897ed55b"
@@ -279,9 +279,9 @@
     },
     "52-funflow-cas-singleflight-and-external-sandbox-binding": {
       "slice_id": 52,
-      "bundle_sha256": "3e3c1084de911edf96903f19a8ae79ce7331fa4796a1270b6a60c42780a02e8f",
+      "bundle_sha256": "fe7bb7d0aa1c6288d22d1d81445e6156df0052a739bf6e0ad0a1ad0215a15cc6",
       "files": {
-        "org": "2e43fb72dece88178373ab69287a219b04c4b1ff4203857f53adc88e4c536dfc",
+        "org": "2d1dd501fcef6d01e22d94694f4afbd0302c65a0f51a86eb80159beb5ef2c763",
         "sysml": "6213103557f0f1e87833dc069db609e680bf2badc52b010e0f30d248e7ec3d79",
         "lean": "e55ff0d880109a7c6662a61c146e5ec87d1e72b06b23757ebc7253a0186bdbae",
         "qnt": "c26de779be74dd3d08dad8acaf47727ce2f16bed1d9c2ebedde1c02d21579cb4"
@@ -304,9 +304,9 @@
     },
     "53-yuanxu-c4-profile-convergence-and-interface-slots": {
       "slice_id": 53,
-      "bundle_sha256": "d8f7c4c71377f759411f3c2510214c8393593cdbef508f9692ab27cd6870a3a3",
+      "bundle_sha256": "3ca6baa95a5e53f545494e5070bea259d8ce06df607869530bb0de635d4dffa4",
       "files": {
-        "org": "f9a0c1832e71d083ad298b5467321439b731382956c07f184ad29e820c0cb817",
+        "org": "64044ce51912091ca0ca50fea5b1e4c04f1143939794c0ce973606d208f3dee2",
         "sysml": "640dddb170dee6e399b82ec2f633f0a91055b41e9a821eebfabd8ad2e10c3446",
         "lean": "6415048628178006090eb1e14f71bfccf8a24f3c9b6f8613387a66e8a0514ceb",
         "qnt": "fa584e57ce41f45bb85200744a642cb2c4fbac4200589b4f4440239172d30277"
@@ -333,9 +333,9 @@
     },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "1b21427b0150f2ad42c266f122294fe2a01b407d8a736146ce2129ea204e9587",
+      "bundle_sha256": "2334091dcc181590a029f68f11f2b4551ee3371d5ffcff4f08225f5b23d7d00e",
       "files": {
-        "org": "b3c61fbe2833e1cd8b85ef2c98ceb7e92901c480ab7d4ad1d99d38db6c046b0e",
+        "org": "2f82ebbe3e4a157433016c8b2be24c20d23ab02d3ac4f07a89563f30dab6eb75",
         "sysml": "ad39b03df95b9af421846129dcc1df83f77d17d333d231573758b47c8976ae07",
         "lean": "80dfe85addacfc03eb03eacc59518a8d16dec1253462d6629178d26322820ec2",
         "qnt": "863a340c87c8f1e3c0cf44dcc94740d69ed676bb7e3d1893a97732f9361a8da3"
