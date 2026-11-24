@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Pure descriptor composition has no source resolution, diagnostics or runtime
 ;;; acquisition dependency. The legacy activation owner delegates here.
-(import :tao3k/yuanxu/modules/funflow/control-plane/task
-        :tao3k/yuanxu/modules/funflow/control-plane/flow
+(import :tao3k/agentic-ai-lab/modules/funflow/control-plane/task
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         (only-in :tao3k/yuanxu/object/syntax defpoo-object-family))
 (export agentic-ai-lab-module-activation-prototype

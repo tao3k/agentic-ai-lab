@@ -3,9 +3,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: bridge tests cover request envelopes and runtime command handoff.
 ;;; Invariant: profile descriptor defaults are tested in the profile owner.
 
@@ -20,7 +20,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/api)
 
 (export agent-sandbox-bridge-test)

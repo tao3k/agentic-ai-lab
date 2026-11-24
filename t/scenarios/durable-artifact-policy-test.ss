@@ -15,7 +15,7 @@
         :tao3k/yuanxu/profile-composition/profile-bundle
 
         (only-in :clan/poo/type element?)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario))
 
 
 (def (profile-id profile)

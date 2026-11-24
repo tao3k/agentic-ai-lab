@@ -9,7 +9,7 @@
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/type validate TypeError? define-type Type.)
         (only-in :clan/poo/type Record)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         (only-in :tao3k/yuanxu/profile-composition/profile-bundle

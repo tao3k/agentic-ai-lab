@@ -10,8 +10,8 @@
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
 (import (only-in :clan/poo/object .ref object?)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile)

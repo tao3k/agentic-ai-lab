@@ -9,10 +9,10 @@
 
 (import :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
-        :tao3k/yuanxu/modules/funflow/graph-projection
-        :tao3k/yuanxu/modules/funflow/check-types
-        :tao3k/yuanxu/modules/funflow/check-objects
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map?)
+        :tao3k/agentic-ai-lab/modules/funflow/graph-projection
+        :tao3k/agentic-ai-lab/modules/funflow/check-types
+        :tao3k/agentic-ai-lab/modules/funflow/check-objects
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check-map?)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests)
         )
 

@@ -8,8 +8,8 @@
 ;;; Runtime contract: Marlin owns all runtime/Cube API execution after handoff.
 ;;; Policy evidence: dispatcher tests assert nono/Cube routing and failure gates.
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile

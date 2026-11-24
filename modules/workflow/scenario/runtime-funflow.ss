@@ -13,8 +13,8 @@
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
         (only-in :clan/poo/type element?)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
-        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/graph-projection
                  funflow-plan
                  yuanxu-funflow-plan->runtime-projection))
 

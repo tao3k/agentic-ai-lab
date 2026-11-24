@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: descriptor registries are policy extension surfaces.
 
 (import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
@@ -21,7 +21,7 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .@ .slot? .all-slots)
-        :tao3k/yuanxu/modules/funflow/control-plane/api)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api)
 
 ;;; This suite keeps descriptor registry lookup behavior separate from concrete
 ;;; workflow execution.

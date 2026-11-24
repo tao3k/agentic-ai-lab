@@ -11,8 +11,8 @@
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-elapsed-us)
         "../support/performance"
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
-        (only-in :tao3k/yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-graph-performance-test)
 

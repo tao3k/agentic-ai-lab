@@ -15,10 +15,10 @@
 ;;; Parser policy should treat this file as the resolver/activation owner.
 
 (import (only-in :clan/poo/object .get)
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
-        :tao3k/yuanxu/modules/funflow/control-plane/task
-        :tao3k/yuanxu/modules/funflow/control-plane/flow
-        :tao3k/yuanxu/modules/funflow/control-plane/config
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/task
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/config
         :tao3k/yuanxu/module-system/source/imports
         :tao3k/yuanxu/module-system/source/objects
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor

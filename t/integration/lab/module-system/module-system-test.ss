@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :tao3k/yuanxu/module-system/source/imports

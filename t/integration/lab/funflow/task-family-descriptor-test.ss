@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: task-family descriptor tests stay separate from flow execution.
 
 (import :tao3k/yuanxu/composition/roles
@@ -21,8 +21,8 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
-        :tao3k/yuanxu/modules/funflow/store)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/store)
 
 ;;; This suite keeps task-family routing policy executable without invoking
 ;;; runtime adapters, so descriptor regressions fail at the control-plane edge.

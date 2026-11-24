@@ -16,7 +16,7 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
         :tao3k/yuanxu/object/indexed
-        :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/schema/validation)

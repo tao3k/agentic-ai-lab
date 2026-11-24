@@ -59,3 +59,24 @@ require document roots or open headline anchors accepted by the existing runtime
 Context profile. Unsupported paths, incomplete results and unbound source cuts
 are refused. GQL, Org Contract, ASCENT proof, authority and Session are distinct
 contracts; none is a substitute for the others.
+
+* Layered GitOps topology and inline multi-agent governance
+
+[[file:governance/topology.org][governance/topology.org]] (=context.gitops.topology.v1=)
+defines Layer 1 project-wide architecture and entry routing
+(=PROJECT_ID=, =GITOPS_SHARED_STORE=, and component headlines with
+=ARCH_COMPONENT= and =ENTRY_SOURCE=) so Agents locate governed Org sources
+through GQL without blind search.
+
+[[file:governance/work.org][governance/work.org]] (=context.governance.work.v1=)
+defines Layer 2 inline multi-agent governance where each =:ID:= section carries
+an immutable governance header (=:AGENT_ID:=, =:REVIEWER_AGENT_ID:=,
+=:TASK_ID:=, =:ARCH_COMPONENT:=, =:DEPENDS_ON:=) and an Agent-editable body
+admitted through =context-governance-host= single-use tokens and structural rebase.
+
+[[file:seed/session-seed.org][seed/session-seed.org]] (=context.session.seed.v1=)
+provides the minimal organic session seed. Instead of pre-baking static ADR or
+execution-plan templates, =ASCENT= deductive rules inspect =Org Elements= AST
+facts and user-case signals to derive triggered structural facets for Flash
+synthesis, =L0..L3= progressive disclosure spans, and two-stage AST/Flash
+repair. See [[file:../../../../docs/10-19-design/org-elements-gql-context-design.org][Org Elements, GQL, and ASCENT Progressive Context Design]].

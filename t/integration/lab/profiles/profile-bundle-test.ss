@@ -12,7 +12,7 @@
         (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         :tao3k/yuanxu/profile-composition/profile-bundle
         (only-in :clan/poo/mop make-instance)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario))
 
 (export profile-bundle-test)
 

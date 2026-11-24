@@ -9,7 +9,7 @@
 (def AgenticAILabSourcePolicy
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
-      '(:tao3k/yuanxu/modules/funflow/control-plane/api
+      '(:tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/yuanxu/module-system/feature/interface)
       package-prefix: ":tao3k/agentic-ai-lab/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")

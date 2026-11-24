@@ -18,7 +18,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/nono
         :tao3k/agentic-ai-lab/modules/agent-sandbox/cube

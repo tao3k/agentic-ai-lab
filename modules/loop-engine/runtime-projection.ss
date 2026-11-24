@@ -5,7 +5,7 @@
 ;;; Boundary: projects user loop-engine configuration into runtime-owned inputs.
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
 (import (only-in :std/list/list fold fold-right)
-        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog

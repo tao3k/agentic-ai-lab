@@ -10,15 +10,15 @@
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/type TypeError?)
         (only-in :clan/poo/type Record Symbol)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
-        :tao3k/yuanxu/modules/funflow/control-plane/graph
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/graph
         (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         :tao3k/yuanxu/module-system/authoring/roles
         (only-in :tao3k/agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
         :tao3k/yuanxu/profile-composition/selection-syntax
 
         :tao3k/yuanxu/profile-composition/profile-bundle
-        :tao3k/yuanxu/modules/funflow/bundle-v1
+        :tao3k/agentic-ai-lab/modules/funflow/bundle-v1
         :tao3k/yuanxu/module-system/feature/bundle-v1-lowering)
 
 (.def WriterSourceProfile

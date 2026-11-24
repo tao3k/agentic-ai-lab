@@ -28,7 +28,7 @@
 
 (import :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy
         
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map-name)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check-map-name)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-alist-ref)
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects

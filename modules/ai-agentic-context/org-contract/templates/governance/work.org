@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID: governed-work-root
+:CONTRACT_ID: context.governance.work.v1
+:CONTRACT_REVISION: 1
+:PROJECT_ID: marlin-agent-core
+:WORKTREE_ID: feat/org-shared-context
+:END:
+#+title: Multi-Agent Governed Work Context
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.governance.work.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "work.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID")
+                (property value "context.governance.work.v1"))
+  (expect exactly 1))
+
+(assert-org-element "work.project-binding" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "PROJECT_ID"))
+  (expect exactly 1))
+
+(assert-org-element "work.agent-owners" error
+  (bindings)
+  (org-elements node-property (descendant-of scope)
+                (property key "AGENT_ID"))
+  (expect at-least 1))
+
+(assert-org-element "work.task-bindings" error
+  (bindings)
+  (org-elements node-property (descendant-of scope)
+                (property key "TASK_ID"))
+  (expect at-least 1))
+#+end_src
+
+* Architecture Spec
+:PROPERTIES:
+:ID: sec-arch
+:CUSTOM_ID: sec-arch
+:ARCH_COMPONENT: marlin-deck-runtime
+:AGENT_ID: agent/architect-01
+:REVIEWER_AGENT_ID: agent/reviewer-09
+:TASK_ID: task/write-arch
+:END:
+
+Initial governed architecture notes.
+See [[file:topology.org::#topo-deck-runtime][project topology]].
+
+* Rust Async Coordinator
+:PROPERTIES:
+:ID: sec-rust
+:CUSTOM_ID: sec-rust
+:ARCH_COMPONENT: marlin-deck-runtime
+:AGENT_ID: agent/rust-worker-02
+:REVIEWER_AGENT_ID: agent/architect-01
+:TASK_ID: task/write-rust
+:DEPENDS_ON: sec-arch
+:END:
+
+Initial Tokio lease and single-VM mediation notes.

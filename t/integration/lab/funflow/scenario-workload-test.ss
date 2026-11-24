@@ -6,7 +6,7 @@
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .ref)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        :tao3k/yuanxu/modules/funflow/workload)
+        :tao3k/agentic-ai-lab/modules/funflow/workload)
 
 (export scenario-workload-test)
 

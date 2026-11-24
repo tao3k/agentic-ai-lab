@@ -3,8 +3,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Marlin interface tests cover backend dispatch envelopes.
 ;;; Invariant: tests do not execute nono, Cube, or Marlin runtime code.
 
@@ -19,7 +19,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/api
         :tao3k/agentic-ai-lab/modules/agent-sandbox/cube
         :tao3k/agentic-ai-lab/modules/agent-sandbox/nono

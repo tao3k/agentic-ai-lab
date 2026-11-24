@@ -117,7 +117,7 @@
             (write `(yuanxu! :load-modules ,(path-expand "modules" root-dir) mode: explicit
                       (json-schema @ ,(path-expand "core/modules/json-schema" project))
                       (nix @ ,(path-expand "modules/nix" project))
-                      (funflow @ ,(path-expand "core/modules/funflow" project))
+                      (funflow @ ,(path-expand "modules/funflow" project))
                       :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)

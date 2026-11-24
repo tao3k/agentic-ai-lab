@@ -1,6 +1,6 @@
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -20,7 +20,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/docker/interface
         :tao3k/agentic-ai-lab/modules/agent-sandbox/resource)
 

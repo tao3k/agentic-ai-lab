@@ -3,7 +3,8 @@
 (import (only-in :clan/poo/object .def .o)
         (only-in "./config.ss" DurableConfig)
         (only-in "./types.ss" DurableScopeContract)
-        (only-in "./func.ss" durable-recovery-decision durable-workspace-recovery-host durable-agenda-start))
+        (only-in "./func.ss" durable-recovery-decision durable-workspace-recovery-host
+                 durable-agenda-start DurableOrchestratorExports))
 (export Durable)
 
 (.def Durable
@@ -14,5 +15,6 @@
       exports: (.o recovery-policy: DurableConfig
                    decide-recovery: durable-recovery-decision
                    workspace-recovery-host: durable-workspace-recovery-host
-                   agenda-start: durable-agenda-start))
+                   agenda-start: durable-agenda-start
+                   orchestrator: DurableOrchestratorExports))
   features: (.o))

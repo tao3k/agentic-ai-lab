@@ -6,8 +6,8 @@
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/string/misc string-subst)
         (only-in :tao3k/yuanxu/ops/func run-script call-with-execution-cancellation)
-        (only-in :tao3k/yuanxu/modules/funflow/job-prototypes Task. Job.)
-        (only-in :tao3k/yuanxu/modules/funflow/job run-job job-graph)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/job-prototypes Task. Job.)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/job run-job job-graph)
         (only-in :tao3k/yuanxu/module-system/source/deferred-declaration module-binding-action))
 (export OpenTofuExecution. NullExecution. opentofu-execution)
 

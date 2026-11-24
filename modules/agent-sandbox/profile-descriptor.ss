@@ -7,7 +7,7 @@
 ;;; Invariant: descriptors project through the shared validation owner.
 
 (import (only-in :clan/poo/object .@ object?)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles execution-policy-role)
         :tao3k/yuanxu/object/role-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax

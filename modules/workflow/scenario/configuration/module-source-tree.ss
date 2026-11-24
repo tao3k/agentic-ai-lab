@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/type Record)
         (only-in :clan/poo/mop make-instance)
         (only-in :clan/poo/object .o .get)
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface)
         (only-in :tao3k/yuanxu/module-system/authoring/admission

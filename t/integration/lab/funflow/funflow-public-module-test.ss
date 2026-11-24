@@ -6,9 +6,9 @@
 (import (only-in :std/test test-suite check-equal?)
         (only-in :tao3k/yuanxu/observability/testing-case
                  yuanxu-test-case)
-        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
-        (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule. Job. Task.)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/objects FunflowModule. Job. Task.)
         (only-in :clan/poo/object object?)
         (only-in :clan/poo/mop
                  clos-generic-function))

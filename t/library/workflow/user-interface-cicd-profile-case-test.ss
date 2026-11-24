@@ -19,7 +19,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         (only-in "../../../user-interface/custom/my-module/profiles/cicd"
                  agentic-ai-lab-custom-my-module-cicd-module)
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints

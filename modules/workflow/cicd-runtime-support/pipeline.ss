@@ -7,13 +7,13 @@
 
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :tao3k/yuanxu/modules/funflow/check-types
-        :tao3k/yuanxu/modules/funflow/check-objects
-        :tao3k/yuanxu/modules/funflow/check-funs
-        :tao3k/yuanxu/modules/funflow/projection-syntax
+        :tao3k/agentic-ai-lab/modules/funflow/check-types
+        :tao3k/agentic-ai-lab/modules/funflow/check-objects
+        :tao3k/agentic-ai-lab/modules/funflow/check-funs
+        :tao3k/agentic-ai-lab/modules/funflow/projection-syntax
         :tao3k/agentic-ai-lab/modules/workflow/cicd-sandbox
         :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/checks
-        :tao3k/yuanxu/modules/funflow/dependency-graph)
+        :tao3k/agentic-ai-lab/modules/funflow/dependency-graph)
 
 (export agentic-ai-lab-cicd-pipeline-run-step-status
         agentic-ai-lab-cicd-pipeline-run-step-diagnostics

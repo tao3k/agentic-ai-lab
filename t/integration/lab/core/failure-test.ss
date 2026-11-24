@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: failure tests cover typed control-plane payloads.
 ;;; Invariant: tests inspect failure structs, not exception message text.
 
@@ -21,7 +21,7 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api)
 
 (export failure-test)
 

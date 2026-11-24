@@ -12,8 +12,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol
-        :tao3k/yuanxu/modules/funflow/control-plane/runtime-adapter
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-adapter
         :tao3k/agentic-ai-lab/modules/session/durable-policy
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)

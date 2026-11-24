@@ -6,4 +6,4 @@
 ;; The Worktree consumer also imports the query and authority libraries as
 ;; ordinary compiled modules.
 (.def Build
-  defbuild-script: (.o spec: '("types" "query-provider" "use-host")))
+  defbuild-script: (.o spec: '("types" "query-provider" "governance-host" "use-host")))

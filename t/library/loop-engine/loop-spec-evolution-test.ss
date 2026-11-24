@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/agentic-ai-lab/modules/loop-engine/control/spec-evolution)
 
 (export loop-spec-evolution-test)

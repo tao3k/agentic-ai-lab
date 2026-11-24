@@ -1,4 +1,4 @@
-(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-

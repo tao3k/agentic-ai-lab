@@ -7,7 +7,7 @@
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
 (import (only-in :clan/poo/object .@ .get .o .ref)
-        (only-in :tao3k/yuanxu/modules/funflow/objects FunflowModule.)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/objects FunflowModule.)
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor
         :tao3k/yuanxu/module-system/funs

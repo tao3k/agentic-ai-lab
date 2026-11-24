@@ -15,7 +15,7 @@
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
 
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-command yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-command yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
         (only-in "../../../../user-interface/custom/my-module/cases/poo-introspection"
                  agentic-ai-lab-custom-my-module-poo-introspection-case))
 

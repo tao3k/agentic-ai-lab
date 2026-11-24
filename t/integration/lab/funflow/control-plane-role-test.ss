@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api)
 
 (export control-plane-role-test)
 

@@ -65,10 +65,11 @@ thin declarative configuration):
      =eval=.
 2. **Tweag-Inspired =FunFlow= CAS DAG & Epoch-Bounded Replanning**:
    - Building on Tweag's Haskell =FunFlow= (Arrow static inspectability,
-     content-addressed store caching, crash resumability) and Yuanxu's
-     =core/modules/funflow/= (=dependency-graph=, =scc=, =job-graph=,
-     =after-start= finalizers, =flow-compose=, =strategy=), complex Org task
-     trees map 1-to-1 to POO =FunFlow= DAGs.
+     content-addressed store caching, crash resumability) and unified directly
+     under =tao3k/agentic-ai-lab/modules/funflow/= (=durable-dag.ss=,
+     =dependency-graph=, =scc=, =job-graph=, =after-start= finalizers,
+     =flow-compose=, =strategy=), complex Org task trees map 1-to-1 to POO
+     =FunFlow= DAGs.
    - **Static Pre-Check (0 Tokens)**: Validates acyclicity (=scc=),
      =:DEPENDS_ON:= closure, =after-start= finalizers, and per-node
      =ContextScope= / =RestrictionEnvelope= / =UseGrant= before execution.

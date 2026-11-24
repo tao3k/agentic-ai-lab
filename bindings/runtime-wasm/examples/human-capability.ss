@@ -6,7 +6,7 @@
 ;;; Example owner: this composition keeps human authority and evidence return
 ;;; explicit across every stage before bundle publication.
 
-(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
         :tao3k/agentic-ai-lab/modules/workflow/control-plane/plan
         :tao3k/yuanxu/profile-composition/selection-syntax
@@ -15,7 +15,7 @@
         (only-in :tao3k/agentic-ai-lab/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)
-        :tao3k/yuanxu/modules/funflow/bundle-v1)
+        :tao3k/agentic-ai-lab/modules/funflow/bundle-v1)
 
 (export human-capability)
 

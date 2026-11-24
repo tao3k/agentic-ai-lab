@@ -22,7 +22,7 @@
          (use-module use-profile-module))
 
         (only-in :clan/poo/type element?)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
 
 
         :tao3k/agentic-ai-lab/user-interface/scenarios/langchain/scenario

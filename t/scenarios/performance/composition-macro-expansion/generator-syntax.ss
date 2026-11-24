@@ -5,7 +5,7 @@
 
 ;;; Boundary: declarative fixture generator for composition expansion gates.
 
-(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/object .def)
         :tao3k/yuanxu/profile-composition/selection-syntax

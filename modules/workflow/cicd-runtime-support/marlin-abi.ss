@@ -5,10 +5,10 @@
 
 ;;; Boundary: Marlin ABI projection for CI/CD runtime handoff.
 
-(import :tao3k/yuanxu/modules/funflow/check-types
-        :tao3k/yuanxu/modules/funflow/check-objects
-        :tao3k/yuanxu/modules/funflow/check-funs
-        :tao3k/yuanxu/modules/funflow/projection-syntax
+(import :tao3k/agentic-ai-lab/modules/funflow/check-types
+        :tao3k/agentic-ai-lab/modules/funflow/check-objects
+        :tao3k/agentic-ai-lab/modules/funflow/check-funs
+        :tao3k/agentic-ai-lab/modules/funflow/projection-syntax
         :tao3k/agentic-ai-lab/modules/workflow/cicd-sandbox
         :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-support/checks)
 

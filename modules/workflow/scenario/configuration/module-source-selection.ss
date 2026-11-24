@@ -5,7 +5,7 @@
 
 ;;; Boundary: resolve source-neutral POO selections against an ordered load path.
 
-(import :tao3k/yuanxu/modules/funflow/control-plane/failure
+(import :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/yuanxu/module-system/source/collection
         (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         (only-in :tao3k/yuanxu/module-system/source/objects

@@ -13,7 +13,7 @@
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
 (import (only-in :clan/poo/object .def .o .+ .cc .call .get .ref .slot?)
         (only-in :tao3k/yuanxu/ops/process-script ProcessScript.)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
         :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge

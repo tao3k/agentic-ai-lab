@@ -4,11 +4,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/type TypeError?))
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/signatures
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
                  Fun Any Number Integer String Symbol List Pair Null Unit)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow flow-output-contract)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: runtime bridge tests cover schema envelopes, not real Rust IO.
 ;;; Invariant: Scheme emits deterministic request/response data for adapters.
 
@@ -23,8 +23,8 @@
                  check-true
                  test-error
                  test-suite)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
-        :tao3k/yuanxu/modules/funflow/store)
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/store)
 
 (export runtime-bridge-test)
 

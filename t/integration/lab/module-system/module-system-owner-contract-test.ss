@@ -24,7 +24,7 @@
                  test-suite)
         (only-in :clan/poo/object .o .def .def! .cc .ref .get .call .all-slots
                  object-slots $constant-slot-spec? $self-slot-spec?)
-        :tao3k/yuanxu/modules/funflow/control-plane/api
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/module-authoring/module-descriptor

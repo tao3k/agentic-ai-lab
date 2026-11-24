@@ -15,7 +15,7 @@
 ;;; Policy evidence:
 ;;; - Profile and bridge tests assert both valid requests and failure codes.
 
-(import (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure raise-control-plane-failure)
         :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
         :tao3k/agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :tao3k/agentic-ai-lab/modules/agent-sandbox/profile

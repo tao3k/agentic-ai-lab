@@ -8,10 +8,10 @@
 
 (import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :tao3k/yuanxu/modules/funflow/control-plane/roles
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object/role-syntax
-        :tao3k/yuanxu/modules/funflow/control-plane/agent-harness
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/agent-harness
         (only-in "./governor.ss"
                  loop-governor?
                  loop-governor->contract/validated

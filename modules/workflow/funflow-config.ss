@@ -1,8 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product selection and runtime handoff adaptation; no Core back dependency.
-(import :clan/poo/object :tao3k/yuanxu/modules/funflow/graph-projection
- :tao3k/yuanxu/modules/funflow/config-adapter
+(import :clan/poo/object :tao3k/agentic-ai-lab/modules/funflow/graph-projection
+ :tao3k/agentic-ai-lab/modules/funflow/config-adapter
  :tao3k/yuanxu/module-system/selection/objects
 
  (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-command-manifests))

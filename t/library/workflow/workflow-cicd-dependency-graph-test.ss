@@ -11,8 +11,8 @@
                  test-suite
                  check-equal?
                  )
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
-        (only-in :tao3k/yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-dependency-graph-test)
 

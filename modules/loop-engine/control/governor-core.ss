@@ -8,8 +8,8 @@
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :tao3k/yuanxu/composition/roles role-slot/default)
-        :tao3k/yuanxu/modules/funflow/control-plane/roles
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object/role-syntax
         (only-in "./strategy.ss"
                  loop-strategy-engine-role

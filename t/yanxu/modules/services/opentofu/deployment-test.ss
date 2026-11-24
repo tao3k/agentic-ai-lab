@@ -315,17 +315,17 @@
               (begin (displayln "LAB-DEPLOYMENT-PRELUDE-CONTEXT no-captured-ssi") (force-output))))
           (execution-progress! 'lab-deployment-spec 1)
           (def targets (list-sort string<? (map (lambda (row) (if (pair? row) (cadr row) row)) (call-with-input-string spec read))))
-          (check-equal? (and (member "tao3k/yuanxu/modules/funflow/store-flow" targets) #t) #t)
+          (check-equal? (and (member "tao3k/agentic-ai-lab/modules/funflow/store-flow" targets) #t) #t)
           (for-each (lambda (target) (check-equal? (member target targets) #f))
-                    '("tao3k/yuanxu/modules/funflow/store"
-                      "tao3k/yuanxu/modules/funflow/control-plane/config"
-                      "tao3k/yuanxu/modules/funflow/control-plane/agent-harness"))
+                    '("tao3k/agentic-ai-lab/modules/funflow/store"
+                      "tao3k/agentic-ai-lab/modules/funflow/control-plane/config"
+                      "tao3k/agentic-ai-lab/modules/funflow/control-plane/agent-harness"))
           (def selected-owners '(tao3k/agentic-ai-lab/modules/nix/interface
                                  tao3k/yuanxu/modules/json-schema/interface
-                                 tao3k/yuanxu/modules/funflow/interface
+                                 tao3k/agentic-ai-lab/modules/funflow/interface
                                  tao3k/agentic-ai-lab/modules/services/opentofu/interface))
           (def owner-prefixes '("tao3k/agentic-ai-lab/modules/nix/" "tao3k/agentic-ai-lab/modules/services/opentofu/"
-                                "tao3k/yuanxu/modules/json-schema/" "tao3k/yuanxu/modules/funflow/"))
+                                "tao3k/yuanxu/modules/json-schema/" "tao3k/agentic-ai-lab/modules/funflow/"))
           (def (selected-target? target) (ormap (cut string-prefix? <> target) owner-prefixes))
           (def selected-tests (.get yuanxu-deployment-consumer.init.exports tests))
           (def test-files (measure-phase 'test-discovery
@@ -359,7 +359,7 @@
           (check-equal? (list-sort string<? test-files)
             (list-sort string<? (map (cut path-expand <> root)
               '("core/modules/json-schema/tests/atomic-test.ss"
-                "core/modules/funflow/tests/atomic-test.ss"
+                "modules/funflow/tests/atomic-test.ss"
                 "modules/services/opentofu/tests/module-test.ss"))))
           ;; Dependency edges, not matching tags, bring these owners into Make.
           (for-each (lambda (prefix)

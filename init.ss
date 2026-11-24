@@ -24,5 +24,4 @@
   (tool-calling @ "./user-interface/profiles/tool-calling")
   :load-modules (from: :tao3k/yuanxu/init ModulesSource)
   mode: explicit mount: YuanxuModules
-  (json-schema)
-  (funflow))
+  (json-schema))

@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/flow-strand
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow-strand
                  default-flow-strand-registry
                  flow-strand-for-kind-in
                  flow-strand-registry-descriptors

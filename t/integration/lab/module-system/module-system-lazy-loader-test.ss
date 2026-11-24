@@ -23,7 +23,7 @@
                  test-suite)
         "../../../support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/failure
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
         (only-in :tao3k/yuanxu/module-system/selection/syntax yuanxu-modules!)

@@ -9,7 +9,7 @@
          (only-in :clan/poo/object .all-slots .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/type element?)
-        (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
 
         :tao3k/yuanxu/module-system/source/collection
         (only-in :tao3k/agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)

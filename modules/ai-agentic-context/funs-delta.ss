@@ -7,11 +7,15 @@
         "types.ss" "objects.ss" "funs-projection.ss" "funs-scope.ss")
 (export agentic-ai-lab-ai-agentic-context-delta-between
         agentic-ai-lab-ai-agentic-context-delta-apply
+        agentic-ai-lab-ai-agentic-context-delta-rebase
         agentic-ai-lab-ai-agentic-context-delta-admit
         agentic-ai-lab-ai-agentic-context-delta-admit-incremental)
-(def (reject reason-value) (.o accepted?: #f reason: reason-value))
-(def (accept content-value) (.o accepted?: #t content: content-value
-  stage: 'reconstructed action-authorized?: #f))
+(def (reject reason)
+  (let ((accepted? #f))
+    (.o accepted? reason)))
+(def (accept content)
+  (let ((accepted? #t) (stage 'reconstructed) (action-authorized? #f))
+    (.o accepted? content stage action-authorized?)))
 (def (unique? ids) (= (length ids) (length (delete-duplicates/hash ids))))
 (def (lookup units id) (assoc id units))
 (def (agentic-ai-lab-ai-agentic-context-delta-between base target)
@@ -44,6 +48,57 @@
                        (every (lambda (id) (lookup result id)) order))
                 (accept (map (lambda (id) (lookup result id)) order))
                 (reject 'incomplete-order)))))))))
+
+;; Rebase a unit-level delta prepared on an older base onto `live-base` when
+;; every edited unit identity still matches its `expected` preimage!
+;; Preserves `live-base` ordering for untouched units and appends newly added
+;; units from `delta`. Conflicting edits to the same unit fail closed (`'conflicting-unit-edit`).
+(def (agentic-ai-lab-ai-agentic-context-delta-rebase live-base delta)
+  (cond
+    ((not (agentic-ai-lab-ai-agentic-context-delta-shape? delta))
+     (reject 'invalid-delta))
+    (else
+     (let* ((live-units (.ref live-base 'content))
+            (edits (.ref delta 'edits))
+            (edited-ids (map (cut .ref <> 'identity) edits)))
+       (cond
+         ((not (and (unique? (map car live-units)) (unique? edited-ids)))
+          (reject 'duplicate-identity))
+         ((not (every (lambda (e)
+                        (equal? (or (lookup live-units (.ref e 'identity)) #f)
+                                (.ref e 'expected)))
+                      edits))
+          (reject 'conflicting-unit-edit))
+         (else
+          (let* ((deleted-ids (map (cut .ref <> 'identity)
+                                   (filter (lambda (e) (not (.ref e 'replacement))) edits)))
+                 (added-ids (map (cut .ref <> 'identity)
+                                 (filter (lambda (e) (and (not (.ref e 'expected))
+                                                          (.ref e 'replacement)))
+                                         edits)))
+                 (rebased-order
+                  (append (filter (lambda (id) (not (member id deleted-ids)))
+                                  (map car live-units))
+                          added-ids))
+                 (survivors (filter (lambda (u) (not (member (car u) edited-ids))) live-units))
+                 (replacements (filter values (map (cut .ref <> 'replacement) edits)))
+                 (merged-units (append survivors replacements))
+                 (ordered-content (map (cut lookup merged-units <>) rebased-order))
+                 (base-digest (.ref live-base 'semantic-digest))
+                 (target-digest (agentic-ai-lab-ai-agentic-context-digest
+                                 (list 'rebased-delta-content.v1
+                                       base-digest
+                                       ordered-content)))
+                 (order rebased-order)
+                 (rebased-delta
+                  (.o (:: @ AiAgenticContextDelta.)
+                      base-digest target-digest edits order))
+                 (accepted? #t)
+                 (rebased? (not (equal? base-digest (.ref delta 'base-digest))))
+                 (delta rebased-delta)
+                 (content ordered-content)
+                 (action-authorized? #f))
+            (.o accepted? rebased? delta content action-authorized?))))))))
 (def (admit-delta base-source base delta target-source scope restriction profile incremental?)
   ;; Proposal payloads are never returned. Replay both sources and return fresh values.
   (let* ((verified-base (agentic-ai-lab-ai-agentic-context-org-replay base-source base (.ref base 'scope)))

@@ -88,7 +88,7 @@
                (= (hash-ref first-times '(calls scope-factory) 0) 4)
                (andmap (lambda (id) (= (hash-ref first-times (list 'calls (list 'scope-factory id)) 0) 1))
                        '(tao3k/agentic-ai-lab/modules/nix/interface tao3k/yuanxu/modules/json-schema/interface
-                         tao3k/yuanxu/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface)))
+                         tao3k/agentic-ai-lab/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface)))
     (error "First business read must admit and construct exactly the selected closure"))
   (defvalues (again repeat-times)
     (call-with-module-source-operation-measurement selected-deployment accounting?: #f))
@@ -99,7 +99,7 @@
   (def test-order (.get yuanxu-deployment-consumer.init.exports tests selected-graph module-order))
   (unless (equal? test-order
                   '(tao3k/agentic-ai-lab/modules/nix/interface tao3k/yuanxu/modules/json-schema/interface
-                         tao3k/yuanxu/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface))
+                         tao3k/agentic-ai-lab/modules/funflow/interface tao3k/agentic-ai-lab/modules/services/opentofu/interface))
     (error "Test projection differs from the runtime dependency closure" test-order))
   (unless (equal? ((.get scope schema type) '("map" "string"))
                   '((type . "object") (additionalProperties . ((type . "string")))))
@@ -119,7 +119,7 @@
     '("yuanxu-deployment-consumer/main~0"
       "yuanxu-deployment-consumer/init~0"
       "tao3k/yuanxu/modules/json-schema/json-schema-contract~0"
-      "tao3k/yuanxu/modules/funflow/objects~0"))
+      "tao3k/agentic-ai-lab/modules/funflow/objects~0"))
   (displayln "LAB-DEPLOYMENT-PRODUCT-USE-OK"))
 
 (def (main) (verify-deployment-runtime))

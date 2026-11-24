@@ -1,5 +1,5 @@
 ;;; Inert negative fixture: meta imports belong to an owned extension module.
-(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/type validate))
 (def raw-mop

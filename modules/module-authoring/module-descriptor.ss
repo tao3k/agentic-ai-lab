@@ -9,11 +9,11 @@
 (import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/type Record)
         (only-in :clan/poo/object .o .@ .ref .mix .slot? .all-slots object? object<-alist)
-        :tao3k/yuanxu/modules/funflow/control-plane/roles
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object/role-syntax
-        :tao3k/yuanxu/modules/funflow/control-plane/task
-        :tao3k/yuanxu/modules/funflow/control-plane/flow
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/task
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow
         :tao3k/agentic-ai-lab/modules/module-authoring/module-interface
         (only-in :tao3k/yuanxu/module-system/graph/funs
                  module-closure module-missing-imports)

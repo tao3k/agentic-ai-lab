@@ -12,10 +12,10 @@
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime-command-config
                  agentic-ai-lab-user-alist-ref)
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-catalog
-        (only-in :tao3k/yuanxu/modules/funflow/graph-projection
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/graph-projection
                  yuanxu-funflow-check-map->functional-dag
                  yuanxu-funflow-functional-dag->alist)
-        (only-in :tao3k/yuanxu/modules/funflow/check-objects
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/check-objects
                  yuanxu-cicd-check-map?
                  yuanxu-cicd-check-map-name)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi))

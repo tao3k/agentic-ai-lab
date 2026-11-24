@@ -8,8 +8,8 @@
 
 (import :tao3k/yuanxu/composition/roles
         (only-in :clan/poo/object .o object?)
-        :tao3k/yuanxu/modules/funflow/control-plane/roles
-        :tao3k/yuanxu/modules/funflow/control-plane/failure
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure
         :tao3k/yuanxu/object/role-syntax
         (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/human-audit
                  +loop-human-audit-decisions+))

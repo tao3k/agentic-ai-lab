@@ -117,4 +117,21 @@
         (check-exception (agentic-ai-lab-ai-agentic-context-session-input after p bound-scope "receipt") true)))
     (yuanxu-test-case "historical bytes and source mismatch cannot be trusted"
       (check-exception (agentic-ai-lab-ai-agentic-context-delta-admit "* TODO Forged\n" (base)
-        (agentic-ai-lab-ai-agentic-context-delta-between (base) (target)) after target-scope restriction profile) true))))
+        (agentic-ai-lab-ai-agentic-context-delta-between (base) (target)) after target-scope restriction profile) true))
+    (yuanxu-test-case "concurrent disjoint unit delta rebases cleanly while conflicting unit edit fails closed"
+      (let* ((a2 '("a" (title "A-updated")))
+             (b2 '("b" (title "B-updated")))
+             (live-after-a (.o semantic-digest: "live-after-a" content: (list a2 unit-b)))
+             (delta-b-on-old (agentic-ai-lab-ai-agentic-context-delta-between
+                              toy-base (.o semantic-digest: "b-target" content: (list unit-a b2 unit-c))))
+             (rebased (agentic-ai-lab-ai-agentic-context-delta-rebase live-after-a delta-b-on-old))
+             (conflict-delta (agentic-ai-lab-ai-agentic-context-delta-between
+                              toy-base (.o semantic-digest: "a-conflict" content: (list '("a" (title "A-other")) unit-b))))
+             (conflict (agentic-ai-lab-ai-agentic-context-delta-rebase live-after-a conflict-delta)))
+        (check (.ref rebased 'accepted?) => #t)
+        (check (.ref rebased 'rebased?) => #t)
+        (check (.ref rebased 'content) => (list a2 b2 unit-c))
+        (check (.ref (agentic-ai-lab-ai-agentic-context-delta-apply live-after-a (.ref rebased 'delta)) 'content)
+               => (list a2 b2 unit-c))
+        (check (.ref conflict 'accepted?) => #f)
+        (check (.ref conflict 'reason) => 'conflicting-unit-edit)))))

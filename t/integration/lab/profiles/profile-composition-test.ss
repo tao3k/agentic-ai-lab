@@ -3,13 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :tao3k/yuanxu/modules/funflow/scenario Scenario)
+(import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :clan/poo/mop .new)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? check-exception test-suite)
         (only-in :clan/poo/object .all-slots .def .o .ref object?)
         (only-in :clan/poo/type element?)
-        (only-in :tao3k/yuanxu/modules/funflow/control-plane/graph execution-plan? execution-plan-nodes)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/graph execution-plan? execution-plan-nodes)
         (only-in :tao3k/yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         (only-in :tao3k/yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         :tao3k/yuanxu/profile-composition/selection-syntax

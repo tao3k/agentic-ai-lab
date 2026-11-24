@@ -7,9 +7,9 @@
 ;;; Invariant: formal POO use-module config only; no runtime work.
 
 (import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
-        (only-in :tao3k/yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
         (only-in :clan/poo/object .def)
-        (only-in :tao3k/yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-config-flags))
 
 (export agentic-ai-lab-custom-my-module-poo-introspection-case)
