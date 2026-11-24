@@ -11,7 +11,8 @@
         (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
-(export +agentic-ai-lab-model-core-spec-kind+
+(export ModelCoreScope
+        +agentic-ai-lab-model-core-spec-kind+
         +agentic-ai-lab-model-core-catalog-kind+
         +agentic-ai-lab-model-core-selection-policy-kind+
         +agentic-ai-lab-model-core-selection-receipt-kind+
@@ -121,3 +122,10 @@
   (element? AgenticAILabModelSelectionPolicy value))
 (def (agentic-ai-lab-model-selection-receipt-value? value)
   (element? AgenticAILabModelSelectionReceipt value))
+
+(define-type (ModelCoreScope @ Type.)
+  identity: 'model-core/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/model-core/interface))))

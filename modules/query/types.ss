@@ -11,7 +11,8 @@
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list every))
 
-(export agentic-ai-lab-query-kind
+(export QueryScope
+        agentic-ai-lab-query-kind
         agentic-ai-lab-query-language-kind
         agentic-ai-lab-query-program-kind
         agentic-ai-lab-query-element-space-kind
@@ -299,3 +300,10 @@
 
 (def (agentic-ai-lab-source-query-receipt? value)
   (element? AgenticAILabSourceQueryReceipt value))
+
+(define-type (QueryScope @ Type.)
+  identity: 'query/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/query/interface))))
