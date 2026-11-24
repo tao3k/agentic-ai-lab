@@ -18,6 +18,7 @@
       temporal: (.get selection modules temporal-causality)
       gitops: (.get selection modules gitops)
       module-authoring: (.get selection modules module-authoring)
+      session: (.get selection modules session)
       loop-engine: (.get selection modules loop-engine)
       authorization: (.get selection modules authorization)
       c-abi-clock: (.get selection CAbi clock)))

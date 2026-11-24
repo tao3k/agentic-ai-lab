@@ -4,8 +4,9 @@
         (only-in :tao3k/yuanxu/module-system/convergence/types make-slot-spec)
         (only-in "./config.ss" DurableConfig)
         (only-in "./types.ss" DurableScopeContract)
-        (only-in "./func.ss" durable-recovery-decision DurableWorkExports))
-(export Durable)
+        (only-in "./func.ss" durable-recovery-decision DurableWorkExports)
+        "policy.ss")
+(export Durable (import: "policy.ss"))
 
 (.def Durable
   identity: 'durable

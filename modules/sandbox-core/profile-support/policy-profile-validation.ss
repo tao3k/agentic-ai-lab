@@ -15,7 +15,7 @@
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-profile-core
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
-        (only-in :tao3k/agentic-ai-lab/modules/session/durable-policy
+        (only-in :tao3k/agentic-ai-lab/modules/durable/interface
                  agentic-ai-lab-durable-policy?
                  agentic-ai-lab-durable-policy-diagnostic->alist
                  agentic-ai-lab-durable-policy-diagnostics

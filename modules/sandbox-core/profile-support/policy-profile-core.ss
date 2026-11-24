@@ -12,7 +12,7 @@
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-core
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-capability
         :tao3k/agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax
-        (only-in :tao3k/agentic-ai-lab/modules/session/durable-policy
+        (only-in :tao3k/agentic-ai-lab/modules/durable/interface
                  agentic-ai-lab-durable-policy/default
                  agentic-ai-lab-durable-policy?
                  agentic-ai-lab-durable-policy-name))

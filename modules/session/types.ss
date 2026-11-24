@@ -5,9 +5,17 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/type Type. define-type)
         (only-in :std/list/list every delete-duplicates/hash))
-(export SessionInputRefType SessionTaskType SessionScheduleType
+(export SessionScope
+        SessionInputRefType SessionTaskType SessionScheduleType
         agentic-ai-lab-session-input-ref-shape? agentic-ai-lab-session-task-shape?
         agentic-ai-lab-session-schedule-shape?)
+
+(define-type (SessionScope @ Type.)
+  identity: 'session/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/session/interface))))
 (def (name? value) (and (string? value) (< 0 (string-length value) 257)))
 (def (coordinate? value) (and (exact-integer? value) (<= 0 value 65535)))
 (def (has? value kind keys)
