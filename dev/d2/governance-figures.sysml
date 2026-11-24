@@ -72,4 +72,8 @@ package ContextGovernanceFigures {
     view obligationFixpointReconciler : InterconnectionView {
         expose AscentObligationFixpointReconciler::ObligationFixpointReconcilerSystem;
     }
+
+    view delegationCedarToctou : InterconnectionView {
+        expose DelegationAttenuationAndCedarToctou::DelegationAndToctouGovernanceSystem;
+    }
 }

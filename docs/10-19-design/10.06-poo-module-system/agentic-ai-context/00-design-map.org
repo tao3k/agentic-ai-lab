@@ -683,6 +683,16 @@ proving =(holeId, premiseDigest)= idempotence, deterministic-first FunFlow
 precedence (=0 LLM calls=), strict rejection of raw single-step tool calls,
 competing-hypothesis preservation, and selective bitemporal premise retraction.
 
+[[file:58-delegation-attenuation-and-cedar-toctou-fence.org][58: Multi-Agent Delegated Obligation Attenuation & Concurrent Cedar Revocation TOCTOU Fence]]
+and its [[file:58-delegation-attenuation-and-cedar-toctou-fence.sysml][SysML]], [[file:58-delegation-attenuation-and-cedar-toctou-fence.qnt][Quint]],
+and [[file:58-delegation-attenuation-and-cedar-toctou-fence.lean][Lean]] artifacts ground our evidence chain in real documented production
+issues from =anthropics/claude-code= (=#25000=, =#23983=, =#107019=, =#6036=,
+=#6004=, =#47695=) and =openai/codex= (=#34043=, =#54855=, =#51116=, =#15305=,
+=#20830=, =#51799=), formalizing multi-hop capability attenuation, parent
+denylist dominance, atomic Cedar revocation & cut-drift TOCTOU fencing, and
+Durable Work → =ObligationGraph= unclosed-subagent recovery
+(=modules/loop-engine/{durable-event-bridge,delegation-fence}.ss=).
+
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
 [[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
@@ -692,11 +702,11 @@ competing-hypothesis preservation, and selective bitemporal premise retraction.
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=57= both
-horizontally (=47= imports all seventeen upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=58= both
+horizontally (=47= imports all eighteen upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 18-namespace axiom audit + 123 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all seventeen single-plane models + 8-step Apalache on
+Lake 19-namespace axiom audit + 130 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all eighteen single-plane models + 8-step Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).

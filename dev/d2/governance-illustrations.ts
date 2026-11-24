@@ -1620,6 +1620,89 @@ const composeObligationFixpointReconcilerStory: FigureComposer = context => {
   };
 };
 
+// Story 58: Multi-Agent Delegation Attenuation & Concurrent Cedar TOCTOU Fence
+const composeDelegationCedarToctouStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Multi-Agent Delegation Attenuation and Concurrent Cedar TOCTOU Fence">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="1120" fill="#FAF8F2"/>
+      ${txt(48, 64, 'Multi-Agent Delegation Attenuation & Cedar TOCTOU Fence (Slice 58)', 32, '#102A3A', 800)}
+      ${txt(48, 102, 'Grounded in real anthropics/claude-code & openai/codex production issues (deny bypass, TOCTOU & resume hang).', 20, '#3C5B6B', 500)}
+
+      <g data-subject-ref="${subjectId('attenuationGate')}">
+        <rect x="48" y="138" width="1424" height="422" rx="22" fill="#FFFFFF" stroke="#1E6091" stroke-width="2.5"/>
+        ${pill(72, 160, 760, 36, '#EBF5FB', '#1E6091', '1. ALGEBRAIC CAPABILITY ATTENUATION & REAL-ISSUE EVIDENCE', '#154360')}
+        ${txt(72, 224, 'Eliminates Claude Code #25000/#23983 subagent deny-rule bypass & Codex #15305/#51116 sandbox drift:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="424" height="274" rx="16" fill="#F0F8FF" stroke="#1E6091" stroke-width="2"/>
+        ${txt(94, 290, 'Capability Meet Lattice', 19, '#154360', 800)}
+        ${txt(94, 328, 'child.allowed =', 16, '#2C3E50')}
+        ${txt(94, 358, '  (parent ∩ req) \\ parent.denied', 16, '#154360', 700)}
+        ${txt(94, 396, '✗ Parent deny dominates child', 16, '#922B21', 700)}
+        ${txt(94, 426, '✓ Multi-hop never escalates', 16, '#1B5E20', 700)}
+        ${txt(94, 464, 'Lean: multiHopDelegation_never...', 15, '#154360', 700)}
+        ${txt(94, 496, '✓ Closes Claude #25000 / #23983', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 389H548', '#1E6091')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FEF5E7" stroke="#9C640C" stroke-width="2"/>
+        ${txt(570, 290, 'Stale Cut & Raw Bash Block', 19, '#784212', 800)}
+        ${txt(570, 328, 'Child token binds liveCut at', 16, '#2C3E50')}
+        ${txt(570, 358, 'delegation time & re-checks.', 16, '#784212', 700)}
+        ${txt(570, 396, '✗ boundCut != liveCut -> REFUSED', 16, '#922B21', 700)}
+        ${txt(570, 426, '✗ Raw bash bypass -> FORBIDDEN', 16, '#922B21', 700)}
+        ${txt(570, 464, 'Lean: staleChildContextCut_...', 15, '#784212', 700)}
+        ${txt(570, 496, '✓ Closes Claude #107019 / #6036', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'Durable Resume Recovery', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, 'Durable Work unclosed attempts', 16, '#2C3E50')}
+        ${txt(1046, 358, 'project as explicit defeaters.', 16, '#1B5E20', 700)}
+        ${txt(1046, 396, '✗ Blocks silent parent completion', 16, '#922B21', 700)}
+        ${txt(1046, 426, '✓ Recovers cleanly via event stream', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, 'Lean: unclosedSubagentAttempt_...', 15, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Closes Codex #34043 / #54855', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('toctouFence')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 790, 36, '#EFEBF9', '#5B4B8A', '2. ATOMIC CEDAR REVOCATION TOCTOU FENCE & LOOPENGINE EXPORT', '#4A3B99')}
+        ${txt(72, 678, 'Synchronizes asynchronous Cedar revocation across parent/child delegations with zero TOCTOU window:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'Concurrent Cedar Revocation & Epoch Fence', 19, '#922B21', 800)}
+        ${txt(96, 786, '• Checks parentGrantLive && childGrantLive atomically', 16, '#2C3E50')}
+        ${txt(96, 820, '✗ Any parent revocation or grantEpoch advance', 16, '#922B21', 700)}
+        ${txt(96, 856, '  immediately invalidates every in-flight child token', 16, '#922B21', 700)}
+        ${txt(96, 896, '✓ Single human approval restores grant & runs FunFlow', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '  directly with 0 prompt loops (Claude #47695 / Codex #51799)', 16, '#1B5E20', 700)}
+        ${txt(96, 968, 'Lean: revokedParentGrant_immediately_blocks_child_toctou', 15, '#922B21', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'LoopEngine Yuanxu Interface & 19-Slice Closure', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Published via modules/loop-engine/interface.ss', 16, '#2C3E50')}
+        ${txt(820, 820, '• ObligationGraph + ASCENT Reconciler + Durable Bridge', 16, '#2C3E50')}
+        ${txt(820, 860, '✓ Delegation Attenuation + Cedar TOCTOU Fence live', 16, '#1B5E20', 700)}
+        ${txt(820, 896, '✓ 7 Lean theorems + exhaustive TLC (20 states, q=0)', 16, '#1B5E20', 700)}
+        ${txt(820, 932, '✓ 6 real Codex/Claude Code issue families tested 100%', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 19-Slice Assurance Chain (130 Lean thms, 18x TLC)', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 58 Closure: Seals multi-agent delegation & Cedar TOCTOU against real Codex/Claude Code issues.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -1748,6 +1831,13 @@ const stories: readonly StorySpec[] = [
     title: 'Post-ReAct Declarative Obligation-Fixpoint Reconciler (ASCENT x FunFlow x POO)',
     composer: composeObligationFixpointReconcilerStory,
   },
+  {
+    slug: '58-delegation-cedar-toctou',
+    view: 'ContextGovernanceFigures::delegationCedarToctou',
+    modelFile: '58-delegation-attenuation-and-cedar-toctou-fence.sysml',
+    title: 'Multi-Agent Delegation Attenuation & Concurrent Cedar Revocation TOCTOU Fence',
+    composer: composeDelegationCedarToctouStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1778,6 +1868,7 @@ const allChainModelFiles = [
   '55-mcp-tool-poisoning-and-camel-capability-flow.sysml',
   '56-ascent-governed-loop-termination.sysml',
   '57-obligation-fixpoint-reconciler.sysml',
+  '58-delegation-attenuation-and-cedar-toctou-fence.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

@@ -18,6 +18,7 @@ import «54-durable-work-engine-core-challenge»
 import «55-mcp-tool-poisoning-and-camel-capability-flow»
 import «56-ascent-governed-loop-termination»
 import «57-obligation-fixpoint-reconciler»
+import «58-delegation-attenuation-and-cedar-toctou-fence»
 
 /-!
 Slice 47 — Master Imported Lean DAG (`40..46, 48..53 -> 47`) & Quotient Bridge:
@@ -246,6 +247,7 @@ structure QuintBoundaryGuardFlags where
   untrustedSinkArgBlocked : Bool
   loopCycleHaltsFailClosed : Bool
   rawReactToolCallRejected : Bool
+  revokedDelegationBlocked : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -294,6 +296,10 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     !(AscentObligationFixpointReconciler.admitOracleProposal
       { kind := .rawSingleStepToolCall, contractValid := true,
         camelAndMcpSafe := true, branchCount := 1, maxBranches := 4 })
+  revokedDelegationBlocked :=
+    !(DelegationAttenuationAndCedarToctou.admitDelegatedExecution
+      { boundCut := 1, liveCut := 1, boundGrantEpoch := 1, liveGrantEpoch := 1,
+        parentGrantLive := false, childGrantLive := true, capAdmitted := true })
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -316,7 +322,8 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     q.unclosedAttemptBlocksArchive = true ∧
     q.untrustedSinkArgBlocked = true ∧
     q.loopCycleHaltsFailClosed = true ∧
-    q.rawReactToolCallRejected = true := by
+    q.rawReactToolCallRejected = true ∧
+    q.revokedDelegationBlocked = true := by
   dsimp [projectToQuintGuardFlags]
   refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
           ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
@@ -327,6 +334,7 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
             ([] : List (Nat × Nat)) 1 1 rfl,
           by simp [YuanxuC4ProfileConvergence.explicitVeto_dominates_implied],
           by simp [DurableWorkEngineCoreChallenge.unclosedAttempt_blocks_autoArchive_fail_closed],
+          rfl,
           rfl,
           rfl,
           rfl⟩

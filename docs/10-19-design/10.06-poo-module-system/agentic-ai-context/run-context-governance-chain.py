@@ -50,6 +50,7 @@ SLICES = [
     (55, "55-mcp-tool-poisoning-and-camel-capability-flow", "McpToolPoisoningAndCamelCapabilityFlow", "McpToolPoisoningDispatchContract", 2, "tlc"),
     (56, "56-ascent-governed-loop-termination", "AscentGovernedLoopTermination", "AscentLoopTerminationDispatchContract", 2, "tlc"),
     (57, "57-obligation-fixpoint-reconciler", "AscentObligationFixpointReconciler", "ObligationReconcilerDispatchContract", 2, "tlc"),
+    (58, "58-delegation-attenuation-and-cedar-toctou-fence", "DelegationAttenuationAndCedarToctou", "DelegationToctouDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -71,6 +72,7 @@ QUINT_MAINS = {
     "55-mcp-tool-poisoning-and-camel-capability-flow": "McpToolPoisoningAndCamelCapabilityFlow",
     "56-ascent-governed-loop-termination": "AscentGovernedLoopTermination",
     "57-obligation-fixpoint-reconciler": "AscentObligationFixpointReconciler",
+    "58-delegation-attenuation-and-cedar-toctou-fence": "DelegationAttenuationAndCedarToctou",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -94,6 +96,7 @@ STORY_SLUGS = (
     "55-mcp-tool-poisoning-camel",
     "56-ascent-loop-termination",
     "57-obligation-fixpoint-reconciler",
+    "58-delegation-cedar-toctou",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -407,6 +410,22 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         cut_ok = itf_int(st["oracleInvocationsOnSamePremise"]) <= 1
         grant_ok = (not bool(st["oracleCalledWithDetPending"])) and (not bool(st["rawToolCallAdmitted"]))
         epistemic_ok = not bool(st["collapsedCompetingHypotheses"])
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 58:
+        st = last["s58"]
+        consumed = (
+            (itf_int(st["safeChildExecutions"]) > 0)
+            or bool(st["childBypassedDeny"])
+            or bool(st["childExecutedAfterRevokeOrDrift"])
+            or bool(st["parentCompletedWithUnclosedChild"])
+            or bool(st["childDelegated"])
+        )
+        cut_ok = (not bool(st["childExecutedAfterRevokeOrDrift"])) and (
+            itf_int(st["childBoundGrantEpoch"]) <= itf_int(st["liveGrantEpoch"])
+        )
+        grant_ok = not bool(st["childBypassedDeny"])
+        epistemic_ok = not bool(st["parentCompletedWithUnclosedChild"])
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:
@@ -731,7 +750,7 @@ def verify_quint_tlc_apalache_and_export_itf(
             cwd=str(qwork),
             capture_output=True,
             text=True,
-            timeout=240 if backend == "tlc" else 480,
+            timeout=240 if backend == "tlc" else 900,
             check=False,
         )
         vout = vres.stdout + vres.stderr

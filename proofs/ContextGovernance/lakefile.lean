@@ -29,5 +29,6 @@ lean_lib ContextGovernanceChain where
     `«55-mcp-tool-poisoning-and-camel-capability-flow»,
     `«56-ascent-governed-loop-termination»,
     `«57-obligation-fixpoint-reconciler»,
+    `«58-delegation-attenuation-and-cedar-toctou-fence»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]
