@@ -16,16 +16,17 @@ package EndToEndContextGovernanceClosure {
     private import DetourTaintConfinementAndCausalAudit::*;
     private import MemoryQuarantineAndKvPrefixSerialization::*;
     private import FunflowCasSingleflightAndExternalSandbox::*;
+    private import YuanxuC4ProfileConvergence::*;
 
-    doc /* Capstone SysML v2 horizontal & vertical chain closure across all twelve
-           upstream planes (Slices 40-46 + Slices 48-52):
-           1. Horizontally imports and instantiates all twelve upstream Context
+    doc /* Capstone SysML v2 horizontal & vertical chain closure across all thirteen
+           upstream planes (Slices 40-46 + Slices 48-53):
+           1. Horizontally imports and instantiates all thirteen upstream Context
               Governance subsystem models inside the five-station pipeline.
            2. Defines `AuditCapsuleLifecycle` governing hot O(1) cut-stamp use,
               push invalidation on source-cut advance, and zero-LLM cold replay.
            3. Vertically dispatches composed pure pipeline and quotient bridge
-              theorems to `47-*.lean` (importing `40..46, 48..52`) and cross-plane
-              concurrent races to `47-*.qnt` (importing `s40..s46, s48..s52`), plus
+              theorems to `47-*.lean` (importing `40..46, 48..53`) and cross-plane
+              concurrent races to `47-*.qnt` (importing `s40..s46, s48..s53`), plus
               real Quint ITF trace-replay verification (`QuintTraceScalarReplayContract`). */
 
     item def DeterministicAuditCapsule {
@@ -90,6 +91,7 @@ package EndToEndContextGovernanceClosure {
         part concurrentContextSubsystem : ConcurrentSharedContextOrchestrationSystem;
         part absorptionSubsystem : LiteratureAbsorptionGovernanceSystem;
         part funflowCasSandboxSubsystem : FunflowCasSandboxSystem;
+        part c4ConvergenceSubsystem : YuanxuC4ProfileConvergenceSystem;
         port prev : ~StageChainPort;
         port handoff : ~FinalHostIntakePort;
     }
@@ -137,14 +139,15 @@ package EndToEndContextGovernanceClosure {
     // 2. Quint Cross-Module Composed Push-Invalidation, Host CAS & Cold-Replay Race
     requirement composedMultiPlaneCasAndColdReplayRace : QuintInterleavingObligation {
         attribute :>> quintArtifact = "47-end-to-end-context-governance-assurance-closure.qnt";
-        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allTwelveUpstreamSliceInvariantsHold";
-        doc /* Importing all twelve upstream Quint protocol modules (s40..s46, s48..s52),
+        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allThirteenUpstreamSliceInvariantsHold";
+        doc /* Importing all thirteen upstream Quint protocol modules (s40..s46, s48..s53),
                concurrent source-cut advances, generation advances, omitted-hypothesis
                discoveries, active-defeater disclosure arrivals, shared-context claims,
                confined-detour taint checks, memory-poisoning quarantine, KV-prefix
-               stability, FunFlow singleflight/pinned-GC/finalizer guards, cited-evidence
-               retractions or grant revocations block stale Host CAS while cold forensic
-               replay at cut 1 remains valid. */
+               stability, FunFlow singleflight/pinned-GC/finalizer guards, C4 profile
+               convergence & veto dominance, cited-evidence retractions or grant
+               revocations block stale Host CAS while cold forensic replay at cut 1
+               remains valid. */
     }
 
     allocation ownPipelineChainDomain allocate crossSlicePurePipelineCompositionLaw to pipelineSystem.stageGovernance;

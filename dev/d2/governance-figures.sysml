@@ -52,4 +52,8 @@ package ContextGovernanceFigures {
     view funflowCasSandbox : InterconnectionView {
         expose FunflowCasSingleflightAndExternalSandbox::FunflowCasSandboxSystem;
     }
+
+    view c4ProfileConvergence : InterconnectionView {
+        expose YuanxuC4ProfileConvergence::YuanxuC4ProfileConvergenceSystem;
+    }
 }

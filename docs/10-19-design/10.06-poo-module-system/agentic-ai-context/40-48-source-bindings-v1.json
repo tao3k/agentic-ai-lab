@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "f8a503b5374e26c78e3076900212beb877606aa94faef4803ba8e5edf8fe4d72",
+  "aggregate_bundle_sha256": "95962fc2552cb3dc7d9410a889dd7f9bf895848ffe93367e360c8e4eefb7a50f",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "a57d3f5a2f38791005ae9b60e4a44eb4123d3f63cd782af4c526df395c78782c",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "f9a63d6a53f51d6bb58cabbdf7d3a5ac73db9a25d139aa2528b89622381aec42",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "d0b2b9b250e130d1ed9b88f78a657b27118fd471b5acc524a11d6f39ba11eaeb",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "6ae5c8f1dcd510bfee40cbb48a1f8941f7b4959428b71d7c14770844db5e3d16",
     "proofs/ContextGovernance/lakefile.lean": "2a635214b3a28277aecdfba0bd37ac7fdbf8f6e51f48c1d0f25afe22dd69039e",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
     "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "696572455f48d8a780696b4914744b929f212c74b70abd5e4e0f6ecdd08e6ad2",
-    "dev/d2/governance-figures.sysml": "0d9c4d2a25221c3759c7752a87af623136d81d0a76096287533ac85fa8aface7",
-    "dev/d2/governance-illustrations.ts": "ba86c1ec3e23470790fd79bcfe5426ee854c3bb09335f368c2bdd2af4d354355"
+    "dev/d2/governance-figures.sysml": "63e27bb7386d2db1c06a8d86679f626ddd9d6667ed8f44aab80b1dbbc444e63b",
+    "dev/d2/governance-illustrations.ts": "aed950d4d66ea075af18e1589670b8915b59a411522e1f642546143bc02cac64"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -302,14 +302,43 @@
         "singleflightAtMostOneActiveComputePerKey"
       ]
     },
+    "53-yuanxu-c4-profile-convergence-and-interface-slots": {
+      "slice_id": 53,
+      "bundle_sha256": "d8f7c4c71377f759411f3c2510214c8393593cdbef508f9692ab27cd6870a3a3",
+      "files": {
+        "org": "f9a0c1832e71d083ad298b5467321439b731382956c07f184ad29e820c0cb817",
+        "sysml": "640dddb170dee6e399b82ec2f633f0a91055b41e9a821eebfabd8ad2e10c3446",
+        "lean": "6415048628178006090eb1e14f71bfccf8a24f3c9b6f8613387a66e8a0514ceb",
+        "qnt": "fa584e57ce41f45bb85200744a642cb2c4fbac4200589b4f4440239172d30277"
+      },
+      "lean_theorems": [
+        "explicitVeto_dominates_implied",
+        "foldGovernanceFloor_no_escalation",
+        "impliedActivates_when_prereq_and_no_veto",
+        "impliedFeature_subset_admitted",
+        "impliedRuleFires_monotone",
+        "inactiveFeature_excluded_from_compiledClosure",
+        "peerExclusive_agreement_collapses",
+        "peerExclusive_disagreement_conflicts",
+        "runtimeStageSlot_never_expands_assemblyClosure",
+        "tagTarget_subset_admitted"
+      ],
+      "quint_invariants": [
+        "invExplicitClosure",
+        "invGovernanceFloorMonotonic",
+        "invPeerConflictFailClosed",
+        "invRuntimeStageNoCompileExpansion",
+        "invVetoDominance"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "990fcd193afe3c860749306aaf7c32df6e80095af410fc10dfc912ae068c7318",
+      "bundle_sha256": "1b21427b0150f2ad42c266f122294fe2a01b407d8a736146ce2129ea204e9587",
       "files": {
-        "org": "b13165fa609f44563d835dc91f10ff17415d3331e603c8c25f1559b4c3b8d832",
-        "sysml": "bd1118f701df3628f9887a1bfbc0c0d553276bb5af963a00e69c8bccf7035d72",
-        "lean": "2c298994d34731a9c022008875501f9236b48abe495dc051f2a30fc628709ac9",
-        "qnt": "9d35b938eda303c4aa1b69ceb288bbfdec2b025be1cbe7a045db3bd6b3ab8d3c"
+        "org": "b3c61fbe2833e1cd8b85ef2c98ceb7e92901c480ab7d4ad1d99d38db6c046b0e",
+        "sysml": "ad39b03df95b9af421846129dcc1df83f77d17d333d231573758b47c8976ae07",
+        "lean": "80dfe85addacfc03eb03eacc59518a8d16dec1253462d6629178d26322820ec2",
+        "qnt": "863a340c87c8f1e3c0cf44dcc94740d69ed676bb7e3d1893a97732f9361a8da3"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -321,7 +350,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allTwelveUpstreamSliceInvariantsHold",
+        "allThirteenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

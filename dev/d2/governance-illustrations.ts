@@ -1203,6 +1203,91 @@ const composeFunflowCasSandboxStory: FigureComposer = context => {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Story 53: Two-Tier Yuanxu Interface, Slot-Observation & C4 Profile Convergence
+// ---------------------------------------------------------------------------
+const composeC4ProfileConvergenceStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Two-Tier Yuanxu Interface, POO Slot-Observation and C4 Profile Convergence">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect width="1520" height="1120" fill="#FBF8F1"/>
+      ${txt(48, 64, 'Two-Tier Yuanxu Interface, POO Slot-Observation & C4 Profile Convergence', 30, '#1B3B4B', 800)}
+      ${txt(48, 102, 'Formalizes INV-1..INV-6: explicit closure, veto dominance, fail-closed peer conflict, monotonic floor, and zero runtime compile bleed.', 19, '#496370', 500)}
+
+      <g data-subject-ref="${subjectId('assemblyEntry')}">
+        <rect x="48" y="138" width="1424" height="420" rx="22" fill="#FFFFFF" stroke="#2874A6" stroke-width="2.5"/>
+        ${pill(72, 160, 740, 36, '#EEF4FC', '#2874A6', '1. TIER 1 ENTRYPOINT (yuanxu!) — EXPLICIT CLOSURE & VETO DOMINANCE', '#1B4F72')}
+        ${txt(72, 224, 'INV-1, INV-2 & INV-3: Implied cross-module bridges & tag targeting NEVER pull undeclared modules:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="420" height="274" rx="16" fill="#EBF5FB" stroke="#2874A6" stroke-width="2"/>
+        ${txt(94, 290, 'Closed Module Universe', 19, '#1B4F72', 800)}
+        ${txt(94, 328, 'Admitted: { env, context, ... }', 16, '#2C3E50')}
+        ${txt(94, 362, '• Implied bridges (durable.enabled?)', 16, '#2C3E50')}
+        ${txt(94, 392, '  fire ONLY inside admitted closure', 16, '#1B4F72', 700)}
+        ${txt(94, 430, '• by-tag Global Profiles NEVER pull', 16, '#2C3E50')}
+        ${txt(94, 460, '  undeclared modules (Lean proven!)', 16, '#1B5E20', 700)}
+        ${txt(94, 496, 'INV-1: subset_admitted = TRUE', 16, '#1B5E20', 800)}
+
+        ${arrow('M492 389H548', '#2874A6')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FFF9F2" stroke="#8C5A2B" stroke-width="2"/>
+        ${txt(570, 290, 'Band 4b Explicit Veto (-feat)', 19, '#784212', 800)}
+        ${txt(570, 328, 'Band 1: implied bridge sets enabled', 16, '#2C3E50')}
+        ${txt(570, 362, 'Band 4b: user -durable veto overrides', 16, '#922B21', 700)}
+        ${txt(570, 396, 'purely via C4 precedence — ZERO', 16, '#2C3E50')}
+        ${txt(570, 426, 'magic priority integers!', 16, '#784212', 700)}
+        ${txt(570, 464, 'resolve(implied, explicitVeto) = false', 16, '#922B21', 700)}
+        ${txt(570, 496, 'INV-3: Veto ALWAYS dominates', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'Stage Separation (INV-6)', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, '• Inactive assembly features stay', 16, '#2C3E50')}
+        ${txt(1046, 358, '  100% outside compiledClosure', 16, '#1B5E20', 700)}
+        ${txt(1046, 396, '• Runtime slots (detour-state) mount', 16, '#2C3E50')}
+        ${txt(1046, 426, '  C4 overlays at 0 compile cost', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, 'runtimeStageSlot_never_expands', 15, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Zero cost for inactive units', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('convergenceEngine')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 880, 36, '#EFEBF9', '#5B4B8A', '2. TIER 2 CONVERGENCE ENGINE — PEER CONFLICT FAIL-CLOSED & GOVERNANCE FLOOR', '#4A3B99')}
+        ${txt(72, 678, 'INV-4 & INV-5: Same-band exclusive disagreement fails closed; Band 5 GovernanceFloor only narrows:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'INV-4: Same-Band Peer Exclusive Conflict = FAIL-CLOSED', 19, '#922B21', 800)}
+        ${txt(96, 786, '• Peer Profile A sets scalar slot = "on-blur"', 16, '#2C3E50')}
+        ${txt(96, 820, '• Peer Profile B sets scalar slot = "immediate"', 16, '#2C3E50')}
+        ${txt(96, 860, '✗ Silent order-luck overwrite is FORBIDDEN', 16, '#922B21', 700)}
+        ${txt(96, 896, '✓ Emits structured conflict(left, right) verdict', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '✓ Equal peers collapse cleanly: combine(v, v) = ok(v)', 16, '#1B5E20', 700)}
+        ${txt(96, 968, 'Lean: peerExclusive_disagreement_conflicts', 16, '#922B21', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'INV-5: Band 5 GovernanceFloor Monotonic Meet', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Folds envMeet across arbitrary Profile lists:', 16, '#2C3E50')}
+        ${txt(820, 820, '  trustCeiling = min(a, b), network/write = a && b', 16, '#4A3B99', 700)}
+        ${txt(820, 860, '• No Profile or overlay can EVER escalate trust ceiling', 16, '#2C3E50')}
+        ${txt(820, 896, '  or re-grant disabled network/write capabilities', 16, '#2C3E50')}
+        ${txt(820, 932, '✓ foldGovernanceFloor_no_escalation (Lean + TLC)', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 10 Lean theorems + exhaustive TLC (queue = 0)', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 53 Closure: Unifies Yuanxu Design 165 Two-Tier C4 Profile Convergence into the 14-Slice Assurance Chain.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -1296,6 +1381,13 @@ const stories: readonly StorySpec[] = [
     title: 'FunFlow CAS Singleflight, Fail-Closed Premise Invalidation, Pinned GC and External Sandbox',
     composer: composeFunflowCasSandboxStory,
   },
+  {
+    slug: '53-c4-profile-convergence',
+    view: 'ContextGovernanceFigures::c4ProfileConvergence',
+    modelFile: '53-yuanxu-c4-profile-convergence-and-interface-slots.sysml',
+    title: 'Two-Tier Yuanxu Interface, POO Slot-Observation and C4 Profile Convergence',
+    composer: composeC4ProfileConvergenceStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1321,6 +1413,7 @@ const allChainModelFiles = [
   '50-literature-frontier-detour-confinement-and-causal-audit.sysml',
   '51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml',
   '52-funflow-cas-singleflight-and-external-sandbox-binding.sysml',
+  '53-yuanxu-c4-profile-convergence-and-interface-slots.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

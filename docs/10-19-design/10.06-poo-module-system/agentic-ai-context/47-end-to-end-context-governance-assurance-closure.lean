@@ -13,10 +13,11 @@ import «49-scoped-detour-funflow-concurrent-shared-context»
 import «50-literature-frontier-detour-confinement-and-causal-audit»
 import «51-memory-poisoning-quarantine-and-kv-prefix-serialization»
 import «52-funflow-cas-singleflight-and-external-sandbox-binding»
+import «53-yuanxu-c4-profile-convergence-and-interface-slots»
 
 /-!
-Slice 47 — Master Imported Lean DAG (`40..46, 48..52 -> 47`) & Quotient Bridge:
-1. Imports all twelve upstream Lean modules (`40`–`46`, `48`–`52`) and composes
+Slice 47 — Master Imported Lean DAG (`40..46, 48..53 -> 47`) & Quotient Bridge:
+1. Imports all thirteen upstream Lean modules (`40`–`46`, `48`–`53`) and composes
    their pure functional operators into one end-to-end pipeline
    `executePureGovernanceChain`.
 2. Proves `pureGovernanceChain_end_to_end_sound`: any admitted pipeline output
@@ -236,6 +237,7 @@ structure QuintBoundaryGuardFlags where
   frozenKvPrefixPreserved : Bool
   fencedEffectPlainCasRejected : Bool
   retractedPremiseFailClosed : Bool
+  explicitVetoDominatesImplied : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -260,6 +262,8 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     !(FunflowCasSingleflightAndExternalSandbox.casSkipAdmitted .fencedEffect true true false)
   retractedPremiseFailClosed :=
     FunflowCasSingleflightAndExternalSandbox.premiseDriftedFailClosed ([] : List (Nat × Nat)) 1 1
+  explicitVetoDominatesImplied :=
+    !(YuanxuC4ProfileConvergence.resolveFeatureEnabled true .explicitVeto)
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -277,7 +281,8 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     q.stallAdvisoryAuthorizesMutation = false ∧
     q.frozenKvPrefixPreserved = true ∧
     q.fencedEffectPlainCasRejected = true ∧
-    q.retractedPremiseFailClosed = true := by
+    q.retractedPremiseFailClosed = true ∧
+    q.explicitVetoDominatesImplied = true := by
   dsimp [projectToQuintGuardFlags]
   refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
           ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
@@ -285,7 +290,8 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
           rfl,
           by simp [FunflowCasSingleflightAndExternalSandbox.fencedEffect_never_reused_by_plain_cas],
           FunflowCasSingleflightAndExternalSandbox.retractedPremise_always_invalidates_fail_closed
-            ([] : List (Nat × Nat)) 1 1 rfl⟩
+            ([] : List (Nat × Nat)) 1 1 rfl,
+          by simp [YuanxuC4ProfileConvergence.explicitVeto_dominates_implied]⟩
   rw [List.all_eq_true]
   intro f hf
   exact bne_iff_ne.mpr (redactFields_strips_all_secrets rawFields f hf)

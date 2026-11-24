@@ -45,6 +45,7 @@ SLICES = [
     (50, "50-literature-frontier-detour-confinement-and-causal-audit", "DetourTaintConfinementAndCausalAudit", "LiteratureAbsorptionDispatchAndBoundaryContract", 2, "tlc"),
     (51, "51-memory-poisoning-quarantine-and-kv-prefix-serialization", "MemoryQuarantineAndKvPrefixSerialization", "MemoryQuarantineAndKvPrefixContract", 2, "tlc"),
     (52, "52-funflow-cas-singleflight-and-external-sandbox-binding", "FunflowCasSingleflightAndExternalSandbox", "FunflowCasSandboxDispatchContract", 2, "tlc"),
+    (53, "53-yuanxu-c4-profile-convergence-and-interface-slots", "YuanxuC4ProfileConvergence", "YuanxuC4ProfileConvergenceContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -61,6 +62,7 @@ QUINT_MAINS = {
     "50-literature-frontier-detour-confinement-and-causal-audit": "DetourTaintConfinementAndCausalAudit",
     "51-memory-poisoning-quarantine-and-kv-prefix-serialization": "MemoryQuarantineAndKvPrefixSerialization",
     "52-funflow-cas-singleflight-and-external-sandbox-binding": "FunflowCasSingleflightAndExternalSandbox",
+    "53-yuanxu-c4-profile-convergence-and-interface-slots": "YuanxuC4ProfileConvergence",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -79,6 +81,7 @@ STORY_SLUGS = (
     "50-detour-confinement-audit",
     "51-memory-quarantine-kv-prefix",
     "52-funflow-cas-sandbox",
+    "53-c4-profile-convergence",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -299,6 +302,34 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
             (itf_int(st["fencedExecCount"]) <= 1)
             and (not bool(st["archivedWithDroppedFinalizer"]))
             and ((not (bool(st["archivedWorkflow"]) and bool(st["fencedFailed"]))) or bool(st["finalizerCompleted"]))
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 53:
+        st = last["s53"]
+        admitted_mods = set(itf_set(st["admittedModules"]))
+        left = str(st["peerSlotLeft"])
+        right = str(st["peerSlotRight"])
+        consumed = (
+            bool(st["contextDurableEnabled"])
+            or bool(st["contextDurableVetoed"])
+            or bool(st["undeclaredModulePulled"])
+            or bool(st["conflictDetected"])
+            or bool(st["silentPeerOverwrite"])
+            or (itf_int(st["runtimeOverlayCount"]) > 0)
+            or (itf_int(st["effectiveTrustCeiling"]) != itf_int(st["parentTrustCeiling"]))
+        )
+        cut_ok = (
+            (not bool(st["undeclaredModulePulled"]))
+            and ((not bool(st["contextDurableEnabled"])) or ("durable" in admitted_mods))
+            and (not bool(st["runtimeExpandedCompile"]))
+        )
+        grant_ok = (
+            ((not bool(st["contextDurableVetoed"])) or (not bool(st["contextDurableEnabled"])))
+            and (itf_int(st["effectiveTrustCeiling"]) <= itf_int(st["parentTrustCeiling"]))
+        )
+        epistemic_ok = (not bool(st["silentPeerOverwrite"])) and (
+            (not (left != "" and right != "" and left != right)) or bool(st["conflictDetected"])
         )
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
