@@ -17,6 +17,16 @@
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-open journal-close! journal-get)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
+                 FunflowNode.
+                 EffectClass.
+                 PureCAS.
+                 VerifiedEpistemic.
+                 FencedEffect.
+                 funflow-admit-node-effect
+                 funflow-envelope-meet
+                 WorkspaceTopology.
+                 funflow-workspace-plan
+                 funflow-invalidate-premises
                  OrchestratorStrategy.
                  ParallelFrontierStrategy.
                  TieredModelStrategy.
@@ -32,10 +42,22 @@
                  WorktreeNode.
                  TaskNode.
                  SubTaskNode.
-                 define-repo!
-                 define-worktree!
-                 define-durable-task!
-                 define-orchestrator-strategy!
+                 DetourNode.
+                 BlockerDetourNode.
+                 SideQuestDetourNode.
+                 CompletedExit.
+                 ParkedExit.
+                 CancelledExit.
+                 PromotedToTaskExit.
+                 MainlineStepAnchor.
+                 durable-reconcile-detour-exit
+                 task-apply-org-overlay
+                 task-reanchor-mainline
+                 shared-context-perceive-claims
+                 shared-context-assert-write-owner
+                 shared-context-claim!
+                 shared-context-extend!
+                 shared-context-handover!
                  node-effective-rules
                  task-artifact-path
                  task-funflow-dag
@@ -50,14 +72,14 @@
 
 (export durable-funflow-orchestrator-test)
 
-(define-repo! TestRepo.
+(.def (TestRepo. @ RepoNode.)
   repo-id: "marlin-agent-core"
   index-path: "index.org"
   policy: (.o (:: @ DurableTaskPolicy.)
               focused-tab-archive: 'on-blur
               max-concurrency: 2))
 
-(define-worktree! TestWorktree. TestRepo.
+(.def (TestWorktree. @ [TestRepo. WorktreeNode.])
   worktree: "wt/auth-refactor"
   branch: "feat/auth-refactor"
   source-cut: "sha256:cut-100"
@@ -66,7 +88,7 @@
               focused-tab-archive: 'on-blur
               max-concurrency: 2))
 
-(define-orchestrator-strategy! StrictCustomStrategy. DurableGovernedStrategy.
+(.def (StrictCustomStrategy. @ DurableGovernedStrategy.)
   name: 'strict-custom
   require-sod-reviewer: #t
   (.admit-node =>
@@ -75,7 +97,7 @@
         (and (base-admit node context)
              (not (eq? (.ref node 'id) 'forbidden-node)))))))
 
-(define-durable-task! AuthRefactorTask. TestWorktree.
+(.def (AuthRefactorTask. @ [TestWorktree. TaskNode.])
   task-id: "task-auth-01"
   org-path: "work/task-auth-01.org"
   strategy: StrictCustomStrategy.)
@@ -285,6 +307,150 @@
                 (check-equal? (and (string-contains (.ref reopened 'next-task-org) "* TODO") #t) #t)
                 (check-equal? (not (string-contains (.ref reopened 'next-index-org) ":ARCHIVE:")) #t)
                 (check-equal? (object? (journal-get journal "orchestrator:reopen:task-auth-01")) #t))))
+          (lambda ()
+            (journal-close! journal)
+            (when (file-exists? jpath) (delete-file jpath))))))
+
+    (test-case "Slice 49: Three-State CLOS Effect admission, monotonic OrgOverlay meet, premise invalidation, and WorkspaceTopology"
+      (let* ((pure-node (funflow-dag-node 'parse-org effect-class: PureCAS. source-cut: "cut-1"
+                                          premise-digests: '(("pkg" . "sha-v1"))))
+             (ep-node (funflow-dag-node 'gen-patch needs: '(parse-org)
+                                        effect-class: VerifiedEpistemic. source-cut: "cut-1"
+                                        premise-digests: '(("pkg" . "sha-v1"))))
+             (fenced-node (funflow-dag-node 'git-push needs: '(gen-patch)
+                                            effect-class: FencedEffect. source-cut: "cut-1"
+                                            idempotency-key: "push-cut-1"))
+             (other-node (funflow-dag-node 'independent-doc effect-class: PureCAS. source-cut: "cut-1"
+                                           premise-digests: '(("doc" . "sha-d1"))))
+             (r-pure (funflow-admit-node-effect pure-node envelope: (.o bind-these: #f claims-exhaustive?: #f)))
+             (r-ep-deny (funflow-admit-node-effect ep-node envelope: (.o bind-these: #f has-endorsement?: #f live-cut: "cut-1")))
+             (r-ep-ok (funflow-admit-node-effect ep-node envelope: (.o bind-these: #f has-endorsement?: #t live-cut: "cut-1")))
+             (r-fenced-unexh (funflow-admit-node-effect fenced-node
+                               envelope: (.o bind-these: #f claims-exhaustive?: #f has-authorized-token?: #t has-endorsement?: #t live-cut: "cut-1")))
+             (r-fenced-ok (funflow-admit-node-effect fenced-node
+                            envelope: (.o bind-these: #f claims-exhaustive?: #t has-authorized-token?: #t has-endorsement?: #t live-cut: "cut-1")))
+             (dag (funflow-dag-build (list pure-node ep-node fenced-node other-node)))
+             (inv (funflow-invalidate-premises dag '(("pkg" . "sha-v2") ("doc" . "sha-d1"))))
+             ;; Monotonic OrgOverlay(g) meet cannot escalate trust-ceiling or can-push?
+             (parent-env (.o bind-these: #f domain: "marlin" trust-ceiling: 2 lease-start: 10 lease-end: 50 can-write?: #t can-push?: #f))
+             (task-with-env (.o (:: @ AuthRefactorTask.) bind-these: #f restriction-envelope: parent-env))
+             (overlay (.o bind-these: #f max-parallel: 6
+                          restriction-envelope: (.o bind-these: #f trust-ceiling: 4 lease-start: 5 lease-end: 100 can-write?: #t can-push?: #t)))
+             (overlaid (task-apply-org-overlay task-with-env overlay))
+             (eff-env (.ref overlaid 'restriction-envelope))
+             ;; Multi-repo WorkspaceTopology pin plan + remote drift probe
+             (ws (.o (:: @ WorkspaceTopology.)
+                     bind-these: #f
+                     workspace-id: "tao3k-suite"
+                     repos: (list (.o bind-these: #f repo-id: "yuanxu" local-head: "aaa")
+                                  (.o bind-these: #f repo-id: "lab" local-head: "bbb")
+                                  (.o bind-these: #f repo-id: "marlin" local-head: "ccc"))
+                     pin-edges: '(("lab" . "yuanxu") ("marlin" . "lab"))))
+             (ws-plan (funflow-workspace-plan ws remote-heads: '(("yuanxu" . "aaa") ("lab" . "bbb-remote") ("marlin" . "ccc")))))
+        (check-equal? (.ref r-pure 'admitted?) #t)
+        (check-equal? (.ref r-ep-deny 'admitted?) #f)
+        (check-equal? (.ref r-ep-ok 'admitted?) #t)
+        (check-equal? (.ref r-fenced-unexh 'admitted?) #f)
+        (check-equal? (.ref r-fenced-unexh 'reason) 'fenced-effect-blocked-by-omitted-alternatives)
+        (check-equal? (.ref r-fenced-ok 'admitted?) #t)
+        (check-equal? (.ref inv 'stale-nodes) '(parse-org gen-patch git-push))
+        (check-equal? (.ref inv 'unaffected-nodes) '(independent-doc))
+        (check-equal? (.ref eff-env 'trust-ceiling) 2)
+        (check-equal? (.ref eff-env 'lease-start) 10)
+        (check-equal? (.ref eff-env 'lease-end) 50)
+        (check-equal? (.ref eff-env 'can-push?) #f)
+        (check-equal? (.ref ws-plan 'valid?) #t)
+        (check-equal? (.ref ws-plan 'any-remote-drift?) #t)
+        (check-equal? (.ref ws-plan 'push-order) '(yuanxu lab marlin))))
+
+    (test-case "Slice 49: Scoped Detour 4-exit CLOS reconciler, 0-token re-anchor, and Zero-SubAgent shared-context ownership"
+      (let* ((blocker-detour (.o (:: @ BlockerDetourNode.) bind-these: #f return-anchor: "step-scheme"))
+             (side-detour (.o (:: @ SideQuestDetourNode.) bind-these: #f return-anchor: "step-scheme"))
+             (anchor (.o (:: @ MainlineStepAnchor.) bind-these: #f anchor-id: "step-scheme"
+                         mainline-counterexample-core: '("gambit-oN-rule")))
+             (r-comp (durable-reconcile-detour-exit blocker-detour
+                       (.o (:: @ CompletedExit.) bind-these: #f outcome-receipt-digest: "sha256:rec-1" defeat-conditions: '("poo-bind-these"))
+                       anchor))
+             (r-park (durable-reconcile-detour-exit side-detour
+                       (.o (:: @ ParkedExit.) bind-these: #f custody-oid: "gitops-custody:oid-42")
+                       anchor))
+             (r-cancel-bad (durable-reconcile-detour-exit blocker-detour
+                             (.o (:: @ CancelledExit.) bind-these: #f defeat-conditions: '())
+                             anchor))
+             (r-cancel-ok (durable-reconcile-detour-exit blocker-detour
+                            (.o (:: @ CancelledExit.) bind-these: #f defeat-conditions: '("dead-end-api-v1"))
+                            anchor))
+             (r-promote (durable-reconcile-detour-exit blocker-detour
+                          (.o (:: @ PromotedToTaskExit.) bind-these: #f promoted-task-id: "task-funflow-migration")
+                          anchor))
+             ;; 0-token re-anchor blocks Auto-Archive while blocker detour is open
+             (detour-org
+              (string-append
+               "* IN_PROGRESS Mainline Task [1/2]\n"
+               ":PROPERTIES:\n"
+               ":ID: task-auth-01\n"
+               ":END:\n"
+               "** DONE Design\n"
+               ":PROPERTIES:\n"
+               ":ID: step-design\n"
+               ":ROLE: mainline\n"
+               ":END:\n"
+               "** TODO Blocker Detour\n"
+               ":PROPERTIES:\n"
+               ":ID: detour-1\n"
+               ":ROLE: detour\n"
+               ":DETOUR_KIND: blocker\n"
+               ":RETURN_ANCHOR: step-design\n"
+               ":DETOUR_DEPTH: 3\n"
+               ":END:\n"))
+             (align (task-reanchor-mainline AuthRefactorTask. detour-org mainline-core: '("gambit-oN-rule") max-detour-depth: 2))
+             ;; Zero-SubAgent shared-context `:ID:` ownership + Extend-Never-Overwrite + expiry takeover
+             (jpath (string-append (make-temporary-file-name "marlin-claim-journal-") ".sqlite"))
+             (journal (journal-open jpath)))
+        (dynamic-wind
+          (lambda () (void))
+          (lambda ()
+            (check-equal? (.ref r-comp 'admitted?) #t)
+            (check-equal? (.ref r-comp 'folded-disclosure-depth) 0)
+            (check-equal? (.ref r-park 'admitted?) #t)
+            (check-equal? (.ref r-park 'unblocks-mainline?) #t)
+            (check-equal? (.ref r-cancel-bad 'admitted?) #f)
+            (check-equal? (.ref r-cancel-ok 'admitted?) #t)
+            (check-equal? (and (member "gambit-oN-rule" (.ref r-cancel-ok 'next-counterexample-core))
+                               (member "dead-end-api-v1" (.ref r-cancel-ok 'next-counterexample-core)) #t)
+                          #t)
+            (check-equal? (.ref r-promote 'promoted-task-id) "task-funflow-migration")
+            (check-equal? (.ref align 'auto-archive-blocked?) #t)
+            (check-equal? (.ref align 'depth-guard-triggered?) #t)
+            (check-equal? (.ref align 'return-anchor-id) "step-design")
+            (let* ((claimed (shared-context-claim! journal "task-auth-01" "step-rust" "agent:alpha"
+                                                   worktree: "wt/auth-refactor" now: 100 ttl: 60
+                                                   org-source: sample-active-task-org))
+                   (org1 (.ref claimed 'next-org-source))
+                   (claims1 (shared-context-perceive-claims org1))
+                   (beta-overwrite (shared-context-assert-write-owner org1 "step-rust" "agent:beta"))
+                   (extended (shared-context-extend! journal "task-auth-01" "step-rust" "step-rust-ext-1"
+                                                     "human:guangtao" "Human steering note"
+                                                     body: "Keep Rust ABI zero-copy" role: "human-steering"
+                                                     now: 110 org-source: org1))
+                   (org2 (.ref extended 'next-org-source))
+                   (still-alpha (shared-context-assert-write-owner org2 "step-rust" "agent:alpha"))
+                   (early-takeover (shared-context-handover! journal "task-auth-01" "step-rust" "agent:beta"
+                                                             now: 120 custody-oid: "custody:oid-1" org-source: org2))
+                   (expired-takeover (shared-context-handover! journal "task-auth-01" "step-rust" "agent:beta"
+                                                               now: 160 custody-oid: "custody:oid-1" org-source: org2)))
+              (check-equal? (.ref claimed 'claimed?) #t)
+              (check-equal? (length claims1) 1)
+              (check-equal? (.ref (car claims1) 'owner-actor) "agent:alpha")
+              (check-equal? (.ref beta-overwrite 'admitted?) #f)
+              (check-equal? (.ref beta-overwrite 'reason) 'non-owner-overwrite-forbidden)
+              (check-equal? (.ref extended 'extended?) #t)
+              (check-equal? (.ref still-alpha 'admitted?) #t)
+              (check-equal? (.ref early-takeover 'handed-over?) #f)
+              (check-equal? (.ref early-takeover 'reason) 'active-lease-not-expired)
+              (check-equal? (.ref expired-takeover 'handed-over?) #t)
+              (check-equal? (.ref expired-takeover 'claim-lease-epoch) 2)
+              (check-equal? (.ref expired-takeover 'next-owner) "agent:beta")))
           (lambda ()
             (journal-close! journal)
             (when (file-exists? jpath) (delete-file jpath))))))))

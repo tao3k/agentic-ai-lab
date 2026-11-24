@@ -20,5 +20,6 @@ lean_lib ContextGovernanceChain where
     `«45-org-sexpr-gql-candidate-exchange-search»,
     `«46-durable-agenda-session-sandbox-governance»,
     `«48-progressive-disclosure-and-two-stage-org-repair»,
+    `«49-scoped-detour-funflow-concurrent-shared-context»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]

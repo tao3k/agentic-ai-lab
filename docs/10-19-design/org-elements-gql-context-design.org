@@ -47,49 +47,82 @@ Declarativity is the primary contract of the library =interface.ss= surface
 (inspired by Doom Emacs's clean separation between core engine mechanisms and
 thin declarative configuration):
 
-1. **=gerbil-poo= C4 Linearization & Objectified Tasks**:
-   - =Repo.= models a Git repository as the root prototype =A= of a
-     =gerbil-poo= **C4 linearization** chain (=A -> B -> C -> D=), owning the
-     shared parsed =OrgElementGraph= reference, Plan-A =index.org=, default
-     policies, and default =OrchestratorStrategy.=.
-   - =Worktree.= derives directly from =Repo.= via =(:: @ RepoA.)=, inheriting
-     the shared context object, =index.org= authority, and defaults while
-     overriding only worktree-specific bindings (=worktree=, =branch=,
-     =source-cut=, local write grants).
-   - =Task.= and =SubTask.= / =Extension.= objects derive via multi-prototype
-     C4 linearization (=(:: @ WorktreeB. OrgTaskBase.)=, =(:: @ TaskC. Mixin...)=),
-     supporting deterministic **Override** and =super= **Extension** while
-     sharing one underlying parsed Org Context graph at zero copy cost.
-   - Compile-time hygienic macros expand declarative repository, worktree,
-     task, and strategy definitions into validated POO values with zero runtime
-     =eval=.
-2. **Tweag-Inspired =FunFlow= CAS DAG & Epoch-Bounded Replanning**:
-   - Building on Tweag's Haskell =FunFlow= (Arrow static inspectability,
-     content-addressed store caching, crash resumability) and unified directly
-     under =tao3k/agentic-ai-lab/modules/funflow/= (=durable-dag.ss=,
-     =dependency-graph=, =scc=, =job-graph=, =after-start= finalizers,
-     =flow-compose=, =strategy=), complex Org task trees map 1-to-1 to POO
-     =FunFlow= DAGs.
-   - **Static Pre-Check (0 Tokens)**: Validates acyclicity (=scc=),
-     =:DEPENDS_ON:= closure, =after-start= finalizers, and per-node
-     =ContextScope= / =RestrictionEnvelope= / =UseGrant= before execution.
-   - **CAS Resumability**: Computes deterministic node fingerprints
-     =sha256(source-cut, input-org-slice-digest, node-contract-digest, policy-digest)=
-     against =durable-journal=; already-verified nodes skip at zero token cost
-     on restart or re-run.
-   - **Epoch-Bounded Dynamic Replanning**: Each generation =g= is 100%
-     statically verified; when an agent appends a newly discovered blocker to
-     shared Org (=g+1=), unchanged completed nodes stay satisfied from CAS
-     while affected downstream frontier waves re-sequence.
-3. **Shared Context + Governance Scope Isolation**:
-   - All Task and Agent objects share one authoritative Org Context graph,
-     while Lab's Governance plane (Slices 40–45: =ContextScope=, 6-tuple
-     =RestrictionEnvelope= lower-semilattice =meet=, 5-level =TrustLattice=
-     non-self-review promotion, disjoint =:ID:= subtree leases, and one-shot
-     =AuthorizedEffectToken=) isolates read/write authority across roles and
-     worktrees — eliminating the fleet-memory leakage, stale propagation, and
-     worktree-drift failures observed in conventional coding agents.
-4. **MOP =.defgeneric= Dispatch Protocols & Generic =Durable= Orchestrator**:
+1. **=gerbil-poo= C4 Linearization, POO-Constrained Macro Governance & Multi-Repo =WorkspaceTopology.=**:
+   - =WorkspaceTopology.= composes multiple =RepoNode.= roots with explicit Pin
+     dependency edges, a =PreFlightRemoteDriftProbe= (=PureCAS=), and 3-party
+     SoD =DeclassificationCert= for cross-repo context transfers.
+   - =RepoNode.= -> =WorktreeNode.= -> =TaskNode.= -> =SubTaskNode.= /
+     =DetourNode.= compose via =gerbil-poo= C4 linearization with POOF constant
+     slots =(slot := expr)=, runtime lexical slot references, and ==>= / ==>.+=
+     refinements — strictly adhering to =45-40-10-poo-constrained-gerbil-macro-governance.org=
+     (value-first POO + =ObjectContract= admission + fail-closed CLOS
+     =.defmethod-bundle= for multi-axis crossings; no Doom-style business
+     =define-*!= wrapper macros and zero runtime =eval=).
+   - **Bidirectional Lens (=OrgOverlay(g)=)**: Inert Org =:PROPERTIES:= and
+     =:DEPENDS_ON:= edits validate through =OrgOverlayContract= and compose as
+     the top C4 mixin for Epoch =g=, propagating hot policy refinements to
+     inner lexical slots while monotonically narrowing =RestrictionEnvelope=
+     via =restriction-meet=.
+2. **Tweag-Inspired =FunFlow= Three-State Effect Algebra, CAS Resumability & Premise Invalidation**:
+   - Owned directly under =tao3k/agentic-ai-lab/modules/funflow/=
+     (=durable-dag.ss=, =dependency-graph=, =scc=, =job-graph=, =after-start=
+     finalizers, =flow-compose=, =strategy=), complex Org task trees map 1-to-1
+     to POO =FunFlow= DAGs with three effect classes dispatched via CLOS
+     =(admit-node-effect node effect-class envelope)=:
+     - =PureCAS.=: deterministic steps skipped on exact input CAS hit.
+     - =VerifiedEpistemic.=: stochastic LLM steps reused via Semantic CAS when
+       bound to live =source-cut= and backed by Verifier / =EndorsementReceipt=.
+     - =FencedEffect.=: irreversible side-effects gated by one-shot
+       =AuthorizedEffectToken=, unique =idempotency-key=, =after-start=
+       finalizer, and =admit-security-branch= (=claims-exhaustive?: #t=).
+   - **Premise Invalidation (0 Tokens)**: Each node binds =premise-digests=;
+     when a concurrent edit or detour shifts a premise, =ASCENT=
+     =assumption_invalidated= marks only affected downstream nodes
+     =stale-premise= while keeping unaffected CAS entries valid across
+     =funflow-replan-epoch (g -> g+1)=.
+3. **Scoped Detours, 0-Token Org-Elements Re-Anchoring & Four Exit States**:
+   - Humans and concurrent peer Agents open side-quests strictly inside the
+     parent =Task Scope= as =:ROLE: detour= subtrees carrying =:DETOUR_KIND:=
+     (=blocker= | =side-quest=) and =:RETURN_ANCHOR: <mainline-id>=.
+   - Dual-focus progressive disclosure keeps the active detour at =L2/L3= while
+     keeping the mainline Goal spine and =:RETURN_ANCHOR:= pinned at =L0/L1=.
+   - When a detour concludes, zero-token Org Elements + ISO GQL + =ASCENT=
+     runs =task-reanchor-mainline= and dispatches fail-closed CLOS
+     =(reconcile-detour-exit detour exit-state anchor)= across four exits:
+     - =CompletedExit.=: distills receipts & counterexamples via
+       =admit-consolidation= back to =:RETURN_ANCHOR:=, folds detour to =L0=,
+       and unblocks mainline dependencies.
+     - =ParkedExit.=: snapshots dirty worktree edits into GitOps =custody= /
+       =org-attach= (=custody-oid=), restores a clean worktree, and leaves
+       non-blocking mainlines unencumbered.
+     - =CancelledExit.=: discards dirty code edits while **mandatorily
+       preserving =defeat-conditions=** into the mainline Non-Droppable
+       Counterexample Core.
+     - =PromotedToTaskExit.=: when =max_detour_depth= or scope boundaries are
+       exceeded, =fission-subtree= promotes the detour into a first-class
+       top-level Task Tab in =index.org=.
+4. **Zero-SubAgent Concurrent Shared Context & Per-=:ID:= Ownership Claims (Extend, Never Overwrite)**:
+   - Unlike mainstream "SubAgent" frameworks that spawn isolated child chats
+     which re-read the codebase from scratch (=O(K*N)=) and lose shared state,
+     there are **no isolated SubAgents**: sequential or concurrent, Humans and
+     multiple peer Agents operate symmetrically over **one live Shared Org
+     Context** in which **both information and task state reside**.
+   - Every working table / task / subtree =:ID:= records its live Governance
+     ownership directly in =:PROPERTIES:= (=:OWNER_ACTOR:=, =:CLAIM_STATE:=,
+     =:CLAIM_LEASE_EPOCH:=, =:CLAIM_SCOPE_DIGEST:=, =:CLAIM_WORKTREE:=),
+     fenced by =durable-journal= and Rust =OrgGovernanceLedger=.
+   - **Ambient Cross-Actor Perception (0 Re-Read)**: The moment Agent =A= (or
+     a Human) claims =:ID: X= in Shared Context, every peer Agent =B, C= and
+     Human immediately perceives that live claim at =L0/L1= via zero-token Org
+     Elements — zero duplicate reads, zero duplicate work, zero hidden silos.
+   - **Extend-Never-Overwrite Invariant**: If =:ID: X= is =claimed-active= by
+     actor =A=, any peer actor =B != A= (Human or Agent) **cannot overwrite**
+     =:ID: X=. Instead, =B= contributes by extending on top of =X= via a fresh
+     disjoint child/steering subtree =:ID: Y= (=:EXTENDS_ID: X=, disjoint byte
+     span, cleanly rebased via =funs-subtree-mediation= + =funs-delta=), or via
+     explicit fenced handover incrementing =:CLAIM_LEASE_EPOCH:= (preserving
+     =A='s partial edits in GitOps =custody=).
+5. **MOP =.defgeneric= Protocols & Generic =Durable= Orchestrator**:
    - Extensible MOP generics: =node-effective-rules=, =task-artifact-path=,
      =task-funflow-dag=, =task-orchestration-plan=, =task-archive-transition=,
      and =project-workbench-tabs=.
@@ -97,9 +130,12 @@ thin declarative configuration):
      =policy-clock=, =use-host=, and =session-host= to drive objectified
      =OrchestratorStrategy.= execution, crash-safe replay, and atomic
      Auto-Archive (requiring =root=DONE=, every reachable =FunFlow= DAG node
-     and child TODO =DONE=, all checklists =[X]=, zero pending finalizers, and
-     zero in-flight journal attempts before archiving, with zero TUI coupling).
+     and blocker detour =DONE=, all mainline invariants satisfied, all
+     checklists =[X]=, zero pending finalizers, and zero in-flight journal
+     attempts before archiving, with zero TUI coupling).
 
 See also [[file:10.06-poo-module-system/agentic-ai-context/43-ascent-security-branch-omission-refinement.org][Slice 43 (ASCENT branch admissibility)]],
-[[file:10.06-poo-module-system/agentic-ai-context/45-org-sexpr-gql-candidate-exchange-search.org][Slice 45 (Org S-expr + GQL + CandidateExchange)]], and
-[[file:10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.org][Slice 46 (Durable Agenda & Session Governance)]].
+[[file:10.06-poo-module-system/agentic-ai-context/45-org-sexpr-gql-candidate-exchange-search.org][Slice 45 (Org S-expr + GQL + CandidateExchange)]],
+[[file:10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.org][Slice 46 (Durable Agenda & Session Governance)]],
+[[file:10.06-poo-module-system/agentic-ai-context/48-progressive-disclosure-and-two-stage-org-repair.org][Slice 48 (Progressive Disclosure & Two-Stage Repair)]], and
+[[file:10.06-poo-module-system/agentic-ai-context/49-scoped-detour-funflow-concurrent-shared-context.org][Slice 49 (Scoped Detours, Three-State FunFlow, and Concurrent Shared-Context Ownership)]].

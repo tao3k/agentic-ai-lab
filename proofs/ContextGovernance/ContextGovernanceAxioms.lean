@@ -9,6 +9,7 @@ import «44-temporal-causal-survival-and-memory-quotient»
 import «45-org-sexpr-gql-candidate-exchange-search»
 import «46-durable-agenda-session-sandbox-governance»
 import «48-progressive-disclosure-and-two-stage-org-repair»
+import «49-scoped-detour-funflow-concurrent-shared-context»
 import «47-end-to-end-context-governance-assurance-closure»
 import Lean.Util.CollectAxioms
 import Lean.Elab.Command
@@ -27,6 +28,7 @@ run_cmd do
     `OrgSexprGqlCandidateExchange,
     `DurableAgendaSessionSandboxGovernance,
     `ProgressiveDisclosureAndOrgRepair,
+    `ScopedDetourFunflowConcurrentContext,
     `EndToEndContextGovernanceClosure
   ]
   let mut declCount : Nat := 0
@@ -38,4 +40,4 @@ run_cmd do
           throwError "{name} depends on disallowed axiom {axiomName}"
   if declCount == 0 then
     throwError "Context Governance declarations were not loaded"
-  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 9 namespaces"
+  logInfo m!"CONTEXT-GOVERNANCE-LAKE-AXIOM-AUDIT-OK: {declCount} declarations across 10 namespaces"
