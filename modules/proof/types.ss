@@ -10,7 +10,8 @@
         (only-in :clan/poo/type define-type Type. element?)
         (only-in :std/list/list every))
 
-(export +agentic-ai-lab-proof-artifact-kind+
+(export ProofScope
+        +agentic-ai-lab-proof-artifact-kind+
         +agentic-ai-lab-proof-receipt-kind+
         +agentic-ai-lab-proof-impact-binding-kind+
         +agentic-ai-lab-proof-refinement-binding-kind+
@@ -182,3 +183,10 @@
   (element? AgenticAILabProofAssurance value))
 (def (agentic-ai-lab-proof-module? value)
   (element? AgenticAILabProofModule value))
+
+(define-type (ProofScope @ Type.)
+  identity: 'proof/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/proof/interface))))

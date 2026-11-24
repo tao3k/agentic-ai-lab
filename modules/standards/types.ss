@@ -11,7 +11,8 @@
         (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-all? yuanxu-any? yuanxu-list-of?))
 
-(export +agentic-ai-lab-standard-family-kind+
+(export StandardsScope
+        +agentic-ai-lab-standard-family-kind+
         +agentic-ai-lab-standard-failure-codes+
         +agentic-ai-lab-standard-artifact-ref-kind+
         +agentic-ai-lab-standard-artifact-source-kind+
@@ -834,3 +835,10 @@
   (element? AgenticAILabStandardValidationProvider value))
 (def (agentic-ai-lab-standard-materialization-context? value)
   (element? AgenticAILabStandardMaterializationContext value))
+
+(define-type (StandardsScope @ Type.)
+  identity: 'standards/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'library)
+                    (eq? (.ref value 'library) 'tao3k/agentic-ai-lab/modules/standards/interface))))

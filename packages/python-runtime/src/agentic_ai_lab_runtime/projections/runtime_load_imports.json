@@ -2,7 +2,7 @@
   "schema": "agentic-ai-lab.runtime-authoring-imports.v1",
   "owner": "Gerbil compiler runtime dependency closure",
   "roots": [
-    "core/modules/funflow/scenario.ss",
+    "modules/funflow/scenario.ss",
     "modules/workflow/profiles/funflow-library.ss",
     "modules/workflow/scenario/runtime-funflow.ss"
   ],

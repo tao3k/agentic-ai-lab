@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[3]
-ROOTS = ['core/modules/funflow/scenario.ss', 'modules/workflow/profiles/funflow-library.ss',
+ROOTS = ['modules/funflow/scenario.ss', 'modules/workflow/profiles/funflow-library.ss',
          'modules/workflow/scenario/runtime-funflow.ss']
 
 
@@ -24,7 +24,7 @@ def main():
         cwd=ROOT, check=True, capture_output=True, text=True, timeout=60)
     modules = list(dict.fromkeys(name for name in result.stdout.splitlines()
         if name.startswith(('clan/', 'tao3k/yuanxu/', 'tao3k/agentic-ai-lab/')) and ' ' not in name))
-    for name in ['yuanxu/profile-composition/selection-syntax',
+    for name in ['tao3k/yuanxu/profile-composition/selection-syntax',
                  'tao3k/agentic-ai-lab/modules/workflow/profiles/funflow-library']:
         if name not in modules:
             modules.append(name)
