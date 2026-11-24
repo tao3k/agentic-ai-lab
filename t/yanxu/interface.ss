@@ -36,5 +36,7 @@
       docker-sandbox: (.get selection modules docker-sandbox)
       cubeSandbox: (.get selection modules cubeSandbox)
       workflow: (.get selection modules workflow)
+      agent-sandbox: (.get selection modules agent-sandbox)
+      sandbox-core: (.get selection modules sandbox-core)
       c-abi-clock: (.get selection CAbi clock)))
 (def Lab (make-lab-dependencies tao3k/agentic-ai-lab.init.exports))

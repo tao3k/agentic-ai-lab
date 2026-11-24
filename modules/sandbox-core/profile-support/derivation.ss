@@ -1,4 +1,4 @@
-(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-metadata))
+(import (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/interface agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -12,8 +12,8 @@
         :tao3k/yuanxu/graph/interface
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
-        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
         :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract

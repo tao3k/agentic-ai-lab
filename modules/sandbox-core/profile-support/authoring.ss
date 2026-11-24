@@ -9,8 +9,8 @@
         (only-in :clan/poo/object .def .o .ref .slot? object?)
         :tao3k/yuanxu/module-system/schema/interface
         :tao3k/agentic-ai-lab/modules/sandbox-core/shared-object
-        :tao3k/agentic-ai-lab/modules/agent-sandbox/config
-        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/profile-validation
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
+        (only-in :tao3k/agentic-ai-lab/modules/agent-sandbox/interface
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
         :tao3k/agentic-ai-lab/modules/sandbox-core/resource-contract
