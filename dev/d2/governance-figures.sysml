@@ -76,4 +76,8 @@ package ContextGovernanceFigures {
     view delegationCedarToctou : InterconnectionView {
         expose DelegationAttenuationAndCedarToctou::DelegationAndToctouGovernanceSystem;
     }
+
+    view graphEngineConvergentTree : InterconnectionView {
+        expose GraphEngineConvergentTree::UnifiedGraphEngineSystem;
+    }
 }

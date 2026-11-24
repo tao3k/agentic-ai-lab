@@ -148,6 +148,11 @@
       input
       required-evidence-ids: (required-evidence-ids '())
       premise-ids: (premise-ids '())
+      depends-on-tasks: (depends-on-tasks '())
+      read-footprint: (read-footprint '())
+      write-footprint: (write-footprint '())
+      span: (span #f)
+      effect-class: (effect-class 'pure-cas)
       sandbox-profile: (sandbox-profile #f)
       env-digest: (env-digest "sha256:default-env")
       idempotency-key: (idempotency-key #f)
@@ -161,6 +166,11 @@
       input: input
       required-evidence-ids: required-evidence-ids
       premise-ids: premise-ids
+      depends-on-tasks: depends-on-tasks
+      read-footprint: read-footprint
+      write-footprint: write-footprint
+      span: span
+      effect-class: effect-class
       sandbox-profile: sandbox-profile
       env-digest: env-digest
       idempotency-key: idempotency-key
@@ -409,6 +419,9 @@
                        h))
                    (.ref g 'hypotheses))))
         (clone-graph g cut: next-cut obligations: updated-obs hypotheses: updated-hyps)))
+
+     ((eq? ekind 'advance-cut)
+      (clone-graph g cut: (opt-ref event 'cut next-cut)))
 
      ((eq? ekind 'cedar-revoked)
       (clone-graph g cut: next-cut cedar-grant-live?: #f))

@@ -30,5 +30,6 @@ lean_lib ContextGovernanceChain where
     `«56-ascent-governed-loop-termination»,
     `«57-obligation-fixpoint-reconciler»,
     `«58-delegation-attenuation-and-cedar-toctou-fence»,
+    `«59-graph-engine-convergent-tree-and-apex-join»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]

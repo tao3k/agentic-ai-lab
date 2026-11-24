@@ -22,6 +22,8 @@
         (only-in :std/list/list every filter)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/api
                  flow? adapter-result? adapter-result-value)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
+                 ParallelFrontierStrategy.)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/governed-runner
                  governed-funflow-run)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-assembly-pipeline
@@ -34,7 +36,8 @@
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-scope
                  agentic-ai-lab-ai-agentic-context-digest)
         "obligation-graph.ss"
-        "ascent-reconciler.ss")
+        "ascent-reconciler.ss"
+        "dag-frontier-scheduler.ss")
 
 (export make-typed-funflow-dag-patch
         make-bounded-competing-branches
@@ -231,7 +234,9 @@
       graph
       oracle-fn: (oracle-fn #f)
       funflow-runner: (funflow-runner #f)
-      context-spec: (context-spec #f))
+      context-spec: (context-spec #f)
+      dag-strategy: (dag-strategy ParallelFrontierStrategy.)
+      completed-cas: (completed-cas #f))
   (let* ((frontier (ascent-reconcile-frontier graph))
          (mode (.ref frontier 'frontier-mode)))
     (cond
@@ -274,72 +279,104 @@
             cas-hits: 0
             audit-capsule: cap)))
 
-     ;; 3. Deterministic FunFlow Frontier (STRICT PRECEDENCE, 0 LLM CALLS!)
+     ;; 3. Deterministic FunFlow C4 DAG Frontier (STRICT PRECEDENCE, 0 LLM, 0 Subagents!)
      ((eq? mode 'dispatch-deterministic-funflow)
       (unless funflow-runner
         (error "reconcile-once needs funflow-runner to execute ready deterministic tasks"))
-      (let loop ((tasks (.ref frontier 'ready-deterministic-tasks))
-                 (g-cur graph)
-                 (ran 0)
-                 (hits 0)
-                 (blocked? #f)
-                 (block-reason #f))
-        (if (or (null? tasks) blocked?)
-          (let* ((cap (seal-reconcile-capsule g-cur mode (or block-reason 'deterministic-frontier-completed)))
-                 (g-out (obligation-graph-append-capsule g-cur cap)))
+      (let ((plan (plan-funflow-c4-frontier
+                   graph
+                   (.ref frontier 'ready-deterministic-tasks)
+                   strategy: dag-strategy
+                   completed-cas: completed-cas)))
+        (if (not (.ref plan 'valid?))
+          (let* ((inbox-item (.o bind-these: #f
+                                 kind: 'agentic-ai-lab.loop-engine.human-inbox-item.v1
+                                 graph-id: (.ref graph 'graph-id)
+                                 cut: (.ref graph 'cut)
+                                 reason: (.ref plan 'reason)
+                                 action-authorized?: #f))
+                 (cap (seal-reconcile-capsule graph 'blocked-on-dag-cycle (.ref plan 'reason)))
+                 (g-out (obligation-graph-append-capsule
+                         (obligation-graph-add-human-inbox graph inbox-item) cap)))
             (.o bind-these: #f
                 kind: 'agentic-ai-lab.loop-engine.reconcile-step-result.v1
                 graph: g-out
                 frontier: frontier
-                mode: (if blocked? 'blocked-on-sandbox mode)
-                quiescent?: blocked?
+                frontier-plan: plan
+                mode: 'blocked-on-dag-cycle
+                quiescent?: #t
                 llm-calls-used: 0
-                det-tasks-executed: ran
-                cas-hits: hits
-                blocked-reason: block-reason
+                det-tasks-executed: 0
+                cas-hits: 0
+                subagents-spawned: 0
+                blocked-reason: (.ref plan 'reason)
                 audit-capsule: cap))
-          (let* ((t (car tasks))
-                 (tid (.ref t 'task-id))
-                 (ob-id (.ref t 'obligation-id))
-                 (pdig (obligation-graph-premise-digest g-cur ob-id (.ref t 'premise-ids)))
-                 (cut-str (string-append "cut-" (number->string (.ref g-cur 'cut))))
-                 (ff-res (governed-funflow-run
-                          funflow-runner
-                          (.ref t 'flow)
-                          (.ref t 'input)
-                          capsule-id: (string-append (.ref g-cur 'graph-id) ":" cut-str)
-                          sandbox-override: (.ref t 'sandbox-profile)
-                          env-digest-override: (.ref t 'env-digest)
-                          idempotency-key: (.ref t 'idempotency-key)
-                          idempotency-commits: (.ref t 'idempotency-commits))))
-            (if (not (.ref ff-res 'admitted?))
-              (let ((g-blk (obligation-graph-add-human-inbox
-                            g-cur
-                            (.o bind-these: #f
-                                kind: 'agentic-ai-lab.loop-engine.human-inbox-item.v1
-                                task-id: tid
-                                obligation-id: ob-id
-                                reason: (.ref ff-res 'reason)
-                                action-authorized?: #f))))
-                (loop '() g-blk ran hits #t (.ref ff-res 'reason)))
-              (let* ((raw-val (.ref ff-res 'value))
-                     (payload (if (adapter-result? raw-val) (adapter-result-value raw-val) raw-val))
-                     (ev (make-evidence-fact
-                          (.ref t 'produces-evidence-id)
-                          payload
-                          cut: (.ref g-cur 'cut)
-                          premise-ids: (.ref t 'premise-ids)
-                          origin-tier: 'observed-fact
-                          endorsed?: #t))
-                     (g-next (obligation-graph-mark-task-completed
-                              (obligation-graph-with-evidence g-cur ev)
-                              tid pdig))
-                     (is-hit? (and (.slot? ff-res 'cas-hit?) (.ref ff-res 'cas-hit?))))
-                (loop (cdr tasks)
-                      g-next
-                      (+ ran 1)
-                      (if is-hit? (+ hits 1) hits)
-                      #f #f)))))))
+          (let loop ((tasks (.ref plan 'parallel-batch))
+                     (g-cur graph)
+                     (ran 0)
+                     (hits 0)
+                     (blocked? #f)
+                     (block-reason #f))
+            (if (or (null? tasks) blocked?)
+              (let* ((cap (seal-reconcile-capsule g-cur mode (or block-reason 'deterministic-frontier-completed)))
+                     (g-out (obligation-graph-append-capsule g-cur cap)))
+                (.o bind-these: #f
+                    kind: 'agentic-ai-lab.loop-engine.reconcile-step-result.v1
+                    graph: g-out
+                    frontier: frontier
+                    frontier-plan: plan
+                    mode: (if blocked? 'blocked-on-sandbox mode)
+                    quiescent?: blocked?
+                    llm-calls-used: 0
+                    det-tasks-executed: ran
+                    cas-hits: hits
+                    parallel-batch-size: (length (.ref plan 'parallel-batch))
+                    deferred-by-conflict: (length (.ref plan 'deferred-tasks))
+                    subagents-spawned: 0
+                    blocked-reason: block-reason
+                    audit-capsule: cap))
+              (let* ((t (car tasks))
+                     (tid (.ref t 'task-id))
+                     (ob-id (.ref t 'obligation-id))
+                     (pdig (obligation-graph-premise-digest g-cur ob-id (.ref t 'premise-ids)))
+                     (cut-str (string-append "cut-" (number->string (.ref g-cur 'cut))))
+                     (ff-res (governed-funflow-run
+                              funflow-runner
+                              (.ref t 'flow)
+                              (.ref t 'input)
+                              capsule-id: (string-append (.ref g-cur 'graph-id) ":" cut-str)
+                              sandbox-override: (.ref t 'sandbox-profile)
+                              env-digest-override: (.ref t 'env-digest)
+                              idempotency-key: (.ref t 'idempotency-key)
+                              idempotency-commits: (.ref t 'idempotency-commits))))
+                (if (not (.ref ff-res 'admitted?))
+                  (let ((g-blk (obligation-graph-add-human-inbox
+                                g-cur
+                                (.o bind-these: #f
+                                    kind: 'agentic-ai-lab.loop-engine.human-inbox-item.v1
+                                    task-id: tid
+                                    obligation-id: ob-id
+                                    reason: (.ref ff-res 'reason)
+                                    action-authorized?: #f))))
+                    (loop '() g-blk ran hits #t (.ref ff-res 'reason)))
+                  (let* ((raw-val (.ref ff-res 'value))
+                         (payload (if (adapter-result? raw-val) (adapter-result-value raw-val) raw-val))
+                         (ev (make-evidence-fact
+                              (.ref t 'produces-evidence-id)
+                              payload
+                              cut: (.ref g-cur 'cut)
+                              premise-ids: (.ref t 'premise-ids)
+                              origin-tier: 'observed-fact
+                              endorsed?: #t))
+                         (g-next (obligation-graph-mark-task-completed
+                                  (obligation-graph-with-evidence g-cur ev)
+                                  tid pdig))
+                         (is-hit? (and (.slot? ff-res 'cas-hit?) (.ref ff-res 'cas-hit?))))
+                    (loop (cdr tasks)
+                          g-next
+                          (+ ran 1)
+                          (if is-hit? (+ hits 1) hits)
+                          #f #f)))))))))
 
      ;; 4. Stateless Typed Leaf SynthesisOracle (ONLY when deterministic frontier is empty!)
      ((eq? mode 'invoke-typed-synthesis-oracle)
@@ -424,7 +461,9 @@
       graph
       oracle-fn: (oracle-fn #f)
       funflow-runner: (funflow-runner #f)
-      context-spec: (context-spec #f))
+      context-spec: (context-spec #f)
+      dag-strategy: (dag-strategy ParallelFrontierStrategy.)
+      completed-cas: (completed-cas #f))
   (let ((cap-steps (.ref graph 'max-reconcile-steps)))
     (let loop ((g graph) (step 0) (llm-total 0) (det-total 0) (cas-total 0) (trace-rev '()))
       (if (>= step cap-steps)
@@ -441,7 +480,9 @@
         (let* ((res (reconcile-once g
                                     oracle-fn: oracle-fn
                                     funflow-runner: funflow-runner
-                                    context-spec: context-spec))
+                                    context-spec: context-spec
+                                    dag-strategy: dag-strategy
+                                    completed-cas: completed-cas))
                (g1 (.ref res 'graph))
                (llm1 (+ llm-total (.ref res 'llm-calls-used)))
                (det1 (+ det-total (.ref res 'det-tasks-executed)))
@@ -465,12 +506,16 @@
       events
       oracle-fn: (oracle-fn #f)
       funflow-runner: (funflow-runner #f)
-      context-spec: (context-spec #f))
+      context-spec: (context-spec #f)
+      dag-strategy: (dag-strategy ParallelFrontierStrategy.)
+      completed-cas: (completed-cas #f))
   (let* ((init-report (reconcile-to-fixed-point
                        initial-graph
                        oracle-fn: oracle-fn
                        funflow-runner: funflow-runner
-                       context-spec: context-spec)))
+                       context-spec: context-spec
+                       dag-strategy: dag-strategy
+                       completed-cas: completed-cas)))
     (let loop ((evs events)
                (g (.ref init-report 'graph))
                (llm-total (.ref init-report 'total-llm-calls))
@@ -492,7 +537,9 @@
                      g-ev
                      oracle-fn: oracle-fn
                      funflow-runner: funflow-runner
-                     context-spec: context-spec)))
+                     context-spec: context-spec
+                     dag-strategy: dag-strategy
+                     completed-cas: completed-cas)))
           (loop (cdr evs)
                 (.ref rep 'graph)
                 (+ llm-total (.ref rep 'total-llm-calls))

@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths:
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-9]-*'
-      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-8]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-9]-*'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py'
       - 'proofs/ContextGovernance/**'
@@ -19,7 +19,7 @@ on:
   pull_request:
     paths:
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/4[0-9]-*'
-      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-8]-*'
+      - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/5[0-9]-*'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org'
       - 'docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py'
       - 'proofs/ContextGovernance/**'

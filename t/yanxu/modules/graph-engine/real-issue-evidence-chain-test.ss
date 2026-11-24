@@ -22,21 +22,21 @@
                  make-funflow-cas-store)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/governed-runner
                  make-governed-funflow-runner)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/obligation-graph
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/obligation-graph
                  make-obligation make-evidence-fact
                  make-deterministic-task-node make-synthesis-hole
                  make-obligation-graph)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/ascent-reconciler
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/ascent-reconciler
                  ascent-reconcile-frontier)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/synthesis-oracle
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/synthesis-oracle
                  make-raw-tool-call-proposal
                  admit-synthesis-proposal
                  reconcile-to-fixed-point
                  reconcile-event-stream)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/durable-event-bridge
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/durable-event-bridge
                  work-snapshot->obligation-graph
                  durable-journal-event->obligation-event)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/delegation-fence
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/delegation-fence
                  make-capability-envelope
                  capability-permitted?
                  attenuate-delegation-envelope

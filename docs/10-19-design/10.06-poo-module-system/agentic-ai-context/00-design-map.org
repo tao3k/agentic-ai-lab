@@ -691,7 +691,18 @@ issues from =anthropics/claude-code= (=#25000=, =#23983=, =#107019=, =#6036=,
 =#20830=, =#51799=), formalizing multi-hop capability attenuation, parent
 denylist dominance, atomic Cedar revocation & cut-drift TOCTOU fencing, and
 Durable Work → =ObligationGraph= unclosed-subagent recovery
-(=modules/loop-engine/{durable-event-bridge,delegation-fence}.ss=).
+(=modules/graph-engine/{durable-event-bridge,delegation-fence}.ss=).
+
+[[file:59-graph-engine-convergent-tree-and-apex-join.org][59: Unified GraphEngine — FunFlow C4 Disjoint DAG Frontier & Convergent Tree]]
+and its [[file:59-graph-engine-convergent-tree-and-apex-join.sysml][SysML]], [[file:59-graph-engine-convergent-tree-and-apex-join.qnt][Quint]],
+and [[file:59-graph-engine-convergent-tree-and-apex-join.lean][Lean]] artifacts promote the unified graph-driven execution core into
+=modules/graph-engine/= (=interface.ss=, =dag-frontier-scheduler.ss=,
+=convergent-tree.ss=), proving strict separation between disjoint FunFlow C4
+DAG parallel fan-out (=0 subagents=, =0 LLM=) and subordinate Trunk-anchored
+branches (=ContextEnrichmentDetour.=, =DivergentExplorationBranch.=,
+=SubordinateTaskBranch.=) that can complete local tasks yet never directly
+finalize the Trunk, converging solely into the mission Apex with monotonic
+counterexample preservation and Apex-driven cancellation of optional branches.
 
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
@@ -702,11 +713,11 @@ Durable Work → =ObligationGraph= unclosed-subagent recovery
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=58= both
-horizontally (=47= imports all eighteen upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=59= both
+horizontally (=47= imports all nineteen upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 19-namespace axiom audit + 130 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all eighteen single-plane models + 8-step Apalache on
+Lake 20-namespace axiom audit + 137 SysML-bound theorem checks, exhaustive TLC
+queue-zero checks on all nineteen single-plane models + 8-step Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).

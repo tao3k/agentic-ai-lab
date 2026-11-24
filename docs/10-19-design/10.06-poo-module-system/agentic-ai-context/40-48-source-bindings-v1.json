@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "d90fcce81a278d9ebad1ff96f8e76b534ee052442b93169ade5b5a53105e02bc",
+  "aggregate_bundle_sha256": "189511b9d3f6a019f921ba280bb5b00427a3be1390f6fcdc634f336e7659203f",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "3e293f446b4b25fc8bdb382f8915f294d705da670327d2293112aa431af4544f",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "12f5d54b0f171de45ecd27f7ac0ac3595db0f52ae8e0dacea5ed00a78b51978a",
-    "proofs/ContextGovernance/lakefile.lean": "2bf3e8be3b5ac89d102f38cc32853c0c5e905629c1999c90973806d37ad8f612",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "ce67f263a6c7e5a05fee853c2482272c5c625be79f1b63539f548e8b81af1c7d",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "ba9f630cfc0dadfb35e10d620538237d297ec6e17d94849aa42d2717543e6ce8",
+    "proofs/ContextGovernance/lakefile.lean": "692f65138d1bdf787e399c9f27d8474f5173fccbc85b02509748e4095cced377",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "fe1e95fa70e05f08415cd60c3927958ede4ddfffebf4f543035975c3cf6737b3",
-    "dev/d2/governance-figures.sysml": "2783116be4a08c31dab26cb60afafe8a195a60f9019521ee3c19a88087c89f77",
-    "dev/d2/governance-illustrations.ts": "82783aec036e7009c642c62fc9f5b3e4a4e4207527ed07a0b19cc63ccba8af84"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "d3d9df161c28bb1f50d32536f8bf312e94ba925e639fba28e952eeb4975ad998",
+    "dev/d2/governance-figures.sysml": "87784a46b317ef969f38a16dc7eccc166fa117c4ce524a61e45a8e3259cb728b",
+    "dev/d2/governance-illustrations.ts": "6b3f515a1ae01a935a8d682b2306815fd0fba1d0892cef1e302ca06aba9108c5"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -455,14 +455,39 @@
         "revokedGrantOrStaleCutNeverAdmitsChildToctou"
       ]
     },
+    "59-graph-engine-convergent-tree-and-apex-join": {
+      "slice_id": 59,
+      "bundle_sha256": "4ecb494d6cbe1e5ae103f87c1cb35c3c41b1c0685c31250d9264adee278e46dd",
+      "files": {
+        "org": "9a6332eecf8e310f8ba8851520a89e510de30f99fba750116e10863dea0bea09",
+        "sysml": "9f55ff962a579c596ea8ac1e85a631041f0d3d1d0a64e906a9cf9e8b1012c72f",
+        "lean": "b89af956f35e319eff2c15f1f93a2d29ff94a82d2061a85d81150cf2f1494c5b",
+        "qnt": "33254c68d785574aa9a237f168d6e4bde8c679a64dada34717c5b1c2196b9680"
+      },
+      "lean_theorems": [
+        "apexConvergence_supersedes_remaining_optional_branches",
+        "branchCompletion_never_finalizes_trunk_directly",
+        "disjointParallelDagFrontier_spawns_zero_subagents",
+        "isolatedOrDetachedBranch_always_refused",
+        "overlappingWriteFootprint_never_parallelized",
+        "staleBranchContribution_never_pollutes_trunk_yet_preserves_counterexamples",
+        "unclosedRequiredBranch_blocks_apex_convergence"
+      ],
+      "quint_invariants": [
+        "apexConvergenceClearsOptionalAndRequiresZeroActiveBranches",
+        "noIsolatedUnsharedSubagentSpawned",
+        "parallelDagNeverSpawnsSubagents",
+        "subordinateBranchNeverDirectlyFinalizesTrunk"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "0587e793e9a5ddf24b4a5d5f40414bad877b90aa40d121736aa0043beac39456",
+      "bundle_sha256": "9d3b744a6f5a46090b7e256cf7a30de1deb77a2e0445ff32e13cf4c8a8141b57",
       "files": {
-        "org": "5d816fa20f31e13b28adac87a986e4dfa2969712e6c69df1d3bff3fb619225e3",
-        "sysml": "751f68109721999c4e20328777d401368918b8fb0d3cfca9fc09bc0b8d484f86",
-        "lean": "bef808cc08398756a6298d456f5cc08219496b1c986612f9530dfa8f2a3e445e",
-        "qnt": "97bf0a1d68eaf0c44991ade6a318df518f1d9c1d7d3d1376991f2eb273827fa2"
+        "org": "b2c129d839f5a57cb3eacc12c27ec11112ce7cd2be756cbe1bfe2ba7e29c0118",
+        "sysml": "4c7ac4a9e638f8ac43d78c0812138c39069c4f6cf7982ba28faddafcc2dff5a2",
+        "lean": "2e3d3a2d1087443cdda98c29bd20463e7617bf93b10e191b6e46d6f514eef0e2",
+        "qnt": "475c1e1dea48c1b44d8f2e70715a7e999007d0d72941092a83931b5cccafe80b"
       },
       "lean_theorems": [
         "allStagesHold_append",
@@ -474,7 +499,7 @@
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allEighteenUpstreamSliceInvariantsHold",
+        "allNineteenUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

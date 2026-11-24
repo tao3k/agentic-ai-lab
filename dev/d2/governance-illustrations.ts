@@ -1703,6 +1703,89 @@ const composeDelegationCedarToctouStory: FigureComposer = context => {
   };
 };
 
+// Story 59: Unified GraphEngine — FunFlow C4 Disjoint DAG Frontier & Convergent Tree
+const composeGraphEngineConvergentTreeStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Unified GraphEngine: FunFlow C4 Disjoint DAG Frontier and Convergent Tree">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="1120" fill="#FAF8F2"/>
+      ${txt(48, 64, 'Unified GraphEngine: FunFlow C4 DAG & Convergent Tree (Slice 59)', 32, '#102A3A', 800)}
+      ${txt(48, 102, 'Everything is a Graph: DAGs, Convergent Trees, Obligation Graphs & Bounded Loops share one governed core.', 20, '#3C5B6B', 500)}
+
+      <g data-subject-ref="${subjectId('dagFrontierGate')}">
+        <rect x="48" y="138" width="1424" height="422" rx="22" fill="#FFFFFF" stroke="#1E6091" stroke-width="2.5"/>
+        ${pill(72, 160, 790, 36, '#EBF5FB', '#1E6091', '1. FUNFLOW C4 DAG FRONTIER VS SUBORDINATE BRANCH SEPARATION', '#154360')}
+        ${txt(72, 224, 'Parallel commands are DAG speed (0 Subagents, 0 LLM); Subagents exist only as Trunk-serving Branches:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="424" height="274" rx="16" fill="#F0F8FF" stroke="#1E6091" stroke-width="2"/>
+        ${txt(94, 290, 'Disjoint FunFlow C4 DAG', 19, '#154360', 800)}
+        ${txt(94, 328, 'Bernstein read/write check +', 16, '#2C3E50')}
+        ${txt(94, 358, 'ParallelFrontierStrategy. (C4)', 16, '#154360', 700)}
+        ${txt(94, 396, '✓ 5x read-only cmds -> 1 DAG wave', 16, '#1B5E20', 700)}
+        ${txt(94, 426, '✓ Write conflict / A->B -> serial', 16, '#1B5E20', 700)}
+        ${txt(94, 464, '✓ Tarjan SCC cycle -> fail-closed', 16, '#922B21', 700)}
+        ${txt(94, 496, '✓ subagentsSpawned = 0, LLM = 0', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 389H548', '#1E6091')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FEF5E7" stroke="#9C640C" stroke-width="2"/>
+        ${txt(570, 290, '3 Subordinate Branch Kinds', 19, '#784212', 800)}
+        ${txt(570, 328, 'All anchored to Trunk Scope Cut:', 16, '#2C3E50')}
+        ${txt(570, 358, '1. ContextEnrichmentDetour', 16, '#784212', 700)}
+        ${txt(570, 392, '2. DivergentExplorationBranch', 16, '#784212', 700)}
+        ${txt(570, 426, '3. SubordinateTaskBranch (sub-DAG)', 16, '#784212', 700)}
+        ${txt(570, 464, '✗ Isolated/detached -> REFUSED', 16, '#922B21', 700)}
+        ${txt(570, 496, '✓ Slice 58 attenuation + TOCTOU', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'No Branch Trunk-Finality', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, 'A branch can finish a real task,', 16, '#2C3E50')}
+        ${txt(1046, 358, 'yet NEVER directly finalize Trunk:', 16, '#1B5E20', 700)}
+        ${txt(1046, 396, '✗ Direct Trunk finalize -> FALSE', 16, '#922B21', 700)}
+        ${txt(1046, 426, '✓ Emits BranchContributionReceipt', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, '✓ Stale cut never pollutes Trunk', 16, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Counterexamples monotonic', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('trunkApexGate')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 790, 36, '#EFEBF9', '#5B4B8A', '2. CONVERGENT APEX JOIN & GRAPHENGINE MODULE PUBLICATION', '#4A3B99')}
+        ${txt(72, 678, 'All branches serve the Trunk and converge into one mission Apex via C4 + Slice 50 + ASCENT:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'Apex Convergence & Lifecycle Invalidation', 19, '#922B21', 800)}
+        ${txt(96, 786, '• Active required branch blocks premature Apex join', 16, '#2C3E50')}
+        ${txt(96, 820, '• Absorbs contributions in C4 deterministic priority order', 16, '#2C3E50')}
+        ${txt(96, 856, '• Preserves competing hypotheses & counterexample-core', 16, '#1B5E20', 700)}
+        ${txt(96, 896, '✓ Trunk cut advance immediately supersedes stale branches', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '✓ Apex closure auto-supersedes remaining optional branches', 16, '#1B5E20', 700)}
+        ${txt(96, 968, '✓ Zero zombie branches; single ApexConvergenceReceipt', 16, '#922B21', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'GraphEngine Yuanxu Interface & 20-Slice Closure', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Published via modules/graph-engine/interface.ss', 16, '#2C3E50')}
+        ${txt(820, 820, '• Unifies DAG, Convergent Tree, Obligation Graph & Loop', 16, '#2C3E50')}
+        ${txt(820, 860, '✓ dag-frontier-scheduler.ss + convergent-tree.ss live', 16, '#1B5E20', 700)}
+        ${txt(820, 896, '✓ 7 Lean theorems + exhaustive TLC (99 states, q=0)', 16, '#1B5E20', 700)}
+        ${txt(820, 932, '✓ E2E tree + real-issue + module tests all passing', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 20-Slice Assurance Chain (137 Lean thms, 19x TLC)', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 59 Closure: Unifies FunFlow C4 DAG speed and Trunk-serving Convergent Trees under GraphEngine.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -1838,6 +1921,13 @@ const stories: readonly StorySpec[] = [
     title: 'Multi-Agent Delegation Attenuation & Concurrent Cedar Revocation TOCTOU Fence',
     composer: composeDelegationCedarToctouStory,
   },
+  {
+    slug: '59-graph-engine-convergent-tree',
+    view: 'ContextGovernanceFigures::graphEngineConvergentTree',
+    modelFile: '59-graph-engine-convergent-tree-and-apex-join.sysml',
+    title: 'Unified GraphEngine: FunFlow C4 Disjoint DAG Frontier & Convergent Tree',
+    composer: composeGraphEngineConvergentTreeStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1869,6 +1959,7 @@ const allChainModelFiles = [
   '56-ascent-governed-loop-termination.sysml',
   '57-obligation-fixpoint-reconciler.sysml',
   '58-delegation-attenuation-and-cedar-toctou-fence.sysml',
+  '59-graph-engine-convergent-tree-and-apex-join.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

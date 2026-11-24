@@ -19,6 +19,7 @@
       gitops: (.get selection modules gitops)
       module-authoring: (.get selection modules module-authoring)
       session: (.get selection modules session)
+      graph-engine: (.get selection modules graph-engine)
       loop-engine: (.get selection modules loop-engine)
       authorization: (.get selection modules authorization)
       text: (.get selection modules text)

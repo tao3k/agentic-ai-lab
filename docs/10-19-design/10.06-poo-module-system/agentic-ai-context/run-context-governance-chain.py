@@ -51,6 +51,7 @@ SLICES = [
     (56, "56-ascent-governed-loop-termination", "AscentGovernedLoopTermination", "AscentLoopTerminationDispatchContract", 2, "tlc"),
     (57, "57-obligation-fixpoint-reconciler", "AscentObligationFixpointReconciler", "ObligationReconcilerDispatchContract", 2, "tlc"),
     (58, "58-delegation-attenuation-and-cedar-toctou-fence", "DelegationAttenuationAndCedarToctou", "DelegationToctouDispatchContract", 2, "tlc"),
+    (59, "59-graph-engine-convergent-tree-and-apex-join", "GraphEngineConvergentTree", "ConvergentTreeDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -73,6 +74,7 @@ QUINT_MAINS = {
     "56-ascent-governed-loop-termination": "AscentGovernedLoopTermination",
     "57-obligation-fixpoint-reconciler": "AscentObligationFixpointReconciler",
     "58-delegation-attenuation-and-cedar-toctou-fence": "DelegationAttenuationAndCedarToctou",
+    "59-graph-engine-convergent-tree-and-apex-join": "GraphEngineConvergentTree",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -97,6 +99,7 @@ STORY_SLUGS = (
     "56-ascent-loop-termination",
     "57-obligation-fixpoint-reconciler",
     "58-delegation-cedar-toctou",
+    "59-graph-engine-convergent-tree",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -426,6 +429,24 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         )
         grant_ok = not bool(st["childBypassedDeny"])
         epistemic_ok = not bool(st["parentCompletedWithUnclosedChild"])
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 59:
+        st = last["s59"]
+        consumed = (
+            (itf_int(st["dagDisjointExecs"]) > 0)
+            or (itf_int(st["subagentsFromDag"]) > 0)
+            or bool(st["isolatedBranchSpawned"])
+            or bool(st["branchDirectlyFinalizedTrunk"])
+            or bool(st["convergedWithActiveRequiredBranch"])
+            or bool(st["apexConverged"])
+        )
+        cut_ok = (itf_int(st["subagentsFromDag"]) == 0) and (not bool(st["isolatedBranchSpawned"]))
+        grant_ok = not bool(st["branchDirectlyFinalizedTrunk"])
+        epistemic_ok = (not bool(st["convergedWithActiveRequiredBranch"])) and (
+            (not bool(st["apexConverged"]))
+            or ((not bool(st["requiredBranchActive"])) and (not bool(st["optionalBranchActive"])))
+        )
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:

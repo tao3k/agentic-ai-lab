@@ -35,13 +35,13 @@
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-trust-lattice
                  agentic-ai-lab-ai-agentic-context-admit-mcp-tool-registration
                  agentic-ai-lab-ai-agentic-context-replay-audit-capsule)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/obligation-graph
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/obligation-graph
                  make-obligation make-hypothesis make-evidence-fact
                  make-deterministic-task-node make-synthesis-hole
                  make-obligation-graph)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/ascent-reconciler
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/ascent-reconciler
                  ascent-reconcile-frontier)
-        (only-in :tao3k/agentic-ai-lab/modules/loop-engine/synthesis-oracle
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/synthesis-oracle
                  make-typed-funflow-dag-patch
                  make-bounded-competing-branches
                  make-raw-tool-call-proposal

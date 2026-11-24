@@ -128,7 +128,9 @@
                         (pdig (obligation-graph-premise-digest graph (.ref t 'obligation-id) (.ref t 'premise-ids)))
                         (inputs-ok? (every (lambda (eid) (member eid live-ev-ids))
                                            (.ref t 'required-evidence-ids)))
-                        (not-done? (not (member (cons tid pdig) completed))))
+                        (output-missing? (not (member (.ref t 'produces-evidence-id) live-ev-ids)))
+                        (not-done? (and output-missing?
+                                        (not (member (cons tid pdig) completed)))))
                    (and ti inputs-ok? not-done? (list ti))))
                tasks))
              ;; Synthesis hole facts (with `(hole-id, premise-digest)` idempotence!)
