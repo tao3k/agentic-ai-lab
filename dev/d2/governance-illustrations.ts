@@ -1786,6 +1786,89 @@ const composeGraphEngineConvergentTreeStory: FigureComposer = context => {
   };
 };
 
+// Story 60: Tarjan SCC Cyclic Subgraphs, Durable SQLite WAL Recovery & Assume-Guarantee Composition
+const composeCyclicSccDurableRecoveryStory: FigureComposer = context => {
+  const {subjectId, pill, txt, arrow} = drawingHelpers(context);
+  return {
+    markup: `<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface data-question="${context.text(context.view.question.ref)}" viewBox="0 0 1520 1120" width="1520" height="1120" role="img" aria-label="Tarjan SCC Cyclic Feedback Subgraphs and Durable SQLite WAL Crash Recovery">
+      <defs>
+        <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1L11 6L1 11Z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="1120" fill="#FAF8F2"/>
+      ${txt(48, 64, 'Unified Cyclic SCC Subgraphs & Durable WAL Recovery (Slice 60)', 32, '#102A3A', 800)}
+      ${txt(48, 102, 'Tarjan SCC condensation governs cyclic Loops inside GraphEngine; SQLite WAL fences crash/restart recovery.', 20, '#3C5B6B', 500)}
+
+      <g data-subject-ref="${subjectId('sccCondensationGate')}">
+        <rect x="48" y="138" width="1424" height="422" rx="22" fill="#FFFFFF" stroke="#1E6091" stroke-width="2.5"/>
+        ${pill(72, 160, 790, 36, '#EBF5FB', '#1E6091', '1. TARJAN SCC CONDENSATION DAG (ACYCLIC + BOUNDED CYCLIC LOOPS)', '#154360')}
+        ${txt(72, 224, 'Any workflow graph (with or without cycles) condenses into a single governed Condensation DAG:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="252" width="424" height="274" rx="16" fill="#F0F8FF" stroke="#1E6091" stroke-width="2"/>
+        ${txt(94, 290, 'Trivial SCC (Acyclic DAG)', 19, '#154360', 800)}
+        ${txt(94, 328, 'Single node, zero self-loop:', 16, '#2C3E50')}
+        ${txt(94, 358, 'executes once via FunFlow DAG', 16, '#154360', 700)}
+        ${txt(94, 396, '✓ Deterministic topological order', 16, '#1B5E20', 700)}
+        ${txt(94, 426, '✓ 0 loop iterations, 0 subagents', 16, '#1B5E20', 700)}
+        ${txt(94, 464, '✓ Revoked Cedar -> 0 nodes run', 16, '#922B21', 700)}
+        ${txt(94, 496, '✓ Unblocks downstream SCCs', 16, '#1B5E20', 800)}
+
+        ${arrow('M496 389H548', '#1E6091')}
+
+        <rect x="548" y="252" width="420" height="274" rx="16" fill="#FEF5E7" stroke="#9C640C" stroke-width="2"/>
+        ${txt(570, 290, 'Cyclic Feedback SCC (Loop)', 19, '#784212', 800)}
+        ${txt(570, 328, 'Must bind explicit POO', 16, '#2C3E50')}
+        ${txt(570, 358, 'CycleTerminationContract:', 16, '#784212', 700)}
+        ${txt(570, 396, '✗ Ungoverned cycle -> REFUSED', 16, '#922B21', 700)}
+        ${txt(570, 426, '✗ State repeat (A->B->A) -> HALT', 16, '#922B21', 700)}
+        ${txt(570, 464, '✗ Budget hit -> HumanInbox', 16, '#922B21', 700)}
+        ${txt(570, 496, '✓ Exit met -> single receipt', 16, '#1B5E20', 800)}
+
+        ${arrow('M968 389H1024', '#2E7D32')}
+
+        <rect x="1024" y="252" width="424" height="274" rx="16" fill="#F1FAF4" stroke="#2E7D32" stroke-width="2"/>
+        ${txt(1046, 290, 'Assume-Guarantee Proofs', 19, '#1B5E20', 800)}
+        ${txt(1046, 328, 'Disjoint-frame composition lifts', 16, '#2C3E50')}
+        ${txt(1046, 358, '20x exhaustive TLC proofs:', 16, '#1B5E20', 700)}
+        ${txt(1046, 396, '✓ Lean proves product lifting', 16, '#1B5E20', 700)}
+        ${txt(1046, 426, '✓ TLC covers 100% single-plane', 16, '#1B5E20', 700)}
+        ${txt(1046, 464, '✓ Apalache checks cross-plane', 16, '#1B5E20', 700)}
+        ${txt(1046, 496, '✓ Scales fast to 21+ slices', 16, '#1B5E20', 800)}
+      </g>
+
+      <g data-subject-ref="${subjectId('durableRecoveryGate')}">
+        <rect x="48" y="592" width="1424" height="438" rx="22" fill="#FFFFFF" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${pill(72, 614, 790, 36, '#EFEBF9', '#5B4B8A', '2. REAL SQLITE WAL CRASH/RESTART RECOVERY & EPOCH FENCING', '#4A3B99')}
+        ${txt(72, 678, 'durable-tree-journal.ss persists inert POO Trunk snapshots (zero code replay) with SHA-256 log chains:', 19, '#1B3B4B', 700)}
+
+        <rect x="72" y="706" width="660" height="292" rx="16" fill="#FDF2F2" stroke="#C0392B" stroke-width="2.5"/>
+        ${txt(96, 746, 'Crash Takeover & Epoch Fencing', 19, '#922B21', 800)}
+        ${txt(96, 786, '• journal-open monotonically increments SQLite owner epoch', 16, '#2C3E50')}
+        ${txt(96, 820, '✗ Superseded stale handle writes -> REJECTED fail-closed', 16, '#922B21', 700)}
+        ${txt(96, 856, '✗ Tampered log/state/evidence digest -> RECOVERY REFUSED', 16, '#922B21', 700)}
+        ${txt(96, 896, '✓ Recovered open required branches block premature Apex', 16, '#1B5E20', 700)}
+        ${txt(96, 932, '✓ Reconciling branches post-crash seals durable terminal', 16, '#1B5E20', 700)}
+        ${txt(96, 968, '✓ Cold epoch-3 reopen preserves C4 order & counterexamples', 16, '#1B5E20', 800)}
+
+        ${arrow('M732 852H796', '#5B4B8A')}
+
+        <rect x="796" y="706" width="652" height="292" rx="16" fill="#F7F5FD" stroke="#5B4B8A" stroke-width="2.5"/>
+        ${txt(820, 746, 'GraphEngine 21-Slice Closure', 19, '#4A3B99', 800)}
+        ${txt(820, 786, '• Published via modules/graph-engine/interface.ss', 16, '#2C3E50')}
+        ${txt(820, 820, '• cyclic-subgraph.ss + durable-tree-journal.ss live', 16, '#2C3E50')}
+        ${txt(820, 860, '✓ Real SQLite WAL crash/restart E2E test passing', 16, '#1B5E20', 700)}
+        ${txt(820, 896, '✓ 7 Lean theorems + exhaustive TLC (q=0)', 16, '#1B5E20', 700)}
+        ${txt(820, 932, '✓ Assume-Guarantee Lean + Apalache 21-slice chain', 16, '#1B5E20', 700)}
+        ${txt(820, 968, '✓ 145 Lean theorems, 20x TLC + 1x Composed Apalache', 16, '#1B5E20', 800)}
+      </g>
+
+      ${txt(48, 1084, 'Slice 60 Closure: Unifies cyclic SCCs, SQLite WAL crash recovery, and Assume-Guarantee verification.', 19, '#244957', 700)}
+    </svg>`,
+    css: '[data-vector-surface]{display:block;max-width:100%;height:auto}',
+  };
+};
+
 interface StorySpec {
   slug: string;
   view: string;
@@ -1928,6 +2011,13 @@ const stories: readonly StorySpec[] = [
     title: 'Unified GraphEngine: FunFlow C4 Disjoint DAG Frontier & Convergent Tree',
     composer: composeGraphEngineConvergentTreeStory,
   },
+  {
+    slug: '60-cyclic-scc-durable-recovery',
+    view: 'ContextGovernanceFigures::cyclicSccDurableRecovery',
+    modelFile: '60-unified-cyclic-scc-and-durable-tree-recovery.sysml',
+    title: 'Unified Cyclic SCC Subgraphs & Durable SQLite WAL Crash Recovery',
+    composer: composeCyclicSccDurableRecoveryStory,
+  },
 ];
 
 const sources: Record<string, string> = {};
@@ -1960,6 +2050,7 @@ const allChainModelFiles = [
   '57-obligation-fixpoint-reconciler.sysml',
   '58-delegation-attenuation-and-cedar-toctou-fence.sysml',
   '59-graph-engine-convergent-tree-and-apex-join.sysml',
+  '60-unified-cyclic-scc-and-durable-tree-recovery.sysml',
   '47-end-to-end-context-governance-assurance-closure.sysml',
 ];
 const modelRelatives = await Promise.all(allChainModelFiles.map(f => capture(path.join(contextDir, f))));

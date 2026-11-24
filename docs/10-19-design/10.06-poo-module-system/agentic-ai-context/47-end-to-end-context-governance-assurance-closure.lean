@@ -20,6 +20,7 @@ import «56-ascent-governed-loop-termination»
 import «57-obligation-fixpoint-reconciler»
 import «58-delegation-attenuation-and-cedar-toctou-fence»
 import «59-graph-engine-convergent-tree-and-apex-join»
+import «60-unified-cyclic-scc-and-durable-tree-recovery»
 
 /-!
 Slice 47 — Master Imported Lean DAG (`40..46, 48..53 -> 47`) & Quotient Bridge:
@@ -250,6 +251,7 @@ structure QuintBoundaryGuardFlags where
   rawReactToolCallRejected : Bool
   revokedDelegationBlocked : Bool
   branchDirectFinalizationBlocked : Bool
+  ungovernedCycleBlocked : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -306,6 +308,9 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     !(GraphEngineConvergentTree.branchDirectTrunkFinalization
       { kind := .subordinateTask, localTaskCompleted := true,
         boundCut := 1, boundGrantEpoch := 1, discoveredCounterexamples := [] })
+  ungovernedCycleBlocked :=
+    !(UnifiedCyclicSccAndDurableRecovery.admitSccExecution
+      { isCyclic := true, hasContract := false, cedarGrantLive := true })
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -330,7 +335,8 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     q.loopCycleHaltsFailClosed = true ∧
     q.rawReactToolCallRejected = true ∧
     q.revokedDelegationBlocked = true ∧
-    q.branchDirectFinalizationBlocked = true := by
+    q.branchDirectFinalizationBlocked = true ∧
+    q.ungovernedCycleBlocked = true := by
   dsimp [projectToQuintGuardFlags]
   refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
           ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
@@ -341,6 +347,7 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
             ([] : List (Nat × Nat)) 1 1 rfl,
           by simp [YuanxuC4ProfileConvergence.explicitVeto_dominates_implied],
           by simp [DurableWorkEngineCoreChallenge.unclosedAttempt_blocks_autoArchive_fail_closed],
+          rfl,
           rfl,
           rfl,
           rfl,
@@ -399,5 +406,30 @@ theorem cut_inequality_invalidates_hot_capsule
 theorem assurance_carries_zero_authority
     (witness : ContextGovernanceBoundary.GovernanceExecutionAuthority) : False :=
   ContextGovernanceBoundary.governance_value_carries_zero_authority witness
+
+/-- Disjoint-Frame Assume-Guarantee Composition Theorem:
+    When an interleaved product system updates Plane `P` in isolation (preserving
+    all other planes) or updates the Cross-Plane Capsule `C` while keeping `P`
+    fixed, any exhaustive single-plane invariant (`TLC queue = 0`) composes
+    soundly with the cross-plane Capsule/CAS invariant (`Apalache`). -/
+theorem disjointFrame_step_preserves_product_invariant
+    {P C : Type}
+    (invP : P → Prop)
+    (invCross : P → C → Prop)
+    (stepP : P → P → Prop)
+    (stepC : P → C → C → Prop)
+    (hPresP : ∀ p p', invP p → stepP p p' → invP p')
+    (hPresCrossP : ∀ p p' c, invP p → invCross p c → stepP p p' → invCross p' c)
+    (hPresCrossC : ∀ p c c', invP p → invCross p c → stepC p c c' → invCross p c')
+    (p p' : P) (c c' : C)
+    (hNow : invP p ∧ invCross p c)
+    (hInterleaved : (stepP p p' ∧ c' = c) ∨ (p' = p ∧ stepC p c c')) :
+    invP p' ∧ invCross p' c' := by
+  rcases hNow with ⟨hP, hCr⟩
+  rcases hInterleaved with ⟨hStepP, hEqC⟩ | ⟨hEqP, hStepC⟩
+  · rw [hEqC]
+    exact ⟨hPresP p p' hP hStepP, hPresCrossP p p' c hP hCr hStepP⟩
+  · rw [hEqP]
+    exact ⟨hP, hPresCrossC p c c' hP hCr hStepC⟩
 
 end EndToEndContextGovernanceClosure

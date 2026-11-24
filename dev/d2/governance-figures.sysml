@@ -80,4 +80,8 @@ package ContextGovernanceFigures {
     view graphEngineConvergentTree : InterconnectionView {
         expose GraphEngineConvergentTree::UnifiedGraphEngineSystem;
     }
+
+    view cyclicSccDurableRecovery : InterconnectionView {
+        expose UnifiedCyclicSccAndDurableRecovery::CyclicSccAndDurableRecoverySystem;
+    }
 }

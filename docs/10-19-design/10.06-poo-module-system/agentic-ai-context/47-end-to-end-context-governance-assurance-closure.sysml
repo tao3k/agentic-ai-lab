@@ -23,6 +23,7 @@ package EndToEndContextGovernanceClosure {
     private import AscentObligationFixpointReconciler::*;
     private import DelegationAttenuationAndCedarToctou::*;
     private import GraphEngineConvergentTree::*;
+    private import UnifiedCyclicSccAndDurableRecovery::*;
 
     doc /* Capstone SysML v2 horizontal & vertical chain closure across all thirteen
            upstream planes (Slices 40-46 + Slices 48-53):
@@ -104,6 +105,7 @@ package EndToEndContextGovernanceClosure {
         part obligationReconcilerSubsystem : ObligationFixpointReconcilerSystem;
         part delegationToctouSubsystem : DelegationAndToctouGovernanceSystem;
         part graphEngineSubsystem : UnifiedGraphEngineSystem;
+        part cyclicRecoverySubsystem : CyclicSccAndDurableRecoverySystem;
         port prev : ~StageChainPort;
         port handoff : ~FinalHostIntakePort;
     }
@@ -141,17 +143,19 @@ package EndToEndContextGovernanceClosure {
 
     requirement deterministicCapsuleReplayPurity : LeanAlgebraicObligation {
         attribute :>> leanArtifact = "47-end-to-end-context-governance-assurance-closure.lean";
-        attribute :>> leanTheorems = "replayCapsule_deterministic_without_llm, cut_inequality_invalidates_hot_capsule, assurance_carries_zero_authority";
+        attribute :>> leanTheorems = "replayCapsule_deterministic_without_llm, cut_inequality_invalidates_hot_capsule, assurance_carries_zero_authority, disjointFrame_step_preserves_product_invariant";
         doc /* Reconstructing an AuditCapsule is a pure deterministic fold over
                immutable ORG bytes and journal entries (zero LLM parameter),
-               cut inequality invalidates hot reuse in O(1), and Governance
-               carries zero execution authority. */
+               cut inequality invalidates hot reuse in O(1), Governance carries
+               zero execution authority, and disjoint-frame assume-guarantee
+               composition soundly lifts exhaustive TLC single-plane invariants
+               into the composed cross-plane product. */
     }
 
     // 2. Quint Cross-Module Composed Push-Invalidation, Host CAS & Cold-Replay Race
     requirement composedMultiPlaneCasAndColdReplayRace : QuintInterleavingObligation {
         attribute :>> quintArtifact = "47-end-to-end-context-governance-assurance-closure.qnt";
-        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allNineteenUpstreamSliceInvariantsHold";
+        attribute :>> quintInvariants = "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes, coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff, allTwentyUpstreamSliceInvariantsHold";
         doc /* Importing all thirteen upstream Quint protocol modules (s40..s46, s48..s53),
                concurrent source-cut advances, generation advances, omitted-hypothesis
                discoveries, active-defeater disclosure arrivals, shared-context claims,

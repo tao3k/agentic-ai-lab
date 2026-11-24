@@ -5,15 +5,15 @@
     "opensysml_version": "0.10.1",
     "quint_apalache_version": "0.62.1"
   },
-  "aggregate_bundle_sha256": "189511b9d3f6a019f921ba280bb5b00427a3be1390f6fcdc634f336e7659203f",
+  "aggregate_bundle_sha256": "2f85745bea5361acffc9eb77e21f96c17561ff9d24bda771f32dcb82cb5b2ef5",
   "supporting_files": {
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "ce67f263a6c7e5a05fee853c2482272c5c625be79f1b63539f548e8b81af1c7d",
-    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "ba9f630cfc0dadfb35e10d620538237d297ec6e17d94849aa42d2717543e6ce8",
-    "proofs/ContextGovernance/lakefile.lean": "692f65138d1bdf787e399c9f27d8474f5173fccbc85b02509748e4095cced377",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "368fe595184d4c5b12bd54e5fa907e65ec0359e750b87943c2d6da645cd476e3",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "b8e45279f3af1796bb693f4e5f500bcbcdb9b0f2868fcf233ff38fdf4e262138",
+    "proofs/ContextGovernance/lakefile.lean": "a6ee96c57aed2cba53841b98df41462084d67631cc52e7cf10613e8670622913",
     "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
-    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "d3d9df161c28bb1f50d32536f8bf312e94ba925e639fba28e952eeb4975ad998",
-    "dev/d2/governance-figures.sysml": "87784a46b317ef969f38a16dc7eccc166fa117c4ce524a61e45a8e3259cb728b",
-    "dev/d2/governance-illustrations.ts": "6b3f515a1ae01a935a8d682b2306815fd0fba1d0892cef1e302ca06aba9108c5"
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "91dc21e9f50bc8179aa7cb592c645a0acc432e262160aac28ad953aa3083b01f",
+    "dev/d2/governance-figures.sysml": "8e5c9588864b0a3675b40991b28ef7d264ab8264c3cf67df72f87f885b3b0e48",
+    "dev/d2/governance-illustrations.ts": "d471db1c092c608f086d97292f023a1dde170bf54df2679d9d2b2d74cec71c27"
   },
   "slices": {
     "40-context-governance-boundary": {
@@ -480,26 +480,52 @@
         "subordinateBranchNeverDirectlyFinalizesTrunk"
       ]
     },
+    "60-unified-cyclic-scc-and-durable-tree-recovery": {
+      "slice_id": 60,
+      "bundle_sha256": "7ea15fae6e0baf9615677035bd7404c748261f216f955804b919c15415c303bb",
+      "files": {
+        "org": "c8e1d6f96178772033f47b4ea52659cd64071d441fc5b6df11778a69b6ba3f1b",
+        "sysml": "aef0005d0e9bfeba382978bebbe4023b7afb9a4311851d6890ad6b2875de9771",
+        "lean": "4bd653dd0b231288e21593e94f33998a59e2d38e8a3184bfc62ea4b1e1d25f81",
+        "qnt": "e1f3b9fc7b356359d0c4b0bfa7eb8bc0f0ee1cab5d245c069f2629c757650f1d"
+      },
+      "lean_theorems": [
+        "budgetExhaustedCycle_halts_fail_closed",
+        "recoveredOpenRequiredBranches_block_premature_apex",
+        "repeatedStateDigest_immediately_halts_oscillation",
+        "revokedCedarGrant_blocks_unified_graph",
+        "supersededJournalEpoch_rejected_fail_closed",
+        "tamperedJournalHashChain_refuses_recovery",
+        "ungovernedCyclicScc_always_refused"
+      ],
+      "quint_invariants": [
+        "oscillatingCycleNeverContinues",
+        "postCrashApexRequiresZeroOpenBranchesAndConvergedScc",
+        "supersededEpochNeverWritesJournal",
+        "ungovernedCycleNeverExecutes"
+      ]
+    },
     "47-end-to-end-context-governance-assurance-closure": {
       "slice_id": 47,
-      "bundle_sha256": "9d3b744a6f5a46090b7e256cf7a30de1deb77a2e0445ff32e13cf4c8a8141b57",
+      "bundle_sha256": "041110d7d3eb3f9c627a7e65fba63827683a982a9c020709ee354377a06350a6",
       "files": {
-        "org": "b2c129d839f5a57cb3eacc12c27ec11112ce7cd2be756cbe1bfe2ba7e29c0118",
-        "sysml": "4c7ac4a9e638f8ac43d78c0812138c39069c4f6cf7982ba28faddafcc2dff5a2",
-        "lean": "2e3d3a2d1087443cdda98c29bd20463e7617bf93b10e191b6e46d6f514eef0e2",
-        "qnt": "475c1e1dea48c1b44d8f2e70715a7e999007d0d72941092a83931b5cccafe80b"
+        "org": "459d8cee5d1e4199e8ddf61359c25f9494b94c047bb6df5f49acde6821bfd39c",
+        "sysml": "cc5f38572ca3dd2fe32b48b64242708b18fcbd5fced8e36d90c45293c2c6c2ad",
+        "lean": "3e59c94608c0e1cc1942c4fc7cfff38f6ecc95b929c3c0ae5afe34824486fbf0",
+        "qnt": "2f9154036b37aace6a1805dd0fde60df04aa251a2153c116ea442d2e99fc3379"
       },
       "lean_theorems": [
         "allStagesHold_append",
         "any_refuted_stage_refutes_pipeline",
         "assurance_carries_zero_authority",
         "cut_inequality_invalidates_hot_capsule",
+        "disjointFrame_step_preserves_product_invariant",
         "leanToQuintBoundaryQuotient_sound",
         "pureGovernanceChain_end_to_end_sound",
         "replayCapsule_deterministic_without_llm"
       ],
       "quint_invariants": [
-        "allNineteenUpstreamSliceInvariantsHold",
+        "allTwentyUpstreamSliceInvariantsHold",
         "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
         "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
       ]

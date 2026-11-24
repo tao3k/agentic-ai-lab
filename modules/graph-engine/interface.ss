@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Public GraphEngine module interface.
-;;; Unifies Acyclic FunFlow C4 DAGs, Shared-Context Convergent Trees (Trunk ->
-;;; Subordinate Branches -> Apex), Relational ASCENT Obligation Graphs, and
-;;; bounded cyclic feedback subgraphs (Loops as governed graph specializations).
+;;; Unifies Acyclic FunFlow C4 DAGs, Convergent Trees (Trunk -> Subordinate
+;;; Branches -> Apex), Durable SQLite WAL Recovery, Relational ASCENT
+;;; Obligation Graphs, and Bounded Cyclic Feedback Subgraphs (Tarjan SCC).
 
 (import (only-in :clan/poo/object .def .o)
         "types.ss"
@@ -18,7 +18,7 @@
 
 (.def GraphEngine
   identity: 'graph-engine
-  tags: '(graph-engine control ascent-reconciler funflow-dag convergent-tree)
+  tags: '(graph-engine control ascent-reconciler funflow-dag convergent-tree cyclic-scc)
   core: (.o scope-contract: GraphEngineScope
             exports: (.o library: 'tao3k/agentic-ai-lab/modules/graph-engine/interface
                          obligation-graph: ObligationGraph.
@@ -35,5 +35,10 @@
                          spawn-trunk-branch: graph-spawn-trunk-branch
                          execute-branch-funflow-dag: graph-execute-branch-funflow-dag
                          absorb-branch-contribution: graph-absorb-branch-contribution
-                         converge-trunk-to-apex: graph-converge-trunk-to-apex))
+                         converge-trunk-to-apex: graph-converge-trunk-to-apex
+                         durable-trunk-open: graph-durable-trunk-open
+                         durable-trunk-commit-step!: graph-durable-trunk-commit-step!
+                         durable-trunk-recover: graph-durable-trunk-recover
+                         condense-graph-sccs: graph-condense-sccs
+                         execute-unified-graph: graph-execute-unified))
   features: (.o))

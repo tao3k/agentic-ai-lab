@@ -52,6 +52,7 @@ SLICES = [
     (57, "57-obligation-fixpoint-reconciler", "AscentObligationFixpointReconciler", "ObligationReconcilerDispatchContract", 2, "tlc"),
     (58, "58-delegation-attenuation-and-cedar-toctou-fence", "DelegationAttenuationAndCedarToctou", "DelegationToctouDispatchContract", 2, "tlc"),
     (59, "59-graph-engine-convergent-tree-and-apex-join", "GraphEngineConvergentTree", "ConvergentTreeDispatchContract", 2, "tlc"),
+    (60, "60-unified-cyclic-scc-and-durable-tree-recovery", "UnifiedCyclicSccAndDurableRecovery", "CyclicSccDurableRecoveryDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -75,6 +76,7 @@ QUINT_MAINS = {
     "57-obligation-fixpoint-reconciler": "AscentObligationFixpointReconciler",
     "58-delegation-attenuation-and-cedar-toctou-fence": "DelegationAttenuationAndCedarToctou",
     "59-graph-engine-convergent-tree-and-apex-join": "GraphEngineConvergentTree",
+    "60-unified-cyclic-scc-and-durable-tree-recovery": "UnifiedCyclicSccAndDurableRecovery",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -100,6 +102,7 @@ STORY_SLUGS = (
     "57-obligation-fixpoint-reconciler",
     "58-delegation-cedar-toctou",
     "59-graph-engine-convergent-tree",
+    "60-cyclic-scc-durable-recovery",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -449,6 +452,24 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         )
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
+    if slice_id == 60:
+        st = last["s60"]
+        consumed = (
+            (itf_int(st["sccIterations"]) > 0)
+            or bool(st["ungovernedCycleExecuted"])
+            or bool(st["oscillationContinued"])
+            or bool(st["staleEpochWriteAdmitted"])
+            or bool(st["recoveredApexWithOpenBranch"])
+            or bool(st["apexConverged"])
+        )
+        cut_ok = (not bool(st["ungovernedCycleExecuted"])) and (not bool(st["oscillationContinued"]))
+        grant_ok = not bool(st["staleEpochWriteAdmitted"])
+        epistemic_ok = (not bool(st["recoveredApexWithOpenBranch"])) and (
+            (not bool(st["apexConverged"]))
+            or ((itf_int(st["openRequiredBranches"]) == 0) and bool(st["sccConverged"]))
+        )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
     if slice_id == 47:
         cap = last["c"]
         consumed = bool(cap["hostCasConsumed"])
@@ -752,6 +773,18 @@ def verify_quint_tlc_apalache_and_export_itf(
                 "safety",
             ]
         else:
+            # Disjoint-Frame Assume-Guarantee compositional Apalache check:
+            # Every upstream single-plane model is ALREADY verified exhaustively
+            # (`queue = 0`) by TLC above and lifted via Lean 4
+            # `disjointFrame_step_preserves_product_invariant`. Checking
+            # `crossPlaneCapsuleSafety` (the coupled Capsule/Host-CAS invariants)
+            # across all 20 interleaved planes avoids O(N^2) redundant VC re-checks!
+            if not re.search(r"\bval\s+crossPlaneCapsuleSafety\s*=", qtext):
+                raise RuntimeError(f"Missing `val crossPlaneCapsuleSafety` in {qfile.name}")
+            tlc_upstream = [m for m in verified_models if m["backend"] == "tlc"]
+            expected_tlc = sum(1 for _, _, _, _, _, b in SLICES if b == "tlc")
+            if len(tlc_upstream) != expected_tlc or any(m.get("queue_remaining") != 0 for m in tlc_upstream):
+                raise RuntimeError("Assume-Guarantee precondition failed: not all upstream TLC planes exhausted")
             vcmd = [
                 "quint",
                 "verify",
@@ -763,7 +796,7 @@ def verify_quint_tlc_apalache_and_export_itf(
                 "--max-steps",
                 str(max_steps),
                 "--invariant",
-                "safety",
+                "crossPlaneCapsuleSafety",
             ]
 
         vres = subprocess.run(

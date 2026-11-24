@@ -704,6 +704,16 @@ branches (=ContextEnrichmentDetour.=, =DivergentExplorationBranch.=,
 finalize the Trunk, converging solely into the mission Apex with monotonic
 counterexample preservation and Apex-driven cancellation of optional branches.
 
+[[file:60-unified-cyclic-scc-and-durable-tree-recovery.org][60: Unified GraphEngine — Tarjan SCC Cyclic Feedback Subgraphs & Durable SQLite WAL Recovery]]
+and its [[file:60-unified-cyclic-scc-and-durable-tree-recovery.sysml][SysML]], [[file:60-unified-cyclic-scc-and-durable-tree-recovery.qnt][Quint]],
+and [[file:60-unified-cyclic-scc-and-durable-tree-recovery.lean][Lean]] artifacts formalize Tarjan SCC condensation for mixed
+acyclic/cyclic workflows (=modules/graph-engine/cyclic-subgraph.ss= —
+ungoverned cycles fail closed, state-digest oscillation halts immediately,
+bounded budgets escalate cleanly) alongside real SQLite WAL crash/restart
+recovery (=modules/graph-engine/durable-tree-journal.ss= — monotonic owner
+epoch fencing, tamper-evident hash chain verification, and post-crash
+unclosed-branch Apex gating).
+
 [[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
 [[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
 [[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
@@ -713,11 +723,12 @@ counterexample preservation and Apex-driven cancellation of optional branches.
 (=just check-context-governance-lake=, =just check-context-governance-bindings=,
 and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
 [[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
-and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=59= both
-horizontally (=47= imports all nineteen upstream packages/modules in SysML v2,
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=60= both
+horizontally (=47= imports all twenty upstream packages/modules in SysML v2,
 Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
-Lake 20-namespace axiom audit + 137 SysML-bound theorem checks, exhaustive TLC
-queue-zero checks on all nineteen single-plane models + 8-step Apalache on
+Lake 21-namespace axiom audit + 145 SysML-bound theorem checks including
+disjoint-frame assume-guarantee composition, exhaustive TLC queue-zero checks
+on all twenty single-plane models + 8-step assume-guarantee Apalache on
 composed =47.qnt=, real Quint ITF JSON trace replay into SysML
 =QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
 verification).
