@@ -64,4 +64,8 @@ package ContextGovernanceFigures {
     view mcpToolPoisoningCamel : InterconnectionView {
         expose McpToolPoisoningAndCamelCapabilityFlow::McpToolPoisoningGovernanceSystem;
     }
+
+    view ascentLoopTermination : InterconnectionView {
+        expose AscentGovernedLoopTermination::AscentLoopTerminationSystem;
+    }
 }

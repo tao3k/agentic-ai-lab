@@ -48,6 +48,7 @@ SLICES = [
     (53, "53-yuanxu-c4-profile-convergence-and-interface-slots", "YuanxuC4ProfileConvergence", "YuanxuC4ProfileConvergenceContract", 2, "tlc"),
     (54, "54-durable-work-engine-core-challenge", "DurableWorkEngineCoreChallenge", "DurableWorkChallengeDispatchContract", 2, "tlc"),
     (55, "55-mcp-tool-poisoning-and-camel-capability-flow", "McpToolPoisoningAndCamelCapabilityFlow", "McpToolPoisoningDispatchContract", 2, "tlc"),
+    (56, "56-ascent-governed-loop-termination", "AscentGovernedLoopTermination", "AscentLoopTerminationDispatchContract", 2, "tlc"),
     (47, "47-end-to-end-context-governance-assurance-closure", "EndToEndContextGovernanceClosure", "EndToEndDispatchAndClosureContract", 4, "apalache"),
 ]
 
@@ -67,6 +68,7 @@ QUINT_MAINS = {
     "53-yuanxu-c4-profile-convergence-and-interface-slots": "YuanxuC4ProfileConvergence",
     "54-durable-work-engine-core-challenge": "DurableWorkEngineCoreChallenge",
     "55-mcp-tool-poisoning-and-camel-capability-flow": "McpToolPoisoningAndCamelCapabilityFlow",
+    "56-ascent-governed-loop-termination": "AscentGovernedLoopTermination",
     "47-end-to-end-context-governance-assurance-closure": "EndToEndContextGovernanceClosure",
 }
 
@@ -88,6 +90,7 @@ STORY_SLUGS = (
     "53-c4-profile-convergence",
     "54-durable-work-core-challenge",
     "55-mcp-tool-poisoning-camel",
+    "56-ascent-loop-termination",
 )
 
 TLC_COUNTS_RE = re.compile(
@@ -372,6 +375,21 @@ def project_itf_end_state_to_sysml_scalars(slice_id: int, trace: dict) -> tuple[
         epistemic_ok = (not (bool(st["offlineAuditExecuted"]) and bool(st["metadataFlippedDecision"]))) or bool(
             st["decisionHijackFlagged"]
         )
+        return steps, consumed, cut_ok, grant_ok, epistemic_ok
+
+    if slice_id == 56:
+        st = last["s56"]
+        consumed = (
+            (itf_int(st["stepsTaken"]) > 0)
+            or bool(st["admittedAfterCycle"])
+            or bool(st["admittedAfterGovBlock"])
+            or bool(st["selfResetSucceeded"])
+        )
+        cut_ok = (itf_int(st["stepsTaken"]) <= itf_int(st["initialBudget"])) and (
+            itf_int(st["stepBudgetRemaining"]) >= 0
+        )
+        grant_ok = (not bool(st["admittedAfterGovBlock"])) and (not bool(st["selfResetSucceeded"]))
+        epistemic_ok = not bool(st["admittedAfterCycle"])
         return steps, consumed, cut_ok, grant_ok, epistemic_ok
 
     if slice_id == 47:

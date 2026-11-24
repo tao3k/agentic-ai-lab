@@ -16,6 +16,7 @@ import «52-funflow-cas-singleflight-and-external-sandbox-binding»
 import «53-yuanxu-c4-profile-convergence-and-interface-slots»
 import «54-durable-work-engine-core-challenge»
 import «55-mcp-tool-poisoning-and-camel-capability-flow»
+import «56-ascent-governed-loop-termination»
 
 /-!
 Slice 47 — Master Imported Lean DAG (`40..46, 48..53 -> 47`) & Quotient Bridge:
@@ -242,6 +243,7 @@ structure QuintBoundaryGuardFlags where
   explicitVetoDominatesImplied : Bool
   unclosedAttemptBlocksArchive : Bool
   untrustedSinkArgBlocked : Bool
+  loopCycleHaltsFailClosed : Bool
 
 def projectToQuintGuardFlags {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -277,6 +279,15 @@ def projectToQuintGuardFlags {HId Payload Digest : Type}
     !(McpToolPoisoningAndCamelCapabilityFlow.admitSinkInvocation
       { sink := .sensitive, argOrigin := .untrustedMetadata,
         manifestPinned := true, hasDeclassCert := false })
+  loopCycleHaltsFailClosed :=
+    AscentGovernedLoopTermination.isHaltedVerdict
+      (AscentGovernedLoopTermination.evaluateLoopVerdict
+        { stepBudgetRemaining := 4, tokensRemaining := 1000, remainingFrontier := 2,
+          openInvariants := 0, openDefeaters := 0, openBlockers := 0,
+          journalQuiescent := false, exactStateCycle := true, oscillationCycle := false,
+          repeatedFailureCount := 0, maxRepeatedFailures := 2, zeroProgressStreak := 0,
+          maxStallTurns := 2, governanceBlocked := false, haltedPrior := false,
+          humanReopenEndorsed := false })
 
 theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     (omittedIds : List HId)
@@ -297,7 +308,8 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
     q.retractedPremiseFailClosed = true ∧
     q.explicitVetoDominatesImplied = true ∧
     q.unclosedAttemptBlocksArchive = true ∧
-    q.untrustedSinkArgBlocked = true := by
+    q.untrustedSinkArgBlocked = true ∧
+    q.loopCycleHaltsFailClosed = true := by
   dsimp [projectToQuintGuardFlags]
   refine ⟨omissionFlag_true_iff_nonempty_gap omittedIds, beq_iff_eq, ?_, rfl,
           ScopedDetourFunflowConcurrentContext.pureCAS_admitted_without_exhaustiveness,
@@ -308,6 +320,7 @@ theorem leanToQuintBoundaryQuotient_sound {HId Payload Digest : Type}
             ([] : List (Nat × Nat)) 1 1 rfl,
           by simp [YuanxuC4ProfileConvergence.explicitVeto_dominates_implied],
           by simp [DurableWorkEngineCoreChallenge.unclosedAttempt_blocks_autoArchive_fail_closed],
+          rfl,
           rfl⟩
   rw [List.all_eq_true]
   intro f hf

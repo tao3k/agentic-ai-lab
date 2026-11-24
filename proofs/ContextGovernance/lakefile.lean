@@ -27,5 +27,6 @@ lean_lib ContextGovernanceChain where
     `«53-yuanxu-c4-profile-convergence-and-interface-slots»,
     `«54-durable-work-engine-core-challenge»,
     `«55-mcp-tool-poisoning-and-camel-capability-flow»,
+    `«56-ascent-governed-loop-termination»,
     `«47-end-to-end-context-governance-assurance-closure»
   ]
