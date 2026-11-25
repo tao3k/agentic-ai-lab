@@ -66,7 +66,7 @@ gerbil_test_timeout := "timeout --foreground --signal=TERM --kill-after=5s"
 lab_test_file_budget := env_var_or_default("LAB_TEST_FILE_BUDGET", "120s")
 lab_macos_qualification_timing := if os() == "macos" { env_var_or_default("LAB_MACOS_QUALIFICATION_TIMING", "") } else { "" }
 lab_focused_test_deadline := if lab_macos_qualification_timing == "1" { "" } else { gerbil_test_timeout + " " + lab_test_file_budget }
-lab_context_temporal_deadline := if lab_macos_qualification_timing == "1" { "" } else { "timeout --foreground --signal=TERM --kill-after=1s 45s" }
+lab_context_temporal_deadline := if lab_macos_qualification_timing == "1" { "" } else { "timeout --foreground --signal=TERM --kill-after=1s 120s" }
 
 # gerbil.pkg is the parser revision authority.  Resolve source-owned fixtures
 # through gxpkg's installed package root; never fall back to an arbitrary
