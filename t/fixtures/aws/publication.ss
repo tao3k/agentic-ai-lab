@@ -155,8 +155,6 @@
     (call-with-output-string
       (lambda (port)
         (write `(yuanxu!
-                  :load-modules ,(path-expand "core/modules" repository)
-                  mode: explicit mount: Core (json-schema)
                   :load-modules ,(path-expand "modules" repository)
                   mode: explicit mount: Lab
                   (funflow) (nix) :services (opentofu)

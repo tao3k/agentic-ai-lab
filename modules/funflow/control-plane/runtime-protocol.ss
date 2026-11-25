@@ -48,6 +48,7 @@
    value
    artifact-handle
    error)
+  id: tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol#adapter-result::t
   transparent: #t)
 
 ;; : (-> Unit Symbol)
@@ -81,6 +82,7 @@
    artifact-handle
    error
    metadata)
+  id: tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol#runtime-response::t
   transparent: #t)
 
 ;; : (-> Alist Alist Alist)

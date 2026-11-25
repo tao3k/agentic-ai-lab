@@ -323,6 +323,7 @@
    frontier
    strategy
    policy)
+  id: tao3k/agentic-ai-lab/modules/funflow/control-plane/task#execution-request::t
   transparent: #t)
 
 (def ExecutionRequestContract

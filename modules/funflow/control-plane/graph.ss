@@ -56,6 +56,7 @@
    kind
    name
    dependencies)
+  id: tao3k/agentic-ai-lab/modules/funflow/control-plane/graph#plan-node::t
   transparent: #t)
 
 ;;; The plan mirrors the flow boundary contracts while exposing a flat node
@@ -66,6 +67,7 @@
    nodes
    input-contract
    output-contract)
+  id: tao3k/agentic-ai-lab/modules/funflow/control-plane/graph#execution-plan::t
   transparent: #t)
 
 ;;; DAG receipts are report-only graph projections. They are not run receipts,

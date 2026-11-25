@@ -214,7 +214,7 @@
                   (map (lambda (path) (cons path (module-source-read path)))
                        (list expression-path catalog-path collector-path checker))))))
           (write-source (path-expand "interface.ss" owner)
-            "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects)) (.def Infrastructure identity: 'app/infrastructure core: (.o scope-contract: Scope exports: (.o config: Config)) features: (.o))")
+            "(import (only-in :tao3k/agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)) (.def Infrastructure identity: 'app/infrastructure core: (.o scope-contract: Scope exports: (.o config: Config)) features: (.o))")
           (write-source (path-expand "modules/unused/bomb/interface.ss" root)
                         "(((disabled module must not parse")
           (write-source (path-expand "modules/unused/bomb/build.ss" root)

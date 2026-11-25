@@ -26,7 +26,7 @@
                        agentic-ai-lab-sandbox-profile?
                        agentic-ai-lab-sandbox-profile-name
                        agentic-ai-lab-sandbox-profile->descriptor)))
-      (eval '(import :clan/poo/mop :clan/poo/object))
+      (eval '(import :clan/poo/mop :clan/poo/object :clan/poo/type))
       (let (contract-row
       (sandbox-profile-contract-eval
        '(agentic-ai-lab-sandbox-profile-type-contract->alist)))

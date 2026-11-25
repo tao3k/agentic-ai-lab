@@ -13,18 +13,21 @@
         (only-in "control-plane/task.ss" execution-request-name execution-request-request execution-request-input
                  make-external-task make-pure-task)
         (only-in "control-plane/runtime-protocol.ss" make-adapter-result adapter-result-value)
-        (only-in "control-plane/strategy.ss" make-local-eager-strategy)
-        (for-template "control-plane/runtime-adapter.ss" "control-plane/runner.ss")
+        (for-template "control-plane/strategy.ss" "control-plane/runtime-adapter.ss" "control-plane/runner.ss")
         (only-in :tao3k/yuanxu/module-system/source/module-binding module-binding-action)
         (only-in :tao3k/yuanxu/module-system/source/compiled-role
                  bind-deferred-interfaces deferred-interface-values))
 (export job-graph job-flow run-job)
 
-(bind-deferred-interfaces "control-plane/runtime-adapter.ss" "control-plane/runner.ss")
+(bind-deferred-interfaces "control-plane/strategy.ss" "control-plane/runtime-adapter.ss" "control-plane/runner.ss")
 
 ;; Importing a Job prototype or projecting its graph leaves execution cold.
 (def job-runtime
-  (.o adapter: (deferred-interface-values
+  (.o strategy: (deferred-interface-values
+                  "control-plane/strategy.ss"
+                  tao3k/agentic-ai-lab/modules/funflow/control-plane/strategy
+                  (make-local-eager-strategy) module-binding-action)
+      adapter: (deferred-interface-values
                  "control-plane/runtime-adapter.ss"
                  tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-adapter
                  (make-runtime-adapter) module-binding-action)
@@ -177,7 +180,8 @@
             (let* ((adapter ((.get job-runtime adapter make-runtime-adapter) 'ops '(external) submit
                               unsupported-ops-operation unsupported-ops-operation unsupported-ops-operation))
                    (runtime (.get job-runtime runner))
-                   (runner ((.get runtime make-runner) (make-local-eager-strategy) adapter))
+                   (strategy ((.get job-runtime strategy make-local-eager-strategy)))
+                   (runner ((.get runtime make-runner) strategy adapter))
                    (outcome ((.get runtime runner-run) runner (job-flow job projection workspace) (.o))))
               (set! results ((.get runtime run-result-value) outcome))
               (set! flow-receipt-value ((.get runtime run-result-receipt) outcome))))

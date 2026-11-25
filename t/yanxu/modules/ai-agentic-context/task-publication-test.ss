@@ -22,6 +22,7 @@
         (only-in :clan/poo/object .o .ref .slot? .cc object? object-supers)
         (only-in :clan/poo/type Type.)
         (only-in :std/list/list find)
+        (only-in :tao3k/agentic-ai-lab/modules/gitops/working-copy GitOpsWorkingCopyPolicy)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/task-publication
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/query-provider
@@ -204,7 +205,10 @@
                               (.o worktree: GitOpsFeature work: GitOpsWorkFeature worktrunk: GitOpsWorkTrunkFeature)
                               (.o worktree: ContextFeature work: ContextWorkFeature worktrunk: ContextWorkTrunkFeature))))
                      (.o identity: id features: declarations
-                         core: (.o scope-contract: ScopeType exports: (.o component: id)))))))))
+                         core: (.o scope-contract: ScopeType
+                                   exports: (if (eq? id 'gitops)
+                                              (.o component: id working-copy-policy: GitOpsWorkingCopyPolicy)
+                                              (.o component: id))))))))))
     (.ref view 'modules)))
 
 (def (worktree-loader s revision live-generation (design-path '(org design)) (roots '(findings))

@@ -40,6 +40,7 @@
         (.call tao3k/agentic-ai-lab.init.exports .make-spec-for '(modules/nono-sandbox)))
       (def target
         `(gxc: "modules/nono-sandbox/_nono"
+               (extra-inputs: ("modules/nono-sandbox/nono-c/nono.h"))
                "-cc-options" ,(string-append "-I" (path-expand "modules/nono-sandbox/nono-c"))
                "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup")
                                           (else "-ldl"))))

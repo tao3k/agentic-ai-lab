@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :clan/poo/object .ref)
+        (only-in :clan/poo/object .ref object?)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
@@ -56,7 +56,8 @@
                       'poo-authoring-gate)
         (check-equal? (.ref pipeline 'runtime-executed) #f)
         (check-equal? (car user-config) ':config)
-        (check-equal? (caadr user-config) '.def)
+        (check-equal? (object? (cadr user-config)) #t)
+        (check-equal? (.ref (cadr user-config) 'pipeline-name) 'poo-authoring-gate)
         (check-equal? (map yuanxu-cicd-check-name checks)
                       '(profile-authoring funflow-readiness))
         (check-equal? (yuanxu-cicd-check-profile
