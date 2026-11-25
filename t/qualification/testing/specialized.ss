@@ -68,7 +68,7 @@
        (def measure? (macos-qualification-timing?))
        (def qualified
          (qualification-script files (if measure? command (watched command)) 120
-           inputs: (list source (this-source-file) (absolute watch)) case-count: 99))
+           inputs: (list source (this-source-file) (absolute watch)) case-count: 100))
        (def script
          (if measure?
            (.cc qualified profile: (qualification-timing-profile (.get qualified profile)))
