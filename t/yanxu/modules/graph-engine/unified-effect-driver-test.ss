@@ -129,4 +129,71 @@
               (check (.ref step4 'phase) => 'quiescent-fixed-point)
               (check (.ref step4 'llm-calls-emitted) => 0)
               (check (.ref step4 'effects) => '())
-              (displayln "GRAPH-ENGINE-UNIFIED-EFFECT-DRIVER-OK"))))))))
+              (displayln "GRAPH-ENGINE-UNIFIED-EFFECT-DRIVER-OK"))))))
+
+    (test-case "run-unified-driver-to-quiescence drives 3 rounds automatically and projects live WorkbenchTabProjection"
+      (let* ((ob (make-obligation "ob-root" title: "Root Check" required-evidence-ids: '("ev-det")))
+             (det-task (make-deterministic-task-node
+                        "det-scan-1"
+                        "ob-root"
+                        "ev-det"
+                        'funflow-scan
+                        "src/a.ss"
+                        effect-class: 'pure-cas
+                        read-footprint: '("src/a.ss")
+                        write-footprint: '()))
+             (h1 (make-competing-hypothesis
+                  "H1" "Supply chain artifact tampering"
+                  evidence-lineage: '("ev:hash-diff")
+                  contradictions: '("build-repro-matched")
+                  open-questions: '("check-builder-attestation?")))
+             (h2 (make-competing-hypothesis
+                  "H2" "Non-deterministic archive timestamp"
+                  evidence-lineage: '("ev:mtime-delta")
+                  contradictions: '()
+                  open-questions: '("is-SOURCE_DATE_EPOCH-set?")))
+             (b1 (make-hypothesis-branch-proposal "B1" "Inspect cosign bundle"))
+             (b2 (make-hypothesis-branch-proposal "B2" "Diff tar headers"))
+             (g0 (make-obligation-graph
+                  "g-trampoline" cut: 3
+                  obligations: (list ob)
+                  evidence: '()
+                  det-tasks: (list det-task)))
+             (actor0 (make-actor-for-graph g0))
+             (st0 (make-unified-driver-state
+                   actor0 g0 (make-base-ctx)
+                   competing-hypotheses: (list h1 h2)
+                   branch-proposals: (list b1 b2)))
+             ;; Pure mock of Marlin's thin 4-primitive Rust `effect_pump`
+             (thin-substrate
+              (lambda (effects)
+                (map (lambda (eff)
+                       (let ((k (.ref eff 'kind))
+                             (id (.ref eff 'effect-id)))
+                         (cond
+                          ((eq? k 'cas-get) (make-cas-hit-receipt id "cached-det-evidence"))
+                          ((eq? k 'llm-complete) (make-llm-completed-receipt id (string-append "obs:" id)))
+                          (else (make-effect-error-receipt id "unexpected effect")))))
+                     effects)))
+             (run (run-unified-driver-to-quiescence st0 thin-substrate))
+             (proj (project-driver-state->workbench-projection run))
+             (tab (car (.ref proj 'dynamic-tabs)))
+             (final-graph (.ref (.ref run 'final-state) 'obligation-graph)))
+        ;; Round 1: deterministic-funflow-wave (cas-get -> cas-hit, 0 LLM)
+        ;; Round 2: evaluating-competing-hypotheses (2x2=4 parallel LLM calls)
+        ;; Round 3: quiescent-fixed-point (matrix recorded on ObligationGraph!)
+        (check (.ref run 'rounds-executed) => 3)
+        (check (.ref run 'final-phase) => 'quiescent-fixed-point)
+        (check (.ref run 'cas-hits-count) => 1)
+        (check (.ref run 'total-llm-calls) => 4)
+        (check (.ref run 'authorizes-effect?) => #f)
+        (check (length (.ref final-graph 'branch-matrices)) => 1)
+        ;; Direct WorkbenchTabProjection carries live phase, discharged checklist [1/1], and 2 observed hypotheses
+        (check (.ref proj 'visible-tab-ids) => '(index "task-uni-01"))
+        (check (.ref tab 'driver-phase) => 'quiescent-fixed-point)
+        (check (.ref tab 'checklist-done) => 1)
+        (check (.ref tab 'checklist-total) => 1)
+        (check (length (.ref tab 'competing-hypotheses)) => 2)
+        (check (.ref (car (.ref tab 'competing-hypotheses)) 'observed-branches) => 2)
+        (check (.ref (car (.ref tab 'competing-hypotheses)) 'total-branches) => 2)
+        (displayln "GRAPH-ENGINE-TRAMPOLINE-WORKBENCH-PROJECTION-OK")))))
