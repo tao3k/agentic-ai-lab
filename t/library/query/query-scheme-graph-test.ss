@@ -3,13 +3,13 @@
 (import :std/test
         (only-in :clan/poo/object .o .cc .ref)
         (only-in :tao3k/yuanxu/graph/types yuanxu-graph yuanxu-graph-node yuanxu-graph-edge)
-        (only-in ../modules/query/objects
+        (only-in :tao3k/agentic-ai-lab/modules/query/objects
                  AgenticAILabQuery. AgenticAILabQueryElementSpace. AgenticAILabSchemeGqlQueryLanguage.
                  AgenticAILabGqlQueryProgram. GraphSyntaxNode. GraphSyntaxStep. GraphSyntaxPath.
                  GraphSyntaxEquals. GraphSyntaxLiteral. GraphSyntaxProperty. GraphSyntaxProjection.
                  agentic-ai-lab-query-result-contract)
-        (only-in ../modules/query/gql agentic-ai-lab-query->gql)
-        (only-in ../modules/query/scheme-graph agentic-ai-lab-query-select-scheme-graph))
+        (only-in :tao3k/agentic-ai-lab/modules/query/gql agentic-ai-lab-query->gql)
+        (only-in :tao3k/agentic-ai-lab/modules/query/scheme-graph agentic-ai-lab-query-select-scheme-graph))
 (export query-scheme-graph-test)
 
 (def nodes
