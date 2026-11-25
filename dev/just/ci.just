@@ -34,6 +34,7 @@ ci-prepare-gerbil-deps cache_hit="false":
     if "$rebuild_dependents"; then
       gerbil env gerbil interactive packages/automation/runtime-dependencies.ss --rebuild-core-dependents
     fi
+    gerbil env gerbil pkg unlink github.com/tao3k/agentic-ai-lab >/dev/null 2>&1 || true
     gerbil env gerbil pkg link github.com/tao3k/agentic-ai-lab "{{ justfile_directory() }}"
     mkdir -p dev/.gerbil/lib
 
