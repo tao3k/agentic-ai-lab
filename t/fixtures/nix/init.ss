@@ -3,7 +3,7 @@
 (yuanxu!
   :load-modules "../../../modules" mount: Lab mode: explicit :test-dir "./t"
   (nix)
+  (funflow)
   :services (opentofu)
   :load-modules "../../../core/modules" mount: Core mode: explicit :test-dir "./t"
-  (funflow)
   (json-schema))

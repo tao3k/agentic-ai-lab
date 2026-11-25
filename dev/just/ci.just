@@ -61,6 +61,7 @@ ci-qualify-downstreams log_dir:
 [group('ci')]
 ci-build-dev-qualification qualification_dir:
     mkdir -p "{{ qualification_dir }}/lib"
+    ln -sfn "{{ agentic_ai_lab_gerbil_path }}/pkg" "{{ qualification_dir }}/pkg"
     gerbil env env GERBIL_PATH="{{ qualification_dir }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" just build-library
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss
 
