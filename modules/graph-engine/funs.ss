@@ -15,7 +15,8 @@
         "journal-handoff.ss"
         "governed-context-bridge.ss"
         "cyclic-subgraph.ss"
-        "task-actor.ss")
+        "task-actor.ss"
+        "marlin-handoff.ss")
 
 (export (import: "ascent-reconciler.ss")
         (import: "synthesis-oracle.ss")
@@ -50,7 +51,12 @@
         graph-admit-task-actor-scope-access
         graph-settle-task-actor
         graph-lookup-task-actor-by-id
-        graph-project-task-actors->workbench-tabs)
+        graph-project-task-actors->workbench-tabs
+        graph-validate-marlin-dispatch
+        graph-make-marlin-dispatch
+        graph-marlin-dispatch-alist
+        graph-make-marlin-receipt
+        graph-reconcile-marlin-receipt)
 
 (def graph-reconcile-frontier ascent-reconcile-frontier)
 (def graph-plan-funflow-c4-frontier plan-funflow-c4-frontier)
@@ -83,3 +89,8 @@
 (def graph-settle-task-actor settle-task-actor)
 (def graph-lookup-task-actor-by-id lookup-task-actor-by-id)
 (def graph-project-task-actors->workbench-tabs project-task-actors->workbench-tabs)
+(def graph-validate-marlin-dispatch validate-graph-marlin-dispatch)
+(def graph-make-marlin-dispatch make-graph-marlin-dispatch)
+(def graph-marlin-dispatch-alist graph-marlin-dispatch->alist)
+(def graph-make-marlin-receipt make-marlin-execution-receipt)
+(def graph-reconcile-marlin-receipt reconcile-marlin-execution-receipt)

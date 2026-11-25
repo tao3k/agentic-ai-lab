@@ -28,6 +28,16 @@ The project is not only an agent-loop or workflow-configuration library. Its int
 
 Scheme owns the high-level control plane: object prototypes, functional composition, validation, extension, projection, proof fact emission, and user configuration. Heavy execution remains outside this layer.
 
+* Library Framework Boundary (What =agentic-ai-lab= Does and Does NOT Own)
+
+*Important:* =agentic-ai-lab= is a *Library Framework* (pure POO + functional semantic core and verified contract layer). *It does NOT own or run everything after handoff (=runtime-executed?: #f=, =handoff-required?: #t=).*
+
+| Responsibility | Owner | Notes |
+| POO prototypes, FunFlow combinators, unified =GraphEngine= (DAG / Convergent Tree / Tarjan SCC / Session-free =TaskActor= & C4 Steering) | =agentic-ai-lab= (Library) | 100% pure Scheme core; zero mandatory SQLite/network/process side effects. |
+| Governed structural Context assembly, sandbox/Cedar pre-handoff validation, formal proofs (Quint / Lean) | =agentic-ai-lab= (Library) | Produces inert, identity-bound handoff envelopes and flat wire ABI projections (=MarlinDispatchEnvelope.= / =->alist=). |
+| Optional storage substrate features (e.g. =(graph-engine +sqlite-turso)=) & consumer libraries (=packages/python-runtime/=) | =agentic-ai-lab= (Opt-in / Library) | Strictly opt-in (=implied-modules: '()=) or backend-agnostic consumer libraries; never forced into the pure core. |
+| Production execution after run/handoff: LLM/model calls, live tool & OS sandbox execution (Nono/Cube), live Cedar PDP, production Turso/WAL DB hosting, daemons, and Marlin-specific Scheme/Rust wiring | *Marlin (=marlin-agent-core=) or other downstream Runtime Hosts* | Marlin-specific Scheme integration and runtime orchestration live in the *Marlin* repository, consuming =agentic-ai-lab= as a library via its stable handoff and fencing-epoch receipt contracts. |
+
 * Core Direction
 The current design is centered on three ideas.
 

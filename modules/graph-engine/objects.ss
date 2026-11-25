@@ -13,7 +13,8 @@
         "journal-handoff.ss"
         "governed-context-bridge.ss"
         "cyclic-subgraph.ss"
-        "task-actor.ss")
+        "task-actor.ss"
+        "marlin-handoff.ss")
 
 (export (import: "obligation-graph.ss")
         (import: "dag-frontier-scheduler.ss")
@@ -22,4 +23,5 @@
         (import: "journal-handoff.ss")
         (import: "governed-context-bridge.ss")
         (import: "cyclic-subgraph.ss")
-        (import: "task-actor.ss"))
+        (import: "task-actor.ss")
+        (import: "marlin-handoff.ss"))

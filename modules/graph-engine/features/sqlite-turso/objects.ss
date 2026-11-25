@@ -12,6 +12,7 @@
                  durable-trunk-open
                  durable-trunk-close!
                  durable-trunk-execute-handoff!
+                 durable-trunk-execute-marlin-dispatch!
                  durable-trunk-commit-step!
                  durable-trunk-recover))
 
@@ -26,6 +27,7 @@
       open: durable-trunk-open
       close!: durable-trunk-close!
       execute-handoff!: durable-trunk-execute-handoff!
+      execute-marlin-dispatch!: durable-trunk-execute-marlin-dispatch!
       commit-step!: durable-trunk-commit-step!
       recover: durable-trunk-recover))
 

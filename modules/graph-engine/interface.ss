@@ -61,5 +61,12 @@
                          admit-task-actor-scope-access: graph-admit-task-actor-scope-access
                          settle-task-actor: graph-settle-task-actor
                          lookup-task-actor-by-id: graph-lookup-task-actor-by-id
-                         project-task-actors->workbench-tabs: graph-project-task-actors->workbench-tabs))
+                         project-task-actors->workbench-tabs: graph-project-task-actors->workbench-tabs
+                         marlin-dispatch: MarlinDispatchEnvelope.
+                         marlin-receipt: MarlinExecutionReceipt.
+                         validate-marlin-dispatch: graph-validate-marlin-dispatch
+                         make-marlin-dispatch: graph-make-marlin-dispatch
+                         marlin-dispatch->alist: graph-marlin-dispatch-alist
+                         make-marlin-receipt: graph-make-marlin-receipt
+                         reconcile-marlin-receipt: graph-reconcile-marlin-receipt))
   features: '(sqlite-turso))

@@ -29,12 +29,16 @@
                  journal-verify!)
         (only-in "../../journal-handoff.ss"
                  plan-trunk-journal-handoff
-                 project-recovered-trunk-receipt))
+                 project-recovered-trunk-receipt)
+        (only-in "../../marlin-handoff.ss"
+                 marlin-dispatch-envelope?
+                 make-marlin-execution-receipt))
 
 (export plan-turso-substrate-envelope
         durable-trunk-open
         durable-trunk-close!
         durable-trunk-execute-handoff!
+        durable-trunk-execute-marlin-dispatch!
         durable-trunk-commit-step!
         durable-trunk-recover)
 
@@ -88,6 +92,34 @@
   (durable-trunk-execute-handoff!
    journal
    (plan-trunk-journal-handoff event-id event-payload trunk)))
+
+;;; Execute a validated `MarlinDispatchEnvelope.` carrying a `journal-handoff`
+;;; against the local SQLite/Turso WAL substrate and emit a real verified
+;;; `MarlinExecutionReceipt.` (`journal-epoch`, `chain-head-hash`, `fencing-epoch`)
+;;; ready for pure `reconcile-marlin-execution-receipt`.
+(def (durable-trunk-execute-marlin-dispatch!
+      journal
+      dispatch-envelope
+      branch-outcomes: (branch-outcomes '())
+      executed-wave-ids: (executed-wave-ids '()))
+  (unless (marlin-dispatch-envelope? dispatch-envelope)
+    (error "durable-trunk-execute-marlin-dispatch!: expected MarlinDispatchEnvelope." dispatch-envelope))
+  (let* ((intent (.ref dispatch-envelope 'journal-handoff))
+         (commit-res (if intent
+                       (durable-trunk-execute-handoff! journal intent)
+                       #f))
+         (head-hash (journal-verify! journal))
+         (j-epoch (if commit-res (.ref commit-res 'journal-epoch) (journal-epoch journal))))
+    (make-marlin-execution-receipt
+     (.ref dispatch-envelope 'request-id)
+     (.ref dispatch-envelope 'task-id)
+     (.ref dispatch-envelope 'fencing-epoch)
+     status: 'ok
+     journal-epoch: j-epoch
+     chain-head-hash: head-hash
+     executed-wave-ids: executed-wave-ids
+     branch-outcomes: branch-outcomes
+     substrate: 'sqlite-turso)))
 
 (def (durable-trunk-recover journal task-flow-registry: (task-flow-registry '()))
   (let* ((head-hash (journal-verify! journal))
