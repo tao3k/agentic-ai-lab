@@ -5,7 +5,7 @@
 ;;; Unified Pure Scheme High-Order Execution Driver
 ;;; (`modules/graph-engine/unified-effect-driver.ss`).
 ;;;
-;;; Composes EVERY pure Scheme high-order engine in `poo-flow` into a single
+;;; Composes EVERY pure Scheme high-order engine in `agentic-ai-lab` into a single
 ;;; functional state machine over Marlin's thin 4-primitive `AtomicEffect` pump:
 ;;;   1. Real `gerbil-ascent` fixed-point reconciliation (`ascent-reconcile-frontier`)
 ;;;   2. Strict Deterministic-First Precedence: ready deterministic tasks emit
