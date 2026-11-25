@@ -4,8 +4,8 @@
 (import (rename-in (only-in :gerbil/tools/gxtest main) (main gxtest-main))
         (only-in :gerbil/runtime/init gerbil-load-expander!)
         (only-in :gerbil/expander import-module)
-        "../../temporal-applicability-test.ss"
-        "../../temporal-lifecycle-test.ss")
+        "../../yanxu/modules/temporal-causality/temporal-applicability-test.ss"
+        "../../yanxu/modules/temporal-causality/temporal-lifecycle-test.ss")
 (export main)
 ;;; Statically linked owner modules; upstream gxtest still owns discovery,
 ;;; assertions, Case profiles, reporting and exit status.
