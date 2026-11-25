@@ -19,6 +19,7 @@
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
         (only-in :std/list/list filter find)
         "obligation-graph.ss"
+        "delegation-fence.ss"
         "convergent-tree.ss"
         "journal-handoff.ss"
         "task-actor.ss"
@@ -36,6 +37,8 @@
         run-graph-fleet-to-quiescence
         fleet->inert-snapshot
         inert-snapshot->fleet
+        fleet->wire-string
+        wire-string->fleet
         plan-fleet-cas-checkpoint
         restore-fleet-from-cas-receipt
         project-fleet->workbench-projection)
@@ -484,17 +487,297 @@
      focused-task-id: (.ref snap 'focused-task-id)
      round-count: (.ref snap 'round-count))))
 
-;;; Emit a single canonical `CasPutEffect.` to persist the Fleet snapshot via Marlin.
+;;; ---------------------------------------------------------------------------
+;;; Pure Scheme UTF-8 Wire Serialization (`fleet->wire-string` / `wire-string->fleet`)
+;;; ---------------------------------------------------------------------------
+;;; Converts a complete `GraphFleetState.` into plain, closure-free Scheme data
+;;; (lists/symbols/strings/numbers/booleans) serialized as a deterministic UTF-8
+;;; S-expression string suitable for real disk / Turso SQLite WAL `CasPut`/`CasGet`
+;;; persistence across full VM/process restarts!
+
+(def (wire-alist-ref alist key default)
+  (let ((pair (and (list? alist) (assq key alist))))
+    (if pair (cdr pair) default)))
+
+(def (ob->wire o)
+  (list (cons 'obligation-id (.ref o 'obligation-id))
+        (cons 'title (opt-ref o 'title ""))
+        (cons 'required-evidence-ids (opt-ref o 'required-evidence-ids '()))
+        (cons 'depends-on (opt-ref o 'depends-on '()))
+        (cons 'active-defeaters (opt-ref o 'active-defeaters '()))
+        (cons 'premise-ids (opt-ref o 'premise-ids '()))))
+
+(def (wire->ob a)
+  (make-obligation
+   (wire-alist-ref a 'obligation-id "ob-restored")
+   title: (wire-alist-ref a 'title "")
+   required-evidence-ids: (wire-alist-ref a 'required-evidence-ids '())
+   depends-on: (wire-alist-ref a 'depends-on '())
+   active-defeaters: (wire-alist-ref a 'active-defeaters '())
+   premise-ids: (wire-alist-ref a 'premise-ids '())))
+
+(def (ev->wire ev)
+  (list (cons 'evidence-id (.ref ev 'evidence-id))
+        (cons 'payload (opt-ref ev 'payload ""))
+        (cons 'cut (opt-ref ev 'cut 1))
+        (cons 'premise-ids (opt-ref ev 'premise-ids '()))
+        (cons 'origin-tier (opt-ref ev 'origin-tier 'observed-fact))
+        (cons 'endorsed? (opt-ref ev 'endorsed? #t))
+        (cons 'retracted? (opt-ref ev 'retracted? #f))))
+
+(def (wire->ev a)
+  (make-evidence-fact
+   (wire-alist-ref a 'evidence-id "ev-restored")
+   (wire-alist-ref a 'payload "")
+   cut: (wire-alist-ref a 'cut 1)
+   premise-ids: (wire-alist-ref a 'premise-ids '())
+   origin-tier: (wire-alist-ref a 'origin-tier 'observed-fact)
+   endorsed?: (wire-alist-ref a 'endorsed? #t)
+   retracted?: (wire-alist-ref a 'retracted? #f)))
+
+(def (det-task->wire t)
+  (list (cons 'task-id (.ref t 'task-id))
+        (cons 'obligation-id (.ref t 'obligation-id))
+        (cons 'produces-evidence-id (.ref t 'produces-evidence-id))
+        (cons 'input (opt-ref t 'input ""))
+        (cons 'required-evidence-ids (opt-ref t 'required-evidence-ids '()))
+        (cons 'premise-ids (opt-ref t 'premise-ids '()))
+        (cons 'depends-on-tasks (opt-ref t 'depends-on-tasks '()))
+        (cons 'read-footprint (opt-ref t 'read-footprint '()))
+        (cons 'write-footprint (opt-ref t 'write-footprint '()))
+        (cons 'effect-class (opt-ref t 'effect-class 'pure-cas))
+        (cons 'env-digest (opt-ref t 'env-digest "sha256:default-env"))))
+
+(def (wire->det-task a)
+  (make-deterministic-task-node
+   (wire-alist-ref a 'task-id "det-restored")
+   (wire-alist-ref a 'obligation-id "ob-restored")
+   (wire-alist-ref a 'produces-evidence-id "ev-restored")
+   'restored-flow
+   (wire-alist-ref a 'input "")
+   required-evidence-ids: (wire-alist-ref a 'required-evidence-ids '())
+   premise-ids: (wire-alist-ref a 'premise-ids '())
+   depends-on-tasks: (wire-alist-ref a 'depends-on-tasks '())
+   read-footprint: (wire-alist-ref a 'read-footprint '())
+   write-footprint: (wire-alist-ref a 'write-footprint '())
+   effect-class: (wire-alist-ref a 'effect-class 'pure-cas)
+   env-digest: (wire-alist-ref a 'env-digest "sha256:default-env")))
+
+(def (inbox-item->wire item)
+  (list (cons 'kind (opt-ref item 'kind 'diagnostic))
+        (cons 'task-id (opt-ref item 'task-id ""))
+        (cons 'detail (opt-ref item 'detail ""))))
+
+(def (wire->inbox-item a)
+  (.o bind-these: #f
+      kind: (wire-alist-ref a 'kind 'diagnostic)
+      task-id: (wire-alist-ref a 'task-id "")
+      detail: (wire-alist-ref a 'detail "")))
+
+(def (comp-hyp->wire h)
+  (list (cons 'hypothesis-id (.ref h 'hypothesis-id))
+        (cons 'claim (opt-ref h 'claim ""))
+        (cons 'evidence-lineage (opt-ref h 'evidence-lineage '()))
+        (cons 'contradictions (opt-ref h 'contradictions '()))
+        (cons 'open-questions (opt-ref h 'open-questions '()))))
+
+(def (wire->comp-hyp a)
+  (make-competing-hypothesis
+   (wire-alist-ref a 'hypothesis-id "H?")
+   (wire-alist-ref a 'claim "")
+   evidence-lineage: (wire-alist-ref a 'evidence-lineage '())
+   contradictions: (wire-alist-ref a 'contradictions '())
+   open-questions: (wire-alist-ref a 'open-questions '())))
+
+(def (branch-prop->wire b)
+  (list (cons 'branch-id (.ref b 'branch-id))
+        (cons 'question (opt-ref b 'question ""))
+        (cons 'proposer (opt-ref b 'proposer 'investigator))
+        (cons 'endpoint (opt-ref b 'endpoint "openai/gpt-marlin"))
+        (cons 'evidence-refs (opt-ref b 'evidence-refs '()))))
+
+(def (wire->branch-prop a)
+  (make-hypothesis-branch-proposal
+   (wire-alist-ref a 'branch-id "B?")
+   (wire-alist-ref a 'question "")
+   proposer: (wire-alist-ref a 'proposer 'investigator)
+   endpoint: (wire-alist-ref a 'endpoint "openai/gpt-marlin")
+   evidence-refs: (wire-alist-ref a 'evidence-refs '())))
+
+(def (graph->wire g)
+  (list (cons 'graph-id (.ref g 'graph-id))
+        (cons 'cut (.ref g 'cut))
+        (cons 'obligations (map ob->wire (.ref g 'obligations)))
+        (cons 'evidence (map ev->wire (.ref g 'evidence)))
+        (cons 'det-tasks (map det-task->wire (.ref g 'det-tasks)))
+        (cons 'completed-tasks (opt-ref g 'completed-tasks '()))
+        (cons 'human-inbox (map inbox-item->wire (opt-ref g 'human-inbox '())))
+        (cons 'cedar-grant-live? (opt-ref g 'cedar-grant-live? #t))
+        (cons 'mcp-manifest-healthy? (opt-ref g 'mcp-manifest-healthy? #t))))
+
+(def (wire->graph a)
+  (let* ((base (make-obligation-graph
+                (wire-alist-ref a 'graph-id "g-restored")
+                cut: (wire-alist-ref a 'cut 1)
+                obligations: (map wire->ob (wire-alist-ref a 'obligations '()))
+                evidence: (map wire->ev (wire-alist-ref a 'evidence '()))
+                det-tasks: (map wire->det-task (wire-alist-ref a 'det-tasks '()))
+                completed-tasks: (wire-alist-ref a 'completed-tasks '())
+                cedar-grant-live?: (wire-alist-ref a 'cedar-grant-live? #t)
+                mcp-manifest-healthy?: (wire-alist-ref a 'mcp-manifest-healthy? #t))))
+    (let loop ((items (map wire->inbox-item (wire-alist-ref a 'human-inbox '())))
+               (g base))
+      (if (null? items)
+        g
+        (loop (cdr items) (obligation-graph-add-human-inbox g (car items)))))))
+
+(def (ctx->wire c)
+  (list (cons 'context-cut (opt-ref c 'context-cut 1))
+        (cons 'kv-prefix-digest (opt-ref c 'kv-prefix-digest "sha256:unbound"))
+        (cons 'disclosure-depth (opt-ref c 'disclosure-depth 'L1))
+        (cons 'has-active-defeater? (opt-ref c 'has-active-defeater? #f))
+        (cons 'sandbox-admitted? (opt-ref c 'sandbox-admitted? #t))
+        (cons 'cedar-handoff-valid? (opt-ref c 'cedar-handoff-valid? #t))))
+
+(def (wire->ctx a)
+  (.o bind-these: #f
+      context-cut: (wire-alist-ref a 'context-cut 1)
+      kv-prefix-digest: (wire-alist-ref a 'kv-prefix-digest "sha256:unbound")
+      disclosure-depth: (wire-alist-ref a 'disclosure-depth 'L1)
+      has-active-defeater?: (wire-alist-ref a 'has-active-defeater? #f)
+      sandbox-admitted?: (wire-alist-ref a 'sandbox-admitted? #t)
+      cedar-handoff-valid?: (wire-alist-ref a 'cedar-handoff-valid? #t)))
+
+(def (archived->wire a)
+  (list (cons 'task-id (.ref a 'task-id))
+        (cons 'title (opt-ref a 'title (.ref a 'task-id)))
+        (cons 'worktree (opt-ref a 'worktree "main"))
+        (cons 'status (opt-ref a 'status 'done))
+        (cons 'archived? #t)
+        (cons 'competing-hypotheses (map comp-hyp->wire (opt-ref a 'competing-hypotheses '())))))
+
+(def (wire->archived a)
+  (.o bind-these: #f
+      task-id: (wire-alist-ref a 'task-id "archived")
+      title: (wire-alist-ref a 'title "archived")
+      worktree: (wire-alist-ref a 'worktree "main")
+      status: (wire-alist-ref a 'status 'done)
+      archived?: #t
+      competing-hypotheses: (map wire->comp-hyp (wire-alist-ref a 'competing-hypotheses '()))
+      hypothesis-matrix: #f))
+
+(def (fleet->wire-string fleet-or-run)
+  (let* ((fleet (if (and (object? fleet-or-run)
+                         (eq? (opt-ref fleet-or-run 'kind #f)
+                              'agentic-ai-lab.graph-engine.fleet-run-trace.v1))
+                  (.ref fleet-or-run 'final-fleet)
+                  fleet-or-run))
+         (active-wires
+          (map (lambda (st)
+                 (let* ((actor (.ref st 'actor))
+                        (trunk (.ref actor 'trunk))
+                        (env (.ref trunk 'capability-envelope)))
+                   (list (cons 'task-id (.ref actor 'task-id))
+                         (cons 'title (opt-ref actor 'title (.ref actor 'task-id)))
+                         (cons 'worktree (opt-ref actor 'worktree "main"))
+                         (cons 'scope-mode (opt-ref actor 'scope-mode 'project))
+                         (cons 'scope-ids (opt-ref actor 'scope-ids '("scope-main")))
+                         (cons 'fencing-epoch (opt-ref actor 'fencing-epoch 1))
+                         (cons 'detour-mode (opt-ref actor 'detour-mode 'mainline))
+                         (cons 'detour-node-id (opt-ref actor 'detour-node-id #f))
+                         (cons 'trunk-id (.ref trunk 'trunk-id))
+                         (cons 'apex-obligation-id (.ref trunk 'apex-obligation-id))
+                         (cons 'shared-context-cut (.ref trunk 'shared-context-cut))
+                         (cons 'kv-prefix-digest (.ref trunk 'kv-prefix-digest))
+                         (cons 'env-owner (.ref env 'owner-id))
+                         (cons 'env-allowed (.ref env 'allowed-caps))
+                         (cons 'env-denied (.ref env 'denied-caps))
+                         (cons 'env-egress? (.ref env 'egress-allowed?))
+                         (cons 'obligation-graph (graph->wire (.ref st 'obligation-graph)))
+                         (cons 'governed-context (ctx->wire (.ref st 'governed-context)))
+                         (cons 'competing-hypotheses (map comp-hyp->wire (.ref st 'competing-hypotheses)))
+                         (cons 'branch-proposals (map branch-prop->wire (.ref st 'branch-proposals)))
+                         (cons 'step-count (opt-ref st 'step-count 0))
+                         (cons 'repair-budget (opt-ref st 'repair-budget 3))
+                         (cons 'repair-history (opt-ref st 'repair-history '())))))
+               (.ref fleet 'active-drivers)))
+         (wire-sexp
+          (list 'fleet-wire-v1
+                (cons 'active active-wires)
+                (cons 'archived (map archived->wire (.ref fleet 'archived-actors)))
+                (cons 'peek-set (.ref fleet 'peek-set))
+                (cons 'focused-task-id (.ref fleet 'focused-task-id))
+                (cons 'round-count (.ref fleet 'round-count)))))
+    (call-with-output-string (lambda (port) (write wire-sexp port)))))
+
+(def (wire-string->fleet wire-str)
+  (let ((parsed (call-with-input-string wire-str read)))
+    (unless (and (pair? parsed) (eq? (car parsed) 'fleet-wire-v1))
+      (error "wire-string->fleet: invalid fleet-wire-v1 header" parsed))
+    (let* ((alist (cdr parsed))
+           (drivers
+            (map (lambda (e)
+                   (let* ((g (wire->graph (wire-alist-ref e 'obligation-graph '())))
+                          (env (make-capability-envelope
+                                (wire-alist-ref e 'env-owner "owner")
+                                allowed-caps: (wire-alist-ref e 'env-allowed '(context-read))
+                                denied-caps: (wire-alist-ref e 'env-denied '(host-egress))
+                                egress-allowed?: (wire-alist-ref e 'env-egress? #f)))
+                          (trunk (make-context-trunk
+                                  (wire-alist-ref e 'trunk-id "trunk-restored")
+                                  (wire-alist-ref e 'apex-obligation-id "ob-restored")
+                                  g
+                                  env
+                                  shared-context-cut: (wire-alist-ref e 'shared-context-cut 1)
+                                  kv-prefix-digest: (wire-alist-ref e 'kv-prefix-digest "sha256:unbound")))
+                          (base-actor (make-task-actor
+                                       (wire-alist-ref e 'task-id "task-restored")
+                                       trunk
+                                       (wire-alist-ref e 'scope-ids '("scope-main"))
+                                       title: (wire-alist-ref e 'title "Restored")
+                                       worktree: (wire-alist-ref e 'worktree "main")
+                                       scope-mode: (wire-alist-ref e 'scope-mode 'project)
+                                       fencing-epoch: (wire-alist-ref e 'fencing-epoch 1)))
+                          (dmode (wire-alist-ref e 'detour-mode 'mainline))
+                          (actor (if (eq? dmode 'mainline)
+                                   base-actor
+                                   (.ref (enter-task-actor-detour
+                                          base-actor dmode
+                                          (or (wire-alist-ref e 'detour-node-id #f) "restored-detour"))
+                                         'actor))))
+                     (make-unified-driver-state
+                      actor
+                      g
+                      (wire->ctx (wire-alist-ref e 'governed-context '()))
+                      competing-hypotheses: (map wire->comp-hyp (wire-alist-ref e 'competing-hypotheses '()))
+                      branch-proposals: (map wire->branch-prop (wire-alist-ref e 'branch-proposals '()))
+                      step-count: (wire-alist-ref e 'step-count 0)
+                      repair-budget: (wire-alist-ref e 'repair-budget 3)
+                      repair-history: (wire-alist-ref e 'repair-history '()))))
+                 (wire-alist-ref alist 'active '()))))
+      (make-graph-fleet-state
+       drivers
+       archived-actors: (map wire->archived (wire-alist-ref alist 'archived '()))
+       peek-set: (wire-alist-ref alist 'peek-set '())
+       focused-task-id: (wire-alist-ref alist 'focused-task-id #f)
+       round-count: (wire-alist-ref alist 'round-count 0)))))
+
+;;; Emit a single canonical `CasPutEffect.` carrying UTF-8 wire bytes of the
+;;; complete Fleet snapshot for Marlin's thin `effect_pump` / Turso WAL CAS.
 (def (plan-fleet-cas-checkpoint fleet-or-run cas-key)
   (make-cas-put-effect
    (string-append "fleet-checkpoint:" cas-key)
    cas-key
-   (fleet->inert-snapshot fleet-or-run)))
+   (fleet->wire-string fleet-or-run)))
 
-;;; Restore a live `GraphFleetState.` from a Marlin `cas-hit` receipt.
+;;; Restore a live `GraphFleetState.` from a Marlin `cas-hit` receipt (supports
+;;; both UTF-8 wire strings from real Turso WAL and in-memory POO snapshots).
 (def (restore-fleet-from-cas-receipt receipt)
   (if (and (object? receipt) (eq? (opt-ref receipt 'kind #f) 'cas-hit))
-    (inert-snapshot->fleet (.ref receipt 'payload))
+    (let ((payload (.ref receipt 'payload)))
+      (if (string? payload)
+        (wire-string->fleet payload)
+        (inert-snapshot->fleet payload)))
     (error "restore-fleet-from-cas-receipt: expected cas-hit receipt" receipt)))
 
 ;;; Project an entire multi-actor `GraphFleetState.` (or `GraphFleetRunTrace.`)

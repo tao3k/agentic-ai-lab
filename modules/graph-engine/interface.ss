@@ -97,6 +97,8 @@
                          run-graph-fleet-to-quiescence: graph-run-graph-fleet-to-quiescence
                          fleet->inert-snapshot: graph-fleet->inert-snapshot
                          inert-snapshot->fleet: graph-inert-snapshot->fleet
+                         fleet->wire-string: graph-fleet->wire-string
+                         wire-string->fleet: graph-wire-string->fleet
                          plan-fleet-cas-checkpoint: graph-plan-fleet-cas-checkpoint
                          restore-fleet-from-cas-receipt: graph-restore-fleet-from-cas-receipt
                          project-fleet->workbench-projection: graph-project-fleet->workbench-projection))

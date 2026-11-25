@@ -198,6 +198,8 @@
         (check (.ref (.ref st-def 'actor) 'detour-mode) => 'blocker-active)
         (check (.ref (.ref st-def 'governed-context) 'disclosure-depth) => 'L3)
         (check (.ref (.ref st-def 'governed-context) 'has-active-defeater?) => #t)
+        ;; Checkpoint payload is a real pure UTF-8 wire string (zero Gambit heap pointers!)
+        (check (string? (.ref put-eff 'payload)) => #t)
         ;; Restored Fleet preserves blocker-active, active defeater, human-inbox, and competing hypotheses!
         (check (.ref tab-restored 'detour-mode) => 'blocker-active)
         (check (.ref tab-restored 'active-defeaters-count) => 1)

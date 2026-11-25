@@ -91,6 +91,8 @@
         graph-run-graph-fleet-to-quiescence
         graph-fleet->inert-snapshot
         graph-inert-snapshot->fleet
+        graph-fleet->wire-string
+        graph-wire-string->fleet
         graph-plan-fleet-cas-checkpoint
         graph-restore-fleet-from-cas-receipt
         graph-project-fleet->workbench-projection)
@@ -159,6 +161,8 @@
 (def graph-run-graph-fleet-to-quiescence run-graph-fleet-to-quiescence)
 (def graph-fleet->inert-snapshot fleet->inert-snapshot)
 (def graph-inert-snapshot->fleet inert-snapshot->fleet)
+(def graph-fleet->wire-string fleet->wire-string)
+(def graph-wire-string->fleet wire-string->fleet)
 (def graph-plan-fleet-cas-checkpoint plan-fleet-cas-checkpoint)
 (def graph-restore-fleet-from-cas-receipt restore-fleet-from-cas-receipt)
 (def graph-project-fleet->workbench-projection project-fleet->workbench-projection)
