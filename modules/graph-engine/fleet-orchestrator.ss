@@ -18,7 +18,9 @@
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
         (only-in :std/list/list filter find)
+        "obligation-graph.ss"
         "convergent-tree.ss"
+        "journal-handoff.ss"
         "task-actor.ss"
         "atomic-effect-orchestrator.ss"
         "unified-effect-driver.ss")
@@ -26,10 +28,16 @@
 (export GraphFleetState.
         GraphFleetStepResult.
         GraphFleetRunTrace.
+        GraphFleetSnapshot.
         make-graph-fleet-state
         fleet-spawn-sibling-from-detour
+        fleet-apply-bitemporal-event
         step-graph-fleet
         run-graph-fleet-to-quiescence
+        fleet->inert-snapshot
+        inert-snapshot->fleet
+        plan-fleet-cas-checkpoint
+        restore-fleet-from-cas-receipt
         project-fleet->workbench-projection)
 
 (def (opt-ref obj key default)
@@ -55,6 +63,10 @@
 (.def GraphFleetRunTrace.
   kind: 'agentic-ai-lab.graph-engine.fleet-run-trace.v1
   authorizes-effect?: #f)
+
+(.def GraphFleetSnapshot.
+  kind: 'agentic-ai-lab.graph-engine.fleet-snapshot.v1
+  runtime-executed?: #f)
 
 (def (make-graph-fleet-state
       active-drivers
@@ -187,6 +199,89 @@
        focused-task-id: (or (.ref fleet 'focused-task-id) sibling-task-id)
        round-count: (.ref fleet 'round-count)))))
 
+(def (graph-has-active-defeaters? g)
+  (let loop ((obs (.ref g 'obligations)))
+    (cond
+     ((null? obs) #f)
+     ((pair? (.ref (car obs) 'active-defeaters)) #t)
+     (else (loop (cdr obs))))))
+
+;;; Inject an external bitemporal event (`defeater-discovered`, `premise-retracted`,
+;;; `cedar-revoked`, `cedar-restored`, `human-approved`, `evidence-arrived`, etc.)
+;;; onto `task-id` inside the live Fleet:
+;;;   - Selectively updates `ObligationGraph` (preserving unrelated CAS receipts!)
+;;;   - On defeater/retraction/revocation: elevates `governed-context` to L3,
+;;;     appends a `human-inbox` diagnostic entry, and enters `blocker-active` Detour!
+;;;   - On `human-approved` / `cedar-restored`: clears resolved blocker & exits
+;;;     `blocker-active` cleanly via `'return-to-origin`.
+(def (fleet-apply-bitemporal-event fleet task-id event)
+  (let* ((ekind (.ref event 'event-kind))
+         (drivers (.ref fleet 'active-drivers))
+         (next-drivers
+          (map
+           (lambda (st)
+             (if (not (equal? (.ref (.ref st 'actor) 'task-id) task-id))
+               st
+               (let* ((actor (.ref st 'actor))
+                      (graph0 (.ref st 'obligation-graph))
+                      (ctx0 (.ref st 'governed-context))
+                      (g1 (obligation-graph-apply-event graph0 event))
+                      (blocking? (memq ekind '(defeater-discovered premise-retracted
+                                               cedar-revoked mcp-manifest-mutated)))
+                      (resolving? (memq ekind '(human-approved cedar-restored mcp-manifest-repinned)))
+                      (g2 (if blocking?
+                            (obligation-graph-add-human-inbox
+                             g1
+                             (.o bind-these: #f
+                                 kind: ekind
+                                 task-id: task-id
+                                 detail: (or (opt-ref event 'defeater-id #f)
+                                             (opt-ref event 'premise-id #f)
+                                             (symbol->string ekind))))
+                            g1))
+                      (defeater-now? (graph-has-active-defeaters? g2))
+                      (next-ctx
+                       (.o bind-these: #f
+                           context-cut: (.ref g2 'cut)
+                           kv-prefix-digest: (opt-ref ctx0 'kv-prefix-digest "sha256:unbound")
+                           disclosure-depth: (if (or blocking? defeater-now?)
+                                               'L3
+                                               (opt-ref ctx0 'disclosure-depth 'L1))
+                           has-active-defeater?: (or defeater-now? (eq? ekind 'defeater-discovered))
+                           sandbox-admitted?: (opt-ref ctx0 'sandbox-admitted? #t)
+                           cedar-handoff-valid?: (cond
+                                                  ((eq? ekind 'cedar-revoked) #f)
+                                                  ((memq ekind '(cedar-restored human-approved)) #t)
+                                                  (else (opt-ref ctx0 'cedar-handoff-valid? #t)))))
+                      (cur-detour (opt-ref actor 'detour-mode 'mainline))
+                      (next-actor
+                       (cond
+                        ((and blocking? (eq? cur-detour 'mainline))
+                         (.ref (enter-task-actor-detour
+                                actor 'blocker-active
+                                (string-append "blk-event-" (symbol->string ekind)))
+                               'actor))
+                        ((and resolving? (eq? cur-detour 'blocker-active) (not defeater-now?)
+                              (.ref g2 'cedar-grant-live?))
+                         (.ref (exit-task-actor-detour actor 'return-to-origin) 'actor))
+                        (else actor))))
+                 (make-unified-driver-state
+                  next-actor g2 next-ctx
+                  competing-hypotheses: (.ref st 'competing-hypotheses)
+                  branch-proposals: (.ref st 'branch-proposals)
+                  hypothesis-matrix: (opt-ref st 'hypothesis-matrix #f)
+                  completed-step-outputs: (opt-ref st 'completed-step-outputs '())
+                  step-count: (opt-ref st 'step-count 0)
+                  repair-budget: (opt-ref st 'repair-budget 3)
+                  repair-history: (opt-ref st 'repair-history '())))))
+           drivers)))
+    (make-graph-fleet-state
+     next-drivers
+     archived-actors: (.ref fleet 'archived-actors)
+     peek-set: (.ref fleet 'peek-set)
+     focused-task-id: (.ref fleet 'focused-task-id)
+     round-count: (.ref fleet 'round-count))))
+
 ;;; Pure functional fleet step: runs `drive-graph-actor-step` across EVERY active
 ;;; actor simultaneously, merges all emitted `AtomicEffect.`s into a single
 ;;; parallel batch for Marlin's thin Tokio pump, and optionally auto-archives
@@ -309,6 +404,98 @@
             authorizes-effect?: #f)
         (let ((next-receipts (effect-interpreter effs)))
           (loop next-fl next-receipts (+ round 1) llm-n hit-n put-n next-trace))))))
+
+;;; Pure Scheme inert snapshot of a complete multi-actor `GraphFleetState.`
+;;; (suitable for persisting via Marlin's thin `CasPutEffect.` / Turso WAL and
+;;; lossless crash-restart recovery without touching Rust high-order logic!).
+(def (fleet->inert-snapshot fleet-or-run)
+  (let* ((fleet (if (and (object? fleet-or-run)
+                         (eq? (opt-ref fleet-or-run 'kind #f)
+                              'agentic-ai-lab.graph-engine.fleet-run-trace.v1))
+                  (.ref fleet-or-run 'final-fleet)
+                  fleet-or-run))
+         (active-entries
+          (map (lambda (st)
+                 (let ((actor (.ref st 'actor)))
+                   (.o bind-these: #f
+                       task-id: (.ref actor 'task-id)
+                       title: (opt-ref actor 'title (.ref actor 'task-id))
+                       worktree: (opt-ref actor 'worktree "main")
+                       scope-mode: (opt-ref actor 'scope-mode 'project)
+                       scope-ids: (opt-ref actor 'scope-ids '("scope-main"))
+                       fencing-epoch: (opt-ref actor 'fencing-epoch 1)
+                       detour-mode: (opt-ref actor 'detour-mode 'mainline)
+                       detour-node-id: (opt-ref actor 'detour-node-id #f)
+                       trunk-snapshot: (trunk->inert-snapshot (.ref actor 'trunk))
+                       obligation-graph: (.ref st 'obligation-graph)
+                       governed-context: (.ref st 'governed-context)
+                       competing-hypotheses: (.ref st 'competing-hypotheses)
+                       branch-proposals: (.ref st 'branch-proposals)
+                       hypothesis-matrix: (opt-ref st 'hypothesis-matrix #f)
+                       completed-step-outputs: (opt-ref st 'completed-step-outputs '())
+                       step-count: (opt-ref st 'step-count 0)
+                       repair-budget: (opt-ref st 'repair-budget 3)
+                       repair-history: (opt-ref st 'repair-history '()))))
+               (.ref fleet 'active-drivers))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.graph-engine.fleet-snapshot.v1
+        active-entries: active-entries
+        archived-actors: (.ref fleet 'archived-actors)
+        peek-set: (.ref fleet 'peek-set)
+        focused-task-id: (.ref fleet 'focused-task-id)
+        round-count: (.ref fleet 'round-count)
+        runtime-executed?: #f)))
+
+;;; Reconstruct a live, runnable `GraphFleetState.` from a `GraphFleetSnapshot.`.
+(def (inert-snapshot->fleet snap)
+  (let ((drivers
+         (map (lambda (e)
+                (let* ((trunk (inert-snapshot->trunk (.ref e 'trunk-snapshot)))
+                       (base-actor (make-task-actor
+                                    (.ref e 'task-id)
+                                    trunk
+                                    (.ref e 'scope-ids)
+                                    title: (.ref e 'title)
+                                    worktree: (.ref e 'worktree)
+                                    scope-mode: (.ref e 'scope-mode)
+                                    fencing-epoch: (.ref e 'fencing-epoch)))
+                       (dmode (.ref e 'detour-mode))
+                       (actor (if (eq? dmode 'mainline)
+                                base-actor
+                                (.ref (enter-task-actor-detour
+                                       base-actor dmode (or (.ref e 'detour-node-id) "restored-detour"))
+                                      'actor))))
+                  (make-unified-driver-state
+                   actor
+                   (.ref e 'obligation-graph)
+                   (.ref e 'governed-context)
+                   competing-hypotheses: (.ref e 'competing-hypotheses)
+                   branch-proposals: (.ref e 'branch-proposals)
+                   hypothesis-matrix: (.ref e 'hypothesis-matrix)
+                   completed-step-outputs: (.ref e 'completed-step-outputs)
+                   step-count: (.ref e 'step-count)
+                   repair-budget: (.ref e 'repair-budget)
+                   repair-history: (.ref e 'repair-history))))
+              (.ref snap 'active-entries))))
+    (make-graph-fleet-state
+     drivers
+     archived-actors: (.ref snap 'archived-actors)
+     peek-set: (.ref snap 'peek-set)
+     focused-task-id: (.ref snap 'focused-task-id)
+     round-count: (.ref snap 'round-count))))
+
+;;; Emit a single canonical `CasPutEffect.` to persist the Fleet snapshot via Marlin.
+(def (plan-fleet-cas-checkpoint fleet-or-run cas-key)
+  (make-cas-put-effect
+   (string-append "fleet-checkpoint:" cas-key)
+   cas-key
+   (fleet->inert-snapshot fleet-or-run)))
+
+;;; Restore a live `GraphFleetState.` from a Marlin `cas-hit` receipt.
+(def (restore-fleet-from-cas-receipt receipt)
+  (if (and (object? receipt) (eq? (opt-ref receipt 'kind #f) 'cas-hit))
+    (inert-snapshot->fleet (.ref receipt 'payload))
+    (error "restore-fleet-from-cas-receipt: expected cas-hit receipt" receipt)))
 
 ;;; Project an entire multi-actor `GraphFleetState.` (or `GraphFleetRunTrace.`)
 ;;; into a canonical Marlin `WorkbenchTabProjection`:

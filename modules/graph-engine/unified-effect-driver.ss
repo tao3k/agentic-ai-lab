@@ -11,12 +11,16 @@
 ;;;   2. Strict Deterministic-First Precedence: ready deterministic tasks emit
 ;;;      FunFlow `cas-get` / `sandbox-run` batches FIRST with ZERO LLM calls, and
 ;;;      completed receipts automatically mark tasks done & admit `EvidenceFact.`s!
-;;;   3. Scoped Detour `blocker-active` fail-closed trunk-mutation / settlement gate
-;;;   4. Competing Hypothesis Preservation: when `open-competition` hypotheses
-;;;      exist alongside proposed POO branches, emits the full `(hypotheses × branches)`
-;;;      read-only parallel batch, reconciles receipts into `CompetingHypothesisMatrix.`,
-;;;      and records it on `ObligationGraph` without collapsing or authorizing effects!
-;;;   5. Pure multi-round trampoline (`run-unified-driver-to-quiescence`) & direct
+;;;   3. Cold CAS Miss -> Two-Zone KV-Prefix + L3 Floor -> `llm-complete` -> `cas-put`
+;;;   4. Bounded Repair Cycle (Cyclic SCC): non-zero `sandbox-exited` checks
+;;;      `visited-failure-digests` (immediate `'cycle-oscillation-detected` halt!)
+;;;      and `repair-budget` (`'cycle-budget-exhausted`), auto-entering
+;;;      `blocker-active` Detour + recording a `human-inbox` diagnostic entry!
+;;;   5. Scoped Detour `blocker-active` fail-closed trunk-mutation / settlement gate
+;;;   6. Competing Hypothesis Preservation: full `(hypotheses × branches)` read-only
+;;;      parallel batch reconciled into `CompetingHypothesisMatrix.` without
+;;;      collapsing or authorizing effects!
+;;;   7. Pure multi-round trampoline (`run-unified-driver-to-quiescence`) & direct
 ;;;      Marlin `WorkbenchTabProjection` projection (`project-driver-state->workbench-projection`).
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
@@ -67,7 +71,9 @@
       branch-proposals: (branch-proposals '())
       hypothesis-matrix: (hypothesis-matrix #f)
       completed-step-outputs: (completed-step-outputs '())
-      step-count: (step-count 0))
+      step-count: (step-count 0)
+      repair-budget: (repair-budget 3)
+      repair-history: (repair-history '()))
   (.o bind-these: #f
       kind: 'agentic-ai-lab.graph-engine.unified-driver-state.v1
       actor: actor
@@ -78,6 +84,8 @@
       hypothesis-matrix: hypothesis-matrix
       completed-step-outputs: completed-step-outputs
       step-count: step-count
+      repair-budget: (max 1 repair-budget)
+      repair-history: repair-history
       authorizes-effect?: #f))
 
 (def (det-task->funflow-step task)
@@ -102,12 +110,24 @@
       (let ((effs (.ref (car ps) 'effects)))
         (loop (cdr ps) (append (reverse effs) acc))))))
 
-;;; Apply deterministic task completion receipts (`cas-hit`, `llm-completed` for
-;;; cold-miss deterministic steps, or `sandbox-exited` 0) directly onto the
-;;; immutable `ObligationGraph`, admitting produced evidence, marking
-;;; `(task-id . premise-digest)` completed, and emitting `cas-miss` -> `llm-complete`
-;;; or `llm-completed` -> `cas-put` follow-up atomic effects!
-(def (ingest-deterministic-receipts graph actor ctx receipts prev-outputs)
+(def (repair-history-lookup history tid)
+  (let ((entry (assoc tid history)))
+    (if entry (cdr entry) (cons 0 '()))))
+
+(def (repair-history-put history tid attempts visited)
+  (cons (cons tid (cons attempts visited))
+        (filter (lambda (e) (not (equal? (car e) tid))) history)))
+
+(def (total-repair-attempts history)
+  (let loop ((hs history) (acc 0))
+    (if (null? hs)
+      acc
+      (loop (cdr hs) (+ acc (cadr (car hs)))))))
+
+;;; Apply deterministic task receipts (`cas-hit`, `cas-miss`, `llm-completed`,
+;;; `sandbox-exited` 0, AND bounded repair cycle for non-zero `sandbox-exited`)
+;;; onto immutable `ObligationGraph` + `repair-history`.
+(def (ingest-deterministic-receipts graph actor ctx receipts prev-outputs repair-budget prev-repair-history)
   (let ((det-tasks (.ref graph 'det-tasks))
         (cut (.ref graph 'cut))
         (kv-digest (opt-ref ctx 'kv-prefix-digest "sha256:unbound"))
@@ -118,9 +138,12 @@
                (outs prev-outputs)
                (cas-hits 0)
                (cas-puts 0)
-               (followups '()))
+               (followups '())
+               (rhist prev-repair-history)
+               (halt-reason #f)
+               (halt-task #f))
       (if (null? rs)
-        (values g outs cas-hits cas-puts (reverse followups))
+        (values g outs cas-hits cas-puts (reverse followups) rhist halt-reason halt-task)
         (let* ((r (car rs))
                (rk (and (object? r) (opt-ref r 'kind #f)))
                (eid (and (object? r) (opt-ref r 'effect-id ""))))
@@ -142,8 +165,9 @@
                                   step actor ctx (list r) two-zone-prompt: prompt))
                             (next-effs (opt-ref rec 'next-effects '())))
                        (loop (cdr rs) g outs cas-hits cas-puts
-                             (append (reverse next-effs) followups)))
-                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+                             (append (reverse next-effs) followups)
+                             rhist halt-reason halt-task))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups rhist halt-reason halt-task)))))
 
            ;; Completed LLM call for a cold-miss deterministic step -> admit evidence,
            ;; mark task completed, AND emit `cas-put` so subsequent runs hit CAS with 0 LLM!
@@ -169,8 +193,54 @@
                              (append outs (list (cons tid payload)))
                              cas-hits
                              (+ cas-puts (length put-effs))
-                             (append (reverse put-effs) followups)))
-                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+                             (append (reverse put-effs) followups)
+                             rhist halt-reason halt-task))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups rhist halt-reason halt-task)))))
+
+           ;; Non-zero Sandbox exit -> Bounded Repair Cycle (SCC oscillation & budget gate!)
+           ((and (eq? rk 'sandbox-exited)
+                 (not (= (opt-ref r 'exit-code 1) 0))
+                 (strip-prefix "sandbox:" eid))
+            => (lambda (tid)
+                 (let* ((task (find (lambda (t) (equal? (.ref t 'task-id) tid)) det-tasks))
+                        (code (opt-ref r 'exit-code 1))
+                        (stderr (opt-ref r 'stderr ""))
+                        (fail-sig (string-append tid ":exit=" (number->string code) ":" stderr))
+                        (prev (repair-history-lookup rhist tid))
+                        (attempts (car prev))
+                        (visited (cdr prev))
+                        (next-attempts (+ attempts 1))
+                        (oscillating? (and (member fail-sig visited) #t))
+                        (exhausted? (>= next-attempts repair-budget))
+                        (next-rhist (repair-history-put rhist tid next-attempts (cons fail-sig visited))))
+                   (cond
+                    ((not task)
+                     (loop (cdr rs) g outs cas-hits cas-puts followups next-rhist halt-reason halt-task))
+                    (oscillating?
+                     (let* ((item (.o bind-these: #f
+                                      kind: 'cycle-oscillation-detected
+                                      task-id: tid
+                                      detail: fail-sig
+                                      attempts: next-attempts))
+                            (g1 (obligation-graph-add-human-inbox g item)))
+                       (loop (cdr rs) g1 outs cas-hits cas-puts followups next-rhist
+                             'cycle-oscillation-detected tid)))
+                    (exhausted?
+                     (let* ((item (.o bind-these: #f
+                                      kind: 'cycle-budget-exhausted
+                                      task-id: tid
+                                      detail: fail-sig
+                                      attempts: next-attempts))
+                            (g1 (obligation-graph-add-human-inbox g item)))
+                       (loop (cdr rs) g1 outs cas-hits cas-puts followups next-rhist
+                             'cycle-budget-exhausted tid)))
+                    (else
+                     (let* ((step (det-task->funflow-step task))
+                            (plan (plan-funflow-step-effects step actor ctx))
+                            (retry-effs (if (.ref plan 'admitted?) (.ref plan 'effects) '())))
+                       (loop (cdr rs) g outs cas-hits cas-puts
+                             (append (reverse retry-effs) followups)
+                             next-rhist halt-reason halt-task)))))))
 
            ;; Warm CAS hit or successful Sandbox exit -> admit evidence & mark completed (0 LLM!)
            ((or (and (eq? rk 'cas-hit) (strip-prefix "cas-get:" eid))
@@ -197,29 +267,41 @@
                              (append outs (list (cons tid payload)))
                              (if (eq? rk 'cas-hit) (+ cas-hits 1) cas-hits)
                              cas-puts
-                             followups))
-                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+                             followups
+                             rhist halt-reason halt-task))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups rhist halt-reason halt-task)))))
 
            (else
-            (loop (cdr rs) g outs cas-hits cas-puts followups))))))))
+            (loop (cdr rs) g outs cas-hits cas-puts followups rhist halt-reason halt-task))))))))
 
 ;;; Pure functional step: `(state, incoming-receipts) -> UnifiedDriverStepResult.`
 ;;; ZERO I/O, ZERO mutable globals — Marlin's thin Tokio pump executes `effects`
 ;;; in parallel and feeds raw receipts back into the next call.
 (def (drive-graph-actor-step state (receipts '()))
   (let*-values
-      (((actor) (.ref state 'actor))
+      (((raw-actor) (.ref state 'actor))
        ((raw-graph) (.ref state 'obligation-graph))
        ((ctx) (.ref state 'governed-context))
        ((hyps) (.ref state 'competing-hypotheses))
        ((branches) (.ref state 'branch-proposals))
-       ((detour-mode) (opt-ref actor 'detour-mode 'mainline))
        ((prev-matrix) (opt-ref state 'hypothesis-matrix #f))
        ((prev-outputs) (opt-ref state 'completed-step-outputs '()))
        ((next-count) (+ (opt-ref state 'step-count 0) 1))
-       ;; Step 1a: Ingest deterministic FunFlow / CAS-Miss / Sandbox receipts into ObligationGraph.
-       ((graph1 next-outputs cas-hits cas-puts followup-effs)
-        (ingest-deterministic-receipts raw-graph actor ctx receipts prev-outputs))
+       ((repair-budget) (opt-ref state 'repair-budget 3))
+       ((prev-rhist) (opt-ref state 'repair-history '()))
+       ;; Step 1a: Ingest deterministic FunFlow / CAS-Miss / Sandbox / Repair SCC receipts.
+       ((graph1 next-outputs cas-hits cas-puts followup-effs next-rhist cycle-halt halt-tid)
+        (ingest-deterministic-receipts
+         raw-graph raw-actor ctx receipts prev-outputs repair-budget prev-rhist))
+       ;; Auto-enter `blocker-active` Scoped Detour if bounded repair SCC halted fail-closed!
+       ((actor)
+        (if (and cycle-halt (eq? (opt-ref raw-actor 'detour-mode 'mainline) 'mainline))
+          (.ref (enter-task-actor-detour
+                 raw-actor 'blocker-active
+                 (string-append "blk-" (symbol->string cycle-halt) ":" (or halt-tid "step")))
+                'actor)
+          raw-actor))
+       ((detour-mode) (opt-ref actor 'detour-mode 'mainline))
        ;; Step 1b: Reconcile any competing-hypothesis receipts into a full
        ;; non-authorizing CompetingHypothesisMatrix and archive on ObligationGraph.
        ((hyp-receipts)
@@ -243,8 +325,31 @@
        ((followup-llm-count)
         (length (filter (lambda (e) (eq? (.ref e 'kind) 'llm-complete)) followup-effs))))
     (cond
-     ;; Gate 0: Pending FunFlow cold-miss follow-up (`llm-complete` or `cas-put`)
-     ;; must complete before starting the next frontier wave.
+     ;; Gate -1: Bounded Repair Cycle halted fail-closed (oscillation or budget exhausted).
+     (cycle-halt
+      (let ((next-state (make-unified-driver-state
+                         actor graph ctx
+                         competing-hypotheses: hyps
+                         branch-proposals: branches
+                         hypothesis-matrix: matrix
+                         completed-step-outputs: next-outputs
+                         step-count: next-count
+                         repair-budget: repair-budget
+                         repair-history: next-rhist)))
+        (.o bind-these: #f
+            kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
+            phase: 'cycle-repair-halted-blocker
+            blocked-reasons: (list cycle-halt)
+            llm-calls-emitted: 0
+            cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
+            effects: '()
+            ascent-frontier: ascent
+            hypothesis-matrix: matrix
+            state: next-state
+            authorizes-effect?: #f)))
+
+     ;; Gate 0: Pending FunFlow cold-miss / bounded repair retry follow-up effects.
      ((pair? followup-effs)
       (let ((next-state (make-unified-driver-state
                          actor graph ctx
@@ -252,12 +357,15 @@
                          branch-proposals: branches
                          hypothesis-matrix: matrix
                          completed-step-outputs: next-outputs
-                         step-count: next-count)))
+                         step-count: next-count
+                         repair-budget: repair-budget
+                         repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
-            phase: (if (> followup-llm-count 0)
-                     'funflow-cas-miss-llm-fill
-                     'funflow-cas-store-commit)
+            phase: (cond
+                    ((> followup-llm-count 0) 'funflow-cas-miss-llm-fill)
+                    ((> cas-puts 0) 'funflow-cas-store-commit)
+                    (else 'bounded-repair-cycle-retry))
             llm-calls-emitted: followup-llm-count
             cas-hits-observed: cas-hits
             cas-puts-emitted: cas-puts
@@ -266,6 +374,7 @@
             hypothesis-matrix: matrix
             state: next-state
             authorizes-effect?: #f)))
+
      ;; Gate A: Governance unhealthy -> halt fail-closed with 0 effects.
      ((eq? frontier-mode 'blocked-on-governance)
       (let ((next-state (make-unified-driver-state
@@ -274,12 +383,15 @@
                          branch-proposals: branches
                          hypothesis-matrix: matrix
                          completed-step-outputs: next-outputs
-                         step-count: next-count)))
+                         step-count: next-count
+                         repair-budget: repair-budget
+                         repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
             phase: 'blocked-on-governance
             llm-calls-emitted: 0
             cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
             effects: '()
             ascent-frontier: ascent
             hypothesis-matrix: matrix
@@ -304,7 +416,9 @@
                           branch-proposals: branches
                           hypothesis-matrix: matrix
                           completed-step-outputs: next-outputs
-                          step-count: next-count)))
+                          step-count: next-count
+                          repair-budget: repair-budget
+                          repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
             phase: (if (and (null? admitted-effects) (pair? blocked-plans))
@@ -312,6 +426,7 @@
                      'deterministic-funflow-wave)
             llm-calls-emitted: 0
             cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
             c4-frontier-plan: c4-plan
             blocked-reasons: (map (lambda (p) (.ref p 'reason)) blocked-plans)
             effects: admitted-effects
@@ -333,12 +448,15 @@
                           branch-proposals: branches
                           hypothesis-matrix: #f
                           completed-step-outputs: next-outputs
-                          step-count: next-count)))
+                          step-count: next-count
+                          repair-budget: repair-budget
+                          repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
             phase: 'evaluating-competing-hypotheses
             llm-calls-emitted: (length effs)
             cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
             effects: effs
             ascent-frontier: ascent
             hypothesis-matrix: #f
@@ -354,12 +472,15 @@
                          branch-proposals: branches
                          hypothesis-matrix: matrix
                          completed-step-outputs: next-outputs
-                         step-count: next-count)))
+                         step-count: next-count
+                         repair-budget: repair-budget
+                         repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
             phase: 'blocker-detour-halting-settlement
             llm-calls-emitted: 0
             cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
             effects: '()
             ascent-frontier: ascent
             hypothesis-matrix: matrix
@@ -374,12 +495,15 @@
                          branch-proposals: branches
                          hypothesis-matrix: matrix
                          completed-step-outputs: next-outputs
-                         step-count: next-count)))
+                         step-count: next-count
+                         repair-budget: repair-budget
+                         repair-history: next-rhist)))
         (.o bind-these: #f
             kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
             phase: 'quiescent-fixed-point
             llm-calls-emitted: 0
             cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
             effects: '()
             ascent-frontier: ascent
             hypothesis-matrix: matrix
@@ -445,6 +569,12 @@
         total-branches: total-count
         authorizes-effect?: #f)))
 
+(def (count-active-defeaters graph)
+  (let loop ((obs (.ref graph 'obligations)) (acc 0))
+    (if (null? obs)
+      acc
+      (loop (cdr obs) (+ acc (length (.ref (car obs) 'active-defeaters)))))))
+
 ;;; Project a live `UnifiedDriverStepResult.` (or `UnifiedDriverRunTrace.` /
 ;;; `UnifiedDriverState.`) directly into a Marlin `WorkbenchTabProjection` POO
 ;;; object consumable by `scheme/ui/task-workbench.ss` with ZERO Rust edits!
@@ -481,7 +611,11 @@
                   worktree: (opt-ref actor 'worktree "main")
                   checklist-done: done-obs
                   checklist-total: total-obs
-                  competing-hypotheses: enriched-hyps))
+                  competing-hypotheses: enriched-hyps
+                  human-inbox: (opt-ref graph 'human-inbox '())
+                  active-defeaters-count: (count-active-defeaters graph)
+                  repair-attempts: (total-repair-attempts (opt-ref st 'repair-history '()))
+                  repair-budget: (opt-ref st 'repair-budget 3)))
          (archived (map (lambda (a)
                           (.o bind-these: #f
                               task-id: (.ref a 'task-id)

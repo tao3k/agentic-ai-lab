@@ -73,20 +73,31 @@
                          marlin-dispatch->c-abi-vector: graph-marlin-dispatch-c-abi-vector
                          make-marlin-receipt: graph-make-marlin-receipt
                          reconcile-marlin-receipt: graph-reconcile-marlin-receipt
-                         compute-funflow-cas-key: compute-funflow-cas-key
-                         plan-funflow-step-effects: plan-funflow-step-effects
-                         reconcile-funflow-step-receipts: reconcile-funflow-step-receipts
-                         make-competing-hypothesis: make-competing-hypothesis
-                         make-hypothesis-branch-proposal: make-hypothesis-branch-proposal
-                         plan-competing-hypothesis-frontier: plan-competing-hypothesis-frontier
-                         reconcile-competing-hypothesis-matrix: reconcile-competing-hypothesis-matrix
-                         make-unified-driver-state: make-unified-driver-state
-                         drive-graph-actor-step: drive-graph-actor-step
-                         run-unified-driver-to-quiescence: run-unified-driver-to-quiescence
-                         project-driver-state->workbench-projection: project-driver-state->workbench-projection
-                         make-graph-fleet-state: make-graph-fleet-state
-                         fleet-spawn-sibling-from-detour: fleet-spawn-sibling-from-detour
-                         step-graph-fleet: step-graph-fleet
-                         run-graph-fleet-to-quiescence: run-graph-fleet-to-quiescence
-                         project-fleet->workbench-projection: project-fleet->workbench-projection))
+                         make-cas-hit-receipt: graph-make-cas-hit-receipt
+                         make-cas-miss-receipt: graph-make-cas-miss-receipt
+                         make-cas-stored-receipt: graph-make-cas-stored-receipt
+                         make-llm-completed-receipt: graph-make-llm-completed-receipt
+                         make-sandbox-exited-receipt: graph-make-sandbox-exited-receipt
+                         make-effect-error-receipt: graph-make-effect-error-receipt
+                         compute-funflow-cas-key: graph-compute-funflow-cas-key
+                         plan-funflow-step-effects: graph-plan-funflow-step-effects
+                         reconcile-funflow-step-receipts: graph-reconcile-funflow-step-receipts
+                         make-competing-hypothesis: graph-make-competing-hypothesis
+                         make-hypothesis-branch-proposal: graph-make-hypothesis-branch-proposal
+                         plan-competing-hypothesis-frontier: graph-plan-competing-hypothesis-frontier
+                         reconcile-competing-hypothesis-matrix: graph-reconcile-competing-hypothesis-matrix
+                         make-unified-driver-state: graph-make-unified-driver-state
+                         drive-graph-actor-step: graph-drive-graph-actor-step
+                         run-unified-driver-to-quiescence: graph-run-unified-driver-to-quiescence
+                         project-driver-state->workbench-projection: graph-project-driver-state->workbench-projection
+                         make-graph-fleet-state: graph-make-graph-fleet-state
+                         fleet-spawn-sibling-from-detour: graph-fleet-spawn-sibling-from-detour
+                         fleet-apply-bitemporal-event: graph-fleet-apply-bitemporal-event
+                         step-graph-fleet: graph-step-graph-fleet
+                         run-graph-fleet-to-quiescence: graph-run-graph-fleet-to-quiescence
+                         fleet->inert-snapshot: graph-fleet->inert-snapshot
+                         inert-snapshot->fleet: graph-inert-snapshot->fleet
+                         plan-fleet-cas-checkpoint: graph-plan-fleet-cas-checkpoint
+                         restore-fleet-from-cas-receipt: graph-restore-fleet-from-cas-receipt
+                         project-fleet->workbench-projection: graph-project-fleet->workbench-projection))
   features: '(sqlite-turso))

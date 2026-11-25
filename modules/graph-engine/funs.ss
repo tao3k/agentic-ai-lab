@@ -66,7 +66,34 @@
         graph-marlin-dispatch-alist
         graph-marlin-dispatch-c-abi-vector
         graph-make-marlin-receipt
-        graph-reconcile-marlin-receipt)
+        graph-reconcile-marlin-receipt
+        graph-make-cas-hit-receipt
+        graph-make-cas-miss-receipt
+        graph-make-cas-stored-receipt
+        graph-make-llm-completed-receipt
+        graph-make-sandbox-exited-receipt
+        graph-make-effect-error-receipt
+        graph-compute-funflow-cas-key
+        graph-plan-funflow-step-effects
+        graph-reconcile-funflow-step-receipts
+        graph-make-competing-hypothesis
+        graph-make-hypothesis-branch-proposal
+        graph-plan-competing-hypothesis-frontier
+        graph-reconcile-competing-hypothesis-matrix
+        graph-make-unified-driver-state
+        graph-drive-graph-actor-step
+        graph-run-unified-driver-to-quiescence
+        graph-project-driver-state->workbench-projection
+        graph-make-graph-fleet-state
+        graph-fleet-spawn-sibling-from-detour
+        graph-fleet-apply-bitemporal-event
+        graph-step-graph-fleet
+        graph-run-graph-fleet-to-quiescence
+        graph-fleet->inert-snapshot
+        graph-inert-snapshot->fleet
+        graph-plan-fleet-cas-checkpoint
+        graph-restore-fleet-from-cas-receipt
+        graph-project-fleet->workbench-projection)
 
 (def graph-reconcile-frontier ascent-reconcile-frontier)
 (def graph-plan-funflow-c4-frontier plan-funflow-c4-frontier)
@@ -108,3 +135,30 @@
 (def graph-marlin-dispatch-c-abi-vector graph-marlin-dispatch->c-abi-vector)
 (def graph-make-marlin-receipt make-marlin-execution-receipt)
 (def graph-reconcile-marlin-receipt reconcile-marlin-execution-receipt)
+(def graph-make-cas-hit-receipt make-cas-hit-receipt)
+(def graph-make-cas-miss-receipt make-cas-miss-receipt)
+(def graph-make-cas-stored-receipt make-cas-stored-receipt)
+(def graph-make-llm-completed-receipt make-llm-completed-receipt)
+(def graph-make-sandbox-exited-receipt make-sandbox-exited-receipt)
+(def graph-make-effect-error-receipt make-effect-error-receipt)
+(def graph-compute-funflow-cas-key compute-funflow-cas-key)
+(def graph-plan-funflow-step-effects plan-funflow-step-effects)
+(def graph-reconcile-funflow-step-receipts reconcile-funflow-step-receipts)
+(def graph-make-competing-hypothesis make-competing-hypothesis)
+(def graph-make-hypothesis-branch-proposal make-hypothesis-branch-proposal)
+(def graph-plan-competing-hypothesis-frontier plan-competing-hypothesis-frontier)
+(def graph-reconcile-competing-hypothesis-matrix reconcile-competing-hypothesis-matrix)
+(def graph-make-unified-driver-state make-unified-driver-state)
+(def graph-drive-graph-actor-step drive-graph-actor-step)
+(def graph-run-unified-driver-to-quiescence run-unified-driver-to-quiescence)
+(def graph-project-driver-state->workbench-projection project-driver-state->workbench-projection)
+(def graph-make-graph-fleet-state make-graph-fleet-state)
+(def graph-fleet-spawn-sibling-from-detour fleet-spawn-sibling-from-detour)
+(def graph-fleet-apply-bitemporal-event fleet-apply-bitemporal-event)
+(def graph-step-graph-fleet step-graph-fleet)
+(def graph-run-graph-fleet-to-quiescence run-graph-fleet-to-quiescence)
+(def graph-fleet->inert-snapshot fleet->inert-snapshot)
+(def graph-inert-snapshot->fleet inert-snapshot->fleet)
+(def graph-plan-fleet-cas-checkpoint plan-fleet-cas-checkpoint)
+(def graph-restore-fleet-from-cas-receipt restore-fleet-from-cas-receipt)
+(def graph-project-fleet->workbench-projection project-fleet->workbench-projection)
