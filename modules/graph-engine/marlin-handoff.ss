@@ -41,6 +41,7 @@
         validate-graph-marlin-dispatch
         make-graph-marlin-dispatch
         graph-marlin-dispatch->alist
+        graph-marlin-dispatch->c-abi-vector
         make-marlin-execution-receipt
         reconcile-marlin-execution-receipt)
 
@@ -90,6 +91,7 @@
       actor
       operation: (operation 'execute-frontier)
       join-node-id: (join-node-id #f)
+      detour-mode: (detour-mode 'mainline)
       cedar-handoff: (cedar-handoff #f)
       sandbox-admission: (sandbox-admission #f)
       journal-handoff: (journal-handoff #f)
@@ -101,6 +103,11 @@
       (set! errs (cons 'invalid-marlin-operation errs)))
     (unless (memq substrate-target +valid-substrate-targets+)
       (set! errs (cons 'invalid-substrate-target errs)))
+    (unless (memq detour-mode '(mainline blocker-active side-quest-active))
+      (set! errs (cons 'invalid-detour-mode errs)))
+    (when (and (eq? detour-mode 'blocker-active)
+               (eq? operation 'commit-settlement))
+      (set! errs (cons 'blocker-detour-blocks-settlement errs)))
     (when (task-actor? actor)
       (unless (or (eq? (.ref actor 'status) 'active)
                   (and (eq? operation 'commit-settlement)
@@ -138,6 +145,7 @@
       actor
       operation: (operation 'execute-frontier)
       join-node-id: (join-node-id #f)
+      detour-mode: (detour-mode 'mainline)
       frontier-plan: (frontier-plan #f)
       scc-condensation: (scc-condensation #f)
       cedar-handoff: (cedar-handoff #f)
@@ -149,6 +157,7 @@
                actor
                operation: operation
                join-node-id: join-node-id
+               detour-mode: detour-mode
                cedar-handoff: cedar-handoff
                sandbox-admission: sandbox-admission
                journal-handoff: journal-handoff
@@ -229,6 +238,27 @@
      (cons 'cedar-policy-valid? (if cedar (opt-ref cedar 'policy-valid? #f) #f))
      (cons 'sandbox-admitted? (if sbx (opt-ref sbx 'admitted? #f) #t))
      (cons 'journal-event-id (if jh (opt-ref jh 'event-id #f) #f)))))
+
+;;; Project a `MarlinDispatchEnvelope.` into the exact 7-slot POO-free rooted vector
+;;; consumed by `marlin-agent-core`'s `marlin_graph_engine_dispatch_vector` C-ABI:
+;;;   #(request-id task-id operation fencing-epoch scope-mode join-node-id substrate-target)
+(def (graph-marlin-dispatch->c-abi-vector env)
+  (let* ((op (case (.ref env 'operation)
+               ((execute-frontier) 'execute-frontier)
+               ((execute-branch) 'apply-steering)
+               ((continue-trunk) 'converge-apex)
+               ((commit-settlement) 'commit-settlement)
+               (else (.ref env 'operation))))
+         (substrate (case (.ref env 'substrate-target)
+                      ((sqlite-turso marlin-store) 'sqlite-turso)
+                      (else 'pure-memory))))
+    (vector (.ref env 'request-id)
+            (.ref env 'task-id)
+            op
+            (.ref env 'fencing-epoch)
+            (.ref env 'scope-mode)
+            (.ref env 'join-node-id)
+            substrate)))
 
 ;;; Construct an inbound `MarlinExecutionReceipt.` returned by `marlin-agent-core`
 ;;; (or the opt-in `+sqlite-turso` adapter) after executing a dispatched envelope.

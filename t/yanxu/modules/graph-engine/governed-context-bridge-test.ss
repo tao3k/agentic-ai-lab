@@ -32,7 +32,8 @@
         (only-in :tao3k/agentic-ai-lab/modules/graph-engine/governed-context-bridge
                  make-graph-cedar-handoff
                  admit-graph-nono-sandbox
-                 make-governed-context-trunk))
+                 make-governed-context-trunk
+                 governed-trunk-bundle->marlin-capsule-vector))
 
 (export graph-engine-governed-context-bridge-test)
 
@@ -105,7 +106,33 @@
           (check (.ref intent 'runtime-executed?) => #f)
           (check (length (.ref intent 'immutable-evidence-records)) => 1)
           (check (.ref rec 'recovered?) => #t)
-          (check (.ref rec 'journal-epoch) => 4))))
+          (check (.ref rec 'journal-epoch) => 4))
+        ;; Rooted 10-slot C-ABI projection matches marlin_graph_engine_governed_context_vector!
+        (let ((vec (governed-trunk-bundle->marlin-capsule-vector
+                    "task-gov-1"
+                    bundle
+                    detour-mode: 'blocker-active
+                    auto-archive-enabled?: #f)))
+          (check (vector? vec) => #t)
+          (check (vector-length vec) => 10)
+          (check (vector-ref vec 0) => "task-gov-1")
+          (check (vector-ref vec 1) => 2)
+          (check (vector-ref vec 2) => (.ref bundle 'kv-prefix-digest))
+          (check (vector-ref vec 3) => 'L3)
+          (check (vector-ref vec 4) => #t)
+          (check (vector-ref vec 5) => 1)
+          (check (vector-ref vec 6) => #t)
+          (check (vector-ref vec 7) => #t)
+          (check (vector-ref vec 8) => 'blocker-active)
+          (check (vector-ref vec 9) => #f))
+        ;; Design 165 invariant: blocker-active MUST fail-closed if auto-archive is enabled!
+        (check-exception
+          (governed-trunk-bundle->marlin-capsule-vector
+           "task-gov-1"
+           bundle
+           detour-mode: 'blocker-active
+           auto-archive-enabled?: #t)
+          true)))
 
     (test-case "nono-sandbox Lethal-Trifecta profile with unendorsed egress blocks governed trunk fail-closed"
       (let* ((egress-profile (.o (:: @ nono-sandbox-profile)

@@ -45,6 +45,7 @@
                          make-graph-cedar-handoff: graph-make-cedar-handoff
                          admit-graph-nono-sandbox: graph-admit-nono-sandbox
                          make-governed-context-trunk: graph-make-governed-context-trunk
+                         governed-trunk->marlin-capsule-vector: graph-governed-trunk->marlin-capsule-vector
                          condense-graph-sccs: graph-condense-sccs
                          execute-unified-graph: graph-execute-unified
                          task-actor: TaskActor.
@@ -67,6 +68,7 @@
                          validate-marlin-dispatch: graph-validate-marlin-dispatch
                          make-marlin-dispatch: graph-make-marlin-dispatch
                          marlin-dispatch->alist: graph-marlin-dispatch-alist
+                         marlin-dispatch->c-abi-vector: graph-marlin-dispatch-c-abi-vector
                          make-marlin-receipt: graph-make-marlin-receipt
                          reconcile-marlin-receipt: graph-reconcile-marlin-receipt))
   features: '(sqlite-turso))

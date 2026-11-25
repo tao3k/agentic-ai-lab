@@ -38,6 +38,7 @@
         graph-make-cedar-handoff
         graph-admit-nono-sandbox
         graph-make-governed-context-trunk
+        graph-governed-trunk->marlin-capsule-vector
         graph-condense-sccs
         graph-execute-unified
         graph-make-task-actor
@@ -55,6 +56,7 @@
         graph-validate-marlin-dispatch
         graph-make-marlin-dispatch
         graph-marlin-dispatch-alist
+        graph-marlin-dispatch-c-abi-vector
         graph-make-marlin-receipt
         graph-reconcile-marlin-receipt)
 
@@ -75,6 +77,7 @@
 (def graph-make-cedar-handoff make-graph-cedar-handoff)
 (def graph-admit-nono-sandbox admit-graph-nono-sandbox)
 (def graph-make-governed-context-trunk make-governed-context-trunk)
+(def graph-governed-trunk->marlin-capsule-vector governed-trunk-bundle->marlin-capsule-vector)
 (def graph-condense-sccs condense-graph-sccs)
 (def graph-execute-unified execute-unified-graph)
 (def graph-make-task-actor make-task-actor)
@@ -92,5 +95,6 @@
 (def graph-validate-marlin-dispatch validate-graph-marlin-dispatch)
 (def graph-make-marlin-dispatch make-graph-marlin-dispatch)
 (def graph-marlin-dispatch-alist graph-marlin-dispatch->alist)
+(def graph-marlin-dispatch-c-abi-vector graph-marlin-dispatch->c-abi-vector)
 (def graph-make-marlin-receipt make-marlin-execution-receipt)
 (def graph-reconcile-marlin-receipt reconcile-marlin-execution-receipt)

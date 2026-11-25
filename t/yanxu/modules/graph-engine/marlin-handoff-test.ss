@@ -114,6 +114,22 @@
         (check (cdr (assq 'session-free? abi-alist)) => #t)
         (check (cdr (assq 'cedar-policy-valid? abi-alist)) => #t)
         (check (cdr (assq 'sandbox-admitted? abi-alist)) => #t)
+        ;; 7-slot C-ABI dispatch vector matches marlin_graph_engine_dispatch_vector with zero POO objects!
+        (let ((c-vec (graph-marlin-dispatch->c-abi-vector env)))
+          (check (vector? c-vec) => #t)
+          (check (vector-length c-vec) => 7)
+          (check (vector-ref c-vec 1) => "task-dfg")
+          (check (vector-ref c-vec 2) => 'apply-steering)
+          (check (vector-ref c-vec 3) => (.ref a2 'fencing-epoch))
+          (check (vector-ref c-vec 4) => 'project)
+          (check (vector-ref c-vec 6) => 'sqlite-turso))
+        ;; Design 165 / MAR-GRAPH-R06: blocker-active Scoped Detour blocks commit-settlement!
+        (let ((d-blocker (make-graph-marlin-dispatch
+                          a2
+                          operation: 'commit-settlement
+                          detour-mode: 'blocker-active)))
+          (check (.ref d-blocker 'admitted?) => #f)
+          (check (and (member 'blocker-detour-blocks-settlement (.ref d-blocker 'errors)) #t) => #t))
         ;; Reconcile fresh Marlin receipt completing D1 & D2 -> opens join F for continue-trunk!
         (let* ((rcpt (make-marlin-execution-receipt
                       (.ref env 'request-id)
