@@ -60,6 +60,8 @@
         park-task-actor
         resume-task-actor
         update-task-actor-trunk
+        enter-task-actor-detour
+        exit-task-actor-detour
         settle-task-actor
         lookup-task-actor-by-id
         project-task-actors->workbench-tabs)
@@ -77,6 +79,8 @@
 (def +valid-steering-targets+ '(trunk branch))
 (def +valid-settlement-outcomes+ '(converged cancelled failed denied parked))
 (def +valid-branch-outcomes+ '(completed failed defeated cancelled))
+(def +valid-detour-modes+ '(mainline blocker-active side-quest-active))
+(def +valid-detour-exits+ '(return-to-origin absorb-and-continue spawn-sibling-task abort-detour))
 
 (.def TaskActor.
   kind: 'agentic-ai-lab.graph-engine.task-actor.v1
@@ -85,6 +89,9 @@
   session-free?: #t
   llm-sessions-spawned: 0
   fencing-epoch: 1
+  detour-mode: 'mainline
+  detour-node-id: #f
+  detour-origin-epoch: #f
   status: 'active)
 
 (.def SteeringMessage.
@@ -155,6 +162,9 @@
         kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
         capability-envelope: (.ref trunk 'capability-envelope)
         trunk: trunk
+        detour-mode: 'mainline
+        detour-node-id: #f
+        detour-origin-epoch: #f
         steering-log: '()
         branch-joins: '()))))
 
@@ -199,6 +209,9 @@
                             kv-prefix-digest)
         capability-envelope: capability-envelope
         trunk: #f
+        detour-mode: 'mainline
+        detour-node-id: #f
+        detour-origin-epoch: #f
         steering-log: '()
         branch-joins: '()))))
 
@@ -231,6 +244,9 @@
         kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
         capability-envelope: (.ref trunk 'capability-envelope)
         trunk: trunk
+        detour-mode: (opt-ref actor 'detour-mode 'mainline)
+        detour-node-id: (opt-ref actor 'detour-node-id #f)
+        detour-origin-epoch: (opt-ref actor 'detour-origin-epoch #f)
         steering-log: (.ref actor 'steering-log)
         branch-joins: (.ref actor 'branch-joins)))))
 
@@ -281,11 +297,23 @@
       status: (status #f)
       trunk: (trunk 'keep)
       fencing-epoch: (fencing-epoch #f)
+      detour-mode: (detour-mode 'keep)
+      detour-node-id: (detour-node-id 'keep)
+      detour-origin-epoch: (detour-origin-epoch 'keep)
       steering-log: (steering-log 'keep)
       branch-joins: (branch-joins 'keep))
   (let* ((next-trunk (if (eq? trunk 'keep) (.ref actor 'trunk) trunk))
          (next-status (or status (.ref actor 'status)))
          (next-epoch (or fencing-epoch (.ref actor 'fencing-epoch)))
+         (next-detour-mode (if (eq? detour-mode 'keep)
+                             (opt-ref actor 'detour-mode 'mainline)
+                             detour-mode))
+         (next-detour-node (if (eq? detour-node-id 'keep)
+                             (opt-ref actor 'detour-node-id #f)
+                             detour-node-id))
+         (next-detour-epoch (if (eq? detour-origin-epoch 'keep)
+                              (opt-ref actor 'detour-origin-epoch #f)
+                              detour-origin-epoch))
          (next-log (if (eq? steering-log 'keep) (.ref actor 'steering-log) steering-log))
          (next-joins (if (eq? branch-joins 'keep) (.ref actor 'branch-joins) branch-joins)))
     (.o bind-these: #f
@@ -315,6 +343,9 @@
                                (.ref next-trunk 'capability-envelope)
                                (.ref actor 'capability-envelope))
         trunk: next-trunk
+        detour-mode: next-detour-mode
+        detour-node-id: next-detour-node
+        detour-origin-epoch: next-detour-epoch
         steering-log: next-log
         branch-joins: next-joins)))
 
@@ -526,6 +557,87 @@
     (error "update-task-actor-trunk: next-trunk must be a ContextTrunk." next-trunk)
     (clone-actor actor trunk: next-trunk)))
 
+;;; Enter a Design 165 Scoped Detour (`'blocker-active` or `'side-quest-active`)
+;;; anchored at `detour-node-id`. Rejects nested detours and inactive actors fail-closed.
+(def (enter-task-actor-detour actor mode detour-node-id)
+  (cond
+   ((not (task-actor? actor))
+    (.o bind-these: #f admitted?: #f reason: 'invalid-task-actor actor: actor))
+   ((not (eq? (.ref actor 'status) 'active))
+    (.o bind-these: #f admitted?: #f reason: 'task-actor-not-active actor: actor))
+   ((not (memq mode '(blocker-active side-quest-active)))
+    (.o bind-these: #f admitted?: #f reason: 'invalid-detour-mode actor: actor))
+   ((not (and (string? detour-node-id) (> (string-length detour-node-id) 0)))
+    (.o bind-these: #f admitted?: #f reason: 'invalid-detour-node-id actor: actor))
+   ((not (eq? (opt-ref actor 'detour-mode 'mainline) 'mainline))
+    (.o bind-these: #f admitted?: #f reason: 'nested-detour-forbidden actor: actor))
+   (else
+    (let ((next (clone-actor actor
+                             detour-mode: mode
+                             detour-node-id: detour-node-id
+                             detour-origin-epoch: (.ref actor 'fencing-epoch))))
+      (.o bind-these: #f
+          admitted?: #t
+          reason: 'detour-entered
+          detour-mode: mode
+          detour-node-id: detour-node-id
+          actor: next)))))
+
+;;; Exit an active Design 165 Scoped Detour via one of the 4 canonical re-anchoring exits:
+;;;   - `'return-to-origin`: returns parent to `'mainline` without mutating trunk cut.
+;;;   - `'absorb-and-continue`: absorbs detour evidence and advances trunk `shared-context-cut` by +1.
+;;;   - `'spawn-sibling-task`: promotes detour to an independent sibling `TaskActor.` and returns parent.
+;;;   - `'abort-detour`: discards detour scratch and returns parent to `'mainline`.
+(def (exit-task-actor-detour
+      actor
+      exit-kind
+      sibling-task-id: (sibling-task-id #f)
+      sibling-title: (sibling-title #f))
+  (cond
+   ((not (task-actor? actor))
+    (.o bind-these: #f exited?: #f reason: 'invalid-task-actor actor: actor sibling-actor: #f))
+   ((not (memq exit-kind +valid-detour-exits+))
+    (.o bind-these: #f exited?: #f reason: 'invalid-detour-exit actor: actor sibling-actor: #f))
+   ((eq? (opt-ref actor 'detour-mode 'mainline) 'mainline)
+    (.o bind-these: #f exited?: #f reason: 'actor-not-in-detour actor: actor sibling-actor: #f))
+   ((and (eq? exit-kind 'spawn-sibling-task)
+         (not (and (string? sibling-task-id) (> (string-length sibling-task-id) 0))))
+    (.o bind-these: #f exited?: #f reason: 'sibling-task-id-required actor: actor sibling-actor: #f))
+   (else
+    (let* ((trunk (.ref actor 'trunk))
+           (next-trunk
+            (if (and (eq? exit-kind 'absorb-and-continue) trunk)
+              (trunk-advance-cut-or-revoke
+               trunk
+               new-cut: (+ 1 (.ref trunk 'shared-context-cut))
+               new-grant-epoch: (.ref actor 'fencing-epoch)
+               trunk-grant-live?: #t)
+              'keep))
+           (sibling
+            (if (eq? exit-kind 'spawn-sibling-task)
+              (make-open-focus-actor
+               sibling-task-id
+               (.ref actor 'scope-ids)
+               (.ref actor 'capability-envelope)
+               title: (or sibling-title sibling-task-id)
+               worktree: (.ref actor 'worktree)
+               scope-mode: (.ref actor 'scope-mode)
+               shared-context-cut: (.ref actor 'shared-context-cut)
+               kv-prefix-digest: (.ref actor 'kv-prefix-digest))
+              #f))
+           (next-actor
+            (clone-actor actor
+                         trunk: next-trunk
+                         detour-mode: 'mainline
+                         detour-node-id: #f
+                         detour-origin-epoch: #f)))
+      (.o bind-these: #f
+          exited?: #t
+          reason: 'detour-exited
+          exit-kind: exit-kind
+          actor: next-actor
+          sibling-actor: sibling)))))
+
 (def (upsert-index-entry entries entry)
   (let* ((tid (.ref entry 'task-id))
          (without (filter (lambda (e) (not (equal? (.ref e 'task-id) tid))) entries)))
@@ -553,6 +665,10 @@
         actor: actor index: index entry: #f handoff-intent: #f))
    ((not (memq outcome +valid-settlement-outcomes+))
     (.o bind-these: #f settled?: #f reason: 'invalid-settlement-outcome
+        actor: actor index: index entry: #f handoff-intent: #f))
+   ((and (eq? outcome 'converged)
+         (eq? (opt-ref actor 'detour-mode 'mainline) 'blocker-active))
+    (.o bind-these: #f settled?: #f reason: 'blocker-detour-blocks-settlement
         actor: actor index: index entry: #f handoff-intent: #f))
    (else
     (let* ((trunk (.ref actor 'trunk))
@@ -678,6 +794,7 @@
                      actor-kind: (.ref a 'actor-kind)
                      scope-mode: (.ref a 'scope-mode)
                      status: (.ref a 'status)
+                     detour-mode: (opt-ref a 'detour-mode 'mainline)
                      worktree: (.ref a 'worktree)
                      scope-ids: (.ref a 'scope-ids)
                      trunk-id: (.ref a 'trunk-id)

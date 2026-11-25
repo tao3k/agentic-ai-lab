@@ -164,36 +164,44 @@
 (def (governed-trunk-bundle->marlin-capsule-vector
       task-id
       bundle
-      detour-mode: (detour-mode 'mainline)
-      auto-archive-enabled?: (auto-archive-enabled? #t))
-  (unless (memq detour-mode '(mainline blocker-active side-quest-active))
-    (error "invalid Scoped Detour mode" detour-mode))
-  (when (and (eq? detour-mode 'blocker-active) auto-archive-enabled?)
-    (error "blocker-detour-must-disable-auto-archive"))
-  (let* ((trunk (.ref bundle 'trunk))
-         (cut (.ref trunk 'shared-context-cut))
-         (kv-dig (.ref bundle 'kv-prefix-digest))
-         (depth-num (.ref bundle 'effective-disclosure-depth))
-         (depth-sym (case depth-num
-                      ((0) 'L0)
-                      ((1) 'L1)
-                      ((2) 'L2)
-                      (else 'L3)))
-         (og (.ref trunk 'obligation-graph))
-         (has-defeater? (pair? (filter (lambda (o) (pair? (.ref o 'active-defeaters)))
-                                       (.ref og 'obligations))))
-         (quarantined (.ref bundle 'quarantined-excluded))
-         (sbx (.ref bundle 'sandbox-admission))
-         (cedar (.ref bundle 'cedar-handoff))
-         (sandbox-ok? (if sbx (opt-ref sbx 'admitted? #f) #t))
-         (cedar-ok? (if cedar (opt-ref cedar 'policy-valid? #f) #t)))
-    (vector task-id
-            cut
-            kv-dig
-            depth-sym
-            (and has-defeater? #t)
-            quarantined
-            (and sandbox-ok? #t)
-            (and cedar-ok? #t)
-            detour-mode
-            (and auto-archive-enabled? #t))))
+      actor: (actor #f)
+      detour-mode: (detour-mode #f)
+      auto-archive-enabled?: (auto-archive-enabled? 'auto))
+  (let* ((eff-detour (or detour-mode
+                         (if (and (object? actor) (.slot? actor 'detour-mode))
+                           (.ref actor 'detour-mode)
+                           'mainline)))
+         (eff-auto-archive (if (eq? auto-archive-enabled? 'auto)
+                             (not (eq? eff-detour 'blocker-active))
+                             (and auto-archive-enabled? #t))))
+    (unless (memq eff-detour '(mainline blocker-active side-quest-active))
+      (error "invalid Scoped Detour mode" eff-detour))
+    (when (and (eq? eff-detour 'blocker-active) eff-auto-archive)
+      (error "blocker-detour-must-disable-auto-archive"))
+    (let* ((trunk (.ref bundle 'trunk))
+           (cut (.ref trunk 'shared-context-cut))
+           (kv-dig (.ref bundle 'kv-prefix-digest))
+           (depth-num (.ref bundle 'effective-disclosure-depth))
+           (depth-sym (case depth-num
+                        ((0) 'L0)
+                        ((1) 'L1)
+                        ((2) 'L2)
+                        (else 'L3)))
+           (og (.ref trunk 'obligation-graph))
+           (has-defeater? (pair? (filter (lambda (o) (pair? (.ref o 'active-defeaters)))
+                                         (.ref og 'obligations))))
+           (quarantined (.ref bundle 'quarantined-excluded))
+           (sbx (.ref bundle 'sandbox-admission))
+           (cedar (.ref bundle 'cedar-handoff))
+           (sandbox-ok? (if sbx (opt-ref sbx 'admitted? #f) #t))
+           (cedar-ok? (if cedar (opt-ref cedar 'policy-valid? #f) #t)))
+      (vector task-id
+              cut
+              kv-dig
+              depth-sym
+              (and has-defeater? #t)
+              quarantined
+              (and sandbox-ok? #t)
+              (and cedar-ok? #t)
+              eff-detour
+              eff-auto-archive))))

@@ -168,4 +168,50 @@
           (check (.ref peek-tab 'id) => "task-fail")
           (check (.ref peek-tab 'mode) => 'peek-readonly)
           (check (.ref peek-tab 'outcome) => 'failed))
-        (displayln "GRAPH-ENGINE-SESSION-FREE-TASK-ACTOR-OK")))))
+        (displayln "GRAPH-ENGINE-SESSION-FREE-TASK-ACTOR-OK")))
+
+    (test-case "TaskActor natively enforces Design 165 Scoped Detour 4-exits, blocker settlement gate & Workbench projection"
+      (let* ((t-ok (converge-sample-trunk (make-sample-trunk "t-detour" "ob-apex-det")))
+             (a0 (make-task-actor "task-det" t-ok '(scope/core) title: "Detour Mainline"))
+             (idx0 (make-task-actor-index))
+             (entered (enter-task-actor-detour a0 'blocker-active "detour-node-1"))
+             (a-blk (.ref entered 'actor))
+             ;; Nested detour fails closed
+             (nested (enter-task-actor-detour a-blk 'side-quest-active "detour-nested"))
+             ;; Blocker-active blocks BOTH settle-task-actor AND marlin commit-settlement automatically!
+             (blocked-settle (settle-task-actor a-blk idx0 outcome: 'converged))
+             (blocked-dispatch (make-graph-marlin-dispatch a-blk operation: 'commit-settlement))
+             (proj-blk (project-task-actors->workbench-tabs (list a-blk) idx0))
+             ;; Exit 1: absorb-and-continue advances shared-context-cut from 1 -> 2
+             (ex-abs (exit-task-actor-detour a-blk 'absorb-and-continue))
+             (a-abs (.ref ex-abs 'actor))
+             ;; Exit 2: side-quest -> spawn-sibling-task creates independent sibling actor
+             (sq (enter-task-actor-detour a-abs 'side-quest-active "detour-sq-1"))
+             (ex-sib (exit-task-actor-detour (.ref sq 'actor) 'spawn-sibling-task
+                                             sibling-task-id: "task-sib-1"
+                                             sibling-title: "Sibling Spike"))
+             (a-after-sib (.ref ex-sib 'actor))
+             ;; Exit 3 & 4: return-to-origin & abort-detour preserve cut=2
+             (ex-ret (exit-task-actor-detour
+                      (.ref (enter-task-actor-detour a-after-sib 'side-quest-active "detour-ret") 'actor)
+                      'return-to-origin))
+             (ex-ab (exit-task-actor-detour
+                     (.ref (enter-task-actor-detour (.ref ex-ret 'actor) 'side-quest-active "detour-ab") 'actor)
+                     'abort-detour)))
+        (check (.ref entered 'admitted?) => #t)
+        (check (.ref a-blk 'detour-mode) => 'blocker-active)
+        (check (.ref nested 'admitted?) => #f)
+        (check (.ref nested 'reason) => 'nested-detour-forbidden)
+        (check (.ref blocked-settle 'settled?) => #f)
+        (check (.ref blocked-settle 'reason) => 'blocker-detour-blocks-settlement)
+        (check (.ref blocked-dispatch 'admitted?) => #f)
+        (check (and (member 'blocker-detour-blocks-settlement (.ref blocked-dispatch 'errors)) #t) => #t)
+        (check (.ref (car (.ref proj-blk 'dynamic-tabs)) 'detour-mode) => 'blocker-active)
+        (check (.ref ex-abs 'exited?) => #t)
+        (check (.ref a-abs 'detour-mode) => 'mainline)
+        (check (.ref a-abs 'shared-context-cut) => 2)
+        (check (.ref ex-sib 'exited?) => #t)
+        (check (task-actor? (.ref ex-sib 'sibling-actor)) => #t)
+        (check (.ref (.ref ex-sib 'sibling-actor) 'task-id) => "task-sib-1")
+        (check (.ref (.ref ex-ret 'actor) 'shared-context-cut) => 2)
+        (check (.ref (.ref ex-ab 'actor) 'shared-context-cut) => 2)))))

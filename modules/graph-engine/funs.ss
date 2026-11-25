@@ -51,6 +51,8 @@
         graph-make-task-actor-index
         graph-admit-task-actor-scope-access
         graph-settle-task-actor
+        graph-enter-task-actor-detour
+        graph-exit-task-actor-detour
         graph-lookup-task-actor-by-id
         graph-project-task-actors->workbench-tabs
         graph-validate-marlin-dispatch
@@ -90,6 +92,8 @@
 (def graph-make-task-actor-index make-task-actor-index)
 (def graph-admit-task-actor-scope-access admit-task-actor-scope-access)
 (def graph-settle-task-actor settle-task-actor)
+(def graph-enter-task-actor-detour enter-task-actor-detour)
+(def graph-exit-task-actor-detour exit-task-actor-detour)
 (def graph-lookup-task-actor-by-id lookup-task-actor-by-id)
 (def graph-project-task-actors->workbench-tabs project-task-actors->workbench-tabs)
 (def graph-validate-marlin-dispatch validate-graph-marlin-dispatch)

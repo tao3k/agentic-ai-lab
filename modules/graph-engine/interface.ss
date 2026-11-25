@@ -61,6 +61,8 @@
                          make-task-actor-index: graph-make-task-actor-index
                          admit-task-actor-scope-access: graph-admit-task-actor-scope-access
                          settle-task-actor: graph-settle-task-actor
+                         enter-task-actor-detour: graph-enter-task-actor-detour
+                         exit-task-actor-detour: graph-exit-task-actor-detour
                          lookup-task-actor-by-id: graph-lookup-task-actor-by-id
                          project-task-actors->workbench-tabs: graph-project-task-actors->workbench-tabs
                          marlin-dispatch: MarlinDispatchEnvelope.
