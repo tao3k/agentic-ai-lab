@@ -678,6 +678,40 @@ queue attempted all 54 files and refused five; its 49 passes do not waive the
 remaining thresholds. The published macOS native job at =7363abb1= passes,
 but that does not certify these later working-tree changes or make PR 34 green.
 
+* Downstream cross-package on-demand compilation, 2026-11-25
+
+Downstream consumers of Agentic AI Lab (such as =marlin-agent-core=) declare
+upstream package dependencies through ordinary Gerbil =gerbil.pkg= =depend:=
+entries and import only the libraries they use via plain
+=(import :tao3k/agentic-ai-lab/modules/<name>/interface)=. Downstream
+=init.ss= does not need a redundant =:load-modules (from: ...)= window merely
+to compile ordinary Gerbil library imports, and downstream =build.ss= stays a
+minimal Yuanxu =defbuild-script= without hand-maintained upstream sentinel
+lists or shellouts.
+
+Core's =core/module-system/building/dependency-packages.ss= implements a
+two-stage prerequisite compiler invoked during compile actions:
+
+1. *Stage 1 (Native import discovery)*: Walks =gerbil.pkg= =depend:= packages
+   under active =pkg/= stores and reads selected local and imported sources
+   with Gerbil's native =core-read-module/sexp= reader (without evaluating
+   module bodies, executing =##c-declare= FFI forms, or constructing business
+   scopes), collecting only missing or transitively stale targets grouped by
+   dependency package root in topological order.
+2. *Stage 2 (Per-package isolated =std/make=)*: Compiles each dependency
+   package with missing or stale targets independently via native =:std/make=
+   using that package's own =srcdir:= and =gerbil.pkg= inside
+   =call-with-build-input-path= and =call-with-selected-output-lock=. The
+   consuming package's =std-make-spec= and =clean= remain strictly
+   single-package pure; already fresh =.ssi= artifacts are reused with zero
+   recompilation.
+
+In addition, =core/module-system/source/build.ss= reconciles ='source= and
+='publication= contributions when one selected Module imports another selected
+Module's =interface.ss= with matching path and =compiler-identity=. See
+[[file:../../core/module-system/design/05-namespace-and-build-ownership.org][Yuanxu namespace and build ownership]]
+and [[file:../../core/t/module-build-cross-package-test.ss][the Core cross-package demand build regression]].
+
 * Modularized child ORG modules
 
 | Child module | Title |
