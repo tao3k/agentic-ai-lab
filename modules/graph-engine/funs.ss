@@ -18,13 +18,15 @@
         "task-actor.ss"
         "marlin-handoff.ss"
         "atomic-effect-orchestrator.ss"
-        "unified-effect-driver.ss")
+        "unified-effect-driver.ss"
+        "fleet-orchestrator.ss")
 
 (export (import: "ascent-reconciler.ss")
         (import: "synthesis-oracle.ss")
         (import: "durable-event-bridge.ss")
         (import: "atomic-effect-orchestrator.ss")
         (import: "unified-effect-driver.ss")
+        (import: "fleet-orchestrator.ss")
         graph-reconcile-frontier
         graph-plan-funflow-c4-frontier
         graph-reconcile-to-fixed-point

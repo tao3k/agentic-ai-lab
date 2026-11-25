@@ -83,5 +83,10 @@
                          make-unified-driver-state: make-unified-driver-state
                          drive-graph-actor-step: drive-graph-actor-step
                          run-unified-driver-to-quiescence: run-unified-driver-to-quiescence
-                         project-driver-state->workbench-projection: project-driver-state->workbench-projection))
+                         project-driver-state->workbench-projection: project-driver-state->workbench-projection
+                         make-graph-fleet-state: make-graph-fleet-state
+                         fleet-spawn-sibling-from-detour: fleet-spawn-sibling-from-detour
+                         step-graph-fleet: step-graph-fleet
+                         run-graph-fleet-to-quiescence: run-graph-fleet-to-quiescence
+                         project-fleet->workbench-projection: project-fleet->workbench-projection))
   features: '(sqlite-turso))

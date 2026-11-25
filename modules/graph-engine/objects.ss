@@ -16,7 +16,8 @@
         "task-actor.ss"
         "marlin-handoff.ss"
         "atomic-effect-orchestrator.ss"
-        "unified-effect-driver.ss")
+        "unified-effect-driver.ss"
+        "fleet-orchestrator.ss")
 
 (export (import: "obligation-graph.ss")
         (import: "dag-frontier-scheduler.ss")
@@ -28,4 +29,5 @@
         (import: "task-actor.ss")
         (import: "marlin-handoff.ss")
         (import: "atomic-effect-orchestrator.ss")
-        (import: "unified-effect-driver.ss"))
+        (import: "unified-effect-driver.ss")
+        (import: "fleet-orchestrator.ss"))

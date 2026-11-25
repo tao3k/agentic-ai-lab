@@ -102,44 +102,106 @@
       (let ((effs (.ref (car ps) 'effects)))
         (loop (cdr ps) (append (reverse effs) acc))))))
 
-;;; Apply deterministic task completion receipts (`cas-hit` or `sandbox-exited` 0)
-;;; directly onto the immutable `ObligationGraph`, admitting produced evidence
-;;; and marking `(task-id . premise-digest)` completed for ASCENT idempotence.
-(def (ingest-deterministic-receipts graph receipts prev-outputs)
+;;; Apply deterministic task completion receipts (`cas-hit`, `llm-completed` for
+;;; cold-miss deterministic steps, or `sandbox-exited` 0) directly onto the
+;;; immutable `ObligationGraph`, admitting produced evidence, marking
+;;; `(task-id . premise-digest)` completed, and emitting `cas-miss` -> `llm-complete`
+;;; or `llm-completed` -> `cas-put` follow-up atomic effects!
+(def (ingest-deterministic-receipts graph actor ctx receipts prev-outputs)
   (let ((det-tasks (.ref graph 'det-tasks))
-        (cut (.ref graph 'cut)))
-    (let loop ((rs receipts) (g graph) (outs prev-outputs) (cas-hits 0))
+        (cut (.ref graph 'cut))
+        (kv-digest (opt-ref ctx 'kv-prefix-digest "sha256:unbound"))
+        (has-defeater? (opt-ref ctx 'has-active-defeater? #f))
+        (disc-depth (opt-ref ctx 'disclosure-depth 'L1)))
+    (let loop ((rs receipts)
+               (g graph)
+               (outs prev-outputs)
+               (cas-hits 0)
+               (cas-puts 0)
+               (followups '()))
       (if (null? rs)
-        (values g outs cas-hits)
+        (values g outs cas-hits cas-puts (reverse followups))
         (let* ((r (car rs))
                (rk (and (object? r) (opt-ref r 'kind #f)))
-               (eid (and (object? r) (opt-ref r 'effect-id "")))
-               (tid (cond
-                     ((and (eq? rk 'cas-hit) (strip-prefix "cas-get:" eid)) => values)
-                     ((and (eq? rk 'sandbox-exited)
-                           (= (opt-ref r 'exit-code 1) 0)
-                           (strip-prefix "sandbox:" eid))
-                      => values)
-                     (else #f)))
-               (task (and tid (find (lambda (t) (equal? (.ref t 'task-id) tid)) det-tasks))))
-          (if task
-            (let* ((pdig (obligation-graph-premise-digest
-                          g (.ref task 'obligation-id) (.ref task 'premise-ids)))
-                   (payload (if (eq? rk 'cas-hit)
-                              (opt-ref r 'payload "")
-                              (opt-ref r 'stdout "")))
-                   (ev (make-evidence-fact
-                        (.ref task 'produces-evidence-id)
-                        payload
-                        cut: cut
-                        premise-ids: (.ref task 'premise-ids)))
-                   (g1 (obligation-graph-with-evidence g ev))
-                   (g2 (obligation-graph-mark-task-completed g1 tid pdig)))
-              (loop (cdr rs)
-                    g2
-                    (append outs (list (cons tid payload)))
-                    (if (eq? rk 'cas-hit) (+ cas-hits 1) cas-hits)))
-            (loop (cdr rs) g outs cas-hits)))))))
+               (eid (and (object? r) (opt-ref r 'effect-id ""))))
+          (cond
+           ;; Cold CAS miss -> validate Two-Zone prompt + L3 floor via FunFlow bridge,
+           ;; then emit `llm-complete` effect!
+           ((and (eq? rk 'cas-miss) (strip-prefix "cas-get:" eid))
+            => (lambda (tid)
+                 (let ((task (find (lambda (t) (equal? (.ref t 'task-id) tid)) det-tasks)))
+                   (if task
+                     (let* ((step (det-task->funflow-step task))
+                            (eff-depth (if has-defeater? 'L3 disc-depth))
+                            (prompt (make-two-zone-prompt-spec
+                                     (string-append "ZONE1::" kv-digest)
+                                     kv-digest
+                                     (string-append "Execute deterministic step: " tid)
+                                     disclosure-depth: eff-depth))
+                            (rec (reconcile-funflow-step-receipts
+                                  step actor ctx (list r) two-zone-prompt: prompt))
+                            (next-effs (opt-ref rec 'next-effects '())))
+                       (loop (cdr rs) g outs cas-hits cas-puts
+                             (append (reverse next-effs) followups)))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+
+           ;; Completed LLM call for a cold-miss deterministic step -> admit evidence,
+           ;; mark task completed, AND emit `cas-put` so subsequent runs hit CAS with 0 LLM!
+           ((and (eq? rk 'llm-completed) (strip-prefix "llm:" eid))
+            => (lambda (tid)
+                 (let ((task (find (lambda (t) (equal? (.ref t 'task-id) tid)) det-tasks)))
+                   (if task
+                     (let* ((step (det-task->funflow-step task))
+                            (rec (reconcile-funflow-step-receipts step actor ctx (list r)))
+                            (put-effs (opt-ref rec 'next-effects '()))
+                            (payload (opt-ref r 'content ""))
+                            (pdig (obligation-graph-premise-digest
+                                   g (.ref task 'obligation-id) (.ref task 'premise-ids)))
+                            (ev (make-evidence-fact
+                                 (.ref task 'produces-evidence-id)
+                                 payload
+                                 cut: cut
+                                 premise-ids: (.ref task 'premise-ids)))
+                            (g1 (obligation-graph-with-evidence g ev))
+                            (g2 (obligation-graph-mark-task-completed g1 tid pdig)))
+                       (loop (cdr rs)
+                             g2
+                             (append outs (list (cons tid payload)))
+                             cas-hits
+                             (+ cas-puts (length put-effs))
+                             (append (reverse put-effs) followups)))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+
+           ;; Warm CAS hit or successful Sandbox exit -> admit evidence & mark completed (0 LLM!)
+           ((or (and (eq? rk 'cas-hit) (strip-prefix "cas-get:" eid))
+                (and (eq? rk 'sandbox-exited)
+                     (= (opt-ref r 'exit-code 1) 0)
+                     (strip-prefix "sandbox:" eid)))
+            => (lambda (tid)
+                 (let ((task (find (lambda (t) (equal? (.ref t 'task-id) tid)) det-tasks)))
+                   (if task
+                     (let* ((pdig (obligation-graph-premise-digest
+                                   g (.ref task 'obligation-id) (.ref task 'premise-ids)))
+                            (payload (if (eq? rk 'cas-hit)
+                                       (opt-ref r 'payload "")
+                                       (opt-ref r 'stdout "")))
+                            (ev (make-evidence-fact
+                                 (.ref task 'produces-evidence-id)
+                                 payload
+                                 cut: cut
+                                 premise-ids: (.ref task 'premise-ids)))
+                            (g1 (obligation-graph-with-evidence g ev))
+                            (g2 (obligation-graph-mark-task-completed g1 tid pdig)))
+                       (loop (cdr rs)
+                             g2
+                             (append outs (list (cons tid payload)))
+                             (if (eq? rk 'cas-hit) (+ cas-hits 1) cas-hits)
+                             cas-puts
+                             followups))
+                     (loop (cdr rs) g outs cas-hits cas-puts followups)))))
+
+           (else
+            (loop (cdr rs) g outs cas-hits cas-puts followups))))))))
 
 ;;; Pure functional step: `(state, incoming-receipts) -> UnifiedDriverStepResult.`
 ;;; ZERO I/O, ZERO mutable globals — Marlin's thin Tokio pump executes `effects`
@@ -155,9 +217,9 @@
        ((prev-matrix) (opt-ref state 'hypothesis-matrix #f))
        ((prev-outputs) (opt-ref state 'completed-step-outputs '()))
        ((next-count) (+ (opt-ref state 'step-count 0) 1))
-       ;; Step 1a: Ingest deterministic FunFlow / Sandbox receipts into ObligationGraph.
-       ((graph1 next-outputs cas-hits)
-        (ingest-deterministic-receipts raw-graph receipts prev-outputs))
+       ;; Step 1a: Ingest deterministic FunFlow / CAS-Miss / Sandbox receipts into ObligationGraph.
+       ((graph1 next-outputs cas-hits cas-puts followup-effs)
+        (ingest-deterministic-receipts raw-graph actor ctx receipts prev-outputs))
        ;; Step 1b: Reconcile any competing-hypothesis receipts into a full
        ;; non-authorizing CompetingHypothesisMatrix and archive on ObligationGraph.
        ((hyp-receipts)
@@ -177,8 +239,33 @@
        ((ascent) (ascent-reconcile-frontier graph))
        ((frontier-mode) (.ref ascent 'frontier-mode))
        ((ready-det) (.ref ascent 'ready-deterministic-tasks))
-       ((epistemic-status) (.ref ascent 'epistemic-competition-status)))
+       ((epistemic-status) (.ref ascent 'epistemic-competition-status))
+       ((followup-llm-count)
+        (length (filter (lambda (e) (eq? (.ref e 'kind) 'llm-complete)) followup-effs))))
     (cond
+     ;; Gate 0: Pending FunFlow cold-miss follow-up (`llm-complete` or `cas-put`)
+     ;; must complete before starting the next frontier wave.
+     ((pair? followup-effs)
+      (let ((next-state (make-unified-driver-state
+                         actor graph ctx
+                         competing-hypotheses: hyps
+                         branch-proposals: branches
+                         hypothesis-matrix: matrix
+                         completed-step-outputs: next-outputs
+                         step-count: next-count)))
+        (.o bind-these: #f
+            kind: 'agentic-ai-lab.graph-engine.unified-driver-step-result.v1
+            phase: (if (> followup-llm-count 0)
+                     'funflow-cas-miss-llm-fill
+                     'funflow-cas-store-commit)
+            llm-calls-emitted: followup-llm-count
+            cas-hits-observed: cas-hits
+            cas-puts-emitted: cas-puts
+            effects: followup-effs
+            ascent-frontier: ascent
+            hypothesis-matrix: matrix
+            state: next-state
+            authorizes-effect?: #f)))
      ;; Gate A: Governance unhealthy -> halt fail-closed with 0 effects.
      ((eq? frontier-mode 'blocked-on-governance)
       (let ((next-state (make-unified-driver-state
@@ -310,18 +397,21 @@
              (round 1)
              (total-llm 0)
              (total-cas-hits 0)
+             (total-cas-puts 0)
              (trace '()))
     (let* ((step (drive-graph-actor-step st incoming))
            (phase (.ref step 'phase))
            (effs (.ref step 'effects))
            (llm-n (+ total-llm (.ref step 'llm-calls-emitted)))
            (cas-n (+ total-cas-hits (opt-ref step 'cas-hits-observed 0)))
+           (put-n (+ total-cas-puts (opt-ref step 'cas-puts-emitted 0)))
            (entry (.o bind-these: #f
                       round: round
                       phase: phase
                       effects-count: (length effs)
                       llm-calls-emitted: (.ref step 'llm-calls-emitted)
-                      cas-hits-observed: (opt-ref step 'cas-hits-observed 0)))
+                      cas-hits-observed: (opt-ref step 'cas-hits-observed 0)
+                      cas-puts-emitted: (opt-ref step 'cas-puts-emitted 0)))
            (next-trace (append trace (list entry))))
       (if (or (null? effs) (>= round max-rounds))
         (.o bind-these: #f
@@ -332,10 +422,11 @@
             rounds-executed: round
             total-llm-calls: llm-n
             cas-hits-count: cas-n
+            cas-puts-count: put-n
             trace: next-trace
             authorizes-effect?: #f)
         (let ((next-receipts (effect-interpreter effs)))
-          (loop (.ref step 'state) next-receipts (+ round 1) llm-n cas-n next-trace))))))
+          (loop (.ref step 'state) next-receipts (+ round 1) llm-n cas-n put-n next-trace))))))
 
 (def (enrich-hypothesis-for-workbench hyp matrix)
   (let* ((hid (.ref hyp 'hypothesis-id))
