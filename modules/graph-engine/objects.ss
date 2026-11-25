@@ -15,7 +15,8 @@
         "cyclic-subgraph.ss"
         "task-actor.ss"
         "marlin-handoff.ss"
-        "atomic-effect-orchestrator.ss")
+        "atomic-effect-orchestrator.ss"
+        "unified-effect-driver.ss")
 
 (export (import: "obligation-graph.ss")
         (import: "dag-frontier-scheduler.ss")
@@ -26,4 +27,5 @@
         (import: "cyclic-subgraph.ss")
         (import: "task-actor.ss")
         (import: "marlin-handoff.ss")
-        (import: "atomic-effect-orchestrator.ss"))
+        (import: "atomic-effect-orchestrator.ss")
+        (import: "unified-effect-driver.ss"))

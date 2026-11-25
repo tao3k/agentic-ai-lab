@@ -79,5 +79,7 @@
                          make-competing-hypothesis: make-competing-hypothesis
                          make-hypothesis-branch-proposal: make-hypothesis-branch-proposal
                          plan-competing-hypothesis-frontier: plan-competing-hypothesis-frontier
-                         reconcile-competing-hypothesis-matrix: reconcile-competing-hypothesis-matrix))
+                         reconcile-competing-hypothesis-matrix: reconcile-competing-hypothesis-matrix
+                         make-unified-driver-state: make-unified-driver-state
+                         drive-graph-actor-step: drive-graph-actor-step))
   features: '(sqlite-turso))
