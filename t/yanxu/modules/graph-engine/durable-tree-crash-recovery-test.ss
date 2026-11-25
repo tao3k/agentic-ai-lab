@@ -40,7 +40,8 @@
                  make-branch-contribution
                  absorb-branch-contribution
                  converge-trunk-to-apex)
-        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/durable-tree-journal
+        (only-in :tao3k/agentic-ai-lab/modules/graph-engine/features/sqlite-turso/adapter
+                 plan-turso-substrate-envelope
                  durable-trunk-open
                  durable-trunk-close!
                  durable-trunk-commit-step!

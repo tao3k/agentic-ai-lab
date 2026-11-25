@@ -2,10 +2,14 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Public GraphEngine module interface.
+;;; Public GraphEngine module interface (100% pure semantic core).
 ;;; Unifies Acyclic FunFlow C4 DAGs, Convergent Trees (Trunk -> Subordinate
-;;; Branches -> Apex), Durable SQLite WAL Recovery, Relational ASCENT
-;;; Obligation Graphs, and Bounded Cyclic Feedback Subgraphs (Tarjan SCC).
+;;; Branches -> Apex), Pure Marlin Journal Handoff, Governed Context/Sandbox/
+;;; Cedar Handoff, Relational ASCENT Obligation Graphs, and Tarjan SCC Cyclic
+;;; Feedback Subgraphs.
+;;;
+;;; Real Turso/SQLite WAL execution is an OPTIONAL Yuanxu Feature (`+sqlite-turso`
+;;; under `features/sqlite-turso/`) and is NEVER loaded by default pure core!
 
 (import (only-in :clan/poo/object .def .o)
         "types.ss"
@@ -36,9 +40,11 @@
                          execute-branch-funflow-dag: graph-execute-branch-funflow-dag
                          absorb-branch-contribution: graph-absorb-branch-contribution
                          converge-trunk-to-apex: graph-converge-trunk-to-apex
-                         durable-trunk-open: graph-durable-trunk-open
-                         durable-trunk-commit-step!: graph-durable-trunk-commit-step!
-                         durable-trunk-recover: graph-durable-trunk-recover
+                         plan-trunk-journal-handoff: graph-plan-trunk-journal-handoff
+                         project-recovered-trunk-receipt: graph-project-recovered-trunk-receipt
+                         make-graph-cedar-handoff: graph-make-cedar-handoff
+                         admit-graph-nono-sandbox: graph-admit-nono-sandbox
+                         make-governed-context-trunk: graph-make-governed-context-trunk
                          condense-graph-sccs: graph-condense-sccs
                          execute-unified-graph: graph-execute-unified))
-  features: (.o))
+  features: '(sqlite-turso))

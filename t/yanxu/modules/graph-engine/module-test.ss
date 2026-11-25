@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :std/test
-        (only-in :clan/poo/object .get)
+        (only-in :clan/poo/object .get .slot?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/agentic-ai-lab/t/yanxu/interface Lab))
 
@@ -11,7 +11,7 @@
 
 (def graph-engine-module-test
   (test-suite "GraphEngine Yuanxu module publication"
-    (yuanxu-test-case "loads unified GraphEngine through Lab init module namespace"
+    (yuanxu-test-case "loads pure GraphEngine core without loading optional +sqlite-turso Feature"
       (def scope (.get Lab graph-engine))
       (check-equal? (.get scope library)
                     'tao3k/agentic-ai-lab/modules/graph-engine/interface)
@@ -27,8 +27,12 @@
       (check (procedure? (.get scope execute-branch-funflow-dag)) => #t)
       (check (procedure? (.get scope absorb-branch-contribution)) => #t)
       (check (procedure? (.get scope converge-trunk-to-apex)) => #t)
-      (check (procedure? (.get scope durable-trunk-open)) => #t)
-      (check (procedure? (.get scope durable-trunk-commit-step!)) => #t)
-      (check (procedure? (.get scope durable-trunk-recover)) => #t)
+      (check (procedure? (.get scope plan-trunk-journal-handoff)) => #t)
+      (check (procedure? (.get scope project-recovered-trunk-receipt)) => #t)
+      (check (procedure? (.get scope make-graph-cedar-handoff)) => #t)
+      (check (procedure? (.get scope admit-graph-nono-sandbox)) => #t)
+      (check (procedure? (.get scope make-governed-context-trunk)) => #t)
       (check (procedure? (.get scope condense-graph-sccs)) => #t)
-      (check (procedure? (.get scope execute-unified-graph)) => #t))))
+      (check (procedure? (.get scope execute-unified-graph)) => #t)
+      ;; Yuanxu INV-6 cold-feature check: default pure GraphEngine NEVER exposes sqlite-turso!
+      (check (.slot? scope 'sqlite-turso) => #f))))

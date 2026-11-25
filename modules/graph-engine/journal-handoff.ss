@@ -2,52 +2,36 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Durable SQLite WAL Journal Bridge for GraphEngine Convergent Trees
-;;; (`modules/graph-engine/durable-tree-journal.ss`).
+;;; Pure Marlin / Runtime Journal Handoff Protocol for GraphEngine Convergent
+;;; Trees (`modules/graph-engine/journal-handoff.ss`).
 ;;;
-;;; Connects `convergent-tree.ss` directly onto `modules/temporal-causality/runtime/durable-journal.ss`:
-;;; - Persists Trunk + Branches + Absorbed Contributions + Counterexample Core +
-;;;   ObligationGraph as 100% inert POO snapshots (ZERO code replay in SQLite!).
-;;; - Persists every live EvidenceFact in the immutable append-only `evidence` table.
-;;; - Enforces monotonic SQLite owner epoch fencing (`journal-open` increments epoch
-;;;   and fences out any crashed/stale prior process handle!).
-;;; - Writes tamper-evident SHA-256 hash-chained `log` records and durable `terminals`
-;;;   on Apex convergence.
-;;; - Recovers cleanly after hard crash/restart via `(journal-verify! j)` +
-;;;   `inert-snapshot->trunk`, preserving unclosed required branches so premature Apex
-;;;   completion remains blocked until reconciled!
+;;; INVARIANT: 100% PURE functional / POO semantic core.
+;;; ZERO SQLite imports, ZERO `durable-journal` imports, ZERO filesystem I/O!
+;;; Real Turso/SQLite WAL execution lives strictly behind the optional Yuanxu Feature
+;;; `(graph-engine +sqlite-turso)` (`features/sqlite-turso/`) or an external
+;;; Marlin host adapter consuming `JournalHandoffIntent.`.
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
         (only-in :std/list/list filter)
-        (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
-                 journal-open
-                 journal-close!
-                 journal-closed?
-                 journal-epoch
-                 journal-get
-                 journal-put!
-                 journal-evidence!
-                 journal-receive!
-                 journal-begin!
-                 journal-commit!
-                 journal-terminal!
-                 journal-verify!)
         "obligation-graph.ss"
         "delegation-fence.ss"
         "convergent-tree.ss")
 
-(export DurableTrunkRecoveryReceipt.
+(export JournalHandoffIntent.
+        DurableTrunkRecoveryReceipt.
         trunk->inert-snapshot
         inert-snapshot->trunk
-        durable-trunk-open
-        durable-trunk-close!
-        durable-trunk-commit-step!
-        durable-trunk-recover)
+        plan-trunk-journal-handoff
+        project-recovered-trunk-receipt)
 
 (def (opt-ref obj key default)
   (if (and (object? obj) (.slot? obj key))
     (.ref obj key)
     default))
+
+(.def JournalHandoffIntent.
+  kind: 'agentic-ai-lab.graph-engine.journal-handoff-intent.v1
+  runtime-executed?: #f)
 
 (.def DurableTrunkRecoveryReceipt.
   kind: 'agentic-ai-lab.graph-engine.durable-trunk-recovery.v1)
@@ -152,7 +136,7 @@
            total-det-tasks: (.ref r 'total-det-tasks)
            receipt-digest: (.ref r 'receipt-digest))))
 
-;;; Convert a live `ContextTrunk.` into 100% inert POO data safe for SQLite `journal-pack`.
+;;; Convert a live `ContextTrunk.` into 100% inert POO data (zero code replay).
 (def (trunk->inert-snapshot trunk)
   (let ((g (.ref trunk 'obligation-graph)))
     (.o bind-these: #f
@@ -221,8 +205,8 @@
   (let ((pair (and (list? registry) (assoc task-id registry))))
     (and pair (cdr pair))))
 
-;;; Rehydrate a live `ContextTrunk.` from an inert SQLite snapshot, rebinding
-;;; pure FunFlow task flows by `task-id` from `task-flow-registry` (never code replay).
+;;; Rehydrate a live `ContextTrunk.` from an inert POO snapshot, rebinding
+;;; pure FunFlow task flows by `task-id` from `task-flow-registry`.
 (def (inert-snapshot->trunk snap task-flow-registry: (task-flow-registry '()))
   (let* ((gs (.ref snap 'graph))
          (tasks
@@ -320,76 +304,65 @@
         apex-status: (.ref snap 'apex-status)
         apex-receipt: (.ref snap 'apex-receipt))))
 
-(def (durable-trunk-open db-path)
-  (journal-open db-path))
-
-(def (durable-trunk-close! journal)
-  (journal-close! journal))
-
-;;; Atomically persist a Convergent Tree transition into SQLite WAL journal
-;;; under monotonic owner epoch fencing + immutable evidence storage.
-(def (durable-trunk-commit-step! journal event-id event-payload trunk)
+;;; Pure Marlin handoff planner: constructs an inert `JournalHandoffIntent.`
+;;; describing the exact evidence, state snapshot, and optional Apex terminal
+;;; to commit at the Marlin / `+sqlite-journal` Feature boundary (ZERO I/O!).
+(def (plan-trunk-journal-handoff event-id event-payload trunk)
   (let* ((snap (trunk->inert-snapshot trunk))
-         (evs (obligation-graph-live-evidence (.ref trunk 'obligation-graph))))
-    ;; 1. Persist immutable evidence records first (fail-closed on replacement!)
-    (for-each
-     (lambda (ev)
-       (journal-evidence!
-        journal
-        (string-append "ev:" (.ref ev 'evidence-id))
-        (inert-evidence ev)))
-     evs)
-    ;; 2. Inbox admission precedes decision transaction
-    (journal-receive! journal event-id event-payload)
-    ;; 3. Fenced transaction writing inert trunk snapshot + optional Apex terminal
-    (journal-begin! journal event-id)
-    (journal-put! journal "graph-engine:trunk" snap)
-    (when (eq? (.ref trunk 'apex-status) 'converged)
-      (journal-terminal!
-       journal
-       (.o bind-these: #f
-           session: (.ref trunk 'trunk-id)
-           attempt: (.ref trunk 'apex-obligation-id)
-           generation: (.ref trunk 'shared-context-cut)
-           receipt-digest: (.ref (.ref trunk 'apex-receipt) 'receipt-digest))))
-    (journal-commit! journal)
+         (evs (map (lambda (ev)
+                     (cons (string-append "ev:" (.ref ev 'evidence-id))
+                           (inert-evidence ev)))
+                   (obligation-graph-live-evidence (.ref trunk 'obligation-graph))))
+         (terminal (and (eq? (.ref trunk 'apex-status) 'converged)
+                        (.o bind-these: #f
+                            session: (.ref trunk 'trunk-id)
+                            attempt: (.ref trunk 'apex-obligation-id)
+                            generation: (.ref trunk 'shared-context-cut)
+                            receipt-digest: (.ref (.ref trunk 'apex-receipt) 'receipt-digest)))))
     (.o bind-these: #f
-        committed?: #t
+        kind: 'agentic-ai-lab.graph-engine.journal-handoff-intent.v1
+        runtime-executed?: #f
+        state-key: "graph-engine:trunk"
         event-id: event-id
-        journal-epoch: (journal-epoch journal)
+        event-payload: event-payload
         trunk-id: (.ref trunk 'trunk-id)
-        apex-status: (.ref trunk 'apex-status))))
+        apex-status: (.ref trunk 'apex-status)
+        inert-snapshot: snap
+        immutable-evidence-records: evs
+        terminal-record: terminal)))
 
-;;; Crash/Restart recovery: verifies the full SQLite SHA-256 hash chain and
-;;; rehydrates the exact inert `ContextTrunk.` with explicit open-branch status.
-(def (durable-trunk-recover journal task-flow-registry: (task-flow-registry '()))
-  (let* ((head-hash (journal-verify! journal))
-         (snap (journal-get journal "graph-engine:trunk")))
-    (if (not snap)
+;;; Pure recovery projection: turns a verified inert snapshot + host epoch/hash
+;;; into a `DurableTrunkRecoveryReceipt.` (ZERO I/O!).
+(def (project-recovered-trunk-receipt
+      snap
+      journal-epoch: (journal-epoch 1)
+      chain-head-hash: (chain-head-hash "root")
+      task-flow-registry: (task-flow-registry '()))
+  (if (not snap)
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.graph-engine.durable-trunk-recovery.v1
+        recovered?: #f
+        reason: 'no-committed-trunk-snapshot
+        journal-epoch: journal-epoch
+        chain-head-hash: chain-head-hash
+        trunk: #f
+        open-required-branch-ids: '()
+        needs-branch-reconciliation?: #f)
+    (let* ((trunk (inert-snapshot->trunk snap task-flow-registry: task-flow-registry))
+           (open-req-ids
+            (map (lambda (b) (.ref b 'branch-id))
+                 (filter (lambda (b)
+                           (and (.ref b 'required-for-apex?)
+                                (eq? (.ref b 'status) 'active)))
+                         (.ref trunk 'branches)))))
       (.o bind-these: #f
           kind: 'agentic-ai-lab.graph-engine.durable-trunk-recovery.v1
-          recovered?: #f
-          reason: 'no-committed-trunk-snapshot
-          journal-epoch: (journal-epoch journal)
-          chain-head-hash: head-hash
-          trunk: #f
-          open-required-branch-ids: '()
-          needs-branch-reconciliation?: #f)
-      (let* ((trunk (inert-snapshot->trunk snap task-flow-registry: task-flow-registry))
-             (open-req-ids
-              (map (lambda (b) (.ref b 'branch-id))
-                   (filter (lambda (b)
-                             (and (.ref b 'required-for-apex?)
-                                  (eq? (.ref b 'status) 'active)))
-                           (.ref trunk 'branches)))))
-        (.o bind-these: #f
-            kind: 'agentic-ai-lab.graph-engine.durable-trunk-recovery.v1
-            recovered?: #t
-            reason: (if (pair? open-req-ids)
-                      'recovered-with-unclosed-serving-branches
-                      'recovered-clean)
-            journal-epoch: (journal-epoch journal)
-            chain-head-hash: head-hash
-            trunk: trunk
-            open-required-branch-ids: open-req-ids
-            needs-branch-reconciliation?: (pair? open-req-ids))))))
+          recovered?: #t
+          reason: (if (pair? open-req-ids)
+                    'recovered-with-unclosed-serving-branches
+                    'recovered-clean)
+          journal-epoch: journal-epoch
+          chain-head-hash: chain-head-hash
+          trunk: trunk
+          open-required-branch-ids: open-req-ids
+          needs-branch-reconciliation?: (pair? open-req-ids)))))

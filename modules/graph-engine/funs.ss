@@ -2,7 +2,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: GraphEngine public functional combinators and non-shadowing aliases.
+;;; Boundary: 100% pure GraphEngine functional combinators & non-shadowing aliases.
+;;; ZERO SQLite imports — Turso/SQLite WAL lives in optional Feature `+sqlite-turso`.
 
 (import "obligation-graph.ss"
         "ascent-reconciler.ss"
@@ -11,7 +12,8 @@
         "durable-event-bridge.ss"
         "delegation-fence.ss"
         "convergent-tree.ss"
-        "durable-tree-journal.ss"
+        "journal-handoff.ss"
+        "governed-context-bridge.ss"
         "cyclic-subgraph.ss")
 
 (export (import: "ascent-reconciler.ss")
@@ -29,9 +31,11 @@
         graph-execute-branch-funflow-dag
         graph-absorb-branch-contribution
         graph-converge-trunk-to-apex
-        graph-durable-trunk-open
-        graph-durable-trunk-commit-step!
-        graph-durable-trunk-recover
+        graph-plan-trunk-journal-handoff
+        graph-project-recovered-trunk-receipt
+        graph-make-cedar-handoff
+        graph-admit-nono-sandbox
+        graph-make-governed-context-trunk
         graph-condense-sccs
         graph-execute-unified)
 
@@ -47,8 +51,10 @@
 (def graph-execute-branch-funflow-dag execute-branch-funflow-dag)
 (def graph-absorb-branch-contribution absorb-branch-contribution)
 (def graph-converge-trunk-to-apex converge-trunk-to-apex)
-(def graph-durable-trunk-open durable-trunk-open)
-(def graph-durable-trunk-commit-step! durable-trunk-commit-step!)
-(def graph-durable-trunk-recover durable-trunk-recover)
+(def graph-plan-trunk-journal-handoff plan-trunk-journal-handoff)
+(def graph-project-recovered-trunk-receipt project-recovered-trunk-receipt)
+(def graph-make-cedar-handoff make-graph-cedar-handoff)
+(def graph-admit-nono-sandbox admit-graph-nono-sandbox)
+(def graph-make-governed-context-trunk make-governed-context-trunk)
 (def graph-condense-sccs condense-graph-sccs)
 (def graph-execute-unified execute-unified-graph)
