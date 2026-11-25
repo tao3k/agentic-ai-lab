@@ -9,6 +9,12 @@
 
 (def (main . files)
   (def root (path-expand "../.." (path-directory (this-source-file))))
+  ;; Compile declared Core module prerequisites (e.g. YuanxuModules/json-schema)
+  ;; before compiling test-support targets such as modules/services/opentofu/objects.
+  (.call tao3k/agentic-ai-lab.init.exports .compile-selection
+    '(YuanxuModules/json-schema) '()
+    (lambda (targets target-root) (make targets srcdir: target-root))
+    package-roots?: #t)
   (def tests
     (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
       (if (null? files) (default-test-files) files) '()
