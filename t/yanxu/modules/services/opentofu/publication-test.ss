@@ -76,9 +76,9 @@
                     (write `(yuanxu!
                               :load-modules ,(path-expand "core/modules" project)
                               mode: explicit mount: Core
-                              (json-schema disable: ,schema-disabled?) (funflow)
+                              (json-schema disable: ,schema-disabled?)
                               :load-modules ,(path-normalize maintained)
-                              mode: explicit (nix) :services (opentofu)
+                              mode: explicit (funflow) (nix) :services (opentofu)
                               ,@(if (or review? consumer?)
                                   `(:load-modules "./modules" mode: explicit mount: App
                                     :app ,@(if review? '((review)) '())

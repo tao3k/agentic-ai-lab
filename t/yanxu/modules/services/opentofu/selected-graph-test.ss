@@ -187,9 +187,9 @@
               (lambda (port)
                 (write `(yuanxu!
                           :load-modules ,(path-expand "core/modules" (current-directory))
-                          mode: explicit mount: Core (json-schema) (funflow)
+                          mode: explicit mount: Core (json-schema)
                           :load-modules ,(path-expand "modules" (current-directory))
-                          mode: explicit mount: Lab (nix) :services (opentofu)
+                          mode: explicit mount: Lab (funflow) (nix) :services (opentofu)
                           :load-modules "./modules" mode: explicit mount: App
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)

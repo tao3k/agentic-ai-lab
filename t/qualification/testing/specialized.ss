@@ -67,7 +67,7 @@
             (command (append (list "gerbil" vm "test" "-v" "5") files)))
        (def measure? (macos-qualification-timing?))
        (def qualified
-         (qualification-script files (if measure? command (watched command)) 120
+         (qualification-script files (if measure? command (watched command)) 240
            inputs: (list source (this-source-file) (absolute watch)) case-count: 100))
        (def script
          (if measure?

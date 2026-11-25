@@ -156,10 +156,10 @@
       (lambda (port)
         (write `(yuanxu!
                   :load-modules ,(path-expand "core/modules" repository)
-                  mode: explicit mount: Core (funflow) (json-schema)
+                  mode: explicit mount: Core (json-schema)
                   :load-modules ,(path-expand "modules" repository)
                   mode: explicit mount: Lab
-                  (nix) :services (opentofu)
+                  (funflow) (nix) :services (opentofu)
                   :load-modules ,(path-expand "scenarios" repository)
                   mode: explicit mount: scenarios (aws)) port))))
   (.cc (.o) 'project project 'init init 'reader (module-publication-reader)
