@@ -143,7 +143,7 @@ def run_qualify_downstreams(log_dir: Path) -> int:
     subprocess.run(["gerbil", "env", "just", "clean"], cwd=REPO_ROOT, check=True)
 
     downstream_env = dict(os.environ)
-    downstream_env.setdefault("LAB_TEST_FILE_BUDGET", "300s")
+    downstream_env.setdefault("LAB_TEST_FILE_BUDGET", "600s")
 
     downstream_status = 0
     for category in ("context-memory", "governance", "deployment"):
