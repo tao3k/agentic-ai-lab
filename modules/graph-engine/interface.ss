@@ -72,5 +72,12 @@
                          marlin-dispatch->alist: graph-marlin-dispatch-alist
                          marlin-dispatch->c-abi-vector: graph-marlin-dispatch-c-abi-vector
                          make-marlin-receipt: graph-make-marlin-receipt
-                         reconcile-marlin-receipt: graph-reconcile-marlin-receipt))
+                         reconcile-marlin-receipt: graph-reconcile-marlin-receipt
+                         compute-funflow-cas-key: compute-funflow-cas-key
+                         plan-funflow-step-effects: plan-funflow-step-effects
+                         reconcile-funflow-step-receipts: reconcile-funflow-step-receipts
+                         make-competing-hypothesis: make-competing-hypothesis
+                         make-hypothesis-branch-proposal: make-hypothesis-branch-proposal
+                         plan-competing-hypothesis-frontier: plan-competing-hypothesis-frontier
+                         reconcile-competing-hypothesis-matrix: reconcile-competing-hypothesis-matrix))
   features: '(sqlite-turso))

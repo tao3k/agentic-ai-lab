@@ -16,11 +16,13 @@
         "governed-context-bridge.ss"
         "cyclic-subgraph.ss"
         "task-actor.ss"
-        "marlin-handoff.ss")
+        "marlin-handoff.ss"
+        "atomic-effect-orchestrator.ss")
 
 (export (import: "ascent-reconciler.ss")
         (import: "synthesis-oracle.ss")
         (import: "durable-event-bridge.ss")
+        (import: "atomic-effect-orchestrator.ss")
         graph-reconcile-frontier
         graph-plan-funflow-c4-frontier
         graph-reconcile-to-fixed-point

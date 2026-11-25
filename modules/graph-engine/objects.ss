@@ -14,7 +14,8 @@
         "governed-context-bridge.ss"
         "cyclic-subgraph.ss"
         "task-actor.ss"
-        "marlin-handoff.ss")
+        "marlin-handoff.ss"
+        "atomic-effect-orchestrator.ss")
 
 (export (import: "obligation-graph.ss")
         (import: "dag-frontier-scheduler.ss")
@@ -24,4 +25,5 @@
         (import: "governed-context-bridge.ss")
         (import: "cyclic-subgraph.ss")
         (import: "task-actor.ss")
-        (import: "marlin-handoff.ss"))
+        (import: "marlin-handoff.ss")
+        (import: "atomic-effect-orchestrator.ss"))
