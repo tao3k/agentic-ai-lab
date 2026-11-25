@@ -63,7 +63,7 @@ lab_test_env := (gerbil_test_heap_env +
     " " + gerbil_darwin_env)
 lab_test_fixtures := 'python3 packages/automation/gerbil_test_inputs.py --inputs "${AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS:-' + agentic_ai_lab_gerbil_path + '/test-inputs}"'
 gerbil_test_timeout := "timeout --foreground --signal=TERM --kill-after=5s"
-lab_test_file_budget := "120s"
+lab_test_file_budget := env_var_or_default("LAB_TEST_FILE_BUDGET", "120s")
 lab_macos_qualification_timing := if os() == "macos" { env_var_or_default("LAB_MACOS_QUALIFICATION_TIMING", "") } else { "" }
 lab_focused_test_deadline := if lab_macos_qualification_timing == "1" { "" } else { gerbil_test_timeout + " " + lab_test_file_budget }
 lab_context_temporal_deadline := if lab_macos_qualification_timing == "1" { "" } else { "timeout --foreground --signal=TERM --kill-after=1s 45s" }

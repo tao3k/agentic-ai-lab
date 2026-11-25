@@ -110,12 +110,18 @@ def discover_lean_matrix(lakefile: Path = LEAN_LAKEFILE) -> dict[str, list[dict[
     return {"include": entries}
 
 
-def _run_and_tee(command: list[str], log_path: Path) -> int:
+def _run_and_tee(
+    command: list[str],
+    log_path: Path,
+    *,
+    env: dict[str, str] | None = None,
+) -> int:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("w", encoding="utf-8") as log_file:
         process = subprocess.Popen(
             command,
             cwd=REPO_ROOT,
+            env=env,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -136,6 +142,9 @@ def run_qualify_downstreams(log_dir: Path) -> int:
     )
     subprocess.run(["gerbil", "env", "just", "clean"], cwd=REPO_ROOT, check=True)
 
+    downstream_env = dict(os.environ)
+    downstream_env.setdefault("LAB_TEST_FILE_BUDGET", "300s")
+
     downstream_status = 0
     for category in ("context-memory", "governance", "deployment"):
         suite = DOWNSTREAM_SUITES[category]
@@ -143,6 +152,7 @@ def run_qualify_downstreams(log_dir: Path) -> int:
         code = _run_and_tee(
             ["/usr/bin/time", "-p", "gerbil", "env", "just", "test-file", suite],
             log_path,
+            env=downstream_env,
         )
         if code != 0:
             downstream_status = code
