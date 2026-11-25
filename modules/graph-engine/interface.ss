@@ -93,6 +93,8 @@
                          make-graph-fleet-state: graph-make-graph-fleet-state
                          fleet-spawn-sibling-from-detour: graph-fleet-spawn-sibling-from-detour
                          fleet-apply-bitemporal-event: graph-fleet-apply-bitemporal-event
+                         fleet-propose-hypothesis-branch: graph-fleet-propose-hypothesis-branch
+                         fleet-propagate-shared-defeater: graph-fleet-propagate-shared-defeater
                          step-graph-fleet: graph-step-graph-fleet
                          run-graph-fleet-to-quiescence: graph-run-graph-fleet-to-quiescence
                          fleet->inert-snapshot: graph-fleet->inert-snapshot

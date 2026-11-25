@@ -33,6 +33,8 @@
         make-graph-fleet-state
         fleet-spawn-sibling-from-detour
         fleet-apply-bitemporal-event
+        fleet-propose-hypothesis-branch
+        fleet-propagate-shared-defeater
         step-graph-fleet
         run-graph-fleet-to-quiescence
         fleet->inert-snapshot
@@ -284,6 +286,88 @@
      peek-set: (.ref fleet 'peek-set)
      focused-task-id: (.ref fleet 'focused-task-id)
      round-count: (.ref fleet 'round-count))))
+
+;;; Append a bounded investigator/agent POO `HypothesisBranchProposal.` onto
+;;; `task-id` inside the live Fleet, invalidating ONLY `hypothesis-matrix` so
+;;; the next `step-graph-fleet` evaluates EVERY branch against EVERY preserved
+;;; competing hypothesis without re-running completed deterministic CAS steps
+;;; or authorizing any effect!
+(def (fleet-propose-hypothesis-branch
+      fleet
+      task-id
+      branch-proposal
+      max-branches: (max-branches 16))
+  (unless (and (object? branch-proposal)
+               (eq? (opt-ref branch-proposal 'kind #f)
+                    'agentic-ai-lab.graph-engine.hypothesis-branch-proposal.v1)
+               (not (opt-ref branch-proposal 'authorizes-effect? #t)))
+    (error "fleet-propose-hypothesis-branch: requires non-authorizing HypothesisBranchProposal."
+           branch-proposal))
+  (let* ((drivers (.ref fleet 'active-drivers))
+         (target-st (find (lambda (st) (equal? (.ref (.ref st 'actor) 'task-id) task-id))
+                          drivers)))
+    (unless target-st
+      (error "fleet-propose-hypothesis-branch: active task actor not found" task-id))
+    (let* ((bid (.ref branch-proposal 'branch-id))
+           (existing (.ref target-st 'branch-proposals))
+           (kept (filter (lambda (b) (not (equal? (.ref b 'branch-id) bid))) existing))
+           (updated (append kept (list branch-proposal))))
+      (when (> (length updated) (max 1 max-branches))
+        (error "fleet-propose-hypothesis-branch: bounded branch limit exceeded" max-branches))
+      (let ((next-drivers
+             (map (lambda (st)
+                    (if (not (equal? (.ref (.ref st 'actor) 'task-id) task-id))
+                      st
+                      (make-unified-driver-state
+                       (.ref st 'actor)
+                       (.ref st 'obligation-graph)
+                       (.ref st 'governed-context)
+                       competing-hypotheses: (.ref st 'competing-hypotheses)
+                       branch-proposals: updated
+                       hypothesis-matrix: #f
+                       completed-step-outputs: (opt-ref st 'completed-step-outputs '())
+                       step-count: (opt-ref st 'step-count 0)
+                       repair-budget: (opt-ref st 'repair-budget 3)
+                       repair-history: (opt-ref st 'repair-history '()))))
+                  drivers)))
+        (make-graph-fleet-state
+         next-drivers
+         archived-actors: (.ref fleet 'archived-actors)
+         peek-set: (.ref fleet 'peek-set)
+         focused-task-id: (.ref fleet 'focused-task-id)
+         round-count: (.ref fleet 'round-count))))))
+
+;;; Propagate a newly discovered defeater across EVERY active actor in the Fleet
+;;; whose obligations depend on `shared-premise-id` (entering `blocker-active`,
+;;; L3 disclosure floor, and appending a `human-inbox` diagnostic), while leaving
+;;; all independent actors untouched in `mainline`!
+(def (fleet-propagate-shared-defeater
+      fleet
+      defeater-id
+      shared-premise-id
+      source-task-id: (source-task-id #f))
+  (let loop ((ds (.ref fleet 'active-drivers)) (fl fleet))
+    (if (null? ds)
+      fl
+      (let* ((st (car ds))
+             (tid (.ref (.ref st 'actor) 'task-id))
+             (obs (.ref (.ref st 'obligation-graph) 'obligations))
+             (matching-obs
+              (filter (lambda (o)
+                        (or (member shared-premise-id (opt-ref o 'premise-ids '()))
+                            (member shared-premise-id (opt-ref o 'required-evidence-ids '()))
+                            (and source-task-id (equal? tid source-task-id))))
+                      obs)))
+        (if (null? matching-obs)
+          (loop (cdr ds) fl)
+          (let ob-loop ((mos matching-obs) (cur-fl fl))
+            (if (null? mos)
+              (loop (cdr ds) cur-fl)
+              (let ((ev (.o bind-these: #f
+                            event-kind: 'defeater-discovered
+                            obligation-id: (.ref (car mos) 'obligation-id)
+                            defeater-id: defeater-id)))
+                (ob-loop (cdr mos) (fleet-apply-bitemporal-event cur-fl tid ev))))))))))
 
 ;;; Pure functional fleet step: runs `drive-graph-actor-step` across EVERY active
 ;;; actor simultaneously, merges all emitted `AtomicEffect.`s into a single

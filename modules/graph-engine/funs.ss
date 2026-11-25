@@ -87,6 +87,8 @@
         graph-make-graph-fleet-state
         graph-fleet-spawn-sibling-from-detour
         graph-fleet-apply-bitemporal-event
+        graph-fleet-propose-hypothesis-branch
+        graph-fleet-propagate-shared-defeater
         graph-step-graph-fleet
         graph-run-graph-fleet-to-quiescence
         graph-fleet->inert-snapshot
@@ -157,6 +159,8 @@
 (def graph-make-graph-fleet-state make-graph-fleet-state)
 (def graph-fleet-spawn-sibling-from-detour fleet-spawn-sibling-from-detour)
 (def graph-fleet-apply-bitemporal-event fleet-apply-bitemporal-event)
+(def graph-fleet-propose-hypothesis-branch fleet-propose-hypothesis-branch)
+(def graph-fleet-propagate-shared-defeater fleet-propagate-shared-defeater)
 (def graph-step-graph-fleet step-graph-fleet)
 (def graph-run-graph-fleet-to-quiescence run-graph-fleet-to-quiescence)
 (def graph-fleet->inert-snapshot fleet->inert-snapshot)
