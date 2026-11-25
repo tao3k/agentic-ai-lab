@@ -77,10 +77,6 @@ gerbil_parser_path := agentic_ai_lab_gerbil_path
 
 gerbil_parser_library_path := agentic_ai_lab_library_path + ":" + gerbil_parser_dir + ":" + contribution_source_root + "/lambda-episteme:" + justfile_directory()
 
-aitia_ffi_library := justfile_directory() + "/.gerbil/runtime/libagentic_ai_lab_aitia.dylib"
-
-aitia_python_dir := contribution_source_root + "/lambda-aitia/bindings/python"
-
 contribution_test_path := justfile_directory() + "/.gerbil/contributions/lambda-episteme/module-test"
 
 contribution_test_library_path := contribution_test_path + "/lib"
