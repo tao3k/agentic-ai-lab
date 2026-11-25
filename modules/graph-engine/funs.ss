@@ -14,7 +14,8 @@
         "convergent-tree.ss"
         "journal-handoff.ss"
         "governed-context-bridge.ss"
-        "cyclic-subgraph.ss")
+        "cyclic-subgraph.ss"
+        "task-actor.ss")
 
 (export (import: "ascent-reconciler.ss")
         (import: "synthesis-oracle.ss")
@@ -37,7 +38,19 @@
         graph-admit-nono-sandbox
         graph-make-governed-context-trunk
         graph-condense-sccs
-        graph-execute-unified)
+        graph-execute-unified
+        graph-make-task-actor
+        graph-make-open-focus-actor
+        graph-promote-focus->task-actor
+        graph-make-steering-message
+        graph-steer-task-actor
+        graph-complete-anchored-branch
+        graph-can-continue-trunk-at-join?
+        graph-make-task-actor-index
+        graph-admit-task-actor-scope-access
+        graph-settle-task-actor
+        graph-lookup-task-actor-by-id
+        graph-project-task-actors->workbench-tabs)
 
 (def graph-reconcile-frontier ascent-reconcile-frontier)
 (def graph-plan-funflow-c4-frontier plan-funflow-c4-frontier)
@@ -58,3 +71,15 @@
 (def graph-make-governed-context-trunk make-governed-context-trunk)
 (def graph-condense-sccs condense-graph-sccs)
 (def graph-execute-unified execute-unified-graph)
+(def graph-make-task-actor make-task-actor)
+(def graph-make-open-focus-actor make-open-focus-actor)
+(def graph-promote-focus->task-actor promote-focus->task-actor)
+(def graph-make-steering-message make-steering-message)
+(def graph-steer-task-actor steer-task-actor)
+(def graph-complete-anchored-branch complete-anchored-branch)
+(def graph-can-continue-trunk-at-join? can-continue-trunk-at-join?)
+(def graph-make-task-actor-index make-task-actor-index)
+(def graph-admit-task-actor-scope-access admit-task-actor-scope-access)
+(def graph-settle-task-actor settle-task-actor)
+(def graph-lookup-task-actor-by-id lookup-task-actor-by-id)
+(def graph-project-task-actors->workbench-tabs project-task-actors->workbench-tabs)

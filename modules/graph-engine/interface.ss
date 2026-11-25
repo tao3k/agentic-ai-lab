@@ -46,5 +46,20 @@
                          admit-graph-nono-sandbox: graph-admit-nono-sandbox
                          make-governed-context-trunk: graph-make-governed-context-trunk
                          condense-graph-sccs: graph-condense-sccs
-                         execute-unified-graph: graph-execute-unified))
+                         execute-unified-graph: graph-execute-unified
+                         task-actor: TaskActor.
+                         steering-message: SteeringMessage.
+                         task-actor-index: TaskActorIndex.
+                         make-task-actor: graph-make-task-actor
+                         make-open-focus-actor: graph-make-open-focus-actor
+                         promote-focus->task-actor: graph-promote-focus->task-actor
+                         make-steering-message: graph-make-steering-message
+                         steer-task-actor: graph-steer-task-actor
+                         complete-anchored-branch: graph-complete-anchored-branch
+                         can-continue-trunk-at-join?: graph-can-continue-trunk-at-join?
+                         make-task-actor-index: graph-make-task-actor-index
+                         admit-task-actor-scope-access: graph-admit-task-actor-scope-access
+                         settle-task-actor: graph-settle-task-actor
+                         lookup-task-actor-by-id: graph-lookup-task-actor-by-id
+                         project-task-actors->workbench-tabs: graph-project-task-actors->workbench-tabs))
   features: '(sqlite-turso))

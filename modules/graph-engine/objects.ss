@@ -12,7 +12,8 @@
         "convergent-tree.ss"
         "journal-handoff.ss"
         "governed-context-bridge.ss"
-        "cyclic-subgraph.ss")
+        "cyclic-subgraph.ss"
+        "task-actor.ss")
 
 (export (import: "obligation-graph.ss")
         (import: "dag-frontier-scheduler.ss")
@@ -20,4 +21,5 @@
         (import: "convergent-tree.ss")
         (import: "journal-handoff.ss")
         (import: "governed-context-bridge.ss")
-        (import: "cyclic-subgraph.ss"))
+        (import: "cyclic-subgraph.ss")
+        (import: "task-actor.ss"))
