@@ -104,10 +104,26 @@
          '("config" "interface" "objects" "objects-builtin" "objects-catalog" "objects-core"
            "objects-durable" "objects-handoff" "objects-validation" "org-selection"
            "session-selection"))
-    '("tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax"
+    '("tao3k/agentic-ai-lab/modules/durable/config"
+      "tao3k/agentic-ai-lab/modules/durable/func"
+      "tao3k/agentic-ai-lab/modules/durable/interface"
+      "tao3k/agentic-ai-lab/modules/durable/objects"
+      "tao3k/agentic-ai-lab/modules/durable/policy"
+      "tao3k/agentic-ai-lab/modules/durable/types"
+      "tao3k/agentic-ai-lab/modules/durable/work"
+      "tao3k/agentic-ai-lab/modules/durable/work/claims-engine"
+      "tao3k/agentic-ai-lab/modules/durable/work/contracts"
+      "tao3k/agentic-ai-lab/modules/durable/work/detour-engine"
+      "tao3k/agentic-ai-lab/modules/durable/work/entities"
+      "tao3k/agentic-ai-lab/modules/durable/work/scheduler"
+      "tao3k/agentic-ai-lab/modules/funflow/durable-dag"
+      "tao3k/agentic-ai-lab/modules/governance/policy/recovery-decision"
+      "tao3k/agentic-ai-lab/modules/module-authoring/module-config-syntax"
       "tao3k/agentic-ai-lab/modules/session/durable-policy"
       "tao3k/agentic-ai-lab/modules/session/objects-core"
-      "tao3k/agentic-ai-lab/modules/session/transform-support/memory-intent")))
+      "tao3k/agentic-ai-lab/modules/session/transform-support/memory-intent"
+      "tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal"
+      "tao3k/agentic-ai-lab/modules/workflow/runtime/scheme-wire")))
 
 (def yuanxu-context-memory-downstream-test
   (test-suite "Agentic Context Memory in an independent Gerbil package"
