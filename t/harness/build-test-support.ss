@@ -15,6 +15,7 @@
     '(YuanxuModules/json-schema) '()
     (lambda (targets target-root) (make targets srcdir: target-root))
     package-roots?: #t)
+  (##gc)
   (def tests
     (.call (.get tao3k/agentic-ai-lab.init.exports tests) .for-files
       (if (null? files) (default-test-files) files) '()

@@ -31,7 +31,7 @@ build-testing:
 [group('build')]
 [positional-arguments]
 build-test-support *paths:
-    {{ lab_test_env }} {{ gerbil_test_timeout }} 600s gerbil {{ gerbil_test_runtime_options }} interactive t/harness/build-test-support.ss "$@"
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=4G,live-ratio=50,debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} {{ gerbil_test_timeout }} 600s gerbil -:max-heap=4G,live-ratio=50,debug={{ gerbil_test_debug }} interactive t/harness/build-test-support.ss "$@"
 
 # Reuse the maintained, hash-locked qualification inputs; retain a GC root.
 [group('dependency')]
