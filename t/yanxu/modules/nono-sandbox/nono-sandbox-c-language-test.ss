@@ -18,8 +18,7 @@
                  test-error
                  test-suite)
         (only-in :std/misc/process run-process)
-        (only-in :clan/poo/object .get)
-        (only-in :tao3k/yuanxu/module-system/building/products current-build-module-roots)
+        (only-in :clan/poo/object .call)
         (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
         :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build
         :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
@@ -38,8 +37,7 @@
   (test-suite "nono-sandbox C language binding"
     (yuanxu-test-case "Nono contributes its own compiler and linker flags to init"
       (def spec
-        (parameterize ((current-build-module-roots '(nono-sandbox)))
-          (.get tao3k/agentic-ai-lab.init.exports std-make-spec)))
+        (.call tao3k/agentic-ai-lab.init.exports .make-spec-for '(modules/nono-sandbox)))
       (def target
         `(gxc: "modules/nono-sandbox/_nono"
                "-cc-options" ,(string-append "-I" (path-expand "modules/nono-sandbox/nono-c"))
