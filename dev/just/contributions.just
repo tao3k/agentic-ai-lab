@@ -101,7 +101,7 @@ check-healthcare-case-assurance: build-contribute check-healthcare-gql check-hea
 [group('build')]
 build-contribute contribution="lambda-episteme":
     case "{{ contribution }}" in lambda-episteme|lambda-aitia) ;; *) echo "unsupported contribution: {{ contribution }}" >&2; exit 64 ;; esac
-    cd "{{ contribution_source_root }}/{{ contribution }}" && GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" exec {{ gerbil_darwin_env }} gerbil build </dev/null
+    cd "{{ contribution_source_root }}/{{ contribution }}" && GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" exec {{ gerbil_darwin_env }} gerbil build </dev/null
 
 # Clean one contribution through its runtime gxpkg package entry.
 [group('build')]
@@ -126,7 +126,7 @@ test-contribute contribution="lambda-aitia" module="sdlc":
         test_directory="packages/{{ contribution }}/t/{{ module }}"
     fi
     test -d "$test_directory"
-    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="$test_root" GERBIL_LOADPATH="{{ contribution_source_root }}/{{ contribution }}:{{ justfile_directory() }}:$test_root/lib:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "$runner" "$test_directory"
+    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="$test_root" GERBIL_LOADPATH="$test_root/lib:{{ agentic_ai_lab_dev_library_path }}:{{ contribution_source_root }}/{{ contribution }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "$runner" "$test_directory"
 
 # Replay a previously compiled exact test under the opt-in runtime heap monitor.
 [group('test')]
@@ -154,7 +154,7 @@ test-contribute-atomic contribution="lambda-aitia" module="sdlc" test_file="unit
         test_path="packages/{{ contribution }}/t/{{ module }}/{{ test_file }}"
     fi
     test -f "$test_path"
-    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="$test_root" GERBIL_LOADPATH="{{ contribution_source_root }}/{{ contribution }}:{{ justfile_directory() }}:$test_root/lib:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gxi {{ gerbil_test_runtime_options }} "$runner" "$test_path"
+    GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="$test_root" GERBIL_LOADPATH="$test_root/lib:{{ agentic_ai_lab_dev_library_path }}:{{ contribution_source_root }}/{{ contribution }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 60s gxi {{ gerbil_test_runtime_options }} "$runner" "$test_path"
 
 # Let gxtest qualify source first, then build the admitted contribution.
 [group('check')]
