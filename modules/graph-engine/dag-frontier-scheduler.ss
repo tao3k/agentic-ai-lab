@@ -178,7 +178,7 @@
                         (.ref n 'needs)))
                (map (lambda (id) (hash-ref node-map id)) topo-ready-syms)))
              (resume (if completed-cas
-                       (funflow-resume-plan dag completed-cas)
+                       (funflow-resume-plan dag completed-cas-table: completed-cas)
                        #f))
              (skipped-syms (if resume (.ref resume 'skipped-ids) '()))
              (exec-candidates

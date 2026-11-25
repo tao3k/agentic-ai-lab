@@ -23,8 +23,6 @@
         (only-in :std/list/list filter)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-assembly-pipeline
                  agentic-ai-lab-ai-agentic-context-assemble-governed-turn)
-        (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/profile-interface
-                 nono-sandbox-profile)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
                  funflow-admit-external-task-sandbox)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/governed-runner
@@ -66,10 +64,16 @@
         grant-epoch: grant-epoch
         runtime-executed?: #f)))
 
-;;; Evaluate real `nono-sandbox-profile` (or any POO subtype) against Slice 52's
-;;; Lethal-Trifecta sandbox gate (`untrusted-input + private-data + unendorsed egress`).
+(def GraphDefaultNonoProfile.
+  (.o bind-these: #f
+      backend-kind: 'nono
+      capabilities: '(process-run filesystem-read tmpdir)
+      egress-enabled?: #f))
+
+;;; Evaluate real `nono-sandbox-profile` (or any `sandbox-profile` POO subtype)
+;;; against Slice 52's Lethal-Trifecta sandbox gate (`untrusted-input + private-data + unendorsed egress`).
 (def (admit-graph-nono-sandbox
-      profile: (profile nono-sandbox-profile)
+      profile: (profile GraphDefaultNonoProfile.)
       env-digest: (env-digest "sha256:nono-default-env")
       has-untrusted-input?: (has-untrusted-input? #f)
       has-private-data?: (has-private-data? #f)
