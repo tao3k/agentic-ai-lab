@@ -45,14 +45,13 @@
 ;;; Project a pure `JournalHandoffIntent.` into a Turso/Marlin durable substrate
 ;;; envelope suitable for `RuntimeDurableAdapter.turso_from_envelope` handoff.
 (def (plan-turso-substrate-envelope intent db-uri: (db-uri "file:graph-engine-turso.db"))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.graph-engine.sqlite-turso-envelope.v1
-      substrate: 'sqlite-turso
-      concurrency-mode: 'turso-mvcc-wal
-      policy-authority: 'none
-      db-uri: db-uri
-      handoff-intent: intent
-      runtime-executed?: #f))
+  (.o (kind := 'agentic-ai-lab.graph-engine.sqlite-turso-envelope.v1)
+      (substrate := 'sqlite-turso)
+      (concurrency-mode := 'turso-mvcc-wal)
+      (policy-authority := 'none)
+      (db-uri)
+      (handoff-intent := intent)
+      (runtime-executed? := #f)))
 
 (def (durable-trunk-open db-path)
   (journal-open db-path))
@@ -80,13 +79,12 @@
     (when term
       (journal-terminal! journal term))
     (journal-commit! journal)
-    (.o bind-these: #f
-        committed?: #t
-        substrate: 'sqlite-turso
-        event-id: event-id
-        journal-epoch: (journal-epoch journal)
-        trunk-id: (.ref intent 'trunk-id)
-        apex-status: (.ref intent 'apex-status))))
+    (.o (committed? := #t)
+        (substrate := 'sqlite-turso)
+        (event-id)
+        (journal-epoch := (journal-epoch journal))
+        (trunk-id := (.ref intent 'trunk-id))
+        (apex-status := (.ref intent 'apex-status)))))
 
 (def (durable-trunk-commit-step! journal event-id event-payload trunk)
   (durable-trunk-execute-handoff!

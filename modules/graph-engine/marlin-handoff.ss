@@ -167,46 +167,27 @@
                journal-handoff: journal-handoff
                substrate-target: substrate-target)))
     (if (pair? errs)
-      (.o bind-these: #f
-          admitted?: #f
-          errors: errs
-          envelope: #f)
-      (let* ((tid (.ref actor 'task-id))
-             (epoch (.ref actor 'fencing-epoch))
+      (.o (admitted? := #f) (errors := errs) (envelope := #f))
+      (let* ((task-id (.ref actor 'task-id))
+             (fencing-epoch (.ref actor 'fencing-epoch))
              (rid (or request-id
-                      (string-append "marlin:" tid ":e" (number->string epoch)
+                      (string-append "marlin:" task-id ":e" (number->string fencing-epoch)
                                      ":" (symbol->string operation))))
-             (env (.o bind-these: #f
-                      kind: 'agentic-ai-lab.graph-engine.marlin-dispatch.v1
-                      schema: +graph-engine-marlin-dispatch-schema+
-                      request-id: rid
-                      runtime-owner: "marlin-agent-core"
-                      handoff-required?: #t
-                      runtime-executed?: #f
-                      runtime-parses-scheme-source?: #f
-                      scheme-manufactures-runtime-handlers?: #f
-                      session-free?: #t
-                      operation: operation
-                      substrate-target: substrate-target
-                      task-id: tid
-                      actor-kind: (.ref actor 'actor-kind)
-                      scope-mode: (.ref actor 'scope-mode)
-                      scope-ids: (.ref actor 'scope-ids)
-                      fencing-epoch: epoch
-                      trunk-id: (.ref actor 'trunk-id)
-                      apex-obligation-id: (.ref actor 'apex-obligation-id)
-                      shared-context-cut: (.ref actor 'shared-context-cut)
-                      kv-prefix-digest: (.ref actor 'kv-prefix-digest)
-                      join-node-id: join-node-id
-                      frontier-plan: frontier-plan
-                      scc-condensation: scc-condensation
-                      cedar-handoff: cedar-handoff
-                      sandbox-admission: sandbox-admission
-                      journal-handoff: journal-handoff)))
-        (.o bind-these: #f
-            admitted?: #t
-            errors: '()
-            envelope: env)))))
+             (envelope
+              (.o (:: @ MarlinDispatchEnvelope.)
+                  (request-id := rid)
+                  (operation) (substrate-target) (task-id)
+                  (actor-kind := (.ref actor 'actor-kind))
+                  (scope-mode := (.ref actor 'scope-mode))
+                  (scope-ids := (.ref actor 'scope-ids))
+                  (fencing-epoch)
+                  (trunk-id := (.ref actor 'trunk-id))
+                  (apex-obligation-id := (.ref actor 'apex-obligation-id))
+                  (shared-context-cut := (.ref actor 'shared-context-cut))
+                  (kv-prefix-digest := (.ref actor 'kv-prefix-digest))
+                  (join-node-id) (frontier-plan) (scc-condensation)
+                  (cedar-handoff) (sandbox-admission) (journal-handoff))))
+        (.o (admitted? := #t) (errors := '()) (envelope))))))
 
 ;;; Project a `MarlinDispatchEnvelope.` into a flat, POO-free wire ABI alist for
 ;;; `marlin-agent-core` / Rust / C ABI consumption.
@@ -276,19 +257,13 @@
       executed-wave-ids: (executed-wave-ids '())
       branch-outcomes: (branch-outcomes '())
       substrate: (substrate 'marlin-store))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.graph-engine.marlin-receipt.v1
-      schema: +graph-engine-marlin-receipt-schema+
-      runtime-owner: "marlin-agent-core"
-      request-id: request-id
-      task-id: task-id
-      fencing-epoch: fencing-epoch
-      status: status
-      journal-epoch: journal-epoch
-      chain-head-hash: chain-head-hash
-      executed-wave-ids: executed-wave-ids
-      branch-outcomes: branch-outcomes
-      substrate: substrate))
+  (.o (:: @ MarlinExecutionReceipt.)
+      (request-id) (task-id) (fencing-epoch) (status)
+      (journal-epoch) (chain-head-hash) (executed-wave-ids)
+      (branch-outcomes) (substrate)))
+
+(def (reconcile-reject reason actor)
+  (.o (accepted? := #f) (reason) (actor) (join-gate := #f)))
 
 ;;; Purely reconcile an inbound `MarlinExecutionReceipt.` against a live `TaskActor.`.
 ;;; Enforces Fencing-Epoch anti-split-brain guard (`stale-fencing-epoch`) so a
@@ -298,20 +273,17 @@
       receipt
       join-node-id: (join-node-id #f))
   (cond
-   ((not (task-actor? actor))
-    (.o bind-these: #f accepted?: #f reason: 'invalid-task-actor actor: actor join-gate: #f))
-   ((not (marlin-execution-receipt? receipt))
-    (.o bind-these: #f accepted?: #f reason: 'invalid-marlin-receipt actor: actor join-gate: #f))
+   ((not (task-actor? actor)) (reconcile-reject 'invalid-task-actor actor))
+   ((not (marlin-execution-receipt? receipt)) (reconcile-reject 'invalid-marlin-receipt actor))
    ((not (equal? (.ref actor 'task-id) (.ref receipt 'task-id)))
-    (.o bind-these: #f accepted?: #f reason: 'receipt-task-id-mismatch actor: actor join-gate: #f))
+    (reconcile-reject 'receipt-task-id-mismatch actor))
    ((not (= (.ref actor 'fencing-epoch) (.ref receipt 'fencing-epoch)))
-    (.o bind-these: #f
-        accepted?: #f
-        reason: 'stale-fencing-epoch
-        actor-fencing-epoch: (.ref actor 'fencing-epoch)
-        receipt-fencing-epoch: (.ref receipt 'fencing-epoch)
-        actor: actor
-        join-gate: #f))
+    (.o (accepted? := #f)
+        (reason := 'stale-fencing-epoch)
+        (actor-fencing-epoch := (.ref actor 'fencing-epoch))
+        (receipt-fencing-epoch := (.ref receipt 'fencing-epoch))
+        (actor)
+        (join-gate := #f)))
    (else
     (let* ((updated-actor
             (foldl (lambda (pair acc)
@@ -326,11 +298,10 @@
              ((and gate (not (.ref gate 'can-continue?))) 'blocked-on-branch)
              (gate 'continue-trunk)
              (else 'ready-for-next-step))))
-      (.o bind-these: #f
-          accepted?: #t
-          reason: 'marlin-receipt-reconciled
-          next-action: next-action
-          journal-epoch: (.ref receipt 'journal-epoch)
-          chain-head-hash: (.ref receipt 'chain-head-hash)
-          actor: updated-actor
-          join-gate: gate)))))
+      (.o (accepted? := #t)
+          (reason := 'marlin-receipt-reconciled)
+          (next-action)
+          (journal-epoch := (.ref receipt 'journal-epoch))
+          (chain-head-hash := (.ref receipt 'chain-head-hash))
+          (actor := updated-actor)
+          (join-gate := gate))))))

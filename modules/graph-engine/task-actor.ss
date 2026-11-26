@@ -37,7 +37,7 @@
 ;;; ZERO filesystem or network I/O.
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
-        (only-in :std/list/list filter every)
+        (only-in :std/list/list filter every find filter-map)
         "convergent-tree.ss"
         "journal-handoff.ss")
 
@@ -122,6 +122,18 @@
   (and (object? v) (.slot? v 'kind)
        (eq? (.ref v 'kind) 'agentic-ai-lab.graph-engine.task-actor-index.v1)))
 
+(def (steer-denied reason actor)
+  (.o (admitted? := #f) (reason) (actor) (spawned-branch := #f)))
+
+(def (detour-enter-denied reason actor)
+  (.o (admitted? := #f) (reason) (actor)))
+
+(def (detour-exit-denied reason actor)
+  (.o (exited? := #f) (reason) (actor) (sibling-actor := #f)))
+
+(def (settle-denied reason actor index)
+  (.o (settled? := #f) (reason) (actor) (index) (entry := #f) (handoff-intent := #f)))
+
 ;;; Spawn a convergent `TaskActor.` anchored to a `ContextTrunk.` over one or more
 ;;; Governance `scope-ids` (`scope-mode`: `'project` or `'detached`).
 (def (make-task-actor
@@ -143,30 +155,22 @@
    ((not (memq scope-mode +valid-scope-modes+))
     (error "make-task-actor: scope-mode must be 'project or 'detached" scope-mode))
    (else
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.task-actor.v1
-        actor-kind: 'convergent-task
-        scope-mode: scope-mode
-        session-free?: #t
-        llm-sessions-spawned: 0
-        fencing-epoch: fencing-epoch
-        task-id: task-id
-        title: (or title task-id)
-        worktree: worktree
-        headless?: (and headless? #t)
-        status: 'active
-        scope-ids: scope-ids
-        trunk-id: (.ref trunk 'trunk-id)
-        apex-obligation-id: (.ref trunk 'apex-obligation-id)
-        shared-context-cut: (.ref trunk 'shared-context-cut)
-        kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-        capability-envelope: (.ref trunk 'capability-envelope)
-        trunk: trunk
-        detour-mode: 'mainline
-        detour-node-id: #f
-        detour-origin-epoch: #f
-        steering-log: '()
-        branch-joins: '()))))
+    (.o (:: @ TaskActor.)
+        (scope-mode)
+        (fencing-epoch)
+        (task-id)
+        (title := (or title task-id))
+        (worktree)
+        (headless? := (and headless? #t))
+        (scope-ids)
+        (trunk-id := (.ref trunk 'trunk-id))
+        (apex-obligation-id := (.ref trunk 'apex-obligation-id))
+        (shared-context-cut := (.ref trunk 'shared-context-cut))
+        (kv-prefix-digest := (.ref trunk 'kv-prefix-digest))
+        (capability-envelope := (.ref trunk 'capability-envelope))
+        (trunk)
+        (steering-log := '())
+        (branch-joins := '())))))
 
 ;;; Spawn a lightweight exploratory `open-focus` actor before an Apex exists
 ;;; (supports both `'project` shared structural Context and `'detached` ad-hoc scope).
@@ -188,32 +192,24 @@
    ((not (memq scope-mode +valid-scope-modes+))
     (error "make-open-focus-actor: scope-mode must be 'project or 'detached" scope-mode))
    (else
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.task-actor.v1
-        actor-kind: 'open-focus
-        scope-mode: scope-mode
-        session-free?: #t
-        llm-sessions-spawned: 0
-        fencing-epoch: 1
-        task-id: task-id
-        title: (or title task-id)
-        worktree: worktree
-        headless?: (and headless? #t)
-        status: 'active
-        scope-ids: scope-ids
-        trunk-id: #f
-        apex-obligation-id: #f
-        shared-context-cut: (if (eq? scope-mode 'detached) 0 shared-context-cut)
-        kv-prefix-digest: (if (eq? scope-mode 'detached)
-                            "sha256:detached-isolated-prefix"
-                            kv-prefix-digest)
-        capability-envelope: capability-envelope
-        trunk: #f
-        detour-mode: 'mainline
-        detour-node-id: #f
-        detour-origin-epoch: #f
-        steering-log: '()
-        branch-joins: '()))))
+    (.o (:: @ TaskActor.)
+        (actor-kind := 'open-focus)
+        (scope-mode)
+        (task-id)
+        (title := (or title task-id))
+        (worktree)
+        (headless? := (and headless? #t))
+        (scope-ids)
+        (trunk-id := #f)
+        (apex-obligation-id := #f)
+        (shared-context-cut := (if (eq? scope-mode 'detached) 0 shared-context-cut))
+        (kv-prefix-digest := (if (eq? scope-mode 'detached)
+                               "sha256:detached-isolated-prefix"
+                               kv-prefix-digest))
+        (capability-envelope)
+        (trunk := #f)
+        (steering-log := '())
+        (branch-joins := '())))))
 
 ;;; Promote an exploratory `open-focus` actor into a `convergent-task` bound to a `ContextTrunk.`.
 (def (promote-focus->task-actor actor trunk)
@@ -225,36 +221,22 @@
    ((eq? (.ref actor 'status) 'settled)
     (error "promote-focus->task-actor: cannot promote a settled actor" (.ref actor 'task-id)))
    (else
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.task-actor.v1
-        actor-kind: 'convergent-task
-        scope-mode: (.ref actor 'scope-mode)
-        session-free?: #t
-        llm-sessions-spawned: 0
-        fencing-epoch: (+ 1 (.ref actor 'fencing-epoch))
-        task-id: (.ref actor 'task-id)
-        title: (.ref actor 'title)
-        worktree: (.ref actor 'worktree)
-        headless?: (.ref actor 'headless?)
-        status: 'active
-        scope-ids: (.ref actor 'scope-ids)
-        trunk-id: (.ref trunk 'trunk-id)
-        apex-obligation-id: (.ref trunk 'apex-obligation-id)
-        shared-context-cut: (.ref trunk 'shared-context-cut)
-        kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-        capability-envelope: (.ref trunk 'capability-envelope)
-        trunk: trunk
-        detour-mode: (opt-ref actor 'detour-mode 'mainline)
-        detour-node-id: (opt-ref actor 'detour-node-id #f)
-        detour-origin-epoch: (opt-ref actor 'detour-origin-epoch #f)
-        steering-log: (.ref actor 'steering-log)
-        branch-joins: (.ref actor 'branch-joins)))))
+    (.o (:: @ actor)
+        (actor-kind := 'convergent-task)
+        (fencing-epoch := (+ 1 (.ref actor 'fencing-epoch)))
+        (status := 'active)
+        (trunk-id := (.ref trunk 'trunk-id))
+        (apex-obligation-id := (.ref trunk 'apex-obligation-id))
+        (shared-context-cut := (.ref trunk 'shared-context-cut))
+        (kv-prefix-digest := (.ref trunk 'kv-prefix-digest))
+        (capability-envelope := (.ref trunk 'capability-envelope))
+        (trunk)
+        (detour-mode := (opt-ref actor 'detour-mode 'mainline))
+        (detour-node-id := (opt-ref actor 'detour-node-id #f))
+        (detour-origin-epoch := (opt-ref actor 'detour-origin-epoch #f))))))
 
 (def (make-task-actor-index entries: (entries '()))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.graph-engine.task-actor-index.v1
-      session-free?: #t
-      entries: entries))
+  (.o (:: @ TaskActorIndex.) (entries)))
 
 ;;; Construct a C4 Steering Message sent mid-flight to either `'trunk` (amends
 ;;; the Main Trunk with highest priority) or `'branch` (spawns a subordinate
@@ -277,20 +259,12 @@
    ((not (memq target +valid-steering-targets+))
     (error "make-steering-message: target must be 'trunk or 'branch" target))
    (else
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.steering-message.v1
-        message-id: message-id
-        target: target
-        payload: payload
-        c4-priority: c4-priority
-        anchor-node-id: anchor-node-id
-        join-node-id: join-node-id
-        branch-id: branch-id
-        branch-kind: branch-kind
-        requested-caps: requested-caps
-        target-obligation-id: target-obligation-id
-        required-for-join?: (and required-for-join? #t)
-        supersede-stale-branches?: (and supersede-stale-branches? #t)))))
+    (.o (:: @ SteeringMessage.)
+        (message-id) (target) (payload) (c4-priority)
+        (anchor-node-id) (join-node-id) (branch-id) (branch-kind)
+        (requested-caps) (target-obligation-id)
+        (required-for-join? := (and required-for-join? #t))
+        (supersede-stale-branches? := (and supersede-stale-branches? #t))))))
 
 (def (clone-actor
       actor
@@ -316,38 +290,28 @@
                               detour-origin-epoch))
          (next-log (if (eq? steering-log 'keep) (.ref actor 'steering-log) steering-log))
          (next-joins (if (eq? branch-joins 'keep) (.ref actor 'branch-joins) branch-joins)))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.task-actor.v1
-        actor-kind: (.ref actor 'actor-kind)
-        scope-mode: (.ref actor 'scope-mode)
-        session-free?: #t
-        llm-sessions-spawned: 0
-        fencing-epoch: next-epoch
-        task-id: (.ref actor 'task-id)
-        title: (.ref actor 'title)
-        worktree: (.ref actor 'worktree)
-        headless?: (.ref actor 'headless?)
-        status: next-status
-        scope-ids: (.ref actor 'scope-ids)
-        trunk-id: (if next-trunk (.ref next-trunk 'trunk-id) (.ref actor 'trunk-id))
-        apex-obligation-id: (if next-trunk
-                              (.ref next-trunk 'apex-obligation-id)
-                              (.ref actor 'apex-obligation-id))
-        shared-context-cut: (if next-trunk
-                              (.ref next-trunk 'shared-context-cut)
-                              (.ref actor 'shared-context-cut))
-        kv-prefix-digest: (if next-trunk
-                            (.ref next-trunk 'kv-prefix-digest)
-                            (.ref actor 'kv-prefix-digest))
-        capability-envelope: (if next-trunk
-                               (.ref next-trunk 'capability-envelope)
-                               (.ref actor 'capability-envelope))
-        trunk: next-trunk
-        detour-mode: next-detour-mode
-        detour-node-id: next-detour-node
-        detour-origin-epoch: next-detour-epoch
-        steering-log: next-log
-        branch-joins: next-joins)))
+    (.o (:: @ actor)
+        (fencing-epoch := next-epoch)
+        (status := next-status)
+        (trunk-id := (if next-trunk (.ref next-trunk 'trunk-id) (.ref actor 'trunk-id)))
+        (apex-obligation-id := (if next-trunk
+                                 (.ref next-trunk 'apex-obligation-id)
+                                 (.ref actor 'apex-obligation-id)))
+        (shared-context-cut := (if next-trunk
+                                 (.ref next-trunk 'shared-context-cut)
+                                 (.ref actor 'shared-context-cut)))
+        (kv-prefix-digest := (if next-trunk
+                               (.ref next-trunk 'kv-prefix-digest)
+                               (.ref actor 'kv-prefix-digest)))
+        (capability-envelope := (if next-trunk
+                                  (.ref next-trunk 'capability-envelope)
+                                  (.ref actor 'capability-envelope)))
+        (trunk := next-trunk)
+        (detour-mode := next-detour-mode)
+        (detour-node-id := next-detour-node)
+        (detour-origin-epoch := next-detour-epoch)
+        (steering-log := next-log)
+        (branch-joins := next-joins))))
 
 ;;; Apply a C4 mid-flight Steering Message to a live `TaskActor.`:
 ;;; - `target: 'trunk`  -> steers the Main Trunk, advances `fencing-epoch`, and
@@ -359,9 +323,9 @@
 (def (steer-task-actor actor steering-msg)
   (cond
    ((not (task-actor? actor))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-task-actor actor: actor spawned-branch: #f))
+    (steer-denied 'invalid-task-actor actor))
    ((not (eq? (.ref actor 'status) 'active))
-    (.o bind-these: #f admitted?: #f reason: 'task-actor-not-active actor: actor spawned-branch: #f))
+    (steer-denied 'task-actor-not-active actor))
    (else
     (let* ((target (.ref steering-msg 'target))
            (next-log (append (.ref actor 'steering-log) (list steering-msg))))
@@ -381,14 +345,7 @@
                 (if supersede?
                   (map (lambda (j)
                          (if (eq? (.ref j 'status) 'in-flight)
-                           (.o bind-these: #f
-                               kind: 'agentic-ai-lab.graph-engine.branch-join-record.v1
-                               branch-id: (.ref j 'branch-id)
-                               anchor-node-id: (.ref j 'anchor-node-id)
-                               join-node-id: (.ref j 'join-node-id)
-                               c4-priority: (.ref j 'c4-priority)
-                               required-for-join?: (.ref j 'required-for-join?)
-                               status: 'superseded)
+                           (.o (:: @ j) (status := 'superseded))
                            j))
                        (.ref actor 'branch-joins))
                   (.ref actor 'branch-joins)))
@@ -397,13 +354,12 @@
                                         fencing-epoch: next-epoch
                                         steering-log: next-log
                                         branch-joins: next-joins)))
-          (.o bind-these: #f
-              admitted?: #t
-              reason: 'trunk-steered
-              route: 'trunk
-              fencing-epoch: next-epoch
-              actor: next-actor
-              spawned-branch: #f)))
+          (.o (admitted? := #t)
+              (reason := 'trunk-steered)
+              (route := 'trunk)
+              (fencing-epoch := next-epoch)
+              (actor := next-actor)
+              (spawned-branch := #f))))
        ((eq? target 'branch)
         (let* ((trunk (.ref actor 'trunk))
                (anchor-id (.ref steering-msg 'anchor-node-id))
@@ -411,11 +367,9 @@
                (bid (.ref steering-msg 'branch-id)))
           (cond
            ((not trunk)
-            (.o bind-these: #f admitted?: #f reason: 'branch-steering-requires-trunk
-                actor: actor spawned-branch: #f))
+            (steer-denied 'branch-steering-requires-trunk actor))
            ((not (and (string? anchor-id) (string? join-id) (string? bid)))
-            (.o bind-these: #f admitted?: #f reason: 'missing-anchor-join-or-branch-id
-                actor: actor spawned-branch: #f))
+            (steer-denied 'missing-anchor-join-or-branch-id actor))
            (else
             (let* ((sp (spawn-trunk-branch
                         trunk
@@ -427,36 +381,28 @@
                         c4-priority: (.ref steering-msg 'c4-priority)
                         required-for-apex?: (.ref steering-msg 'required-for-join?))))
               (if (not (.ref sp 'admitted?))
-                (.o bind-these: #f
-                    admitted?: #f
-                    reason: (.ref sp 'reason)
-                    actor: actor
-                    spawned-branch: #f)
-                (let* ((join-rec (.o bind-these: #f
-                                     kind: 'agentic-ai-lab.graph-engine.branch-join-record.v1
-                                     branch-id: bid
-                                     anchor-node-id: anchor-id
-                                     join-node-id: join-id
-                                     c4-priority: (.ref steering-msg 'c4-priority)
-                                     required-for-join?: (.ref steering-msg 'required-for-join?)
-                                     status: 'in-flight))
+                (steer-denied (.ref sp 'reason) actor)
+                (let* ((join-rec (.o (:: @ BranchJoinRecord.)
+                                     (branch-id := bid)
+                                     (anchor-node-id := anchor-id)
+                                     (join-node-id := join-id)
+                                     (c4-priority := (.ref steering-msg 'c4-priority))
+                                     (required-for-join? := (.ref steering-msg 'required-for-join?))))
                        (next-actor (clone-actor
                                     actor
                                     trunk: (.ref sp 'trunk)
                                     steering-log: next-log
                                     branch-joins: (append (.ref actor 'branch-joins)
                                                           (list join-rec)))))
-                  (.o bind-these: #f
-                      admitted?: #t
-                      reason: 'branch-spawned-from-anchor
-                      route: 'branch
-                      anchor-node-id: anchor-id
-                      join-node-id: join-id
-                      actor: next-actor
-                      spawned-branch: (.ref sp 'branch)))))))))
+                  (.o (admitted? := #t)
+                      (reason := 'branch-spawned-from-anchor)
+                      (route := 'branch)
+                      (anchor-node-id := anchor-id)
+                      (join-node-id := join-id)
+                      (actor := next-actor)
+                      (spawned-branch := (.ref sp 'branch))))))))))
        (else
-        (.o bind-these: #f admitted?: #f reason: 'invalid-steering-target
-            actor: actor spawned-branch: #f)))))))
+        (steer-denied 'invalid-steering-target actor)))))))
 
 ;;; Record completion (or failure/defeater/cancellation) of a branch anchored at
 ;;; `anchor-node-id` so the Trunk continuation gate at `join-node-id` can verify
@@ -469,14 +415,7 @@
     (let ((next-joins
            (map (lambda (j)
                   (if (equal? (.ref j 'branch-id) branch-id)
-                    (.o bind-these: #f
-                        kind: 'agentic-ai-lab.graph-engine.branch-join-record.v1
-                        branch-id: (.ref j 'branch-id)
-                        anchor-node-id: (.ref j 'anchor-node-id)
-                        join-node-id: (.ref j 'join-node-id)
-                        c4-priority: (.ref j 'c4-priority)
-                        required-for-join?: (.ref j 'required-for-join?)
-                        status: outcome)
+                    (.o (:: @ j) (status := outcome))
                     j))
                 (.ref actor 'branch-joins))))
       (clone-actor actor branch-joins: next-joins)))))
@@ -495,52 +434,48 @@
                           relevant)))
     (cond
      ((pair? blocked)
-      (.o bind-these: #f
-          can-continue?: #f
-          reason: 'required-branch-failed-or-defeated
-          join-node-id: join-node-id
-          blocking-branch-ids: (map (lambda (j) (.ref j 'branch-id)) blocked)))
+      (.o (can-continue? := #f)
+          (reason := 'required-branch-failed-or-defeated)
+          (join-node-id)
+          (blocking-branch-ids := (map (lambda (j) (.ref j 'branch-id)) blocked))))
      ((pair? in-flight)
-      (.o bind-these: #f
-          can-continue?: #f
-          reason: 'required-branches-still-in-flight
-          join-node-id: join-node-id
-          blocking-branch-ids: (map (lambda (j) (.ref j 'branch-id)) in-flight)))
+      (.o (can-continue? := #f)
+          (reason := 'required-branches-still-in-flight)
+          (join-node-id)
+          (blocking-branch-ids := (map (lambda (j) (.ref j 'branch-id)) in-flight))))
      (else
-      (.o bind-these: #f
-          can-continue?: #t
-          reason: 'all-required-branches-converged
-          join-node-id: join-node-id
-          blocking-branch-ids: '())))))
+      (.o (can-continue? := #t)
+          (reason := 'all-required-branches-converged)
+          (join-node-id)
+          (blocking-branch-ids := '()))))))
 
 ;;; Pure multi-scope Governance access check for a lightweight `TaskActor.`.
 (def (admit-task-actor-scope-access actor target-scope required-cap)
   (cond
    ((not (task-actor? actor))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-task-actor))
+    (.o (admitted? := #f) (reason := 'invalid-task-actor)))
    ((not (eq? (.ref actor 'status) 'active))
-    (.o bind-these: #f admitted?: #f reason: 'task-actor-not-active))
+    (.o (admitted? := #f) (reason := 'task-actor-not-active)))
    ((not (member target-scope (.ref actor 'scope-ids)))
-    (.o bind-these: #f admitted?: #f reason: 'scope-out-of-bounds))
+    (.o (admitted? := #f) (reason := 'scope-out-of-bounds)))
    (else
     (let* ((env (.ref actor 'capability-envelope))
            (allowed (opt-ref env 'allowed-caps '()))
            (denied (opt-ref env 'denied-caps '())))
       (cond
        ((member required-cap denied)
-        (.o bind-these: #f admitted?: #f reason: 'capability-explicitly-denied))
+        (.o (admitted? := #f) (reason := 'capability-explicitly-denied)))
        ((not (member required-cap allowed))
-        (.o bind-these: #f admitted?: #f reason: 'capability-not-granted))
+        (.o (admitted? := #f) (reason := 'capability-not-granted)))
        (else
-        (.o bind-these: #f
-            admitted?: #t
-            reason: 'admitted
-            task-id: (.ref actor 'task-id)
-            scope-mode: (.ref actor 'scope-mode)
-            target-scope: target-scope
-            required-cap: required-cap
-            kv-prefix-digest: (.ref actor 'kv-prefix-digest)
-            session-free?: #t)))))))
+        (.o (admitted? := #t)
+            (reason := 'admitted)
+            (task-id := (.ref actor 'task-id))
+            (scope-mode := (.ref actor 'scope-mode))
+            (target-scope)
+            (required-cap)
+            (kv-prefix-digest := (.ref actor 'kv-prefix-digest))
+            (session-free? := #t))))))))
 
 (def (park-task-actor actor)
   (if (eq? (.ref actor 'status) 'settled)
@@ -562,26 +497,25 @@
 (def (enter-task-actor-detour actor mode detour-node-id)
   (cond
    ((not (task-actor? actor))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-task-actor actor: actor))
+    (detour-enter-denied 'invalid-task-actor actor))
    ((not (eq? (.ref actor 'status) 'active))
-    (.o bind-these: #f admitted?: #f reason: 'task-actor-not-active actor: actor))
+    (detour-enter-denied 'task-actor-not-active actor))
    ((not (memq mode '(blocker-active side-quest-active)))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-detour-mode actor: actor))
+    (detour-enter-denied 'invalid-detour-mode actor))
    ((not (and (string? detour-node-id) (> (string-length detour-node-id) 0)))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-detour-node-id actor: actor))
+    (detour-enter-denied 'invalid-detour-node-id actor))
    ((not (eq? (opt-ref actor 'detour-mode 'mainline) 'mainline))
-    (.o bind-these: #f admitted?: #f reason: 'nested-detour-forbidden actor: actor))
+    (detour-enter-denied 'nested-detour-forbidden actor))
    (else
     (let ((next (clone-actor actor
                              detour-mode: mode
                              detour-node-id: detour-node-id
                              detour-origin-epoch: (.ref actor 'fencing-epoch))))
-      (.o bind-these: #f
-          admitted?: #t
-          reason: 'detour-entered
-          detour-mode: mode
-          detour-node-id: detour-node-id
-          actor: next)))))
+      (.o (admitted? := #t)
+          (reason := 'detour-entered)
+          (detour-mode := mode)
+          (detour-node-id)
+          (actor := next))))))
 
 ;;; Exit an active Design 165 Scoped Detour via one of the 4 canonical re-anchoring exits:
 ;;;   - `'return-to-origin`: returns parent to `'mainline` without mutating trunk cut.
@@ -595,14 +529,14 @@
       sibling-title: (sibling-title #f))
   (cond
    ((not (task-actor? actor))
-    (.o bind-these: #f exited?: #f reason: 'invalid-task-actor actor: actor sibling-actor: #f))
+    (detour-exit-denied 'invalid-task-actor actor))
    ((not (memq exit-kind +valid-detour-exits+))
-    (.o bind-these: #f exited?: #f reason: 'invalid-detour-exit actor: actor sibling-actor: #f))
+    (detour-exit-denied 'invalid-detour-exit actor))
    ((eq? (opt-ref actor 'detour-mode 'mainline) 'mainline)
-    (.o bind-these: #f exited?: #f reason: 'actor-not-in-detour actor: actor sibling-actor: #f))
+    (detour-exit-denied 'actor-not-in-detour actor))
    ((and (eq? exit-kind 'spawn-sibling-task)
          (not (and (string? sibling-task-id) (> (string-length sibling-task-id) 0))))
-    (.o bind-these: #f exited?: #f reason: 'sibling-task-id-required actor: actor sibling-actor: #f))
+    (detour-exit-denied 'sibling-task-id-required actor))
    (else
     (let* ((trunk (.ref actor 'trunk))
            (next-trunk
@@ -631,12 +565,11 @@
                          detour-mode: 'mainline
                          detour-node-id: #f
                          detour-origin-epoch: #f)))
-      (.o bind-these: #f
-          exited?: #t
-          reason: 'detour-exited
-          exit-kind: exit-kind
-          actor: next-actor
-          sibling-actor: sibling)))))
+      (.o (exited? := #t)
+          (reason := 'detour-exited)
+          (exit-kind)
+          (actor := next-actor)
+          (sibling-actor := sibling))))))
 
 (def (upsert-index-entry entries entry)
   (let* ((tid (.ref entry 'task-id))
@@ -658,61 +591,48 @@
       journal-epoch: (journal-epoch 1))
   (cond
    ((not (task-actor? actor))
-    (.o bind-these: #f settled?: #f reason: 'invalid-task-actor
-        actor: actor index: index entry: #f handoff-intent: #f))
+    (settle-denied 'invalid-task-actor actor index))
    ((not (task-actor-index? index))
-    (.o bind-these: #f settled?: #f reason: 'invalid-task-actor-index
-        actor: actor index: index entry: #f handoff-intent: #f))
+    (settle-denied 'invalid-task-actor-index actor index))
    ((not (memq outcome +valid-settlement-outcomes+))
-    (.o bind-these: #f settled?: #f reason: 'invalid-settlement-outcome
-        actor: actor index: index entry: #f handoff-intent: #f))
+    (settle-denied 'invalid-settlement-outcome actor index))
    ((and (eq? outcome 'converged)
          (eq? (opt-ref actor 'detour-mode 'mainline) 'blocker-active))
-    (.o bind-these: #f settled?: #f reason: 'blocker-detour-blocks-settlement
-        actor: actor index: index entry: #f handoff-intent: #f))
+    (settle-denied 'blocker-detour-blocks-settlement actor index))
    (else
     (let* ((trunk (.ref actor 'trunk))
            (apex-status (and trunk (.ref trunk 'apex-status)))
            (apex-receipt (and trunk (.ref trunk 'apex-receipt))))
       (if (and (eq? outcome 'converged)
                (not (and trunk (eq? apex-status 'converged) apex-receipt)))
-        (.o bind-these: #f
-            settled?: #f
-            reason: 'trunk-not-converged
-            actor: actor
-            index: index
-            entry: #f
-            handoff-intent: #f)
+        (settle-denied 'trunk-not-converged actor index)
         (let* ((next-status (if (eq? outcome 'parked) 'parked 'settled))
                (settled-actor (clone-actor actor status: next-status))
                (absorbed-ids (if apex-receipt
                                (.ref apex-receipt 'absorbed-branch-ids-c4-order)
                                '()))
                (receipt-dig (if apex-receipt (.ref apex-receipt 'receipt-digest) #f))
-               (entry (.o bind-these: #f
-                          kind: 'agentic-ai-lab.graph-engine.task-actor-index-entry.v1
-                          session-free?: #t
-                          archived?: (not (eq? outcome 'parked))
-                          queryable-by-id?: #t
-                          detached-ephemeral?: (eq? (.ref actor 'scope-mode) 'detached)
-                          task-id: (.ref actor 'task-id)
-                          title: (.ref actor 'title)
-                          worktree: (.ref actor 'worktree)
-                          actor-kind: (.ref actor 'actor-kind)
-                          scope-mode: (.ref actor 'scope-mode)
-                          scope-ids: (.ref actor 'scope-ids)
-                          fencing-epoch: (.ref actor 'fencing-epoch)
-                          trunk-id: (.ref actor 'trunk-id)
-                          apex-obligation-id: (.ref actor 'apex-obligation-id)
-                          shared-context-cut: (.ref actor 'shared-context-cut)
-                          kv-prefix-digest: (.ref actor 'kv-prefix-digest)
-                          receipt-digest: receipt-dig
-                          absorbed-branch-ids: absorbed-ids
-                          total-llm-calls: (if apex-receipt (.ref apex-receipt 'total-llm-calls) 0)
-                          total-det-tasks: (if apex-receipt (.ref apex-receipt 'total-det-tasks) 0)
-                          outcome: outcome
-                          reason-note: reason-note
-                          status: (if (eq? outcome 'converged) 'done outcome)))
+               (entry (.o (:: @ TaskActorIndexEntry.)
+                          (archived? := (not (eq? outcome 'parked)))
+                          (detached-ephemeral? := (eq? (.ref actor 'scope-mode) 'detached))
+                          (task-id := (.ref actor 'task-id))
+                          (title := (.ref actor 'title))
+                          (worktree := (.ref actor 'worktree))
+                          (actor-kind := (.ref actor 'actor-kind))
+                          (scope-mode := (.ref actor 'scope-mode))
+                          (scope-ids := (.ref actor 'scope-ids))
+                          (fencing-epoch := (.ref actor 'fencing-epoch))
+                          (trunk-id := (.ref actor 'trunk-id))
+                          (apex-obligation-id := (.ref actor 'apex-obligation-id))
+                          (shared-context-cut := (.ref actor 'shared-context-cut))
+                          (kv-prefix-digest := (.ref actor 'kv-prefix-digest))
+                          (receipt-digest := receipt-dig)
+                          (absorbed-branch-ids := absorbed-ids)
+                          (total-llm-calls := (if apex-receipt (.ref apex-receipt 'total-llm-calls) 0))
+                          (total-det-tasks := (if apex-receipt (.ref apex-receipt 'total-det-tasks) 0))
+                          (outcome)
+                          (reason-note)
+                          (status := (if (eq? outcome 'converged) 'done outcome))))
                (next-index (if (eq? (.ref actor 'scope-mode) 'detached)
                              index
                              (make-task-actor-index
@@ -721,47 +641,47 @@
                                         ":e" (number->string journal-epoch)))
                (handoff (if trunk
                           (plan-trunk-journal-handoff event-id entry trunk)
-                          (.o bind-these: #f
-                              kind: 'agentic-ai-lab.graph-engine.journal-handoff-intent.v1
-                              runtime-executed?: #f
-                              state-key: "graph-engine:task-actor"
-                              event-id: event-id
-                              event-payload: entry
-                              trunk-id: (.ref actor 'task-id)
-                              outcome: outcome))))
-          (.o bind-these: #f
-              settled?: #t
-              reason: (if (eq? (.ref actor 'scope-mode) 'detached)
-                        'settled-detached-no-project-pollution
-                        'settled-into-index)
-              outcome: outcome
-              actor: settled-actor
-              index: next-index
-              entry: entry
-              handoff-intent: handoff)))))))
+                          (.o (:: @ JournalHandoffIntent.)
+                              (state-key := "graph-engine:task-actor")
+                              (event-id)
+                              (event-payload := entry)
+                              (trunk-id := (.ref actor 'task-id))
+                              (outcome)))))
+          (.o (settled? := #t)
+              (reason := (if (eq? (.ref actor 'scope-mode) 'detached)
+                           'settled-detached-no-project-pollution
+                           'settled-into-index))
+              (outcome)
+              (actor := settled-actor)
+              (index := next-index)
+              (entry)
+              (handoff-intent := handoff))))))))
 
 ;;; Query a settled task from `TaskActorIndex.` purely by `task-id`.
 ;;; Guarantees ZERO actors spawned and ZERO LLM sessions created!
 (def (lookup-task-actor-by-id index task-id)
-  (let loop ((rest (if (task-actor-index? index) (.ref index 'entries) '())))
-    (cond
-     ((null? rest)
-      (.o bind-these: #f
-          found?: #f
-          task-id: task-id
-          entry: #f
-          mode: 'not-found
-          actors-spawned: 0
-          llm-sessions-spawned: 0))
-     ((equal? (.ref (car rest) 'task-id) task-id)
-      (.o bind-these: #f
-          found?: #t
-          task-id: task-id
-          entry: (car rest)
-          mode: 'peek-readonly
-          actors-spawned: 0
-          llm-sessions-spawned: 0))
-     (else (loop (cdr rest))))))
+  (let ((found (and (task-actor-index? index)
+                    (find (lambda (e) (equal? (.ref e 'task-id) task-id))
+                          (.ref index 'entries)))))
+    (.o (found? := (and found #t))
+        (task-id)
+        (entry := (or found #f))
+        (mode := (if found 'peek-readonly 'not-found))
+        (actors-spawned := 0)
+        (llm-sessions-spawned := 0))))
+
+(def (make-settled-workbench-tab entry mode)
+  (.o (id := (.ref entry 'task-id))
+      (label := (.ref entry 'title))
+      (kind := 'task)
+      (closable? := #t)
+      (status := (.ref entry 'status))
+      (outcome := (.ref entry 'outcome))
+      (worktree := (.ref entry 'worktree))
+      (scope-ids := (.ref entry 'scope-ids))
+      (trunk-id := (.ref entry 'trunk-id))
+      (archived? := #t)
+      (mode)))
 
 ;;; Pure Workbench Tab projection from lightweight `TaskActor.`s + `TaskActorIndex.`.
 (def (project-task-actors->workbench-tabs
@@ -770,12 +690,11 @@
       peek-set: (peek-set '())
       focused-task-id: (focused-task-id #f)
       focused-tab-archive: (focused-tab-archive 'on-blur))
-  (let* ((pinned (list (.o bind-these: #f
-                           id: 'index
-                           label: "Index"
-                           kind: 'index
-                           closable?: #f
-                           mode: 'pinned)))
+  (let* ((pinned (list (.o (id := 'index)
+                           (label := "Index")
+                           (kind := 'index)
+                           (closable? := #f)
+                           (mode := 'pinned))))
          (peek-list (if (list? peek-set) peek-set '()))
          (active-actors (filter (lambda (a)
                                   (and (task-actor? a)
@@ -786,85 +705,54 @@
          (visible-actors (filter (lambda (a) (not (.ref a 'headless?))) active-actors))
          (active-tabs
           (map (lambda (a)
-                 (.o bind-these: #f
-                     id: (.ref a 'task-id)
-                     label: (.ref a 'title)
-                     kind: 'task
-                     closable?: #t
-                     actor-kind: (.ref a 'actor-kind)
-                     scope-mode: (.ref a 'scope-mode)
-                     status: (.ref a 'status)
-                     detour-mode: (opt-ref a 'detour-mode 'mainline)
-                     worktree: (.ref a 'worktree)
-                     scope-ids: (.ref a 'scope-ids)
-                     trunk-id: (.ref a 'trunk-id)
-                     kv-prefix-digest: (.ref a 'kv-prefix-digest)
-                     archived?: #f
-                     mode: 'active))
+                 (.o (id := (.ref a 'task-id))
+                     (label := (.ref a 'title))
+                     (kind := 'task)
+                     (closable? := #t)
+                     (actor-kind := (.ref a 'actor-kind))
+                     (scope-mode := (.ref a 'scope-mode))
+                     (status := (.ref a 'status))
+                     (detour-mode := (opt-ref a 'detour-mode 'mainline))
+                     (worktree := (.ref a 'worktree))
+                     (scope-ids := (.ref a 'scope-ids))
+                     (trunk-id := (.ref a 'trunk-id))
+                     (kv-prefix-digest := (.ref a 'kv-prefix-digest))
+                     (archived? := #f)
+                     (mode := 'active)))
                visible-actors))
          (settled-entries (if (task-actor-index? index) (.ref index 'entries) '()))
          (archived-index
           (map (lambda (e)
-                 (.o bind-these: #f
-                     task-id: (.ref e 'task-id)
-                     title: (.ref e 'title)
-                     status: (.ref e 'status)
-                     outcome: (.ref e 'outcome)
-                     worktree: (.ref e 'worktree)
-                     scope-ids: (.ref e 'scope-ids)
-                     trunk-id: (.ref e 'trunk-id)
-                     receipt-digest: (.ref e 'receipt-digest)
-                     archived?: (.ref e 'archived?)
-                     queryable-by-id?: #t))
+                 (.o (task-id := (.ref e 'task-id))
+                     (title := (.ref e 'title))
+                     (status := (.ref e 'status))
+                     (outcome := (.ref e 'outcome))
+                     (worktree := (.ref e 'worktree))
+                     (scope-ids := (.ref e 'scope-ids))
+                     (trunk-id := (.ref e 'trunk-id))
+                     (receipt-digest := (.ref e 'receipt-digest))
+                     (archived? := (.ref e 'archived?))
+                     (queryable-by-id? := #t)))
                settled-entries))
          (peek-or-blur-tabs
-          (let loop ((rest settled-entries) (acc '()))
-            (if (null? rest)
-              (reverse acc)
-              (let* ((e (car rest))
-                     (tid (.ref e 'task-id))
-                     (peeked? (and (member tid peek-list) #t))
-                     (focused? (and focused-task-id (equal? tid focused-task-id))))
-                (cond
-                 (peeked?
-                  (loop (cdr rest)
-                        (cons (.o bind-these: #f
-                                  id: tid
-                                  label: (.ref e 'title)
-                                  kind: 'task
-                                  closable?: #t
-                                  status: (.ref e 'status)
-                                  outcome: (.ref e 'outcome)
-                                  worktree: (.ref e 'worktree)
-                                  scope-ids: (.ref e 'scope-ids)
-                                  trunk-id: (.ref e 'trunk-id)
-                                  archived?: #t
-                                  mode: 'peek-readonly)
-                              acc)))
-                 ((and focused? (eq? focused-tab-archive 'on-blur))
-                  (loop (cdr rest)
-                        (cons (.o bind-these: #f
-                                  id: tid
-                                  label: (.ref e 'title)
-                                  kind: 'task
-                                  closable?: #t
-                                  status: (.ref e 'status)
-                                  outcome: (.ref e 'outcome)
-                                  worktree: (.ref e 'worktree)
-                                  scope-ids: (.ref e 'scope-ids)
-                                  trunk-id: (.ref e 'trunk-id)
-                                  archived?: #t
-                                  mode: 'archived-pending-blur)
-                              acc)))
-                 (else (loop (cdr rest) acc)))))))
+          (filter-map
+           (lambda (e)
+             (let* ((tid (.ref e 'task-id))
+                    (peeked? (and (member tid peek-list) #t))
+                    (focused? (and focused-task-id (equal? tid focused-task-id))))
+               (cond
+                (peeked? (make-settled-workbench-tab e 'peek-readonly))
+                ((and focused? (eq? focused-tab-archive 'on-blur))
+                 (make-settled-workbench-tab e 'archived-pending-blur))
+                (else #f))))
+           settled-entries))
          (dynamic-tabs (append active-tabs peek-or-blur-tabs)))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.durable.workbench-tab-projection.v1
-        session-free?: #t
-        pinned-tabs: pinned
-        dynamic-tabs: dynamic-tabs
-        archived-index: archived-index
-        visible-tab-ids: (cons 'index (map (lambda (t) (.ref t 'id)) dynamic-tabs))
-        headless-actor-ids: headless-ids
-        active-actor-count: (length active-actors)
-        settled-index-count: (length settled-entries))))
+    (.o (kind := 'agentic-ai-lab.durable.workbench-tab-projection.v1)
+        (session-free? := #t)
+        (pinned-tabs := pinned)
+        (dynamic-tabs)
+        (archived-index)
+        (visible-tab-ids := (cons 'index (map (lambda (t) (.ref t 'id)) dynamic-tabs)))
+        (headless-actor-ids := headless-ids)
+        (active-actor-count := (length active-actors))
+        (settled-index-count := (length settled-entries)))))

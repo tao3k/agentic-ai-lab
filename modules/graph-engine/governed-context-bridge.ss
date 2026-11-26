@@ -55,21 +55,16 @@
       trunk-id
       bound-cut: (bound-cut 1)
       grant-epoch: (grant-epoch 1))
-  (let ((pol (agentic-ai-lab-cedar-policy policy-id policy-source)))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.cedar-handoff.v1
-        policy: pol
-        policy-valid?: (agentic-ai-lab-cedar-policy? pol)
-        trunk-id: trunk-id
-        bound-cut: bound-cut
-        grant-epoch: grant-epoch
-        runtime-executed?: #f)))
+  (let ((policy (agentic-ai-lab-cedar-policy policy-id policy-source)))
+    (.o (:: @ GraphCedarHandoff.)
+        (policy)
+        (policy-valid? := (agentic-ai-lab-cedar-policy? policy))
+        (trunk-id) (bound-cut) (grant-epoch))))
 
-(def GraphDefaultNonoProfile.
-  (.o bind-these: #f
-      backend-kind: 'nono
-      capabilities: '(process-run filesystem-read tmpdir)
-      egress-enabled?: #f))
+(.def GraphDefaultNonoProfile.
+  backend-kind: 'nono
+  capabilities: '(process-run filesystem-read tmpdir)
+  egress-enabled?: #f)
 
 ;;; Evaluate real `nono-sandbox-profile` (or any `sandbox-profile` POO subtype)
 ;;; against Slice 52's Lethal-Trifecta sandbox gate (`untrusted-input + private-data + unendorsed egress`).
@@ -80,21 +75,20 @@
       has-private-data?: (has-private-data? #f)
       egress-endorsed?: (egress-endorsed? #f)
       lease-valid?: (lease-valid? #t))
-  (let* ((binding (sandbox-profile->external-binding
-                   profile
-                   env-digest: env-digest
-                   has-untrusted-input?: has-untrusted-input?
-                   has-private-data?: has-private-data?
-                   egress-endorsed?: egress-endorsed?
-                   lease-valid?: lease-valid?))
-         (decision (funflow-admit-external-task-sandbox binding)))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.sandbox-admission.v1
-        admitted?: (.ref decision 'admitted?)
-        reason: (.ref decision 'reason)
-        sandbox-binding: binding
-        decision: decision
-        runtime-executed?: #f)))
+  (let* ((sandbox-binding (sandbox-profile->external-binding
+                           profile
+                           env-digest: env-digest
+                           has-untrusted-input?: has-untrusted-input?
+                           has-private-data?: has-private-data?
+                           egress-endorsed?: egress-endorsed?
+                           lease-valid?: lease-valid?))
+         (decision (funflow-admit-external-task-sandbox sandbox-binding)))
+    (.o (kind := 'agentic-ai-lab.graph-engine.sandbox-admission.v1)
+        (admitted? := (.ref decision 'admitted?))
+        (reason := (.ref decision 'reason))
+        (sandbox-binding)
+        (decision)
+        (runtime-executed? := #f))))
 
 ;;; Assemble a live governed Context turn via `ai-agentic-context` (Stage-1 ORG
 ;;; AST repair + L0..L3 progressive disclosure + MINJA quarantine + Two-Zone
@@ -137,23 +131,22 @@
                  kv-prefix-digest: kv-dig
                  live-grant-epoch: live-grant-epoch
                  trunk-grant-live?: (and trunk-grant-live? admitted?))))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.graph-engine.governed-trunk-bundle.v1
-        admitted?: admitted?
-        reason: (cond
-                 ((not (.ref assembly 'admitted?)) (.ref assembly 'reason))
-                 ((not sandbox-ok?) (.ref sandbox-admission 'reason))
-                 ((not cedar-ok?) 'invalid-cedar-policy-handoff)
-                 (else 'governed-trunk-assembled))
-        trunk: trunk
-        context-assembly: assembly
-        kv-prefix-digest: kv-dig
-        effective-disclosure-depth: (.ref assembly 'effective-disclosure-depth)
-        quarantined-excluded: (.ref (.ref assembly 'recall-view) 'quarantined-or-rejected-excluded)
-        audit-capsule: (.ref assembly 'audit-capsule)
-        cedar-handoff: cedar-handoff
-        sandbox-admission: sandbox-admission
-        runtime-executed?: #f)))
+    (.o (kind := 'agentic-ai-lab.graph-engine.governed-trunk-bundle.v1)
+        (admitted?)
+        (reason := (cond
+                    ((not (.ref assembly 'admitted?)) (.ref assembly 'reason))
+                    ((not sandbox-ok?) (.ref sandbox-admission 'reason))
+                    ((not cedar-ok?) 'invalid-cedar-policy-handoff)
+                    (else 'governed-trunk-assembled)))
+        (trunk)
+        (context-assembly := assembly)
+        (kv-prefix-digest := kv-dig)
+        (effective-disclosure-depth := (.ref assembly 'effective-disclosure-depth))
+        (quarantined-excluded := (.ref (.ref assembly 'recall-view) 'quarantined-or-rejected-excluded))
+        (audit-capsule := (.ref assembly 'audit-capsule))
+        (cedar-handoff)
+        (sandbox-admission)
+        (runtime-executed? := #f))))
 
 ;;; Project a `make-governed-context-trunk` bundle into the exact 10-slot rooted
 ;;; Scheme vector consumed by `marlin-agent-core`'s C-ABI symbol

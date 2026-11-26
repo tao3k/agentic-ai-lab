@@ -20,7 +20,7 @@
 ;;;      condensation receipt and releases downstream DAG nodes!
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
-        (only-in :std/list/list filter every any)
+        (only-in :std/list/list find every)
         (only-in :tao3k/agentic-ai-lab/modules/ai-agentic-context/funs-scope
                  agentic-ai-lab-ai-agentic-context-digest))
 
@@ -56,11 +56,7 @@
       node-id
       depends-on: (depends-on '())
       execute-fn: (execute-fn #f))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.graph-engine.graph-node-spec.v1
-      node-id: node-id
-      depends-on: depends-on
-      execute-fn: execute-fn))
+  (.o (:: @ GraphNodeSpec.) (node-id) (depends-on) (execute-fn)))
 
 (def (make-cycle-termination-contract
       scc-member-ids
@@ -68,13 +64,10 @@
       exit-predicate: (exit-predicate (lambda (_st) #t))
       step-fn: (step-fn (lambda (st _iter) st))
       state-digest-fn: (state-digest-fn (lambda (st) (digest (list 'scc-state.v1 st)))))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.graph-engine.cycle-termination-contract.v1
-      scc-member-ids: scc-member-ids
-      max-iterations: (max 1 max-iterations)
-      exit-predicate: exit-predicate
-      step-fn: step-fn
-      state-digest-fn: state-digest-fn))
+  (.o (:: @ CycleTerminationContract.)
+      (scc-member-ids)
+      (max-iterations := (max 1 max-iterations))
+      (exit-predicate) (step-fn) (state-digest-fn)))
 
 ;;; Pure Tarjan SCC condensation over arbitrary directed graph nodes (`depends-on`
 ;;; edges: `node` depends on each `dep` in `depends-on`, so DFS walks `dep` first
@@ -121,12 +114,11 @@
                 (let* ((self-loop? (and (= (length next-comp) 1)
                                         (and (member v (hash-ref dep-map v '())) #t)))
                        (cyclic? (or (> (length next-comp) 1) self-loop?))
-                       (scc-obj (.o bind-these: #f
-                                    kind: 'agentic-ai-lab.graph-engine.condensed-scc.v1
-                                    scc-id: (string-append "scc:" (car next-comp))
-                                    members: next-comp
-                                    topology: (if cyclic? 'cyclic-feedback-scc 'acyclic-dag-node)
-                                    cyclic?: cyclic?)))
+                       (scc-obj (.o (:: @ CondensedScc.)
+                                    (scc-id := (string-append "scc:" (car next-comp)))
+                                    (members := next-comp)
+                                    (topology := (if cyclic? 'cyclic-feedback-scc 'acyclic-dag-node))
+                                    (cyclic?))))
                   (set! sccs-rev (cons scc-obj sccs-rev)))
                 (pop-loop next-comp)))))))
     (for-each
@@ -140,14 +132,19 @@
 
 (def (find-contract-for-scc scc contracts)
   (let ((members (.ref scc 'members)))
-    (let loop ((cs contracts))
-      (cond
-       ((null? cs) #f)
-       ((let ((cm (.ref (car cs) 'scc-member-ids)))
-          (and (= (length cm) (length members))
-               (every (lambda (m) (and (member m cm) #t)) members)))
-        (car cs))
-       (else (loop (cdr cs)))))))
+    (find (lambda (c)
+            (let ((cm (.ref c 'scc-member-ids)))
+              (and (= (length cm) (length members))
+                   (every (lambda (m) (and (member m cm) #t)) members))))
+          contracts)))
+
+(def (make-exec-receipt admitted? status reason condensation-sccs acyclic-nodes-executed
+                        cyclic-sccs-converged total-cycle-iterations final-state halted-scc-id)
+  (.o (:: @ UnifiedGraphExecutionReceipt.)
+      (admitted?) (status) (reason) (condensation-sccs)
+      (acyclic-nodes-executed) (cyclic-sccs-converged)
+      (total-cycle-iterations) (final-state) (halted-scc-id)
+      (action-authorized? := #f)))
 
 ;;; Execute ANY unified graph (acyclic DAG, tree, OR cyclic feedback subgraphs)
 ;;; over its Tarjan SCC Condensation DAG with strict fail-closed termination guards.
@@ -160,36 +157,16 @@
         (node-map (make-hash-table)))
     (for-each (lambda (n) (hash-put! node-map (.ref n 'node-id) n)) nodes)
     (if (not cedar-grant-live?)
-      (.o bind-these: #f
-          kind: 'agentic-ai-lab.graph-engine.unified-graph-execution.v1
-          admitted?: #f
-          status: 'blocked-on-governance
-          reason: 'cedar-grant-revoked
-          condensation-sccs: sccs
-          acyclic-nodes-executed: '()
-          cyclic-sccs-converged: '()
-          total-cycle-iterations: 0
-          final-state: initial-state
-          halted-scc-id: #f
-          action-authorized?: #f)
+      (make-exec-receipt #f 'blocked-on-governance 'cedar-grant-revoked
+                         sccs '() '() 0 initial-state #f)
       (let loop-sccs ((rest sccs)
                       (cur-state initial-state)
                       (acyclic-rev '())
                       (cyclic-rev '())
                       (cycle-iters 0))
         (if (null? rest)
-          (.o bind-these: #f
-              kind: 'agentic-ai-lab.graph-engine.unified-graph-execution.v1
-              admitted?: #t
-              status: 'graph-converged
-              reason: 'unified-graph-condensation-completed
-              condensation-sccs: sccs
-              acyclic-nodes-executed: (reverse acyclic-rev)
-              cyclic-sccs-converged: (reverse cyclic-rev)
-              total-cycle-iterations: cycle-iters
-              final-state: cur-state
-              halted-scc-id: #f
-              action-authorized?: #f)
+          (make-exec-receipt #t 'graph-converged 'unified-graph-condensation-completed
+                             sccs (reverse acyclic-rev) (reverse cyclic-rev) cycle-iters cur-state #f)
           (let* ((scc (car rest))
                  (scc-id (.ref scc 'scc-id)))
             (if (not (.ref scc 'cyclic?))
@@ -198,26 +175,13 @@
                      (node (hash-ref node-map nid))
                      (fn (.ref node 'execute-fn))
                      (next-st (if (procedure? fn) (fn cur-state) cur-state)))
-                (loop-sccs (cdr rest)
-                           next-st
-                           (cons nid acyclic-rev)
-                           cyclic-rev
-                           cycle-iters))
+                (loop-sccs (cdr rest) next-st (cons nid acyclic-rev) cyclic-rev cycle-iters))
               ;; Non-trivial SCC: Bounded Cyclic Feedback Subgraph!
               (let ((contract (find-contract-for-scc scc cycle-contracts)))
                 (if (not contract)
-                  (.o bind-these: #f
-                      kind: 'agentic-ai-lab.graph-engine.unified-graph-execution.v1
-                      admitted?: #f
-                      status: 'halted-ungoverned-cycle
-                      reason: 'ungoverned-cycle-forbidden
-                      condensation-sccs: sccs
-                      acyclic-nodes-executed: (reverse acyclic-rev)
-                      cyclic-sccs-converged: (reverse cyclic-rev)
-                      total-cycle-iterations: cycle-iters
-                      final-state: cur-state
-                      halted-scc-id: scc-id
-                      action-authorized?: #f)
+                  (make-exec-receipt #f 'halted-ungoverned-cycle 'ungoverned-cycle-forbidden
+                                     sccs (reverse acyclic-rev) (reverse cyclic-rev)
+                                     cycle-iters cur-state scc-id)
                   (let ((max-it (.ref contract 'max-iterations))
                         (exit? (.ref contract 'exit-predicate))
                         (step-fn (.ref contract 'step-fn))
@@ -226,39 +190,15 @@
                       (let ((sd (dig-fn st)))
                         (cond
                          ((member sd visited)
-                          (.o bind-these: #f
-                              kind: 'agentic-ai-lab.graph-engine.unified-graph-execution.v1
-                              admitted?: #f
-                              status: 'halted-cycle-oscillation
-                              reason: 'cycle-oscillation-detected
-                              condensation-sccs: sccs
-                              acyclic-nodes-executed: (reverse acyclic-rev)
-                              cyclic-sccs-converged: (reverse cyclic-rev)
-                              total-cycle-iterations: (+ cycle-iters iter)
-                              final-state: st
-                              halted-scc-id: scc-id
-                              action-authorized?: #f))
+                          (make-exec-receipt #f 'halted-cycle-oscillation 'cycle-oscillation-detected
+                                             sccs (reverse acyclic-rev) (reverse cyclic-rev)
+                                             (+ cycle-iters iter) st scc-id))
                          ((exit? st)
-                          ;; Converged SCC collapses into a single condensation receipt!
-                          (loop-sccs (cdr rest)
-                                     st
-                                     acyclic-rev
-                                     (cons scc-id cyclic-rev)
+                          (loop-sccs (cdr rest) st acyclic-rev (cons scc-id cyclic-rev)
                                      (+ cycle-iters iter)))
                          ((>= iter max-it)
-                          (.o bind-these: #f
-                              kind: 'agentic-ai-lab.graph-engine.unified-graph-execution.v1
-                              admitted?: #f
-                              status: 'halted-cycle-budget
-                              reason: 'cycle-budget-exhausted
-                              condensation-sccs: sccs
-                              acyclic-nodes-executed: (reverse acyclic-rev)
-                              cyclic-sccs-converged: (reverse cyclic-rev)
-                              total-cycle-iterations: (+ cycle-iters iter)
-                              final-state: st
-                              halted-scc-id: scc-id
-                              action-authorized?: #f))
+                          (make-exec-receipt #f 'halted-cycle-budget 'cycle-budget-exhausted
+                                             sccs (reverse acyclic-rev) (reverse cyclic-rev)
+                                             (+ cycle-iters iter) st scc-id))
                          (else
-                          (loop-cycle (+ iter 1)
-                                      (step-fn st iter)
-                                      (cons sd visited))))))))))))))))
+                          (loop-cycle (+ iter 1) (step-fn st iter) (cons sd visited))))))))))))))))

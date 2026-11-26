@@ -83,14 +83,9 @@
       depends-on: (depends-on '())
       active-defeaters: (active-defeaters '())
       premise-ids: (premise-ids '()))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.obligation.v1
-      obligation-id: obligation-id
-      title: title
-      required-evidence-ids: required-evidence-ids
-      depends-on: depends-on
-      active-defeaters: active-defeaters
-      premise-ids: premise-ids))
+  (.o (:: @ Obligation.)
+      (obligation-id) (title) (required-evidence-ids)
+      (depends-on) (active-defeaters) (premise-ids)))
 
 (def (obligation? v)
   (and (object? v) (.slot? v 'kind)
@@ -103,14 +98,9 @@
       contradicting-evidence-ids: (contradicting-evidence-ids '())
       active-defeaters: (active-defeaters '())
       open-questions: (open-questions '()))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.hypothesis.v1
-      hypothesis-id: hypothesis-id
-      claim: claim
-      supporting-evidence-ids: supporting-evidence-ids
-      contradicting-evidence-ids: contradicting-evidence-ids
-      active-defeaters: active-defeaters
-      open-questions: open-questions))
+  (.o (:: @ Hypothesis.)
+      (hypothesis-id) (claim) (supporting-evidence-ids)
+      (contradicting-evidence-ids) (active-defeaters) (open-questions)))
 
 (def (hypothesis? v)
   (and (object? v) (.slot? v 'kind)
@@ -124,17 +114,12 @@
       origin-tier: (origin-tier 'observed-fact)
       endorsed?: (endorsed? #t)
       retracted?: (retracted? #f))
-  (let ((pdig (digest (list 'evidence-payload.v1 evidence-id payload))))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.loop-engine.evidence-fact.v1
-        evidence-id: evidence-id
-        payload: payload
-        payload-digest: pdig
-        cut: cut
-        premise-ids: premise-ids
-        origin-tier: origin-tier
-        endorsed?: (and endorsed? #t)
-        retracted?: (and retracted? #t))))
+  (.o (:: @ EvidenceFact.)
+      (evidence-id) (payload)
+      (payload-digest := (digest (list 'evidence-payload.v1 evidence-id payload)))
+      (cut) (premise-ids) (origin-tier)
+      (endorsed? := (and endorsed? #t))
+      (retracted? := (and retracted? #t))))
 
 (def (evidence-fact? v)
   (and (object? v) (.slot? v 'kind)
@@ -157,24 +142,11 @@
       env-digest: (env-digest "sha256:default-env")
       idempotency-key: (idempotency-key #f)
       idempotency-commits: (idempotency-commits '()))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.deterministic-task-node.v1
-      task-id: task-id
-      obligation-id: obligation-id
-      produces-evidence-id: produces-evidence-id
-      flow: flow
-      input: input
-      required-evidence-ids: required-evidence-ids
-      premise-ids: premise-ids
-      depends-on-tasks: depends-on-tasks
-      read-footprint: read-footprint
-      write-footprint: write-footprint
-      span: span
-      effect-class: effect-class
-      sandbox-profile: sandbox-profile
-      env-digest: env-digest
-      idempotency-key: idempotency-key
-      idempotency-commits: idempotency-commits))
+  (.o (:: @ DeterministicTaskNode.)
+      (task-id) (obligation-id) (produces-evidence-id) (flow) (input)
+      (required-evidence-ids) (premise-ids) (depends-on-tasks)
+      (read-footprint) (write-footprint) (span) (effect-class)
+      (sandbox-profile) (env-digest) (idempotency-key) (idempotency-commits)))
 
 (def (deterministic-task-node? v)
   (and (object? v) (.slot? v 'kind)
@@ -186,13 +158,9 @@
       description: (description "")
       premise-ids: (premise-ids '())
       max-branches: (max-branches 4))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.synthesis-hole.v1
-      hole-id: hole-id
-      obligation-id: obligation-id
-      description: description
-      premise-ids: premise-ids
-      max-branches: (max 1 max-branches)))
+  (.o (:: @ SynthesisHole.)
+      (hole-id) (obligation-id) (description) (premise-ids)
+      (max-branches := (max 1 max-branches))))
 
 (def (synthesis-hole? v)
   (and (object? v) (.slot? v 'kind)
@@ -214,23 +182,13 @@
       cedar-grant-live?: (cedar-grant-live? #t)
       mcp-manifest-healthy?: (mcp-manifest-healthy? #t)
       max-reconcile-steps: (max-reconcile-steps 32))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.obligation-graph.v1
-      graph-id: graph-id
-      cut: cut
-      obligations: obligations
-      hypotheses: hypotheses
-      evidence: evidence
-      det-tasks: det-tasks
-      synthesis-holes: synthesis-holes
-      attempted-holes: attempted-holes
-      completed-tasks: completed-tasks
-      branch-matrices: branch-matrices
-      human-inbox: human-inbox
-      audit-capsules: audit-capsules
-      cedar-grant-live?: (and cedar-grant-live? #t)
-      mcp-manifest-healthy?: (and mcp-manifest-healthy? #t)
-      max-reconcile-steps: (max 1 max-reconcile-steps)))
+  (.o (:: @ ObligationGraph.)
+      (graph-id) (cut) (obligations) (hypotheses) (evidence) (det-tasks)
+      (synthesis-holes) (attempted-holes) (completed-tasks) (branch-matrices)
+      (human-inbox) (audit-capsules)
+      (cedar-grant-live? := (and cedar-grant-live? #t))
+      (mcp-manifest-healthy? := (and mcp-manifest-healthy? #t))
+      (max-reconcile-steps := (max 1 max-reconcile-steps))))
 
 (def (obligation-graph? v)
   (and (object? v) (.slot? v 'kind)

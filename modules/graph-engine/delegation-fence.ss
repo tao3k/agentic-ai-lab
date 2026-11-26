@@ -13,7 +13,7 @@
 ;;; - Codex #15305 / #51116:       Parent/child sandbox override drift & TOCTOU
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
-        (only-in :std/list/list filter every))
+        (only-in :std/list/list filter))
 
 (export CapabilityEnvelope.
         make-capability-envelope
@@ -25,17 +25,10 @@
         admit-delegated-execution-fence
         parent-completion-admitted?)
 
-(def (opt-ref obj key default)
-  (if (and (object? obj) (.slot? obj key))
-    (.ref obj key)
-    default))
-
 (def (dedup lst)
-  (let loop ((xs lst) (seen '()) (acc '()))
-    (cond
-     ((null? xs) (reverse acc))
-     ((member (car xs) seen) (loop (cdr xs) seen acc))
-     (else (loop (cdr xs) (cons (car xs) seen) (cons (car xs) acc))))))
+  (reverse
+   (foldl (lambda (x acc) (if (member x acc) acc (cons x acc)))
+          '() lst)))
 
 (.def CapabilityEnvelope.
   kind: 'agentic-ai-lab.loop-engine.capability-envelope.v1
@@ -49,16 +42,11 @@
       allowed-caps: (allowed-caps '())
       denied-caps: (denied-caps '())
       egress-allowed?: (egress-allowed? #f))
-  (let ((oid owner-id)
-        (ac (dedup allowed-caps))
-        (dc (dedup denied-caps))
-        (eg (and egress-allowed? #t)))
-    (.o (:: @ CapabilityEnvelope.)
-        kind: 'agentic-ai-lab.loop-engine.capability-envelope.v1
-        owner-id: oid
-        allowed-caps: ac
-        denied-caps: dc
-        egress-allowed?: eg)))
+  (.o (:: @ CapabilityEnvelope.)
+      (owner-id)
+      (allowed-caps := (dedup allowed-caps))
+      (denied-caps := (dedup denied-caps))
+      (egress-allowed? := (and egress-allowed? #t))))
 
 (def (capability-envelope? v)
   (and (object? v) (.slot? v 'kind)
@@ -111,19 +99,16 @@
       attempt-id: (attempt-id "attempt-1"))
   (unless (capability-envelope? envelope)
     (error "make-delegated-obligation-token expects an attenuated CapabilityEnvelope" envelope))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.delegated-obligation-token.v1
-      parent-id: parent-id
-      child-id: child-id
-      obligation-id: obligation-id
-      envelope: envelope
-      bound-cut: bound-cut
-      bound-grant-epoch: bound-grant-epoch
-      attempt-id: attempt-id))
+  (.o (kind := 'agentic-ai-lab.loop-engine.delegated-obligation-token.v1)
+      (parent-id) (child-id) (obligation-id) (envelope)
+      (bound-cut) (bound-grant-epoch) (attempt-id)))
 
 (def (delegated-obligation-token? v)
   (and (object? v) (.slot? v 'kind)
        (eq? (.ref v 'kind) 'agentic-ai-lab.loop-engine.delegated-obligation-token.v1)))
+
+(def (fence-verdict admitted? reason)
+  (.o (admitted?) (reason) (action-authorized? := #f)))
 
 ;;; Atomic TOCTOU Execution Fence (Slice 58 Lean theorems
 ;;; `revokedParentGrant_immediately_blocks_child_toctou`,
@@ -139,40 +124,38 @@
   (unless (delegated-obligation-token? token)
     (error "admit-delegated-execution-fence expects a DelegatedObligationToken" token))
   (let ((env (.ref token 'envelope))
-        (bcut (.ref token 'bound-cut))
-        (bepoch (.ref token 'bound-grant-epoch)))
+        (bound-cut (.ref token 'bound-cut))
+        (bound-grant-epoch (.ref token 'bound-grant-epoch)))
     (cond
-     ((not parent-grant-live?)
-      (.o bind-these: #f admitted?: #f reason: 'cedar-parent-grant-revoked action-authorized?: #f))
-     ((not child-grant-live?)
-      (.o bind-these: #f admitted?: #f reason: 'cedar-child-grant-revoked action-authorized?: #f))
-     ((not (equal? bepoch live-grant-epoch))
-      (.o bind-these: #f admitted?: #f reason: 'cedar-grant-epoch-drifted action-authorized?: #f))
-     ((not (equal? bcut live-cut))
-      (.o bind-these: #f admitted?: #f reason: 'stale-child-context-cut-blocked action-authorized?: #f))
-     ((not (capability-permitted? env requested-cap))
-      (.o bind-these: #f admitted?: #f reason: 'parent-denylist-or-attenuation-denied action-authorized?: #f))
+     ((not parent-grant-live?) (fence-verdict #f 'cedar-parent-grant-revoked))
+     ((not child-grant-live?) (fence-verdict #f 'cedar-child-grant-revoked))
+     ((not (equal? bound-grant-epoch live-grant-epoch)) (fence-verdict #f 'cedar-grant-epoch-drifted))
+     ((not (equal? bound-cut live-cut)) (fence-verdict #f 'stale-child-context-cut-blocked))
+     ((not (capability-permitted? env requested-cap)) (fence-verdict #f 'parent-denylist-or-attenuation-denied))
      (else
-      (.o bind-these: #f
-          admitted?: #t
-          reason: 'delegated-execution-fenced-ok
-          child-id: (.ref token 'child-id)
-          obligation-id: (.ref token 'obligation-id)
-          bound-cut: bcut
-          bound-grant-epoch: bepoch
-          action-authorized?: #f)))))
+      (.o (admitted? := #t)
+          (reason := 'delegated-execution-fenced-ok)
+          (child-id := (.ref token 'child-id))
+          (obligation-id := (.ref token 'obligation-id))
+          (bound-cut)
+          (bound-grant-epoch)
+          (action-authorized? := #f))))))
 
 ;;; Unclosed Subagent Attempt Recovery Fence (Slice 58 Lean theorem
 ;;; `unclosedSubagentAttempt_blocks_silent_hang_or_completion`, closing Codex #34043 & #54855).
 (def (parent-completion-admitted? all-obligations-discharged? unclosed-child-attempts active-defeaters)
   (cond
    ((pair? unclosed-child-attempts)
-    (.o bind-these: #f admitted?: #f reason: 'unclosed-subagent-attempt-requires-recovery
-        unclosed-attempts: unclosed-child-attempts action-authorized?: #f))
+    (.o (admitted? := #f)
+        (reason := 'unclosed-subagent-attempt-requires-recovery)
+        (unclosed-attempts := unclosed-child-attempts)
+        (action-authorized? := #f)))
    ((pair? active-defeaters)
-    (.o bind-these: #f admitted?: #f reason: 'active-defeaters-block-completion
-        active-defeaters: active-defeaters action-authorized?: #f))
+    (.o (admitted? := #f)
+        (reason := 'active-defeaters-block-completion)
+        (active-defeaters)
+        (action-authorized? := #f)))
    ((not all-obligations-discharged?)
-    (.o bind-these: #f admitted?: #f reason: 'obligations-still-unsatisfied action-authorized?: #f))
+    (fence-verdict #f 'obligations-still-unsatisfied))
    (else
-    (.o bind-these: #f admitted?: #t reason: 'parent-clean-completion-admitted action-authorized?: #f))))
+    (fence-verdict #t 'parent-clean-completion-admitted))))

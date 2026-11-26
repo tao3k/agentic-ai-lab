@@ -26,7 +26,7 @@
 ;;;      surfaced as `'open-competition` and NEVER collapsed to a greedy path.
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :std/list/list filter every)
+        (only-in :std/list/list filter filter-map append-map every)
         (only-in :gerbil-ascent/program/api
                  relational-program relational-admit relational-solve
                  relational-query-name)
@@ -66,15 +66,12 @@
              (live-ev-rows (map (lambda (e) (list (hash-get ev->i (.ref e 'evidence-id)))) live-ev))
              ;; Missing required evidence per obligation
              (missing-ev-rows
-              (let loop ((os obs) (acc '()))
-                (if (null? os)
-                  acc
-                  (let* ((o (car os))
-                         (oi (hash-get ob->i (.ref o 'obligation-id)))
-                         (missing (filter (lambda (eid) (not (member eid live-ev-ids)))
-                                          (.ref o 'required-evidence-ids))))
-                    (loop (cdr os)
-                          (if (pair? missing) (cons (list oi) acc) acc))))))
+              (filter-map
+               (lambda (o)
+                 (let ((missing (filter (lambda (eid) (not (member eid live-ev-ids)))
+                                        (.ref o 'required-evidence-ids))))
+                   (and (pair? missing) (list (hash-get ob->i (.ref o 'obligation-id))))))
+               obs))
              ;; Active defeaters on obligations
              (ob-defeater-rows
               (filter-map (lambda (o)
@@ -83,31 +80,24 @@
                           obs))
              ;; Transitive obligation dependency edges: (o, dep)
              (ob-dep-rows
-              (let loop ((os obs) (acc '()))
-                (if (null? os)
-                  acc
-                  (let* ((o (car os))
-                         (oi (hash-get ob->i (.ref o 'obligation-id)))
-                         (deps (.ref o 'depends-on)))
-                    (loop (cdr os)
-                          (foldl (lambda (dep-id a)
-                                   (let ((di (hash-get ob->i dep-id)))
-                                     (if di (cons (list oi di) a) a)))
-                                 acc
-                                 deps))))))
+              (append-map
+               (lambda (o)
+                 (let ((oi (hash-get ob->i (.ref o 'obligation-id))))
+                   (filter-map (lambda (dep-id)
+                                 (let ((di (hash-get ob->i dep-id)))
+                                   (and di (list oi di))))
+                               (.ref o 'depends-on))))
+               obs))
              ;; Hypothesis counter-evidence & defeaters
              (hyp-counter-rows
-              (let loop ((hs hyps) (acc '()))
-                (if (null? hs)
-                  acc
-                  (let* ((h (car hs))
-                         (hi (hash-get hyp->i (.ref h 'hypothesis-id))))
-                    (loop (cdr hs)
-                          (foldl (lambda (eid a)
-                                   (let ((ei (hash-get ev->i eid)))
-                                     (if ei (cons (list hi ei) a) a)))
-                                 acc
-                                 (.ref h 'contradicting-evidence-ids)))))))
+              (append-map
+               (lambda (h)
+                 (let ((hi (hash-get hyp->i (.ref h 'hypothesis-id))))
+                   (filter-map (lambda (eid)
+                                 (let ((ei (hash-get ev->i eid)))
+                                   (and ei (list hi ei))))
+                               (.ref h 'contradicting-evidence-ids))))
+               hyps))
              (hyp-defeater-rows
               (filter-map (lambda (h)
                             (and (pair? (.ref h 'active-defeaters))
@@ -236,25 +226,17 @@
                             (member (.ref o 'obligation-id)
                                     (map (lambda (x) (.ref x 'obligation-id)) exhausted-obs))))
                       unsat-obs)))
-        (.o bind-these: #f
-            kind: 'agentic-ai-lab.loop-engine.ascent-reconcile-frontier.v1
-            cut: (.ref graph 'cut)
-            frontier-mode: frontier-mode
-            quiescent?: quiescent?
-            governance-healthy?: gov-healthy?
-            discharged-obligations: discharged-obs
-            unsatisfied-obligations: unsat-obs
-            blocked-on-human-obligations: blocked-on-human-obs
-            refuted-hypotheses: refuted-hyps
-            unrefuted-hypotheses: unrefuted-hyps
-            epistemic-competition-status: epistemic-status
-            ready-deterministic-tasks: ready-det-tasks
-            ready-synthesis-holes: selected-holes
-            action-authorized?: #f)))))
-
-(def (filter-map fn lst)
-  (let loop ((xs lst) (acc '()))
-    (if (null? xs)
-      (reverse acc)
-      (let ((v (fn (car xs))))
-        (loop (cdr xs) (if v (cons v acc) acc))))))
+        (.o (kind := 'agentic-ai-lab.loop-engine.ascent-reconcile-frontier.v1)
+            (cut := (.ref graph 'cut))
+            (frontier-mode)
+            (quiescent?)
+            (governance-healthy? := gov-healthy?)
+            (discharged-obligations := discharged-obs)
+            (unsatisfied-obligations := unsat-obs)
+            (blocked-on-human-obligations := blocked-on-human-obs)
+            (refuted-hypotheses := refuted-hyps)
+            (unrefuted-hypotheses := unrefuted-hyps)
+            (epistemic-competition-status := epistemic-status)
+            (ready-deterministic-tasks := ready-det-tasks)
+            (ready-synthesis-holes := selected-holes)
+            (action-authorized? := #f))))))

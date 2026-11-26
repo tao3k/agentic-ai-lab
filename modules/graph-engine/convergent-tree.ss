@@ -23,7 +23,7 @@
 ;;;    zero orphan/zombie subagents survive.
 
 (import (only-in :clan/poo/object .def .o .ref .slot? object?)
-        (only-in :std/list/list filter every any)
+        (only-in :std/list/list filter every any find foldl)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag
                  ParallelFrontierStrategy.)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/governed-runner
@@ -64,11 +64,11 @@
     default))
 
 (def (dedup xs)
-  (let loop ((rest xs) (seen '()) (acc '()))
-    (cond
-     ((null? rest) (reverse acc))
-     ((member (car rest) seen) (loop (cdr rest) seen acc))
-     (else (loop (cdr rest) (cons (car rest) seen) (cons (car rest) acc))))))
+  (reverse
+   (foldl (lambda (x acc)
+            (if (member x acc) acc (cons x acc)))
+          '()
+          xs)))
 
 (def +valid-branch-kinds+
   '(context-enrichment-detour divergent-exploration subordinate-task))
@@ -100,6 +100,13 @@
 (.def ApexConvergenceReceipt.
   kind: 'agentic-ai-lab.loop-engine.apex-convergence.v1)
 
+(def (branch-prototype-for-kind branch-kind)
+  (case branch-kind
+    ((context-enrichment-detour) ContextEnrichmentDetour.)
+    ((divergent-exploration) DivergentExplorationBranch.)
+    ((subordinate-task) SubordinateTaskBranch.)
+    (else SubordinateTaskBranch.)))
+
 (def (context-trunk? v)
   (and (object? v) (.slot? v 'kind)
        (eq? (.ref v 'kind) 'agentic-ai-lab.loop-engine.context-trunk.v1)))
@@ -107,6 +114,12 @@
 (def (trunk-branch? v)
   (and (object? v) (.slot? v 'kind)
        (eq? (.ref v 'kind) 'agentic-ai-lab.loop-engine.trunk-branch.v1)))
+
+(def (spawn-denied reason trunk)
+  (.o (admitted? := #f) (reason) (trunk) (branch := #f)))
+
+(def (step-denied reason)
+  (.o (admitted? := #f) (reason) (action-authorized? := #f)))
 
 (def (make-context-trunk
       trunk-id
@@ -120,21 +133,20 @@
   (let* ((cut-val (or shared-context-cut (.ref obligation-graph 'cut)))
          (kv-dig (or kv-prefix-digest
                      (digest (list 'shared-context-kv-prefix.v1 trunk-id cut-val)))))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-        trunk-id: trunk-id
-        apex-obligation-id: apex-obligation-id
-        shared-context-cut: cut-val
-        kv-prefix-digest: kv-dig
-        live-grant-epoch: live-grant-epoch
-        trunk-grant-live?: (and trunk-grant-live? #t)
-        capability-envelope: capability-envelope
-        obligation-graph: obligation-graph
-        branches: '()
-        absorbed-contributions: '()
-        counterexample-core: '()
-        apex-status: 'open
-        apex-receipt: #f)))
+    (.o (:: @ ContextTrunk.)
+        (trunk-id)
+        (apex-obligation-id)
+        (shared-context-cut := cut-val)
+        (kv-prefix-digest := kv-dig)
+        (live-grant-epoch)
+        (trunk-grant-live? := (and trunk-grant-live? #t))
+        (capability-envelope)
+        (obligation-graph)
+        (branches := '())
+        (absorbed-contributions := '())
+        (counterexample-core := '())
+        (apex-status := 'open)
+        (apex-receipt := #f))))
 
 ;;; Spawn a subordinate branch anchored directly to the shared Context Trunk.
 ;;; Refuses isolated/unshared spawns, invalid branch kinds, or non-open Trunks.
@@ -153,19 +165,19 @@
       requested-apex-id: (requested-apex-id #f))
   (cond
    ((not (context-trunk? trunk))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-context-trunk trunk: trunk branch: #f))
+    (spawn-denied 'invalid-context-trunk trunk))
    ((not (eq? (.ref trunk 'apex-status) 'open))
-    (.o bind-these: #f admitted?: #f reason: 'trunk-apex-not-open trunk: trunk branch: #f))
+    (spawn-denied 'trunk-apex-not-open trunk))
    ((not (.ref trunk 'trunk-grant-live?))
-    (.o bind-these: #f admitted?: #f reason: 'trunk-cedar-grant-revoked trunk: trunk branch: #f))
+    (spawn-denied 'trunk-cedar-grant-revoked trunk))
    ((not (memq branch-kind +valid-branch-kinds+))
-    (.o bind-these: #f admitted?: #f reason: 'invalid-branch-kind trunk: trunk branch: #f))
+    (spawn-denied 'invalid-branch-kind trunk))
    ((and requested-shared-cut (not (equal? requested-shared-cut (.ref trunk 'shared-context-cut))))
-    (.o bind-these: #f admitted?: #f reason: 'isolated-or-stale-context-cut-forbidden trunk: trunk branch: #f))
+    (spawn-denied 'isolated-or-stale-context-cut-forbidden trunk))
    ((and requested-kv-prefix (not (equal? requested-kv-prefix (.ref trunk 'kv-prefix-digest))))
-    (.o bind-these: #f admitted?: #f reason: 'unshared-kv-prefix-forbidden trunk: trunk branch: #f))
+    (spawn-denied 'unshared-kv-prefix-forbidden trunk))
    ((and requested-apex-id (not (equal? requested-apex-id (.ref trunk 'apex-obligation-id))))
-    (.o bind-these: #f admitted?: #f reason: 'detached-apex-target-forbidden trunk: trunk branch: #f))
+    (spawn-denied 'detached-apex-target-forbidden trunk))
    (else
     (let* ((env (attenuate-delegation-envelope
                  (.ref trunk 'capability-envelope)
@@ -179,61 +191,43 @@
                  (.ref trunk 'shared-context-cut)
                  (.ref trunk 'live-grant-epoch)
                  attempt-id: (string-append "attempt-" branch-id)))
-           (branch (.o bind-these: #f
-                       kind: 'agentic-ai-lab.loop-engine.trunk-branch.v1
-                       branch-id: branch-id
-                       branch-kind: branch-kind
-                       trunk-id: (.ref trunk 'trunk-id)
-                       serving-apex-id: (.ref trunk 'apex-obligation-id)
-                       target-obligation-id: target-obligation-id
-                       shared-context-cut: (.ref trunk 'shared-context-cut)
-                       kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                       bound-grant-epoch: (.ref trunk 'live-grant-epoch)
-                       c4-priority: c4-priority
-                       required-for-apex?: (and required-for-apex? #t)
-                       can-finalize-trunk?: #f
-                       status: 'active
-                       delegation-token: tok
-                       capability-envelope: env))
-           (trunk-next (.o bind-these: #f
-                           kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                           trunk-id: (.ref trunk 'trunk-id)
-                           apex-obligation-id: (.ref trunk 'apex-obligation-id)
-                           shared-context-cut: (.ref trunk 'shared-context-cut)
-                           kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                           live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                           trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                           capability-envelope: (.ref trunk 'capability-envelope)
-                           obligation-graph: (.ref trunk 'obligation-graph)
-                           branches: (append (.ref trunk 'branches) (list branch))
-                           absorbed-contributions: (.ref trunk 'absorbed-contributions)
-                           counterexample-core: (.ref trunk 'counterexample-core)
-                           apex-status: (.ref trunk 'apex-status)
-                           apex-receipt: (.ref trunk 'apex-receipt))))
-      (.o bind-these: #f
-          admitted?: #t
-          reason: 'shared-context-branch-spawned
-          trunk: trunk-next
-          branch: branch)))))
+           (branch-proto (branch-prototype-for-kind branch-kind))
+           (branch (.o (:: @ branch-proto)
+                       (branch-id)
+                       (branch-kind)
+                       (trunk-id := (.ref trunk 'trunk-id))
+                       (serving-apex-id := (.ref trunk 'apex-obligation-id))
+                       (target-obligation-id)
+                       (shared-context-cut := (.ref trunk 'shared-context-cut))
+                       (kv-prefix-digest := (.ref trunk 'kv-prefix-digest))
+                       (bound-grant-epoch := (.ref trunk 'live-grant-epoch))
+                       (c4-priority)
+                       (required-for-apex? := (and required-for-apex? #t))
+                       (can-finalize-trunk? := #f)
+                       (status := 'active)
+                       (delegation-token := tok)
+                       (capability-envelope := env)))
+           (trunk-next (.o (:: @ trunk)
+                           (branches := (append (.ref trunk 'branches) (list branch))))))
+      (.o (admitted? := #t)
+          (reason := 'shared-context-branch-spawned)
+          (trunk := trunk-next)
+          (branch))))))
 
 ;;; Hard Invariant 1 (No Branch Trunk-Finality):
 ;;; A branch may complete its own local task, NEVER finalize the Trunk or
 ;;; commit directly to Host CAS.
 (def (branch-attempt-direct-trunk-finalization branch)
-  (.o bind-these: #f
-      admitted?: #f
-      branch-id: (if (trunk-branch? branch) (.ref branch 'branch-id) "unknown")
-      can-finalize-trunk?: #f
-      reason: 'branch-cannot-finalize-trunk-directly
-      action-authorized?: #f))
+  (.o (admitted? := #f)
+      (branch-id := (if (trunk-branch? branch) (.ref branch 'branch-id) "unknown"))
+      (can-finalize-trunk? := #f)
+      (reason := 'branch-cannot-finalize-trunk-directly)
+      (action-authorized? := #f)))
 
 ;;; Find the current trunk-recorded branch object by id.
 (def (trunk-find-branch trunk branch-id)
-  (let loop ((bs (.ref trunk 'branches)))
-    (cond
-     ((null? bs) #f)
-     ((equal? (.ref (car bs) 'branch-id) branch-id) (car bs))
-     (else (loop (cdr bs))))))
+  (find (lambda (b) (equal? (.ref b 'branch-id) branch-id))
+        (.ref trunk 'branches)))
 
 ;;; Atomic execution fence for ANY step inside a subordinate branch:
 ;;; Enforces live Trunk anchor, shared ContextCut, shared KV-Prefix, active
@@ -243,15 +237,15 @@
          (live-b (and (context-trunk? trunk) (trunk-find-branch trunk bid))))
     (cond
      ((not (and (context-trunk? trunk) (trunk-branch? branch) live-b))
-      (.o bind-these: #f admitted?: #f reason: 'unregistered-or-detached-branch action-authorized?: #f))
+      (step-denied 'unregistered-or-detached-branch))
      ((not (eq? (.ref trunk 'apex-status) 'open))
-      (.o bind-these: #f admitted?: #f reason: 'trunk-apex-already-closed action-authorized?: #f))
+      (step-denied 'trunk-apex-already-closed))
      ((not (eq? (.ref live-b 'status) 'active))
-      (.o bind-these: #f admitted?: #f reason: 'branch-superseded-or-closed action-authorized?: #f))
+      (step-denied 'branch-superseded-or-closed))
      ((not (equal? (.ref live-b 'serving-apex-id) (.ref trunk 'apex-obligation-id)))
-      (.o bind-these: #f admitted?: #f reason: 'branch-apex-mismatch action-authorized?: #f))
+      (step-denied 'branch-apex-mismatch))
      ((not (equal? (.ref live-b 'kv-prefix-digest) (.ref trunk 'kv-prefix-digest)))
-      (.o bind-these: #f admitted?: #f reason: 'branch-kv-prefix-drift action-authorized?: #f))
+      (step-denied 'branch-kv-prefix-drift))
      (else
       (admit-delegated-execution-fence
        (.ref live-b 'delegation-token)
@@ -269,23 +263,22 @@
       counterexample-core: (counterexample-core '())
       declass-cert: (declass-cert #t)
       summary: (summary ""))
-  (.o bind-these: #f
-      kind: 'agentic-ai-lab.loop-engine.branch-contribution.v1
-      branch-id: (.ref branch 'branch-id)
-      branch-kind: (.ref branch 'branch-kind)
-      serving-apex-id: (.ref branch 'serving-apex-id)
-      target-obligation-id: (.ref branch 'target-obligation-id)
-      shared-context-cut: (.ref branch 'shared-context-cut)
-      bound-grant-epoch: (.ref branch 'bound-grant-epoch)
-      c4-priority: (.ref branch 'c4-priority)
-      exit-kind: exit-kind
-      evidence-facts: evidence-facts
-      completed-task-ids: completed-task-ids
-      hypotheses: hypotheses
-      counterexample-core: counterexample-core
-      declass-cert: declass-cert
-      summary: summary
-      can-finalize-trunk?: #f))
+  (.o (:: @ BranchContributionReceipt.)
+      (branch-id := (.ref branch 'branch-id))
+      (branch-kind := (.ref branch 'branch-kind))
+      (serving-apex-id := (.ref branch 'serving-apex-id))
+      (target-obligation-id := (.ref branch 'target-obligation-id))
+      (shared-context-cut := (.ref branch 'shared-context-cut))
+      (bound-grant-epoch := (.ref branch 'bound-grant-epoch))
+      (c4-priority := (.ref branch 'c4-priority))
+      (exit-kind)
+      (evidence-facts)
+      (completed-task-ids)
+      (hypotheses)
+      (counterexample-core)
+      (declass-cert)
+      (summary)
+      (can-finalize-trunk? := #f)))
 
 ;;; Execute a SubordinateTaskBranch's internal FunFlow CAS DAG inside its
 ;;; confined overlay. Still NEVER finalizes the Trunk; returns an immutable
@@ -299,12 +292,11 @@
       strategy: (strategy ParallelFrontierStrategy.))
   (let ((fence (admit-branch-execution-step trunk branch required-cap)))
     (if (not (.ref fence 'admitted?))
-      (.o bind-these: #f
-          admitted?: #f
-          reason: (.ref fence 'reason)
-          contribution: #f
-          subagents-spawned: 0
-          can-finalize-trunk?: #f)
+      (.o (admitted? := #f)
+          (reason := (.ref fence 'reason))
+          (contribution := #f)
+          (subagents-spawned := 0)
+          (can-finalize-trunk? := #f))
       (let* ((sub-graph (make-obligation-graph
                          (string-append "branch-dag:" (.ref branch 'branch-id))
                          cut: (.ref trunk 'shared-context-cut)
@@ -314,26 +306,24 @@
                     branch-tasks
                     strategy: strategy)))
         (if (not (.ref plan 'valid?))
-          (.o bind-these: #f
-              admitted?: #f
-              reason: (.ref plan 'reason)
-              frontier-plan: plan
-              contribution: #f
-              subagents-spawned: 0
-              can-finalize-trunk?: #f)
+          (.o (admitted? := #f)
+              (reason := (.ref plan 'reason))
+              (frontier-plan := plan)
+              (contribution := #f)
+              (subagents-spawned := 0)
+              (can-finalize-trunk? := #f))
           (let loop ((tasks (.ref plan 'parallel-batch))
                      (evs-rev '())
                      (tids-rev '())
                      (failed-reason #f))
             (cond
              (failed-reason
-              (.o bind-these: #f
-                  admitted?: #f
-                  reason: failed-reason
-                  frontier-plan: plan
-                  contribution: #f
-                  subagents-spawned: 0
-                  can-finalize-trunk?: #f))
+              (.o (admitted? := #f)
+                  (reason := failed-reason)
+                  (frontier-plan := plan)
+                  (contribution := #f)
+                  (subagents-spawned := 0)
+                  (can-finalize-trunk? := #f)))
              ((null? tasks)
               (let ((contrib (make-branch-contribution
                               branch
@@ -341,13 +331,12 @@
                               evidence-facts: (reverse evs-rev)
                               completed-task-ids: (reverse tids-rev)
                               summary: "subordinate-branch-dag-completed")))
-                (.o bind-these: #f
-                    admitted?: #t
-                    reason: 'subordinate-branch-task-completed-awaiting-trunk-absorption
-                    frontier-plan: plan
-                    contribution: contrib
-                    subagents-spawned: 0
-                    can-finalize-trunk?: #f)))
+                (.o (admitted? := #t)
+                    (reason := 'subordinate-branch-task-completed-awaiting-trunk-absorption)
+                    (frontier-plan := plan)
+                    (contribution := contrib)
+                    (subagents-spawned := 0)
+                    (can-finalize-trunk? := #f))))
              (else
               (let* ((t (car tasks))
                      (cut-str (string-append "cut-" (number->string (.ref trunk 'shared-context-cut))))
@@ -379,22 +368,7 @@
 (def (update-branch-status branches branch-id new-status)
   (map (lambda (b)
          (if (equal? (.ref b 'branch-id) branch-id)
-           (.o bind-these: #f
-               kind: 'agentic-ai-lab.loop-engine.trunk-branch.v1
-               branch-id: (.ref b 'branch-id)
-               branch-kind: (.ref b 'branch-kind)
-               trunk-id: (.ref b 'trunk-id)
-               serving-apex-id: (.ref b 'serving-apex-id)
-               target-obligation-id: (.ref b 'target-obligation-id)
-               shared-context-cut: (.ref b 'shared-context-cut)
-               kv-prefix-digest: (.ref b 'kv-prefix-digest)
-               bound-grant-epoch: (.ref b 'bound-grant-epoch)
-               c4-priority: (.ref b 'c4-priority)
-               required-for-apex?: (.ref b 'required-for-apex?)
-               can-finalize-trunk?: #f
-               status: new-status
-               delegation-token: (.ref b 'delegation-token)
-               capability-envelope: (.ref b 'capability-envelope))
+           (.o (:: @ b) (status := new-status))
            b))
        branches))
 
@@ -419,87 +393,53 @@
                                 (opt-ref contribution 'counterexample-core '())))))
     (cond
      ((not live-b)
-      (.o bind-these: #f admitted?: #f reason: 'unknown-branch-contribution trunk: trunk))
+      (.o (admitted? := #f) (reason := 'unknown-branch-contribution) (trunk)))
      ((not (memq exit-k +valid-exit-kinds+))
-      (.o bind-these: #f admitted?: #f reason: 'invalid-4-exit-kind trunk: trunk))
+      (.o (admitted? := #f) (reason := 'invalid-4-exit-kind) (trunk)))
      ((not (eq? (.ref trunk 'apex-status) 'open))
-      (.o bind-these: #f admitted?: #f reason: 'superseded-by-closed-apex trunk: trunk))
+      (.o (admitted? := #f) (reason := 'superseded-by-closed-apex) (trunk)))
      ((or (not (equal? (.ref contribution 'shared-context-cut) (.ref trunk 'shared-context-cut)))
           (not (= (.ref contribution 'bound-grant-epoch) (.ref trunk 'live-grant-epoch)))
           (eq? (.ref live-b 'status) 'superseded-stale))
       ;; Record counterexamples monotonically, mark branch superseded, NEVER pollute Trunk evidence!
       (let* ((bs* (update-branch-status (.ref trunk 'branches) bid 'superseded-stale))
-             (trunk-next (.o bind-these: #f
-                             kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                             trunk-id: (.ref trunk 'trunk-id)
-                             apex-obligation-id: (.ref trunk 'apex-obligation-id)
-                             shared-context-cut: (.ref trunk 'shared-context-cut)
-                             kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                             live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                             trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                             capability-envelope: (.ref trunk 'capability-envelope)
-                             obligation-graph: (.ref trunk 'obligation-graph)
-                             branches: bs*
-                             absorbed-contributions: (.ref trunk 'absorbed-contributions)
-                             counterexample-core: new-ce
-                             apex-status: (.ref trunk 'apex-status)
-                             apex-receipt: (.ref trunk 'apex-receipt))))
-        (.o bind-these: #f
-            admitted?: #f
-            reason: 'branch-contribution-superseded-by-trunk-cut-or-epoch
-            trunk: trunk-next)))
+             (trunk-next (.o (:: @ trunk)
+                             (branches := bs*)
+                             (counterexample-core := new-ce))))
+        (.o (admitted? := #f)
+            (reason := 'branch-contribution-superseded-by-trunk-cut-or-epoch)
+            (trunk := trunk-next))))
      ((and (eq? exit-k 'completed) (not (.ref contribution 'declass-cert)))
-      (.o bind-these: #f admitted?: #f reason: 'missing-declassification-certificate trunk: trunk))
+      (.o (admitted? := #f) (reason := 'missing-declassification-certificate) (trunk)))
      ((memq exit-k '(parked-custody cancelled))
       (let* ((bs* (update-branch-status (.ref trunk 'branches) bid exit-k))
-             (trunk-next (.o bind-these: #f
-                             kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                             trunk-id: (.ref trunk 'trunk-id)
-                             apex-obligation-id: (.ref trunk 'apex-obligation-id)
-                             shared-context-cut: (.ref trunk 'shared-context-cut)
-                             kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                             live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                             trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                             capability-envelope: (.ref trunk 'capability-envelope)
-                             obligation-graph: (.ref trunk 'obligation-graph)
-                             branches: bs*
-                             absorbed-contributions: (.ref trunk 'absorbed-contributions)
-                             counterexample-core: new-ce
-                             apex-status: (.ref trunk 'apex-status)
-                             apex-receipt: (.ref trunk 'apex-receipt))))
-        (.o bind-these: #f
-            admitted?: #t
-            reason: (if (eq? exit-k 'cancelled) 'branch-cancelled-counterexamples-preserved 'branch-parked-custody)
-            trunk: trunk-next)))
+             (trunk-next (.o (:: @ trunk)
+                             (branches := bs*)
+                             (counterexample-core := new-ce))))
+        (.o (admitted? := #t)
+            (reason := (if (eq? exit-k 'cancelled)
+                         'branch-cancelled-counterexamples-preserved
+                         'branch-parked-custody))
+            (trunk := trunk-next))))
      (else
       ;; Completed / promoted-to-task: absorb evidence & competing hypotheses onto Trunk in C4 order
       (let* ((g0 (.ref trunk 'obligation-graph))
-             (g1 (let loop ((evs (.ref contribution 'evidence-facts)) (g g0))
-                   (if (null? evs) g (loop (cdr evs) (obligation-graph-with-evidence g (car evs))))))
+             (g1 (foldl (lambda (ev g) (obligation-graph-with-evidence g ev))
+                        g0
+                        (.ref contribution 'evidence-facts)))
              (hyps (opt-ref contribution 'hypotheses '()))
              (g2 (if (pair? hyps) (obligation-graph-with-hypotheses g1 hyps) g1))
              (bs* (update-branch-status (.ref trunk 'branches) bid 'absorbed))
              (contribs* (sort-contributions-c4
                          (cons contribution (.ref trunk 'absorbed-contributions))))
-             (trunk-next (.o bind-these: #f
-                             kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                             trunk-id: (.ref trunk 'trunk-id)
-                             apex-obligation-id: (.ref trunk 'apex-obligation-id)
-                             shared-context-cut: (.ref trunk 'shared-context-cut)
-                             kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                             live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                             trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                             capability-envelope: (.ref trunk 'capability-envelope)
-                             obligation-graph: g2
-                             branches: bs*
-                             absorbed-contributions: contribs*
-                             counterexample-core: new-ce
-                             apex-status: (.ref trunk 'apex-status)
-                             apex-receipt: (.ref trunk 'apex-receipt))))
-        (.o bind-these: #f
-            admitted?: #t
-            reason: 'branch-contribution-absorbed-into-trunk
-            trunk: trunk-next))))))
+             (trunk-next (.o (:: @ trunk)
+                             (obligation-graph := g2)
+                             (branches := bs*)
+                             (absorbed-contributions := contribs*)
+                             (counterexample-core := new-ce))))
+        (.o (admitted? := #t)
+            (reason := 'branch-contribution-absorbed-into-trunk)
+            (trunk := trunk-next)))))))
 
 ;;; Apex-Driven Lifecycle Invalidation:
 ;;; Advancing Trunk cut/epoch or revoking Trunk Cedar grant immediately marks
@@ -520,50 +460,27 @@
          (g* (let* ((g0 (.ref trunk 'obligation-graph))
                     (g1 (if new-cut
                           (obligation-graph-apply-event
-                           g0 (.o bind-these: #f event-kind: 'advance-cut cut: cut*))
+                           g0 (.o (event-kind := 'advance-cut) (cut := cut*)))
                           g0)))
                (if (eq? trunk-grant-live? 'unchanged)
                  g1
                  (obligation-graph-apply-event
-                  g1 (.o bind-these: #f event-kind: (if live?* 'cedar-restored 'cedar-revoked))))))
+                  g1 (.o (event-kind := (if live?* 'cedar-restored 'cedar-revoked)))))))
          (bs* (map (lambda (b)
                      (if (and (eq? (.ref b 'status) 'active)
                               (or (not live?*)
                                   (not (equal? (.ref b 'shared-context-cut) cut*))
                                   (not (= (.ref b 'bound-grant-epoch) epoch*))))
-                       (.o bind-these: #f
-                           kind: 'agentic-ai-lab.loop-engine.trunk-branch.v1
-                           branch-id: (.ref b 'branch-id)
-                           branch-kind: (.ref b 'branch-kind)
-                           trunk-id: (.ref b 'trunk-id)
-                           serving-apex-id: (.ref b 'serving-apex-id)
-                           target-obligation-id: (.ref b 'target-obligation-id)
-                           shared-context-cut: (.ref b 'shared-context-cut)
-                           kv-prefix-digest: (.ref b 'kv-prefix-digest)
-                           bound-grant-epoch: (.ref b 'bound-grant-epoch)
-                           c4-priority: (.ref b 'c4-priority)
-                           required-for-apex?: (.ref b 'required-for-apex?)
-                           can-finalize-trunk?: #f
-                           status: 'superseded-stale
-                           delegation-token: (.ref b 'delegation-token)
-                           capability-envelope: (.ref b 'capability-envelope))
+                       (.o (:: @ b) (status := 'superseded-stale))
                        b))
                    (.ref trunk 'branches))))
-    (.o bind-these: #f
-        kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-        trunk-id: (.ref trunk 'trunk-id)
-        apex-obligation-id: (.ref trunk 'apex-obligation-id)
-        shared-context-cut: cut*
-        kv-prefix-digest: kv*
-        live-grant-epoch: epoch*
-        trunk-grant-live?: live?*
-        capability-envelope: (.ref trunk 'capability-envelope)
-        obligation-graph: g*
-        branches: bs*
-        absorbed-contributions: (.ref trunk 'absorbed-contributions)
-        counterexample-core: (.ref trunk 'counterexample-core)
-        apex-status: (.ref trunk 'apex-status)
-        apex-receipt: (.ref trunk 'apex-receipt))))
+    (.o (:: @ trunk)
+        (shared-context-cut := cut*)
+        (kv-prefix-digest := kv*)
+        (live-grant-epoch := epoch*)
+        (trunk-grant-live? := live?*)
+        (obligation-graph := g*)
+        (branches := bs*))))
 
 ;;; Convergent Apex Join Gate (`converge-trunk-to-apex`):
 ;;; The ONLY place where the Trunk may declare global task completion.
@@ -587,18 +504,16 @@
          (open-check (parent-completion-admitted? #t open-required-ids '())))
     (cond
      ((not (.ref trunk 'trunk-grant-live?))
-      (.o bind-these: #f
-          converged?: #f
-          reason: 'trunk-cedar-grant-revoked
-          trunk: trunk
-          apex-receipt: #f))
+      (.o (converged? := #f)
+          (reason := 'trunk-cedar-grant-revoked)
+          (trunk)
+          (apex-receipt := #f)))
      ((not (.ref open-check 'admitted?))
-      (.o bind-these: #f
-          converged?: #f
-          reason: 'unclosed-serving-branches-remaining
-          open-branch-ids: open-required-ids
-          trunk: trunk
-          apex-receipt: #f))
+      (.o (converged? := #f)
+          (reason := 'unclosed-serving-branches-remaining)
+          (open-branch-ids := open-required-ids)
+          (trunk)
+          (apex-receipt := #f)))
      (else
       (let* ((report (reconcile-to-fixed-point
                       (.ref trunk 'obligation-graph)
@@ -612,86 +527,47 @@
                                   (.ref frontier 'discharged-obligations)))
              (apex-discharged? (and (member apex-id discharged-ids) #t)))
         (if (not apex-discharged?)
-          (let ((trunk-open (.o bind-these: #f
-                                kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                                trunk-id: (.ref trunk 'trunk-id)
-                                apex-obligation-id: apex-id
-                                shared-context-cut: (.ref trunk 'shared-context-cut)
-                                kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                                live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                                trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                                capability-envelope: (.ref trunk 'capability-envelope)
-                                obligation-graph: g-final
-                                branches: (.ref trunk 'branches)
-                                absorbed-contributions: (.ref trunk 'absorbed-contributions)
-                                counterexample-core: (.ref trunk 'counterexample-core)
-                                apex-status: 'open
-                                apex-receipt: #f)))
-            (.o bind-these: #f
-                converged?: #f
-                reason: 'apex-obligation-not-yet-discharged
-                reconcile-report: report
-                trunk: trunk-open
-                apex-receipt: #f))
+          (let ((trunk-open (.o (:: @ trunk)
+                                (obligation-graph := g-final)
+                                (apex-status := 'open)
+                                (apex-receipt := #f))))
+            (.o (converged? := #f)
+                (reason := 'apex-obligation-not-yet-discharged)
+                (reconcile-report := report)
+                (trunk := trunk-open)
+                (apex-receipt := #f)))
           (let* ((absorbed-ids (map (lambda (c) (.ref c 'branch-id))
                                     (.ref trunk 'absorbed-contributions)))
                  ;; Apex-Driven Cancellation: supersede any remaining active optional branches
                  (bs-closed (map (lambda (b)
                                    (if (eq? (.ref b 'status) 'active)
-                                     (.o bind-these: #f
-                                         kind: 'agentic-ai-lab.loop-engine.trunk-branch.v1
-                                         branch-id: (.ref b 'branch-id)
-                                         branch-kind: (.ref b 'branch-kind)
-                                         trunk-id: (.ref b 'trunk-id)
-                                         serving-apex-id: (.ref b 'serving-apex-id)
-                                         target-obligation-id: (.ref b 'target-obligation-id)
-                                         shared-context-cut: (.ref b 'shared-context-cut)
-                                         kv-prefix-digest: (.ref b 'kv-prefix-digest)
-                                         bound-grant-epoch: (.ref b 'bound-grant-epoch)
-                                         c4-priority: (.ref b 'c4-priority)
-                                         required-for-apex?: (.ref b 'required-for-apex?)
-                                         can-finalize-trunk?: #f
-                                         status: 'superseded-by-apex
-                                         delegation-token: (.ref b 'delegation-token)
-                                         capability-envelope: (.ref b 'capability-envelope))
+                                     (.o (:: @ b) (status := 'superseded-by-apex))
                                      b))
                                  (.ref trunk 'branches)))
-                 (receipt (.o bind-these: #f
-                              kind: 'agentic-ai-lab.loop-engine.apex-convergence.v1
-                              trunk-id: (.ref trunk 'trunk-id)
-                              apex-obligation-id: apex-id
-                              shared-context-cut: (.ref trunk 'shared-context-cut)
-                              kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                              absorbed-branch-ids-c4-order: absorbed-ids
-                              counterexample-core: (.ref trunk 'counterexample-core)
-                              unrefuted-hypotheses: (.ref frontier 'unrefuted-hypotheses)
-                              hypothesis-verdict: (.ref frontier 'epistemic-competition-status)
-                              total-llm-calls: (.ref report 'total-llm-calls)
-                              total-det-tasks: (.ref report 'total-det-tasks)
-                              receipt-digest: (digest (list 'apex-convergence.v1
-                                                            (.ref trunk 'trunk-id)
-                                                            apex-id
-                                                            (.ref trunk 'shared-context-cut)
-                                                            absorbed-ids
-                                                            (.ref trunk 'counterexample-core)))))
-                 (trunk-done (.o bind-these: #f
-                                 kind: 'agentic-ai-lab.loop-engine.context-trunk.v1
-                                 trunk-id: (.ref trunk 'trunk-id)
-                                 apex-obligation-id: apex-id
-                                 shared-context-cut: (.ref trunk 'shared-context-cut)
-                                 kv-prefix-digest: (.ref trunk 'kv-prefix-digest)
-                                 live-grant-epoch: (.ref trunk 'live-grant-epoch)
-                                 trunk-grant-live?: (.ref trunk 'trunk-grant-live?)
-                                 capability-envelope: (.ref trunk 'capability-envelope)
-                                 obligation-graph: g-final
-                                 branches: bs-closed
-                                 absorbed-contributions: (.ref trunk 'absorbed-contributions)
-                                 counterexample-core: (.ref trunk 'counterexample-core)
-                                 apex-status: 'converged
-                                 apex-receipt: receipt)))
-            (.o bind-these: #f
-                converged?: #t
-                reason: 'apex-converged
-                reconcile-report: report
-                trunk: trunk-done
-                apex-receipt: receipt))))))))
+                 (receipt (.o (:: @ ApexConvergenceReceipt.)
+                              (trunk-id := (.ref trunk 'trunk-id))
+                              (apex-obligation-id := apex-id)
+                              (shared-context-cut := (.ref trunk 'shared-context-cut))
+                              (kv-prefix-digest := (.ref trunk 'kv-prefix-digest))
+                              (absorbed-branch-ids-c4-order := absorbed-ids)
+                              (counterexample-core := (.ref trunk 'counterexample-core))
+                              (unrefuted-hypotheses := (.ref frontier 'unrefuted-hypotheses))
+                              (hypothesis-verdict := (.ref frontier 'epistemic-competition-status))
+                              (total-llm-calls := (.ref report 'total-llm-calls))
+                              (total-det-tasks := (.ref report 'total-det-tasks))
+                              (receipt-digest := (digest (list 'apex-convergence.v1
+                                                               (.ref trunk 'trunk-id)
+                                                               apex-id
+                                                               (.ref trunk 'shared-context-cut)
+                                                               absorbed-ids
+                                                               (.ref trunk 'counterexample-core))))))
+                 (trunk-done (.o (:: @ trunk)
+                                 (obligation-graph := g-final)
+                                 (branches := bs-closed)
+                                 (apex-status := 'converged)
+                                 (apex-receipt := receipt))))
+            (.o (converged? := #t)
+                (reason := 'apex-converged)
+                (reconcile-report := report)
+                (trunk := trunk-done)
+                (apex-receipt := receipt)))))))))

@@ -119,34 +119,24 @@
 ;;; Translates Durable Work / Journal domain events into Post-ReAct
 ;;; `ObligationGraph` events for `reconcile-event-stream`.
 (def (durable-journal-event->obligation-event work-event)
-  (let ((ek (.ref work-event 'work-event-kind)))
-    (cond
-     ((eq? ek 'work-attempt-interrupted)
-      (.o bind-these: #f
-          event-kind: 'defeater-discovered
-          obligation-id: (as-string (.ref work-event 'root-id))
-          defeater-id: (string-append "unclosed-attempt:" (as-string (.ref work-event 'attempt-id)))))
-     ((eq? ek 'work-attempt-recovered)
-      (.o bind-these: #f
-          event-kind: 'human-approved
-          resolve-defeater-id: (string-append "unclosed-attempt:" (as-string (.ref work-event 'attempt-id)))))
-     ((eq? ek 'work-premise-changed)
-      (.o bind-these: #f
-          event-kind: 'premise-retracted
-          premise-id: (as-string (.ref work-event 'premise-id))))
-     ((eq? ek 'work-evidence-verified)
-      (.o bind-these: #f
-          event-kind: 'evidence-arrived
-          evidence: (.ref work-event 'evidence)))
-     ((eq? ek 'work-cedar-revoked)
-      (.o bind-these: #f event-kind: 'cedar-revoked))
-     ((eq? ek 'work-cedar-restored)
-      (.o bind-these: #f event-kind: 'cedar-restored))
-     ((eq? ek 'work-mcp-mutated)
-      (.o bind-these: #f event-kind: 'mcp-manifest-mutated))
-     ((eq? ek 'work-human-approved)
-      (.o bind-these: #f
-          event-kind: 'human-approved
-          resolve-defeater-id: (opt-ref work-event 'resolve-defeater-id #f)))
-     (else
-      (error "Unknown durable work event kind" ek)))))
+  (case (.ref work-event 'work-event-kind)
+    ((work-attempt-interrupted)
+     (.o (event-kind := 'defeater-discovered)
+         (obligation-id := (as-string (.ref work-event 'root-id)))
+         (defeater-id := (string-append "unclosed-attempt:" (as-string (.ref work-event 'attempt-id))))))
+    ((work-attempt-recovered)
+     (.o (event-kind := 'human-approved)
+         (resolve-defeater-id := (string-append "unclosed-attempt:" (as-string (.ref work-event 'attempt-id))))))
+    ((work-premise-changed)
+     (.o (event-kind := 'premise-retracted)
+         (premise-id := (as-string (.ref work-event 'premise-id)))))
+    ((work-evidence-verified)
+     (.o (event-kind := 'evidence-arrived)
+         (evidence := (.ref work-event 'evidence))))
+    ((work-cedar-revoked) (.o (event-kind := 'cedar-revoked)))
+    ((work-cedar-restored) (.o (event-kind := 'cedar-restored)))
+    ((work-mcp-mutated) (.o (event-kind := 'mcp-manifest-mutated)))
+    ((work-human-approved)
+     (.o (event-kind := 'human-approved)
+         (resolve-defeater-id := (opt-ref work-event 'resolve-defeater-id #f))))
+    (else (error "Unknown durable work event kind" (.ref work-event 'work-event-kind)))))

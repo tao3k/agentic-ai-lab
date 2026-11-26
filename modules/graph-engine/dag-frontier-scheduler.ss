@@ -102,11 +102,8 @@
                           (and (member (.ref other 'produces-evidence-id) req-evs) #t))
                         all-tasks))))
          (all-deps
-          (let loop ((xs (append explicit-deps ev-deps)) (seen '()) (acc '()))
-            (cond
-             ((null? xs) (reverse acc))
-             ((memq (car xs) seen) (loop (cdr xs) seen acc))
-             (else (loop (cdr xs) (cons (car xs) seen) (cons (car xs) acc))))))
+          (reverse (foldl (lambda (d acc) (if (memq d acc) acc (cons d acc)))
+                          '() (append explicit-deps ev-deps))))
          (cut-str (string-append "cut-" (number->string cut)))
          (eff (effect-symbol->class (opt-ref task 'effect-class 'pure-cas)))
          (r-fp (opt-ref task 'read-footprint '()))
@@ -122,11 +119,10 @@
      idempotency-key: (opt-ref task 'idempotency-key #f)
      sandbox-profile: (opt-ref task 'sandbox-profile #f)
      span: (opt-ref task 'span #f)
-     metadata: (.o bind-these: #f
-                   task-id: tid
-                   task-node: task
-                   read-footprint: r-fp
-                   write-footprint: w-fp))))
+     metadata: (.o (task-id := tid)
+                   (task-node := task)
+                   (read-footprint := r-fp)
+                   (write-footprint := w-fp)))))
 
 ;;; Compute a C4-governed FunFlow DAG frontier execution plan over an
 ;;; ObligationGraph's ready deterministic tasks.
@@ -149,19 +145,18 @@
          (dag (funflow-dag-build dag-nodes strategy: strategy))
          (valid? (.ref dag 'valid?)))
     (if (not valid?)
-      (.o bind-these: #f
-          kind: 'agentic-ai-lab.loop-engine.funflow-frontier-plan.v1
-          valid?: #f
-          reason: (if (pair? (.ref dag 'cycle-nodes))
-                    'funflow-dag-cycle-detected
-                    'funflow-dag-invalid-edges)
-          dag: dag
-          strategy-name: (.ref strategy 'name)
-          parallel-batch: '()
-          deferred-tasks: ready-tasks
-          cas-skipped-ids: '()
-          subagents-spawned: 0
-          llm-calls-used: 0)
+      (.o (:: @ FunflowFrontierPlan.)
+          (valid? := #f)
+          (reason := (if (pair? (.ref dag 'cycle-nodes))
+                       'funflow-dag-cycle-detected
+                       'funflow-dag-invalid-edges))
+          (dag)
+          (strategy-name := (.ref strategy 'name))
+          (parallel-batch := '())
+          (deferred-tasks := ready-tasks)
+          (cas-skipped-ids := '())
+          (subagents-spawned := 0)
+          (llm-calls-used := 0))
       (let* ((ready-syms (map (lambda (t) (as-sym (.ref t 'task-id))) ready-tasks))
              ;; Preserve topological order across ready tasks
              (topo-ready-syms
@@ -187,8 +182,7 @@
              (admission (strategy-admit-frontier
                          strategy
                          exec-candidates
-                         (.o bind-these: #f
-                             pair-compatible?: footprints-compatible?)))
+                         (.o (pair-compatible? := footprints-compatible?))))
              (selected-tasks
               (map (lambda (n) (.ref (.ref n 'metadata) 'task-node))
                    (.ref admission 'selected)))
@@ -201,16 +195,15 @@
              (cas-skipped-ids
               (map symbol->string
                    (filter (lambda (id) (memq id ready-syms)) skipped-syms))))
-        (.o bind-these: #f
-            kind: 'agentic-ai-lab.loop-engine.funflow-frontier-plan.v1
-            valid?: #t
-            reason: 'funflow-c4-frontier-planned
-            dag: dag
-            dag-digest: (.ref dag 'dag-digest)
-            strategy-name: (.ref strategy 'name)
-            max-concurrency: (.ref strategy 'max-concurrency)
-            parallel-batch: selected-tasks
-            deferred-tasks: deferred-tasks
-            cas-skipped-ids: cas-skipped-ids
-            subagents-spawned: 0
-            llm-calls-used: 0)))))
+        (.o (:: @ FunflowFrontierPlan.)
+            (valid? := #t)
+            (reason := 'funflow-c4-frontier-planned)
+            (dag)
+            (dag-digest := (.ref dag 'dag-digest))
+            (strategy-name := (.ref strategy 'name))
+            (max-concurrency := (.ref strategy 'max-concurrency))
+            (parallel-batch := selected-tasks)
+            (deferred-tasks)
+            (cas-skipped-ids)
+            (subagents-spawned := 0)
+            (llm-calls-used := 0))))))

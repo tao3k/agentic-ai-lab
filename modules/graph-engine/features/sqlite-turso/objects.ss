@@ -21,15 +21,14 @@
         EnableGraphEngineSqliteTurso)
 
 (def GraphEngineSqliteTursoExports
-  (.o bind-these: #f
-      substrate: 'sqlite-turso
-      plan-envelope: plan-turso-substrate-envelope
-      open: durable-trunk-open
-      close!: durable-trunk-close!
-      execute-handoff!: durable-trunk-execute-handoff!
-      execute-marlin-dispatch!: durable-trunk-execute-marlin-dispatch!
-      commit-step!: durable-trunk-commit-step!
-      recover: durable-trunk-recover))
+  (.o (substrate := 'sqlite-turso)
+      (plan-envelope := plan-turso-substrate-envelope)
+      (open := durable-trunk-open)
+      (close! := durable-trunk-close!)
+      (execute-handoff! := durable-trunk-execute-handoff!)
+      (execute-marlin-dispatch! := durable-trunk-execute-marlin-dispatch!)
+      (commit-step! := durable-trunk-commit-step!)
+      (recover := durable-trunk-recover)))
 
 (define-type (GraphEngineSqliteTursoContract @ Type.)
   identity: 'graph-engine/sqlite-turso-feature
