@@ -14,6 +14,7 @@
         (only-in "durable-dag.ss" FunflowDurableDagExports)
         (only-in "cas-store.ss" FunflowCasStoreExports)
         (only-in "governed-runner.ss" GovernedFunflowRunnerExports)
+        (only-in "choice-flow.ss" ChoiceFlowPlan. ChoiceFlowExports)
         "config-prototypes.ss" "graph-projection.ss"
         (only-in "scenario.ss" Scenario))
 (export Task. Job. FunflowModule.)
@@ -28,6 +29,7 @@
             (return-flow) (cached-pure-flow))
   durable-dag: (.o (:: @ FunflowDurableDagExports)
                    cas-store: FunflowCasStoreExports
-                   governed-runner: GovernedFunflowRunnerExports)
+                   governed-runner: GovernedFunflowRunnerExports
+                   choice-flow: ChoiceFlowExports)
   pipeline-graph: yuanxu-funflow-poo-pipeline->functional-dag
-  prototypes: (.o Task: Task. Job: Job. check: funflow-check pipeline: funflow-pipeline))
+  prototypes: (.o Task: Task. Job: Job. ChoiceFlowPlan: ChoiceFlowPlan. check: funflow-check pipeline: funflow-pipeline))

@@ -29,5 +29,6 @@
           durable-dag: (list (Record))
           pipeline-graph: (list (Fun FunctionalDag <- Pipeline))
           prototypes: (list (Record Task: (list (Record)) Job: (list (Record))
+                                    ChoiceFlowPlan: (list (Record))
                                     check: (list (Record)) pipeline: (list (Record))))))
 (def FunflowScopeContract (.cc ScopeFields identity: 'funflow/scope))
