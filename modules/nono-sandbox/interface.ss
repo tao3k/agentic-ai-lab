@@ -5,7 +5,7 @@
 
 ;;; Public nono-sandbox module interface; all internal roles close through this file.
 
-(import (only-in :clan/poo/object .def)
+(import (only-in :clan/poo/object .def .o)
         "types.ss" "objects.ss" "funs.ss" "config.ss")
 (export (import: "types.ss")
         (import: "objects.ss")
