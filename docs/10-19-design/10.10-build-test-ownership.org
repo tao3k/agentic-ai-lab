@@ -1,0 +1,719 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: 10.10 Build and Test Ownership
+
+* Command ownership
+
+=gerbil build= owns library compilation through the package's existing runtime
+Make specification. =gerbil test= owns suite import, Case execution and Harness
+results. Ordinary test modules declare suites and fixtures; they do not start a
+second package test run. Integration tests of the compiler/process boundary may
+exercise that boundary explicitly; this is not the ordinary suite dispatcher.
+
+The retired =unit-tests.ss= dispatcher and the locally patched/rebuilt =gxtest=
+are removed. No replacement test engine or Builder is introduced.
+
+=dev/gerbil.pkg= owns optional development dependencies, not another product
+library. =build-testing= compiles ASP in its development prefix against the
+already selected product library. =test-root= separately requires
+=build-library= in the production prefix. There is no =dev/build.ss= forwarding
+entry: forwarding the product build while retaining the development
+=GERBIL_PATH= duplicates the entire production library and its compiler work.
+Tests use the production library first and the development dependency library
+second; development preparation does not republish production modules.
+
+The ordinary CLI calls the demand's =.run= once. Core's existing execution
+boundary prepares and authenticates support before starting the Harness and
+checks currentness again on release. A separate =.compile= operation is for
+explicit preparation requests; calling it before =.run= repeats the full
+preparation and admission boundary without adding another requested operation.
+
+Gerbil owns import resolution through its configured library paths. The test
+projector uses =core-import-module= without replacing the expander's importer,
+rewriting symbolic imports to filenames, or classifying installed products by
+suffix or prefix. It observes actual imported context paths. Only contexts
+matching the admitted package source contribute support targets to =std/make=;
+other imported contexts remain dependencies, not test compilation requests.
+Production changes require =gerbil build=. Observation does not prove compiler
+correctness. Suite, support and configuration mutation controls remain separate.
+
+Ordinary Make completion uses =building/products.ss= for the selected product
+inventory and per-unit recovery. Publication/issuance remains in
+=building/artifacts.ss= and uses that same inventory implementation. The build
+projection resolves its effectful issuance functions through the existing
+=module-entry-action= only on explicit =.compile= / =.process= demand. This
+separates dependencies, not authority checks: currentness before and after the
+callback, output validation and signing still execute at their existing gates.
+
+
+* Published authoring entry points
+
+Standalone authoring front ends are declared by the existing module source
+publication in =modules/module-authoring/source-registry.ss=. The production
+build projects those SourceRef values by their entrypoint role and lets
+=package-library-spec= / Gerbil derive their import closure. Module interfaces
+retain their ordinary roots. Tests do not maintain another list of production
+helpers, compile a missing public API into a private test prefix, or substitute
+source imports for installed libraries. Missing declared sources still fail.
+The removed Testing Module is not a maintained integration directory; the test
+interface belongs to =init.exports.tests=.
+
+The large =use-module= transformer retains the same ordered =syntax-case=
+clauses under Gerbil's =begin-annotation @no-optimize-syntax-case=. The installed
+compiler's =optimize-ann.ss= recognizes this tag and compiles the original
+recognizer instead of recursively optimizing its decision tree. It does not
+remove syntax checks, Type/Contract checks, source locations or runtime checks.
+The annotation is local to this transformer; Make settings and compiler sources
+remain unchanged. Qualify with =just build= and =just test-file
+t/agent-sandbox-profile-user-interface-test.ss=, followed by =just test-root=.
+
+
+* Native process completion and build completion
+
+The package command's deadline includes import/expansion, selected-graph
+admission, Make, final currentness and normal process teardown. A returned
+=std/make= call or =BUILD-STAGE main return= is not successful package acceptance:
+the owning command must also exit normally. In particular, dynamic library
+unloading after Scheme has returned can consume the remaining deadline.
+Do not bypass normal cleanup or approve an interrupted producer's outputs.
+
+Gerbil's =ProcessError= exposes the native wait status. Interpret it with the
+installed runtime's =process-exit-code=, rather than calling the raw integer a
+shell exit code. Keep the watchdog's own =--verbose= signal report so deadline
+termination can be distinguished from an external signal. A signal alone is
+not evidence of heap exhaustion or of a POO retained-object leak.
+
+Reproduce through =GERBIL_BUILD_VERBOSE=2 just build-library=, then =just
+test-root=. The existing verbosity reports source projection, currentness and
+Make separately; Just must not overwrite an explicitly requested verbosity.
+Keep process samples and failed execution logs in ignored qualification output.
+Sampling must distinguish dynamic-loader allocation/teardown from Scheme GC,
+shared loaded code from receiver-owned data, and the parent from compiler
+children. No Make scheduler, process-exit shortcut or cache protocol is added.
+
+
+* External selection and resource policy
+
+=init.exports.tests= publishes the official Harness input spec: a list of test
+file paths, consumed by the installed =gerbil test=. It is not a package
+manifest, a Make target list, or a replacement TestSuite format.
+The default =just test-root= takes its =t/yanxu/= paths from
+=init.exports.tests.qualification= and includes the root and Nix integration
+test files. Gerbil imports every file in its argument list before running its
+Harness. The entry submits serial batches of at most eight paths and starts a
+new batch at each directory. It also accepts explicit Gerbil test paths.
+The entry runs the independent Session and deployment tests in their own Gerbil
+processes with the same watchdog as =just test-file=.
+
+The pre-import heap fence applies to every process. One aggregate deadline
+covers the default entry, and existing Case budgets still apply. Focused
+=just test-file= keeps its 120-second fence. Every batch must report its module
+and Harness completion, and the entry reports failure if any batch fails.
+
+Build and qualification-input preparation are explicit, independent operations.
+CI and the complete repository aggregate prepare them once; focused native tests
+do not start Make, another controller, or provider-package preparation. Module
+publications and actual domain admission retain their own currentness and
+source diagnostics. A generic test-launch receipt cannot replace those checks.
+Actual independent-process qualifications still use Ops and the existing Fixture
+boundary, including preservation of both original errors on failed cleanup.
+
+Reproduce the bounded migration before running the ordinary directory:
+
+#+begin_src sh
+just test-core-file t/testing-script-test.ss
+just test-core-file t/init-test-input-test.ss
+just test-core-file t/gitea-postgresql-publication-test.ss
+just test-root t/agent-sandbox-profile-user-interface-test.ss t/sandbox-profile-poo-type-contract-test.ss
+# Repeat the same command in a new process without changing source or outputs.
+just test-root t/agent-sandbox-profile-user-interface-test.ss t/sandbox-profile-poo-type-contract-test.ss
+just test-root
+#+end_src
+
+Record prerequisite/build wall time separately from =TEST-FILE-SECONDS= and
+whole-invocation wall time. A new process over existing native outputs is not a
+clean compilation experiment. =TEST-FILE-OK= is controller progress only:
+acceptance still requires the original per-file =MODULE-OK=, =HARNESS-OK= and
+final =OK=, with no Harness error markers. Raw benchmark/failure transcripts
+remain local artifacts, not Org content.
+
+** Remaining acceptance boundary: controller-owned expansion
+
+Small passing runtime selections do not qualify an unbounded persistent
+controller. Previously, =module-test-source-spec= in
+=module-system/source/build.ss= called the official =core-import-module= for
+every requesting Suite to discover support. In the installed Gerbil,
+=gerbil/expander/module.ss= registers the path and module identity in
+=__module-registry=; the module context retains both expanded code and the
+delayed evaluator. A fresh top context does not create a fresh module registry.
+Consequently, removing process startup without changing compiler-context
+ownership can accumulate all previously expanded test bodies in the controller.
+This is distinct from POO's ordinary receiver caches and from a Make DAG.
+
+The candidate now uses the official reader and complete module expansion for
+the requesting Suite in an invocation-owned analysis context. It does not
+register that context, retain expanded runtime code, or install its delayed
+evaluator. Imported dependencies still use the official importer. Expansion
+includes macro-generated and phase-shifted imports; Suite runtime statements
+must not execute during support discovery. A fresh demand re-analyzes the
+current Suite source; an old demand must reject changed source. This context
+is private analysis data, never a substitute for an authenticated publication.
+Macros may have compile-time effects or deliberately retain contexts; this
+change does not prove arbitrary macro memory use bounded.
+
+The persistent-controller migration is not yet accepted for the complete
+regression. Reproduce with the ordinary =just test-root=; retain the failed
+transcript and use explicit paths from its failing prefix for bounded follow-up.
+Do not weaken the heap cap, evict native registry entries, strip module code or
+add a shadow import registry. The next production change must close support
+discovery/expansion ownership through the existing build/test publication
+boundary, while preserving its original issued dependencies and currentness.
+Controller heap/stack exhaustion fails immediately; it must not be counted as
+many independent failing child suites. A child's ordinary nonzero result still
+retains its full diagnostic and allows the next independent file to run.
+
+=dev/tests.ss= is a thin CLI consumer of =agentic-ai-lab.init.exports.tests=.
+It asks the existing =.for-files= method for a bounded demand, refines that
+demand's execution policy and explicitly calls =.run=. It does not construct
+another =TestingScript.= or select a compiler. The same entry serves ordinary
+focused tests and the existing long-budget diagnostic command. Core owns
+selection, demand-scoped support preparation, runtime issuance and execution.
+Its command remains the installed =gerbil test=, with the original pre-import
+heap fence and watchdog. Core's source guard and exact
+=MODULE-OK=/=HARNESS-OK=/=OK= result admission remain in force, including failure
+markers even when a tool exits zero. This is outside the test Case, not a Case
+launching another test Harness.
+
+The public owner is the same init export that publishes =std-make-spec=:
+
+#+begin_src scheme
+(def tests
+  (.call (.get agentic-ai-lab.init.exports tests) .for-files
+    '("t/gerbil-runtime-import-test.ss")))
+;; No process is started by obtaining this object.
+(.call tests .run)
+#+end_src
+
+The legacy =t/= exclusions remain plain data in the CLI consumer until the
+suites move to module-owned directories. They are applied by the init-owned
+directory projection, not by ASP or another product scanner. The retired
+=dev/test-file.ss=, =dev/test-files.ss= and =dev/testing-profiles.ss= do not
+remain as forwarding entrypoints. The package-file diagnostic uses this same
+publication instead of constructing a separate qualification Script.
+
+** Syntax binding is a separate obligation
+
+=init.exports.tests= already publishes selection, preparation and execution.
+It does not yet inject the lexical =yuanxu-test-case= or Fixture macro bindings
+into ordinary test sources. The existing macros expand hygienically to runtime
+=std/test= TestCases and retain their Case policy. Automatic binding must join
+the existing compiler-source role preparation on both reading and compilation;
+it must preserve original locations and explicit non-default preludes. Adding
+an eval-time import to a CLI, changing the global package prelude, or declaring
+an alias named =yuanxu-test= would not close that obligation. No such replacement
+is introduced here. Loading an init export must remain inert. A proposed
+test-only package/prelude was withdrawn: neither =t/gerbil.pkg= nor a separate
+testing language is required by the official Harness. Explicit runtime test
+macro imports remain until the existing role preparation can supply them
+without changing the Harness interface.
+
+The product consumer migration is exercised through default =just test-file=:
+the runtime-import control passes with an empty support spec. The build-boundary
+regression passes through the init-owned demand, including inert =tests= access
+and distinct cross-package entries. Its first run compiles three support units;
+a second Just process reports =issuer-reused=#t=, =make-seconds=0= and
+=compile-count=0=. Both complete with the required runtime Harness markers and
+no failure markers. This demonstrates reuse of the existing issuance owner,
+not a new cache or a cached test verdict. Automatic lexical macro injection and
+full CI closure are not established by these runs.
+
+Ordinary =just test-file= does not prepare Provider artifacts or Nix executables.
+The full package and explicit Nix qualification prepare those inputs separately.
+The Nix environment transport runs once for the full package, not on every file.
+Core module-system qualifications retain their existing signed support-build
+entry; this change does not replace that protocol with an unissued Make call.
+
+
+* CI audit, 2026-10-26
+
+The inspected published heads are Agentic AI Lab #34 at =774943a= and Yuanxu #19
+at =0e3c1f8=. Local working-tree changes are not results for those heads.
+
+- Ordinary Context/Session regressions no longer have duplicate handwritten
+  compile-and-test steps before the package run. Independent AOT, process-boundary,
+  C ABI and formal qualifications remain explicit.
+- The six-file Context/Temporal AOT qualification is published by
+  =t/qualification/context-temporal/interface.ss= using ordinary
+  Gerbil imports and re-exports the existing runtime TestSuites. (The former
+  =t/build.ss= and =t/qualification/testing/spec.ss= have been deleted.)
+  =gxtest= discovers these exported =*-test= values using its own normal
+  protocol. No parallel list defines the six suites. The init-owned test build
+  projection follows that module's runtime import closure and prepares its
+  imported suites as support units. =tests.compile= and =tests.run= share the
+  existing preparation/issuance boundary; only =run= starts the Harness.
+  Neither product nor Core =t/= has its own =gerbil.pkg=.
+- The Parser dependency entry now includes the compiler-profile API consumed by
+  the pinned Orgize build script; the coverage checker is unchanged.
+- Core's cost test no longer imports a dependency's uninstalled private test
+  helper. It uses installed Gambit =##exec-stats=, retaining named signed VM
+  statistics and labeling its allocation account as =vm-account=.
+- The Nix build registers Core's source package for test support that is
+  intentionally absent from the installed production library.
+
+Local actionlint, recipe parsing, installed-Gerbil dynamic import and the build
+boundary regression pass. The complete 312-file manifest is produced without
+running its suites. Core's slot-read cost controls pass. These are focused
+results, not a passing full CI. The 10,000-module 2 GiB/600-second failure remains
+visible; no matrix member, assertion or budget is relaxed. The Nix build gets
+past the missing-module error but still exceeds its 240-second executable-build
+limit. Pending SPDX failures in concurrent unpublished files also remain open.
+Raw logs stay in local/CI artifacts. No commit or push is made by this audit.
+
+The existing Parser API coverage Bazel target passes after the missing root is
+added; its missing-API negative control remains intact. Earlier AOT build
+results refer to the retired explicit list and cannot qualify the new runtime
+TestSuite publication. Its runtime qualification calls
+the installed =gerbil test= on those compiled interfaces directly, rather than
+loading gxtest inside another Scheme test program. That runtime attempt reaches
+the unchanged five-second no-progress refusal before Harness output. Build
+success is not runtime qualification; the refusal remains open. No longer
+timeout, fabricated progress or locally patched Gerbil binary replaces this result.
+
+** Runtime startup diagnosis
+
+The unchanged five-second refusal was reproduced with failure-only Darwin stack
+sampling. In that one-second sample, 56 of 95 main-thread samples were under
+=___dynamic_load=/=dlopen=; 53 included dyld debugger-image notification, with
+synchronous Mach-message waits visible. Only two samples were in the GC branch.
+This is a sampled startup interval, not a measurement of the complete run or
+proof that the host is the sole cause. It does establish that this failure
+occurs while loading runtime images before Harness output, rather than while
+compiling a test Case. The sampling time cannot earn a pass: the watchdog has
+already rejected the process before collecting its stack.
+
+The outer qualification process and the runtime test child must be attributed
+separately. Removing the runtime import of the build entry addresses one actual
+phase dependency; it does not establish that the child now meets the progress
+gate. A passing build, a parsed workflow and a focused source regression must
+not be reported as a passing AOT runtime or complete CI.
+
+Before the module-publication migration, the bounded runtime AOT build exited zero
+with no compile jobs on the hot run. The default
+=just test-file t/build-projection-observability-test.ss= also exits zero with
+=MODULE-OK=, =HARNESS-OK= and final =OK=, without failure markers. Workflow lint
+and whitespace checks pass. These results qualify phase separation and runtime
+Make reuse; the failed child startup, Nix build and scale results above remain
+open.
+
+
+* Publication is the declaration; spec is a projection
+
+The compiler entry is public =std/make.make=; clean and CLI dispatch stay with
+the runtime =defbuild-script= path. Core projects selected ownership and source
+observations into that spec, but must not replicate dependency timestamps,
+worker scheduling or private Make internals. The latest discovery correction
+preserves runtime compiled-library imports instead of rewriting their internal
+dependencies into test source targets. The real Gitea/PostgreSQL control then
+compiled two private support units and passed all eleven Cases. Empty support
+also avoids importing the signing runtime, verified with the SDK's actual
+=list-modules= and a nonempty positive control. See Core 13.18 for the measured
+source snapshots and remaining qualification boundaries.
+
+** Bounded file-demand measurements
+
+The 2026-10-26 local source snapshot exposed two avoidable dependencies:
+=.cc= arguments acquired the selected graph eagerly, and SDK-only progress /
+role metadata utilities inherited the package POO prelude. Runtime lazy slots
+now defer graph acquisition; those two utility modules explicitly select
+=:gerbil/core=. Export-name calculation lives with role metadata, rather than
+requiring the selection parser merely to obtain a symbol.
+
+The same minimal Gerbil test, through default Core =just test-file=, passed with
+=MODULE-OK=, =HARNESS-OK= and final =OK=. After the lazy-slot change its wall
+time was 55.71 seconds; after the utility import changes it was 30.13 seconds,
+then 24.57 seconds in a separate process on unchanged sources. The last two
+selection deltas were about five milliseconds, with zero linker, reader
+bootstrap and selected-graph calls. These are local wall measurements, not a
+controlled host benchmark or a claim that startup meets the 5--7 second goal.
+The minimal test has no support compilation, so it cannot establish signed
+artifact reuse or full product qualification.
+
+The runtime module runtime cache is process-local. A capability probe measured
+an already-loaded module at 0.000083 seconds, while loading its expansion
+interface still incurred substantial work. Replacing runtime imports wholesale
+with =load-module= would lose lexical/expansion responsibilities; it is not a
+justified fix for fresh-process startup. Remaining startup cost must be
+attributed separately from selected business-role work.
+
+The test of discovery mechanics no longer invokes the complete selected test
+group from inside one TestCase. That integration demand belongs to the external
+=just test-selected-modules= gate, retained in CI. This relocates its original
+coverage; it does not demonstrate that the full group's cold compilation cost
+has disappeared.
+
+Core's follow-up preparation control traced 23 support units to an unnecessarily
+broad Fixture owner. Generic directory resources now live only in
+=core/t/qualification/testing/directory.ss=; service-publication support imports
+them and consumers bind private support through runtime relative imports. The
+same default regression now passes with two outer support units. Cold runtime
+Make took 48.375 seconds; a fresh-process hot run restored the approved outputs
+with zero outer compile jobs. Whole-command times were 290.03 and 101.19 seconds,
+including the integration Cases' deliberate fresh builds and refusal controls.
+This closes that cold preparation failure, not the remaining startup latency,
+Nix qualification, scale gate or full CI. Detailed receipts and boundaries are
+in [[file:../../core/docs/10-19-design/13-module-loading/13.18-guarded-test-precompilation.org][Core 13.18]].
+
+** Runtime publication example
+
+The Context/Temporal qualification declares its exports in a Scheme
+module. =spec= contains only the resulting Harness input, never a second list
+of what the qualification does:
+
+#+begin_src scheme
+(def tests
+  (.call (.get agentic-ai-lab.init.exports tests) .for-files
+    '("t/qualification/context-temporal/interface.ss")))
+(.call tests .compile) ; signed preparation only, no Harness or TestCase
+(.call tests .run)     ; independent currentness, hot preparation, gerbil test
+#+end_src
+
+The original 99-Case admission, 45-second qualification and five-second genuine
+progress watchdog remain. CI prepares the published module separately under
+the existing 120-second compilation cap. Compilation and execution use the
+same runtime dependency closure and approval owner; no extra Builder or cache
+protocol is introduced. The old startup/scale/Nix failures remain failures
+until their new-path executions pass.
+
+
+* Context build ownership convergence, 2026-10-26
+
+=agentic-ai-lab.init.exports.std-make-spec= is the production build owner.
+=build-spec.ss= supplies the retained runtime-library import closure and existing
+platform options to that owner. The duplicate =build-modules.ss= and
+=dev/package.ss= catalogs and the =dev/build.ss= forwarding entry are removed.
+The development prefix builds dependencies only. Bootstrap initializes a missing Core checkout without resetting an
+existing revision or local work.
+
+The 39 specialized Context/Temporal build aliases are removed. Executable
+qualifications and runnable Org instructions now consume =build-library= or
+=build-test <path>=. The latter asks =init.exports.tests.for-files= through
+=dev/tests.ss compile=; Core owns support discovery, source admission, Make and
+artifact recovery. The explicit Actor AOT executable consumes a driver and does
+not publish a second module catalog. The numbered-object cleanup script is also
+removed. Historical JSON receipts keep their original commands and verdicts.
+
+The C artifact materializer uses the selected =gerbil build= frontend, then
+=gerbil env= for SDK static-dependency resolution. Both steps retain the runtime
+package environment; Python does not invent module order or dependency paths.
+The successful artifact materializes 328 compiler-emitted user units. A plain C
+consumer loads that artifact and exercises actual Gambit setup/cleanup, descriptor
+projection, result release, foreign-thread refusal, control-lane refusal,
+trailing-datum rejection, absent-service refusal and terminal close/reopen.
+No setup/cleanup mocks, forced process exit or Rust binding is involved.
+
+#+begin_src sh
+just build-library
+GERBIL_TEST_MAX_HEAP=2G just build-test t/context-service-test.ss
+GERBIL_TEST_MAX_HEAP=2G just test-context-service /private/tmp/NEW-context.sqlite
+just build-semantic-runtime /private/tmp/context-semantic/libsemantic.dylib
+just test-semantic-c /private/tmp/context-semantic/libsemantic.dylib
+#+end_src
+
+The current build-boundary regression and runtime Context service probe pass
+with =MODULE-OK=, =HARNESS-OK= and final =OK=. The service retains single-terminal,
+historical retry, substitution refusal, proactive revocation, unaffected
+consumers, no revival and joined shutdown controls under 2 GiB/150 seconds.
+Focused compilation reports =issuer-reused=#t=, =compile-count=0=; that is reuse
+of issued compilation, not a cached test verdict. The Python descriptor contract
+also passes against the packaged artifact after building the existing CFFI shim.
+
+The standalone C probe installs no live Context. Its VM/ABI result and the
+Scheme probe's active Context/Session result are separate evidence. Complete
+60-case replay, performance, distributed-runtime qualification and exact-head CI
+are not established by these checks. Failed package-environment attempts and
+the missing Python CFFI attempt remain local evidence, distinct from passes.
+See [[file:10.06-poo-module-system/agentic-ai-context/31-build-unification-results.json][the source-bound structured receipt]]. Raw build logs, binaries and journals
+remain local artifacts.
+
+
+
+* Native import closure and store-output reuse qualification
+
+The compiler's own dependency graph qualifies Query and Context imports. Their
+CLOS contracts use existing owning modules; Parser semantic dispatch imports the
+existing generic syntax owner. A positive closure test excludes the aggregate
+CLOS facade, while an intentional facade import must still be detected. This
+reduces unnecessary dynamic modules without suppressing native cleanup.
+
+Nix realization resolves the current derivation's outputs through the native
+store on every call. Exactly one currently registered output may be reused.
+Missing, unresolved and multiple outputs retain native realization. No Scheme
+mapping or registration result is cached. Source/currentness and publication
+checks still bracket realization, including the registered-output branch.
+The real cold-build, repeated-registration, registration-refusal, multiple-output
+and failing-native-command controls are maintained in =t/yanxu/modules/nix/output-reuse-test.ss=.
+The Selected Graph tamper injection covers both output lookup and realization.
+
+ASCENT now uses the official Gerbil test entry and its existing worker progress
+watchdog. CI no longer duplicates that watcher around the preparation command.
+The worker retains its five-second silence gate; the Just command retains its
+45-second total cap. Actual cached-import silence and failed-Case controls must
+still be refused. The handwritten ASCENT import runner has been removed.
+
+Candidate local receipts on 2026-10-28 record two natural-exit Context runs of
+99 Cases each: preparation 21.508 / 5.340 seconds, Cases 56.113 / 56.242 seconds.
+The complete AWS observation-off/on Case passed in 62.118 seconds, with 2.201
+seconds before its Harness. These are focused candidate observations, not
+cold-store benchmarks or remote-CI acceptance. The unchanged resource limits,
+source withdrawal, expiry, cancellation/recovery and tamper controls remain
+required. Complete final-cohort file-queue and exact-head CI evidence must be
+reported separately; the previously published ecf15ec7 queue admitted 314/315
+files and its macOS Context worker failed during native unload after final OK.
+Raw logs, native journals and failure samples remain local or CI artifacts.
+
+
+* Library publication and fresh Gerbil processes
+
+The Context qualification's existing interface remains the sole Suite roster.
+Its specialized declaration invokes the official =gerbil test= command through
+the existing TestingScript, retaining the original Case count and deadline.
+There is no separate Context executable build entry or unused deferred demand.
+
+Core is a library. Restart qualification requires a fresh process, not a new
+executable target in Core. Lab's existing Ops declarations invoke its own
+standard-Make qualification tool. Construction is inert; only explicit execution
+creates the process. Core continues to issue and admit
+the selected library products, their identities, source inputs and approval
+records. Test drivers and the installed interpreter are trusted qualification
+inputs, distinct from the candidate library products under attack.
+
+The Nix preparation entry uses native Make to compile supporting libraries and
+link Lab's existing qualification tool. It introduces no Core =.program=
+interface or executable issuance requirement. The Core producer accepts the
+test owner's worker command; its standalone fixture still uses installed Gerbil.
+Library publication is checked independently before and after child
+execution through the existing Core artifact handoff. The candidate's writable
+record cannot substitute for the selected publication's approval.
+
+CI keeps Quint typechecking/source binding separate from model verification.
+The two existing complete verification inventories still run together; the
+typecheck job retains receipt-admission unit tests and source correspondence.
+Both jobs retain the original deadline, and every model retains its original
+execution and idle fences. Parallel scheduling does not remove a model,
+negative control, source check or required receipt.
+
+Reproduce complete restart and joint product/record replacement through
+=just test-file t/approved-build-recovery-test.ss= and
+=just test-file t/build-store-recovery-test.ss= after standard Nix qualification
+preparation. Keep every refusal control and original process/Case budget. A
+successful producer or warm reader alone is not complete qualification.
+
+The process budget includes interpreter startup, qualification execution and
+normal runtime shutdown. A child printing an accepted result is not sufficient:
+the parent must observe its natural successful exit, and the official Harness
+must complete every control. Native dynamic-module unload can still consume
+time after the last protocol row. Attribute that cost separately from source
+admission; do not suppress cleanup, omit restarted readers or widen the budget
+to make a library-publication result appear complete. Existing Lean
+=CoreBuildPublication= and Quint controls describe issuance authority and final
+checks, not a bound on the operating system's dynamic-loader latency.
+
+The POO dependency action uses the pinned upstream
+=gerbil_project_execution_policy= with =memory_per_core_bytes= set to 4 GiB.
+The existing guard still owns the live host-derived RSS ceiling and compiler
+capacity decision. This accounts for the Gerbil frontend and GSC/C compiler
+subtrees without fixing the worker count, changing compiler optimization,
+raising the RSS ceiling or extending a deadline. Runtime Case heap limits are
+independent and unchanged. The estimate is not proof that every compiler input
+will fit: the same guard must still reject an actual over-budget process tree.
+
+The pinned Bazel integration has a standard =git_override= patch for generated
+native environments. Invocation-owned =GERBIL_BUILD_CORES= and =GAMBOPT= survive
+nested official tool calls; configured compiler identities and native runtime
+relocation remain pinned. No new environment variable or configuration protocol
+is introduced. The real compiler Fixture observes available cores inside the
+VM, rather than relying only on the resource guard's receipt. The unpatched
+launcher failed with twelve actual cores despite a one-core guard; the patched
+launcher passed the same real compilation with one core. A fresh three-core POO
+build completed locally in 69.625 seconds under its original 180-second cap;
+this does not certify remote cold-build latency.
+
+The published 1cca43d4 local full queue completed all 317 files, admitted 316,
+and measured 1,233 Cases. Its flake process counter was stale after native output
+lookup was added. Linux CI additionally exposed a Fixture builder whose plain
+store-path string omitted the shell dependency from the sandbox closure. The
+counter now distinguishes lookup, validity and construction, and the Fixture
+retains the shell's native Nix string context. Both focused native Nix checks
+passed without removing source invalidation or output-tamper controls.
+
+Candidate Context program runs completed all 99 original Cases and naturally
+exited twice: preparation approximately 2.98 / 3.00 seconds, Harness import
+2.632 / 1.793 seconds, Cases 54.658 / 54.389 seconds. The 2 GiB heap fence,
+150-second worker cap and five-second progress watchdog remain unchanged.
+The old macOS CI result completed all 99 Cases and then failed during dynamic
+unload; it remains a failure. Final published-source queue replay and exact-head
+CI, including natural macOS exit, are separate acceptance requirements. Raw
+logs, failed experiments, samples and structured receipts remain artifacts.
+
+After the clean build with independent compiler declarations, the final installed
+cohort completed 99 Cases and the complete 99-Case replay with natural exit.
+Preparation was 3.007 / 3.111 seconds, Harness import 2.682 / 1.847 seconds,
+and Cases 55.347 / 56.234 seconds. Both consumers projected one program target.
+The native ASCENT gate also passed both original Cases. The stronger real
+compiler qualification requested twelve cores, was admitted for one by the
+unchanged smaller Fixture policy, and observed one inside the actual VM. Its
+unpatched replay was refused with twelve actual VM cores; the corrected run
+completed in 2.235 seconds. These receipts do not replace the final frozen Root
+queue or exact-head remote checks.
+
+The root Gerbil Bazel override selects the provider that owns compiler budget
+handoff. An external consumer uses the same override fragment in its root
+=MODULE.bazel=; it does not copy a local patch package. The existing
+external-module Fixture checks the declared provider and retains the real
+missing-root-override counterexample. Reproduce its preparation controls with
+=python3 -m unittest discover -s t/qualification/external_bazel -p
+external_module_test.py -v= before the full Bazel acceptance. The Lean
+YuanxuProof declaration and Lake-generated lock must also match the exact Core
+gitlink; the namespace gate checks that relationship.
+
+
+* Complete queue and exact failure boundaries, 2026-10-28
+
+The frozen b49c4d8f Root queue completed all 317 original files with natural
+exit zero, all required native markers, 1,234 measured Cases, and an exact
+inventory match. All 3,462 Root and 2,358 Core tracked source hashes remained
+unchanged during the queue. The independent Linux CI queue also admitted all
+317 files and measured 1,234 Cases; its later integration failure does not
+invalidate or replace that separate queue receipt. The AWS Context publication
+Case took 68.162 seconds, with 2.650 seconds before the Harness and 78 seconds
+for the complete file. Original observation-off/on and refusal controls remain.
+
+Exact-head CI identified three additional ownership mismatches. The native
+Context demand observes the existing watchdog and native observer sources, so
+Bazel must project those actual inputs through the Root file and existing
+=//dev:sources= owner. Linux and WASM previously refused the missing watchdog
+before compilation. The native Darwin executable link also needs the maintained
+OpenSSL library environment: CI now uses the existing =just build-library=,
+which still invokes official =gerbil build=, rather than a direct invocation
+that omits the stable library path. The failed link's stale Cellar path is not
+a reason to hard-code another Cellar revision.
+
+The Python evidence consumer still calls the same heap-fenced =just test-file=
+with its original 150-second outer limit. Its completion check now compares
+canonical complete source paths, accepting the same relative or absolute file
+while rejecting another directory or a suffixed filename. Nonzero exits, missing
+Harness/final markers, and Case, Check, Module, Harness, heap and stack errors
+remain refusals. Fifteen executable receipt controls pass. The full Python
+project Harness remains a separate failed gate: an immutable b49c4d8f snapshot
+and the modified project have exactly the same 154 blocking findings (141
+output findings, twelve oversized modules, and one test-root entry). No rule or
+test inventory has been disabled to hide that existing baseline.
+
+A fresh standard POO cold build used three actual workers, the remote guard's
+4,982,162,063-byte tree limit and the unchanged 180-second deadline. Its existing
+=library= entry compiles the same owner declaration as the default entry and
+reports make work before VM shutdown. Make took 72.435 seconds; the guard took
+73.272 seconds and observed natural exit zero, with a 4,207,165,440-byte peak.
+Read-only process observations attributed about 7.2 CPU seconds to the table
+GSC process and 26.3 CPU seconds to its C compiler. The table source was emitted
+about 25 seconds before its GSC process started. These sampled lifetimes include
+queueing and cannot certify remote performance. Existing C host splitting was
+already active; blindly lowering its threshold is not a demonstrated fix.
+
+Failed Bazel dependency sandboxes and their native logs are retained as CI
+artifacts. The original remote POO 180-second failure, Darwin unload failure,
+new link failure, and all negative-control receipts remain failures. Full
+Bazel compilation, native integration, complete replay and exact-head CI must
+finish independently before the macOS lifecycle or complete CI can be closed.
+
+
+* Strict refactoring and cached native package authority, 2026-10-28
+
+The earlier 154-finding Python failure is historical. The complete refactoring
+retains the strict warning/error gate, with no baseline waiver or disabled
+rules. The published Python owner scans and parses all 355 selected files,
+reports zero blocking findings, and retains 781 informational findings.
+Its 73 unit tests and 152 native integration tests pass. These results do not
+certify the separate Scheme, performance or remote-CI gates.
+
+Production =gerbil build= now prepares library roots only. The existing
+=dev/gerbil.pkg= owns =dev/build.ss=, which projects performance support through
+=init.exports.tests= and its =std-make-spec=. The existing qualification and
+Context declarations run in independent official Gerbil compiler processes.
+The Nix declaration keeps its original aggregate 240-second preparation fence;
+the development build keeps its existing 900-second fence. Ordinary workers
+retain 2 GiB / 120 seconds; Context retains 2 GiB / 150 seconds.
+
+The preserved frozen Root attempt completed all 317 files but admitted 316.
+Its sole refusal was the full approved-recovery Case exceeding 120 seconds;
+that queue is not accepted. Recovery readers now run Lab's existing standard
+Make tool in a fresh process. The producer retains its original Root/Services
+closure. The original Core library publication and approval
+remain the authority for candidate products; a test-driver executable is not
+another publication root. TestingScript does not compile a driver.
+
+A concrete source-authority defect remained after splitting the native roles.
+The independent consumer observed one more input than the cached preparation:
+=core/gerbil.pkg=. The other 349 observations, native specification and compiler
+identities matched. Cached native =.ss= contexts had retained source bytes but
+omitted the package lookup observations. Core now reuses its existing retained
+source preparer for those contexts, preserving positive package observations
+and negative observations for nearer package files. This is not a handwritten
+manifest addition. The new native regression checks package replacement,
+nearer-package insertion, refusal, and restoration; the original real compiler,
+executable-tamper and stale-source Case remains intact. Both Cases pass.
+
+After this repair, the complete approved-recovery Case passes twice with all
+nine subprocess steps. The replay after removing temporary fingerprint output
+measures 90.984 seconds of Case execution. The related store-recovery Case
+measures 58.351 seconds. Both have natural exit zero, =MODULE-OK=, =HARNESS-OK=
+and final =OK=, without Case/Check/Harness or heap/stack failures. The existing
+observer reports Case time separately from package preparation. Failed attempts,
+full logs and source fingerprints remain local/CI artifacts, not committed logs.
+
+These are focused working-tree results. The revised whole Root queue, Context
+99-Case replay, all 54 performance files, external compilation and exact-head
+remote CI remain independent acceptance obligations. The earlier performance
+queue attempted all 54 files and refused five; its 49 passes do not waive the
+remaining thresholds. The published macOS native job at =7363abb1= passes,
+but that does not certify these later working-tree changes or make PR 34 green.
+
+* Downstream cross-package on-demand compilation, 2026-11-25
+
+Downstream consumers of Agentic AI Lab (such as =marlin-agent-core=) declare
+upstream package dependencies through ordinary Gerbil =gerbil.pkg= =depend:=
+entries and import only the libraries they use via plain
+=(import :tao3k/agentic-ai-lab/modules/<name>/interface)=. Downstream
+=init.ss= does not need a redundant =:load-modules (from: ...)= window merely
+to compile ordinary Gerbil library imports, and downstream =build.ss= stays a
+minimal Yuanxu =defbuild-script= without hand-maintained upstream sentinel
+lists or shellouts.
+
+Core's =core/module-system/building/dependency-packages.ss= implements a
+two-stage prerequisite compiler invoked during compile actions:
+
+1. *Stage 1 (Native import discovery)*: Walks =gerbil.pkg= =depend:= packages
+   under active =pkg/= stores and reads selected local and imported sources
+   with Gerbil's native =core-read-module/sexp= reader (without evaluating
+   module bodies, executing =##c-declare= FFI forms, or constructing business
+   scopes), collecting only missing or transitively stale targets grouped by
+   dependency package root in topological order.
+2. *Stage 2 (Per-package isolated =std/make=)*: Compiles each dependency
+   package with missing or stale targets independently via native =:std/make=
+   using that package's own =srcdir:= and =gerbil.pkg= inside
+   =call-with-build-input-path= and =call-with-selected-output-lock=. The
+   consuming package's =std-make-spec= and =clean= remain strictly
+   single-package pure; already fresh =.ssi= artifacts are reused with zero
+   recompilation.
+
+In addition, =core/module-system/source/build.ss= reconciles ='source= and
+='publication= contributions when one selected Module imports another selected
+Module's =interface.ss= with matching path and =compiler-identity=. See
+[[file:../../core/module-system/design/05-namespace-and-build-ownership.org][Yuanxu namespace and build ownership]]
+and [[file:../../core/t/module-build-cross-package-test.ss][the Core cross-package demand build regression]].
+
+* Modularized child ORG modules
+
+| Child module | Title |
+|--------------+-------|
+| [[file:10.10-build-test-ownership--offload-01-native-replay-and-current.org][10.10-build-test-ownership--offload-01-native-replay-and-current.org]] | Native replay and current performance boundary, 2026-10-29 .. CI allowance revision after native failure diagnosis |

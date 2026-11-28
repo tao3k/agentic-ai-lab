@@ -22,7 +22,7 @@ isolated performance test sets =current-expander-compiling?= to false and calls
 =import-module= with =reload?= true, so each window includes real source-module
 expansion, bypasses an existing =.ssi=, and neither queues compilation nor
 writes artifacts.  The focused gate requires the bounded lowering to be faster
-and at most 75 percent of the native-reference expansion time.
+and at most 75 percent of the runtime-reference expansion time.
 
 * Verification
 

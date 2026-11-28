@@ -1,0 +1,380 @@
+// SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+// SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+// Slice 47 — Master Composed Quint Interleaving Chain (`40..46, 48..60 -> 47`):
+// Imports ALL TWENTY upstream Quint state machines (`s40`..`s46`, `s48`..`s60`)
+// directly so `assembleAuditCapsule`, `consumeHostCasFence`, and
+// `runColdForensicReplayAtCut1` synchronize and race against every upstream
+// concurrent plane.
+module EndToEndContextGovernanceClosure {
+  import ContextGovernanceBoundary as s40 from "./40-context-governance-boundary"
+  import ContextEpistemicConsolidationGovernance as s41 from "./41-epistemic-consolidation-governance"
+  import MultiRepoAgentDeclassification as s42 from "./42-multi-repo-multi-agent-declassification"
+  import AscentSecurityBranchOmissionRefinement as s43 from "./43-ascent-security-branch-omission-refinement"
+  import TemporalCausalSurvivalMemoryQuotient as s44 from "./44-temporal-causal-survival-and-memory-quotient"
+  import OrgSexprGqlCandidateExchange as s45 from "./45-org-sexpr-gql-candidate-exchange-search"
+  import DurableAgendaSessionSandbox as s46 from "./46-durable-agenda-session-sandbox-governance"
+  import ProgressiveDisclosureAndOrgRepair as s48 from "./48-progressive-disclosure-and-two-stage-org-repair"
+  import ScopedDetourFunflowConcurrentContext as s49 from "./49-scoped-detour-funflow-concurrent-shared-context"
+  import DetourTaintConfinementAndCausalAudit as s50 from "./50-literature-frontier-detour-confinement-and-causal-audit"
+  import MemoryQuarantineAndKvPrefixSerialization as s51 from "./51-memory-poisoning-quarantine-and-kv-prefix-serialization"
+  import FunflowCasSingleflightAndExternalSandbox as s52 from "./52-funflow-cas-singleflight-and-external-sandbox-binding"
+  import YuanxuC4ProfileConvergence as s53 from "./53-yuanxu-c4-profile-convergence-and-interface-slots"
+  import DurableWorkEngineCoreChallenge as s54 from "./54-durable-work-engine-core-challenge"
+  import McpToolPoisoningAndCamelCapabilityFlow as s55 from "./55-mcp-tool-poisoning-and-camel-capability-flow"
+  import AscentGovernedLoopTermination as s56 from "./56-ascent-governed-loop-termination"
+  import AscentObligationFixpointReconciler as s57 from "./57-obligation-fixpoint-reconciler"
+  import DelegationAttenuationAndCedarToctou as s58 from "./58-delegation-attenuation-and-cedar-toctou-fence"
+  import GraphEngineConvergentTree as s59 from "./59-graph-engine-convergent-tree-and-apex-join"
+  import UnifiedCyclicSccAndDurableRecovery as s60 from "./60-unified-cyclic-scc-and-durable-tree-recovery"
+
+  type CapsuleState = {
+    hotCapsulePresent: bool,
+    hotCapsuleCut: int,
+    hotCapsuleRepoCoreCut: int,
+    hotCapsuleGen: int,
+    archivedCut1Capsule: bool,
+    cedarHostGrantLive: bool,
+    hostCasConsumed: bool,
+    planesWereLiveAtCas: bool,
+    coldReplayVerifiedAtCut1: bool
+  }
+
+  var c: CapsuleState
+
+  action keep40 = s40::s40' = s40::s40
+  action keep41 = s41::s41' = s41::s41
+  action keep42 = s42::s42' = s42::s42
+  action keep43 = s43::s43' = s43::s43
+  action keep44 = s44::s44' = s44::s44
+  action keep45 = s45::s45' = s45::s45
+  action keep46 = s46::s46' = s46::s46
+  action keep48 = s48::s48' = s48::s48
+  action keep49 = s49::s49' = s49::s49
+  action keep50 = s50::s50' = s50::s50
+  action keep51 = s51::s51' = s51::s51
+  action keep52 = s52::s52' = s52::s52
+  action keep53 = s53::s53' = s53::s53
+  action keep54 = s54::s54' = s54::s54
+  action keep55 = s55::s55' = s55::s55
+  action keep56 = s56::s56' = s56::s56
+  action keep57 = s57::s57' = s57::s57
+  action keep58 = s58::s58' = s58::s58
+  action keep59 = s59::s59' = s59::s59
+  action keep60 = s60::s60' = s60::s60
+  action keepC = c' = c
+
+  pure def allUpstreamPlanesReady(
+    st40: s40::State,
+    st41: s41::State,
+    st42: s42::State,
+    st43: s43::State,
+    st44: s44::State,
+    st45: s45::State,
+    st46: s46::State,
+    st48: s48::State,
+    st49: s49::State,
+    st50: s50::State,
+    st51: s51::State,
+    st52: s52::State,
+    st53: s53::State,
+    st54: s54::State,
+    st55: s55::State,
+    st56: s56::State,
+    st57: s57::State,
+    st58: s58::State,
+    st59: s59::State,
+    st60: s60::State
+  ): bool =
+    st45.published and
+    st45.publishedAtGen == st45.temporalGen and
+    st44.activeCitedGem and
+    st44.liveStatus.get("E-cited") == "active" and
+    st41.session2GrantLive and
+    st42.dualBindingsVerified and
+    not(st43.omissionReceiptActive) and
+    st48.stageOneSyntaxHealthy and
+    (not(st48.activeDefeaterPresent) or (st48.consumedPresent and st48.consumedDepth == 3)) and
+    not(st49.overwrittenByNonOwner) and
+    not(st49.blockerDetourActive) and
+    not(st50.mainlineTainted) and
+    not(st50.unattestedMergeOccurred) and
+    not(st51.recallableContainsPoison) and
+    not(st51.kvPrefixFractured) and
+    not(st52.corruptCasVisible) and
+    not(st52.pinnedEntryEvictedByGc) and
+    not(st52.archivedWithDroppedFinalizer) and
+    not(st53.undeclaredModulePulled) and
+    not(st53.silentPeerOverwrite) and
+    not(st53.runtimeExpandedCompile) and
+    not(st54.leaseHijacked) and
+    not(st54.mainlineTainted) and
+    (st54.effectiveMaxConcurrency <= st54.parentMaxConcurrency) and
+    not(st55.rugPullInvoked) and
+    not(st55.shadowDispatched) and
+    not(st55.sensitiveSinkAcceptedUntrusted) and
+    not(st56.admittedAfterCycle) and
+    not(st56.admittedAfterGovBlock) and
+    not(st56.selfResetSucceeded) and
+    (st56.stepsTaken <= st56.initialBudget) and
+    (st57.oracleInvocationsOnSamePremise <= 1) and
+    not(st57.oracleCalledWithDetPending) and
+    not(st57.rawToolCallAdmitted) and
+    not(st57.collapsedCompetingHypotheses) and
+    not(st58.childBypassedDeny) and
+    not(st58.childExecutedAfterRevokeOrDrift) and
+    not(st58.parentCompletedWithUnclosedChild) and
+    (st58.childBoundGrantEpoch <= st58.liveGrantEpoch) and
+    (st59.subagentsFromDag == 0) and
+    not(st59.isolatedBranchSpawned) and
+    not(st59.branchDirectlyFinalizedTrunk) and
+    not(st59.convergedWithActiveRequiredBranch) and
+    not(st60.ungovernedCycleExecuted) and
+    not(st60.oscillationContinued) and
+    not(st60.staleEpochWriteAdmitted) and
+    not(st60.recoveredApexWithOpenBranch) and
+    st40.consumedHandoff.present and
+    st40.consumedHandoff.boundCut == st40.sourceCut and
+    st40.threatPhase != "exposed" and
+    st46.grantLive and
+    st46.activeAttempt.outcome != "unknown"
+
+  action init: bool = all {
+    s40::init,
+    s41::init,
+    s42::init,
+    s43::init,
+    s44::init,
+    s45::init,
+    s46::init,
+    s48::init,
+    s49::init,
+    s50::init,
+    s51::init,
+    s52::init,
+    s53::init,
+    s54::init,
+    s55::init,
+    s56::init,
+    s57::init,
+    s58::init,
+    s59::init,
+    s60::init,
+    c' = {
+      hotCapsulePresent: false,
+      hotCapsuleCut: 0,
+      hotCapsuleRepoCoreCut: 0,
+      hotCapsuleGen: 0,
+      archivedCut1Capsule: false,
+      cedarHostGrantLive: true,
+      hostCasConsumed: false,
+      planesWereLiveAtCas: true,
+      coldReplayVerifiedAtCut1: false
+    }
+  }
+
+  // Upstream asynchronous transitions across all 20 planes racing against Host CAS
+  action stepGov40 = all { s40::step, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepEpistemic41 = all { s41::step, keep40, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepDeclassify42 = all { s42::step, keep40, keep41, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepBranch43 = all { s43::step, keep40, keep41, keep42, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepSurvival44 = all { s44::step, keep40, keep41, keep42, keep43, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepSearch45 = all { s45::step, keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepSandbox46 = all { s46::step, keep40, keep41, keep42, keep43, keep44, keep45, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepDisclosure48 = all { s48::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepConcurrent49 = all { s49::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepAbsorption50 = all { s50::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepMemoryKv51 = all { s51::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepFunflowCas52 = all { s52::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepC4Convergence53 = all { s53::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepDurableWork54 = all { s54::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepMcpTool55 = all { s55::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep56, keep57, keep58, keep59, keep60, keepC }
+  action stepLoopTerm56 = all { s56::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep57, keep58, keep59, keep60, keepC }
+  action stepReconciler57 = all { s57::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep58, keep59, keep60, keepC }
+  action stepDelegation58 = all { s58::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep59, keep60, keepC }
+  action stepTree59 = all { s59::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep60, keepC }
+  action stepSccRec60 = all { s60::step, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keepC }
+
+  action assembleAuditCapsule: bool = all {
+    allUpstreamPlanesReady(s40::s40, s41::s41, s42::s42, s43::s43, s44::s44, s45::s45, s46::s46, s48::s48, s49::s49, s50::s50, s51::s51, s52::s52, s53::s53, s54::s54, s55::s55, s56::s56, s57::s57, s58::s58, s59::s59, s60::s60),
+    keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60,
+    c' = {
+      ...c,
+      hotCapsulePresent: true,
+      hotCapsuleCut: s40::s40.sourceCut,
+      hotCapsuleRepoCoreCut: s42::s42.repoCoreCut,
+      hotCapsuleGen: s45::s45.temporalGen,
+      archivedCut1Capsule: c.archivedCut1Capsule or (s40::s40.sourceCut == 1)
+    }
+  }
+
+  action revokeCedarGrant: bool = all {
+    keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60,
+    c' = { ...c, cedarHostGrantLive: false }
+  }
+
+  action consumeHostCasFence: bool = {
+    val liveNow =
+      c.hotCapsulePresent and
+      c.cedarHostGrantLive and
+      c.hotCapsuleCut == s40::s40.sourceCut and
+      c.hotCapsuleRepoCoreCut == s42::s42.repoCoreCut and
+      c.hotCapsuleGen == s45::s45.temporalGen and
+      allUpstreamPlanesReady(s40::s40, s41::s41, s42::s42, s43::s43, s44::s44, s45::s45, s46::s46, s48::s48, s49::s49, s50::s50, s51::s51, s52::s52, s53::s53, s54::s54, s55::s55, s56::s56, s57::s57, s58::s58, s59::s59, s60::s60)
+    all {
+      liveNow,
+      not(c.hostCasConsumed),
+      keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60,
+      c' = {
+        ...c,
+        hostCasConsumed: true,
+        planesWereLiveAtCas: liveNow
+      }
+    }
+  }
+
+  action runColdForensicReplayAtCut1: bool = all {
+    c.archivedCut1Capsule,
+    keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60,
+    c' = { ...c, coldReplayVerifiedAtCut1: true }
+  }
+
+  action step = any {
+    stepGov40,
+    stepEpistemic41,
+    stepDeclassify42,
+    stepBranch43,
+    stepSurvival44,
+    stepSearch45,
+    stepSandbox46,
+    stepDisclosure48,
+    stepConcurrent49,
+    stepAbsorption50,
+    stepMemoryKv51,
+    stepFunflowCas52,
+    stepC4Convergence53,
+    stepDurableWork54,
+    stepMcpTool55,
+    stepLoopTerm56,
+    stepReconciler57,
+    stepDelegation58,
+    stepTree59,
+    stepSccRec60,
+    assembleAuditCapsule,
+    revokeCedarGrant,
+    consumeHostCasFence,
+    runColdForensicReplayAtCut1,
+    all { keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC }
+  }
+
+  // Master composed temporal safety invariants across all 21 slices
+  val hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes =
+    not(c.hostCasConsumed) or c.planesWereLiveAtCas
+
+  val coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff =
+    not(c.coldReplayVerifiedAtCut1) or c.archivedCut1Capsule
+
+  val allTwentyUpstreamSliceInvariantsHold = and {
+    s40::safety,
+    s41::safety,
+    s42::safety,
+    s43::safety,
+    s44::safety,
+    s45::safety,
+    s46::safety,
+    s48::safety,
+    s49::safety,
+    s50::safety,
+    s51::safety,
+    s52::safety,
+    s53::safety,
+    s54::safety,
+    s55::safety,
+    s56::safety,
+    s57::safety,
+    s58::safety,
+    s59::safety,
+    s60::safety
+  }
+
+  // Assume-Guarantee cross-plane verification target for Apalache (2 VCs):
+  // All 20 upstream single-plane safety invariants are exhaustively proven
+  // by TLC (queue = 0) and lifted via Lean 4 `disjointFrame_step_preserves_product_invariant`.
+  val crossPlaneCapsuleSafety = and {
+    hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes,
+    coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff
+  }
+
+  val safety = and {
+    hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes,
+    coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff,
+    allTwentyUpstreamSliceInvariantsHold
+  }
+
+  // Standalone fault-injection action (outside `step`) for cross-plane drift counterexample
+  action buggyConsumeStaleCapsuleIgnoringUpstreamDrift: bool = all {
+    c.hotCapsulePresent,
+    keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60,
+    c' = {
+      ...c,
+      hostCasConsumed: true,
+      planesWereLiveAtCas:
+        c.cedarHostGrantLive and
+        c.hotCapsuleCut == s40::s40.sourceCut and
+        c.hotCapsuleRepoCoreCut == s42::s42.repoCoreCut and
+        c.hotCapsuleGen == s45::s45.temporalGen and
+        allUpstreamPlanesReady(s40::s40, s41::s41, s42::s42, s43::s43, s44::s44, s45::s45, s46::s46, s48::s48, s49::s49, s50::s50, s51::s51, s52::s52, s53::s53, s54::s54, s55::s55, s56::s56, s57::s57, s58::s58, s59::s59, s60::s60)
+    }
+  }
+
+  run endToEndTwentyPlaneAssembleDriftAndColdReplaySafeTest =
+    init
+      .then(all { s45::submitProviderReceipt("gql", 1, true), keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s45::submitProviderReceipt("ascent", 1, true), keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s45::publishCandidateExchange, keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s44::admitCitedQuotientGem, keep40, keep41, keep42, keep43, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s40::prepareUnpromotedData("tenantA:restricted"), keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s40::consumeHandoffFence, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s52::agentAAcquireSingleflight, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s52::stageTempArtifact, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s52::atomicRenamePublish, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s52::pinPublishedEntryToCapsule, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s53::admitDurableModule, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s54::reconcileUnclosedAttempt, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s55::invokeGuardedSensitiveSink, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s56::admitProgressTurn, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s57::runDeterministicFunflowTask, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep58, keep59, keep60, keepC })
+      .then(all { s58::delegateAttenuatedChild, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep59, keep60, keepC })
+      .then(all { s59::dispatchDisjointParallelDag, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep60, keepC })
+      .then(all { s60::stepGovernedCyclicScc, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keepC })
+      .then(assembleAuditCapsule)
+      .expect(c.hotCapsulePresent and c.archivedCut1Capsule and safety)
+      // Upstream planes drift & revoke concurrently while cold replay at cut 1 succeeds!
+      .then(all { s49::spawnBlockerDetour, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s51::ingestPoisonedUntrustedCandidate, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s52::runCasGcSweep, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s53::enterRuntimeDetourOverlay, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s54::mergeConfinedDetour, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s55::serverMutatesToolRugPull, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s56::detectOscillationAndHalt, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s57::runDeterministicFunflowTask, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep58, keep59, keep60, keepC })
+      .then(all { s58::revokeParentCedarGrant, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep59, keep60, keepC })
+      .then(all { s59::advanceTrunkCutAndSupersede, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep60, keepC })
+      .then(all { s60::crashAndRestartJournalTakeover, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keepC })
+      // Cold audit replay at cut 1 succeeds (pinned CAS survived GC!) while live CAS stays blocked!
+      .then(runColdForensicReplayAtCut1)
+      .expect(c.coldReplayVerifiedAtCut1 and s52::s52.casPublished and not(c.hostCasConsumed) and safety)
+
+  run crossPlaneDriftAgainstCachedCapsuleCounterexampleTest =
+    init
+      .then(all { s45::submitProviderReceipt("gql", 1, true), keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s45::submitProviderReceipt("ascent", 1, true), keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s45::publishCandidateExchange, keep40, keep41, keep42, keep43, keep44, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s44::admitCitedQuotientGem, keep40, keep41, keep42, keep43, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s40::prepareUnpromotedData("tenantA:restricted"), keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(all { s40::consumeHandoffFence, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep49, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(assembleAuditCapsule)
+      .then(all { s49::spawnBlockerDetour, keep40, keep41, keep42, keep43, keep44, keep45, keep46, keep48, keep50, keep51, keep52, keep53, keep54, keep55, keep56, keep57, keep58, keep59, keep60, keepC })
+      .then(buggyConsumeStaleCapsuleIgnoringUpstreamDrift)
+      .expect(not(hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes))
+}

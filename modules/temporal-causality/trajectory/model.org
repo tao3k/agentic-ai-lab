@@ -11,7 +11,7 @@
 :CUSTOM_ID: temporal-trajectory-owner
 :END:
 
-=trajectory/= owns POO-native samples and series.  A series identifies a
+=trajectory/= owns POO samples and series.  A series identifies a
 subject, scenario, outcome, unit, admission cut, valid-time projection, clock
 domain and modality.  Its samples are canonicalized by exact clock coordinate;
 coordinates and instant identities are unique, and every sample belongs to

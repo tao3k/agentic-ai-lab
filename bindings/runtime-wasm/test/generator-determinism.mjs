@@ -7,12 +7,9 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { runBazel } from "../scripts/bazel-runner.mjs";
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const workspaceRoot = resolve(packageRoot, "../..");
-const bazelBin = runBazel(["info", "bazel-bin"], { cwd: workspaceRoot });
-const outputRoot = join(bazelBin, "bindings/runtime-wasm");
+const outputRoot = join(packageRoot, ".build/bundles");
 
 assert.deepEqual(
   readFileSync(join(outputRoot, "human-capability.determinism.descriptor.bin")),

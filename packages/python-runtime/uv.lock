@@ -135,7 +135,7 @@ wheels = [
 ]
 
 [[package]]
-name = "poo-flow-runtime"
+name = "agentic-ai-lab-runtime"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

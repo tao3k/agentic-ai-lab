@@ -1,15 +1,17 @@
-#+TITLE: Temporal LeanPoo Proof Boundary
+#+TITLE: Agentic AI Lab LeanPoo Proof Boundaries
 
 #+begin_comment
 SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 #+end_comment
 
-This independent Lean 4.34 Lake package pins [[https://github.com/tao3k/lean-poo][LeanPoo]] at the revision
-recorded in =lake-manifest.json=.  POO Flow's Cedar-bound proof package uses
-Lean 4.31, so its existing proof graph remains separate.
+This independent Lean 4.34 Lake package pins [[https://github.com/tao3k/lean-poo][LeanPoo]] at the exact
+main revision recorded in =lake-manifest.json=.  Agentic AI Lab's Cedar-bound proof
+package uses Lean 4.31, so its existing proof graph remains separate.  The
+Session proofs here belong to Agentic AI Lab =modules/session= and its WorkTree
+sharing policy; MRR's Query/Content/Context receipts are external inputs.
 
-=PooFlowTemporalPooProof.TruthMaintenance= interprets a temporal cut as a
+=AgenticAILabTemporalPooProof.TruthMaintenance= interprets a temporal cut as a
 =LeanPoo.Proof.ProofObject= and a changed premise footprint as a =Patch=.
 It proves that an old obligation depending on a changed key enters
 =pending=, that an unaffected old obligation is excluded unless explicitly
@@ -18,8 +20,39 @@ object once that frontier is discharged.  It does not prove that the Scheme
 index emits the same frontier.  The required projection is recorded in
 =modules/temporal-causality/framework.org=.
 
-=PooFlowTemporalPooProof.ConclusionSelection= proves the abstract safety law
+=AgenticAILabTemporalPooProof.ConclusionSelection= proves the abstract safety law
 that a successful version increment makes another proposal against the old
 version stale.  It does not prove the external pointer store is atomic.
 
 Run =just check-temporal-poo-lean= from the repository root.
+
+* Session and shared Context boundary
+
+=AgenticAILabSessionProof.Lifecycle= proves pure guards for begin, query-use
+binding, and resume: terminal refusal, exact Session/turn/cut agreement, and
+revision advance. =AgenticAILabSessionProof.SharedContext= proves same-WorkTree
+authorized reads and guards for cross-WorkTree import proposals.  It does not
+establish semantic validity of an MRR Content or Context reference.
+
+=AgenticAILabSessionProof.PolicyC4= requires a =LeanPoo.C4.VerifiedOrder= for a
+declared policy graph and root.  It proves a finite, duplicate-free order with
+the root first and every included policy node reachable by graph ancestry.
+Project/WorkTree/Task/Session containment and Org heading depth are not C4
+parent edges; the production Agentic AI Lab graph-to-proof correspondence remains an
+implementation gate.
+
+The models are abstract.  They have not been refined against the Scheme
+=modules/session= implementation, runtime CAS, MRR admission, or MRR Data
+storage.  The finite [[file:../quint/session-context.org][Quint checks]] cover concurrency and deliberately
+broken guards at their own bounded scope.  Run =just check-session-proof= for
+both focused proof gates.
+The PR CI runs this library and its axiom audit in the independent =Session
+and WorkTree LeanPoo proof= job; the independent =Quint finite proof models= job runs the Quint cases.
+
+For Org-backed Memory, the [[file:../../../docs/10-19-design/10.06-poo-module-system/166-session-memory-orgize-boundary.org][Scheme selection boundary]] consumes an Orgize
+Scheme graph and named query. =OrgMemory.lean= proves that a pure Agentic AI Lab
+intent preserves its selected source, requires current scope, grant, policy
+and head, and grants neither semantic admission nor publication. The host
+must still authenticate graph/query identity against exact Org bytes and the
+WorkTree cut. Quint should exercise reload, revoke, close and two-writer
+publication once that adapter exists. Orgize owns parser and query correctness.

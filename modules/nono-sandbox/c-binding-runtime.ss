@@ -6,22 +6,24 @@
 ;;; Owner: nono-sandbox C binding runtime manifest projection lives here.
 ;;; Boundary: this module emits capability plans and backend handoff manifests.
 ;;; Runtime contract: Marlin or another C runtime owns dlopen/FFI execution.
-;;; Source contract: symbols mirror the package-owned bindings/nono-c/nono.h.
+;;; Source contract: symbols mirror the package-owned modules/nono-sandbox/nono-c/nono.h.
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
-;;; Native nono C binding runtime manifest projection.
+;;; Runtime nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/nono-sandbox/c-binding-build
-        :poo-flow/modules/nono-sandbox/c-binding-descriptor
-        (only-in :std/misc/process run-process))
+(import (only-in :clan/poo/object .def .o .+ .cc .call .get .ref .slot?)
+        (only-in :tao3k/yuanxu/ops/process-script ProcessScript.)
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/alist
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/profile
+        :tao3k/agentic-ai-lab/modules/agent-sandbox/bridge
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-build
+        :tao3k/agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
 
 (export +nono-c-binding-dry-run-receipt-schema+
         +nono-c-binding-smoke-test-receipt-schema+
         +nono-c-binding-live-test-receipt-schema+
+        NonoSmokeProbe. NonoLiveProbe.
         nono-c-binding-compile-probe-command
         nono-c-binding-runtime-manifest-validation-errors
         nono-c-binding-validate-runtime-manifest
@@ -61,22 +63,22 @@
      (cons (car rows) rows-rev))))
 
 ;;; Dry-run receipts are Scheme-side evidence only. They prove the nono C ABI
-;;; manifest can be projected, but they do not load a native library or apply a sandbox.
+;;; manifest can be projected, but they do not load a runtime library or apply a sandbox.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-dry-run-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.dry-run.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.dry-run.v1)
 
 ;;; Smoke receipts add an opt-in process probe over the dry-run receipt while
 ;;; keeping irreversible nono sandbox application outside Scheme.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-smoke-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.smoke-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.smoke-test.v1)
 
 ;;; Live receipts are PATH-gated. They run a harmless installed `nono` probe
 ;;; when available, and otherwise record a skip instead of failing package tests.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.live-test.v1)
 
 ;;; Mount validation is deliberately stricter than the neutral request schema:
 ;;; the C ABI needs a UTF-8 path and one of the generated access constants.
@@ -206,7 +208,7 @@
       (field 'runtime-manifest)
       (code 'not-alist)))))
 
-;;; This validator is the last Scheme-side boundary before a native runtime
+;;; This validator is the last Scheme-side boundary before a runtime
 ;;; receives the manifest, so it preserves the original manifest in failures
 ;;; for bridge diagnostics and policy tests.
 ;; : (-> RuntimeManifest AgentSandboxRuntimeManifest)
@@ -372,10 +374,10 @@
 
 ;;; The dry-run receipt is the nono C binding preflight surface: it validates
 ;;; the neutral runtime manifest, projects the ABI call plan, and reports the
-;;; native apply entrypoint without calling it.
+;;; runtime apply entrypoint without calling it.
 ;; nono-c-binding-dry-run
 ;;   : (-> RuntimeManifest [NonoCBindingDescriptor] Alist)
-;;   | contract: validates and projects only; native sandbox apply is never called
+;;   | contract: validates and projects only; runtime sandbox apply is never called
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -411,99 +413,72 @@
      (support-function
       (agent-sandbox-alist-ref apply-plan 'support #f)))))
 
-;;; Smoke tests run a host probe command through Gerbil's standard process
-;;; library after dry-run validation. The default probe is the direct C compile
-;;; argv; callers may pass a safer or platform-specific command.
-;; nono-c-binding-smoke-test
-;;   : (forall (c) (-> RuntimeManifest [c] Alist))
-;;   : (-> RuntimeManifest [Command] Alist)
-;;   | contract: runs a host probe command only; native sandbox apply is never called
-;;   | doc m%
-;;       # Examples
-;;
-;;       ```scheme
-;;       (nono-c-binding-smoke-test runtime-manifest (nono-c-binding-compile-probe-command))
-;;       ;; => receipt
-;;       ```
-;;     %
-(def (nono-c-binding-smoke-test runtime-manifest . maybe-command)
-  (let* ((dry-run (nono-c-binding-dry-run runtime-manifest))
-         (command (if (null? maybe-command)
-                    (nono-c-binding-compile-probe-command)
-                    (car maybe-command)))
-         (status 0)
-         (output
-          (run-process command
-                       stderr-redirection: #t
-                       check-status:
-                       (lambda (exit-status _settings)
-                         (set! status exit-status)))))
-    (list (cons 'schema +nono-c-binding-smoke-test-receipt-schema+)
-          (cons 'ok? (zero? status))
-          (cons 'status status)
-          (cons 'output output)
-          (cons 'command command)
-          (cons 'runtime-executed #f)
-          (cons 'would-apply? #f)
-          (cons 'dry-run dry-run))))
+;; Probe policy is inherited through slots. Only .run validates the manifest
+;; and starts the configured Script. Receipts keep Gerbil's raw wait status.
+(.def (NonoProbe. probe [])
+  manifest: #f
+  schema: #f
+  script: (.cc ProcessScript. check-status: #f)
+  .capture: (lambda (script) (.call script .run))
+  .outcome: (lambda (_result) (.o))
+  .run:
+  (lambda ()
+    (def dry-run-value (nono-c-binding-dry-run (.get probe manifest)))
+    (def script (.get probe script))
+    (def result (.call probe .capture script))
+    (def receipt
+      (.+ (.o schema: (.get probe schema) command: (.get script command)
+              dry-run: dry-run-value runtime-executed: #f would-apply?: #f)
+          (if result
+            (let (status-code (.get result wait-status))
+              (.o ok?: (zero? status-code) status: status-code output: (.get result output)))
+            (.o ok?: #t))))
+    (.+ receipt (.call probe .outcome result))))
 
-;;; Live probes are enabled by PATH discovery: if the command can be spawned,
-;;; its exit status determines success; if it cannot be spawned, the receipt is
-;;; an explicit skip. The default command is `nono --version`, not sandbox apply.
-;; nono-c-binding-live-test
-;;   : (forall (c) (-> RuntimeManifest [c] Alist))
-;;   : (-> RuntimeManifest [Command] Alist)
-;;   | contract: runs only an installed nono CLI probe; native sandbox apply is never called
-;;   | doc m%
-;;       # Examples
-;;
-;;       ```scheme
-;;       (nono-c-binding-live-test runtime-manifest)
-;;       ;; => live receipt, either enabled or skipped
-;;       ```
-;;     %
+;; Extend either probe with a manifest and refine script: with =>.+ to
+;; keep ProcessScript's execution policy and override only the desired slots.
+(.def (NonoSmokeProbe. @ NonoProbe.)
+  schema: +nono-c-binding-smoke-test-receipt-schema+
+  script: =>.+ (.o command: (nono-c-binding-compile-probe-command)))
+
+(.def (NonoLiveProbe. @ NonoProbe.)
+  schema: +nono-c-binding-live-test-receipt-schema+
+  script: =>.+ (.o command: '("nono" "--version"))
+  .capture:
+  (lambda (script)
+    (with-catch (lambda (_failure) #f)
+      (lambda () (.call script .run))))
+  .outcome:
+  (lambda (result)
+    (if result
+      (.o enabled?: #t skipped?: #f live-executed: #t)
+      (.o enabled?: #f skipped?: #t skip-reason: 'nono-not-found-on-path
+          live-executed: #f))))
+
+;; Keep the existing alist entry points at the compatibility boundary.
+(def (probe-alist prototype manifest commands fields)
+  (def probe
+    (.cc prototype manifest: manifest
+         script: (if (null? commands)
+                   (.get prototype script)
+                   (.cc (.get prototype script) command: (car commands)))))
+  (def receipt (.call probe .run))
+  (map (lambda (name) (cons name (.ref receipt name)))
+       (filter (lambda (name) (.slot? receipt name)) fields)))
+
+(def (nono-c-binding-smoke-test runtime-manifest . maybe-command)
+  (probe-alist NonoSmokeProbe. runtime-manifest maybe-command
+    '(schema ok? status output command runtime-executed would-apply? dry-run)))
+
 (def (nono-c-binding-live-test runtime-manifest . maybe-command)
-  (let* ((dry-run (nono-c-binding-dry-run runtime-manifest))
-         (command (if (null? maybe-command)
-                    '("nono" "--version")
-                    (car maybe-command)))
-         (status 0)
-         (output-or-failure
-          (with-catch
-           (lambda (failure) failure)
-           (lambda ()
-             (run-process command
-                          stderr-redirection: #t
-                          check-status:
-                          (lambda (exit-status _settings)
-                            (set! status exit-status)))))))
-    (if (string? output-or-failure)
-      (list (cons 'schema +nono-c-binding-live-test-receipt-schema+)
-            (cons 'ok? (zero? status))
-            (cons 'enabled? #t)
-            (cons 'skipped? #f)
-            (cons 'status status)
-            (cons 'output output-or-failure)
-            (cons 'command command)
-            (cons 'live-executed #t)
-            (cons 'runtime-executed #f)
-            (cons 'would-apply? #f)
-            (cons 'dry-run dry-run))
-      (list (cons 'schema +nono-c-binding-live-test-receipt-schema+)
-            (cons 'ok? #t)
-            (cons 'enabled? #f)
-            (cons 'skipped? #t)
-            (cons 'skip-reason 'nono-not-found-on-path)
-            (cons 'command command)
-            (cons 'live-executed #f)
-            (cons 'runtime-executed #f)
-            (cons 'would-apply? #f)
-            (cons 'dry-run dry-run)))))
+  (probe-alist NonoLiveProbe. runtime-manifest maybe-command
+    '(schema ok? enabled? skipped? skip-reason status output command
+      live-executed runtime-executed would-apply? dry-run)))
 
 ;;; Final projection packages the verified ABI contract, request policy, and
 ;;; query/apply/state entry points into one backend-owned manifest. Consumers
 ;;; can bind this data to C directly without reading Gerbil request internals
-;;; or invoking native code from the Scheme layer.
+;;; or invoking runtime code from the Scheme layer.
 ;; : (-> AgentSandboxRuntimeManifest [NonoCBindingDescriptor] NonoCBindingManifest)
 (def (nono-c-binding-runtime-manifest->manifest runtime-manifest
                                                 . maybe-descriptor)

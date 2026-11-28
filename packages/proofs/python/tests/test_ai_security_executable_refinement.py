@@ -9,7 +9,7 @@ from hashlib import sha256
 
 import pytest
 
-from poo_flow_proof.ai_security_executable_refinement import (
+from agentic_ai_lab_proof.ai_security_executable_refinement import (
     ACTION_EVIDENCE_ENVELOPE_SCHEMA_ID,
     AgentActionEvidenceEnvelope,
     EvidenceContentVerifier,
@@ -38,7 +38,7 @@ def envelope() -> AgentActionEvidenceEnvelope:
         actor_identity="agent:codex",
         tool_identity="tool:filesystem-patch",
         capability_id="capability:repo-write",
-        effect_domain="workspace:poo-flow",
+        effect_domain="workspace:agentic-ai-lab",
         evidence_root=digest(b"evidence"),
         trace_parent_root=digest(b"parent-trace"),
         requested_effects=("file:update",),
@@ -50,7 +50,7 @@ def policy() -> TransitionPolicy:
     return TransitionPolicy(
         granted_capabilities=("capability:repo-write",),
         expected_tool_identity="tool:filesystem-patch",
-        allowed_effect_domains=("workspace:poo-flow",),
+        allowed_effect_domains=("workspace:agentic-ai-lab",),
         expected_parent_action_id="action-1",
         expected_trace_parent_root=digest(b"parent-trace"),
     )
@@ -138,7 +138,7 @@ def verifier() -> EvidenceContentVerifier:
         },
         issuer_authenticator=lambda artifact, assertion: (
             artifact == b"artifact"
-            and assertion.issuer_identity == "issuer:poo-flow"
+            and assertion.issuer_identity == "issuer:agentic-ai-lab"
             and assertion.signature == "signature:valid"
         ),
         transparency_verifier=lambda artifact_digest, proof: (
@@ -160,7 +160,7 @@ def request() -> EvidenceVerificationRequest:
             "actionId": "action-2",
         },
         issuer_assertion=IssuerAssertion(
-            issuer_identity="issuer:poo-flow",
+            issuer_identity="issuer:agentic-ai-lab",
             key_identity="key:release",
             signature="signature:valid",
         ),

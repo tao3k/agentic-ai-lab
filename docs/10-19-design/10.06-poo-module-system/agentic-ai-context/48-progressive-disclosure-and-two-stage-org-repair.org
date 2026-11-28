@@ -1,0 +1,61 @@
+#+title: ASCENT Progressive Disclosure (L0–L3) and Two-Stage ORG AST Repair Governance
+#+date: [2026-11-23]
+#+language: en
+#+property: STATUS design-and-formal-models-verified-no-scheme-changes
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and coupling to Slices 41, 43 and 45
+
+[[file:../../org-elements-gql-context-design.org][Org Elements, ISO GQL, ASCENT Progressive Disclosure, and Two-Stage AST Repair]]
+introduces two high-leverage mechanisms for running bounded Flash models over
+rich ORG Context documents without token bloat:
+
+1. *ASCENT Progressive Disclosure (=L0..L3=) & Dynamic Facets*: evaluates
+   deductive rules at zero LLM token cost to project each ORG element at minimal
+   depth (=L0= skeleton, =L1= properties + checklists, =L2= =#+RESULTS:= with
+   =#+BEGIN_THINKING= folded, =L3= full raw span on active defeaters or explicit
+   drill-downs).
+2. *Two-Stage ORG AST Repair*: runs deterministic zero-token Stage-1 AST
+   auto-repair (~90% of malformed drawer/block/cookie edits) before emitting a
+   bounded diagnostic Stage-2 Flash repair request (~10%).
+
+Without formal governance coupling to [[file:41-epistemic-consolidation-governance.org][Slice 41]] (non-droppable defeater kernel)
+and [[file:45-org-sexpr-gql-candidate-exchange-search.org][Slice 45]] (structural Orgize AST admission), folding =L0..L2= could hide an
+active defeater inside a collapsed subtree, or an unparsed Stage-2 Flash patch
+could overwrite an advanced source cut. This slice closes both seams under
+=FormalVerificationTaxonomy=. No Scheme sources are modified.
+
+* Architecture: L0–L3 Disclosure Lattice + Stage-1 / Stage-2 Repair Fence
+
+| Mechanism | Semantic owner | Algebraic / concurrency invariant |
+|-----------+----------------+-----------------------------------|
+| 1. Disclosure Depth Lattice (=L0..L3=) | =ASCENT= Progressive Disclosure Deriver | $(\{L_0, L_1, L_2, L_3\}, \sqcup)$ forms a join-semilattice; =hasActiveDefeater = true= or explicit drill-down unconditionally forces $L_3$; folding =#+BEGIN_THINKING= at $L_2$ preserves every =activeDefeaterBlock= and =resultsBody= |
+| 2. Stage-1 Deterministic AST Repair (0 Tokens) | Deterministic AST Repairer | Idempotent fixpoint ($\mathrm{repair}(\mathrm{repair}(x)) = \mathrm{repair}(x)$) preserving every element =:ID:= and =hasActiveDefeater= flag |
+| 3. Stage-2 Diagnostic Flash Repair (~10%) | Bounded Stage-2 Proposer + Orgize Re-Parse Fence | Carries zero direct write authority; any Stage-2 patch must pass Orgize re-parse at the exact live =sourceCut= before publication |
+
+#+begin_src typst
+$ upright("deriveDepth")(d_(upright("req")), upright("drill"), upright("defeater")) =
+  cases(L_3 & "if" upright("defeater") or upright("drill"), d_(upright("req")) & "otherwise"),
+  quad upright("stageOneRepair")(upright("stageOneRepair")(x)) = upright("stageOneRepair")(x) $
+#+end_src
+
+* Orthogonal SysML v2 Verification Allocation and Local Verification
+
+| Artifact | Disjoint formal ownership under =FormalVerificationTaxonomy= |
+|----------+--------------------------------------------------------------|
+| [[file:48-progressive-disclosure-and-two-stage-org-repair.sysml][48-progressive-disclosure-and-two-stage-org-repair.sysml]] | Disclosure & Two-Stage Repair ports + disjoint allocation to =leanEngine= XOR =quintEngine= (=ProgressiveDisclosureDispatchAndBoundaryContract=) |
+| [[file:48-progressive-disclosure-and-two-stage-org-repair.lean][48-progressive-disclosure-and-two-stage-org-repair.lean]] | Unbounded join-semilattice, L2 folding preservation & Stage-1 repair idempotence ONLY: =maxDepth_idem=, =maxDepth_comm=, =maxDepth_assoc=, =activeDefeater_forces_full_L3_disclosure=, =foldThinking_preserves_defeaters_and_results=, =stageOneRepair_idem=, =stageOneRepair_preserves_ids_and_defeaters=, and =stageTwoRequest_carries_zero_write_authority= |
+| [[file:48-progressive-disclosure-and-two-stage-org-repair.qnt][48-progressive-disclosure-and-two-stage-org-repair.qnt]] | Exhaustive TLC + =nondet= concurrency ONLY: asynchronous =arriveActiveDefeater= overriding folded =L0..L2= views, and =advanceSourceCut= racing against =escalateToStageTwoFlash= / =reParseStageTwoCandidate= / =publishStageTwoPatchFence= |
+| [[file:../../../../dev/d2/governance-illustrations.ts][governance-illustrations.ts]] + [[file:../../../../dev/d2/governance-figures.sysml][governance-figures.sysml]] | OpenSysML + =@deterministic-engineering/render= illustrated view [[file:figures/48-progressive-disclosure.png][48-progressive-disclosure.png]] (=output/48-progressive-disclosure.{svg,png,webp,html,receipt.json}=) |
+
+#+CAPTION: Slice 48 — ASCENT L0–L3 Progressive Disclosure Lattice & Two-Stage ORG AST Repair
+[[file:figures/48-progressive-disclosure.png]]
+
+Reproduce via the unified chain gate:
+
+#+begin_src sh
+just check-context-governance-chain
+#+end_src

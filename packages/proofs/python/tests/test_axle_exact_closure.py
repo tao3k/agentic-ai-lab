@@ -11,15 +11,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from poo_flow_proof import axle_exact_closure
-from poo_flow_proof.axle_exact_closure import (
+from agentic_ai_lab_proof import axle_exact_closure
+from agentic_ai_lab_proof.axle_exact_closure import (
     AxleExactClosureError,
     ExactAxleClosure,
     SourceDeclaration,
     build_exact_axle_closure,
     source_declaration_closure,
 )
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanDeclarationClosure,
     LeanOwnerSource,
 )
@@ -192,11 +192,11 @@ def test_non_theorem_root_uses_exact_roundtrip_without_theorem_pipeline(
     import asyncio
     from types import SimpleNamespace
 
-    from poo_flow_proof.axle_exact_closure import (
+    from agentic_ai_lab_proof.axle_exact_closure import (
         _digest,
         build_exact_axle_closure,
     )
-    from poo_flow_proof.lean_declaration_closure import (
+    from agentic_ai_lab_proof.lean_declaration_closure import (
         LeanDeclaration,
         LeanDeclarationClosure,
         LeanOwnerSource,
@@ -339,7 +339,7 @@ end Example
     assert fake_client.theorem_calls == 0
     assert fake_client.verify_calls == 0
     assert exact.theorem2sorry == {
-        "schema_id": "poo-flow.axle-root-theorem-obligation.v1",
+        "schema_id": "agentic-ai-lab.axle-root-theorem-obligation.v1",
         "status": "not-applicable",
         "root_declarations": (),
         "root_declaration_kinds": {"Example.Evidence": "structure"},
@@ -384,7 +384,7 @@ def test_exact_closure_classifies_roots_before_theorem_phases_and_emits_receipts
             "owner_modules": ["Example.Root"],
             "root_declarations": ["Example.safe"],
             "root_module": "Example.Root",
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         }
     )
     source_path = tmp_path / "Example" / "Root.lean"
@@ -547,7 +547,7 @@ def test_owner_source_envelope_uses_declared_base_imports(
             "owner_modules": ["Example.Root"],
             "root_declarations": ["Example.safe"],
             "root_module": "Example.Root",
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         }
     )
     source = LeanOwnerSource(
@@ -624,7 +624,7 @@ def test_owner_source_envelope_preserves_typed_proof_base_roles(
             "owner_modules": ["Example.Root"],
             "root_declarations": ["Example.safe"],
             "root_module": "Example.Root",
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         }
     )
     source = LeanOwnerSource(

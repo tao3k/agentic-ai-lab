@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID: example-reference
+:CONTRACT_ID: context.reference.v1
+:CONTRACT_REVISION: 1
+:END:
+#+title: Example Reference
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.reference.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "reference.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID") (property value "context.reference.v1"))
+  (expect exactly 1))
+#+end_src
+
+* Reference evidence
+:PROPERTIES:
+:ID: reference-record
+:CUSTOM_ID: reference-evidence
+:END:
+
+Placeholder source note.

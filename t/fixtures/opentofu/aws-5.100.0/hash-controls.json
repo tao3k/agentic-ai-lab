@@ -1,0 +1,45 @@
+{
+  "provider": "registry.terraform.io/hashicorp/aws",
+  "version": "5.100.0",
+  "platform": "darwin_arm64",
+  "binary_sha256": "0d25f8f99c202cdf4d9566d3bc5165d518e7ea88de87a3ec4e77b2cf367daac4",
+  "engine": "OpenTofu 1.12.6",
+  "mode": "plan-refresh-false-no-apply",
+  "membership": {
+    "input": [
+      "utIPHxYsX5E8zVX",
+      "u3czpzvJxk89nnq",
+      "alice",
+      "alice"
+    ],
+    "normalized": [
+      "alice",
+      "utIPHxYsX5E8zVX"
+    ]
+  },
+  "collision": {
+    "strings": [
+      "utIPHxYsX5E8zVX",
+      "u3czpzvJxk89nnq"
+    ],
+    "hash": 1403338338
+  },
+  "rule": {
+    "cidr_blocks": [
+      "10.1.0.0/16",
+      "10.0.0.0/16"
+    ],
+    "description": "",
+    "from_port": 443,
+    "ipv6_cidr_blocks": [],
+    "prefix_list_ids": [],
+    "protocol": "tcp",
+    "security_groups": [
+      "sg-a"
+    ],
+    "self": false,
+    "to_port": 443
+  },
+  "rule_hash_input": "443-443-tcp-false-10.0.0.0/16-10.1.0.0/16-sg-a-",
+  "rule_hash": 4241109959
+}

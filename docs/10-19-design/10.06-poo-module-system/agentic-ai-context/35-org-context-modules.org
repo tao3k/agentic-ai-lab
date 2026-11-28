@@ -1,0 +1,569 @@
+#+title: Org Context as Versioned Composable Modules
+#+date: [2026-11-16]
+#+language: en
+#+property: STATUS bounded-task-publication-with-scheme-correspondence
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and semantic owners
+
+This is a proposed refinement of [[file:01-system-boundary.org][Context responsibilities]],
+[[file:15-unified-query-provider.org][the Org Query boundary]], and Core's
+[[file:../../../../core/module-system/design/43-session-memory-recovery/12-git-project-context-model.org][Git Project model]]. Its [[file:35-org-context-modules.sysml][SysML v2 model]] makes the
+roles and selected relationships explicit. Task publication for one Worktree's
+selected Org modules runs through the existing POO interfaces. External
+module resolution and source capture supply the effective selection.
+Orgize owns parsing and Elements, Query owns its supported query semantics,
+Context coordinates projections, and the Host/runtime owns effect admission.
+
+* A leaf is relative to a traversal
+
+A module revision exposes a namespace of declarations. A traversal may stop at
+an address and return a module as its leaf; another traversal can use that same
+module revision as its root and expand it further. A leaf is therefore neither
+necessarily a scalar nor necessarily rendered text. Discovery of declarations
+and materialization of a value are separate operations; a declaration listing
+must not silently run the leaf's business computation.
+
+| Role | Composition and identity | Exposes or binds |
+|------+--------------------------+-----------------|
+| Project | Logical root; may compose multiple Repo modules | Applicable shared declarations and explicit imports |
+| Repo | Versioned module within a Project, not the Project identity | Project conventions, Org entry points, available interfaces |
+| Worktree | Situated derived revision of selected Project/Repo cuts | Git observation, local Org, Task inputs, overrides and imports |
+| Org | Addressable content module associated with a source revision | Elements, properties and links; optional declared Contract or Query interface |
+| Derived Org | Worktree-owned source and separately identified module | Qualified origin anchor and origin source revision; may itself be extended |
+
+Containment, derivation and imported interfaces are independent: an Org belongs
+to a Worktree view without necessarily deriving from another Org. A derived Org
+can reference an anchor in an external source without moving that source or
+inheriting its permissions. Anchor identity includes source identity, source
+revision and the registered anchor; a local ID or pathname alone does not
+identify historical content. Missing or ambiguous anchors must remain explicit,
+not silently retargeted. An Org link is not executable code or an import by
+itself.
+
+A Worktree cut retains the selected parent revision, repository and Worktree
+association, and an actual bounded observation of HEAD, index, working bytes
+and selected untracked inputs as applicable. A commit alone does not represent a
+dirty Worktree. Capture must retain bytes or report their unavailability and
+must check races at the producer boundary. None of these identities authenticates
+authority or proves the source's factual claims.
+
+* Three relationships and two kinds of order
+
+- =derives(base revision, successor revision)= records versioned ancestry and
+  declared composition/override. Persistent derivation does not mutate the base
+  or sibling, though a computed value depending on final self can differ.
+- =imports(importer, provider revision, interface/contract)= makes an explicit
+  interface selectable under visibility rules. Import is neither a call nor a
+  grant. Imported declarations may themselves create dependencies.
+- =invokes(binding, implementation revision, request, source cut, authority)=
+  records the actual dispatch decision and its inputs. The Host rechecks current
+  authority, source and applicable Contract at the effect boundary; an old
+  projection or imported interface is not standing authorization.
+
+Declared ordered prototype parents and overrides determine effective POO
+features through the actual supported C3/C4 mechanism. Do not assume C4 is
+always applicable or that import, Git, evidence or Org link edges participate in
+prototype linearization. Ambiguous or inconsistent precedence, unresolved
+interfaces, cycles and violated hard Contracts must be reported or refused by
+the applicable owner; retain the unresolved proposal for inspection. Contract
+obligations cannot be overridden away merely by precedence. Final prompt order
+is a separate, explicit serialization policy, not inheritance order.
+
+* Demand, selection and evaluation
+
+For a particular Task/consumer and selected source cut:
+
+1. Inspect accessible declarations and choose requested interfaces, Org anchors,
+   queries and explicitly needed dependencies. Record missing coverage and
+   unresolved alternatives; do not treat unvisited content as absent evidence.
+2. Resolve the transitive dependency closure and applicable revisions, ordered
+   prototype parents, overrides, source/Contract/query cuts and visibility.
+   Resolve the effective definitions or return a conflict. Changing a Contract,
+   provider selection or final-self-dependent input can affect a demand even
+   when the newly added module is never directly read.
+3. Evaluate only what is needed within that closure using the existing Module
+   mechanisms and the supported Query provider. Bind all actual reads and
+   results to their source, revision, query and Contract. The provider's present
+   supported Org/GQL subset is described in 15; arbitrary Org and full GQL are
+   not implied by this design.
+4. Serialize the admitted result for the consuming model under an explicit,
+   versioned ordering and rendering policy. Record the effective inputs,
+   omissions, uncertainty and result lineage. An absent Task read of a new
+   independent Org need not change this projection, provided its addition also
+   changes none of the selected closure, effective definitions or policy.
+
+For example, a Worktree may import Router and Search. A Router result proposes
+qualified Org anchors, symbols and evidence scope; Search is invoked against
+that Worktree's bound source cut through its declared interface. A local Router
+replacement can leave the Search interface unchanged. It may nevertheless
+change the Search request and resulting projection. Dispatch requires separate
+current authorization; a route is neither evidence authentication nor authority
+to execute a tool. Other Worktrees keep their own revisions and selections.
+
+* Reuse and invalidation
+
+A retained evaluation is reusable only if its complete recorded dependencies,
+including effective definition, final-self-sensitive inputs, source and Contract
+cuts, query, visibility and current applicability, remain valid. Dependency
+tracking must include reads made by computations and selection/override inputs;
+an incomplete read set cannot justify minimal invalidation. Coarse invalidation
+is safe when exact dependency capture is unavailable. Concurrent source or
+policy changes require current admission checks and publication fencing as
+specified by existing lifecycle designs.
+
+A model KV cache is a downstream runtime optimization. Its reusable length is
+at most the longest equal token prefix of the actual authorized rendered inputs,
+subject also to model, tokenizer, cache format, runtime and isolation/authority
+compatibility. Equal module identity, equal text, or shared Repo ancestry alone
+is insufficient. Conversely, a change after an identical prefix need not erase
+that prefix. Any cross-consumer sharing must satisfy the runtime's disclosure and
+isolation policy independently of token equality. This design asserts no cache
+hit rate or speedup and does not prescribe a provider's cache API.
+
+* Publishing one Task projection
+
+For a GC investigation, Task =investigate-owner= in Worktree =gc-owner-fix=
+asks its Router to select Org evidence for the current hypothesis. The Router
+selects a qualified =findings.org#owner-evidence= anchor and returns a proposal
+for a bounded Org property query. Org Elements supply the searchable structure
+and source-qualified identities. GQL defines which Elements to select and which
+fields to project. In this case the Org Query Provider executes =MATCH= on
+=OrgElement= with a =propertyId= equality predicate. The Search Engine
+coordinates the evaluation and binds the observation to its request and source.
+The finding remains owned by =gc-owner-fix=. Its selected Org Element may declare
+an original =design.org= anchor at a pinned source revision. The original
+participates as a selected dependency with its own read grant and GQL receipt.
+An ordinary Org link remains traversable through its own authorized read.
+
+** Org Elements are the Context search model
+
+The Orgize ElementGraph supplies searchable objects and their structural
+relations. A headline provides a scope, its property drawer supplies
+structured fields, and its descendants can include paragraphs, tables, links,
+and source blocks. GQL selects and projects an authorized portion of this
+structure. Search coordinates the evaluation and its receipts. The Worktree
+Module selection determines which source cuts can contribute Elements.
+
+An anchor identifies an entry into the graph. For the GC investigation, a
+structural query can start at =findings.org#owner-evidence=, select a child
+table and an evidence link, and return the corresponding Elements with their
+ancestry and source ranges. A link is evidence that the document contains a
+reference. A scoped cross-file link can resolve to a separately authorized
+source cut and qualified target anchor. Source-block content has no execution
+semantics in Context Search.
+
+An Org Module opts into a bounded descendant window by declaring
+=descendants: (.o max-depth: 8 result-bound: 16)=. The display grant admission
+digest includes the same window via =context-task-read-scope=. Both bounds
+accept integers from 1 through 32. Depth counts Orgize graph edges below the
+anchor. The window selects paragraphs, tables and links in that source cut.
+Depth controls which Elements have rows. A row's byte range covers its full
+Element, including inline contents. The result bound is checked before a
+receipt is issued.
+
+[[file:../../../../modules/ai-agentic-context/org-contract/descendants.ss][Org
+descendant selection]] uses the Orgize parent relation. The
+[[file:../../../../modules/ai-agentic-context/query-provider.ss][GQL Provider]]
+reconstructs the window and requires its exact ElementSpace, selected
+identities and projection. Each row carries the Element kind, source, byte
+range, and the corresponding UTF-8 text. The receipt binds the root, parser,
+source revision, window bounds and root-first ancestor paths. A path includes
+the root and immediate parent, with a half-open byte range at each step. The
+ordinary Query journal replays the receipt from the original source bytes.
+
+| Case | Required observation |
+|------+----------------------|
+| Select two same-titled sections | Only descendants of the source-qualified root anchor enter the result. |
+| Select a table and an evidence link | Return source-backed Elements with their parent lineage and ranges. Keep link resolution explicit. |
+| Encounter markup inside a source block in this window | The table, paragraph and link projection uses the Orgize structural kinds. Text inside a source block remains part of that block. |
+| Change a selected source revision or withdraw its read grant | Withdraw the result from current Context. Retain its historical receipt. |
+| Exceed the declared result bound | Refuse the query before issuing a complete receipt. |
+
+The descendant window scopes the existing single-node GQL selector. General
+GQL path queries and automatic link traversal are outside this window.
+An Org Module with the original anchor selection still issues its one-row
+=propertyId= query.
+
+[[file:35-org-context-descendants.qnt][Org Context Descendants in Quint]]
+matches the focused Scheme cases in =org-descendants-test.ss=. It abstracts
+Orgize ancestry and byte intervals as finite Elements. Four controls include
+a same-title sibling, truncate an over-bound result, admit a stale source
+revision, or admit a withdrawn grant. The Scheme cases execute real Orgize,
+GQL, Query replay and Task publication, including changed UTF-8 offsets.
+
+#+begin_src sh
+quint test 35-org-context-descendants.qnt --main OrgContextDescendants
+quint verify 35-org-context-descendants.qnt --main OrgContextDescendants \
+  --max-steps 8 --invariants completeAndScoped admittedWhileCurrent
+#+end_src
+
+From the Lab root, run
+=just test-file t/yanxu/modules/ai-agentic-context/org-descendants-test.ss=.
+The four Scheme cases and Lab layout gate passed. The eight Quint runs
+passed and both invariants held through eight symbolic transitions.
+
+** Cross-file link resolution
+
+Link discovery runs one Orgize expression over each reached anchor's
+admitted =descendants= window.
+
+#+begin_src scheme
+(org-elements link (descendant-of scope))
+#+end_src
+
+Orgize owns the Link and Attachment shapes, relation matching, and link
+fields. For a relative =file:= link with a custom ID selector, Lab uses the
+file field as a source key relative to the originating document's directory.
+For example, =file:design.org::#design-evidence= in =A/worktree.org= looks up
+=A/design.org= in the Worktree's existing =org= namespace. Its Org Module
+declares =source: "A/design.org"=, =anchor: "design-record"=,
+=source-generation: 2=, and its own display grant. The target anchor's unique
+=CUSTOM_ID= must match =design-evidence=. The source provider supplies the
+bytes after the target grant check. The lookup key is used only in the
+Worktree namespace.
+
+The module's
+[[file:../../../../modules/ai-agentic-context/org-contract/templates/worktree/worktree.org][worktree.org]]
+example starts with =CONTRACT_ID: context.gitops.worktree.worktrunk.v1= and
+its =GITOPS_= properties. The file-local Scheme Contract uses the same Orgize
+query syntax. The Scheme tests read the three raw Org files and
+verify the Contract selected for each path before exercising Task receipts.
+
+The effective Context Worktree Feature supplies the Contract family and
+revision. Enabling the Context WorkTrunk Feature extends that family with
+=worktrunk=. Scheme checks the resulting ID and revision against the
+selected =worktree.org= root drawer during Task resolution. The native Orgize
+Contract block owns the document's structure and evidence assertions.
+
+The same expression runs at each admitted target with a descendant window.
+An unauthorized or stale target blocks traversal before its own query.
+An anchor repeated on the active path rejects the selection. Paths can
+converge on one admitted anchor. Attachments and links outside the
+registered source namespace remain reference evidence. Unreachable Modules
+stay lazy, and each reached Module keeps its declared lineage and Query
+scope. A Task can admit up to 32 anchors and 32 link Elements.
+
+Each reached anchor has one Query receipt from the existing GQL Provider.
+The Search batch binds =org-link-roots= and =org-links=. Each hop retains
+the link Element identity and UTF-8 byte range, plus the source, generation,
+anchor, source digest and Query reference at each end. Current and
+historical Task receipts expose the roots and all hops. Consumers join a
+hop's target to the next hop's source by its qualified anchor and Query
+reference. Shared hops are recorded once.
+
+Publication and use recheck every captured cut and grant. Replacing an
+intermediate source or withdrawing its grant makes the entire batch
+ineligible for current use. A late receipt retains its original chain in
+history. A new target generation requires an explicit new pin. Equal
+anchor text or version alone cannot substitute another target file.
+
+[[file:35-org-context-links.qnt][Org Context Links in Quint]] covers accepted
+links, a changed target cut, independent target authorization, a substituted
+source with the same anchor, and a link outside its source window. Removing
+each guard produces a counterexample. The =OrgContextLinkChains= module
+adds a three-anchor traversal, converging paths, cycle refusal,
+intermediate repinning and independent authorization for both reached
+anchors. Its counterexamples remove the cycle, intermediate version or
+intermediate authority check.
+
+#+begin_src sh
+quint test 35-org-context-links.qnt --main OrgContextLinks
+quint verify 35-org-context-links.qnt --main OrgContextLinks \
+  --max-steps 8 --invariants linkBindingsAreSound acceptedWithCurrentTarget
+quint test 35-org-context-links.qnt --main OrgContextLinkChains
+quint verify 35-org-context-links.qnt --main OrgContextLinkChains \
+  --max-steps 8 --invariants linkChainsAreAcyclic acceptedWithCurrentChain
+#+end_src
+
+The Scheme cases in =org-descendants-test.ss= compare both receipt ends,
+reissue with an explicit target pin, revoke the target grant, reject an
+alias with the same local anchor and version, and leave a link under a
+same-titled sibling outside the selected window. The four multi-hop cases share names
+with the Quint trajectories. They also check that the two hops agree on
+the intermediate Query reference and source digest, and leave an unrelated
+Module's failing export unevaluated.
+
+** Task and receipt records
+
+Four records bind the decision to its inputs.
+
+| Record | Captures |
+|--------+----------|
+| Task demand | Task identity, target Worktree, requested interfaces and read scope |
+| Resolved demand | Chosen Project/Repo parent and Worktree source cuts, effective Router and Search Contract, ordered Org modules with qualified anchors, per-source Query revisions and read grants, and any pinned origins |
+| Projection receipt | Unique request, captured resolution, and ordered per-file GQL receipts with source, result and original-anchor lineage |
+| Task publication | Admitted receipt and result, with current eligibility checked independently of its retained identity |
+
+The selection dependencies include the declarations consulted to resolve a
+winner or detect ambiguity. For a direct import this can be a named binding.
+For a selector that enumerates matching providers it includes the consulted
+candidate set and the applicable selection policy. Actual read dependencies
+include source revisions, queries and the values consumed by computations.
+Capture selection inputs when resolving the demand. Bind them together with the
+actual reads in the projection receipt. With incomplete dependency evidence,
+re-resolve and re-evaluate the affected scope conservatively.
+
+1. Resolve the demand under its Worktree and read scope. Missing or ambiguous
+   required anchors, bindings or definitions leave the demand unresolved.
+   The read boundary checks authority before accessing protected inputs.
+2. Issue a unique evaluation request against the resolved cuts. Validate
+   actual source, query, Contract and evidence at the existing provider boundary.
+3. Under the publication owner's compare-and-publish fence, match the receipt to
+   the pending request and compare the captured dependency and grant revisions
+   to the live resolution. A foreign or spent receipt can be retained in the
+   authorized audit scope while preserving pending work and the last publication.
+   A matching result from an obsolete evaluation ends that evaluation as
+   historical evidence. Validate current eligibility again at final use.
+
+| Change | Current-use decision |
+|--------+----------------------|
+| Declare an independently addressed Org module outside both the selection and read dependencies | Preserve the existing projection if the recorded source cut and effective definitions also stay the same |
+| Edit the selected file or change the captured Worktree source cut | Require a new evaluation, even when the same Org ID or result rows reappear |
+| Change the original file's generation while a derived module pins it | Withdraw current use and retain old proof. Require an explicit new original pin and then a fresh evaluation. |
+| Retire the loaded Worktree Module generation or revise a selected declaration source | Withdraw current use. The next Task start re-resolves through its GitOps dependency. Once a current selection is available it can issue while a superseded receipt is still in flight. |
+| Return evidence for only some selected files or substitute a different original | Treat the delivery as unbound. The complete matching receipt can still settle the request. |
+| Replace the effective Router, change the selected Search Contract, or make resolution ambiguous | Withdraw affected projections. Resolve again before a fresh evaluation. |
+| Return a sibling Worktree result with the same local ID, or redeliver an earlier request | Preserve the current projection and pending evaluation. Retain the delivery under audit policy. |
+| Revoke and later restore the read grant | Withdraw current use on revocation. Restoration issues a fresh epoch and old evaluations stay historical. |
+
+An edit that adds a physical Org file can change the producer's recorded
+Worktree cut. The independent-declaration case applies only when the recorded
+inputs stay equal. With an existing whole-source digest, even an edit outside
+the returned rows changes that source dependency. Fine-grained reuse requires
+a verified narrower dependency from the source owner. Historical replay stays
+bound to its recorded source and remains subject to the applicable history-read
+policy.
+
+** Scheme correspondence
+
+[[file:../../../../modules/ai-agentic-context/task-publication.ss][Task Publication]]
+exposes a serialized owner for one Task within a Worktree. Worktree, Work and
+WorkTrunk are GitOps Feature roles. The
+[[file:../../../../modules/gitops/features/worktree/interface.ss][GitOps Worktree Feature]]
+owns the Worktree prototype and the dependency on its current admitted Yuanxu
+selection. The
+[[file:../../../../modules/ai-agentic-context/features/worktree/interface.ss][Context Worktree Feature]]
+requires =gitops/worktree= and inherits the GitOps Worktree prototype. It adds
+the =tasks= and =org= declarations and publishes the existing Task operations.
+The Module selection enables =(gitops +worktree)= and
+=(ai-agentic-context +worktree)= for this path. The
+[[file:../../../../modules/gitops/features/work/interface.ss][GitOps Work]]
+and [[file:../../../../modules/gitops/features/worktrunk/interface.ss][WorkTrunk]]
+Features own their revisioned binding Contracts and use the same
+[[file:../../../../modules/gitops/dependency.ss][current Module dependency]]
+shape. Context's =+work= and =+worktrunk= Features inherit those prototypes
+and add Org roots.
+
+The Worktree declaration supplies the inherited =project=, =worktree= and
+=source-cut= and the Context task and Org namespaces.
+
+#+begin_src scheme
+(.o (:: @ (.get Context worktree-context))
+    project: "gambit" worktree: "A" source-cut: "cut-1"
+    tasks: (.o investigate-owner:
+                 (.o org: '(findings)
+                     router-revision: "router-1" search-contract-revision: "search-1"))
+    org: (.o findings: '(org findings)
+              design: '(org design)))
+#+end_src
+
+The caller obtains the dependency from the selected GitOps scope and uses the
+inherited Context Feature through the public Task entry.
+
+#+begin_src scheme
+(def dependency
+  ((.get GitOps worktree-dependency) current-module-selection '(worktrees gc-owner-fix)))
+((.get Context bind-worktree!) host scope dependency)
+((.get Context start-task!) host)
+#+end_src
+
+Task declarations may add a =work= dependency, a =worktrunk= dependency, or
+both. Their constructors come from the selected GitOps scope as
+=work-dependency= and =worktrunk-dependency=. For each used role enable that
+Feature in GitOps and in Context. The corresponding Context prototype supplies
+the =org= slot for the effective binding.
+
+#+begin_src scheme
+(.o (:: @ (.get Context work-context))
+    project: "gambit" work: "diagnose-gc" revision: "w2"
+    org: '(design findings))
+
+(.o (:: @ (.get Context worktrunk-context))
+    project: "gambit" worktrunk: "gc-review" revision: "t1"
+    org: '(design))
+#+end_src
+
+Task starts with its own Org roots and appends the selected Work and WorkTrunk
+roots. It resolves each name through the same Worktree Org namespace and
+collapses repeated names while retaining their first position. Each selected
+dependency's role, identity and revision enter the Search source cut and are
+available as =gitops-dependencies= in current and historical results. GitOps
+supplies a new admitted Module selection when a dependency's declared
+revision changes. The Task entry re-resolves when a selected dependency is
+replaced. A change in another Task's dependency leaves this Task's projection
+and namespace reads intact.
+
+The individual Org Modules export =worktree=, =source=, =anchor=,
+=query-revision= and =grant=. The Task names =findings=. The Org Element with
+that module's anchor can declare its original in its own property drawer.
+
+#+begin_example
+:PROPERTIES:
+:ID: owner-evidence
+:CONTEXT_ORIGIN_MODULE: design
+:CONTEXT_ORIGIN_SOURCE: A/design.org
+:CONTEXT_ORIGIN_ID: owner-evidence
+:CONTEXT_ORIGIN_GENERATION: 1
+:END:
+#+end_example
+
+[[file:../../../../modules/ai-agentic-context/worktree-selection.ss][Worktree selection]]
+demands the Task's roots through the existing Yuanxu/POO namespace and follows
+each selected Element's original through that Worktree's named Org Modules.
+Both the source identity and local anchor must match the Element's declaration.
+The original's generation must match the pin. Each dependency is separately
+authorized before its source is read. An unselected Org Module does not
+materialize. Explicit roots keep their declared order, and original dependencies
+are appended in discovery order. Cycles, missing names and incomplete origin
+properties refuse selection.
+
+The admitted configuration records the loaded Module selection and source
+digests used to resolve the declarations. Issuance, publication and final use
+recheck the current GitOps dependency, Yuanxu's =admit-current= and those
+digests. For a stale selection, =context-task-start!= obtains the current
+loader from GitOps and repeats resolution against the effective Context
+Feature. It reuses declarations whose source and anchor digest still match.
+An updated original remains unavailable until the derived Org Element declares
+the new pin. When a new selection can issue, the Task replaces an obsolete
+pending evaluation. A matching active evaluation still occupies the active
+slot. For a superseded evaluation with an issued Query ticket, the owner
+retains the Query batch reference, request and Search observation admission
+state, and captured GitOps revisions. The retained binding omits the source
+bytes and live Module closures. Its lifetime ends on a matching delivery or
+explicit cancellation. Each retained binding already consumes at least one
+entry in the bounded Query catalog.
+
+A late return is admitted by the original request and its own Query batch.
+This adds one historical receipt and preserves the newer pending request and
+published value. A malformed return leaves the original binding eligible for
+a legitimate late delivery. Duplicate and canceled returns are unbound.
+
+| SysML responsibility | Scheme operation and authority |
+|----------------------+--------------------------------|
+| =resolveWorktreeModules= | =context-task-select-worktree!= takes the already loaded Yuanxu scope. Its resolver reads the requested Task and Org leaves through ordinary slots, obtains origin properties from Org Elements and builds the selection inside Context. |
+| =refreshWorktreeAtTaskStart= | =context-task-start!= refreshes a stale plan through the GitOps dependency and issues only after the inherited Context plan is current. Replacing the plan fences earlier tickets and leaves unrelated Module leaves cold. |
+| =checkSelectedGitOpsDependencies= | Resolve the Task's optional Work and WorkTrunk through GitOps Record Contracts. Recheck their admitted Module selections during capture. A late receipt relative to either replaced selection remains historical. |
+| =supersedeStaleEvaluation= | =context-task-start!= compares the active capture against the new resolved capture. For a superseded evaluation with an issued Query ticket, =context-task-publish!= uses the original binding and settles it as historical. |
+| =captureEffectiveDemand= | =context-task-start!= checks all registered display grants and policies before obtaining source bytes. Each grant's admission digest binds the exact Scope, source identity and anchor through =context-task-read-scope=. The Task compares all authority stamps again after the last observation callback. |
+| =bindDerivedOrigin= | The source catalog must have the exact original generation. =context-task-query!= evaluates a GQL query in each file's Org ElementSpace and requires the selected anchor in that receipt. The derived member binds the original member's actual Query digest. |
+| =admitCompleteOrgProjection= | =context-task-query!= issues a batch only after every anchor resolves. The Search observation carries the batch digest, which binds each qualified result and original link in order. The caller reads detached results through =org-queries=. The single-file =query= view remains available for one result. |
+| =compareBeforePublish= | =context-task-publish!= validates ownership of the batch receipt and its Search observation, then rechecks the selection epoch, every selected cut and grant, and every Query's current support. Refused partial or substituted deliveries leave pending and current work available. |
+| =preserveIndependentProjection= | Reinstalling the same effective selection leaves its epoch unchanged. An independent file registration leaves the selected cuts unchanged. The coordinator supplies effective resolution changes from Module evaluation. |
+| =withdrawCurrentUse= | =context-task-current= applies the same fence before returning Search evidence, Query receipts, origin references and the selected rows. The Query catalog retains the original observations and source bytes. =context-task-history= retains per-file receipt references and the captured original pin when a bound result becomes historical. |
+
+The test projection reads the issued request ordinal, selected source
+generation, publication outcome, returned Search payload and Query lineage, and
+whether pending work still accepts its legitimate receipt. A live public
+Scheme call supplies each observation. The paired suite exercises the same
+named histories as Quint. It also tests the three counterexample inputs
+from the single-file case against the guarded implementation. The multi-file
+traces cover an unrelated file, a missing anchor, a partial delivery, original
+substitution, changes to each selected file, and an original read grant
+revocation. The three additional controls break batch membership, original
+identity or current original generation.
+
+| Quint control | Adversarial Scheme delivery and required result |
+|---------------+--------------------------------------------------|
+| =ignoreContractCounterexampleTest= | Replace the effective Search Contract during a pending evaluation, then restore the original. Current use stays withdrawn and the old pending result settles as historical. |
+| =ignoreWorktreeCounterexampleTest= | Deliver a sibling Worktree result with the same local anchor and request ordinal. Substitute the sibling cut or Query digest in otherwise matching evidence. These deliveries remain unbound and the legitimate receipt can still publish. |
+| =ignoreGrantEpochCounterexampleTest= | Reissue the same grant at a higher generation while keeping source and selection unchanged. The old publication becomes ineligible and the old pending receipt is historical. =revokedThenRestoredTest= also covers terminal revocation and restoration with a new grant identity. |
+| =acceptPartialOrgCounterexampleTest= | =multiOrgPartialReceiptTest= delivers a real single-file digest as the Search result of a two-file evaluation. This is unbound until both receipts are represented. |
+| =ignoreOriginSourceCounterexampleTest= | =multiOrgOriginIdentityTest= substitutes a real batch whose original lies in a different file with the same local Org ID. The original pending evaluation still accepts its own receipt. |
+| =ignoreOriginVersionCounterexampleTest= | =multiOrgOriginEditTest= registers identical original bytes at a new generation. The earlier receipt is historical and the old pin blocks a fresh evaluation until explicitly replaced. |
+| =ignoreModuleRevisionCounterexampleTest= | =worktreeModuleVersionTest= retires a real Yuanxu generated Module generation. Its old receipt is historical and a later delivery is unbound. The same Task entry issues from the freshly offered loader. |
+| =ignoreOrgDeclarationCounterexampleTest= | =worktreeOriginDeclarationEditTest= removes the origin declaration. Task start automatically resolves the revised declaration and demands just the selected finding. |
+| =ignoreOriginAliasCounterexampleTest= | =worktreeOriginAliasSubstitutionTest= changes the Module path for the original to an otherwise authorized file with the same version and local ID. The declared source identity refuses the substitution. |
+| =ignoreWorkVersionCounterexampleTest= | =workDependencyRefreshTest= replaces only Work while the Worktree and WorkTrunk are current. Late evidence remains historical, and the existing Task entry publishes a fresh batch with Work's new revision. |
+| =ignoreWorkTrunkVersionCounterexampleTest= | =worktrunkDependencyRefreshTest= repeats the sequence for WorkTrunk. Its old receipt cannot settle the new request. |
+| =publishLateCounterexampleTest= | =worktrunkLateReceiptAfterReplacementTest= delivers the earlier receipt after the fresh publication and checks that its captured version is preserved only in history. |
+| =clearNewOnLateCounterexampleTest= | =workLateReceiptDuringReplacementTest= delivers invalid and then valid late evidence with a newer request pending. The original binding and the newer request both retain their proper settlement path. |
+
+The bounded model exercises one Task in single-file and two-file configurations,
+with source, effective Router, Contract and grant revisions abstracted as
+stamps. Scheme admits up to 32 ordered Org anchors. Each GQL query uses the
+established single-source provider and Task composes its receipts afterward.
+The Scheme tests select both Feature declarations through the Yuanxu loader,
+verify their prototype relationship and drive generated Worktree Module
+publications through the Feature's existing Task entry. They count which scope
+values materialize before and after a change in the Task's inherited roots.
+The source owner supplies the observed
+Git cut. Physical source races, external evidence custody and durable Task audit
+retention remain obligations at their owning boundaries.
+
+** Executable design checks
+
+[[file:35-org-context-projection.qnt][Quint model]] checks =currentIsApplicable=
+and =publicationWasBound=. The added =supersededReceiptsStayHistorical=
+checks isolation of the newer request and publication. The 41 named runs retain
+all 34 previous cases and cover late delivery before and after the fresh
+publication, several unresolved earlier requests, cancellation, and an
+evaluation superseded before its Query ticket was issued. Two controls admit
+late evidence as current or clear a newer request on an old return.
+
+#+begin_src sh
+quint typecheck 35-org-context-projection.qnt
+quint test 35-org-context-projection.qnt --main OrgContextProjection
+quint verify 35-org-context-projection.qnt --main OrgContextProjection \
+  --init initWorktree --max-steps 8 --invariants currentIsApplicable publicationWasBound
+quint verify 35-org-context-projection.qnt --main OrgContextProjection \
+  --init initGitOpsDependencies --step stepGitOpsDependencies \
+  --max-steps 8 --invariants currentIsApplicable publicationWasBound
+quint verify 35-org-context-projection.qnt --main OrgContextProjection \
+  --init initGitOpsDependencies --step stepSupersession --max-steps 8 \
+  --invariants currentIsApplicable publicationWasBound supersededReceiptsStayHistorical
+#+end_src
+
+At the Lab root the paired Scheme scenarios run through the existing heap-fenced
+entry point.
+
+#+begin_src sh
+just test-file t/yanxu/modules/ai-agentic-context/task-publication-test.ss
+#+end_src
+
+Local checks on 2026-11-17 passed all 41 Quint runs and 31 Scheme scenarios.
+All three invariants held through eight symbolic transitions with Work and
+WorkTrunk selected and late deliveries enabled. Strict SysML validation
+reported 292 elements, 2566 checks and zero violations or unevaluated checks.
+
+* Verification obligations and status
+
+| Obligation | Required evidence beyond this design |
+|------------+--------------------------------------|
+| Relative leaves | Namespace declaration inspection and nested =.get= on real POO modules, without eager business scopes |
+| Version and anchor binding | Same local ID across sources, stale/missing anchors, dirty/index/untracked and concurrent mutation controls |
+| Composition | Actual Core precedence and conflict behavior, overrides, final self, cycles, hard Contract and sibling isolation |
+| Demand and invalidation | Actual read/dependency receipts, unread independent leaf and changed effective Contract/provider countercases |
+| Dispatch | Router replacement, actual Search interface, source cut, fresh authorization and refused stale or ungranted effects |
+| Projection and cache | Deterministic renderer/tokenizer and runtime policy; actual prefix comparison and isolation behavior |
+
+The accompanying SysML specifies the architectural roles and Task publication
+requirements. The Quint model checks the bounded publication decision once
+resolution supplies its inputs. The paired Scheme scenarios bind that decision
+to the actual receipt and authority interfaces across Org files. Prototype
+precedence, namespace dependency capture, physical protected reads,
+serialization and cache behavior have separate verification obligations.
+
+The earlier model check on 2026-11-16 with =sysml -strict -validate -self-check
+-no-record-cache 35-org-context-modules.sysml= reported 151 elements, 1346
+checks and zero violations or unevaluated checks. Four =-engine run= examples
+of =AdmissionAndReuse= yielded pass for both fully admitted and guarded refusal
+inputs; the deliberately unsafe import-only dispatch and token-only reuse modes
+both yielded fail. These are four selected boolean cases, not exhaustive
+verification. In particular the model treats compatibility and authority as
+boolean inputs; it does not establish their issuance, freshness or isolation.
+The structural connections and string attributes also do not compute graph
+closure, precedence, source identity or tokenization.

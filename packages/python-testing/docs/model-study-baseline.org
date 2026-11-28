@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Pre-registered finite reasoning baseline pilot
+#+STATUS: frozen before live requests; results not yet collected
+#+DATE: 2026-10-01
+#+FILETAGS: :testing:ascent:temporal:llm:
+
+* Question and limits
+
+Does a typed observation from the ASCENT or temporal-causality module
+change a real model's answers on five fixed, finite tasks? This is a
+small paired pilot. It cannot establish general model benefit, proof of
+real-world causation, or superiority over other systems. The fixed tasks
+and answer keys are in =src/agentic_ai_lab_testing/model_study/cases.json=.
+Freeze that file's SHA256 and the tested repository heads in each result.
+Do not edit its prompts, expected answers or task order after the first
+live request; register a separate protocol for changes.
+The frozen corpus SHA256 is
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+
+* Arms and execution
+
+- Model: DeepSeek =deepseek-flash= through the official OpenAI Python SDK
+  and DeepSeek Responses API, non-thinking mode (=reasoning.effort=none=),
+  =temperature=0=, =max_output_tokens=512=, request timeout 45 seconds,
+  no automatic retries. The API may still vary across calls.
+- Arms: baseline receives exactly the task prompt. Tool arm receives the
+  same prompt and one additional inert user message containing a fresh
+  fixed-module observation. There is no adaptive model-to-tool call and no
+  feedback repair turn in this study.
+- Three repetitions per arm and task, 30 requests maximum. Each
+  repetition uses a fresh model conversation. Arm order per task is
+  baseline/tool, tool/baseline, baseline/tool. No task substitution.
+- Each tool observation is generated once from the checked in fixture
+  by the relevant local Scheme module, with one source generation/cut
+  and fixed limits. A failed tool run is recorded as a failed pair; it is
+  never silently replaced with hand-written evidence.
+- No credentials, response headers or source .env contents go into
+  repository artifacts. Raw response records stay in a task-local ignored
+  file; the published report contains prompt hash, IDs, scores, bounded
+  output excerpts, timings and usage counts.
+
+* Predeclared scoring
+
+Parse the entire answer as a JSON object with exactly the =choice= and
+=claim= fields. Each must equal its case key to score one point; invalid
+JSON scores zero on both fields. Report =choice= accuracy and =claim=
+boundary accuracy separately per arm, 15 paired observations each.
+The claim field detects an explicit overreach choice; prose is retained
+for a separate, labelled manual audit, not silently graded after seeing
+results. Record API failures, incomplete responses, output token usage,
+wall time and tool time separately. Do not pool missing calls into an
+apparent win. Paired task-level differences and all individual failures
+are the primary result; no significance or generalization claim follows
+from five tasks and three repeats.
+
+* Independent answer authority
+
+ASCENT tasks use their finite source snapshots and a separate reachability
+or stratified finite model as answer keys. The new
+[[https://github.com/tao3k/gerbil-ascent/blob/00930e20f382516d78d2d2f2df084b89322162ae/docs/finite-stratified-evidence.org][finite replay]]
+is a tool observation, not the sole grading oracle. Temporal tasks use
+the checked in =temporal-causality= module fixtures plus independent
+event/cut expectations. The closed cut distinguishes observed, declared
+and counterfactual events; the open-parent case must keep an unknown
+frontier. The task text gives all facts to both arms.
+
+* Stop and interpretation
+
+Stop at 30 attempted model requests or if the selected credential is
+unavailable. Do not switch model, prompt, temperature, budget, expected
+answers or scoring mid-run. If a tool result disagrees with the
+independent answer, stop model calls and fix the module or fixture first;
+record the discrepancy as a semantic failure, not model evidence. A
+measured improvement requires paired results; a missing or negative
+difference is a valid outcome.

@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from poo_flow_runtime import build_profile
+from agentic_ai_lab_runtime import build_profile
 
 
 def test_build_profile_launcher_diagnostic_receipt_reports_baseline_share() -> None:
@@ -17,7 +17,7 @@ def test_build_profile_launcher_diagnostic_receipt_reports_baseline_share() -> N
         rows=(
             build_profile.CompileDebugRow(
                 phase="package-total",
-                label="poo-flow",
+                label="agentic-ai-lab",
                 status="ok",
                 elapsed_micros=1_000_000,
             ),
@@ -34,7 +34,7 @@ def test_build_profile_launcher_diagnostic_receipt_reports_baseline_share() -> N
         diagnostic,
     )
 
-    assert "poo-flow.build-profile-launcher-diagnostic.v1" in receipt
+    assert "agentic-ai-lab.build-profile-launcher-diagnostic.v1" in receipt
     assert 'profile-command: "gxpkg build -g"' in receipt
     assert 'command: "gxpkg --help"' in receipt
     assert "external-gap-micros: 9000000" in receipt
@@ -63,7 +63,7 @@ def test_build_profile_main_diagnoses_external_gap_failure(
             rows=(
                 build_profile.CompileDebugRow(
                     phase="package-total",
-                    label="poo-flow",
+                    label="agentic-ai-lab",
                     status="ok",
                     elapsed_micros=1_000_000,
                 ),
@@ -106,7 +106,7 @@ def test_build_profile_main_diagnoses_external_gap_failure(
     captured = capsys.readouterr()
     assert exit_code == 1
     assert observed_commands == [("gxpkg", "--help")]
-    assert "poo-flow.build-profile-launcher-diagnostic.v1" in captured.out
+    assert "agentic-ai-lab.build-profile-launcher-diagnostic.v1" in captured.out
 
 
 def test_build_profile_main_diagnoses_on_request_without_gate_failure(
@@ -128,7 +128,7 @@ def test_build_profile_main_diagnoses_on_request_without_gate_failure(
             rows=(
                 build_profile.CompileDebugRow(
                     phase="package-total",
-                    label="poo-flow",
+                    label="agentic-ai-lab",
                     status="ok",
                     elapsed_micros=900_000,
                 ),
@@ -168,4 +168,4 @@ def test_build_profile_main_diagnoses_on_request_without_gate_failure(
     captured = capsys.readouterr()
     assert exit_code == 0
     assert observed_commands == [("custom-gxpkg", "--help")]
-    assert "poo-flow.build-profile-launcher-diagnostic.v1" in captured.out
+    assert "agentic-ai-lab.build-profile-launcher-diagnostic.v1" in captured.out

@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        :poo-flow/src/feature-system/interface
-        "../../../fixtures/bundle-v1-domain-case-projection.ss")
+        :tao3k/yuanxu/module-system/feature/interface
+        "../../../fixtures/bundle-v1/domain-case-projection.ss")
 
 (def +agent-count+ 1000)
 
@@ -32,7 +32,7 @@
 (def lowering-plan (.ref projection 'lowering-plan))
 (def descriptor (.ref lowering-plan 'descriptor))
 
-(display "schema=poo-flow.bundle-v1.domain-case-projection-benchmark.1\n")
+(display "schema=agentic-ai-lab.bundle-v1.domain-case-projection-benchmark.1\n")
 (display "agents=")
 (display +agent-count+)
 (newline)
@@ -59,5 +59,5 @@
 (newline)
 (display "component-matching=compact-id-sort-merge\n")
 (display "component-matching-complexity=O(n-log-n)\n")
-(display "input-interface=poo-native-runtime-handoff-plan\n")
+(display "input-interface=poo-runtime-handoff-plan\n")
 (display "json-in-hot-path=false\n")

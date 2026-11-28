@@ -1,0 +1,336 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Generic Search Engine with Temporal Causality
+#+language: en
+#+startup: overview
+
+* Decision and status
+
+Agentic AI Lab maintains the generic =search-engine=. Its semantic core composes
+Search stages with =temporal-causality=: dependency readiness, evidence
+validity, invalidation and logical continuation belong to one engine contract.
+The engine implementation is maintained in =modules/search-engine/engine.ss=, with
+attempt admission in =modules/search-engine/attempt.ss= and the public exports in
+=modules/search-engine/interface.ss=. Lean and Quint producer models are maintained
+with this module in Agentic AI Lab.
+
+MRR is the Rust dispatch interface and Rust ecosystem scheduling hub. It owns
+FFI sessions, bounded physical dispatch, resource leases, result collection and
+execution handoff to MRR Data and other Rust ecosystem adapters. MRR Data owns physical
+query, index and storage adapters. ASP configures code-search scenarios and
+projects public results.
+
+This document records the implementation and its remaining acceptance boundaries.
+Current =modules/search-engine= supplies POO stages, typed composition, strategies and
+an immutable DAG controller. It derives readiness, issues scoped attempts,
+admits matching completions and propagates invalidation to structural descendants.
+Exact cancellation invalidates the active stage and its descendants; stale
+cancellation preserves the current engine. Factor observations reuse Temporal
+observations and causal events. Canonical configuration identity and physical
+execution-port qualification remain integration work; this document publishes
+no new wire ABI.
+
+* Composition and configuration
+
+The public extension surface is POO objects, prototypes, named functional
+combinators and consumer profiles. An S-expression can lower a scenario into
+those objects. ASP owns its scenario syntax and code-specific operations;
+Agentic AI Lab owns reusable composition and temporal semantics. MRR receives an
+admitted projection, rather than parsing another search language.
+
+An engine configuration binds:
+
+- The original strategy and compiled stage dependency graph.
+- Candidate-space identity, comparison unit and input/output domains.
+- Explicit acquisition, refinement, reasoning, merge and projection operations.
+- Result guarantees and merge/ranking policy, including treatment of partial work.
+- Required physical capabilities and their semantic profiles.
+- Temporal scope, source cut, provenance requirements and validity policy.
+
+Physical concurrency, resource reservations and deadlines are execution policy.
+A change affecting candidate membership, score meaning, truth completeness or
+result order is semantic configuration even if presented as an optimization.
+
+Configuration canonicalization must include all semantic parameters; a stage
+name or existing ABI string is insufficient. Introduce a distinct V1 identity
+contract only after canonicalization and cross-language controls are specified.
+Keep existing published V1 receipts intact.
+
+Generic candidates are opaque identities in an admitted space. File paths,
+language identifiers and parser selectors belong to scenario extensions.
+Combining different spaces requires an explicit admitted mapping stage.
+A merge operation must specify whether it combines exact truth, ranked subsets
+or incomplete evidence. Task completion does not establish exact absence.
+
+* Temporal causality is an engine dependency
+
+The compiled Search graph specifies permitted data dependencies. The Temporal
+event graph records actual causal evidence. They have different responsibilities:
+a declared edge permits a dependency, but cannot manufacture an observed causal
+parent. Every returned observation identifies the exact parent observations
+used by the attempt.
+
+The engine reuses Temporal source revisions, cuts, event graphs, applicability,
+truth maintenance and Impact through their existing named interfaces.
+It adds Search-specific binding and continuation around those mechanisms.
+Existing APIs must be evaluated for their declared scope; a trajectory or
+family-revision receipt is not automatically a Search validity certificate.
+
+Readiness requires valid input observations at the current admitted cut,
+compatible candidate spaces and satisfied stage prerequisites. Invalidation
+uses explicit source/evidence dependencies. A source revision invalidates the
+affected observations and their dependent results; unaffected observations may
+be reused only with valid retained source and configuration bindings.
+
+Negation and absence evidence need coverage and source bindings too.
+An insertion can invalidate a previous empty result even when no old positive
+candidate mentions the inserted item. Capability or policy changes similarly
+require dependency tracking. Source changes alone are not a complete model.
+
+Temporal causality controls logical continuation. MRR may complete independent
+physical requests in any order, while the engine admits their observations
+according to declared dependencies and actual evidence. Arrival order must not
+change causal parents, merge semantics or semantic result identity.
+
+* Four contracts
+
+** Engine configuration
+
+An immutable POO engine configuration composes the strategy, Temporal policy,
+capability requirements, candidate spaces and semantic result policy.
+Concrete operations are supplied through consumer extension objects.
+Backend implementation identities are bound during capability admission.
+Agentic AI Lab does not depend on an MRR or Data backend registry.
+
+** Logical engine state
+
+A POO state binds the admitted configuration, generation, source cut, retained
+observations, outstanding attempts and terminal disposition. Named pure
+functions return a successor state and explicit effects; they do not acquire
+connections or call FFI. State is not a public alist or positional record DSL.
+
+Proposed transition responsibilities are:
+
+| Transition | Semantic responsibility |
+|------------+-------------------------|
+| start | Admit configuration, domains and initial source scope |
+| advance | Derive ready stage attempts from currently valid observations |
+| observe | Admit one result against its original attempt and evidence |
+| revise | Apply a source/policy change and invalidate affected observations |
+| retire | Prevent new attempts and result publication for that generation |
+
+These are contract names, not exported functions. Concrete APIs require an
+implementation review against existing Flow and Temporal lifecycle facilities.
+
+** Execution request
+
+A request projects one ready attempt with configuration identity, generation,
+stage, unique attempt identity, current source cut, exact input-observation
+identities, candidate space, required capability, operation and budget.
+
+An attempt is not a stage name: a retry or re-execution receives a new attempt
+identity. The state retains the original immutable request until settlement.
+A completion from a superseded attempt cannot satisfy a newer attempt, including
+when the stage and generation names coincide.
+
+MRR admits request identity and capability before obtaining Rust resources.
+It schedules only the ready work supplied by the engine. Data executes physical
+operations and binds actual source/adapter receipts. Physical batching may
+change execution organization only while preserving each logical request.
+
+** Returned observation
+
+A result carries its original request/attempt identity, actual source and
+adapter bindings, input dependencies, candidates, guarantee, coverage,
+truncation and failure/cancellation disposition. MRR performs boundary admission;
+Agentic AI Lab validates logical applicability against the retained attempt and cut.
+
+A succeeded physical operation may still yield incomplete semantic evidence.
+Observations retain that distinction. A result arriving after retirement,
+invalidation or attempt supersession cannot revive invalid evidence.
+Cancellation request, lease release and backend termination are separate facts.
+Backend work that cannot stop is drained or quarantined by its execution owner.
+
+* Worked execution and revision
+
+A consumer configures two independent acquisition stages A and B, an explicit
+merge C, refinement D and projection E. The engine emits A and B requests.
+When B completes first, it retains B's observation; C remains blocked until its
+declared input contract is satisfied. It then emits C, D and E in dependency order.
+
+If A's source revision changes after E was produced, the engine marks the
+dependent A/C/D/E observations invalid and preserves B only if its own scope
+remains valid. A new A attempt uses the new source cut. A delayed old A result
+cannot enter C. Recomputing C/D/E publishes a new projection with the revised
+evidence bindings. No file path or code-language provider is needed in this case.
+
+The same case must cover complete empty A, truncated B, failed C, duplicate
+completion, incompatible candidate spaces and a revision during an in-flight D.
+The result policy determines whether partial output is publishable, with explicit
+guarantees; it cannot silently promote partial output to complete truth.
+
+* Rust mediation and source dependency direction
+
+The source dependency direction is Agentic AI Lab -> MRR -> MRR Data -> consumer.
+The runtime call cycle is consumer configuration -> POO engine -> MRR request
+admission/dispatch -> Data execution -> MRR result admission -> POO continuation
+-> consumer projection. This feedback does not create a source dependency cycle.
+
+Rust contributes async execution, connection/resource ownership, cancellation
+coordination, physical adapter access and typed identity admission. Scheme owns
+composition, reasoning and logical readiness. The current single Scheme worker
+boundary remains respected while independent physical work can be concurrent.
+
+ASP source/resident authority and public packet policy remain scenario-owned.
+Move reusable physical engines into Data only with explicit source, completeness
+and lifecycle contracts. Moving a Cargo dependency alone transfers none of them.
+
+* Three-way producer assurance
+
+The maintained module name is =search-engine=, with the canonical public entry
+point =modules/search-engine/interface.ss=. It composes Temporal capability
+through =modules/temporal-causality/interface.ss=.
+
+For each engine transition, Scheme owns the executable POO contract, Lean proves
+its structural laws using the pinned LeanPoo C3/C4 and invalidation certificates,
+and Quint explores its bounded state projection with positive and negative
+controls. The maintained operation mapping and qualification limits are in
+[[file:../../proofs/Composition/README.org][the producer assurance contract]].
+Dependency readiness, observed causality and physical execution are distinct
+facts: a stage dependency does not manufacture a Temporal event, and physical
+completion does not establish evidence validity. These composition obligations
+must be represented explicitly as the evidence model develops.
+
+* Formal ownership and acceptance
+
+LeanPoo supplies reusable C3/C4 mathematics. Agentic AI Lab owns producer models for
+Search composition, Temporal validity and engine transitions. MRR owns FFI
+binding and physical dispatch admission models; Data owns physical correspondence.
+Each consumer qualifies its actual execution and result projection separately.
+
+* Qualified cancellation increment
+
+The pure controller delegates request identity admission to
+=agentic-ai-lab-search-attempt-current?=. Returned identities are reconstructed as
+POO request objects through =agentic-ai-lab-search-attempt-request=.
+=agentic-ai-lab-search-engine-cancel= invalidates an exactly matching active request
+and its structural descendants. It returns the original engine for a stale or
+foreign request, preserving independent completed branches and newer attempts.
+Physical cancellation and resource release remain MRR execution obligations.
+
+The focused Scheme gates cover eight attempt-admission cases and eight DAG
+cases, including exact cancellation, stale cancellation and subsequent
+completion of a reconstructed current request. =SearchAttempt.qnt= includes
+=NoStaleCancellation= and a =cancelAny= negative control. The positive bounded
+model explores 92 distinct states; all four deliberately broken controls
+produce invariant violations. Lean proves =stale_cancel_noop= and
+=cancelled_attempt_cannot_settle=, and binds the maintained Quint source digest.
+These checks qualify the stated transition laws and exercised Scheme controls;
+they do not establish whole-program refinement or downstream adapter closure.
+
+* Implemented Temporal observation contract
+
+The engine now offers =agentic-ai-lab-search-engine-require-evidence= and
+=agentic-ai-lab-search-engine-observe=. The contract is selected before issuing any
+attempt. Observation admission binds the current request to an actual Temporal
+event, exact current predecessor evidence and strictly ordered causal parents.
+Selective revision clears affected observations; independent branches remain
+available. Admitted event identities remain in the engine generation's history,
+so invalidation cannot make an old identity available for a new observation.
+Rejected observations neither settle attempts nor reserve event identities. The producer Lean/Quint projection and actual Scheme controls are
+maintained together in [[file:../../proofs/Composition/README.org][the assurance package]].
+The =agentic-ai-lab-search-engine-inputs= operation reads evidence for an exact current
+attempt. It returns detached Temporal snapshots in the original predecessor
+order; callers cannot mutate retained evidence through these inputs. Roots
+return an empty input list. Cancelled or invalidated attempts and missing
+predecessor observations are rejected. MRR delegates its input wire projection
+to this operation. Lean uses the original LeanPoo C4 parent orders for the
+=InputSnapshot= contract, and =SearchInputs= Quint checks stale-request and
+missing-evidence rejection with explicit negative controls.
+
+Coverage, absence evidence, source authentication and downstream transport are
+separate remaining obligations.
+
+* Remaining acceptance
+
+Remaining producer invariants include: no stage readiness without valid inputs;
+no fabricated causal parents; no stale or duplicate attempt admission; monotonic
+retirement; preservation of unaffected valid observations; explicit incomplete
+evidence; and semantic independence from physical completion order.
+
+Quint must model the actual implemented transition operations and include
+negative controls for omitted invalidation, source cut, parent and attempt
+checks. Lean must prove the corresponding graph/validity properties with explicit
+assumptions. Mathematical witnesses do not establish physical source authenticity
+or implementation refinement by themselves.
+
+Implement and qualify in this order:
+
+1. Reuse Search declarations and Temporal interfaces to implement pure engine
+   readiness, observations, revision and retirement with POO extension objects.
+2. Qualify the A/B/C/D/E execution and revision case with actual Scheme controls.
+3. Add producer Quint/Lean correspondence for those implemented transitions.
+4. Project ready attempts through MRR; extend its root-only dispatch to consume
+   Scheme-owned dependent continuation, retaining original request identities.
+5. Bind Data execution and physical guarantees, then qualify an ASP scenario.
+
+The first engine increment excludes multimodal adapters, speculative retries,
+adaptive ranking and new product command syntax. A generic execution port is
+sufficient; backend capability substitution must remain rejected until qualified.
+
+* Related source and design
+
+- =modules/search-engine/objects.ss= and =funs.ss=: current POO declarations and observations.
+- =modules/temporal-causality/interface.ss=: reusable Temporal authority.
+- [[file:configurable-search-proof-ownership.org][Producer and consumer proof ownership]].
+- MRR =docs/architecture/0037-configurable-search-execution.org=: existing
+  bounded root dispatch and Data integration, with dependent scheduling open.
+
+* Implemented attempt boundary
+
+=modules/search-engine/attempt.ss= now supplies the pure per-stage attempt identity
+transition kernel. The matching Lean/Quint definitions and actual Scheme controls
+are described in [[file:../../proofs/Composition/README.org][the producer proof package]].
+It fences settlement across revisions and retirement; readiness and selective
+Temporal dependency propagation are not implemented by this kernel.
+LeanPoo structural invalidation certificates are reused separately, with an
+explicit stage-graph correspondence prerequisite.
+
+The pure =modules/search-engine/engine.ss= controller now derives prerequisites from
+Search chain/parallel/merge objects, maintains an admitted-completion frontier,
+and invalidates changed stages plus structural descendants. It retains unaffected
+branches and rejects duplicate stage identities. The consumer runtime pin and
+physical dependent dispatch are separate from this producer implementation.
+See the Composition proof README for its executable controls and refinement limits.
+
+* Scheme test execution boundary
+
+Search composition remains Scheme-owned. The installed Scheme SDK and upstream
+gxtest execute the original Context/Temporal test suites from their ordinary
+module artifacts. There is no separate Context/Temporal test executable, static
+SDK copy, or test-program module-order manifest. Test declarations import their
+actual object/function roles and the same Case policy directly, avoiding unused
+configuration and lifecycle interfaces. CI compiles all six original test
+modules in ordinary compiler mode so calls retain exported Scheme entry points,
+and uses =just test-context-temporal= with the existing pre-import heap
+fence. Completed imports and runtime loads report actual preparation work; the
+five-second silence watchdog still rejects stalled execution. gxtest's returned
+status, all 69 case receipts, six module receipts, and the final harness result
+are required together.
+
+The generic Search declaration helpers import Temporal observation objects
+directly. They do not pull the evaluator and query interface into a consumer
+that only constructs observations. MRR imports the causal graph constructor
+from the corresponding Temporal function module and retains its Rust dispatch
+role. Orgize qualification uses its installed =bindings/c/orgize= interface.
+
+Local qualification distinguishes assertion results from process completion.
+Both the narrowed source-role closure and its compiled-library replay produce
+all 69 passing cases, six module receipts and a zero gxtest result. Full-process
+qualification still returns 124 during installed Darwin SDK shutdown under the
+unchanged five-second silence / 45-second batch limits. Undefined-runtime-binding
+warnings are also rejecting evidence. The earlier cleanup diagnosis remains: A read-only process sample locates this phase in
+=___cleanup_dyn_module= and dyld =dlclose=. This remains a failed qualification;
+the recipe does not bypass cleanup, ignore process status, or extend either
+the five-second silence limit or the 45-second batch budget.

@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanClosureError,
     export_declaration_closure,
 )
@@ -32,8 +32,8 @@ def test_export_declaration_closure_has_one_build_and_export_deadline() -> None:
     with pytest.raises(LeanClosureError) as raised:
         export_declaration_closure(
             lean_root=Path("/tmp/lean-proof"),
-            root_module="PooFlowProof.Example",
-            root_declarations=("PooFlowProof.Example.closed",),
+            root_module="AgenticAILabProof.Example",
+            root_declarations=("AgenticAILabProof.Example.closed",),
             timeout_seconds=0.25,
             runner=runner,
         )
@@ -62,8 +62,8 @@ def test_export_declaration_closure_rejects_invalid_deadline(
     with pytest.raises(LeanClosureError) as raised:
         export_declaration_closure(
             lean_root=Path("/tmp/lean-proof"),
-            root_module="PooFlowProof.Example",
-            root_declarations=("PooFlowProof.Example.closed",),
+            root_module="AgenticAILabProof.Example",
+            root_declarations=("AgenticAILabProof.Example.closed",),
             timeout_seconds=timeout_seconds,
             runner=runner,
         )

@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import pytest
 
-from poo_flow_proof.independent_bundle import (
+from agentic_ai_lab_proof.independent_bundle import (
     AxleEnvironmentIdentity,
     BundleValidationError,
     DeclarationIdentity,
@@ -28,7 +28,7 @@ def environment() -> AxleEnvironmentIdentity:
     )
 
 
-def source(package_id: str = "poo-flow-proof") -> ResolvedSourceIdentity:
+def source(package_id: str = "agentic-ai-lab-proof") -> ResolvedSourceIdentity:
     return ResolvedSourceIdentity(
         package_id=package_id,
         revision="test-revision",
@@ -44,7 +44,7 @@ def declaration(
     return DeclarationIdentity(
         name=name,
         kind="theorem",
-        owner_path="PooFlowProof/PooC4/Enterprise/Test.lean",
+        owner_path="AgenticAILabProof/PooC4/Enterprise/Test.lean",
         owner_source_digest=DIGEST_C,
         local_dependencies=dependencies,
     )
@@ -52,7 +52,7 @@ def declaration(
 
 def bundle() -> IndependentDeclarationBundle:
     return IndependentDeclarationBundle(
-        root_module="PooFlowProof.PooC4.Enterprise.Test",
+        root_module="AgenticAILabProof.PooC4.Enterprise.Test",
         root_declarations=("Enterprise.Test.safe",),
         lean_toolchain="leanprover/lean4:v4.31.0",
         axle_environment=environment(),
@@ -82,7 +82,7 @@ def bundle() -> IndependentDeclarationBundle:
 def test_proof_base_interface_is_disjoint_and_dependency_complete() -> None:
     from dataclasses import replace
 
-    from poo_flow_proof.independent_bundle import (
+    from agentic_ai_lab_proof.independent_bundle import (
         ProofBaseInterfaceDeclarationIdentity,
         canonical_proof_base_interface_digest,
     )
@@ -98,9 +98,9 @@ def test_proof_base_interface_is_disjoint_and_dependency_complete() -> None:
     )
     value = replace(
         bundle(),
-        proof_base_imports=("PooFlowProof.ProofBase",),
+        proof_base_imports=("AgenticAILabProof.ProofBase",),
         proof_base_interface_digest=canonical_proof_base_interface_digest(
-            ("PooFlowProof.ProofBase",),
+            ("AgenticAILabProof.ProofBase",),
             proof_base_declarations,
         ),
         proof_base_declarations=proof_base_declarations,
@@ -117,10 +117,10 @@ def test_proof_base_interface_is_disjoint_and_dependency_complete() -> None:
     )
 
     manifest = value.canonical_manifest()
-    assert manifest["proof_base_imports"] == ["PooFlowProof.ProofBase"]
+    assert manifest["proof_base_imports"] == ["AgenticAILabProof.ProofBase"]
     assert manifest["proof_base_interface_digest"] == (
         canonical_proof_base_interface_digest(
-            ("PooFlowProof.ProofBase",),
+            ("AgenticAILabProof.ProofBase",),
             proof_base_declarations,
         )
     )
@@ -268,10 +268,10 @@ def test_project_environment_requires_revision() -> None:
         match="incomplete-environment-source",
     ):
         AxleEnvironmentIdentity(
-            name="poo-flow-test",
+            name="agentic-ai-lab-test",
             lean_toolchain="leanprover/lean4:v4.31.0",
-            imports=("import PooFlowProof",),
-            repo_url="https://example.invalid/poo-flow.git",
+            imports=("import AgenticAILabProof",),
+            repo_url="https://example.invalid/agentic-ai-lab.git",
         )
 
 
@@ -281,7 +281,7 @@ def test_invalid_digest_fails_closed() -> None:
         match="invalid-digest",
     ):
         ResolvedSourceIdentity(
-            package_id="poo-flow-proof",
+            package_id="agentic-ai-lab-proof",
             revision="test-revision",
             source_tree_digest="latest",
             lake_manifest_digest=DIGEST_B,

@@ -1,0 +1,725 @@
+#+title: Process exit and Ops dependency ownership (part 4)
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Extracted module of [[file:00-design-map.org][Agentic AI Context: Existing Org Design to SysML Allocation]].
+
+* Process exit and Ops dependency ownership (part 4)
+The installed Gerbil source-import branch creates a distinct Module
+Context, calls =core-expand-module-begin=, then registers the Context
+and its evaluation promise. Its prelude Context conversion already
+uses Gerbil's registry. The measured native interval still includes
+generated-form expansion, Context registration and nested imports.
+It does not justify changing the Interface parser, caching another
+prelude, or removing a currentness boundary.
+
+At Lab #34 head
+=6f0a6757= the source-build, both Runtime Gerbil unit jobs, both Gerbil
+package jobs and the full external Linux Bazel job failed. The Nix/OpenTofu
+jobs passed on both platforms. These checks apply to the cited heads.
+The Linux runtime job timed out in =build-library= and its macOS
+counterpart was terminated by signal 9. The Linux Bazel package build
+reported a Gambit heap overflow during native compilation. The other
+three failures reached their existing twelve-minute dependency-build or
+external-Bazel watchdogs before the Memory Harness ran. These outcomes
+are separate from the three passing Memory rounds.
+
+At the published Lab head =63213aa6=, the external Linux Bazel job
+reached the Lab =:compile= action. That action ran with the existing
+2 GiB Gambit heap fence and four native workers. It failed in
+=std/sync/barrier#__barrier-wait!= with a Gambit heap overflow after
+218.36 seconds. The Bazel resource receipt reported a 3.39 GB peak
+for the process tree and no resource-guard timeout. The tree's
+measured memory is distinct from the Gambit heap limit. This outcome
+replaces the older head's external-job timeout as the current
+full-build failure evidence.
+
+On Lab =54a535b5= the Linux runtime job completed the selected
+downstreams step, which requires the Memory Suite and its marker
+check. The Memory process logged all four success markers and took
+33.18 seconds from =test-entry= through final =OK=. Its sorted
+51-row cold dispatch digest was
+=0aebaa1c525c4e85517477f302612fefa5b01ac1cfc90a06b0269212e9ada293=,
+the same as the local candidate. The base cold build took 1.37
+seconds from launch to =main=, 0.59 seconds in selected projection,
+3.46 seconds from native Make entry to main return and 0.09 seconds
+from main return to the parent's action return. The independent
+first reads took 0.48/0.60/0.57 seconds for base, enabled and
+withdrawn. The Linux =2591dcd= and local macOS =1cfb032= runs use
+different platform toolchains, so their exit times are not a
+controlled platform comparison.
+
+The following development-library build was the only failed step
+in that Linux runtime job. It first dispatched a target 47.04
+seconds after the command, dispatched 275 distinct targets before
+the existing 180-second watchdog sent TERM, and did not complete.
+The Linux package and external Bazel jobs both reached Lab's
+full =:compile= action and failed with the same Gambit heap
+exception. The resource receipts record four workers in each job,
+elapsed times of 294.47 and 283.58 seconds, and process-tree peaks
+of 3.57 and 3.33 GB. Neither receipt reports a resource-guard
+timeout. Those peaks are separate from the interpreter's 2 GiB
+heap fence.
+
+The full Linux package =compile.log= in the
+=bazel-scheme-compile-evidence-Linux-X64= artifact contains 537
+distinct native target dispatches and 929 distinct native file
+jobs before failure, with no duplicate in either recorded stream.
+Eleven of those target dispatches belong to Context Memory.
+All six prerequisite producer receipts are =ok=. These are
+dispatches from the failed full build. They do not establish
+completed products or identify the Scheme objects that filled the
+heap. The separate selected-downstream result remains evidence
+for the narrower Memory gate.
+
+The macOS package job on the same Lab head failed in its existing
+twelve-minute dependency step, before Lab compilation. Bazel reported
+the POO producer from disk cache in one second. The uploaded
+receipts report successful native Yuanxu and Ascent actions of
+241 and 236 seconds, with three workers each. The deadline expired
+while the Parser producer was still active. The cached POO receipt
+retains its original 701-second producer duration; that is not
+work repeated in this job. This package-job failure is separate
+from the macOS selected-downstream runtime job.
+
+The separate Darwin build job on =54a535b5= passed and published
+11.55-second cold and 11.76-second warm receipts. Its measurement
+invokes =gerbil build= through the installation =build.ss= with
+the default empty Module roots and empty package-library spec.
+It does not compile the complete development library or exercise
+the Memory downstreams. The job's Core build preparation and
+its one-target native compiler control are separate from those
+two timed receipts.
+
+The Runtime-WASM source-build job on =54a535b5= also reached its
+12-minute dependency deadline. The package and source-build jobs
+reported the same Gerbil/Gambit versions and runtime ABI. Their
+receipts bind equal source-resolution observations for Yuanxu
+and Ascent. The native logs contain the same sorted 275 Yuanxu
+and 181 Ascent targets, respectively. Each producer used three
+Make workers in both jobs. The package job serialized the Bazel
+actions. The source-build job overlapped the Ascent and Parser
+actions, taking 487 seconds for Ascent versus 236 in the package
+job. Both jobs reached their existing deadline before Parser
+finished. This comparison does not isolate contention from
+runner differences or establish interchangeable action keys.
+
+Lab =65808a7= advanced the Core gitlink to =62bd03c= and
+superseded the earlier macOS runtime job. The earlier job was
+cancelled during prerequisite compilation, before the Memory
+step. On the new source, the CI namespace check found the
+outdated Yuanxu proof revision and the ABI runfiles action
+found the old Core fixture path. In an isolated checkout, use
+=lake update YuanxuProof= after aligning the declaration with
+the Core gitlink, and update both Bazel references to the
+renamed Feature fixture. License, version and namespace checks,
+=lake build AgenticAILabProof= and all 14 portable ABI tests
+passed. The four-file repair was published as =a91be87= with
+the existing gitlinks unchanged. Its first Ubuntu ABI job
+passed. The earlier Linux Memory result remains specific to
+=54a535b5= until the new Core/Lab pair is qualified.
+
+The new pair's empty-Core native build with POO =cd4de644=
+completed in 78.84 seconds and dispatched 275 targets. Its
+first local default Memory attempt failed the existing idle
+check after 64.72 seconds wall. The base action did not enter
+until 62.02 seconds after process start, and the run emitted
+no native build stage before refusal. This attempt supplies
+no cold consumer dispatch or acceptance evidence for the new
+pair. The prerequisite startup delay is distinct from the
+previous base post-main observations.
+
+On the exact same native Core and Lab sources, three subsequent
+default Memory runs exited naturally in 104.91, 86.96 and 88.70
+seconds. Each run used independent empty consumer outputs and
+the existing 120/120/60-second and 2 GiB limits. The sampler
+did not attach in the first passing round. All three matched
+the original 51-row cold dispatch digest, with 12/27/12 distinct
+targets, zero hot or clean dispatches, and zero business scopes
+during build. Projection Context counts stayed at 112/198/112.
+The independent first reads ranged from 1.60 to 2.06 seconds
+across the three states. Base took 2.45–2.64 seconds after
+main return. The original failed import attempt remains a
+separate result. The exact-head Lab license and Ubuntu ABI
+jobs passed, while the Runtime Gerbil results remain separate.
+
+Lab =6f10339= keeps Core =62bd03c= and moves the remaining Lab
+design inputs and links to =core/module-system/feature=. Reproduce
+with =just test-file t/yuanxu-context-memory-downstream-test.ss=
+using the compiled Core prerequisites and fresh consumer outputs
+for every run. Three runs on the same macOS toolchain exited in
+88.09, 86.47 and 87.09 seconds. All matched the exact 12/27/12
+cold target sets, 112/198/112 projection expansions, zero
+business scopes during projection, and zero hot or clean compile
+dispatches. The three independent first reads ranged from 1.61
+to 1.95 seconds. Base's post-main interval remained 2.57–2.58
+seconds. The refusal, withdrawal, receiver and enabled-product
+digest controls passed in each run.
+
+The following ranges come from those same three runs on Gerbil
+=1cfb032=, Gambit =ea114fc= and POO =cd4de644=. The default Just
+entry selected 12 build cores and a 2 GiB heap. Projection is the
+selected-Graph stage, Make is the native =std-make= span, and the
+tail ends at the parent action return. All values are seconds.
+
+| Cold state | Action launch to main | Projection | Make | Post-main tail | First read |
+|------------+-----------------------+------------+------+----------------+------------|
+| base       | 3.61–3.71 | 0.79–0.82 | 3.13–3.23 | 2.57–2.58 | 1.65–1.85 |
+| +memory    | 3.63–3.67 | 1.54–1.68 | 5.27–5.66 | 2.79–2.99 | 1.68–1.95 |
+| -memory    | 3.65–3.81 | 0.80–0.82 | 2.99–3.36 | 2.54–2.58 | 1.61–1.65 |
+
+The enabled cold increment is concentrated in selection and Make.
+Launch to main overlaps across all three states. The base and
+withdrawn tails also overlap. These spans include remaining process
+cost, so they cannot by themselves assign the tail to a specific
+runtime stack. The earlier separate native sample remains the
+evidence for dynamic-module cleanup.
+
+The Core mutation gate rejected all four faults with status 70
+and passed the order and admission controls before and after.
+The Core Feature interface, publication and testing-source-admission
+suites passed on =62bd03c=. With the same Core prerequisites,
+=6f10339= passed =just test-file t/yanxu/modules/services/opentofu/deployment-test.ss=
+in 59.50 seconds and =just test-file t/yuanxu-governance-downstream-test.ss=
+in 66.11 seconds. Both qualified the independently built B output
+and reported zero hot targets with clean isolation. These are
+local selected-downstream results. Core PR #19's capacity jobs
+remain separate failures. The Ubuntu and macOS ordinary dense
+selection cases both stopped during first Graph evaluation. The
+first namespace returned in 1.08 and 1.92 seconds, respectively.
+The incomplete Graph spans were 176.05 and 169.49 seconds, of
+which 20.79 and 24.39 seconds were reported as GC wall time.
+Neither job reached hot reads or incremental evaluation. The
+Ubuntu observed declaration run last reported 2,000 declarations
+and 1,105,141,224 live bytes. The macOS observed run stopped in
+the same phase after its 1,400-declaration checkpoint and
+882,560,512 live bytes. These are runtime capacity failures under
+the existing budget, outside the selected Memory fixture.
+The macOS contracts job also timed out in the source-admission
+gateway's isolated compile preparation. Its dispatch record
+has no Harness entry, so the result supplies no evidence about
+the gateway's Contract assertions. The job logged 110 distinct
+=SOURCE-TAIL-COMPILE= module starts in about 57 seconds and then
+timed out while dispatching Gambit compilation jobs. It emitted
+no =SOURCE-TAIL-GATEWAY-COMPILED= marker.
+
+The Ubuntu Runtime Gerbil job on Lab =6f10339= subsequently passed
+its selected-downstreams step. Memory took 41.11 seconds from
+=test-entry= to final =OK=. The actual ordered-mode cold target
+sets matched the macOS result after sorting within each mode.
+The three first reads took 0.58, 0.60 and 0.58 seconds. The
+independent read, refusal, zero-scope, withdrawal and zero-hot
+markers were present, with no failed Harness markers. The next
+=build-library= step hit the existing 180-second watchdog and
+reported exit 124 after dispatching 458 distinct targets. The
+Linux result qualifies the selected Memory step on this exact
+commit. Full development build and product-mode Context Core
+qualification remain separate.
+
+The macOS Runtime Gerbil job on the same commit passed Governance
+and Deployment and reached Memory's final refusal action at 114.25
+seconds on the Harness clock. Its three cold builds, three first
+reads, hot build and withdrawn clean had already returned. The
+refusal child emitted =LAB-CONTEXT-REFUSAL-OK= before the aggregate
+watchdog interrupted output collection. The Harness reported
+=ERROR CHECK= and =ERROR HARNESS=, and Just returned 124.
+The marker proves the refusal was reached. Acceptance also
+requires the child and Harness to exit naturally.
+
+| macOS cold state | Launch to main | Selected Graph | Make | Main return to action return | First =.get= | Entire consumer action |
+|------------------+----------------+----------------+------+------------------------------+--------------+------------------------|
+| base             | 4.11           | 1.06           | 4.51 | 2.97                         | 1.92         | 7.92                   |
+| +memory          | 3.91           | 2.29           | 6.13 | 5.26                         | 1.74         | 7.30                   |
+| -memory          | 6.25           | 1.49           | 7.53 | 3.35                         | 2.32         | 8.83                   |
+
+Use =LAB-CONTEXT-ACTION= epochs for the whole command and
+=LAB-CONTEXT-USE-PHASES= for the first slot read. The macOS
+consumer actions spent 2.61–3.10 seconds between their success
+marker and parent return. The equivalent Linux base build spent
+0.09 seconds after =main=, compared with 2.97 on macOS. These
+spans include interpreter exit and supervisor/parent collection.
+The earlier native sample identified dynamic-module teardown;
+the CI transcript alone cannot assign the tail to one process.
+See [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215516][the macOS job]]
+and [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215337][the Linux job]].
+
+On Lab =b80f03e= with Yuanxu =2f69f33=, a separate macOS
+diagnostic followed the existing default test's process tree.
+Use =ps= with timestamps around each process census, =lsof -nP -a -p
+PID -d txt -Fn= after each child's success marker, and a one-second
+=sample= on the refusal child immediately after its marker. Count
+distinct mapped Gerbil =.oN= paths. Keep the sampled round separate
+from the unsampled acceptance rounds.
+
+| Child | Mapped Gerbil images | Marker to parent return (s) | Upper bound from last observed live child to parent return (s) |
+|-------+----------------------+-----------------------------+---------------------------------------------------------------|
+| base build | 456 | 2.44 | 0.73 |
+| base read | 433 | 1.61 | 0.20 |
+| +memory read | 438 | 1.59 | 0.20 |
+| -memory read | 436 | 1.58 | 0.20 |
+| refusal | 424 | 2.13 | 0.07 |
+
+The build row uses the child's =main return= timestamp. The read
+and refusal rows use the observer's first sight of each success
+marker, so their marker-to-return intervals are lower bounds.
+The 424 refusal images were present in every other observed set.
+All 84 refusal main-thread samples were in Gambit dynamic-module
+cleanup and dyld =dlclose=. The sample identifies where this
+observed child was running. It does not predict an unsampled
+teardown or attribute the entire tail to any one library.
+The diagnostic completed in 82.48 seconds. An initial setup
+attempt lacked the empty development library directory expected
+by the default recipe and was retained separately.
+
+The installed Gerbil =std/os/signal-handler= interface is imported
+by Yuanxu's Ops progress module. It brings the native logging
+facade into these children even when they never register an
+execution owner. In the fixed Gerbil source the signal-handler
+implementation is delayed until registration. A focused candidate
+moves the existing cancellation extent to the Ops execution
+module, where resource owners can still use it. The progress
+module keeps its counters and output protocol. The Lean
+projection separates registration from progress and preserves
+the register/acquire/body/release/unregister order. The existing
+Quint TestSourceAdmission safety simulation passed and its
+hard-stop variant violated =FailureCleanup=. These models do
+not establish native signal delivery or teardown latency.
+
+The candidate built from empty Core products in 67.29 seconds.
+The first Memory attempt exceeded its 60-second idle budget
+while the Harness loaded the compiled =slot-origin= module.
+Retain this failure separately. The next diagnostic reached
+all markers and exited naturally in 89.16 seconds. Its sampled
+children used the same 12/27/12 target sets and no projected
+business scopes.
+
+| Child | Original images | Candidate images | Native logging images before / after | Signal-handler images before / after |
+|-------+-----------------+------------------+--------------------------------------+--------------------------------------|
+| base build | 456 | 443 | 21 / 0 | 2 / 0 |
+| base read | 433 | 409 | 21 / 0 | 2 / 0 |
+| +memory read | 438 | 393 | 21 / 0 | 2 / 0 |
+| -memory read | 436 | 405 | 21 / 0 | 2 / 0 |
+| refusal | 424 | 400 | 21 / 0 | 2 / 0 |
+
+These are mapped images observed at the same markers in separate
+native prefixes. Other image differences can reflect observation
+timing and compiled paths. In the candidate, base took 2.16
+seconds after =main= and refusal took at least 2.23 seconds after
+the observer saw its marker. Gambit unload remained visible in
+the refusal sample. The image reduction establishes that
+progress-only processes avoid the signal dependency, while the
+paired sample supplies no aggregate speedup claim.
+The real SIGTERM, Ops process and TestingScript suites passed.
+
+The unsampled Memory runs then completed in 79.31, 77.89 and
+80.87 seconds, compared with 85.72, 85.73 and 86.55 seconds
+before the split. Both sets used fresh outputs for each mode.
+The exact target sets and Module projection expansion counts
+matched at 12/27/12 and 112/198/112 respectively. The 15
+enabled-only targets include 11 owned by Memory and four
+direct support targets. All three first reads, zero projected
+scopes, zero hot compilations, receiver and consumer isolation,
+withdrawal, refusal and enabled artifact digests passed.
+
+| Mode | Launch to main (s) | Graph (s) | Make (s) | Main to action return (s) | First =.get= (s) |
+|------+--------------------+-----------+----------+---------------------------+-----------------|
+| base | 3.58 / 3.26 | 0.80 / 0.79 | 3.07 / 2.88 | 2.51 / 2.25 | 1.62 / 1.56 |
+| +memory | 3.65 / 3.37 | 1.57 / 1.51 | 5.58 / 5.02 | 2.78 / 2.49 | 1.66 / 1.56 |
+| -memory | 3.63 / 3.45 | 0.80 / 0.76 | 3.09 / 2.94 | 2.54 / 2.25 | 1.78 / 1.51 |
+
+Each cell compares the original and candidate medians. To
+reproduce the split, align =BUILD-STAGE main= and
+=LAB-CONTEXT-ACTION= epochs, take Make time from =BUILD-ACCOUNT=,
+and read the independent consumer's =LAB-CONTEXT-USE-PHASES=.
+The trials ran serially rather than interleaved, so host
+variation may account for some of the wall-time delta.
+The separate Deployment control passed in 102.80 seconds with
+46 selected targets, first read from B, zero hot compilation
+and clean isolation. Its prior local control took 67.36
+seconds. Neither run establishes the OpenTofu timing gate.
+The Core publication and testing-source-admission suites passed.
+All four build-input mutations were rejected with exit 70, and
+the order and admission controls passed before and after them.
+
+On the released Scheme sources, the existing
+=just test-file t/build-artifact-publication-test.ss=,
+=just test-file t/conditional-build-publication-test.ss=, and
+=just test-file t/issuer-projection-test.ss= controls exited
+naturally in 54.55, 14.62 and 2.70 seconds. The first suite
+compiled a real probe and refused joint handoff replacement,
+a mismatched handoff, changed artifacts and changed source.
+The issuer suite ran four cases with 12 runtime observations.
+This checks issuance separately from the Memory fixture's
+enabled-product digest.
+
+The Linux Runtime job on Lab =9428753= restored a prerequisite
+cache whose key did not include the Core gitlink. Its first Lab
+=clean= failed before Memory, while expanding the new OpenTofu
+source against the old Core Ops interface. Reproduce by copying
+the previous prerequisite prefix and running the new Lab source
+against it. The mixed-prefix control reproduced the unbound
+=call-with-execution-cancellation= error and exited 70.
+
+Restore and save now use the same cache key containing the
+verified Core gitlink. The cache is saved before Lab is linked
+or built. Preparation uses =clean-core= and =build-core= before
+expanding Lab. On the copied prefix those steps completed in
+15.66 and 59.22 seconds. A matching-Core =clean= diagnostic still
+exceeded its 120-second observation limit. The Runtime job now
+omits this preparation-only Lab clean. The default downstream
+gates still check actual clean behavior in independent prefixes.
+The key-projection Lean control ruled out equality across
+distinct Core revisions. The existing Quint enrollment model
+passed and its stale-approval mutant violated =FreshDemand=.
+
+On the exact Lab =66867e9= and Core =272c46b= sources, an
+isolated development-library diagnostic started from empty Lab
+outputs and the matching compiled prerequisites. This diagnostic
+explicitly used the 2 GiB test heap in the separate development
+entry, which has its own 180-second watchdog. At 141 seconds,
+before any native dispatch, the build interpreter had accumulated
+40.16 seconds of CPU time. In a one-second interpreter sample,
+46 of 82 main-thread samples were in =getcwd_long_path=.
+The child reached 12 distinct native dispatches before the
+watchdog stopped it with exit 124. The outer Gerbil wrapper
+reported exit 70 after 187.19 seconds. Keep the partial outputs
+as failed evidence. This trial does not qualify the Memory gate
+or reproduce the development job's default interpreter heap.
+
+A second cold run on the same source path used the native
+development job's default interpreter heap. The Lab output prefix
+was rebuilt from the original prerequisites, without reusing the
+first run's partial products. At 107 seconds the interpreter had
+42.41 seconds of CPU and no native dispatch. The first target was
+observed at 133.27 seconds. The unchanged 180-second watchdog
+interrupted native compilation after 380 distinct dispatches,
+with inner exit 124 and outer exit 70 after 181.95 seconds.
+The linker error followed the watchdog signal. Both runs remain
+development-library failures and do not alter the 2 GiB Memory
+gate or its three passing runs. The paired observation shows
+that removing the extra diagnostic heap fence did not eliminate
+the pre-dispatch delay.
+
+The workflow-only Lab revision =66867e9= retains the 1,544
+Scheme and package files from the Memory qualification tree
+byte for byte. Its Core gitlink =272c46b= matches all 670
+corresponding Core files. All three uninstrumented transcripts
+end in the Harness's final =OK= after nine successful native
+actions, including three compiled first reads and the refusal
+control. Neither development-library diagnostic contributes to
+that evidence.
+
+The Runtime jobs on =66867e9= passed the selected downstream gate
+on [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42445816324/job/128624538507][Ubuntu]] and [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42445816324/job/128624538475][macOS]]. From =test-entry= to the final =OK=, Memory took
+53.88 and 101.40 seconds respectively. Both jobs then exceeded the
+separate development-library build deadline. The three local full
+qualifications took 79.31, 77.89 and 80.87 seconds and exited naturally.
+
+The documentation and test-name commit =61ce384= kept the Memory
+fixture, production sources, Core gitlink and workflow unchanged.
+GitHub ran merge =6798ce0= with the same tree as the branch head.
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128636953512][Ubuntu]] passed Memory again in 47.46 seconds to the final =OK=.
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128636953383][macOS]] completed the cold targets, three compiled first reads and zero
+hot compiles, then reached the 120-second aggregate deadline in
+withdrawn clean. Its [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42449994733/job/128644578761][single-job replay]] completed all nine native actions,
+including cleanup, refusal and final digest validation. It printed
+the final =OK= 114.87 seconds after =test-entry= but the surrounding
+recipe still exited 124. Both macOS attempts on =61ce384= are failures.
+The total, action and idle limits remained 120, 120 and 60 seconds,
+with the same 2 GiB heap and three compiler workers on macOS.
+
+A paired local candidate moved the existing compiler progress reader
+from TestingScript to Ops progress. The focused native suite passed,
+and all four Memory runs across the forward and reverse pairs exited
+naturally. The candidate consistently removed ten Harness image
+identities, from 472 to 462, but the exit intervals overlapped at
+1.81–1.89 seconds. Total elapsed time favored opposite variants in
+the two orders. The candidate remains isolated. The benchmark did
+not change any production dependency, watchdog or compiler option.
+
+An independent cold =+memory= compile on the published sources
+dispatched 27 targets, expanded 198 Module contexts and spent 7.91
+seconds in native Make. External compiler process polling attributed
+observed CPU lower bounds of 0.70 seconds to =session/durable-policy=,
+0.59 to =memory/objects-handoff= and 0.49 to =memory/objects-durable=.
+Short-lived workers can exit between observations and some compiler
+work runs in the build interpreter. This is a compile-only diagnostic.
+
+A separate local run of the default Memory entry used the published
+sources, three workers, the same heap and deadlines, and fresh outputs.
+The process exited naturally in 84.25 seconds with all four success
+markers. Sampling the Harness PID after the final =OK= observed 773
+of 773 main-thread stacks in Gambit's dynamic-module cleanup and
+macOS =dlclose=. The outer invocation returned about 2.46 seconds
+after the observer first saw =OK=. This is a sampled local Harness
+interval, separate from the three acceptance runs. It confirms that
+native unloading also occurs in the Harness, independently of the
+previously sampled build children. The CI replay did not record a
+native stack, so this local profile does not assign its exact tail.
+
+Lab =909365e= ran Memory before Governance and Deployment in the
+existing serial downstream step. The source fixture, production
+modules, prerequisite revision and budgets were unchanged. The
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/42455443495/job/128653332923][macOS job]] passed all three downstreams. Memory took 109.69 seconds
+from =test-entry= to the final =OK= and the command returned
+naturally. It retained the 12/27/12 cold targets, zero projected
+scopes, three independent compiled reads, zero hot compilations,
+withdrawal cleanup, the rejection and the enabled product digest.
+The [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42455443495/job/128653333026][Linux job]] also passed all three downstreams. Its Memory case took
+53.53 seconds over the same measured interval and returned naturally
+after all nine actions with the same target, scope and hot-build counts.
+The later development-library build hit its own 180-second watchdog
+on both runners. These runs qualify the downstreams within the fixed
+budgets. The comparison does not isolate the effect of execution order.
+
+The external Bazel job on that same revision reached its
+12-minute action timeout while compiling prerequisite packages.
+Parser was still running and the Lab action had not started.
+The post-job disk archive then failed because files in =tmp=
+and =cas= changed while tar read them. This is a separate CI
+failure from the Runtime Memory gate.
+
+A local control used the pinned Bazel version with an
+independent output base and the existing disk cache. It
+completed one action, interrupted a second action, stopped the
+original server from the outer workspace, and archived the
+cache only after the server exited. A fresh server restored
+the completed action with one disk-cache hit. Lean checked that archive
+entry follows shutdown in the ordering model. Quint preserved
+the no-writer invariant and rejected an archive immediately
+after cancellation. An isolated workflow candidate uses the
+same output base for the existing external build and a native
+=bazelisk shutdown= step before post-job archiving. Workflow
+lint and all five external qualification unit tests passed.
+The external build budget and required targets are unchanged.
+The candidate remains local while the active Runtime jobs
+collect evidence for =66867e9=.
+
+On the same Lab commit, the independent Context Core suite hit the
+60-second idle limit while importing a Parser object in a prefix
+with installed prerequisites and no compiled Lab products. This is
+a source-mode control. The CI job runs that suite after
+=just build-library=. Starting that development-library build
+from the same empty Lab output prefix, with 12 cores and a 2 GiB
+heap, reached its 180-second watchdog. The parent finished in
+185.33 seconds, the build recipe reported child exit 124, and 354
+distinct target dispatches were present. The first observed
+Governance and Context =.ssi= files were created approximately
+113 seconds after interpreter launch. A later one-second sample
+during compilation showed Gerbil optimization and Gambit collection.
+It cannot attribute the interval before the first target. The build
+left partial outputs, so no product-mode Context Core pass follows
+from this run.
+
+The Linux external-module and Gerbil-package jobs on =6f10339=
+both exceeded their existing 12-minute action budgets before
+compiling Lab. The external job reached Orgize after the POO,
+Yuanxu and Parser actions. The package job rebuilt POO and Yuanxu
+and stopped while the Parser action was still running. The
+workflows use separate Bazel disk-cache identities. The logs show
+duplicate prerequisite work across jobs. The macOS package job
+also exceeded its 12-minute dependency budget. It was still in
+the POO action at the last 636-second checkpoint for that action.
+That job did not execute the Memory downstream suite.
+
+An analysis-only control on the same source used Bazel =9.2.0=
+and one Darwin toolchain. In the checkout, run:
+
+#+begin_src sh
+bazel aquery --output=jsonproto --include_artifacts --lockfile_mode=off \
+  --macos_minimum_os="$(sw_vers -productVersion)" \
+  'mnemonic("GerbilProjectCompile", deps(//:dependency_packages))'
+#+end_src
+
+Compare it with the same query over =deps(//:agentic_ai_lab_compile)= in the external consumer
+created by =t/qualification/external_bazel/external_module.py=.
+The control used separate output bases and the existing root override
+and set the same macOS target in both invocations.
+
+| Comparison | Matching native action keys |
+|------------+-----------------------------|
+| Direct checkout versus external consumer, shared prerequisites | 0 of 6 |
+| External consumer versus an independently relocated external export | 7 of 7 |
+
+The relocated external graph also had the same argument vectors and
+action environments. In the direct versus external comparison, the
+action arguments carried different repository-qualified labels and
+output paths. Yuanxu also had a different staged source path. The
+dependent actions carried those qualified roots in their input
+environment. Sharing a CI disk-cache name alone would therefore
+leave the observed distinct actions. Keep native Bazel action and
+receipt validation when evaluating any common producer. The Darwin
+control establishes the repository-identity distinction and does
+not establish Linux cache hits or cross-context product equivalence.
+
+A native disk-cache control then built
+=@agentic_ai_lab//:gerbil_poo_package= using the external graph.
+Two independent export and output directories shared the same
+initially empty Bazel disk cache. The builds took 137.62 and
+148.95 seconds and both executed the POO sandbox action.
+The compile action declared the same 715 input paths. Of its
+711 regular-file entries, 12 differed, all in the generated
+Gerbil toolchain launchers or the toolchain receipt. Substituting
+only the output-base prefix in the diagnostic diff explained all
+12 byte differences. The toolchain receipt's ABI fingerprint
+was unchanged.
+
+For the third run, stop the first Bazel server, preserve its output
+directory, and give the independently relocated source export
+a fresh output directory at the first run's absolute output-base
+path. Retain only the same native disk cache between builds.
+The third run took 16.46 seconds including analysis, reported
+one disk-cache hit and no compiler sandbox action, and restored
+the same receipt SHA-256 and all 759 library entries, comparing
+file bytes and symbolic-link targets.
+This qualifies native reuse for the external Darwin POO producer
+under both a stable repository identity and a stable toolchain
+output base. Direct-checkout versus external reuse still requires
+an actual common producer or a separately qualified receipt-bound
+handoff.
+
+The same control extends to the actual Parser prerequisite chain.
+In the external consumer build =@agentic_ai_lab//:gerbil_parser_package=
+with the same =--output_base= and =--disk_cache=, the declared source
+override, and =--jobs=2=. Starting with the qualified POO action
+already available, Bazel compiled Yuanxu and Parser in 268.26
+seconds wall. Their native receipts recorded 110 and 145 seconds,
+respectively. Stop the server, preserve its output directory, then
+repeat from the other independent source export with an empty output
+directory at the same absolute output-base path. The second build
+took 18.56 seconds, reported three disk-cache hits, and ran no
+compiler sandbox action. Request the POO, Yuanxu and Parser targets
+explicitly to materialize all three libraries for comparison. That
+request also ran no compiler action. The receipt bytes were identical
+for all three projects, the expected and observed source revisions
+matched, and the 759, 2,174 and 2,587 library entries respectively
+matched by path and content. The cold chain reused POO and is not a
+measurement of a completely cold dependency graph.
+
+With those three prerequisites available, the unchanged
+=external_module.py= full qualification ran with a fresh output
+directory at the same absolute base and the native disk cache.
+The missing-root-override control refused as expected. The
+remaining actions issued successful native receipts for the
+Scheme/Rust bridge, Ascent, and Orgize after 13, 255, and 398
+seconds respectively. The actions overlap, so these durations
+are not additive. Lab's separate =:compile= action started, then
+the 12-minute full qualification expired after 720.01 seconds
+with exit 124. The final Bazel progress checkpoint showed the
+Lab action at 222 seconds. No Lab receipt was published.
+
+The active Lab action log still held only its resource-admission
+record when copied. A one-second sample of the sandboxed Lab
+interpreter at about 189 seconds showed 39 of 84 main-thread
+samples in =getcwd_long_path=, with Gambit marking and collection
+also visible. This sample locates active work before the first
+observable Make dispatch in that run. It does not estimate the
+whole span or prove that pathname cost alone caused the timeout.
+Sharing prerequisites advances the complete external graph to
+Lab; it does not close the separately observed Lab preparation
+cost. The direct Just development build has its own 180-second
+entry watchdog; the external action in this control was ended by
+the outer 12-minute qualification boundary.
+
+To isolate source location, archive Lab =6f10339= and Core =62bd03c=,
+then run the existing =./build-development.ss spec= entry in three
+fresh processes. Use the same compiled prerequisites without Lab
+products, Gerbil =1cfb032=, Gambit =ea114fc=, POO =cd4de644=, 12
+cores, and a 2 GiB heap. Move the same source directory on the same
+filesystem from a short path into a Bazel-shaped deep path and
+back. Verify the source directory inode stays unchanged. The
+=spec= entry keeps its 180-second watchdog and performs no Make
+compilation. The path lengths below exclude macOS's =/private=
+prefix on =/tmp=.
+
+| Source location | Path characters | Wall seconds | Library projection seconds | Selected Graph seconds | System CPU seconds |
+|-----------------+-----------------+--------------+----------------------------+------------------------+--------------------|
+| Short, before   | 37              | 72.11        | 18.93                      | 44.28                  | 23.05              |
+| Deep            | 209             | 153.92       | 17.73                      | 127.90                 | 95.71              |
+| Short, after    | 37              | 68.31        | 17.48                      | 43.31                  | 22.75              |
+
+All three returned the same ordered 556-target specification after
+normalizing only the source-root spelling for comparison. Expansion
+counts were identical, including 290 for Module projection. The
+short-path return control attributes most of the measured increase to
+source location in the selected Graph phase. It does not isolate one
+Scheme caller or replace full cold build acceptance.
+
+An isolated Yuanxu candidate computed each canonical path once in
+=module-directory-context='s local =inside?= predicate. The existing
+Gambit implementation can call =getcwd= and change directories inside
+each normalization. The Lean equality treats both operands as coming
+from the same snapshot, and a second theorem recomputes both in a
+later snapshot. The existing Quint compiler-enrollment control passed,
+and its stale-approval variant failed as expected. These results do
+not establish filesystem atomicity. The candidate retains independent
+source checks and introduces no persistent state.
+
+For a source-level pair, keep the same physical deep Lab source root
+and prerequisite prefix in both runs. Change only the two local
+bindings in the archived Core's =directory.ss=, rebuild the matching
+Core products through =just build=, and use the existing
+=./build-development.ss spec= entry in a fresh process for each
+variant. Do not count prerequisite rebuilds as Lab cold builds.
+Use the same pins, cores, heap and watchdog as the path-location
+control above.
+
+| Variant         | Graph seconds | Private closure seconds | Context seconds | System CPU seconds | Wall seconds | Exit |
+|-----------------+---------------+-------------------------+-----------------+--------------------+--------------+------|
+| Candidate first | 122.20        | 43.91                   | 25.20           | 53.12              | 180.04       | 124  |
+| Original        | 139.87        | 89.23                   | 1.46            | 100.98             | 172.19       | 0    |
+| Candidate again | 98.10         | 49.41                   | 1.92            | 61.21              | 134.61       | 0    |
+
+All three runs emitted the byte-identical ordered
+556-target spec and 290 Module expansions, with 12,923 private
+closure read attempts and 17,444 overall physical source reads.
+The first candidate logged =main return= at 178.70 seconds and was
+terminated before natural exit. The first setup attempt also
+failed because the temporary prefix lacked the pinned Parser
+prelude. The recorded variants share the repaired prefix. The
+candidate reduced private closure and system CPU in both positions.
+Pre-Graph linker construction increased in the first candidate
+and returned near the original measurement on the repeat. Keep the
+first timeout in the result. This control qualifies neither a
+full development build nor the Memory Harness. The directory,
+publication and testing-source-admission suites passed against the
+candidate's compiled Core products. The build-input mutation gate
+rejected all four faults with exit 70 and passed both order and
+admission checks before and after the faults.
+
+Three serial =just test-file t/yuanxu-context-memory-downstream-test.ss=
+invocations with the candidate completed in 85.72, 85.73 and
+86.55 seconds. Each used the same pins and independent empty
+consumer prefixes. Each retained the 12/27/12 cold sets, all
+three first reads, zero scopes during projection, zero hot
+compilations, receiver and consumer isolation, withdrawal, refusal,
+and the enabled artifact digest. The first downstream setup used
+package links without installed manifests and added a second product
+prefix. Memory failed before the first build could run, and the
+Deployment precheck refused the incomplete prerequisite view. The
+successful Memory rounds use the matching installed package metadata
+and a single prerequisite product prefix.
+The independent Deployment suite then passed in 67.36 seconds with
+46 selected targets, the first read from B, zero hot compilation
+and clean isolation.
+
+The native Bazel =--sandbox_base= option did not shorten the Lab
+action directory. With the same output base and cached prerequisites,
+Bazel inserted a =bazel-sandbox.<hash>= component under the requested
+short directory. The physical action working directory grew from
+214 to 250 characters. The isolated control was stopped explicitly
+at 116.05 seconds after this was confirmed. It is an interrupted
+control, rather than a watchdog failure or a passing cold build.
+No production sandbox setting follows from that control.
+
+An isolated Gerbil Bazel rule experiment staged a root build script
+and its sources directly inside the existing project directory when
+all declared files belonged to the same repository. A Lean control
+checked that stripping a common owner prefix preserves distinct
+relative paths and exhibited the collision for mixed owners. The
+existing Quint compiler-input extent simulation preserved ownership
+and restoration, while its route-first variant violated the owner
+invariant. These checks do not establish full native staging safety.

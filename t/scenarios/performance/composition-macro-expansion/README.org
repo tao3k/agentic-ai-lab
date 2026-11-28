@@ -6,9 +6,9 @@
 
 * Purpose
 
-This scenario exercises the real native Profile value path with 1,000 and
+This scenario exercises the real runtime Profile value path with 1,000 and
 5,000 distinct local POO profiles.  It does not generate Scheme source text or
-measure string construction.  =generator-syntax.ss= creates native =.def=
+measure string construction.  =generator-syntax.ss= creates runtime =.def=
 Profile bindings with the caller's lexical context, then binds the production
 =compose profiles= result through the thin =user-composition= root macro.  No
 clause parser or second lowering path is involved.
@@ -39,9 +39,9 @@ not a portable gate: macOS =/usr/bin/time -l= depends on host =sysctl= access.
 Current admission uses the 20-second elapsed budget for each real =gxc -S= case
 and the declarative ASP Testing Profile for test-process heap enforcement.
 
-The compiler subprocess uses =gxc -S=: Gerbil expands native POO declarations
+The compiler subprocess uses =gxc -S=: Gerbil expands POO declarations
 and the thin root binding, validates module context, and generates Scheme,
 while Gambit C compilation is
 intentionally excluded.  A full =gxc= observation includes C generation and
-native compiler memory and therefore must not be reported as composition macro
+runtime compiler memory and therefore must not be reported as composition macro
 RSS.  Full package builds continue to own that separate backend gate.

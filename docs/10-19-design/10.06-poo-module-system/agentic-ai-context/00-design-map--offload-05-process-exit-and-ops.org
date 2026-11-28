@@ -1,0 +1,440 @@
+#+title: Process exit and Ops dependency ownership (part 5)
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Extracted module of [[file:00-design-map.org][Agentic AI Context: Existing Org Design to SysML Allocation]].
+
+* Process exit and Ops dependency ownership (part 5)
+The first analysis also changed the nested Yuanxu action, so the
+refined control limited the rule to a build script at the repository
+root. Its native =aquery= kept the six prerequisite action keys,
+arguments and environments. It changed only Lab's compile action
+and preserved all 1,745 source-to-relative-path associations.
+The real action working directory shrank from 214 to 175 characters.
+With the same prerequisite products, the experiment reached 180
+distinct Make dispatches before the 180-second control ended at
+180.06 seconds with exit 124. The preceding default external action
+had no observable dispatch at its later sample. The shortened
+action's one-second sample near 137 seconds had three
+=getcwd_long_path= samples out of 83, and still showed Gerbil
+expansion and Gambit GC. The samples are from different moments.
+No Lab receipt was issued. The rule was withdrawn and all seven
+baseline action keys and the pinned provider source were rechecked.
+Before considering production staging, guard all generated project
+namespaces and qualify the complete native build with its receipt.
+
+A local diagnostic used the published Lab sources, its =cd79463=
+Core gitlink, fixed POO artifacts, four workers, the 2 GiB VM fence
+and an empty Lab output prefix. The Darwin =just build-library=
+entry still has its 180-second watchdog. With stage accounting
+enabled, library collection took 24.74 seconds for 445 retained
+rows and the selected graph took 78.51 seconds. Make entered at
+111.88 seconds. The watchdog returned 124 after 180.56 seconds,
+with 355 distinct native target dispatches and no completed main
+span. The build interpreter's maximum observed RSS was 3,087,600
+KiB. In short native samples, projection showed =getcwd=, expander
+work and GC. The Make sample showed compiler optimization and GC.
+This control locates native work in both phases. It reproduces a
+bounded full-build failure on Darwin without reproducing the Linux
+heap exception.
+
+To locate retained data at the compiler handoff, a separate 2 GiB
+diagnostic ran the production library and selected projections from
+=63213aa6= with Core =cd79463=. It entered the normal compiler-input
+extent with a measuring action in place of Make. Two explicit
+collections precede each reading. Gambit's live-byte counter is
+process-wide. The Context counts deduplicate aliases by object
+identity in Gerbil's registry.
+
+| Diagnostic boundary | Live bytes | Registry keys | Distinct Contexts |
+|---------------------+------------+---------------+-------------------|
+| Before library projection | 136373696 | 1014 | 291 |
+| After library projection | 1172456848 | 4409 | 1144 |
+| After selected projection | 1364743472 | 5014 | 1433 |
+| Inside compiler-input extent | 1366999152 | 5014 | 1433 |
+| After compiler-input extent | 1365416576 | 5014 | 1433 |
+| After dropping projection and build Graph | 1348738696 | 5014 | 1433 |
+
+The diagnostic verified a count of 556 native target rows. Weak
+references confirmed that the projection and Graph were collected.
+Their removal released 16,677,880 live bytes while the registered
+Context count stayed unchanged. The ordinary library phase had already
+increased process live data by 1,036,083,152 bytes before the selected
+Graph was constructed. That delta includes runtime and macro state,
+so it is not an exclusive byte count for the registry. The generated
+source view from the earlier full-build control had 556 Scheme files.
+Their source stamp lines totaled 4,585,851 bytes, with a largest line
+of 80,710 bytes. This on-disk count is distinct from heap retention.
+
+Gerbil's native import stores the expanded module body and delayed
+evaluation on the Context and registers it by path and identity.
+Ordinary library traversal needs its import and prelude edges.
+The production compiler can use the same Context and the Reader
+authenticates relevant Context identities. A wholesale registry
+reset would therefore need a stronger source, phase and nominal
+identity proof. Trimming the returned POO Graph or changing only
+the source stamps is unlikely to close this observed heap deficit.
+This forced-GC diagnostic ran no native Make compilation and is not
+a cold-build or throughput result.
+
+A separate diagnostic entered the same authenticated compiler-input
+extent and ran Gerbil's compiler driver on three real ordinary library
+targets. The import for each generated Make path returned the exact
+Context first registered while collecting the library. The original
+paths were =nix-contracts.ss=, the Workflow declaration case and
+Agentic Context =funs.ss=. None requested a reload, and all three
+produced a native interface in the fresh output prefix.
+
+| Boundary | Live bytes after GC | Distinct registered Contexts |
+|----------+---------------------+------------------------------|
+| Before compiling the three targets | 1374033304 | 1444 |
+| After the Nix Contracts target | 1496725856 | 1637 |
+| After the Workflow target | 1535217808 | 1779 |
+| After the Context Functions target | 1601531344 | 2000 |
+| After the compiler-input extent | 1583284360 | 2000 |
+
+The native Context identities rule out re-expansion of those three
+primary source modules as the explanation for their compiler-stage
+increase. The count alone does not classify the additional Contexts
+or bound the entire compiler's memory. The native optimizer can
+replace a Context's expanded code while preserving its identity.
+An identity comparison therefore establishes reuse but cannot
+certify equivalence of expansion state across independent phases.
+
+On the original =nix-contracts.ss= source, a matched native compiler
+control varied only the optimizer option. Both processes generated
+the requested interface in independent empty prefixes and reused the
+same source Context. The default optimized action added 193
+registered Contexts, of which 192 had =.ssxi.ss= paths and one had
+an =.ssi= path. It retained another 120,425,544 live bytes after GC
+and replaced the Context's expanded code. Without the optimizer,
+the same target added no Contexts and 25,120 live bytes, and the
+Context code retained its original identity. The non-optimized run
+is a diagnostic, not an artifact-equivalence or runtime result.
+The default Make options remain in force.
+
+A separate two-process order control acquired the selected Graph
+before the ordinary library in one run and kept the production order
+in the other. The sorted 556 compiler rows, including options, were
+byte-identical, and neither path constructed a business scope. The
+production order finished projection with 1,366,013,968 live bytes
+after GC. Selected-first finished with 1,370,122,792 bytes. Both
+retained 1,433 registered Contexts. The whole diagnostic took 74.28
+and 93.69 seconds respectively. The run does not establish a stable
+wall-time difference, but shows no reduction in the final Context
+set from changing the order. No production phase was reordered.
+
+Two other exact-head Lab failures reached their existing 12-minute
+dependency phase limit. The macOS Runtime-WASM job spent at least 641
+seconds in the POO producer before starting Core. The Ubuntu package
+job spent at least 297 seconds in Parser and timed out during Orgize.
+Those are separate from the external Linux job's Lab compile overflow.
+
+Package windows read the native Gerbil checkout tree under =gerbil-path=.
+The source reader has no reason to initialize the package manager or to
+create directories. Installation, checkout placement, pinning, and compiled
+library resolution remain Gerbil's responsibilities. Compare any package
+root experiment outside the Graph and report its loader IDs separately
+from Gerbil Contexts and native Make targets.
+
+The runtime reader uses its own native Context as the root of its
+source-authentication closure. The Core source bootstrap retains its
+build entry roots. Both use Gerbil's import identities and the same
+Context traversal for the shared role languages and value libraries.
+
+An installed Context can remain a Gerbil prerequisite while an explicit
+selected source owner has a separate byte obligation for the same Module
+ID. The reader retains authenticated owner observations in its existing
+currentness guards. The installed Context adds no Make target. Core's
+=t/module-reader-tool-context-test.ss= exercises the distinction using a
+relocated source checkout: an unrelated edit is allowed, an admitted
+owner edit or removal is refused, and the installed prerequisite stays
+out of the compiler inputs.
+To check the boundary, compare the first compiled consumer read and the
+withdrawn build and clean against the original native target set. Run
+the wrong-Context and changed-source controls separately.
+
+The Base control removes the package manager and its network imports
+from the runtime loader inventory while preserving the registered
+projection Context count and exact compiler target set. Compare wall
+times only with paired host conditions and keep the standalone control
+separate from the full Memory gate.
+
+The owner-currentness control preserved the exact cold target sets in
+all three modes: 12 base, 46 enabled, and 12 withdrawn. Of the 34 enabled
+additions, 23 are in the Memory Feature and 11 are imported Lab libraries.
+All three independent first reads completed. The aggregate watchdog then
+terminated the hot enabled build, which had started at 113.81 seconds
+on the Harness clock. This run establishes cold target and first-read
+coverage only. The hot compilation count, clean, refusal, and three
+complete in-budget runs remain separate acceptance obligations.
+
+Memory now imports the Session helpers and intent accessors from their
+defining modules. The same cold fixture drops exactly five targets:
+=session/objects=, =session/objects-attempt=, =session/objects-graph=,
+=session/objects-handoff=, and =session/transform=. Base and withdrawn
+still compile the same 12 targets. Enabled compiles 41, with 246 projection
+Contexts instead of 251. Native Make's expansion census still reports
+394, so the target reduction does not establish a wall-time improvement.
+The full run reached all three first reads and returned from the hot
+build with zero compilation. The aggregate watchdog interrupted
+withdrawn clean after its child logged =main return=, before the parent
+reported completion. That run does not qualify as acceptance.
+
+With parent action epochs enabled, the base build took 4.93 seconds to
+enter =main=, 6.72 seconds inside =main=, and 2.80 seconds from its return
+to parent completion. Withdrawn clean spent 6.40 seconds inside =main=
+and another 8.50 seconds before parent completion. The clean output
+removal itself took about 20 milliseconds. This run completed the hot
+build and clean, then exhausted the aggregate budget after launching
+the refusal process. The post-main interval includes both child
+teardown and parent collection. A separate native sample identified
+Gambit's dynamic-module cleanup in the child, without attributing the
+entire interval to that stack.
+
+A separate base-only diagnostic followed the child process tree through
+the existing action watchdog. It observed the build =gxi= exit about
+2.06 seconds after =main= returned and the parent action complete at
+2.61 seconds. Process polling bounds the observation resolution. The
+diagnostic locates most of this interval before the build interpreter
+exits and is separate from the aggregate acceptance run.
+
+A second paired exit diagnostic used the fixed =a389bc6= Core manifest,
+=cd4de644= POO source and compiled library, and the same default Memory
+fixture in independent output prefixes. The control had no active
+sampler during the base build and returned to its parent 2.54 seconds
+after =main=. The instrumented base action returned after 4.25 seconds.
+Process-table observation bounded the build interpreter's exit to
+3.54–3.71 seconds after =main=. The Gerbil CLI and its timeout supervisor
+both exited within the final polling interval, which also contains the
+parent return. The time from interpreter exit to parent completion was
+0.54–0.71 seconds. This includes the CLI and supervisor. The final
+polling interval cannot separately resolve parent collection.
+
+The two-second native sample caught the build interpreter in
+=___cleanup_dyn_module= and =dlclose=. Most of that stack was in
+dyld's debugger-unload notification. The sample is specific to the
+instrumented interval. The control and sample differ in wall time,
+so use the sample to identify the work and retain the uninstrumented
+measurements for performance acceptance. Moving the Ops completion
+marker or returning before the child exits would leave this work
+in place and would change the existing process verdict.
+
+An independent base first-read diagnostic observed seven native
+compiler demand roots. Traversing their native module Contexts reached 292
+of the 343 Contexts in the reader catalogue. Neither Funflow's Flow
+and Scenario roots nor the JSON Schema receipt and validation roots
+were in that demand closure. This measures one base input. The
+catalogue still authenticates the canonical Context before publication
+callbacks, and other modules can demand these roots.
+
+An isolated native overlay removed all four roots from the reader
+catalogue while preserving the build bootstrap. The baseline passed
+=module-candidate-stage-test= and =module-json-schema-publication-test=.
+The overlay failed both. A replaced Funflow Task Context path escaped
+the existing currentness check, and JSON Schema produced a node from a
+different nominal type instance. Deferring these roots requires both
+canonical type identity and the existing source guard at actual use.
+
+A second native control mutated the already loaded Funflow Task
+Context's path after creating the Reader and before reading a source
+whose objects import =TaskContract=. The production Reader refused
+the read. The pruned overlay accepted it. A deferred enrollment must
+retain the original provenance of an already loaded Context; checking
+only the path observed at its first demand can bless the replacement.
+
+Both variants passed the isolated native base first-read control with
+the exact same 12 cold compiler targets. The pruned overlay registered
+92 projection Contexts instead of 131 and loaded 76 new runtime module
+IDs during the first read instead of 90. Make reported 214 Contexts in
+both runs. The host load differed between variants, so this comparison
+establishes a reduction in counted work. The two failed publication
+controls exclude this overlay from acceptance.
+
+The next isolated prototype retains prebound native Contexts in the
+existing Reader guard and forces the existing Gerbil catalogue at a
+matching import. It uses native resolution for the deferred paths and
+keeps source-backed roots eager. The original pre-demand refusal,
+Funflow publication, JSON Schema nominal identity and compiler
+Context controls pass. On the real base fixture it reproduced the
+92 projection Contexts and 76 first-read module IDs with the exact
+12 compiler targets. The four build-input mutations all refused.
+The independent deployment gate completed cold A and B, clean A and
+hot B, then exceeded its aggregate budget in the selected test action.
+A compiled path alone does not certify an
+as-yet-unloaded interface across a publication callback. The
+same-path replacement control copied the native Funflow Scenario
+interface into an isolated prefix, created the Reader, replaced the
+interface at the same path with a test-only expansion that writes a
+marker, then forced the Scenario slot through the consumer's
+publication link. The production Reader returned the slot without
+writing the marker. The prototype returned the slot after writing it.
+The effect is evidence against deferral based on path resolution and
+prebound Context identity alone. The prototype remains outside the
+production Reader.
+
+The native import trace showed that Gerbil resolved the symbolic Scenario
+import before calling the Reader's import hook. The hook received an absolute
+interface path. The isolated deferred experiment only recognized a symbolic
+Module ID, so its root-byte check never ran before delegation. An isolated
+control matched the exact resolved path returned by Gerbil. That version
+refused a same-path replacement of Scenario before it wrote the expansion
+marker. Replacing Task alone still passed the root checks and wrote its
+marker before a later Type error. Reproduce by replacing each interface in
+its own temporary prefix after Reader creation, then demanding Scenario
+through the publication link. A refusal after the marker has been written
+fails this control.
+
+The existing =SourceClosureWork= Lean proof and =ToolOrigin= Quint model
+cover previously captured native Context identity and its source obligations.
+A root interface that has never been loaded has no captured Context, and a
+root-path check alone cannot certify its transitive inputs. Keep eager Context
+enrollment until the native import path can authenticate that dependency
+closure before its first expansion effect.
+
+Lexical use alone also underestimates enrollment. Scenario does not refer
+to its imported =AdapterResult= binding, but Gerbil still loads the
+runtime-protocol image while the Reader enrolls Scenario's Context.
+Compare fresh builds of Scenario with and without that import in private
+prefixes, then replace =runtime-protocol.ssi= after Reader creation. A
+separate publication must demand =AdapterResult= through its own role.
+The original graph protects the role from the replacement's expansion
+effect. Removing the seemingly unused import lets the replacement run
+and the role return. Preserve enrollment until the receiving import can
+authenticate the actual native Context before expansion.
+
+Memory's Org selection uses seven bindings from Orgize's Element Types,
+values, and query modules. Each binding is the same native procedure as
+the corresponding Lab facade export. Keep the facade for clients that
+use its Org Contract and syntax APIs. The independent import census
+reported 171 newly loaded module IDs for the defining modules and 179
+for the facade. In the complete cold build phase the enabled target set
+lost only =modules/query/semantic/orgize-interface=, leaving 40 targets.
+Projection Contexts moved from 246 to 240, and Make Contexts from 394 to
+389. Base and withdrawn retained their exact target sets. These counts
+establish work reduction; the runs had different host load.
+The Org selection suite passed against products from a separate
+40-target build. The aggregate run under higher host load finished all
+three first reads, started the hot build at 118.99 seconds, and timed
+out without an acceptance receipt.
+
+On the same inputs a later enabled build again compiled 40 targets and
+registered 389 Make Contexts. Its main-process CPU was 9.16 seconds
+versus 9.12 seconds in the first run, while the parent action increased
+from 28.62 to 46.72 seconds. The main-return-to-parent interval grew
+from 3.67 to 10.65 seconds. Main-process CPU excludes compiler
+children, so this comparison distinguishes unchanged counted work
+from elapsed delay without assigning all of that delay to scheduling.
+That later aggregate run was stopped after the withdrawn build logged
+=main return= and before its parent action reported completion.
+
+The Memory Interface no longer imports and reexports its empty
+=types.ss= and =funs.ss= placeholders. The files publish no bindings
+and contain no initializers. The native cold enabled build now contains
+38 targets. Its difference from the preceding 40-target build consists
+of exactly those two files. The module projection census dropped from
+240 to 238; Make reported 389 Contexts in both builds. Memory Core and
+Org selection passed using the newly compiled products. The existing Memory configuration,
+Org selection and Session selection exports still determine the
+public dependency closure.
+
+The first 38-target aggregate run finished the two initial cold
+builds, started the withdrawn build, and exceeded the aggregate
+deadline. Base took 12.81 seconds from child =main return= to
+parent action completion. The diagnostic and cold target reduction
+do not establish three in-budget aggregate runs.
+
+A subsequent aggregate run completed all three cold builds and the
+target assertions with 12, 38, and 12 targets respectively. Its base
+and withdrawn target sets were identical and contained no Memory
+Feature target. The enabled set matched the independent 38-target
+build. The aggregate watchdog interrupted the base first-read action.
+
+For withdrawal, compare the entire =gerbil clean= action with its
+=clean-outputs= span and the nested =gerbil-clean= and
+=clean-product-residue= spans. Use a fresh withdrawn build with
+products present and confirm that the admitted products disappear.
+Run the existing Feature refusal from its own source prefix so its
+startup and termination can be attributed independently of cleaning.
+
+On macOS, pair an uninstrumented base build with a fresh base build in
+which =sample= attaches to the descendant running =gxi build.ss
+compile= immediately after =BUILD-STAGE main return=. The =main= return
+does not end the command. The sample can distinguish time in Gambit's
+=___cleanup_dyn_module= and dyld's =dlclose= from time in the parent
+supervisor. Keep the sample and host load with the local logs. A sample
+is evidence for the sampled interval only.
+
+Observe the build interpreter, the outer =gerbil build= process, and the
+action watchdog as distinct processes. Bound each exit using the last
+live and first absent or zombie observations, with timestamps around
+each process-table read. Attribute parent collection only after the
+supervised command has exited. The interpreter can be in synchronous
+dyld unload notifications, and the outer CLI can remain alive after the
+interpreter exits. Keep the process census separate from the ordinary
+aggregate qualification.
+
+To isolate hot projection, build an enabled fixture from empty outputs,
+then build again in a new process against those outputs. Attach the
+sampler during the second =library-spec= span of that hot build. The
+first span belongs to the consumer library; the second follows the
+Feature Interface. Separate samples in Gambit's dynamic loading and
+GC from the wall time of the entire span.
+
+To attribute loaded code to its owner, capture Gerbil's =list-modules=
+immediately before and after the existing =std-make-spec= call in a
+diagnostic copy of the consumer build script. Compare the sets of
+module IDs and product paths for fresh base and enabled prefixes.
+Keep phase-suffixed module IDs distinct and compare the native compiler
+target sets separately. A complete cold =+memory= census distinguishes
+the Feature library traversal from Make's optimizer imports. Compare
+the exact native Context IDs and paths emitted at each stage. An optimizer
+Context for the same library has its own identity and cannot substitute
+for the admitted source Context. The native compiler schedules that work.
+
+Parallel Make and compiler workers can interleave their output on the
+same line. The downstream tests share the target reader in
+=t/qualification/yuanxu-build-events.ss=. Replay the original transcript
+and compare the complete sorted target list, retaining duplicates and
+rejecting a missing target. A worker suffix is independent of the target
+identity. Keep a failed cold process receipt even when its transcript
+contains the expected targets or reports that =main= returned.
+
+An idle refusal before the first native compile line also needs separate
+attribution. Compare the last completed specification or source admission
+span with the progress received by Ops. Native compile records can be
+absent throughout specification preparation. Building reports the successful
+specification and owner check through the existing Ops progress channel
+before dispatch. A supervised child using the existing detailed build
+report emits this event without a child watchdog. The event can advance
+the enclosing idle window once and carries neither compilation success
+nor admission. The action and aggregate deadlines remain fixed. Use the
+owner-mismatch control and the =CompilerProgress= replay counterexample
+to verify this distinction.
+
+The Orgize facade imports both runtime query
+values and authoring syntax. Inspect the installed interfaces of those
+imports to identify their preludes and distinguish the Parser phase
+closure from the Lab targets that must be compiled.
+
+The two Orgize syntax modules can compile with =:gerbil/core= and
+preserve their generated import and export declarations. This change
+alone leaves the observed phase-module set unchanged. Import
+=:gerbil-parser/graph-query-support= and
+=:gerbil-parser/graph-projection-support= separately through Gerbil's
+=core-import-module=, taking a fresh inventory after each import. The
+second facade imports the projection generator along with the POO graph
+values. The Orgize =graph-shape= and =value-types= modules use only
+bindings from the graph value owner. An isolated build that resolves
+those bindings from their defining module preserves the Lab compiler
+target set and avoids loading the generator's Parser phase closure.
+The isolated build still uses the normal scope and Make boundaries.
+Package integration requires a maintained upstream binding surface
+and a complete downstream gate against the pinned products.
+
+Use the full unmodified gate for qualification. A successful single
+build, first-read control, or resumed compilation cannot establish a
+cold pass. Record failed rounds alongside successful ones.

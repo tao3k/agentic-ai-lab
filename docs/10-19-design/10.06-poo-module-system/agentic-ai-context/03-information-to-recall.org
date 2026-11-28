@@ -1,0 +1,174 @@
+#+title: Context Round Trip: Information, Situated Use and Knowledge Reentry
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS org-derived-architectural-activity-model
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Process and scope
+
+The [[file:03-information-to-recall.sysml][SysML activity model]] connects the existing activities into an illustrative
+round trip. It refines the [[file:01-system-boundary.org][responsibility model]] and
+[[file:02-lifecycle.sysml][orthogonal lifecycle axes]], using the existing Org contracts listed below.
+
+#+begin_src text
+explicit question / Demand
+  -> source acquisition and qualified ORG Element bindings
+  -> Query selection + POO Graph Context composition
+  -> admitted working Context + exact rendered SessionInputRef
+  -> independent Session Attempt/Turn + fenced Host dispatch
+  -> matching response observation
+       -> current result admission -> Session outcome
+       -> stale/denied result -> historical outcome + recovery obligations
+  -> optional Memory capture of exact input/outcome references
+  -> multidimensional reassessment
+       -> qualified consolidation -> new scoped long-term interpretation
+       -> no consolidation -> retain episode/hypothesis without generalization
+  -- explicit later question / new Demand --> recall candidates
+  -> current source acquisition + selection/composition/admission
+  -> new working Context
+#+end_src
+
+This is an activity relationship, not a prescribed next action or one mandatory
+Agent pipeline. A consumer can stop after working Context formation, opt out of
+Memory, recall existing knowledge without a new capture, or reenter reassessment
+on a source/environment change. The model's single-input bindings illustrate
+ownership; production selection may compose multiple documents, histories,
+knowledge candidates and Context graph parents within the declared budget.
+
+* Step contracts and Session boundaries
+
+| Step | Input and product | Context responsibility | Independent Session responsibility | Executing or admitting owner |
+|------+-------------------+------------------------+------------------------------------+------------------------------|
+| 1. Enter information | Demand plus permitted source -> source-qualified packet/Element references | Select acquisition scope; preserve producer/source/Contract cuts, information roles and uncertainty | Supply original events/turn receipts only when selected history is an input; no active Session needed for ordinary documents | Host authenticates bytes/read scope; Orgize projects Elements/Contract; adapters preserve actual external identities |
+| 2. Form working Context | Source closure plus optional recalled candidates -> situated graph composition and admitted projection | Query selection, explicit POO/C3/C4 composition, budgets, mandatory restrictions/evidence, alternatives and completeness | Supply consumer scope/identity if this projection is for a Session; do not own source meaning or graph lifetime | Query/GQL admission; Context semantics; relevant domain Evidence/Temporal/MRR admissions |
+| 3. Prepare interaction input | Exact projection plus actor/purpose/destination -> immutable SessionInputRef and joint envelope | Render and bind exact content, source/query/profile/restriction identities and producer receipt | Own the generic input-ref contract and preserve its opaque producer bindings | Pure preparation followed by trusted producer resolution; preparation grants no future dispatch permission |
+| 4. Use through a Session | Input ref -> claimed Attempt/Turn -> request/disclosure receipt -> response observation | Compose current disclosure/consumption checks; interpret content/result semantics | Own Task/Attempt/Turn IDs, revisions, request matching, event history, cancellation and one published protocol outcome | Host dispatches via qualified current fence/outbox/gateway; provider supplies observations; Data/Host execute conditional publication |
+| 5. Capture and reassess | Exact Context plus Session outcome -> experience and independently versioned assessment | Coordinate relevance, credibility, applicability, retention value, uncertainty and current-use authority; Memory retains original input/outcome refs | Keep original event/outcome ownership; capture does not edit events or require the Session to remain open | Memory/domain policies consume actual evidence; Temporal/Evidence/MRR retain their semantic roles; durable capture needs Data |
+| 6. Integrate long-term knowledge | Experience/assessment revisions -> new reusable interpretation, or retained episode without generalization | Memory binds mechanism/question, origins, successful/failed uses, competing explanations, contrary evidence, assumptions and defeat/review conditions | Original Session is provenance; it does not approve universal applicability or become owner of the new interpretation | Domain consolidation acceptance; explicit Human decision only where existing policy requires it; Host/Data conditionally publish |
+| 7. Recall and reenter | Explicit new Demand plus retained episode/interpretation -> candidates -> new admitted working Context | Recheck provenance/relevance/applicability/current restrictions; acquire current sources and form a new bounded composition/projection | No active Session required for recall; any later interactive use explicitly binds a current Session/Task/Attempt/Turn | Canonical Query/source route and current Context/domain admission; never reuse an old allow flag |
+
+All information remains in Context's management scope, but selection does not
+mean ingestion into one store or inclusion in every prompt. ORG Elements is the
+public Context Query content window, including source-qualified references to
+external bytes. A Session transcript is a bounded optional input, not the
+implicit complete working Context. Source, composition, consumer and evidence
+edges retain distinct roles.
+
+* Where control and information cross the Module boundary
+
+There are three crossings, with different ownership:
+
+1. Context -> Session: Context produces an admitted exact input reference;
+   Session enrolls it under its own revision/Attempt/Turn protocol. Session
+   preserves producer bindings without importing Context's implementation.
+2. Session -> Context: Context consumes original event/outcome references to
+   interpret results, construct later slices and optionally capture experiences.
+   A received response, provider completion and published Session outcome are
+   distinct from a domain evidence verdict or current-use permission.
+3. Context -> a later Session: recall yields candidates for a new working
+   projection. If another interaction is requested, Context prepares a fresh
+   input binding. Session reuse requires explicit admission; retry creates a
+   fresh Attempt, and child Sessions are created only for admitted delegation.
+
+The static dependency remains Context -> independent Session descriptor.
+Bidirectional data exchange through Session-owned generic contracts does not
+introduce reverse implementation imports, another Session core or a scheduler
+Module. Context coordination composes semantic owners; Host executes I/O.
+
+* Refusal, change and recovery branches
+
+- Source or mandatory selection admission fails: return typed refusal or a
+  declared partial result when the Demand allows it. Do not substitute an old
+  admitted projection or silently omit required evidence.
+- Disclosure check fails: do not dispatch a new payload; preserve the Session
+  claim's outstanding obligations. A prepared envelope is not future permission.
+- Response arrives after invalidation: record its exact historical receipt and
+  refuse current-result use. Preserve contradictions/failures for assessment;
+  capture does not upgrade them to supported claims.
+- Worker/provider state is uncertain: Session retains recovery obligations;
+  Host obtains actual matching terminal/isolation/resource evidence. A timeout,
+  cancellation request or closed waiter is insufficient. Closed Sessions do not
+  reopen, and retries use new Attempt identity and current input.
+- Consolidation obligations fail: retain the episode or disputed hypothesis
+  according to policy. Do not manufacture a general rule from age, retrieval
+  count or prose compression. A reviewed constraint/counterexample can merit
+  retention without a fixed number of successful uses.
+- New evidence challenges long-term knowledge: reassess/restrict/revise/withdraw
+  the interpretation while preserving origins and prior assessments. Retrieval
+  for historical inspection differs from admission as current support.
+- Memory retention is declined or unavailable: working Context and ordinary
+  Session protocol remain usable. Retention refusal does not erase original
+  events or cancel unresolved external effects.
+
+Long-term consolidation creates a versioned abstraction. It does not itself
+write an Org source, extend a grant or schedule a revisit. Org promotion is an
+explicit expected-revision mutation with a new parse/Query cycle. Revisit needs
+its selected Temporal profile and fresh claim generation. Durable publication
+requires the configured Data transaction/current-owner fence; two local checks
+around an external request do not create a distributed transaction.
+
+* Concrete example: a failure becomes a scoped diagnostic procedure
+
+An investigation starts with a failure log referenced from an ORG Element, exact
+code/toolchain cuts and the current question. Context selects the relevant
+source, earlier hypotheses and counterexamples, then forms a bounded working
+projection. Session executes the admitted investigation Attempt/Turns and records
+actual tool/provider outcomes. A stale response remains historical.
+
+Memory may retain that episode. Reassessment separates what was observed from
+why it may have happened, which environment it applies to and what remains
+uncertain. If domain obligations support a reusable diagnosis/procedure, create
+an interpretation linked to original failures, later checks, alternative causes
+and defeat conditions. Otherwise retain the episode without generalization.
+
+A later failure in another Worktree initiates a new Demand. Recall nominates the
+old procedure and its limits; Context checks current code/toolchain/source cuts
+and permissions before forming a new working projection. The later Session's
+Attempt has its own actual-use observations. Neither the old Session's success
+nor shared Project content transfers approval, applicability or grants.
+
+* Existing Org correspondence
+
+| Existing source | Process obligations used here |
+|-----------------+-------------------------------|
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: Formation/use; value reassessment; consolidation; lifecycle relationships]] | Situated Context; actual outcomes; multidimensional reassessment; scoped reusable interpretation; nonmandatory activities |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/09-graph-context-research.org][43.09: Three orders]] and [[file:../../../../core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org][43.11: Owners/windows]] | Distinct graph/chronology/prompt orders; unified Query/GQL; ORG Elements and external references |
+| [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory contracts: Dependency direction; input boundary; transitions; Memory operations]] | Independent Session; producer input binding; capture/recall/consolidation and separate receipts |
+| [[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Scheduling granularity: Units; Context granularity]] | Task/Attempt/Turn identity; selected transcript; explicit child Session/retry boundaries |
+| [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: Three axes; short observation to durable insight]] | Evidence/revisit/retention independence; fresh assessment, actual use and linked provenance |
+| [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context/Temporal lifecycle: Joint envelope; transitions/linearization]] | Current dispatch/result checks; conditional publication; invalidation and actual reconciliation evidence |
+
+* Executed admission and handoff refinements
+
+[[file:04-executable-scenarios.org][Executable scenarios]] now refine four owner crossings into concrete ordered
+state transitions and evaluated verification verdicts: result currentness,
+cancellation/recovery, consolidation failure and cross-Session recall. Their
+[[file:04-executable-scenarios.sysml][SysML fixtures]] and [[file:run-scenarios.py][runner]] retain accepted/refused cases and five unsafe
+controls. This does not make the abstract leaf contracts in 03 executable.
+
+* CLI validation and diagram extraction
+
+#+begin_src sh
+sysml -strict -validate -self-check -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context \
+  -render '#action:AgenticAIContextRoundTrip::InformationToRecall' \
+  -render-form mermaid -o /private/tmp/context-information-to-recall.mmd
+#+end_src
+
+Before adding the executable refinements in 04, =sysml v0.10.1= joint validation returned exit 0, no model errors;
+self-check reported 683 elements, 5,956 checks, 0 violations and 0 unevaluated.
+The CLI also successfully extracted the main activity diagram. The same render
+command can target =SessionBoundUse= and =KnowledgeReentry= for their branches.
+Generated diagrams remain local outputs, not an independent model authority.
+
+These checks validate the model accepted by the installed CLI, including its
+structural self-model constraints; they do not execute the abstract leaf
+contracts, authenticate owner verdicts, explore all traces or prove runtime
+correspondence. Branch-output selection is an explicit abstract contract.
+No Scheme, Quint or Lean implementation changed or corresponding tests ran.

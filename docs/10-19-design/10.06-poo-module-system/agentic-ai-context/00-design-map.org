@@ -1,0 +1,744 @@
+#+title: Agentic AI Context: Existing Org Design to SysML Allocation
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS source-traceability-for-architecture-review
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and reading rule
+
+This map records inspected repository designs, not new claims of their runtime
+qualification. The user's direction is overall Agent Context management across
+content, interaction history and short-/long-term knowledge, while Session
+remains independent. Existing Org contracts supply the architecture; SysML
+organizes their responsibilities and selected lifecycles.
+
+Read explicit ownership/status/supersession sections before treating old paths
+or examples as target architecture. The contracts are overlapping views, not a
+chronological sequence in which every newer file replaces every older file.
+Existing qualification receipts remain scoped to their own cuts and claims;
+they were not rerun by this documentation change.
+
+
+* Feature component and test ownership
+
+Yuanxu owns Feature composition under =module-system/feature=. Maintained Lab
+adapters import =:yuanxu/module-system/feature/interface= or a specific module
+under that same namespace. Module authors declare their optional contributions
+in their Module Interface; init selects =+memory= or =-memory=.
+Core validates the final receiver against both its Core Type and selected Feature
+Types, while source guards remain active across the declaration and callbacks.
+
+The ordinary Core test inventory discovers =t/feature-*-test.ss=,
+=t/feature-test.ss= and =t/module-feature-*-test.ss=. Lab's writer integration
+uses =t/feature-bundle-v1-composition-writer-test.ss=. Run the existing entries:
+
+#+begin_src sh
+just test-file t/feature-bundle-v1-composition-writer-test.ss
+just test-file t/yuanxu-context-memory-downstream-test.ss
+just test-file t/yanxu/modules/services/opentofu/deployment-test.ss
+#+end_src
+
+The package gitlink selects the Core revision used for this qualification.
+Gerbil builds that revision and its declared dependencies before the tests.
+Interpreted source tests using older compiled publication Types are a different
+cohort and do not qualify the migrated Interface.
+
+
+* Source allocation
+
+| Inspected source and section | Existing decision retained | SysML allocation |
+|------------------------------+----------------------------+------------------|
+| [[file:../../../../core/module-system/design/agentic-ai-context-system-design.org][System design: Decision; System structure; Module and Feature contract]] | Context owns the content/context system; independent Session dependency; optional Memory Feature; no single global mutable head | =ContextModule=, =SessionModule=, =Memory= and external owners in 01 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory contracts: Dependency direction; input boundary; transitions; Memory operations]] | Context imports Session descriptor and owns adapters; Session consumes its own generic input refs and never imports Context implementation; active Session not required for source projection/recall | =SessionBoundaryContracts=, directed composition in 01; Session/Attempt and retention activities in 02 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-implementation-plan.org][Implementation plan: Accepted direction; reuse/migrate]] | Reuse existing module/feature closure and semantic owners; migration inventory is not target ownership | No extra manager Module, resolver, Memory registry or parser |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: Formation/use; reassessment; consolidation; composition boundaries; cross-document composition]] | Context is bounded versioned information/relations for a question; prompt is a selected projection; long-term interpretation binds real outcomes, alternatives and defeaters; consumer-local assessment and grants do not transfer | =GraphContextComposition= and =ContextProjection= in 01; six lifecycle activities and orthogonal assessments in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/09-graph-context-research.org][43.09: Core; Three orders; Topology]] | POO/LeanPOO C3/C4 composition; composition precedence, revision provenance and prompt order differ | =GraphContextComposition=, =DistinctGraphRelations= in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org][43.11: Decision; Owners and windows; Query/composition distinction]] | Unified POO Query/GQL; ORG Elements is the content window, including explicit external-artifact references; C3/C4 is not retrieval | =Query=, =Content= and graph/projection separation in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/12-git-project-context-model.org][43.12: Fundamental distinction]] | Git source, Context composition and consumer graphs differ; Worktree is a situated Project derivation, not a Session-owned store | Relation roles and Project/Worktree/domain/task scope in 01 |
+| [[file:../../../../core/module-system/design/166-session-memory-orgize-boundary.org][166: Opening status; Org-runtime source and selection; Scope]] | Preserve Orgize source identity, Query admission and cross-Worktree constraints; old memory-core/store ownership is historical | Source-qualified Content and current-use requirements in 01 |
+| [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: Status; Three axes; Pure contract; Short observation to durable insight]] | Evidence, revisit and retention are independent; long-term is not age/storage/read count; consolidation creates new scoped versioned claims/procedures; revisit uses actual outcomes | Memory parts in 01; orthogonal enums, =RevisitLifecycle= and =Consolidate= in 02 |
+| [[file:../../../../core/module-system/design/session-org-id-subagent-scheduling-design.org][Session IDs: Decision; Identity vocabulary; Org association]] | Session owns interaction identity/scheduling; Context owns many-to-many source bindings and participant projections | Independent Session and history integration in 01 |
+| [[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Scheduling granularity: Decision; Units; Context granularity]] | Task/Attempt/Turn differ; retry does not implicitly create child Session; transcript is an optional bounded input; Context edits require fresh admission | Session contract notes in 01; Attempt lifecycle and fresh-retry boundary in 02 |
+| [[file:../../../../core/module-system/design/context-delta-lean-quint-model-design.org][Context Delta: Decision; Initial restrictions; Pure reference semantics]] | Exact immutable base/target bindings; incomplete coverage requires full reconstruction/refusal; delta success is not permission | Projection revision notes in 01/02; full Delta algorithm stays with its existing owner |
+| [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context/Temporal lifecycle: Orthogonal axes; ASCENT architecture; Strategy composition; Joint envelope; Transitions]] | Separate source/projection/evidence/strategy/Session/Attempt/effect/head/Memory states; original proof/applicability and dependency-directed invalidation; exact current-envelope dispatch, result and publication fences | External semantic owners in 01; selected state axes and owner-event preconditions in 02; remaining axes explicitly referenced |
+| [[file:../../../../core/module-system/design/45-127-higher-order-capability-materialization-poo-lifecycle-object-and-runtime-policy-prototype-algebra.org][45-127: Scope; Central decision]] | Immutable POO lifecycle values, pure policy proposals, adapter-owned handles, actual reconciliation and conditional head publication | Host boundary in 01; recovery/closure receipt requirements in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery-rfc.org][RFC 43: Opening ownership/status corrections]] | Historical store/session-first examples do not define Context; generic lifecycle and Org source contracts supply the corrected direction | No store-first or Session-owned Context model |
+
+
+* Corrections to the first discussion draft
+
+The first draft incorrectly presented static dependency direction as an open
+choice for an additional upper manager. Session owns its descriptor and
+scheduling. Context's Session host imports the scheduling operations it uses.
+The Context module can publish its profile independently. Session consumes
+an opaque input reference through its own data contract.
+
+
+* Context Memory selection
+
+[[file:../../../../modules/ai-agentic-context/interface.ss][The Context Interface]]
+owns the =memory= Feature. A downstream init selects it through the same
+window as the base module.
+
+#+begin_src scheme
+(yuanxu!
+  :load-modules "./modules" mode: explicit
+  (ai-agentic-context +memory))
+#+end_src
+
+The Module System composes and admits the selected scope. Consumers read
+its =profile= slot for Context projections. The base profile contains only
+=ai-agentic-context/core=. The Memory refinement adds
+=ai-agentic-context/memory=, and the Feature contract checks the final profile.
+Both identities remain part of the stored projection format. Checkpoint
+recovery decodes the recorded profile and revalidates the projection against
+its source. Feature selection acquires no Memory store or Session host.
+
+The first draft also underrepresented the already designed Graph Context,
+ORG-only Query window, consumer-local interpretation and short-to-long
+consolidation. They are restored here as inherited design, not newly invented
+features. The user's clarification emphasizes the overall system meaning of
+Context and the short-/long-term knowledge distinction within it.
+
+
+** Downstream build attribution
+
+Use a private Gerbil prefix with the compiled Core prerequisites.
+Link the exact Lab checkout into that prefix with Gerbil's package
+command, as in the Runtime workflow. The fixture checks that the installed
+Lab source and the checkout under test are the same directory. Run
+=just test-file t/yuanxu-context-memory-downstream-test.ss= from that
+checkout. Each run creates fresh base, =+memory= and =-memory= output
+prefixes, performs independent first reads, checks hot reuse and
+withdrawn cleanup, and exercises the Feature refusal. Keep the 120-second
+aggregate, 120-second action and 60-second idle deadlines and the 2 GiB
+test heap. Require natural exit, =LAB-CONTEXT-MEMORY-DOWNSTREAM-OK=,
+=MODULE-OK=, =HARNESS-OK= and a final =OK= without failure markers.
+The OpenTofu runtime gate uses a different selected graph.
+
+The Memory gate's idle watchdog consumes the structured Ops progress
+channel. An admitted build specification and a completed fixture action
+can report progress through that channel. Native Make's diagnostic lines
+are retained for target assertions and phase attribution. They do not
+extend the watchdog deadline.
+
+For process attribution, record =time->seconds= of =current-time= before
+and after the fixture's existing Ops call. Compare those timestamps with
+the =BUILD-STAGE main enter= and =main return= epoch fields. Record the
+Feature's =library-spec= projection, the actual =... compile= targets,
+and the first =.get= in each independent runtime. Use the same commands,
+source checks and deadlines on fresh output prefixes.
+
+Compare the full sets of compiler target identities. The base and
+withdrawn sets must match, and the base set may not contain any
+target owned by the Memory Feature directory. The enabled delta can
+include same-package imports owned outside the Memory directory. Treat a hot Make result
+with zero compiled targets as a separate observation from how much
+Interface projection and source admission still ran in that process.
+Use =BUILD-EXPANSION= and =BUILD-ACCOUNT= to compare the Interface
+projection and Make in each new process. The expansion count measures
+new Gerbil contexts, including those supplied by installed
+dependencies. It does not count compiler invocations or prove that a
+source file was expanded twice.
+
+The Memory Feature imports the prototype and conversion syntax without
+importing the product selection policy. The explicit Memory authoring
+syntax lives in =memory/spec.ss=, and the custom cases that use it import
+that file. On an empty-prefix run this removes only
+=agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy=
+from the enabled compiler target set. The base and withdrawn sets remain
+identical to the reference. Compare the native expansion counters as
+well: the enabled projection goes from 219 to 217 Contexts, and Make
+goes from 389 to 388. These counts establish the eliminated work. Compare
+wall time separately on a stable host before attributing a speedup.
+
+After removing the selection policy, the enabled build had 25 additional
+module identities.
+The generated interfaces separate them into ten durable modules, eleven
+other Memory modules, three Session dependencies and one authoring syntax
+module. The Module System selects =features/memory/interface.ss= as one
+native source root. That Interface imports the configuration and both
+selection adapters. The configuration in turn re-exports the durable
+store, operation, recovery and artifact owners. These are distinct
+compiled modules from the same selected root.
+
+Memory configuration now publishes catalog and job-receipt declarations.
+Durable store, operation, recovery and artifact consumers import the
+corresponding Gerbil modules directly. The selected Memory Interface keeps
+its catalog and Org/Session selection APIs. The empty-prefix build removed
+exactly the ten =memory/durable/= compiler targets. Base and withdrawal
+still produce the same 12 interfaces each, and enabling Memory produces
+27 instead of 37. The enabled projection fell from 217 to 198 native
+Contexts, and Make from 388 to 332. The test checks that the enabled
+target set excludes Durable modules. This comparison uses the existing
+compiled Core qualification cohort. The relocated Feature namespace still
+had to pass a separate full Core rebuild and downstream acceptance.
+The three independent first reads and the zero-compilation hot build
+passed in the same round. The aggregate deadline expired during withdrawn
+clean, so this round did not qualify as complete acceptance. The existing
+catalog, Org selection, durable receipt, recovery and store handoff suites
+passed separately through =just test-file=.
+
+A subsequent empty-prefix Core build completed within 120 seconds and
+produced all 20 modules under the relocated Feature namespace. Use that
+Core library as the compiler prerequisite for the downstream gate. In
+the integrated round, all three cold builds, independent reads, the hot
+zero-compilation build, and withdrawn cleanup returned successfully. The
+aggregate deadline interrupted the final refusal process. The hot action
+took 26.97 seconds, of which 1.48 were in native Make. Its 9.73-second
+specification phase and its process boundaries remain distinct costs.
+The two fixture measurements import the same source-observation bindings
+directly from their defining module.
+
+The earlier 10.16-second hot action on the existing qualification cohort
+and the slower relocated build both reported 86 library Contexts, 198
+projection Contexts, ten Make Contexts, and 89,560 metadata visits across
+74 replay calls. The slower invocation spent 3.95 seconds before the
+selected-graph span, 5.68 seconds in that span and 0.10 seconds in the
+remaining specification checks. Its selected-graph span includes 3.03
+seconds in the Feature's native library walk. These counters separate the
+retained replay work from the observed wall-time difference. Keep
+independent source authentication and open-callback checks in place.
+
+Three consecutive invocations of the unchanged-budget downstream gate
+then completed on the same rebuilt Core products. Each invocation
+created fresh, independent output prefixes. The compiler was Gerbil
+=1cfb032= on Gambit =ea114fc=, with gerbil-poo =cd4de644=, 12 build workers,
+and a 2 GiB test heap. All times in the table are seconds. Total is the
+test entry through return from the refusal action. Each process exited
+with the final Harness success markers.
+
+| Round | Total | Base cold | Memory cold | Withdrawn cold | Base after main | Hot build | Withdrawn clean |
+|-------+-------+-----------+-------------+----------------+-----------------+-----------+-----------------|
+|     1 | 103.80 |     12.26 |       15.56 |          11.97 |            2.60 |      9.61 |            7.98 |
+|     2 | 100.52 |     11.57 |       18.64 |          14.74 |            2.62 |      9.56 |            8.18 |
+|     3 | 100.76 |     12.30 |       16.40 |          11.74 |            2.81 |     13.56 |           11.74 |
+
+Each round checked the 12/27/12 cold targets, zero scope construction
+during projection, all three independent first reads, receiver and
+consumer refinement isolation, zero hot compilation, withdrawn output
+cleanup, explicit Feature refusal, and the enabled products' digest.
+The earlier failed rounds remain separate evidence. The 2.60–2.81-second
+base tail is an observation from these runs, with no change to the
+Gerbil process exit path.
+
+The directory ownership predicate now normalizes each operand once per
+comparison. Reproduce the attribution by archiving this Lab source and
+building the original and candidate Yuanxu sources into the same
+prerequisite prefix in turn. Use the same deep Lab source directory,
+Gerbil =1cfb032=, Gambit =ea114fc=, POO =cd4de644=, 12 build workers and a
+2 GiB heap. Run =./build-development.ss spec= in a fresh process for
+each variant. This entry projects the spec without compiling Lab.
+
+| Variant         | Graph seconds | Private closure seconds | System CPU seconds | Wall seconds | Exit |
+|-----------------+---------------+-------------------------+--------------------+--------------+------|
+| Candidate first | 122.20        | 43.91                   | 53.12              | 180.04       | 124  |
+| Original        | 139.87        | 89.23                   | 100.98             | 172.19       | 0    |
+| Candidate again | 98.10         | 49.41                   | 61.21              | 134.61       | 0    |
+
+All three emitted the same ordered 556-target spec byte for byte,
+with 290 Module expansions and 17,444 physical source reads. The
+first candidate returned from =main= but reached the watchdog
+before natural exit. The two candidate positions both reduced private
+closure and system CPU. This diagnostic does not establish a full
+development build or eliminate the macOS teardown tail.
+
+Using the candidate Core products, the default
+=just test-file t/yuanxu-context-memory-downstream-test.ss= completed
+three serial rounds with independent empty outputs in 85.72, 85.73
+and 86.55 seconds. The exact 12/27/12 target sets, three first reads,
+zero hot compilation, zero projection scopes, receiver isolation,
+withdrawal, refusal and enabled artifact digests all passed. The
+Core directory, publication and testing-source-admission suites
+passed, as did all four build-input mutation controls.
+The independent Deployment suite also completed in 67.36 seconds.
+It qualified the first read from B, 46 exact selected targets,
+zero hot compilation and clean isolation.
+
+On Lab =6f10339=, the [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215337][Linux job]]
+passed the Memory step and timed out in the separate development build.
+The [[https://github.com/tao3k/agentic-ai-lab/actions/runs/42436098417/job/128595215516][macOS job]]
+finished the three first reads, hot build and withdrawn clean. It
+reached the final refusal action at 114.25 seconds and printed the
+expected refusal marker before the aggregate watchdog interrupted
+output collection. That runner did not complete the Memory gate.
+
+
+* Connected process
+
+[[file:03-information-to-recall.org][Information to recall]] maps these existing contracts into a connected activity
+with typed inputs/products and explicit independent Session handoffs. Its
+[[file:03-information-to-recall.sysml][SysML model]] retains the historical-result and no-generalization branches,
+then reenters working Context formation under an independently supplied new
+Demand. It adds architectural control/data flows, not new semantic owners.
+
+
+* Executable refinement
+
+[[file:04-executable-scenarios.org][Executable admission/handoff scenarios]] refine the four selected crossings
+using the same linked Org owners. Explicit verification verdicts and literal
+expected outputs distinguish current acceptance, refusal, preserved history,
+pending recovery and failed unsafe controls. [[file:run-scenarios.py][The runner]] executes the SysML
+model rather than interpreting the domain policy in Python.
+
+
+* Evidence-driven concurrent refinement
+
+[[file:05-concurrent-evidence-lifecycle.org][Concurrent evidence lifecycle]] follows the ASCENT-centered joint design,
+registered original proof/current support Host and existing SessionAttempt /
+ContextTemporalLifecycle contracts. Its [[file:05-concurrent-evidence-lifecycle.sysml][executable SysML reducer]] binds original
+premises, source/journal and grant invalidation to terminal publication and
+recovery. [[file:run-concurrency.py][The runner]] enumerates all 2,240 linearizations of its declared eight
+events and executes them in SysML, with per-prefix monitors and exact replay.
+This is a finite cross-owner scenario, not a replacement proof/inference owner.
+
+
+* Runtime correspondence and literature comparison
+
+[[file:06-runtime-proof-support-replay.org][Runtime replay correspondence]] maps original ASCENT proof, current support,
+journal withdrawal and selected Context/Session paths to actual Scheme calls,
+including a real thread join and an explicit old-snapshot bypass counterexample.
+Its initial qualification distinguishes pure intents from publication;
+[[file:08-runtime-owner-cas-publication.org][08]] extends this to the runtime final owner publication boundary.
+[[file:07-context-literature-comparison.org][CLM and related memory research]] compares primary-source mechanisms with the
+intended evidence-governed design, current local evidence and unmeasured claims.
+
+[[file:09-context-research-2026-july-october.org][Research after July 2026]] adds primary-source comparisons and the explicit
+no-lossy-replacement constraint.
+
+
+* Remaining model scope
+
+01 allocates responsibilities and dependencies. 02 expands projection,
+Session, Attempt and revisit axes and names formation, use, reassessment,
+consolidation, retrieval and revision activities. These are not a single
+mandatory pipeline. Source bootstrap, governed replacement, cross-Session
+competition, full ASCENT proof/support/retraction, strategy algebra, Data
+transactions and external-effect/resource reconciliation remain with their
+linked Org owners; the SysML subset does not replace or qualify them.
+
+
+* No-compression constraint
+
+Context retains original information, source versions, interaction history and
+proof/support/journal lineage. Working Context is a demand- and admission-bound
+selection/projection with explicit source references. Long-term knowledge
+integration creates a separately scoped derived claim with origins,
+alternatives and counterexamples; it does not replace its source with a summary.
+The research comparison in 09 applies this constraint to each recent method.
+
+
+* Mechanism-level comparison and executable omissions
+
+[[file:10-scroll-carryon-clm-contract-comparison.org][Scroll / CarryOn / CLM contract comparison]] connects the inherited Org owners
+to 80 executed SysML combinations, four new runtime scenarios and explicitly
+labeled contract ablations. Paper mechanisms and untested paper guarantees are
+kept distinct from actual runtime results.
+
+
+* Materialized source-driven invalidation
+
+[[file:11-runtime-eager-propagation.org][11]] connects original proof/support reverse plans to runtime Context dependency
+fanout, sticky invalidation and actual Session obligations. It records selective
+unaffected continuation, failed-delivery recovery, scoped concurrency paths and
+the disabled-subscription counterexample.
+
+
+* Authority event propagation extension
+
+[[file:12-runtime-authority-propagation.org][12: runtime authority/policy/deadline propagation]] extends the retained
+source/support graph to exact grant and policy dependencies of immutable
+Context versions. It preserves Session independence and original proof/journal
+history. Its executed SysML contracts, runtime owner paths, missing-subscription
+counterexamples and qualification commands are documented separately from the
+source-only slice; prior receipts do not qualify this new runtime cut.
+
+
+
+* Autonomous deadline extension
+
+[[file:13-runtime-background-clock.org][13: own Context lifecycle algorithm and background clock]] adds the runtime
+monotonic timer and serialized owner reactor, live-clock final-use fences,
+old-ticket isolation, original-evidence preservation, real worker result and
+recovery races, and executed SysML contract counterexamples. Its qualification
+is distinct from the manual-owner-event 12-series and from C3/C4 composition.
+
+
+* Durable recovery and Org Contract binding
+
+[[file:14-runtime-durable-recovery.org][14: durable runtime owner recovery]] binds the original Org Contract/Element
+cut, ASCENT proof/support/source journal, timer calendar, received inputs,
+Context publications and Attempt terminals to a local durable transaction.
+Real process-death gates and retained runtime counterexamples distinguish it
+from the bounded executed SysML contract. Session remains an independent reducer.
+
+[[file:org-durable-declarations.org::#durable-agenda][Durable Agenda]] composes an Org Element Query with a registered
+action. Durable owns the next wake, revalidation and recovery.
+The detailed notification and receipt cases document engine boundaries.
+
+
+* Unified GQL Provider and maintained Org Contracts
+
+[[file:15-unified-query-provider.org][15: bounded runtime GQL to Context Provider]] connects the unified POO Query
+model to source-qualified Org Elements, actual ASCENT membership proofs,
+versioned support/journal and eager captured-version invalidation. Its maintained
+Org Contract templates keep content IDs separate from Session identity and
+reuse existing receipt references. Executed runtime and SysML evidence is scoped
+separately from full GQL/Org completeness and external source authentication.
+
+[[file:16-query-durable-owner-handoff.org][16: durable Query source handoff]] specifies the remaining named-command
+recovery boundary between Provider source changes and the existing durable
+Context owner, including catalog persistence without a consumer. It reuses
+current identities and journal ownership. Executed SysML interleavings and
+saved unsafe/corrected replays qualify the bounded contract; runtime source
+command and crash integration remain open.
+
+[[file:17-runtime-catalog-root-recovery.org][17: runtime catalog roots and recovery readiness]] separates source retention
+from observation selection within the existing recovery value. It specifies
+owner reopening, rejects mismatched shared source histories and prevents a
+catalog-only root from becoming a consumer observation. Its focused runtime gate
+uses real SQLite and independent process replay; automatic owner integration
+remains a separate obligation.
+
+[[file:18-runtime-durable-source-commands.org][18: runtime durable source commands]] connects source replacement/withdrawal
+to the existing owner transaction, committed catalog reconstruction and pending
+input recovery. It keeps original evidence, shares one Provider across restored
+consumers and checks immutable command bytes before historical ACKs. Runtime
+process-death gates and retained unsafe controls qualify their recorded cuts.
+
+[[file:workspace-recovery.org][Workspace recovery and current readiness]] checks recovery itself
+being killed repeatedly, exact worker obligations and a fresh readiness commit
+per owner epoch. Original source-prefix images remain historical inputs; new
+runtime recovery chains and SysML cut combinations carry separate evidence.
+
+[[file:20-runtime-grant-revocation.org][20: production Scheme grant revocation]] adds a pure retirement proposal,
+immutable named owner command, exact grant-cut CAS and pending-input replay.
+The existing authority dependency graph invalidates A/B while source proof
+support and unrelated C remain intact. Runtime crash/result/control prefixes
+and a separate executed SysML contract qualify their recorded cuts.
+
+
+* Durable policy transition implementation
+
+[[file:21-runtime-policy-transition.org][21: Runtime durable policy transition]] implements the pure POO command,
+registered generation/digest CAS, runtime Policy Host handoff and original-inbox
+recovery. Its runtime and SysML gates distinguish authority retirement from
+source evidence preservation and retain stale-command/deadline controls.
+
+
+* Legacy policy migration and interleavings
+
+[[file:22-runtime-policy-migration.org][22: Policy replacement migration]] removes the alternate recovery branch,
+centralizes policy effects in owner dispatch, migrates callers to version CAS,
+and supplies bounded all-order runtime/clock and executable SysML exploration.
+
+
+* Runtime owner lifetime and unpartitioned capacity
+
+[[file:23-runtime-owner-lifecycle.org][23: Runtime owner lifecycle]] addresses the monolithic watchdog failure with
+explicit teardown and indexed inbox access. Its final gate retains one process
+for all 60 scenarios under the original heap/watchdog, with actual resource
+predicates, negative controls and whole-process replay.
+
+
+* Runtime Actor runtime costs and historical proof credentials
+
+See [[file:24-runtime-cost.org][24: Actor runtime costs and sealed historical proof credentials]] for the
+user-authorized 2 GiB profile, measured checkpoint replay fix, runtime controls
+and complete-process qualification/replay evidence. Earlier 1 GiB results remain separate.
+Its dual acceptance section records cold reconstruction and long-lived Context
+current-proof use independently, source-bound Org replay costs, and rejected
+experiments. [[file:24-dual-runtime-results.json][The current structured results]] retain receipt and custody hashes.
+
+
+* Runtime runtime correction and partition contracts
+
+[[file:25-runtime-corrections.org][25]] records measured cold costs, runtime replay sharing, failed-anchor
+rollback/release, stale-writer lock release and Core issuer admission, with the
+original failures kept separate. [[file:26-distributed-runtime.org][26]] allocates the proposed multi-node/shard
+runtime and its QNT owner/authority/publication contract. Local Scheme, complete
+SysML behavior execution, finite QNT verification and distributed implementation
+are separate evidence dimensions; none substitutes for another.
+
+
+* Bounded Runtime scheduling correspondence
+
+[[file:27-bounded-scheduling.org][27]] refines 26 with a pure POO scheduling contract, executable
+SysML handoffs, finite QNT interleavings and actual ITF-to-Scheme replay.
+The reference Actor adapter verifies reserved admission credits before mailbox
+entry. 28 subsequently integrates local owner ingress; distributed scheduling
+and end-to-end byte/control admission remain separate obligations.
+
+
+* Scheme authority and Rust runtime ecosystem
+
+[[file:28-hybrid-runtime.org][28]] integrates bounded ingress into the existing local Context owner and
+composes authority, scheduling and foreign-call lifetime in QNT/SysML. The
+Rust consumer reuses gerbil-scheme-rust fixed VM owners and Tokio, preserving
+Scheme semantics and the C/AOT boundary. Runtime Context qualification and the
+upstream-image transport fixture are separate; the production Context AOT
+service export and multi-node runtime remain explicit integration work.
+
+
+* Runtime Context service and the C ABI boundary
+
+[[file:29-production-service.org][29]] implements the POO service, durable original decisions and
+close-before-work behavior. Scheme retains all lifecycle semantics; Bindings
+retain the existing C ABI responsibilities. Premature Rust integration was
+withdrawn. The new lifecycle service's C export remains explicitly open.
+
+
+* First observation of an unresolved workspace effect
+
+[[file:33-recovery-first-observation.org][33: First recovery observation]] separates a qualified journal gap, current
+workspace content, original effect history, writer reconciliation and Task
+acceptance. Its [[file:33-recovery-first-observation.sysml][SysML model]] describes knowledge/obligation relations rather
+than a recovery workflow. A bounded pure ASCENT design probe exercises the
+independent axes; it does not implement external exactly-once execution. The
+D2 explanation asks why matching file contents cannot identify the original
+writer or complete the Task, and retains actual image-bound reader feedback.
+
+[[file:34-durable-task-real-source-case.org][34: A real Durable source change]] reads the current source artifact against
+the existing Durable and Task design. Its [[file:34-durable-task-real-source-case.sysml][SysML relations]] distinguish an
+observed patch, retained requirements, open inquiry and Task responsibility.
+This is an architectural reading, not a new crash-test workflow.
+
+
+* Durable Module extension refinement
+
+[[file:18-runtime-durable-source-commands.org][18: Durable source commands]] now records the proposed independent Durable Module
+and declarative Context Feature extension using the existing Core Feature System.
+[[file:workspace-recovery.org][Workspace recovery]] supplies the existing committed-readiness case; its
+[[file:workspace-recovery.sysml][SysML package]] adds proposed composition parts and object-state explanations.
+These design additions do not requalify historical runtime results or claim a
+completed code migration. Teaching examples separate composition from recovery,
+with ASCENT-inferred layout and actual image-bound model readings.
+
+
+* Org Context module composition
+
+[[file:35-org-context-modules.org][35: Org Context as versioned composable modules]] and its
+[[file:35-org-context-modules.sysml][SysML model]] distinguish relative traversal leaves, derivation, imports,
+invocation, demand-led projection and downstream cache reuse. This is a proposed
+architecture with explicit runtime and formal correspondence obligations.
+
+[[file:36-scheme-rust-policy-ecosystem.org][36: Policy library and downstream execution]] and its
+[[file:36-scheme-rust-policy-ecosystem.sysml][SysML allocation]] place reusable POO Policy and Contract in Lab.
+Downstream packages select their implementation and own adaptation, physical
+execution and original evidence. Concrete ecosystems are optional consumers.
+
+[[file:37-worktree-gitops.org][37: Worktree Org Context to GitOps]] supplies an executable finite Quint
+protocol, seven deliberately broken variants, sixteen deterministic model traces
+and SysML ports and responsibility allocations. Lab's =modules/gitops= provides
+the Org-bound Policy and evidence interpretation, tested directly in Scheme.
+Physical fencing is an explicit obligation of the selected downstream owner;
+the earlier native coupling is superseded, not a required Lab dependency.
+
+[[file:38-gitops-library-refinement.org][38: What the library refinement checks]] defines the actual Scheme/Quint
+state relation through named business events, shared pure model functions,
+paired successor comparisons and original-object lineage controls. Package
+management and repository layout qualification remain separate responsibilities.
+
+
+* Context Governance boundary, orthogonal SysML v2 verification dispatch and end-to-end closure
+
+In [[file:40-context-governance-boundary.sysml][40-context-governance-boundary.sysml]], =FormalVerificationTaxonomy= acts as
+the master SysML v2 verification allocation table across Slices =40=–=47=: every
+requirement is typed either as =LeanAlgebraicObligation= (allocated exclusively
+to =verifierSuite.leanEngine= for unbounded algebraic, AST/list/path inductive
+and map-frame theorems) or as =QuintInterleavingObligation= (allocated
+exclusively to =verifierSuite.quintEngine= for =nondet= concurrent races,
+out-of-order arrivals and crash/recovery windows), eliminating overlap between
+Lean 4 and Quint.
+
+[[file:40-context-governance-boundary.org][40: Context System Governance boundary]] and its
+[[file:40-context-governance-boundary.sysml][SysML]], [[file:40-context-governance-boundary.qnt][Quint]],
+[[file:40-context-governance-boundary.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts specify =FormalVerificationTaxonomy=,
+=TrustRole= and =RestrictionEnvelope= semilattice algebra, KV domain-key
+injectivity, and =nondet= endorsement/threat/cut-drift handoff races.
+
+[[file:41-epistemic-consolidation-governance.org][41: Epistemic projection and consolidation governance]] and its
+[[file:41-epistemic-consolidation-governance.sysml][SysML]], [[file:41-epistemic-consolidation-governance.qnt][Quint]] and
+[[file:41-epistemic-consolidation-governance.lean][Lean]] models separate unbounded defeater-kernel list induction and catalog
+retraction frame laws in Lean from =nondet= two-Session consolidation,
+retraction and expected-revision ORG promotion races in Quint.
+
+[[file:42-multi-repo-multi-agent-declassification.org][42: Cross-repository multi-agent sharing and declassification]] and its
+[[file:42-multi-repo-multi-agent-declassification.sysml][SysML]], [[file:42-multi-repo-multi-agent-declassification.qnt][Quint]],
+[[file:42-multi-repo-multi-agent-declassification.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts separate pure redaction-operator
+idempotence, secret stripping and commitment non-collision in Lean from =nondet=
+multi-agent certificate signing, nested-subagent forwarding and Repo-Core
+cut-advance cascading withdrawals in Quint.
+
+[[file:43-ascent-security-branch-omission-refinement.org][43: ASCENT security inference branches and omission refinement]] and its
+[[file:43-ascent-security-branch-omission-refinement.sysml][SysML]], [[file:43-ascent-security-branch-omission-refinement.qnt][Quint]],
+[[file:43-ascent-security-branch-omission-refinement.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts separate unbounded branch-matrix
+antitonicity and missing-claim/fit heuristic invariance in Lean from =nondet=
+late competing-hypothesis discovery racing against prepared destructive
+remediation in Quint.
+
+[[file:44-temporal-causal-survival-and-memory-quotient.org][44: Temporal Causality survival spine and memory quotients]] and its
+[[file:44-temporal-causal-survival-and-memory-quotient.sysml][SysML]], [[file:44-temporal-causal-survival-and-memory-quotient.qnt][Quint]],
+[[file:44-temporal-causal-survival-and-memory-quotient.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts separate unbounded bitemporal journal-cut
+append/monotonicity and exploratory-citation frame laws in Lean from =nondet=
+=SourceWatermark= vs =Why-Not=, late valid-time arrival and cited-premise
+eviction races in Quint.
+
+[[file:45-org-sexpr-gql-candidate-exchange-search.org][45: ORG Element S-expression selector, GQL search and CandidateExchange]] and its
+[[file:45-org-sexpr-gql-candidate-exchange-search.sysml][SysML]], [[file:45-org-sexpr-gql-candidate-exchange-search.qnt][Quint]],
+[[file:45-org-sexpr-gql-candidate-exchange-search.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts separate recursive ORG AST =sourceBlock=
+pruning and multi-hop GQL walk induction in Lean from =nondet= GQL/ASCENT
+=CandidateExchange= receipt-uniqueness and generation-advance races in Quint.
+
+[[file:46-durable-agenda-session-sandbox-governance.org][46: Durable Agenda wakes, Session crash fencing and Sandbox Lethal-Trifecta governance]]
+and its [[file:46-durable-agenda-session-sandbox-governance.sysml][SysML]], [[file:46-durable-agenda-session-sandbox-governance.qnt][Quint]],
+[[file:46-durable-agenda-session-sandbox-governance.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts separate capability-set intersection
+algebra, Lethal-Trifecta elimination and per-recipient journal frame laws in
+Lean from =nondet= Agenda wake, mid-flight grant revocation and post-handoff
+crash reconciliation races in Quint.
+
+[[file:48-progressive-disclosure-and-two-stage-org-repair.org][48: ASCENT progressive disclosure (L0–L3) and two-stage ORG AST repair]]
+and its [[file:48-progressive-disclosure-and-two-stage-org-repair.sysml][SysML]], [[file:48-progressive-disclosure-and-two-stage-org-repair.qnt][Quint]],
+[[file:48-progressive-disclosure-and-two-stage-org-repair.lean][Lean]] and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts couple [[file:../../org-elements-gql-context-design.org][Org Elements L0–L3 disclosure & repair]]
+with =FormalVerificationTaxonomy=: proving the $L_0 \le L_1 \le L_2 \le L_3$
+join-semilattice, mandatory $L_3$ defeater floor, $L_2$ thinking-block folding
+preservation and Stage-1 AST repair idempotence in Lean while checking late
+defeater override and Stage-2 re-parse cut races exhaustively in TLC.
+
+[[file:49-scoped-detour-funflow-concurrent-shared-context.org][49: Scoped Detours, Three-State FunFlow Effects and Zero-SubAgent Shared Context]]
+and its [[file:49-scoped-detour-funflow-concurrent-shared-context.sysml][SysML]], [[file:49-scoped-detour-funflow-concurrent-shared-context.qnt][Quint]],
+and [[file:49-scoped-detour-funflow-concurrent-shared-context.lean][Lean]] artifacts formalize monotonic C4 =OrgOverlay(g)= meet, asymmetric
+=PureCAS.= / =VerifiedEpistemic.= / =FencedEffect.= admission, four-exit CLOS
+detour reconciliation (preserving =defeat-conditions= on =CancelledExit.=), and
+Zero-SubAgent per-=:ID:= ownership (=Extend-Never-Overwrite= and heartbeat-expiry
+fenced custody handover).
+
+[[file:50-literature-frontier-detour-confinement-and-causal-audit.org][50: 2025–2026 Literature Positioning, Scoped Detour Taint Confinement and Offline Causal Audit]]
+and its [[file:50-literature-frontier-detour-confinement-and-causal-audit.sysml][SysML]], [[file:50-literature-frontier-detour-confinement-and-causal-audit.qnt][Quint]],
+and [[file:50-literature-frontier-detour-confinement-and-causal-audit.lean][Lean]] artifacts benchmark Slices =40=–=49= against DeLM, FoldGRPO,
+SagaLLM, FIDES, APPA, NeuroTaint, FLOWSEAL, SemanticALLI, APDMem, and Zep, and
+formally absorb APPA-style confined-detour taint isolation (=attestSchema=),
+NeuroTaint-style zero-LLM offline counterfactual causal auditing, and
+zero-authority deterministic stall advisories.
+
+[[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.org][51: Memory Poisoning Quarantine, Typed Memory Contracts and KV-Prefix-Stable Serialization]]
+and its [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.sysml][SysML]], [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.qnt][Quint]],
+and [[file:51-memory-poisoning-quarantine-and-kv-prefix-serialization.lean][Lean]] artifacts close the AgentPoison/MINJA/MemoryGraft experience-imitation
+poisoning gap (Quarantine-Before-Recall + independent endorsement) and the
+RadixAttention/Request-Order-Matters KV-cache context-rot gap (Two-Zone
+Frozen-Canonical-Prefix ++ Dynamic-Suffix serialization).
+
+[[file:52-funflow-cas-singleflight-and-external-sandbox-binding.org][52: FunFlow CAS Singleflight, Fail-Closed Premise Invalidation, Finalizer Closure and External Sandbox Binding]]
+and its [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.sysml][SysML]], [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.qnt][Quint]],
+and [[file:52-funflow-cas-singleflight-and-external-sandbox-binding.lean][Lean]] artifacts formally challenge =modules/funflow/{durable-dag,store,control-plane/*}.ss=,
+surfacing and repairing five concrete logical flaws (=BUG-F1=..=BUG-F5=):
+=after-start= finalizer topo/SCC ordering, fail-closed retracted-premise
+invalidation, canonical 5-tuple CAS keys & =EffectClass=-gated reuse, disjoint
+lease unsatisfiability + =ExternalTask= Lethal-Trifecta binding, multi-agent
+=lookupOrWait= singleflight, crash-atomic temp-rename publish, and
+=AuditCapsule=-pinned CAS GC.
+
+[[file:53-yuanxu-c4-profile-convergence-and-interface-slots.org][53: Two-Tier Yuanxu Interface, POO Slot-Observation, and C4 Profile Convergence]]
+and its [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.sysml][SysML]], [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.qnt][Quint]],
+and [[file:53-yuanxu-c4-profile-convergence-and-interface-slots.lean][Lean]] artifacts verify =INV-1..INV-6= of Yuanxu Design 165: explicit
+module closure conservation, monotone implied cross-module bridging, Band 4b
+explicit =-feature= veto dominance, fail-closed same-band peer exclusive
+conflict detection, Band 5 monotonic =GovernanceFloor= meet, and stage
+separation (zero compile expansion from runtime-stage detour overlays).
+
+[[file:54-durable-work-engine-core-challenge.org][54: Pure Durable Work Engine Core Formal Challenge]]
+and its [[file:54-durable-work-engine-core-challenge.sysml][SysML]], [[file:54-durable-work-engine-core-challenge.qnt][Quint]],
+and [[file:54-durable-work-engine-core-challenge.lean][Lean]] artifacts formally challenge =modules/durable/work/= and
+=modules/ai-agentic-context/features/durable/org-adapter.ss=, surfacing and
+repairing five concrete logical flaws (=BUG-D1=..=BUG-D5=): monotonic overlay
+budget meet, APPA confined tainted-detour =CompletedExit.= gating, authorized
+non-self explicit early handover & =expected-epoch= CAS fencing, unclosed-attempt
+archive quiescence fencing, and fail-closed cancelled =:INVARIANT:= projection.
+
+[[file:55-mcp-tool-poisoning-and-camel-capability-flow.org][55: MCP Tool Poisoning, Rug-Pull Pinning, Cross-Server Shadowing, and CaMeL Capability-Provenance Flow]]
+and its [[file:55-mcp-tool-poisoning-and-camel-capability-flow.sysml][SysML]], [[file:55-mcp-tool-poisoning-and-camel-capability-flow.qnt][Quint]],
+and [[file:55-mcp-tool-poisoning-and-camel-capability-flow.lean][Lean]] artifacts formalize 2025–2026 MCP security defenses (*MCPTox*, *CaMeL*,
+*MindGuard*): cryptographic manifest pinning against post-approval rug-pulls,
+cross-server tool-shadowing namespace isolation, CaMeL value-level argument
+provenance gating at sensitive sinks, and zero-LLM counterfactual
+decision-dependence auditing.
+
+[[file:56-ascent-governed-loop-termination.org][56: ASCENT-Governed Loop Engine Termination, Anti-Oscillation & Safety Dominance]]
+and its [[file:56-ascent-governed-loop-termination.sysml][SysML]], [[file:56-ascent-governed-loop-termination.qnt][Quint]],
+and [[file:56-ascent-governed-loop-termination.lean][Lean]] artifacts formally prove universal bounded termination of the
+ASCENT verdict lattice against arbitrary adversarial LLM policies, covering
+exact state cycles, $A \leftrightarrow B$ oscillations, repeated-failure and
+zero-progress stalls, upstream governance dominance, and absorbing halt reopen
+discipline.
+
+[[file:57-obligation-fixpoint-reconciler.org][57: Post-ReAct Declarative Obligation-Fixpoint Reconciler (ASCENT × FunFlow × POO)]]
+and its [[file:57-obligation-fixpoint-reconciler.sysml][SysML]], [[file:57-obligation-fixpoint-reconciler.qnt][Quint]],
+and [[file:57-obligation-fixpoint-reconciler.lean][Lean]] artifacts replace imperative ReAct loops completely with an ASCENT
+Datalog fixed-point reconciler over typed Obligation & Epistemic Graphs
+(=modules/loop-engine/{obligation-graph,ascent-reconciler,synthesis-oracle}.ss=),
+proving =(holeId, premiseDigest)= idempotence, deterministic-first FunFlow
+precedence (=0 LLM calls=), strict rejection of raw single-step tool calls,
+competing-hypothesis preservation, and selective bitemporal premise retraction.
+
+[[file:58-delegation-attenuation-and-cedar-toctou-fence.org][58: Multi-Agent Delegated Obligation Attenuation & Concurrent Cedar Revocation TOCTOU Fence]]
+and its [[file:58-delegation-attenuation-and-cedar-toctou-fence.sysml][SysML]], [[file:58-delegation-attenuation-and-cedar-toctou-fence.qnt][Quint]],
+and [[file:58-delegation-attenuation-and-cedar-toctou-fence.lean][Lean]] artifacts ground our evidence chain in real documented production
+issues from =anthropics/claude-code= (=#25000=, =#23983=, =#107019=, =#6036=,
+=#6004=, =#47695=) and =openai/codex= (=#34043=, =#54855=, =#51116=, =#15305=,
+=#20830=, =#51799=), formalizing multi-hop capability attenuation, parent
+denylist dominance, atomic Cedar revocation & cut-drift TOCTOU fencing, and
+Durable Work → =ObligationGraph= unclosed-subagent recovery
+(=modules/graph-engine/{durable-event-bridge,delegation-fence}.ss=).
+
+[[file:59-graph-engine-convergent-tree-and-apex-join.org][59: Unified GraphEngine — FunFlow C4 Disjoint DAG Frontier & Convergent Tree]]
+and its [[file:59-graph-engine-convergent-tree-and-apex-join.sysml][SysML]], [[file:59-graph-engine-convergent-tree-and-apex-join.qnt][Quint]],
+and [[file:59-graph-engine-convergent-tree-and-apex-join.lean][Lean]] artifacts promote the unified graph-driven execution core into
+=modules/graph-engine/= (=interface.ss=, =dag-frontier-scheduler.ss=,
+=convergent-tree.ss=), proving strict separation between disjoint FunFlow C4
+DAG parallel fan-out (=0 subagents=, =0 LLM=) and subordinate Trunk-anchored
+branches (=ContextEnrichmentDetour.=, =DivergentExplorationBranch.=,
+=SubordinateTaskBranch.=) that can complete local tasks yet never directly
+finalize the Trunk, converging solely into the mission Apex with monotonic
+counterexample preservation and Apex-driven cancellation of optional branches.
+
+[[file:60-unified-cyclic-scc-and-durable-tree-recovery.org][60: Unified GraphEngine — Tarjan SCC Cyclic Feedback Subgraphs & Durable SQLite WAL Recovery]]
+and its [[file:60-unified-cyclic-scc-and-durable-tree-recovery.sysml][SysML]], [[file:60-unified-cyclic-scc-and-durable-tree-recovery.qnt][Quint]],
+and [[file:60-unified-cyclic-scc-and-durable-tree-recovery.lean][Lean]] artifacts formalize Tarjan SCC condensation for mixed
+acyclic/cyclic workflows (=modules/graph-engine/cyclic-subgraph.ss= —
+ungoverned cycles fail closed, state-digest oscillation halts immediately,
+bounded budgets escalate cleanly) alongside real SQLite WAL crash/restart
+recovery (=modules/graph-engine/durable-tree-journal.ss= — monotonic owner
+epoch fencing, tamper-evident hash chain verification, and post-crash
+unclosed-branch Apex gating).
+
+[[file:47-end-to-end-context-governance-assurance-closure.org][47: End-to-end Context Governance assurance closure]] and its
+[[file:47-end-to-end-context-governance-assurance-closure.sysml][SysML]], [[file:47-end-to-end-context-governance-assurance-closure.qnt][Quint]],
+[[file:47-end-to-end-context-governance-assurance-closure.lean][Lean]],
+[[file:../../../../proofs/ContextGovernance/lakefile.lean][Lake workspace]],
+[[file:40-48-source-bindings-v1.json][pinned SHA-256 source-binding lockfile]],
+[[file:run-context-governance-chain.py][mechanized chain runner]]
+(=just check-context-governance-lake=, =just check-context-governance-bindings=,
+and =just check-context-governance-chain= in [[file:../../../../dev/just/proofs.just][proofs.just]]),
+[[file:../../../../.github/workflows/context-governance-proof.yml][CI proof workflow]],
+and [[file:../../../../dev/d2/governance-illustrations.ts][OpenSysML/TS illustrated]] artifacts close Slices =40=–=46= and =48=–=60= both
+horizontally (=47= imports all twenty upstream packages/modules in SysML v2,
+Lean 4 and Quint) and vertically (100% bidirectional SysML XOR dispatch, full
+Lake 21-namespace axiom audit + 145 SysML-bound theorem checks including
+disjoint-frame assume-guarantee composition, exhaustive TLC queue-zero checks
+on all twenty single-plane models + 8-step assume-guarantee Apalache on
+composed =47.qnt=, real Quint ITF JSON trace replay into SysML
+=QuintTraceScalarReplayContract=, and fail-closed SHA-256 source-binding
+verification).
+
+* Modularized child ORG modules
+
+| Child module | Title |
+|--------------+-------|
+| [[file:00-design-map--offload-01-process-exit-and-ops.org][00-design-map--offload-01-process-exit-and-ops.org]] | Process exit and Ops dependency ownership (part 1) |
+| [[file:00-design-map--offload-02-process-exit-and-ops.org][00-design-map--offload-02-process-exit-and-ops.org]] | Process exit and Ops dependency ownership (part 2) |
+| [[file:00-design-map--offload-03-process-exit-and-ops.org][00-design-map--offload-03-process-exit-and-ops.org]] | Process exit and Ops dependency ownership (part 3) |
+| [[file:00-design-map--offload-04-process-exit-and-ops.org][00-design-map--offload-04-process-exit-and-ops.org]] | Process exit and Ops dependency ownership (part 4) |
+| [[file:00-design-map--offload-05-process-exit-and-ops.org][00-design-map--offload-05-process-exit-and-ops.org]] | Process exit and Ops dependency ownership (part 5) |

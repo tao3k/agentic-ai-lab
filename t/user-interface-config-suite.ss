@@ -18,7 +18,7 @@
 
 ;; : (-> Unit TestSuite)
 (def user-interface-config-suite
-  (test-suite "poo-flow user interface config"
+  (test-suite "agentic-ai-lab user interface config"
     user-interface-config-modules-test
     user-interface-cicd-profile-case-test
     user-interface-config-core-case-test

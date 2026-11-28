@@ -1,0 +1,534 @@
+{
+  "schema": "agentic-ai-context-governance-source-bindings-v1",
+  "toolchain": {
+    "lean_toolchain": "leanprover/lean4:v4.36.0",
+    "opensysml_version": "0.10.1",
+    "quint_apalache_version": "0.62.1"
+  },
+  "aggregate_bundle_sha256": "2f85745bea5361acffc9eb77e21f96c17561ff9d24bda771f32dcb82cb5b2ef5",
+  "supporting_files": {
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/00-design-map.org": "368fe595184d4c5b12bd54e5fa907e65ec0359e750b87943c2d6da645cd476e3",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-governance-chain.py": "b8e45279f3af1796bb693f4e5f500bcbcdb9b0f2868fcf233ff38fdf4e262138",
+    "proofs/ContextGovernance/lakefile.lean": "a6ee96c57aed2cba53841b98df41462084d67631cc52e7cf10613e8670622913",
+    "proofs/ContextGovernance/lean-toolchain": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
+    "proofs/ContextGovernance/ContextGovernanceAxioms.lean": "91dc21e9f50bc8179aa7cb592c645a0acc432e262160aac28ad953aa3083b01f",
+    "dev/d2/governance-figures.sysml": "8e5c9588864b0a3675b40991b28ef7d264ab8264c3cf67df72f87f885b3b0e48",
+    "dev/d2/governance-illustrations.ts": "d471db1c092c608f086d97292f023a1dde170bf54df2679d9d2b2d74cec71c27"
+  },
+  "slices": {
+    "40-context-governance-boundary": {
+      "slice_id": 40,
+      "bundle_sha256": "92f9bf2c287dce20bd631f5d1cd752de64cb922f4b6fae89a9bd6bb2070b2925",
+      "files": {
+        "org": "158504f1bca750430ae7ef0359f5806a1e0008e0d0636a08c4083c6c036e1ef8",
+        "sysml": "cfb0cd3b88c52d4ae60804ddd3b0901731e458121eff05eb60bb9cd36fc3f975",
+        "lean": "f45b9947f41c05d89cea2d999cba7785df6419c949da2397bbbb2d53667c8e35",
+        "qnt": "ff70e3299dd4f8490fd182783872e4867f26e00585d0f73d09659a52bd26f53c"
+      },
+      "lean_theorems": [
+        "RestrictionEnvelope.meet_refines_left",
+        "composeRestrictions_refines_every_member",
+        "foldRoles_le_every_premise",
+        "governance_value_carries_zero_authority",
+        "kvDomainKey_injective",
+        "minRole_assoc",
+        "minRole_comm",
+        "minRole_idem"
+      ],
+      "quint_invariants": [
+        "handoffFencedAgainstThreatAndCutRaces",
+        "kvReuseFencedAgainstRevocation",
+        "noUnendorsedOrStaleEscalation"
+      ]
+    },
+    "41-epistemic-consolidation-governance": {
+      "slice_id": 41,
+      "bundle_sha256": "1a81014abfd243a1a31fd9103c0fc18c92d445405a26d1e5702c4c4c605d027b",
+      "files": {
+        "org": "74d79285db4f98cf3067a524242f7bf53b8e004e029fdf75e38443d4d429326b",
+        "sysml": "a22fb1b4482e6afbd1cd44bd63eafa25d52ef58775d61d3a1741334aa3baf73c",
+        "lean": "dc39e877ab29ed9963bd86fd0284a863b85ac5c02b3ef246de395a56c7ddb195",
+        "qnt": "9d0f8d0d696e605c133c932a03b9de418f5abfa047a2e81628654f280ea2b6b6"
+      },
+      "lean_theorems": [
+        "admitted_projection_preserves_every_active_defeater",
+        "budget_below_kernel_refuses_projection",
+        "omitted_live_competitor_forces_receipt_and_non_exhaustive",
+        "retract_frame_preserves_unrelated_insights",
+        "sumHypothesisCost_append"
+      ],
+      "quint_invariants": [
+        "activeRecallFencedAgainstRetractionAndGrantLoss",
+        "consolidatedInsightsBindLiveOutcomeAndDistinctRoles",
+        "orgPromotionRequiresExpectedRevisionAndWriteGrant"
+      ]
+    },
+    "42-multi-repo-multi-agent-declassification": {
+      "slice_id": 42,
+      "bundle_sha256": "957a6814c6be109846c4cd11e7a455e1d2e5ca147717006ef6f09a3e3e62b75c",
+      "files": {
+        "org": "246f1e7734eba7c58717de58daca0d50e240647bfda90321c6580cb5a0d44a1f",
+        "sysml": "9e3cc65174791f9b7a651c6c1cc6d4fbd0a61deec61081fe7d19086463029b18",
+        "lean": "1ffdc493d5c5876a09c3317054e65d03132fac574c88fad8f2b60e9c3a552d2c",
+        "qnt": "2009b89e39d80e45dd519949546847762eafe3711f2dc68e4ed15756aede112c"
+      },
+      "lean_theorems": [
+        "commit_redacted_ne_raw",
+        "ordinary_intersection_never_adds_ungranted_subagent",
+        "redactFields_idem",
+        "redactFields_length_le",
+        "redactFields_preserves_defeaters",
+        "redactFields_strips_all_secrets",
+        "redacted_ne_raw_when_secret_present"
+      ],
+      "quint_invariants": [
+        "activeDeliverySatisfiesDistinctRoles",
+        "noTransitiveGrantLeakOrRawExposure",
+        "originCutAdvanceWithdrawsActiveSubagentDelivery"
+      ]
+    },
+    "43-ascent-security-branch-omission-refinement": {
+      "slice_id": 43,
+      "bundle_sha256": "dc486650c7fa0aeaad4b5e2c924cc0eb67c87128e5443a3771ddbf911809cfec",
+      "files": {
+        "org": "810c1b1bcc97e7a75d7b54b5894f01ec43e88ab24f72d5de22c35b807026a286",
+        "sysml": "9faedd628e275fcc0d8cde31ec997abcd817807b2c65c8e5af39749ac374f9e6",
+        "lean": "e728d53c7cb2d237ec1ddf6317e53601bde946ff2da643fd18679b176b55080e",
+        "qnt": "54c3dee516714d7da5679ee54c7c6d42584be0a837eaabfa24f63645504b73a7"
+      },
+      "lean_theorems": [
+        "all_projected_evaluated_iff_matrix_complete",
+        "hypothetical_fit_irrelevant_to_safety",
+        "missing_claim_count_irrelevant_to_discriminator",
+        "omissionFlag_true_iff_nonempty_gap",
+        "safeForAll_antitone_in_hypotheses"
+      ],
+      "quint_invariants": [
+        "destructiveRemediationBlockedUnderOmittedCompetitors",
+        "omissionReceiptAccuratelyTracksUnprojectedCompetitors",
+        "readProbePermittedUnderOmissionWithLiveReadGrant"
+      ]
+    },
+    "44-temporal-causal-survival-and-memory-quotient": {
+      "slice_id": 44,
+      "bundle_sha256": "91aa862de5c090f5b1e8b73b95d3c3ebced6abf798299ef853b8a559e7ea0e35",
+      "files": {
+        "org": "0d856c0e8f43b152253aa4033cd23d15c90032014746300b90801a7898eaf106",
+        "sysml": "8354ba790c7f99196361667b19b899e5297129251ee02a242ada9cbfd4d339b2",
+        "lean": "b12f8c7a6383020f75ac0e26fcf13e493b0dfc74806353721664024a2cd4e7a3",
+        "qnt": "b5d4120cdb3ae2eacc561d949dfc9f0eaa4cad45ee4069104196b820ac621249"
+      },
+      "lean_theorems": [
+        "append_later_revision_preserves_historical_cut",
+        "filterUpToCut_monotone_in_cut",
+        "post_admission_citation_invalidates_prior_review",
+        "trajectoryImpact_subsumed_by_potentialFrontier",
+        "unused_retrieved_mutation_creates_zero_invalidation_burden"
+      ],
+      "quint_invariants": [
+        "activeGemEvictsOnCitedRetractionAndIgnoresUncitedChurn",
+        "historicalCutImmutableUnderLateValidTimeArrival",
+        "whyNotMemoryRequiresClosedWatermark"
+      ]
+    },
+    "45-org-sexpr-gql-candidate-exchange-search": {
+      "slice_id": 45,
+      "bundle_sha256": "d8ab06bab5dfc1e8c6118f804fd4d1fd678376185c800a46333622ecb75c9027",
+      "files": {
+        "org": "2792be1836b41a9e35a74d44506f6f00cc83d4d5eb902852a18834e31cf90bc0",
+        "sysml": "4492e36957faca72da0b79035c2f4381c6f528f289de0b5a7603819183338327",
+        "lean": "765823b8c4eca35b3550a0dba5c4745a92da835606b9a8dea921b9f48fa4b327",
+        "qnt": "501e0928219b2a4bef04ad01d406c79a00a31bb185b9f8bbddf839f2bde6c1f2"
+      },
+      "lean_theorems": [
+        "admittedWalk_stays_in_element_space",
+        "selectAstTree_excludes_source_blocks",
+        "selectAstTree_preserves_byte_bounds",
+        "walkFuel_append"
+      ],
+      "quint_invariants": [
+        "genAdvanceClearsPublicationPreservingHistory",
+        "publishedRequiresSameGenCompleteReceipts",
+        "receiptUniquenessPerProviderGen"
+      ]
+    },
+    "46-durable-agenda-session-sandbox-governance": {
+      "slice_id": 46,
+      "bundle_sha256": "87e3a5f010aa12d60cc4af7186e6e8cd719eeca4d1f4200141ea034e2db2c0bd",
+      "files": {
+        "org": "1b20911829bf15e201801502e2cc207b3ad66197fb2351350146ce0bcfd9f73f",
+        "sysml": "97aa7fd6b46a6eccfc0771569fc83f03db7892c214701c7b126f8c17bc2c0994",
+        "lean": "a9d778d17cdf7830dc6f7e9c123804b62d024ff0679e57790216b586d631217f",
+        "qnt": "6dbf51c8a537a39c9c815ef0ea3277bf8dad4322c3b7ca78715e94f1d20d6689"
+      },
+      "lean_theorems": [
+        "effectiveCap_comm",
+        "effectiveCap_idem",
+        "effectiveCap_monotone_ctx",
+        "noEgressProfile_eliminates_lethal_trifecta",
+        "recordOutcome_frame_preserves_other_recipients"
+      ],
+      "quint_invariants": [
+        "crashAmbiguityBlocksBlindRetryAndAdvancesGen",
+        "lethalTrifectaExcludedAtFence",
+        "wakeNeverDispatchesWithoutLiveGrant"
+      ]
+    },
+    "48-progressive-disclosure-and-two-stage-org-repair": {
+      "slice_id": 48,
+      "bundle_sha256": "d808c8d8850af6d67e73bd7cd90da957166c67ce3ae10c82d0362ac0dec0f99c",
+      "files": {
+        "org": "03b14e89e22c1a627a294899e0cbbb3fb2e8ecac906d45b73944e47d13856d56",
+        "sysml": "c9aba0542a3520bc5685c52ebffdcecf0beafe8053e03983949d165a7b5d2793",
+        "lean": "bb255a0291bee2f10bb02798a048f10def9008e7e0da88e9662d8407e57e55cc",
+        "qnt": "f930529a6ca74ddd39cc5aef0e1ead5ea191d764b540d3b55618c7da2868d815"
+      },
+      "lean_theorems": [
+        "activeDefeater_forces_full_L3_disclosure",
+        "foldThinking_preserves_defeaters_and_results",
+        "maxDepth_assoc",
+        "maxDepth_comm",
+        "maxDepth_idem",
+        "stageOneRepair_idem",
+        "stageOneRepair_preserves_ids_and_defeaters",
+        "stageTwoRequest_carries_zero_write_authority"
+      ],
+      "quint_invariants": [
+        "activeDefeaterNeverConsumedFolded",
+        "stageTwoPatchRequiresCurrentCutAndReParse"
+      ]
+    },
+    "49-scoped-detour-funflow-concurrent-shared-context": {
+      "slice_id": 49,
+      "bundle_sha256": "61cad10f30735a4b2718f49fbfcdcb7029383b4ae83d475b929402b3bc5d24a5",
+      "files": {
+        "org": "483699dc27e0f7b6aeb51225457bb6c24a89dd0ba045c0b3029a596de672c115",
+        "sysml": "fdfb3d229c99056917640164e996de163d09560865e4a5a6a93a308e069f2daf",
+        "lean": "e7e2d81a72c39042b7a4019771ff0fc81a0d7a252e520d7d5f5cd278bc439fff",
+        "qnt": "56c816d69b63a97f28bde65cc476a75bc3a0aacdd21282821fd188df018e6c84"
+      },
+      "lean_theorems": [
+        "activeLeaseTakeover_rejected_before_expiry",
+        "cancelledDetour_preserves_mainline_and_new_defeaters",
+        "directWrite_nonOwner_rejected",
+        "expiredLeaseTakeover_strictly_advances_epoch",
+        "extendChild_preserves_claimed_node_invariant",
+        "fencedEffect_requires_exhaustive_token_and_endorsement",
+        "orgOverlayMeet_capabilities_monotonic",
+        "orgOverlayMeet_lease_contained",
+        "orgOverlayMeet_no_trust_escalation",
+        "pureCAS_admitted_without_exhaustiveness",
+        "reanchorMainline_blocks_archive_if_blocker_or_invariant_open"
+      ],
+      "quint_invariants": [
+        "autoArchiveRequiresNoBlockerAndAllInvariants",
+        "cancelledDetourNeverDropsDefeaters",
+        "fencedEffectRequiresExhaustiveAndValidPremise",
+        "noNonOwnerOverwrite"
+      ]
+    },
+    "50-literature-frontier-detour-confinement-and-causal-audit": {
+      "slice_id": 50,
+      "bundle_sha256": "f7ba7bd52d9248145575e44e8fabdefb975fe6814c7fab4869a2db0c80aef82a",
+      "files": {
+        "org": "44351b0a8d5b7a72c9751600629ac78e4399008dd320ec71de0dcd437d5f13e2",
+        "sysml": "aead09ca66eb63715fd1a2b9473df94d19a4171ca6c488b111dca17e5a3e37a2",
+        "lean": "e1c9407ef33c69041e73717106042bd0a6d5ac98ea5eaf96af947a0ccb6b4ccd",
+        "qnt": "c9d1b1763d29eda9f785dc26e0e65e67ab778edcd68b020916769b668051c2e3"
+      },
+      "lean_theorems": [
+        "advisoryTrigger_fires_on_stall_threshold",
+        "advisoryTrigger_never_authorizes_auto_mutation",
+        "attestedDetourReturn_preserves_mainline_taint_without_label_creep",
+        "causalAudit_clean_when_counterfactual_invariant",
+        "causalAudit_clean_when_declassification_certified",
+        "causalAudit_flags_unendorsed_branch_flip",
+        "confinedDetour_isolates_untrusted_read_from_mainline",
+        "confinedDetour_no_egress_when_tainted",
+        "unattestedDetourReturn_rejected"
+      ],
+      "quint_invariants": [
+        "confinedDetourNeverLeaksUnattestedToMainline",
+        "stallAdvisoryNeverAutoMutatesMainline",
+        "taintedConfinedDetourNeverEgresses",
+        "unendorsedCausalFlipAlwaysFlaggedByAudit"
+      ]
+    },
+    "51-memory-poisoning-quarantine-and-kv-prefix-serialization": {
+      "slice_id": 51,
+      "bundle_sha256": "906694098fb5ccec73c5267a9246915513087341f2acbba9f336bce612821e60",
+      "files": {
+        "org": "d1a202667a4f1fe5d2fbb86765890385f6a802e9bfba8dcc3bcfee8c638ab914",
+        "sysml": "c9858b3fa9e15ab5e743a7aff96b3213b7fe2556f7152f030e4c79d8cca4e94e",
+        "lean": "7fe98cdfd1712f99b2a20f792255744fd7cc549cc12f964d9e4aa77c8336c77a",
+        "qnt": "4eb231d54c4434701010944d9ed94121a28a8a07d27b6080f2332807897ed55b"
+      },
+      "lean_theorems": [
+        "appendDynamicSuffix_preserves_frozen_kv_prefix",
+        "canonicalPrefixSort_order_invariant",
+        "detourSuffixSwap_preserves_prefix_commitment",
+        "endorsedAndDefeaterFree_promotes_to_recallable",
+        "quarantinedCandidate_never_recalled",
+        "untrustedOrigin_selfClaimedSuccess_cannot_promote"
+      ],
+      "quint_invariants": [
+        "productionRecallNeverContainsQuarantinedOrPoisoned",
+        "rollingDetourSuffixNeverFracturesFrozenKvPrefix",
+        "untrustedExperienceNeverAutoPromotes"
+      ]
+    },
+    "52-funflow-cas-singleflight-and-external-sandbox-binding": {
+      "slice_id": 52,
+      "bundle_sha256": "fe7bb7d0aa1c6288d22d1d81445e6156df0052a739bf6e0ad0a1ad0215a15cc6",
+      "files": {
+        "org": "2d1dd501fcef6d01e22d94694f4afbd0302c65a0f51a86eb80159beb5ef2c763",
+        "sysml": "6213103557f0f1e87833dc069db609e680bf2badc52b010e0f30d248e7ec3d79",
+        "lean": "e55ff0d880109a7c6662a61c146e5ec87d1e72b06b23757ebc7253a0186bdbae",
+        "qnt": "c26de779be74dd3d08dad8acaf47727ce2f16bed1d9c2ebedde1c02d21579cb4"
+      },
+      "lean_theorems": [
+        "casKey_input_order_invariant",
+        "casKey_sensitive_to_code_and_env_drift",
+        "disjointLeaseMeet_is_unsatisfiable",
+        "externalTask_rejects_unpinned_or_trifecta_sandbox",
+        "fencedEffect_never_reused_by_plain_cas",
+        "gc_never_evicts_capsule_pinned_entry",
+        "retractedPremise_always_invalidates_fail_closed"
+      ],
+      "quint_invariants": [
+        "atomicPublishNeverExposesPartialEntryOnCrash",
+        "fencedEffectExecutesAtMostOnceAndFinalizerNeverDropped",
+        "gcNeverEvictsCapsulePinnedForensicEntry",
+        "singleflightAtMostOneActiveComputePerKey"
+      ]
+    },
+    "53-yuanxu-c4-profile-convergence-and-interface-slots": {
+      "slice_id": 53,
+      "bundle_sha256": "3ca6baa95a5e53f545494e5070bea259d8ce06df607869530bb0de635d4dffa4",
+      "files": {
+        "org": "64044ce51912091ca0ca50fea5b1e4c04f1143939794c0ce973606d208f3dee2",
+        "sysml": "640dddb170dee6e399b82ec2f633f0a91055b41e9a821eebfabd8ad2e10c3446",
+        "lean": "6415048628178006090eb1e14f71bfccf8a24f3c9b6f8613387a66e8a0514ceb",
+        "qnt": "fa584e57ce41f45bb85200744a642cb2c4fbac4200589b4f4440239172d30277"
+      },
+      "lean_theorems": [
+        "explicitVeto_dominates_implied",
+        "foldGovernanceFloor_no_escalation",
+        "impliedActivates_when_prereq_and_no_veto",
+        "impliedFeature_subset_admitted",
+        "impliedRuleFires_monotone",
+        "inactiveFeature_excluded_from_compiledClosure",
+        "peerExclusive_agreement_collapses",
+        "peerExclusive_disagreement_conflicts",
+        "runtimeStageSlot_never_expands_assemblyClosure",
+        "tagTarget_subset_admitted"
+      ],
+      "quint_invariants": [
+        "invExplicitClosure",
+        "invGovernanceFloorMonotonic",
+        "invPeerConflictFailClosed",
+        "invRuntimeStageNoCompileExpansion",
+        "invVetoDominance"
+      ]
+    },
+    "54-durable-work-engine-core-challenge": {
+      "slice_id": 54,
+      "bundle_sha256": "31a120d8100a8dee2311bb1df652fda6dd02eb54b46c4d4624ef3851590dd33f",
+      "files": {
+        "org": "44b3eb5d8d05820fa8fb2db0f98e88660e7f42d29cc83367f826b40906bf477a",
+        "sysml": "fdb02f66f3065d456837095794acba480fd0c93fe59e663cffec16bba101bb58",
+        "lean": "3b21bb0d5ecdf8c8b36e6588b66bfaad854fdca65c712b5ee7fda2bbd4145796",
+        "qnt": "a56344ce460ecb232356675d74c928c403182646bc76dba8656ca25a450a1c54"
+      },
+      "lean_theorems": [
+        "cancelledInvariant_remains_unsatisfied_fail_closed",
+        "explicitEarlyHandover_requires_nonSelf_endorsement",
+        "overlayBudgetMeet_never_escalates",
+        "staleEpochCas_rejected_by_claim_and_handover",
+        "taintedDetourCompletedExit_requires_attestation_or_cert",
+        "unclosedAttempt_blocks_autoArchive_fail_closed"
+      ],
+      "quint_invariants": [
+        "activeLeaseNeverHijackedWithoutExpiryOrEndorsement",
+        "archiveNeverCommitsWithUnclosedAttemptOrOpenBlocker",
+        "overlayBudgetNeverExceedsParentPolicyFloor",
+        "staleEpochWriteOrHandoverAlwaysRejected",
+        "taintedDetourNeverMergesUnattestedIntoMainline"
+      ]
+    },
+    "55-mcp-tool-poisoning-and-camel-capability-flow": {
+      "slice_id": 55,
+      "bundle_sha256": "dea6f761e424c973a231c53aa6f1734132ec1b51583a9ee0671e884637551c8b",
+      "files": {
+        "org": "87005522491cdcd648ea91e4908bc86e4b1f8a3c320b1415bbbeccbaa2e8c8a1",
+        "sysml": "189ecf742ea7648335577eb01024e06f299a853177acddf0b22b51b7fe1702b6",
+        "lean": "594e1436a3e5b7e6d89ee01523f7a20a6e7a5fb54397a9c37673144a02e7d742",
+        "qnt": "0cdd75c07dcb3d9e174d72b5b402d6b55bbfec29f82cc02371dbef010d79e34d"
+      },
+      "lean_theorems": [
+        "crossServerShadowing_rejected_fail_closed",
+        "decisionDependenceAudit_flags_unendorsed_metadata_hijack",
+        "metadataSegregation_keeps_description_untrusted",
+        "rugPullMutation_breaks_manifest_pin",
+        "untrustedOriginArgument_blocked_at_sensitive_sink",
+        "userIntentArgument_admitted_at_sensitive_sink"
+      ],
+      "quint_invariants": [
+        "crossServerShadowedToolNeverDispatched",
+        "poisonedMetadataDecisionHijackAlwaysFlaggedOffline",
+        "rugPullMutatedToolNeverInvoked",
+        "sensitiveSinkNeverAcceptsUntrustedOriginWithoutCert"
+      ]
+    },
+    "56-ascent-governed-loop-termination": {
+      "slice_id": 56,
+      "bundle_sha256": "f1cfd595bfb66816ed966eaf55e620aadf0fed8265b5ccdf40c853958f3ea954",
+      "files": {
+        "org": "bd6d6d28c51d448e10887a8855d7b2ad453ac536c91b8e838d5759391de98aea",
+        "sysml": "9f6639576f0a54fe32ff6a22aa3f52bda3049ed203086efa8b55d8c8148eed47",
+        "lean": "1de9d6864b02be2f56c4c57e2aabc8e2d00a2ecedf0fad7efc0e87db67903b29",
+        "qnt": "84f0a15da76f68ccfa3a6ef397858d67e2fb72c2fc7c1f4da317f1c1d4f319ec"
+      },
+      "lean_theorems": [
+        "adversarialLoop_universally_terminates",
+        "budgetExhausted_always_halts",
+        "convergedQuiescent_halts_cleanly",
+        "exactCycle_or_oscillation_always_halts",
+        "governanceBlock_dominates_retry_and_convergence",
+        "haltedLoop_absorbing_without_human_reopen",
+        "repeatedFailure_or_zeroProgress_always_halts"
+      ],
+      "quint_invariants": [
+        "cycleOrOscillationNeverAdmitsNextStep",
+        "governanceBlockNeverOverriddenByRetry",
+        "haltedLoopNeverSelfResetsWithoutHumanReopen",
+        "stepsTakenNeverExceedsInitialBudget"
+      ]
+    },
+    "57-obligation-fixpoint-reconciler": {
+      "slice_id": 57,
+      "bundle_sha256": "50c1c5fd7eb4a2cf769e480be3624bf26777c995474752f68e109b01e9504a9e",
+      "files": {
+        "org": "86161799fe4fed19b8d7482fcd2f731cb8bc512cf70f6b0bbe4e14de371219e0",
+        "sysml": "408c503e6d84258706085a603ff00e0f8af1ae6dfccf27bc70047158e58196a2",
+        "lean": "e15e48f40a392eb6147c66cd77fa45eb556b595afcb11e020d1175c5eed61467",
+        "qnt": "180f91a2ac1ba0ccfcc39a47027fac428a539de22f92ecb7bef3b39d685e3745"
+      },
+      "lean_theorems": [
+        "attemptedHole_idempotent_on_unchanged_premises",
+        "competingHypotheses_preserved_without_greedy_collapse",
+        "deterministicFrontier_takes_strict_precedence_over_llm",
+        "premiseRetraction_preserves_independent_nodes",
+        "rawToolCallOracleOutput_rejected_fail_closed",
+        "reconciler_reaches_quiescent_fixed_point_on_all_holes",
+        "refutedHypothesis_never_discharges_obligation"
+      ],
+      "quint_invariants": [
+        "competingHypothesesNeverCollapsedWhenUnrefuted",
+        "llmOracleNeverCalledWhileDeterministicFrontierNonEmpty",
+        "rawSingleStepToolCallNeverAdmittedFromOracle",
+        "sameHolePremiseNeverReinvokesOracle"
+      ]
+    },
+    "58-delegation-attenuation-and-cedar-toctou-fence": {
+      "slice_id": 58,
+      "bundle_sha256": "3e2a12d9b95d5e4babfefce4b9fa10ef8756e508191f0378eddd4b20af39b197",
+      "files": {
+        "org": "4559e57151905ba7cba451758925d0f3c1ed9dd85fe6e518ca096b849e276741",
+        "sysml": "dc4a55b6821ef0a3c5175c23ed408feb9bb314450a2dadff2fd527dbaaa1609c",
+        "lean": "d7c332b3571c9bf3fa325b92646406d0fc2212c9ed8e4c1f56bb6f489c562018",
+        "qnt": "732f05d514a272ae23c626fa4e2836278483966b6b1889bcec81c73a17117dc6"
+      },
+      "lean_theorems": [
+        "delegatedCapability_never_exceeds_parent",
+        "grantEpochAdvance_invalidates_inflight_delegation",
+        "multiHopDelegation_never_escalates",
+        "parentDenylist_dominates_child_delegation",
+        "revokedParentGrant_immediately_blocks_child_toctou",
+        "staleChildContextCut_rejected_fail_closed",
+        "unclosedSubagentAttempt_blocks_silent_hang_or_completion"
+      ],
+      "quint_invariants": [
+        "childBoundEpochNeverExceedsLiveGrantEpoch",
+        "delegatedChildNeverBypassesParentDenylist",
+        "parentNeverCompletesWhileChildAttemptUnclosed",
+        "revokedGrantOrStaleCutNeverAdmitsChildToctou"
+      ]
+    },
+    "59-graph-engine-convergent-tree-and-apex-join": {
+      "slice_id": 59,
+      "bundle_sha256": "4ecb494d6cbe1e5ae103f87c1cb35c3c41b1c0685c31250d9264adee278e46dd",
+      "files": {
+        "org": "9a6332eecf8e310f8ba8851520a89e510de30f99fba750116e10863dea0bea09",
+        "sysml": "9f55ff962a579c596ea8ac1e85a631041f0d3d1d0a64e906a9cf9e8b1012c72f",
+        "lean": "b89af956f35e319eff2c15f1f93a2d29ff94a82d2061a85d81150cf2f1494c5b",
+        "qnt": "33254c68d785574aa9a237f168d6e4bde8c679a64dada34717c5b1c2196b9680"
+      },
+      "lean_theorems": [
+        "apexConvergence_supersedes_remaining_optional_branches",
+        "branchCompletion_never_finalizes_trunk_directly",
+        "disjointParallelDagFrontier_spawns_zero_subagents",
+        "isolatedOrDetachedBranch_always_refused",
+        "overlappingWriteFootprint_never_parallelized",
+        "staleBranchContribution_never_pollutes_trunk_yet_preserves_counterexamples",
+        "unclosedRequiredBranch_blocks_apex_convergence"
+      ],
+      "quint_invariants": [
+        "apexConvergenceClearsOptionalAndRequiresZeroActiveBranches",
+        "noIsolatedUnsharedSubagentSpawned",
+        "parallelDagNeverSpawnsSubagents",
+        "subordinateBranchNeverDirectlyFinalizesTrunk"
+      ]
+    },
+    "60-unified-cyclic-scc-and-durable-tree-recovery": {
+      "slice_id": 60,
+      "bundle_sha256": "7ea15fae6e0baf9615677035bd7404c748261f216f955804b919c15415c303bb",
+      "files": {
+        "org": "c8e1d6f96178772033f47b4ea52659cd64071d441fc5b6df11778a69b6ba3f1b",
+        "sysml": "aef0005d0e9bfeba382978bebbe4023b7afb9a4311851d6890ad6b2875de9771",
+        "lean": "4bd653dd0b231288e21593e94f33998a59e2d38e8a3184bfc62ea4b1e1d25f81",
+        "qnt": "e1f3b9fc7b356359d0c4b0bfa7eb8bc0f0ee1cab5d245c069f2629c757650f1d"
+      },
+      "lean_theorems": [
+        "budgetExhaustedCycle_halts_fail_closed",
+        "recoveredOpenRequiredBranches_block_premature_apex",
+        "repeatedStateDigest_immediately_halts_oscillation",
+        "revokedCedarGrant_blocks_unified_graph",
+        "supersededJournalEpoch_rejected_fail_closed",
+        "tamperedJournalHashChain_refuses_recovery",
+        "ungovernedCyclicScc_always_refused"
+      ],
+      "quint_invariants": [
+        "oscillatingCycleNeverContinues",
+        "postCrashApexRequiresZeroOpenBranchesAndConvergedScc",
+        "supersededEpochNeverWritesJournal",
+        "ungovernedCycleNeverExecutes"
+      ]
+    },
+    "47-end-to-end-context-governance-assurance-closure": {
+      "slice_id": 47,
+      "bundle_sha256": "041110d7d3eb3f9c627a7e65fba63827683a982a9c020709ee354377a06350a6",
+      "files": {
+        "org": "459d8cee5d1e4199e8ddf61359c25f9494b94c047bb6df5f49acde6821bfd39c",
+        "sysml": "cc5f38572ca3dd2fe32b48b64242708b18fcbd5fced8e36d90c45293c2c6c2ad",
+        "lean": "3e59c94608c0e1cc1942c4fc7cfff38f6ecc95b929c3c0ae5afe34824486fbf0",
+        "qnt": "2f9154036b37aace6a1805dd0fde60df04aa251a2153c116ea442d2e99fc3379"
+      },
+      "lean_theorems": [
+        "allStagesHold_append",
+        "any_refuted_stage_refutes_pipeline",
+        "assurance_carries_zero_authority",
+        "cut_inequality_invalidates_hot_capsule",
+        "disjointFrame_step_preserves_product_invariant",
+        "leanToQuintBoundaryQuotient_sound",
+        "pureGovernanceChain_end_to_end_sound",
+        "replayCapsule_deterministic_without_llm"
+      ],
+      "quint_invariants": [
+        "allTwentyUpstreamSliceInvariantsHold",
+        "coldAuditReplayPreservedWithoutReopeningStaleLiveHandoff",
+        "hostCasRequiresCurrentCapsuleAndLiveUpstreamPlanes"
+      ]
+    }
+  }
+}

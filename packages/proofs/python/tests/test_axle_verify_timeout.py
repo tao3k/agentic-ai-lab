@@ -10,7 +10,7 @@ import sys
 
 import pytest
 
-from poo_flow_proof import axle_verify
+from agentic_ai_lab_proof import axle_verify
 
 
 def test_cli_bounds_the_complete_axle_operation(
@@ -44,6 +44,6 @@ def test_cli_bounds_the_complete_axle_operation(
         "base_timeout_seconds": 0.0,
         "code": "axle-operation-deadline-exceeded",
         "operation_timeout_seconds": 0.01,
-        "schema_id": "poo-flow.axle-verification.v1",
+        "schema_id": "agentic-ai-lab.axle-verification.v1",
         "status": "rejected",
     }

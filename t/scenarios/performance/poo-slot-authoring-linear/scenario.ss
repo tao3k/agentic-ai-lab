@@ -7,13 +7,14 @@
 ;;; the production tail-passing implementation. The baseline is evidence only;
 ;;; it is not a second runtime or a public compatibility path.
 
-(import (only-in :asp-gerbil-scheme/benchmark-api
+(import :clan/poo/object
+        (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/src/user-interface/module-presentation
-                 poo-flow-poo-slot-authoring-datum-bindings))
+        (only-in :tao3k/yuanxu/module-system/observability/presentation
+                 yuanxu-poo-slot-authoring-datum-bindings))
 
 (def +nesting-depth+ 300)
 (def fixture
@@ -78,7 +79,7 @@
                 (benchmark-run/result
                  fixture
                  (lambda ()
-                   (poo-flow-poo-slot-authoring-datum-bindings source-datum)))))
+                   (yuanxu-poo-slot-authoring-datum-bindings source-datum)))))
     (unless (equal? baseline-value candidate-value)
       (error "tail-passing POO slot walk changed source-order semantics"))
     (unless (benchmark-receipt-pass? candidate-receipt)
@@ -88,7 +89,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "tail-passing POO slot walk did not improve deep traversal"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] poo-slot-authoring-linear baseline=")
+    (display "[agentic-ai-lab-benchmark] poo-slot-authoring-linear baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

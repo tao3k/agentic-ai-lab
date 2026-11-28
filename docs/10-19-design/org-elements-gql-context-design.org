@@ -1,0 +1,191 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+#
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Org Elements, ISO GQL, ASCENT Progressive Disclosure, Declarative POO/Durable Orchestration, and Two-Stage AST Repair
+#+LANGUAGE: en
+#+OPTIONS: toc:2
+
+* 1. Scope and Boundary
+
+=tao3k/orgize= owns native Scheme Org parsing, =Org Elements= S-expression
+selectors, and =OrgContract= evaluation. =tao3k/agentic-ai-lab=
+(=modules/ai-agentic-context=, =modules/durable=, =modules/query=, and
+=gerbil-ascent=) owns the pure generic Context and Durable Orchestration
+library:
+
+1. **=Org Elements -> YuanxuGraph= & ISO =GQL= Compiler**: Projects native Org
+   elements (=OrgSource=, =OrgHeadline=, =OrgListItem=, =OrgSrcBlock=,
+   =OrgDrawer=, =OrgLink=) and compiles =(org-elements ...)= selectors into
+   governed =AgenticAILabQuery.= / =GraphSyntaxProgram.= expressions.
+2. **=ASCENT= Progressive Disclosure (=L0..L3=) & Dynamic Facet Deduction**:
+   Evaluates fixed-point deductive rules in-VM at zero LLM token cost to:
+   - Derive per-element disclosure depths (=L0= skeleton, =L1= properties +
+     checklists, =L2= =#+RESULTS:= body with =#+BEGIN_THINKING= folded, =L3=
+     full raw span on active defeaters or explicit drill-down requests);
+   - Derive minimal case-specific Org facets (=inline-checklist=,
+     =scheduled-todo-dag=, =invariant-section=, =competing-hypotheses=,
+     =attach-media=, =sod-reviewer=, =gitops-split=) so downstream Flash models
+     grow Org structure dynamically from a minimal seed instead of static
+     boilerplate templates;
+   - Derive durable orchestration predicates (=ready_to_schedule=,
+     =needs_recovery=, =ready_to_auto_archive=, =tab_visible=).
+3. **Two-Stage Org Repair Pipeline**:
+   - **Stage 1 (Deterministic AST Auto-Repair, ~90%, 0 Tokens)**: Rewrites
+     accidental nested =:THINKING:= drawers inside =:RESULTS:= into
+     =#+BEGIN_THINKING ... #+END_THINKING= special blocks, closes unclosed
+     drawers/blocks, normalizes checkbox and tag tokens, recomputes
+     =[done/total]= / =[pct%]= statistics cookies, and stamps deterministic
+     origin/root properties before re-parsing via =org-source-element-graph=.
+   - **Stage 2 (Diagnostic-Guided Flash Repair Request, ~10%)**: Packages only
+     the failing subtree slice and structured =OrgContract= / =ASCENT=
+     diagnostics when semantic repair is needed.
+
+* 2. Declarative Interface Plane: =gerbil-poo= C4 Linearization, Tweag-Inspired =FunFlow= CAS DAG, Governance Isolation, and Durable Orchestrator
+
+Declarativity is the primary contract of the library =interface.ss= surface
+(inspired by Doom Emacs's clean separation between core engine mechanisms and
+thin declarative configuration):
+
+1. **=gerbil-poo= C4 Linearization, POO-Constrained Macro Governance & Multi-Repo =WorkspaceTopology.=**:
+   - =WorkspaceTopology.= composes multiple =RepoNode.= roots with explicit Pin
+     dependency edges, a =PreFlightRemoteDriftProbe= (=PureCAS=), and 3-party
+     SoD =DeclassificationCert= for cross-repo context transfers.
+   - =RepoNode.= -> =WorktreeNode.= -> =TaskNode.= -> =SubTaskNode.= /
+     =DetourNode.= compose via =gerbil-poo= C4 linearization with POOF constant
+     slots =(slot := expr)=, runtime lexical slot references, and ==>= / ==>.+=
+     refinements — strictly adhering to =45-40-10-poo-constrained-gerbil-macro-governance.org=
+     (value-first POO + =ObjectContract= admission + fail-closed CLOS
+     =.defmethod-bundle= for multi-axis crossings; no Doom-style business
+     =define-*!= wrapper macros and zero runtime =eval=).
+   - **Bidirectional Lens (=OrgOverlay(g)=)**: Inert Org =:PROPERTIES:= and
+     =:DEPENDS_ON:= edits validate through =OrgOverlayContract= and compose as
+     the top C4 mixin for Epoch =g=, propagating hot policy refinements to
+     inner lexical slots while monotonically narrowing =RestrictionEnvelope=
+     via =restriction-meet=.
+2. **Tweag-Inspired =FunFlow= Three-State Effect Algebra, CAS Resumability & Premise Invalidation**:
+   - Owned directly under =tao3k/agentic-ai-lab/modules/funflow/=
+     (=durable-dag.ss=, =dependency-graph=, =scc=, =job-graph=, =after-start=
+     finalizers, =flow-compose=, =strategy=), complex Org task trees map 1-to-1
+     to POO =FunFlow= DAGs with three effect classes dispatched via CLOS
+     =(admit-node-effect node effect-class envelope)=:
+     - =PureCAS.=: deterministic steps skipped on exact input CAS hit.
+     - =VerifiedEpistemic.=: stochastic LLM steps reused via Semantic CAS when
+       bound to live =source-cut= and backed by Verifier / =EndorsementReceipt=.
+     - =FencedEffect.=: irreversible side-effects gated by one-shot
+       =AuthorizedEffectToken=, unique =idempotency-key=, =after-start=
+       finalizer, and =admit-security-branch= (=claims-exhaustive?: #t=).
+   - **Premise Invalidation (0 Tokens)**: Each node binds =premise-digests=;
+     when a concurrent edit or detour shifts a premise, =ASCENT=
+     =assumption_invalidated= marks only affected downstream nodes
+     =stale-premise= while keeping unaffected CAS entries valid across
+     =funflow-replan-epoch (g -> g+1)=.
+3. **Scoped Detours, 0-Token Org-Elements Re-Anchoring & Four Exit States**:
+   - Humans and concurrent peer Agents open side-quests strictly inside the
+     parent =Task Scope= as =:ROLE: detour= subtrees carrying =:DETOUR_KIND:=
+     (=blocker= | =side-quest=) and =:RETURN_ANCHOR: <mainline-id>=.
+   - Dual-focus progressive disclosure keeps the active detour at =L2/L3= while
+     keeping the mainline Goal spine and =:RETURN_ANCHOR:= pinned at =L0/L1=.
+   - When a detour concludes, zero-token Org Elements + ISO GQL + =ASCENT=
+     runs =task-reanchor-mainline= and dispatches fail-closed CLOS
+     =(reconcile-detour-exit detour exit-state anchor)= across four exits:
+     - =CompletedExit.=: distills receipts & counterexamples via
+       =admit-consolidation= back to =:RETURN_ANCHOR:=, folds detour to =L0=,
+       and unblocks mainline dependencies.
+     - =ParkedExit.=: snapshots dirty worktree edits into GitOps =custody= /
+       =org-attach= (=custody-oid=), restores a clean worktree, and leaves
+       non-blocking mainlines unencumbered.
+     - =CancelledExit.=: discards dirty code edits while **mandatorily
+       preserving =defeat-conditions=** into the mainline Non-Droppable
+       Counterexample Core.
+     - =PromotedToTaskExit.=: when =max_detour_depth= or scope boundaries are
+       exceeded, =fission-subtree= promotes the detour into a first-class
+       top-level Task Tab in =index.org=.
+4. **Zero-SubAgent Concurrent Shared Context & Per-=:ID:= Ownership Claims (Extend, Never Overwrite)**:
+   - Unlike mainstream "SubAgent" frameworks that spawn isolated child chats
+     which re-read the codebase from scratch (=O(K*N)=) and lose shared state,
+     there are **no isolated SubAgents**: sequential or concurrent, Humans and
+     multiple peer Agents operate symmetrically over **one live Shared Org
+     Context** in which **both information and task state reside**.
+   - Every working table / task / subtree =:ID:= records its live Governance
+     ownership directly in =:PROPERTIES:= (=:OWNER_ACTOR:=, =:CLAIM_STATE:=,
+     =:CLAIM_LEASE_EPOCH:=, =:CLAIM_SCOPE_DIGEST:=, =:CLAIM_WORKTREE:=),
+     fenced by =durable-journal= and Rust =OrgGovernanceLedger=.
+   - **Ambient Cross-Actor Perception (0 Re-Read)**: The moment Agent =A= (or
+     a Human) claims =:ID: X= in Shared Context, every peer Agent =B, C= and
+     Human immediately perceives that live claim at =L0/L1= via zero-token Org
+     Elements — zero duplicate reads, zero duplicate work, zero hidden silos.
+   - **Extend-Never-Overwrite Invariant**: If =:ID: X= is =claimed-active= by
+     actor =A=, any peer actor =B != A= (Human or Agent) **cannot overwrite**
+     =:ID: X=. Instead, =B= contributes by extending on top of =X= via a fresh
+     disjoint child/steering subtree =:ID: Y= (=:EXTENDS_ID: X=, disjoint byte
+     span, cleanly rebased via =funs-subtree-mediation= + =funs-delta=), or via
+     explicit fenced handover incrementing =:CLAIM_LEASE_EPOCH:= (preserving
+     =A='s partial edits in GitOps =custody=).
+5. **Pure Durable Work Engine Core + Yuanxu Feature System (=+org= / =+durable=)**:
+   - =modules/durable= Core (=modules/durable/work.ss= + =work/{contracts,entities,scheduler,detour-engine,claims-engine}.ss=)
+     is a **100% pure, domain-agnostic Durable Work Engine** with **zero
+     =orgize= and zero =ai-agentic-context= imports**, operating over typed POO
+     =WorkSnapshot= and =ClaimTable= contracts (=.new/checked=).
+   - Org-mode projection attaches strictly via Yuanxu Feature
+     =modules/durable/features/org= (=(durable +org)=, =EnableDurableOrg=).
+   - Context integration attaches strictly via Yuanxu Feature
+     =modules/ai-agentic-context/features/durable=
+     (=(ai-agentic-context +memory +durable)=, =requires: '(durable/org)=),
+     and in Marlin via =(context-system +causal +durable)= in =scheme/init.ss=.
+
+See also [[file:10.06-poo-module-system/agentic-ai-context/43-ascent-security-branch-omission-refinement.org][Slice 43 (ASCENT branch admissibility)]],
+[[file:10.06-poo-module-system/agentic-ai-context/45-org-sexpr-gql-candidate-exchange-search.org][Slice 45 (Org S-expr + GQL + CandidateExchange)]],
+[[file:10.06-poo-module-system/agentic-ai-context/46-durable-agenda-session-sandbox-governance.org][Slice 46 (Durable Agenda & Session Governance)]],
+[[file:10.06-poo-module-system/agentic-ai-context/48-progressive-disclosure-and-two-stage-org-repair.org][Slice 48 (Progressive Disclosure & Two-Stage Repair)]], and
+* Three-Layer Parser / Orgize / Domain Engineering Boundary
+
+Downstream domain modules (=modules/durable/features/org= and
+=modules/ai-agentic-context=) MUST NOT own Org syntax parsing, ad hoc line
+splitting, or manual =:END:= drawer slicing:
+
+- *Layer 0 (=tao3k/gerbil-parser= — =graph-support/edit.ss=)*: Language-neutral
+  UTF-8 byte-span structural edit algebra (=SpanEdit=, =apply-span-edits=,
+  =apply-span-edits/verified=) rejecting overlapping or out-of-bounds spans
+  fail-closed.
+- *Layer 1 (=tao3k/orgize= — =org-elements= + =org-edit=)*:
+  - =org-elements= owns typed structural projection (=org-source-element-graph=,
+    computed headline =level=, declarative =property:*= query fields in
+    =(org-elements ...)=, and typed view helpers in =view-helpers.ss=).
+  - =org-edit= owns canonical Org syntax formatting (=emit.ss=), parser-span
+    structural rewrites (=org-edit-set-todo=, =org-edit-add-tag=,
+    =org-edit-remove-tag=, =org-edit-set-planning=, =org-edit-remove-planning=,
+    =org-edit-upsert-properties=, =org-edit-delete-properties=,
+    =org-edit-set-checkbox=, =org-edit-upsert-babel-results=,
+    =org-edit-upsert-section=, =org-edit-append-section=,
+    =org-extract-subtree=), and the hygienic =(org-edit ...)= value DSL —
+    every edit batch applied via =apply-span-edits/verified= with fail-closed
+    =org-source-element-graph= re-parse verification.
+- *Layer 2 (=tao3k/agentic-ai-lab= — =durable/+org= & =ai-agentic-context=)*:
+  Pure, thin declarative schema codecs mapping typed =org-elements= records to
+  pure =WorkSnapshot= / =ClaimTable= values and emitting declarative
+  =(org-edit ...)= operations with zero string-slicing surgery.
+
+* Feature Ownership and Two-Tier Yuanxu C4 Conditional Mixin Direction
+
+See [[file:../../core/module-system/design/165-two-tier-yuanxu-interface-c4-conditional-mixins-and-specialisations.org][Yuanxu Design 165 (Two-Tier Interface & C4 Conditional Mixin Specialisations)]]
+for the upcoming module-system refinement:
+
+- =modules/durable= is a 100% pure, domain-agnostic Durable Work Engine and
+  should own *no* Org-mode feature (=features: '()=); =(durable +org)= is an
+  ownership inversion because Org persistence belongs to Context, not Durable.
+- The thin =Org <-> Durable= bridge belongs under
+  =modules/ai-agentic-context/features/durable/= using a single native POO
+  dotted-path slot (=enabled?: durable.enabled?=) tracked by =gerbil-poo='s
+  =slot-observation= so that selecting both =(durable)= and
+  =(ai-agentic-context)= in =yuanxu!= auto-activates the bridge in Band 1
+  without redundant flags, while explicit =-durable= overrides =enabled?: #f=
+  cleanly in Band 4b.
+- Conditional *Profiles* use *zero synthetic condition DSLs and zero =case=/=if=
+  boilerplate*: modules declare a plain POO =.o= dispatch table keyed by typed
+  Interface slot paths (=profiles: (.o env.mode: (.o ci-hermetic: ...)
+  durable.detour-state: (.o blocker-active: ...))=), directly extensible
+  downstream via native POO path assignment (=profiles.env.mode.staging: ...=),
+  with CLOS =.defmethod= reserved only for multi-axis crossings.
+
+[[file:10.06-poo-module-system/agentic-ai-context/49-scoped-detour-funflow-concurrent-shared-context.org][Slice 49 (Scoped Detours, Three-State FunFlow, and Concurrent Shared-Context Ownership)]].

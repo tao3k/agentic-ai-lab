@@ -1,0 +1,225 @@
+{
+  "invalidCandidate": [
+    {
+      "case": "chain",
+      "observation": {
+        "verification": "valid",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "7807b7fd1b218b0615b57fa27b779f57b022e8faedae5f2817ace00b34883149",
+        "candidateValid": true,
+        "operation": "temporal.observe",
+        "requestDigest": "fafa3bfadc8b72f333c89703a968ea632ceced71f37a81dab8941a25263d079d",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "complete"
+        }
+      }
+    },
+    {
+      "case": "branch",
+      "observation": {
+        "bindingDigest": "8943f4197b7b03a04ecd72df484f1da00ee53921b669e41140cae4dba7f78bc7",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "verification": "valid",
+        "requestDigest": "a1e58e546f8a1bb4a500f8e114b9a7a897f698353ee333d45f1db1396f4791d7",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "complete"
+        },
+        "operation": "temporal.observe",
+        "candidateValid": true
+      }
+    },
+    {
+      "case": "withdrawal",
+      "observation": {
+        "candidateValid": true,
+        "operation": "temporal.observe",
+        "requestDigest": "6563406ab086d49c68b59d3e4a99b9e0925f2935c1857a74400660d1b20451b4",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "complete"
+        },
+        "verification": "valid",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "3ac3258f18bc480a3f90d4f1ddd376f72d4c4f61a53989786ed45e65062506c3"
+      }
+    },
+    {
+      "case": "open-cut",
+      "observation": {
+        "requestDigest": "c55d31ae803775ca306ee4cd7e4db01348cbeec0a75c668b7567b7a81a9955e6",
+        "difference": {
+          "observed": "invented",
+          "expected": "partial",
+          "kind": "status-mismatch"
+        },
+        "operation": "temporal.observe",
+        "candidateValid": true,
+        "bindingDigest": "d01a2b5b796958d6a72b46b0bc7dc9b5a67a9fd4164b8809519dfe5bbe963507",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "verification": "invalid"
+      }
+    },
+    {
+      "case": "late-ingestion",
+      "observation": {
+        "operation": "temporal.observe",
+        "requestDigest": "939e3d5dddac2f2a189a319e7833e6ad53d845398c5176c2eb7a2ab711e3e279",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "partial"
+        },
+        "candidateValid": true,
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "9761d6c0381e73ca96f4596d0d38d5f15bae6448255e6b670ae58635c548cf31",
+        "verification": "invalid"
+      }
+    },
+    {
+      "case": "interval",
+      "observation": {
+        "bindingDigest": "5b1384edce3ded54f86cfa32369153dc14ca9bedd6e6702aa04b60f84d107b35",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "verification": "invalid",
+        "requestDigest": "373246b801203b561e214531854c2a5ec8f70a6c67812f8def8525f074f4f2e2",
+        "difference": {
+          "expected": "partial",
+          "kind": "status-mismatch",
+          "observed": "invented"
+        },
+        "operation": "temporal.observe",
+        "candidateValid": true
+      }
+    },
+    {
+      "case": "zero-horizon",
+      "observation": {
+        "candidateValid": true,
+        "operation": "temporal.observe",
+        "requestDigest": "210095fd64f6a58cc2bdb923e8efb683cb5908c6739028767354f1a20892e9f5",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "partial"
+        },
+        "verification": "invalid",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "20d1e03ac5a1fb071142b449c78c9362f3876bdd3df48513e4546220068e312c"
+      }
+    },
+    {
+      "case": "one-horizon",
+      "observation": {
+        "bindingDigest": "0074f7c8869c9e2a20dd4f85ee9cec77472d6bbb9dfc99fd14867a67148667f1",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "verification": "invalid",
+        "requestDigest": "6de4dfbf2def5a9b8b15f46ab05a509b4541b1b89647dcfdf95408bbfc9f406a",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "partial"
+        },
+        "operation": "temporal.observe",
+        "candidateValid": true
+      }
+    },
+    {
+      "case": "clock-mismatch",
+      "observation": {
+        "candidateValid": true,
+        "operation": "temporal.observe",
+        "requestDigest": "8ebbd432b3a3d5aec0786c1bd9755d6ccb9462cd02b7373ae057d153d239a69c",
+        "difference": {
+          "observed": "invented",
+          "expected": "rejected",
+          "kind": "status-mismatch"
+        },
+        "verification": "invalid",
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "3c1beb8bf0be26a92f8ff67414254bcd993f29693d51c45db3f9f8fbd33ec2c7"
+      }
+    },
+    {
+      "case": "generation-mismatch",
+      "observation": {
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "c366c7c8730b2b2362e51637d31493d1eb1cde3dc3607dc41a229fe929c83ebf",
+        "verification": "invalid",
+        "operation": "temporal.observe",
+        "requestDigest": "36253c987f99df1bc09716a28c72992f3d28e8b20c23e5c395b89bb5f2c56a1c",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "rejected"
+        },
+        "candidateValid": true
+      }
+    },
+    {
+      "case": "window-end",
+      "observation": {
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "e97123c871f129fff9399458cce902a193dc28260a650a45097192724f337e46",
+        "verification": "valid",
+        "operation": "temporal.observe",
+        "requestDigest": "f5775ab49c26e5c7c1366b8760f26669619fb1e50a26defae152c0e0c8868266",
+        "difference": {
+          "observed": "invented",
+          "expected": "complete",
+          "kind": "status-mismatch"
+        },
+        "candidateValid": true,
+        "verdict": "contradicted"
+      }
+    },
+    {
+      "case": "unknown-time",
+      "observation": {
+        "operation": "temporal.observe",
+        "requestDigest": "6f951db0c637077f1ef78631a08a2b753683d3fb396aaf6de9b082392fa5dea8",
+        "difference": {
+          "kind": "status-mismatch",
+          "observed": "invented",
+          "expected": "partial"
+        },
+        "candidateValid": true,
+        "verdict": "contradicted",
+        "schema": "poo-flow.semantic-observation",
+        "bindingDigest": "302e58f718c9ba9518491a4a85682805f3944ce0db54fb56d9168fd8175415d4",
+        "verification": "invalid"
+      }
+    }
+  ],
+  "staleSource": {
+    "bindingDigest": "24c12a78b3fc405163b420e05215c09297f021b4c8613244c920590ebd47fdfa",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "verification": "valid",
+    "requestDigest": "95ef515974f17f0acb16b54498ada4b49517dc565b39b4ea739c37079e149576",
+    "difference": {
+      "index": 0,
+      "kind": "extra-row",
+      "observed": [
+        "k",
+        "m"
+      ]
+    },
+    "operation": "temporal.observe",
+    "candidateValid": true
+  }
+}

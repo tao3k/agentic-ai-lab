@@ -1,0 +1,26 @@
+[
+  {
+    "case": "open-cut",
+    "passed": false,
+    "candidate": null,
+    "error": "five seconds without genuine content or total deadline exceeded"
+  },
+  {
+    "case": "one-horizon",
+    "passed": false,
+    "candidate": null,
+    "error": "five seconds without genuine content or total deadline exceeded"
+  },
+  {
+    "case": "window-end",
+    "passed": false,
+    "candidate": null,
+    "error": "five seconds without genuine content or total deadline exceeded"
+  },
+  {
+    "case": "unknown-time",
+    "passed": false,
+    "candidate": null,
+    "error": "five seconds without genuine content or total deadline exceeded"
+  }
+]

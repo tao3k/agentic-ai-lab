@@ -20,6 +20,6 @@
  (optimizationFocus . "AgentParam contract objects derived from session-agent topology and effective policy validation receipts with resolved memory catalog and communication receipt facts")
  (inputShape . "200 AgentParam contract projections from one agent-node and one policy-validation receipt carrying one memory-core catalog validation row and one allowed communication receipt")
  (expectedOutcome . "the session-agent-param-contract scenario preserves its declared semantic result under the ASP P95 gate")
- (expectedRepair . "keep public authoring POO-native, derive AgentParam contracts from topology/policy receipts, project resolved memory catalog facts and communication receipt decisions beside memory refs, and keep bounded rows at ABI boundaries")
+ (expectedRepair . "keep public authoring POO, derive AgentParam contracts from topology/policy receipts, project resolved memory catalog facts and communication receipt decisions beside memory refs, and keep bounded rows at ABI boundaries")
  (measurementPhases collect-before policy-before collect-after policy-after assert-time-gate observe-runtime-memory)
  (tags poo session agent-param topology policy validation performance openrath))

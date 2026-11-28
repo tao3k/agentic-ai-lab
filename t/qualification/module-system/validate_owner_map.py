@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "poo-flow.module-system-qualification-ownership.v1"
+SCHEMA = "agentic-ai-lab.module-system-qualification-ownership.v1"
 ROW_IDS = tuple(
     f"rfc45-{index:02d}-{suffix}"
     for index, suffix in (
@@ -34,7 +34,7 @@ ROW_FIELDS = {
     "test_symbol",
     "target_name",
 }
-SYMBOL_KINDS = {"function", "macro", "test-binding"}
+SYMBOL_KINDS = {"function", "macro", "type", "test-binding"}
 RELATIVE_PATH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_./-]*$")
 TARGET_NAME = re.compile(r"^rfc45_[0-9]{2}_[a-z0-9_]+$")
 
@@ -84,6 +84,10 @@ def load_manifest(path: Path) -> dict[str, Any]:
 
 
 def _symbol_pattern(symbol: str, kind: str) -> re.Pattern[str]:
+    if kind == "type":
+        return re.compile(
+            r"\(define-type\s+\(?" + re.escape(symbol) + r"(?:\s|\))"
+        )
     if kind == "macro":
         return re.compile(
             r"\((?:defsyntax|defrules|defsyntax-call)\s+\(?"

@@ -2,6 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import :clan/poo/object)
 ((benchmarkKind . scenario-e2e)
  (max_total . 50ms)
  (target_total . 20ms)
@@ -12,7 +13,7 @@
  (sourcePath . "t/scenarios/performance/poo-observability-slot-guard/benchmark.ss")
  (rule . GERBIL-SCHEME-AGENT-R046)
  (feature . poo-observability-slot-guard)
- (optimizationFocus . "native POO lazy-slot observability cold and warm phase separation")
+ (optimizationFocus . "POO lazy-slot observability cold and warm phase separation")
  (inputShape . "validated debug policy, guarded one-slot receivers, cached reads, and bounded redacted Clan tracing")
  (expectedOutcome . "prototype lookup is hoisted, non-emitting demand avoids receipt construction, warm demand remains cached, and traced demand retains bounded receipts")
  (expectedRepair . "install the guard before first demand, hoist stable prototype lookup, and keep receipt construction out of the non-emitting admitted path")

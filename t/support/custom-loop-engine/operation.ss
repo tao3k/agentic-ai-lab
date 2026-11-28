@@ -34,7 +34,7 @@
                   #f)
     (check-equal? (test-ref delegated-operation 'kind) 'delegated-operation)
     (check-equal? (test-ref delegated-operation 'contract)
-                  'poo-flow.loop-engine.delegated-operation.v1)
+                  'agentic-ai-lab.loop-engine.delegated-operation.v1)
     (check-equal? (test-ref delegated-operation 'object-family)
                   'agent-operation)
     (check-equal? (test-ref delegated-operation 'operation-ref)

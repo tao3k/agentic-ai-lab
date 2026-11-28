@@ -1,0 +1,399 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: D2 Module
+#+LANGUAGE: en
+
+* Curiosity is an open investigation
+
+=ascent-composition.ss= derives =Divergence= when capture and change leave a
+shared origin and the two branches meet at a check. It derives =Explore=
+questions about prediction, discoverable change, retained state, a surprising
+clue, a reader's possible experiment, and misleading metaphor. These are
+relationally selected questions for the current model, not a fixed drawing
+workflow or a definition of what every child finds interesting.
+
+A representation's =action= describes a proposed perceptible mechanism.
+Missing actions reopen explanation; supplied descriptions do not certify the
+image. The current model must view the exported image, locate the visible
+clues, and return both findings and remaining problems to the image-bound
+Context. Changing the Context can select other explanations or representations.
+A check with a terminal outcome also derives a nested causal neighborhood.
+The native solver arranges those objects together. A split and rejoin selects
+balanced native node placement, rather than favoring one branch as a baseline.
+Existing source-qualified regions keep ownership; no coordinates or case names
+occur in these rules. Cross-hierarchy layout inherits the global direction;
+a nested direction preference cannot promise an independent child direction.
+
+No interest score, checklist pass, or empty request list establishes curiosity
+or understanding. A learner's actual response remains distinct evidence.
+
+* Public boundary
+
+=interface.ss= publishes the managed =d2= Module. Consumers select it through
+their =init.ss= and obtain its scope from =init.exports=. No private-role import
+or handwritten build source list is needed. The existing loader discovers its
+roles and closes =ascent.ss= and the selected helper imports.
+
+| Owner | Responsibility |
+|-------+----------------|
+| =types.ss= | POO Diagram shape/bounds and scope Type |
+| =objects.ss= | Extensible Diagram, Node and Relation prototypes |
+| =ascent.ss= | ASCENT Scheme graph reachability, selection, missing endpoints and cycle relations |
+| =ascent-explanation.ss= | Reader-relative explanation needs, state-bound representation candidates and missing distinctions |
+| =ascent-review.ss= | Open reader questions, prerequisite explanations, critique and view-revision obligations |
+| =ascent-authoring.ss= | Source/image-bound model findings and outstanding authoring requests |
+| =ascent-inspection.ss= | Observed image anchors, semantic gaps, measured layout conflicts and scoped answer bases |
+| =ascent-scene.ss= | Reader-needed native occurrences, model-chosen images and nearest visible source ancestors |
+| =ascent-teaching.ss= | Source-qualified explanatory links, required causal traces, visual attachments and structural gaps |
+| =func.ss= | Evaluate the rules and project their rows to D2 source |
+| =config.ss= | Inert presentation direction policy |
+| =interface.ss= | Declarative publication; no business algorithm |
+| =profiles/context-evolution.ss= | Opt-in, bounded illustrative Context/window rules |
+
+The scope exposes =prototypes=, =config=, =infer=, =scene=, =plan=, =review=, =author=,
+=teaching=, =source= and =profiles=.
+All ordinary inputs are POO objects; internal relation rows are projections of
+those objects. =infer= returns a POO view, and =source= returns a D2 string.
+Neither runs a browser, writes a file or starts a persistent service.
+
+Empty roots select the complete declared graph. Explicit roots select their
+reachable subgraph. General relation cycles are allowed and reported; missing
+endpoints and duplicate Node identities refuse export. None of this treats the
+diagram graph as an inheritance graph or turns its edges into execution grants.
+
+* Illustrative Context profile
+
+The opt-in profile exposes a Window prototype, =evaluate= and =rows=. It
+derives time/as-of membership, current-cut support, competing opposition,
+recursive impact, requirement gaps, knowledge-review candidates and visual edges.
+No Task name or next action is prescribed by a rule.
+
+This profile is an executable design example, not the Context/Evidence/Temporal
+runtime authority. Its source inputs stand for already qualified owner facts.
+The development example supplies a deliberately small requirement inventory;
+passing that inventory creates a review candidate only. It cannot establish a
+real-world mechanism, publish long-term knowledge or authenticate a source.
+The current implementation evaluates finite snapshots; incremental retained
+session integration is not claimed by these tests.
+
+* Reader questions are part of the relational system
+
+=plan= relates the reader, teaching goal, current object state, prerequisite
+concepts and explicit audience gaps. It derives =ExplanationNeed= before
+considering representation candidates. A POO identity does not prescribe a
+picture: the same evidence may need a source trail, two time marks, or visible
+support/opposition relations depending on the question being explained.
+
+An elementary-school reader is an epistemic constraint: assume no framework
+vocabulary, limited working memory and no ability to infer an unstated relation.
+It is not a request to depict children or to use a childish art style. A picture
+must expose the relevant object, action, change or contrast; a decorative actor
+beside an unexplained technical caption supplies no such evidence. Model
+questions should test what the learner can reconstruct from the actual picture,
+which prerequisites are still hidden, and whether spatial separation helps or
+obscures that explanation. These are open observations and competing proposals,
+not a mandated metaphor, fixed sequence, or an automatic comprehension score.
+Legible quoted captions support textual presence only; representation gaps may
+still block the answer basis even when every required caption is present.
+
+The model supplies candidate assets and reports about which distinctions they
+make visible. ASCENT derives =MissingFacet=, =StateMismatch= and
+=CandidateForReview= for the current view revision. A new metaphor requires new
+input objects, not a new object-kind-to-icon rule. These declared meaning reports
+are inputs to further review, not machine proof of what an image communicates.
+The pure Module does not invoke providers or inspect pixels. The model host
+performs those effects and returns observations, as exercised by the development
+session below.
+
+The Question prototype carries an open reader/audience/subject/text binding.
+Models or investigators may introduce new questions and proposed concept
+dependencies. The =review= operation evaluates those facts alongside the exact
+view revision, explanations and source-qualified review findings.
+
+ASCENT recursively derives which explanations a question needs, detects missing
+coverage, preserves critique/uncertainty and reports open questions. A changed
+view does not inherit approval from an older revision. This can drive further
+model-authored explanation, metaphor selection and layout proposals; no fixed
+question inventory, panel template or compulsory revision sequence is defined.
+
+Model critique and explicit learner checks retain distinct relations. Neither
+having a caption nor receiving model approval proves that every pupil understood
+the diagram. LearnerCheck inputs require the existing review/Host owner to qualify
+them; these rules do not authenticate a supplied claim of human understanding.
+
+* Open authoring Context
+
+The surrounding model environment is the default author/reviewer. Source
+interpretation, image reading and newly raised questions are its normal work;
+this Module does not require introducing another model provider. The native
+SysML development path supplies actual SDK objects, source cuts, current reader
+questions and measured render events. Successful rendering adds no semantic
+review verdict. Existing rules derive the remaining obligations from those facts.
+
+=prototypes.AuthoringContext= composes current views, POO proposals, renders,
+image observations, reader questions, feedback and explanation-plan inputs.
+=author= joins proposal revision/source-cut/asset hash with render image hash,
+then admits feedback only when its finding, producer and observed image agree.
+The host verifies artifact bytes; these joins do not authenticate an observation.
+
+ASCENT derives outstanding =propose=, =render=, =inspect=, =explain=,
+=reconsider=, =investigate= and =ask= requests from the supplied relations.
+They are inert handoff values, not execution grants. There is no stage index,
+prescribed iteration count, compulsory revision, icon dispatch table or closed
+question catalog. Facts may arrive together. A new question can reopen the same
+image; changed revisions/cuts/assets cannot inherit its approval.
+
+=Reviewable= requires an explicit current question inventory, no open supplied
+question and no unmet explanation-plan need for that asset. It means reviewable
+against the declared model observations, not universally understood by learners.
+The example retains previous proposals and contrary findings rather than
+overwriting them with a successful final state.
+
+[[file:../../dev/d2/examples/time-window/README.org][The executed development session]] uses the current assistant as model host:
+ASCENT requests -> model-authored SVG -> SDK/Chromium PNG -> actual image
+inspection -> POO findings/new questions -> ASCENT re-evaluation. The host chose
+its reactions to outstanding requests; this trace is not an execution template.
+This earlier explicit-finding example is historical; the native Org/SysML path
+does not import its fixture findings as approval of a new design view.
+
+* Development and TS handoff
+
+=scene= accepts native source occurrences/parents, POO image/caption choices
+with reasons, and reader facet needs. ASCENT selects needed occurrences and
+their chosen ancestors. If an intermediate owner is omitted from the teaching
+view, =VisibleParent= retains the nearest selected ancestor. This is a scoped
+projection of native ancestry, not invention of a direct source relationship.
+Unknown sources, duplicate concrete choices and cyclic ownership are refused;
+a needed occurrence with no choice is reported. General relation cycles remain
+valid in the separate graph inference API. No role/kind-to-image table or pixel
+layout lives in either API.
+
+=teaching= projects reader questions independently of native containment.
+Its POO proposals name a question, facet, native target, depiction and located
+source quotation. Its mechanism value supplies open explanatory links, required
+relations, required traces and presentation attachments. ASCENT selects qualified
+relations, derives =MissingLink= and =MissingTrace=, and returns structural gaps.
+These join =author/inspection= as =relate= requests and block a scoped answer
+basis even when all captions are present. A non-propagating distinction or
+qualification cannot satisfy a requested state-change trace. General cycles
+remain legal; an explanatory graph is not an execution DAG or grant.
+
+The same native object may be shown before and after a conditional change.
+These are labeled teaching views, not extra native SysML instances. Relation
+quotations locate the model's interpretation in source bytes; they do not prove
+that interpretation or authorize an effect. Attachments express where a
+qualification belongs in the picture, independently of native ownership. The
+model still must inspect actual pixels, trace the relationships and return
+contrary observations or new questions.
+
+The rejected gallery established an important limitation: zero outstanding
+requests only describes the supplied inventory. It cannot establish that a
+student understood a mechanism, or that every relevant question was supplied.
+Reader critique can reopen the same image even after caption coverage. Tests
+explicitly preserve the difference between complete captions, a connected
+explanation and observed learner understanding.
+
+The generic =dev/d2/reuse.ts= / =reuse.ss= adapter consumes arbitrary case data,
+uses the existing SDK =composeModelView/graphFromModel= and lets ELK compute
+positions/routes. When =teaching= proposals are present, the generic
+=teaching-view.ts= projects the selected explanatory graph through the SDK
+=composeDiagram/graphFromModel=. Browser measurements and ELK compute all global
+positions and routes. Qualified notes are attached to their affected objects,
+not ranked as extra runtime stages. The earlier three-row gallery was rejected.
+Teaching relations are explicitly model interpretations, not native SysML edges.
+Native layout options are POO case data and apply uniformly
+to visible compounds. Local SVG assets express model-chosen metaphors. There
+is no source identity or per-design compositor branch in this adapter.
+
+The default model can return =inspections= with its actual reading/answer prose,
+=facet-needs= for the question, and =image-evidence= locating exact quotations.
+The host separately supplies =image-anchors= measured from the rendered document
+and bound to the actual PNG digest. Source cut, revision, question, producer and
+current image bind these observations; no =understood= verdict is required.
+
+ASCENT derives =MissingFacet= -> =explain=, =ChangeRepresentation= -> =illustrate=
+and measured =ChangeLayout= -> =relayout=. A representation concern can remain
+open despite the relevant caption being present. A proposed overlap must join
+the actual rectangles, rather than relying on a model assertion of intersection.
+=AnswerBasis= derives only when the supplied needs have grounded correspondence
+and no current discrepancy remains. It is a scoped basis for the model's answer,
+not evidence of learner comprehension. Anchor text matching verifies a rendered
+quotation; the semantic correspondence is still attributable model interpretation.
+New questions/facets, conflicting findings or new image/source bytes can reopen
+work. Neither inspect-only dead ends nor synthetic review-success records are
+needed. The executed native-source example keeps its six facet needs unchanged.
+Grounded image facets also discharge the corresponding explanation-plan facets
+individually. One observed facet never silently covers another requirement of
+the same object. The hybrid allocation reuse case keeps all ten needs active.
+
+=dev/d2/init.ss= selects this Module. =drive.ss= supplies example POO inputs,
+calls the public profile, converts derived edges/statuses into the public Diagram
+prototypes and invokes =infer/source=. =just d2-export= uses the existing heap
+fence and timeout, prepares the init-owned source closure without compilation,
+and checks its currentness before writing local D2 artifacts.
+
+TS currently reads those D2 artifacts using the D2 SDK and the pinned rendering
+library. Browser measurements/ELK own physical layout. Development teaching
+composers can add illustrations without deciding support or graph membership.
+The same output can be consumed by another compositor; this Module imposes no
+panel count, pixel coordinates or closed icon vocabulary.
+
+* Runtime ABI status
+
+The implemented handoff is =Scheme -> D2 artifact -> TS SDK -> SVG=.
+It is not a C ABI integration. No D2 operation has been added to the semantic
+dispatcher, and the current =bindings/runtime-ts= Wasm API has no D2 call.
+
+A direct desktop/server TS consumer can be designed around the existing
+=agentic_ai_lab_semantic_v1_call= boundary in
+[[file:../../bindings/runtime-c/include/agentic_ai_lab/semantic.h][semantic.h]]. Scheme keeps POO values and rule execution;
+the boundary transfers a bounded inert projection, such as D2 UTF-8 carried by
+the existing Scheme-datum transport. The host binding must preserve the owner
+thread, result lifetime/release and current-source contracts. This requires an
+explicit D2 semantic operation and a TS host binding; neither is delivered here.
+Browser TS cannot directly load that process library. Browser deployment would
+need its separately qualified host-service or Wasm path, not an assumption that
+the existing runtime Wasm already contains this Module.
+
+* Verification
+
+=just test-file t/d2-module-test.ss= exercises the actual managed public entry,
+root reachability, general cycles, all-node selection and invalid endpoints/IDs.
+=just test-file t/context-window-ascent-test.ss= consumes the same public profile
+and checks late evidence, conflict preservation, transitive impact, unknown
+inventories, old cuts and adding a new hypothesis without changing the rules.
+These focused checks do not qualify complete Context execution or a runtime ABI.
+
+=just test-d2-rules= runs five reader-question cases under the same heap/time
+limits using the official Gerbil test tool. It is a rule-level gate.
+=just test-d2= passed all eight managed-entry test modules: graph selection,
+Context windows, reader review, explanation planning, image-bound authoring and
+grounded image reading, reusable scenes and source-qualified question groups. The replay reported all eight =MODULE-OK= markers, =HARNESS-OK= and final =OK=
+without failure markers. The authoring suite includes six cases for unordered
+facts, image/source/asset binding, new questions, critique/uncertainty and unmet
+explanation needs despite positive feedback.
+The grounded-reading cases cover evidence-only answers, missing/invented
+quotations, stale image/source bindings, captions with unresolved depiction gaps,
+and actual measured rectangle intersection before layout work is derived.
+Scene cases cover different questions, a new image without a domain rule,
+hidden-owner projection, absent-source/cycle refusal and missing image choices.
+The grounded-reading gate also checks facet-specific explanation-plan discharge.
+=just d2-export= also produced both early/later D2 artifacts. This is focused
+finite-case verification. Three rendered revisions were inspected by the current
+model host; no learner study or unattended provider integration was qualified.
+
+The teaching host also supplies native target/facet/depiction scope on measured
+anchors. ASCENT detects same-depiction text intersection without a handwritten
+collision list. Scoped quotations cannot cover a different native target or
+facet. Unscoped existing observations retain their explicitly declared review
+correspondence. Both forms still require actual current-image inspection and
+retain contrary model observations; physical geometry does not decide meaning.
+
+Attachments require a selected non-propagating explanatory relation and form
+an acyclic visual attachment tree. They are not native inheritance. A true
+state-change link cannot disappear into an annotation or a negation marker.
+These properties have public-scope regression checks alongside the distinction
+between missing caption evidence and a missing explanation relationship.
+
+Explanatory regions are POO proposals with located source quotations and selected
+visual members. They express a teaching neighborhood, not native containment or
+runtime ownership. ASCENT rejects invalid membership and derives a structure gap
+when an explicitly requested pair of causal explanations is not co-located.
+The generic SDK adapter projects admitted regions into compound layout nodes;
+ELK still determines positions and routes. This does not prescribe a sequence
+of model actions or provide a diagram-specific TypeScript layout.
+
+The browser also measures actual SVG route length and endpoint distance, bound
+to the rendered image digest. A question can declare a maximum detour for a
+named relation. ASCENT requests measurement when current metrics are absent and
+relayout when that relation exceeds the declared bound. Old-image measurements
+cannot discharge the request. Co-location and route geometry are useful spatial
+evidence, not evidence of student comprehension; the current model must still
+read the picture and preserve contrary findings in Context.
+
+The former whole-scene =artwork= escape path has been withdrawn. Teaching rejects
+a scene SVG, and the driver rejects object assets containing scene-node,
+scene-edge or explanation scopes. The model still chooses or generates local
+object illustrations. It supplies no global coordinates, routes or canvas slots.
+
+* Relation-driven composition
+
+=ascent-composition.ss= consumes only selected, source-qualified explanations
+and links. It derives =Near= obligations for inputs, reasons, captured values and
+consequences; =Compare= for state changes and relevant before/after views;
+=Check= when a candidate meets a reason; and =NonSequential= for justification
+or qualification relationships. A reason is not promoted to a scheduled stage.
+Roles are extensible through POO =meaning= qualities such as =input?= and
+=reason?=. No design name, object ID or vocabulary lookup selects a layout.
+
+State comparison requires matching representation families, distinct declared
+states and distinct image references. A check needs a comparison intent rather
+than an unexplained logo. Missing encodings produce explanation obligations;
+the declarations do not establish what a human actually sees in the image.
+
+The Module projects these judgments into native ELK direction, shortness and
+straightness preferences. Direct comparison links have stronger shortness and
+straightness priority; indirect before/after comparisons remain tied through
+their reason/check/consequence relationships. Reason edges get no forward-direction priority. Three incoming
+reason relations propose a downward layout; other graphs start horizontally.
+This is a graph-dependent initial heuristic, not a complete layout theorem or
+a fixed drawing template. ELK computes the font-measured positions and paths.
+Physical route feedback and actual model readings can still reopen the picture.
+
+The Module also derives route-reading needs, instead of requiring a case to
+enumerate its own important paths. Actual font sizes are image-bound facts.
+The POO reader policy defaults to 18 CSS px for teaching, separately from the
+unchanged 12 px technical export gate. Small scoped text derives a relayout
+request even when every caption was quoted correctly. None of these checks
+establish that a student understood the figure.
+
+* Meaning and use of visible expressions
+
+A large number with a caption is not a sufficient explanation. A selected
+representation may carry POO =expressions=: identity, kind, token, role-label,
+quantity-label, meaning, use and scale. These bind a visible value to a specific
+record/field and to its purpose in the judgment. They are semantic declarations,
+not positions, drawing slots or favorable review results.
+
+ASCENT derives =MarkGap= when referent/quantity/meaning is missing, use is
+unspecified, a number only decorates, or an exact-match use is encoded as a
+ranking. =Reflect= identifies referent, judgment-use and possible-misreading
+questions without prescribing their wording or a sequence of model calls.
+For owner generation, =identity= is the visual interpretation needed for this
+equality check; it does not deny that the underlying generation is monotone.
+A higher generation is not a greater permission or a confidence score.
+
+The generic driver captures =data-visual-expression= membership on actual
+rendered text. Inspection requires the declared role, quantity and value to be
+visible in the same object; shared object headings are allowed. Bare numeric
+anchors without a binding derive an explanation request. Even labeled numbers
+remain open until the current image reading actually cites the number in its
+reference context. Stale labels cannot satisfy current-image obligations.
+Meaning declarations and geometric matching remain necessary evidence rather
+than a proof that the learner understood the expression. The current model
+must still interpret the actual image and retain contrary reader findings.
+
+* Observed appearance and unknown cause
+
+An input with the open POO =meaning.uncertainty?= quality can participate in an
+=UncertainCheck=. The current model receives questions about observed versus
+unknown information, the gap between appearance and cause, distinguishing
+observations, remaining obligations and the authority to admit an investigation.
+The renderer does not decide application-domain recovery or execution permission.
+
+Uncertainty links remain important bounded routes but are non-sequential. A
+comparison with a peer explanatory branch does not form a compound terminal
+consequence neighborhood: that would push alternatives behind the consequence
+and imply a prescribed order. Native layout still calculates every position.
+This rule is based on relation qualities, not a recovery case name or its words.
+
+* Retained state and replacement objects
+
+=ascent-composition.ss= also derives =RetainedReconstruction= when an origin
+changes into a replacement, a captured object remains, and that retained object
+provides a reason for reconstructing the replacement. It asks what survives,
+which historical evidence is not current authority, what remains unresolved,
+and whether a reader can recognize the changing object. Native placement uses
+the relation structure; these rules contain no Durable identities or template.
+The prompts guide current-model interpretation, not automatic drawing approval.

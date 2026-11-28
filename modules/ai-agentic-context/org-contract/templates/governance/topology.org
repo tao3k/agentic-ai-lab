@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID: project-gitops-topology
+:CONTRACT_ID: context.gitops.topology.v1
+:CONTRACT_REVISION: 1
+:PROJECT_ID: marlin-agent-core
+:GITOPS_WORKTREE: shared-common-dir
+:GITOPS_SHARED_STORE: refs/marlin/context/main
+:GITOPS_SOURCE_CUT: cut-1
+:END:
+#+title: GitOps Project Context Topology
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.gitops.topology.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "topology.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID")
+                (property value "context.gitops.topology.v1"))
+  (expect exactly 1))
+
+(assert-org-element "topology.project-binding" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "PROJECT_ID"))
+  (expect exactly 1))
+
+(assert-org-element "topology.component-entries" error
+  (bindings)
+  (org-elements node-property (descendant-of scope)
+                (property key "ARCH_COMPONENT"))
+  (expect at-least 1))
+
+(assert-org-element "topology.entry-sources" error
+  (bindings)
+  (org-elements node-property (descendant-of scope)
+                (property key "ENTRY_SOURCE"))
+  (expect at-least 1))
+#+end_src
+
+* Deck Runtime Component
+:PROPERTIES:
+:ID: topo-deck-runtime
+:CUSTOM_ID: topo-deck-runtime
+:ARCH_COMPONENT: marlin-deck-runtime
+:ENTRY_SOURCE: work.org
+:END:
+
+Entry locator for Deck VM owner and governed multi-agent work sections.
+See [[file:work.org::#sec-arch][governed architecture section]].
+
+* Context System Component
+:PROPERTIES:
+:ID: topo-context-system
+:CUSTOM_ID: topo-context-system
+:ARCH_COMPONENT: marlin-agent-context
+:ENTRY_SOURCE: work.org
+:RELATED_PROJECT: agentic-ai-lab
+:END:
+
+Entry locator for shared Org-as-Context governance and cross-repo Lab protocols.

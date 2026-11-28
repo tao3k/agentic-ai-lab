@@ -1,0 +1,105 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: A real Durable source change is an artifact, not Task acceptance
+#+LANGUAGE: en
+#+PROPERTY: STATUS design-case-reading
+
+* Concrete case and evidence boundary
+
+The work item is the current repository change to
+=modules/ai-agentic-context/durable-owner.ss=: connect unresolved workspace
+effects to the existing Durable/Task boundary. The source file and its changes
+are real. This document interprets that work through existing architecture;
+it does not manufacture a process crash or claim the implementation is accepted.
+No new tests or fault-injection runs belong to this design-reading activity.
+
+The user's current request is to reason from existing DOC architecture and
+real work, rather than construct a toy configuration or a test workflow.
+The earlier =mode: slow= / =mode: fast= illustration is retired from active use.
+The pictured artifact is a real recovery source change, not a speed setting.
+
+* Existing architecture supplies the meaning
+
+[[file:14-runtime-durable-recovery.org][Durable recovery]] retains original source/input bindings and unresolved
+Attempt obligations. [[file:18-runtime-durable-source-commands.org][Durable source commands]] reuse the existing owner,
+inbox, state versions, decisions and terminal ledger. They do not introduce
+another Session registry or recovery framework.
+
+[[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Task/Attempt/Turn granularity]] distinguishes the logical work item, one
+execution under exact inputs, and independently admitted artifacts/results.
+A source edit is an artifact candidate. It does not alone settle acceptance.
+
+The patch exists. That does not establish Task acceptance.
+The missing fact is whether the change satisfies the requested contract.
+A saved edit is different from a saved execution decision and from an accepted
+Task result. Evidence for one of these must not stand in for the other two.
+
+* What Context retains
+
+Context keeps the original request, the applicable design, the observed source
+revision/diff, earlier observations and unanswered questions addressable together.
+The original work item keeps its identity. An interrupted Attempt keeps its own
+input cut and pending responsibilities; a new working view does not rewrite it.
+
+This case has a known source change and an open acceptance judgment.
+Authorship is not artificially made unknown: the current conversation already
+contains editing observations. A genuinely missing old execution witness would
+be a separate unknown, as described in design 14. Unknown does not mean failed,
+and observing changed bytes does not invent a missing runtime receipt.
+
+A possible recovery boundary is used to read the architecture: an Agent resumes
+this unfinished work and sees the patch. This is a design question, not a claim
+that this source-editing conversation actually suffered that interruption.
+
+* ASCENT relates evidence to declared responsibilities
+
+The existing design and the patch are different inputs to the same question.
+The retained Task contract names what still needs an adequate basis. Application
+relations can express =ObservedArtifact=, =Requires=, =EvidenceFor=, =ConflictsWith=
+and =Unknown= over source-qualified POO object revisions.
+
+Observed code is not a proof that the design boundary is preserved.
+The candidate patch and the existing architecture must be considered together.
+The module derives open explanatory obligations from those relationships,
+without recommending a compulsory next Task or treating absent rows as failure.
+
+For this concrete change the questions include:
+
+- Does the change reuse the existing owner and journal?
+- Does an unresolved effect remain explicit after a Context revision?
+- Are historical decisions kept separate from current permission?
+- Can new observations inform the work without silently completing the Task?
+
+These are examples selected by this case. Other requirements, hypotheses and
+explanations may be proposed under their own scopes. No interest score or
+checklist count establishes that a learner understands the mechanism.
+
+* Model exploration and acceptance remain independent
+
+The model may inspect the diff, reread the owning design, propose an alternative
+boundary or identify a missing explanation. It can retain competing views or
+leave a question open when evidence is insufficient. None of these choices
+requires rerunning a source edit or executing a predefined validation workflow.
+
+The model can propose another explanation without changing the rule program.
+A proposal remains a proposal; current owners decide source admission, effects
+and result publication under the applicable contracts. A source change does
+not acquire execution authority merely because a model describes it confidently.
+
+The Task remains open until its own acceptance basis is available.
+What counts as that basis depends on the actual request and contract. This
+figure does not prescribe tests as the only kind of review or make every
+historical question a permanent prerequisite of every Task.
+
+* Figure source and actual reading
+
+=dev/d2/examples/durable-task-source-case/= supplies inert POO bindings and local
+object/action illustrations. It consumes this ORG, its SysML companion and the
+actual Durable source file. =modules/d2= owns explanation/composition inference;
+the existing generic driver handles the native SDK and export. There is no
+case-specific TS layout, whole-scene SVG or fixed template.
+
+The reader first sees a real source artifact, its request and its design basis.
+They converge at a relation/evidence question, which opens two peer directions:
+remaining responsibility and model exploration. These are explanatory relations,
+not a schedule. Actual image findings return to image-bound Context records.

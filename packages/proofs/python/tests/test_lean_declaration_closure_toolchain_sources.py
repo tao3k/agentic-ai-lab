@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from poo_flow_proof.lean_declaration_closure import _source_roots
+from agentic_ai_lab_proof.lean_declaration_closure import _source_roots
 
 
 def test_source_roots_include_active_toolchain_sources(tmp_path: Path) -> None:

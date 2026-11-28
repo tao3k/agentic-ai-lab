@@ -11,7 +11,7 @@
         poo-object-family-syntax-expected->alist)
 
 (import (only-in :clan/poo/object object<-alist)
-        :core/object-family/syntax)
+        :tao3k/yuanxu/object/syntax)
 
 (def +poo-object-family-syntax-expected-kind+
   'poo-object-family-syntax-scenario)

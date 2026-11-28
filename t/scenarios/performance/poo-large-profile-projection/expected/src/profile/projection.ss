@@ -2,14 +2,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/object-family/indexed
+(import (only-in :tao3k/yuanxu/object/indexed
                  poo-indexed-family
                  poo-indexed-family-object
                  poo-indexed-family-lenses
                  poo-indexed-family-project-objects))
 
 ;;; Scenario expected: the downstream profile is repaired into a reusable
-;;; indexed POO family.  The public surface is still POO-native, while hot slot
+;;; indexed POO family.  The public surface is still POO, while hot slot
 ;;; reads use a compiled lens and vector index instead of rebuilding objects or
 ;;; repeatedly scanning alists.
 

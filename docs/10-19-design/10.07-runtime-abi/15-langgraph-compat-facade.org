@@ -6,12 +6,12 @@
 
 * Boundary
 
-The LangGraph bridge is implemented as a POO Flow runtime package surface:
+The LangGraph bridge is implemented as a Agentic AI Lab runtime package surface:
 
 #+begin_src python
-from poo_flow_runtime.compat.langgraph import START, END, StateGraph
-from poo_flow_runtime.compat.langgraph.types import Send
-from poo_flow_runtime.compat.langgraph.checkpoint.memory import MemorySaver
+from agentic_ai_lab_runtime.compat.langgraph import START, END, StateGraph
+from agentic_ai_lab_runtime.compat.langgraph.types import Send
+from agentic_ai_lab_runtime.compat.langgraph.checkpoint.memory import MemorySaver
 #+end_src
 
 This avoids shipping a top-level =langgraph= shadow package while still preserving LangGraph-shaped module boundaries for downstream runtime users.
@@ -25,11 +25,11 @@ This avoids shipping a top-level =langgraph= shadow package while still preservi
 - =MemorySaver= maps to =MemoryRuntimeGraphCheckpointer=.
 - callable-only =add_node(fn)= uses LangGraph-style callable names.
 - =input_schema=, =output_schema=, and =context_schema= are accepted as compatibility metadata.
-- =set_conditional_entry_point= inserts an internal entry node and then routes through POO Flow conditional edges.
-- =typing.Annotated[..., reducer]= fields on =TypedDict= state schemas register POO Flow state reducers.
+- =set_conditional_entry_point= inserts an internal entry node and then routes through Agentic AI Lab conditional edges.
+- =typing.Annotated[..., reducer]= fields on =TypedDict= state schemas register Agentic AI Lab state reducers.
 - =compile(...).invoke(...)= executes through the runtime graph executor hot path.
-- =compile(checkpointer=...).invoke(..., config={"configurable": {"thread_id": ...}})= stores the resulting runtime state in the POO Flow checkpointer.
-- =get_state=, =get_state_history=, and =update_state= expose LangGraph-shaped =StateSnapshot= values over POO Flow checkpoints.
+- =compile(checkpointer=...).invoke(..., config={"configurable": {"thread_id": ...}})= stores the resulting runtime state in the Agentic AI Lab checkpointer.
+- =get_state=, =get_state_history=, and =update_state= expose LangGraph-shaped =StateSnapshot= values over Agentic AI Lab checkpoints.
 
 * Design choice
 
@@ -58,7 +58,7 @@ The compatibility test suite covers:
 - conditional path maps that route to =END=;
 - checkpoint-backed =invoke=, =get_state=, =update_state=, and =get_state_history=.
 
-The top-level shim lives under the test suite, not the runtime package.  It proves that upstream-shaped LangGraph code can be routed into the POO Flow facade without shipping a package that shadows the real LangGraph distribution.
+The top-level shim lives under the test suite, not the runtime package.  It proves that upstream-shaped LangGraph code can be routed into the Agentic AI Lab facade without shipping a package that shadows the real LangGraph distribution.
 
 The full runtime ABI gate already includes:
 

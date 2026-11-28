@@ -1,0 +1,66 @@
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+classes: {
+  title: {shape: text; style: {font-size: 34; bold: true; font-color: "#14273A"}}
+  note: {shape: text; style: {font-size: 17; font-color: "#415668"}}
+  row: {width: 205; style: {fill: "#EAF0F6"; stroke-width: 0; font-size: 17; border-radius: 8}}
+  cell: {width: 485; style: {fill: "#F2F5F8"; stroke-width: 0; font-size: 17; font-color: "#263A4D"; border-radius: 8}}
+  check: {width: 387; style: {fill: "#EAF0F6"; stroke-width: 0; font-size: 17; font-color: "#263A4D"; border-radius: 8}}
+  head: {style: {bold: true; font-size: 19}}
+}
+
+figure: {
+  label: ""
+  grid-rows: 7
+  vertical-gap: 10
+  style: {fill: transparent; stroke-width: 0}
+
+  title: "When can W1 support the write again?" {class: title}
+  premise: "R2 invalidated W1-v1's attribution. The model finds D1, a candidate direct binding from the storage authority." {class: note}
+  assessment: {
+    label: ""
+    grid-rows: 2
+    horizontal-gap: 8
+    vertical-gap: 7
+    style: {fill: transparent; stroke-width: 0}
+
+    intent_head: "Original durable intent" {class: [check; head]}
+    record_head: "Retained W1 write record" {class: [check; head]}
+    gate_head: "Current Temporal assessment" {class: [check; head]}
+    intent: "D1 must name the original Attempt\nand the exact append effect." {class: check}
+    record: "D1 must name storage write 42\nand match the immutable W1 record digest." {class: check}
+    gate: "Verify issuer, commit and complete lineage\nfree of R1. Check the exact use at this cut." {class: check}
+  }
+
+  comparison: {
+    label: ""
+    grid-rows: 5
+    horizontal-gap: 8
+    vertical-gap: 7
+    style: {fill: transparent; stroke-width: 0}
+
+    view: "Current view" {class: [row; head]}
+    c: "C   Candidate found" {class: [cell; head]; style.fill: "#FBE8CD"}
+    d: "D   W1-v2 selected, result uncontested" {class: [cell; head]; style.fill: "#D8EFE3"}
+
+    evidence: "Temporal\nevidence" {class: row}
+    c_evidence: "D1 is a candidate. W1-v1 stays withdrawn." {class: cell}
+    d_evidence: "Admit W1-v2 on D1 and the current assessment.\nReuse the same raw W1 record." {class: cell}
+
+    outcome: "Context\nresult" {class: row}
+    c_outcome: "UNKNOWN" {class: cell; style.fill: "#FBE8CD"}
+    d_outcome: "SUCCEEDED ON W1-v2" {class: cell; style.fill: "#D8EFE3"}
+
+    original: "ASCENT\noriginal questions" {class: row}
+    c_original: "W1 binding and Attempt outcome remain open." {class: cell}
+    d_original: "Close binding on selection of W1-v2.\nClose outcome on uncontested success." {class: cell}
+
+    summary: "ASCENT\ndownstream review" {class: row}
+    c_summary: "B outcome and B summary need review." {class: cell}
+    d_summary: "The new outcome answers the effect question.\nThe B summary still needs its own review." {class: cell}
+  }
+
+  stale: "If the assessment is stale or the checks fail, W1-v2 cannot supply success support." {class: note}
+  conflict: "With an unresolved result conflict, binding can close while the outcome question stays open." {class: note}
+  history: "History keeps R1, R2, W1-v1, B's success and C's unknown result. D adds a new basis and judgment." {class: note}
+}

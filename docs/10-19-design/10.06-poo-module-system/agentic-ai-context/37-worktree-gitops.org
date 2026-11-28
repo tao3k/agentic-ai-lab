@@ -1,0 +1,222 @@
+#+title: Lab GitOps Library: Org-bound Create Policy and Evidence
+#+date: [2026-11-16]
+#+language: en
+#+property: STATUS unified-lab-gates-passed-locally
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Architectural subject
+
+The subject is =modules/gitops= in Agentic AI Lab. Its public interface is a
+Yuanxu Module whose exports are POO objects and named pure functions. AITIA,
+Marlin and other applications are downstream consumers. The library neither
+imports them nor supplies their execution runtime.
+
+The [[file:37-worktree-gitops.sysml][SysML v2 architecture]] defines two ports: =PolicyPort= accepts a parent
+Policy and Org cut and returns specialization/selection; =EvidencePort= accepts
+current facts, a receipt and previous evidence and returns successor evidence.
+A consumer uses their conjugates and supplies its own execution owner. Physical
+execution occurs outside =LabGitOpsLibrary=.
+
+| Requirement / allocation | Owner | Source / public operation | Scheme acceptance case |
+|--------------------------+-------+---------------------------+------------------------|
+| inputValidity / defineInputs | Lab CreateContract | [[file:../../../../modules/gitops/types.ss][GitOps input Types]]; create-contract.inputs | C01: public descriptors; C02: invalid identity/observation/state; C03: invalid Policy/availability |
+| capabilityRestriction / compose | Lab PolicyComposition | [[file:../../../../modules/gitops/working-copy.ss][bind-working-copy-policy]], select-working-copy | P01: restriction/fallback; P02: selector override and confinement; P03: custom capability; P04: anchor/revision refusal |
+| semanticAdmission / interpret | Lab EvidenceInterpretation | [[file:../../../../modules/gitops/contracts.ss][create-contract]] predicates and admit-working-copy-receipt | E01: original binding; E02: independent correspondence controls; E04: new matching request |
+| evidenceHistory / retain | Lab EvidenceInterpretation | working-copy-evidence, refresh-working-copy-evidence | E01: duplicate substitution; E03: active request/provider/Policy; E04: immutable lineage; E05: withdrawal without revival |
+| physicalFence / fence | Consumer ExecutionOwner | Consumer-selected implementation; no Lab process or ABI | External obligation; Scheme supplies false observations to test refusal, not physical execution |
+
+Module publication uses [[file:../../../../modules/gitops/interface.ss][interface.ss]], [[file:../../../../modules/gitops/config.ss][config.ss]] and the
+[[file:../../../../modules/gitops/types.ss][Scope Contract]]. No alternative loader or downstream native bridge is needed.
+
+* POO composition and open capabilities
+
+=working-copy-policy= is a POO prototype. =bind-working-copy-policy= parses the
+selected Org text with the existing Orgize Element graph, requires one unique
+anchor and a policy revision, and derives a Policy with =.cc=. Space-separated
+=GITOPS_ALLOWED= names restrict the parent capability set. =GITOPS_PREFERRED=
+names one declared capability; preference cannot add authority or availability.
+
+A named =select-provider= function is inherited or overridden through normal
+POO composition. Its return is checked against both the derived allowed set and
+the consumer-supplied availability object. New capability names use the same
+slots; concrete package names and native execution types are not registered in
+Lab. Each consumer can derive its own Policy and maintain its own evidence state.
+
+* Contract and conditional interpretation
+
+The published =create-contract= has identity =agentic-ai-lab.gitops.create=,
+semantic revision 4 and =effects-owner= equal to =downstream-provider=. Its
+predicates are the actual functions used by Scheme evidence transitions.
+
+The =inputs= slot publishes real =define-type= descriptors, not symbolic type
+names or another schema evaluator. Public operations call =validate= at their
+input boundaries. Malformed POO inputs raise a Type admission error and produce
+no successor state. Contract-compatible refusals remain receipts in successor
+evidence. This separates a malformed envelope from an observation whose semantic
+applicability is being evaluated.
+
+| SysML item / field | Scheme Type / slots | Semantic comparison or transition | Scheme case |
+|-------------------+---------------------+-----------------------------------+-------------|
+| OrgCut | GitOpsSourceCut: project, worktree, path, text, git-head | same-source? requires equality of all five fields; identity strings are nonempty | C01, C02, E02 |
+| PolicyValue | GitOpsWorkingCopyPolicyType: allowed, preferred, select-provider; bound source/anchor/revision | Parent/local intersection; named selector inherited; selection checked against Boolean availability | P01, P02, P03, P04 |
+| CurrentFacts | GitOpsCurrentFacts: request, provider, source, policy-revision, authorized?, fence-current? | Current request/provider and captured source/revision must match | C02, E02, E03 |
+| ExecutionReceipt | GitOpsReceipt: request, provider, source, policy-revision, anchor, custody-valid?, executed?, outcome, working-copy | Fresh request, selected provider in allowed set, matching cut/anchor/revision, Boolean facts, applied outcome, nonempty returned path | C02, E01, E02 |
+| EvidenceState history | GitOpsEvidenceState: receipts, accepted-requests | Append original receipt object; spend request only on a new acceptance; keep input state immutable | E01, E04, E05 |
+| EvidenceState current use | active-policy, active-request, active-provider, binding, admitted?, accepted? | Retain only under the exact active Policy object, request and provider, with current source/revision/grant/fence | E01, E03, E05 |
+
+Policy Type admission checks the selector/capability surface; binding additionally
+qualifies the Org source and anchor. Receipt Types admit absent or empty-path
+bindings as unusable observations; semantic admission refuses them while keeping
+their receipts. Non-POO bindings and non-Boolean authority/custody facts fail Type
+admission. Shape admission never authenticates these caller-supplied facts.
+Evidence-state Type admission checks each retained receipt and spent request;
+an optional branch is a String when present. It does not establish historical
+authenticity or prevent a caller from forking persistent state values.
+
+The source correspondence includes project, Worktree, Org path, selected text
+and observed Git HEAD. Receipt acceptance additionally requires matching policy
+revision, Org anchor and request, unspent request identity, current authority,
+=fence-current?=, valid custody, execution, an allowed provider, an applied
+outcome and an actual binding from the provider selected for that request. These
+are supplied facts, not grants synthesized
+from an Org declaration or a success status.
+
+=admitted?= reports a new acceptance; =accepted?= reports current use. Duplicate
+delivery may retain a valid current binding without admitting again. Refresh
+withdraws use when applicability changes, retaining receipt history and spent
+requests. Restoring observations after withdrawal does not automatically revive
+that binding. The caller threads the returned state; these are persistent
+functional values, not a global execution or durable deduplication service. A
+later fresh request can replace current use while retaining both original
+receipts. An unusable redelivery cannot substitute its path for the previously
+accepted binding.
+
+* Bounded protocol model
+
+[[file:38-gitops-library-refinement.org][38: the actual library refinement relation]] defines the commuting Scheme/Quint
+step, ordered history and object-identity conditions, and a readable nine-event
+business history. Its maintained Scheme check compares both implementations on
+the same inputs; package-management behavior is outside that check.
+
+[[file:37-worktree-gitops.qnt][The Quint model]] abstracts two provider capabilities, one captured source and
+Policy cut, one request and one returned receipt. It separates composition,
+consumer projection, owner admission, execution, evidence return and semantic
+consumption. Composition cannot silently recapture a later source cut.
+
+The guarded protocol checks dispatch safety, result applicability, actual
+returned binding and once-only acceptance. The six original deliberately unsafe wrappers
+retain dispatch, result, foreign receipt, intended-path substitution, duplicate
+and capability-widening counterexamples. A seventh control accepts an allowed
+but unselected provider's receipt and must also fail. The positive wrapper has
+sixteen deterministic traces, including mutation before composition and a
+provider mismatch refusal. POO Type admission excludes malformed input shapes
+before this typed protocol abstraction. Multiple requests and active POO object
+identity remain outside the protocol's single-request bound; they are covered
+by E03/E04 and the paired library-kernel business history in 38.
+
+This is a conditional finite protocol model. Its external owner checks are
+assumptions to be discharged by whichever downstream adapter is selected. It
+does not prove physical execution, arbitrary file races, persistence, all
+providers, source refinement or distributed exactly-once behavior. Scheme
+Contract tests are direct library evidence, separate from Quint source/typecheck/
+predicate receipts. No new code generator or Python orchestration owns semantics.
+
+* Reproducible library checks and evidence scope
+
+#+begin_src sh
+just test-file t/yanxu/modules/gitops/working-copy-test.ss
+just test-lab-layout
+sysml -strict -validate -self-check -no-record-cache 37-worktree-gitops.sysml
+#+end_src
+
+The [[file:../../../../t/yanxu/modules/gitops/working-copy-test.ss][Scheme suite]] consumes the public Lab GitOps Module through the shared
+[[file:../../../../t/yanxu/interface.ss][test dependency facade]]. It uses POO values and the real Orgize parser; there is no
+downstream execution runtime or concrete provider execution. Retain the maintained pre-import
+heap fence and original timeout. Require MODULE-OK, HARNESS-OK and final OK;
+process exit status alone does not qualify the suite.
+
+The earlier fourteen native replay results came from a superseded downstream
+coupling. Their local artifacts remain historical evidence and do not qualify
+this library. The task's added Python drivers, generated cross-language guards,
+Marlin wiring and native bridge have been retracted. No package pin is promoted.
+
+The whole-Lab layout gate remains independently required. The following
+historical owner audit distinguishes this task's edits from the shared worktree
+at the first failing cut. It does not infer an authoring chat from an uncommitted
+Git diff. See [[file:38-gitops-library-refinement.org][38]] for the subsequent
+source/loaded-artifact alignment and successful layout receipt.
+
+| Source / artifact | Owning responsibility and observed state | Treatment in this task |
+|-------------------+------------------------------------------+------------------------|
+| modules/gitops, its t/yanxu suites and t/yanxu/interface.ss | Lab GitOps library and its shared public dependency facade | Task-owned changes; no downstream adapter or executor; the duplicate fixture init was removed |
+| modules/module-authoring/interface.ss | Module-authoring native facade; unstaged change adds only-in imports and named exports | Pre-existing parallel edit; left unchanged |
+| core/module-system/source/init.ss | Core Interface/native-facade source classification; staged +23/-4 amendment | Parallel Core edit; not installed, restaged, reverted or included in GitOps |
+| Root Core gitlink and installed Yuanxu checkout | Parallel updates moved the root gitlink to 727749d8d3ce867c2e70787cf78fa60c50c4f030; installed Core remains 207524f90116e621b9ef515bf1a7dea5695e84f7 at this audit cut | No pin promotion or LOADPATH rewrite by the GitOps task |
+| .gerbil/lib/tao3k/yuanxu/module-system/source | Shared compiled Core outputs | Build artifacts are a separate, changeable input cut; an import/compiler failure is not a Contract refusal |
+
+The old installed facade rule admits simple relative file imports and
+=export (import: ...)= forms. The parallel Lab facade now uses =only-in= and
+named exports. The staged Core amendment admits those native declaration forms;
+the current committed =init.ss= blob still has the old rule. The layout gate
+therefore fails while discovering =modules/module-authoring/interface.ss=,
+before it can establish the complete Lab test-owner set. A changed Core HEAD by
+itself does not establish that the staged rule has been committed or installed.
+
+The facade SHA256 remained =8fb927594cc8792058e85400da6efa923efe2fea4a469fc1d3e8c845bef28016=;
+the staged/working Core rule was =67efc4bb0dfb103bea458656d62439024190c33765a57823b7c6e0cd7ad3dc79=;
+the installed Core source was =5c79b55301ff046bc2c54527b27ff292a6423f52a1ca642aae2ec9ac52790ae9=.
+These observations identify the mismatched inputs without claiming a qualified
+Core update. The owning facade/Core change must be qualified together before a
+whole-Lab pass can be claimed. No timeout, relaxed gate or unrelated parallel
+result substitutes for that pass.
+
+Earlier revision-3 evidence on 2026-11-16 recorded 1,957 distinct model states,
+six controls and fifteen traces. It remains historical evidence and does not
+qualify revision 4. Revision 4 has twelve Scheme cases with stable C/P/E names
+referenced by SysML verification objectives. Those objectives do not synthesize
+test verdicts. Strict validation of 36 and 37 reports 345 elements, 3,244 checks,
+zero violations and zero unevaluated checks. The earlier revision-4 protocol
+exhausted its queue at 2,181 distinct states. The shared-library-kernel protocol
+now exhausts its queue at 2,341 distinct states, retains all six original unsafe
+controls plus provider substitution, and passes sixteen model traces. These
+finite results do not qualify physical execution or prove the Scheme source.
+Core's existing backend/runtime tools retain one worker,
+1 GiB heap and 45-second wall / five-second real-output deadlines. No new
+repository verification driver was added. Local =summary.ss= explicitly records
+that catalogue closure, runtime execution and source refinement are unproved.
+
+The final Scheme run against revision-4 sources emitted MODULE-OK, HARNESS-OK
+and final OK with no error markers. An intervening parallel Core rebuild had
+left new generated .ssi/.scm files with older native objects; the failed import
+attempts are retained, not counted as successful input refusals. After the other
+build ended, the maintained =gxpkg clean= for the selected Core package followed
+by =just build-dependency= restored its products. The registered installed source
+remained at 207524f9 and the three audited source hashes above were unchanged.
+The ordinary rebuild attempt that skipped existing products is also retained.
+No alternative prefix, load-path reordering or timeout increase was used. All
+logs and the finite-exploration =summary.ss= remain local artifacts.
+The final layout rerun after dependency recovery still refused the same
+module-authoring facade under the installed rule. Its harness failure and
+nonzero Just verdict remain independent of the passing GitOps suite.
+
+The current refinement gate is =just check-gitops-refinement=. Suite discovery
+uses =t/yanxu/modules/gitops= and imports the shared =t/yanxu/interface.ss=;
+there is no separate fixture init or suite list. The source now defines 49,556
+paired cases and thirteen C/P/E cases in the same aggregate 120-second process.
+The previous 49,549-case pass is historical and does not qualify this migrated
+import path. The first unified Scheme attempt stopped during module-authoring
+facade expansion at =raise-control-plane-failure=, before business cases began.
+After the public Core artifacts were refreshed, the unified working-copy
+module emitted =MODULE-OK=. That earlier aggregate reached its Quint deadline.
+The optimized witness run later completed all 49,556 comparisons and ten
+controls under the unchanged limits. See 38 for both natural-exit measurements.
+The protocol still has
+seven required invariant counterexamples and sixteen deterministic traces.
+SysML 36/37 now report 384 elements, 3,632 checks and no violations. Refinement
+contains no dependency-version or package-management probes; the layout gate
+is invoked independently and retains its own verdict. See 38 for the business
+history and the exact bounded relation, rather than interpreting case counts
+as a general source theorem.

@@ -7,9 +7,9 @@ requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "poo-flow-proof"
+name = "agentic-ai-lab-proof"
 version = "0.1.0"
-description = "Typed Lean artifact generation for poo-flow proof manifests."
+description = "Typed Lean artifact generation for agentic-ai-lab proof manifests."
 license = "Apache-2.0 AND LGPL-2.1-or-later"
 license-files = ["LICENSE"]
 readme = "README.md"
@@ -26,8 +26,8 @@ dev = [
 ]
 
 [project.scripts]
-poo-flow-proof = "poo_flow_proof.cli:main"
-poo-flow-axle-verify = "poo_flow_proof.axle_verify:main"
+agentic-ai-lab-proof = "agentic_ai_lab_proof.cli:main"
+agentic-ai-lab-axle-verify = "agentic_ai_lab_proof.axle_verify:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

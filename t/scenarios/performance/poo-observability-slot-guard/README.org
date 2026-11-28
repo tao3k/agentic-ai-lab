@@ -6,7 +6,7 @@
 
 * Purpose
 
-This scenario keeps the native POO lazy-slot observability path measurable and
+This scenario keeps the POO lazy-slot observability path measurable and
 teachable.  It separates prototype authoring, guarded-object construction,
 first demand, cached demand, and traced demand instead of collapsing them into
 one opaque elapsed value.
@@ -52,21 +52,21 @@ clauses as repair advice; it does not claim the source was executed.
 The end-to-end fixture declares a 20 ms target plus 30 ms regression budget and
 a 50 ms hard limit.  It contains no static observed timing fields or phase-local
 stopwatches.  Live ASP receipts are the only observations.  Separate calibration
-of the actual native primitives measured prototype lookup at 67 ns/op and one
+of the actual runtime primitives measured prototype lookup at 67 ns/op and one
 prototype composition at 1438 ns/op; their checked hard ceilings are 200 ns/op
 and 2000 ns/op respectively.  Process startup and scheduler suspension are not
 reported as POO primitive cost.
 
-Measure the scenario with the native Gerbil test runner through the captured
+Measure the scenario with the Gerbil test runner through the captured
 project environment:
 
 #+begin_src sh
 just test-performance
 #+end_src
 
-The native ASP V1 receipts' =elapsedNs=, =p50Ns=, =p95Ns=, =maxNs=,
+The runtime ASP V1 receipts' =elapsedNs=, =p50Ns=, =p95Ns=, =maxNs=,
 =nsPerOpNumerator=, =nsPerOpDenominator=, =runtimeStats=, and =status= fields
 are the performance evidence.  Bazel may run
 the same test as a dependency-closure and acceptance gate, but its sandbox,
 compilation, and launcher wall time must not be reported as POO performance.
-The root Justfile owns the native heap/debug launch boundary.
+The root Justfile owns the runtime heap/debug launch boundary.

@@ -1,0 +1,27 @@
+#+title: Context Evidence Source Contract
+:PROPERTIES:
+:ID: context-evidence-source-template
+:CONTRACT_ID: context.evidence-source.v1
+:CONTRACT_REVISION: 1
+:END:
+#+language: en
+
+* TODO Evidence
+:PROPERTIES:
+:ID: work
+:ROLE: evidence
+:END:
+Retain the original evidence here or an immutable, revision-bound reference.
+A Property ID identifies content; admission and current authority are separate.
+
+#+begin_src scheme
+;; Source blocks are Org Elements and inert source evidence here.
+;; They are never evaluated by the Context Provider.
+#+end_src
+
+* TODO Reassessment
+:PROPERTIES:
+:ID: reassessment
+:ROLE: review
+:END:
+Record competing explanations, contradictions and unresolved questions.

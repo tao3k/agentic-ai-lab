@@ -1,0 +1,224 @@
+:PROPERTIES:
+:ID: context-design-audit-next-delivery
+:STATUS: source-audit-production-and-delivery-gaps-open
+:END:
+#+title: Agent Context: Design Audit and Next Delivery
+#+date: [2026-10-30]
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Audit boundary
+
+This source audit follows the existing Agent Context system, interpreting the
+user's AR Context reference in that sense. It introduces no new manager or
+runtime. The inspected product head is =29c95ff7=.
+
+The local 317-file candidate replay, final 99-Case Context/replay, approved
+recovery controls and native progress controls are separate evidence. The
+317-file candidate included a subsequently removed compiler option; it is not
+exact-head release admission. Raw logs and hashed receipts remain local under
+=.data/context-ci-20261029/=.
+
+At inspection the current PR head had 17 successful checks and queued/running
+checks. Its preceding budget head reached ASCENT after passing the former POO
+cutoff. Local reproduction found Gambit trying to generate C beside immutable
+POO static Scheme inputs. Overall CI/release closure remains open. Current
+budget policy is in [[file:../../10.10-build-test-ownership.org][build/test ownership]]; earlier limits and timings in the
+research documents are historical evidence, not current CI policy.
+
+* Architectural decision retained
+
+Context owns an Agent's versioned information lifecycle. A prompt is one
+selected projection. Session owns interaction identity, turns, Attempts,
+cancellation and recovery. Memory is an optional Context Feature. ASCENT,
+temporal-causality, Query, Orgize and Authority retain their semantic ownership.
+
+Tool results, interaction history, model proposals, runtime events and external
+artifacts all enter through their admitted Providers. Org Elements is the
+source/query window, including explicit external-artifact references; binary
+or large originals need not be copied into every Org document or consumer.
+The same evidence can support multiple Contexts with independent assessments
+and grants. Selection for a bounded prompt never discards the original chain.
+
+The fundamental problem is which original information a consumer may use for
+an operation at the current authority cut. Preserved bytes are not automatically
+trusted evidence; historical proof, current support and effect authority differ.
+
+| Crossing | Context responsibility | Independent Session boundary |
+|----------+------------------------+------------------------------|
+| Information entry | Provider/source/version, Org Element/Property ID, original bytes and query coverage | Source admission needs no active Session |
+| Working Context | Demand, composition, restrictions, proof/support and consumer-local assessment | Receive an admitted input reference; transcript is optional input |
+| Use/result | Recheck current cut; publish through owner/Attempt CAS; preserve rejected historical results | Own Attempt revision/generation and terminal transition |
+| Reassessment | Push affected-edge invalidation for withdrawal, grants, policy and expiry | Cancel/recover without reviving obsolete results |
+| Knowledge integration | Create a new scoped claim/procedure with premises, actual outcomes and defeaters | A completed turn supplies evidence, not automatic truth |
+| Recall | Re-admit retained claims/support for a new Demand and authority | Another Session retains its own identity and grants |
+
+These are inherited decisions from [[file:00-design-map.org][the existing design map]], not newly qualified features.
+
+* Source findings
+
+** A1: independent descriptor, reverse implementation imports
+
+The following finding describes the pre-refactor source audit.
+[[file:32-independent-session.org][G1 implementation and native qualification]] track the direct ownership migration.
+
+[[file:../../../../modules/ai-agentic-context/config.ss][Context config]] correctly imports the independent [[file:../../../../modules/session/descriptor.ss][Session descriptor]]. However,
+Session's [[file:../../../../modules/session/policy-core.ss][policy core]], [[file:../../../../modules/session/communication.ss][communication]], syntax/config and Org-memory selection
+still import Context's Memory implementation. Memory's [[file:../../../../modules/ai-agentic-context/features/memory/objects-core.ss][objects core]] imports
+Session objects and transforms in return.
+
+This confirms a reverse source dependency, not a demonstrated load cycle.
+Descriptor independence alone does not establish independent Session execution.
+Classify imported symbols before moving them: generic durability policy/receipt
+contracts belong with their existing semantic owner; Org/Memory adapters belong
+on Context's side. Move code rather than duplicate it. Introduce no third
+manager, replacement identity or compatibility umbrella.
+
+Exit: import/select/use Session without Context/Memory implementation or backend
+acquisition, execute its real Attempt/cancel/recover tests, then verify Context
+composition and cross-Session recall using the original identities.
+
+** A2: local service is ahead of standalone active-service delivery
+
+[[file:29-production-service.org][29]] and [[file:../../../../modules/ai-agentic-context/runtime-service.ss][runtime-service.ss]] supply a native Scheme service over the existing owner.
+The in-process C caller exercises active Context behavior. The standalone
+packaged probe exercises runtime setup/cleanup without an installed live
+Context. Combining their results does not qualify a standalone active service.
+
+Exit: one installed artifact using the existing C ABI and an application-installed
+service capability; actual Query/Org admission, two Sessions, result/withdrawal/
+cancel/recovery races, journal restart, result release and natural shutdown.
+Source-tree-only hosts and inert probes cannot substitute. Rust stays downstream;
+28's historical transport fixture and withdrawn Rust integration are not current
+production delivery dependencies.
+
+** A3: count admission does not bound bytes or control latency
+
+[[file:28-hybrid-runtime.org][28]] supersedes 27's earlier open local-ingress status. The production owner
+already has separate bounded queues and a coalesced wake in [[file:../../../../modules/temporal-causality/runtime/owner-ingress.ss][owner-ingress.ss]].
+Its admission is still count-only; trusted handlers can remain long. End-to-end
+control reserve across a future host transport has not been qualified.
+
+Extend the same scheduling contract with request bytes, retained-result bytes
+and work ownership. Original blobs remain in the Evidence Provider under its
+quota; queues retain admitted immutable references. FFI return does not mean
+semantic completion and cannot release the retained task's work credit.
+
+Exit: saturate data while delivering withdrawal/expiry/cancel controls; measure
+enqueue, handler and control latency separately. Keep overflow, retry, client
+abandonment, close and restart negatives. Selection fairness is not elapsed-time
+liveness or preemption.
+
+** A4: receipt qualification is not knowledge integration
+
+[[file:../../../../t/memory-durable-job-receipt-test.ss][The existing durable job test]] explicitly validates/projects jobs without
+recalling, consolidating or persisting a knowledge store. The empty public
+[[file:../../../../modules/ai-agentic-context/features/memory/funs.ss][Memory functions role]] alone proves no absence elsewhere; the gap is an
+inspected end-to-end qualification matching the richer consolidation contract.
+Existing durable storage and receipt shapes must not be promoted to that claim.
+
+Exit: an actual outcome proposes a scoped insight; support and contradiction
+govern admission; a later Session recalls it; source withdrawal invalidates
+dependent uses while preserving history. Preserve failed consolidation,
+unsupported generalization, revoked recall authority and an unaffected consumer.
+Age, usage count, a successful turn or a summary cannot establish truth.
+
+** A5: distributed ownership is a separate delivery
+
+[[file:26-distributed-runtime.org][26]] allocates domains, epochs and clock domains; [[file:27-bounded-scheduling.org][27]] and [[file:28-hybrid-runtime.org][28]] add finite executable
+correspondence and local native scheduling. They do not establish deployed
+multi-node authority or terminal publication.
+
+Exit, after the local service: two actual owners, durable outboxes, stale-owner
+fencing, partition/reordering/duplicates and explicit failover. Define the
+authoritative current cut and remote clock domain before transport selection.
+Attempt terminal uniqueness does not make external effects exactly-once.
+
+** A6: precise Org and algorithm scopes
+
+[[file:../../../../modules/ai-agentic-context/org-contract/templates/README.org][The existing Org Contract catalog]] separates document Property ID, derived
+Session ID and binding digest. Keep those roles. The Provider qualifies a
+bounded GQL/Org Elements profile, not all Org syntax/cross-document closure.
+Unsupported required forms must be refused explicitly.
+
+C3/C4 precedence, source provenance, retrieval order and token-prefix order
+are distinct. Measure invalidation against affected vertices/edges and fanout;
+there is no blanket linear-complexity proof for Query, proof verification,
+journal IO or the whole system. KV reuse still needs exact model/tokenizer/
+runtime/prefix and isolation evidence. Evidence retention alone proves neither
+KV reuse nor superiority over the literature.
+
+* Ordered delivery and executable acceptance
+
+| Order | Work unit | Required exit evidence |
+|-------+-----------+------------------------|
+| G0 | Package/CI and immutable dependency input handling through existing build owners | Same published cohort, complete queues, source/tamper refusals, installed artifacts, natural exits |
+| G1 | Remove Session-to-Context implementation imports | Independent Session native consumer plus Context composition; one owner per policy/identity |
+| G2 | Install active Scheme Context service through existing C ABI | Standalone artifact, two Sessions, real lifecycle, restart/replay, caller-owned result release |
+| G3 | Byte/work/result admission in existing scheduler | Saturated control path, bounded retained bytes, overflow/retry/close negatives and measured latency |
+| G4 | Actual outcome to insight to recall | Native proof/support, consolidation failure, contradiction, withdrawal, cross-Session re-admission |
+| G5 | Cross-node authority/failover, then Rust consumer | Native transport failures and epoch fencing, node memory admission, C ABI ownership preserved |
+
+G1 can be reviewed while G0 is repaired; G2 is not release-qualified before G0.
+G4's pure value/proof contracts may progress alongside G3; runtime acceptance
+uses the admitted service. This is sequencing, not authorization to redesign
+all these owners in one patch.
+
+Reuse SysML for responsibility/transition handoffs, QNT for interleavings and
+invariants, and Scheme for real owners, clocks, journals and processes. Compose
+queue credits, durable acceptance, owner epoch, Attempt terminal and foreign
+result lifetime in the existing models. Keep counterexample ITF paths and native
+replay. Isolated model success is not production refinement; this audit did not
+rerun those engines.
+
+Separate cold package/import/reconstruction from steady events, affected-edge
+propagation, control latency, allocation/GC, journal cost and process shutdown.
+Literature comparison needs matched tasks, quality/authority failures and replay
+evidence before asserting an advantage.
+
+The first implementation unit after review is G1's smallest real import boundary
+and a failing independent consumer, while G0's existing owner repair continues.
+Then deliver G2 over the already implemented native Scheme service.
+
+* G0 native adapter repair checkpoint (2026-10-30)
+
+The isolated Nix adapter exposed two preparation defects before Case execution:
+ordinary library files had been listed as Test demand roots, and an executable
+consumer subset discarded the original producer's library publication. The
+producer now declares only its actual program root; native imports own its
+library closure. The generated service's Nix Source dependency is a real native
+import. Invocation consumes the same original demand as preparation and passes
+its admitted library directories through standard =GERBIL_LOADPATH=.
+
+The existing Nix Just entry preserves installed-library priority and appends the
+registered product source as fallback for official Harness children, matching
+the Root entry. AWS atomic support is prepared through
+=init.exports.scenarios.aws.tests.std-make-spec=, separately from qualification;
+there is no second file inventory or compiler launched by a test Case.
+
+The isolated queue then completed approval/recovery (including source changes,
+joint tampering and missing observations), AWS Context ordinary/observed
+publication and the real atomic endpoint. It later refused store verification
+at the unchanged 60-second Case silence boundary, with a stack in Core artifact
+digest admission. That failed queue is not full adapter admission. The
+store-process observer must compose with the existing source/progress observer;
+forwarding real observations does not create synthetic progress.
+
+Cold-import probes check their issuer's declared Case heap limit in the actual
+child; the expected value comes from the existing profile, not from the observed
+heap. Root recipe evaluation obtains host capacity through the same OS queries
+as CI, retaining explicit =GERBIL_BUILD_CORES= and avoiding a preparation-time
+=gxi -e= process. No test deadline or heap allowance is increased by this repair.
+
+The selected Root cohort at =a71c1369= contains Core =6f9587f= and ASCENT
+=41340e32=. These are candidates, not a qualified dependency receipt: Core's
+Linux scale gate failed, and the ASCENT production program declaration/static
+input boundary remains open. Keep the complete failed queues and local replay
+artifacts outside source control. After dependency admission, rerun the existing
+=just test=, complete =just test-root= replay, =just test-context-temporal=
+execution/replay and =just test-performance=, plus the existing isolated Nix
+=test-all= entry. Focused markers, package preparation or finite-model success
+cannot replace those complete native queues and natural process exits.

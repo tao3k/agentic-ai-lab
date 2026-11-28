@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-17",
+  "runtime": "default Gerbil, Justfile pre-import heap fence",
+  "package_receipt": "family-publication-control.json",
+  "nix_outputs_reused": true,
+  "gates": {
+    "discovery": {
+      "test": "t/opentofu-configuration-discovery-test.ss",
+      "assertions": 49,
+      "passed": true
+    },
+    "explicit_selection_regression": {
+      "test": "t/opentofu-configuration-families-test.ss",
+      "assertions": 36,
+      "passed": true
+    },
+    "publication_regression": {
+      "test": "t/opentofu-provider-families-test.ss",
+      "assertions": 64,
+      "passed": true
+    },
+    "schema_regression": {
+      "test": "t/opentofu-schema-test.ss",
+      "assertions": 57,
+      "passed": true
+    }
+  },
+  "assertions": 206,
+  "manual_selected_types_required": false,
+  "native_child_admission": true,
+  "context_preserved": true,
+  "package_source_preserved": true,
+  "catalog_construction_required_for_discovery": false,
+  "unselected_throwing_binding_forced": false,
+  "final_candidate_discovers_new_type_after_parent_cache": true,
+  "child_registry_uses_own_bindings": true,
+  "original_public_contracts_reused": true,
+  "raw_export_lookup": "association lookup on decoded schema; selected Contract cache is keyed",
+  "first_demand_io": "whole selected Provider export",
+  "provider_aliases_supported": false,
+  "loader_connected": false,
+  "provider_plan_or_apply_executed": false
+}

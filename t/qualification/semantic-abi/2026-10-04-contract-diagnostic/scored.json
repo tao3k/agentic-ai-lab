@@ -1,0 +1,164 @@
+[
+  {
+    "case": "chain",
+    "passed": true,
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "branch",
+    "passed": true,
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "withdrawal",
+    "passed": true,
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "error": null
+  },
+  {
+    "case": "open-cut",
+    "passed": false,
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "late-ingestion",
+    "passed": true,
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "error": null
+  },
+  {
+    "case": "interval",
+    "passed": true,
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "error": null
+  },
+  {
+    "case": "zero-horizon",
+    "passed": false,
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "one-horizon",
+    "passed": false,
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "clock-mismatch",
+    "passed": true,
+    "candidate": {
+      "status": "rejected",
+      "rows": []
+    },
+    "error": null
+  },
+  {
+    "case": "generation-mismatch",
+    "passed": true,
+    "candidate": {
+      "status": "rejected",
+      "rows": []
+    },
+    "error": null
+  },
+  {
+    "case": "window-end",
+    "passed": false,
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "m"
+        ],
+        [
+          "k",
+          "q"
+        ]
+      ]
+    },
+    "error": null
+  },
+  {
+    "case": "unknown-time",
+    "passed": true,
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "error": null
+  }
+]

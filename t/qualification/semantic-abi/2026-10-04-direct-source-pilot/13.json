@@ -1,0 +1,212 @@
+{
+  "case": "zero-horizon",
+  "api": "async",
+  "index": 13,
+  "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "passed": false,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"status\",\"complete\"],[\"rows\",\"[[\"k\",\"m\"],[\"k\",\"q\"]]\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.3172912090085447
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.31736179201107007
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.6098048340063542
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.6098342090117512
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6098568750021514
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.681817292002961
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6930385420128005
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6931280420103576
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7076901670079678
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7077852500078734
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7078344170004129
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7078741250006715
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7189780420012539
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7414395000087097
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7414675420004642
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7414887920022011
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7415066250105156
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7467915840097703
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.746837124999729
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.747024959011469
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7471210420044372
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.792919334009639
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.793013709000661
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7930664590094239
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.793106875004014
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7931449169991538
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7931813340110239
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8241482920129783
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8241847500030417
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8242020000034245
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8242709590122104
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8242890840047039
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8243017090135254
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8243157500110101
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.834371959004784
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8343999589997111
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8344242500024848
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.8346312920039054
+    }
+  ],
+  "contentGapsSeconds": [
+    0.6098568750021514,
+    0.07196041700080968,
+    0.011221250009839423,
+    8.949999755714089e-05,
+    0.014562124997610226,
+    9.508299990557134e-05,
+    4.916699253953993e-05,
+    3.97080002585426e-05,
+    0.011103917000582442,
+    0.022461458007455803,
+    2.8041991754435003e-05,
+    2.12500017369166e-05,
+    1.7833008314482868e-05,
+    0.005284958999254741,
+    4.5540989958681166e-05,
+    0.0001878340117400512,
+    9.608299296814948e-05,
+    0.0457982920052018,
+    9.437499102205038e-05,
+    5.2750008762814105e-05,
+    4.041599459014833e-05,
+    3.804199513979256e-05,
+    3.641701187007129e-05,
+    0.03096695800195448,
+    3.645799006335437e-05,
+    1.7250000382773578e-05,
+    6.8959008785896e-05,
+    1.812499249354005e-05,
+    1.2625008821487427e-05,
+    1.4040997484698892e-05
+  ],
+  "responseId": "f0032007-686f-41af-8747-064d8f6e123b",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9558,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 30,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9588
+  },
+  "seconds": 0.834635375009384,
+  "failure": "SemanticRuntimeError: model output is not inert JSON",
+  "callSeconds": 0.8366779580101138
+}

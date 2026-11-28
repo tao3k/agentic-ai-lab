@@ -7,11 +7,11 @@
 * Purpose
 
 POO performance benchmarks must be real downstream scenarios, not standalone
-metric declarations. Every Big-O family scenario added for POO Flow must carry
+metric declarations. Every Big-O family scenario added for Agentic AI Lab must carry
 both sides of the repair:
 
 - input: the downstream shape before optimization.
-- expected: the POO-native optimized shape after repair.
+- expected: the POO optimized shape after repair.
 
 * Scenario Families
 

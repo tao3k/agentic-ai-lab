@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime import RuntimeGraphBuilder, RuntimeGraphSubgraph
+from agentic_ai_lab_runtime import RuntimeGraphBuilder, RuntimeGraphSubgraph
 
 
 def test_subgraph_stream_values_project_child_outputs():

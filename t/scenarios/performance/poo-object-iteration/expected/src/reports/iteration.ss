@@ -4,7 +4,7 @@
 
 (import (only-in :clan/poo/object .o .alist))
 
-;;; Scenario expected: native POO remains primary, but the hot loop works over a
+;;; Scenario expected: POO remains primary, but the hot loop works over a
 ;;; single boundary snapshot and cached scalar.
 
 (def +report-profile+

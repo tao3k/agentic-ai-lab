@@ -11,8 +11,8 @@ import sys
 
 import pytest
 
-from poo_flow_proof import axle_closure_verify, axle_verify
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof import axle_closure_verify, axle_verify
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanDeclarationClosure,
     LeanOwnerSource,
 )
@@ -44,7 +44,7 @@ def closure() -> LeanDeclarationClosure:
             "owner_modules": ["Example.Root"],
             "root_declarations": ["Example.safe"],
             "root_module": "Example.Root",
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         }
     )
 
@@ -97,7 +97,7 @@ def test_closure_mode_builds_exact_bundle_through_existing_cli(
     source_path.parent.mkdir()
     source_path.write_text("theorem Example.safe : True := by trivial\n")
     (tmp_path / "lake-manifest.json").write_text(
-        '{"name":"poo-flow-proof","packages":[]}\n'
+        '{"name":"agentic-ai-lab-proof","packages":[]}\n'
     )
     source = LeanOwnerSource(
         module="Example.Root",
@@ -111,11 +111,11 @@ def test_closure_mode_builds_exact_bundle_through_existing_cli(
     receipts = [
         json.loads(line) for line in capsys.readouterr().out.splitlines()
     ]
-    assert receipts[0]["schema_id"] == "poo-flow.axle-closure-preflight.v1"
+    assert receipts[0]["schema_id"] == "agentic-ai-lab.axle-closure-preflight.v1"
     assert receipts[0]["root_declarations"] == ["Example.safe"]
     assert (
         receipts[1]["schema_id"]
-        == "poo-flow.axle-exact-declaration-closure.v1"
+        == "agentic-ai-lab.axle-exact-declaration-closure.v1"
     )
     assert receipts[1]["verification"]["okay"] is True
 
@@ -170,7 +170,7 @@ def test_closure_artifact_contains_independent_bundle(
     source_path.parent.mkdir()
     source_path.write_text("theorem Example.safe : True := by trivial\n")
     (tmp_path / "lake-manifest.json").write_text(
-        '{"name":"poo-flow-proof","packages":[]}\n'
+        '{"name":"agentic-ai-lab-proof","packages":[]}\n'
     )
     source = LeanOwnerSource(
         module="Example.Root",
@@ -195,7 +195,7 @@ def test_closure_artifact_contains_independent_bundle(
     assert artifact["preflight"]["declaration_count"] == 1
     assert (
         artifact["independent_declaration_bundle"]["schema_id"]
-        == "poo-flow.independent-declaration-bundle.v1"
+        == "agentic-ai-lab.independent-declaration-bundle.v1"
     )
     assert artifact["independent_declaration_bundle_digest"].startswith("sha256:")
 
@@ -213,7 +213,7 @@ def test_existing_main_routes_closure_flags(
         sys,
         "argv",
         [
-            "poo-flow-axle-verify",
+            "agentic-ai-lab-axle-verify",
             "--lean-root",
             "../lean",
             "--root-module",
@@ -245,7 +245,7 @@ def test_existing_main_preserves_path_mode(
     monkeypatch.setattr(
         sys,
         "argv",
-        ["poo-flow-axle-verify", "Proof.lean"],
+        ["agentic-ai-lab-axle-verify", "Proof.lean"],
     )
 
     with pytest.raises(SystemExit) as exited:

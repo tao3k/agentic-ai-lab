@@ -8,10 +8,10 @@ import tracemalloc
 
 import pytest
 
-from poo_flow_runtime.benchmarks import __main__ as benchmark_cli
-from poo_flow_runtime.benchmarks import _burst_lifecycle_measurement as measurement
-from poo_flow_runtime.benchmarks import _burst_lifecycle_runner as runner
-from poo_flow_runtime.benchmarks import burst_lifecycle as benchmark
+from agentic_ai_lab_runtime.benchmarks import __main__ as benchmark_cli
+from agentic_ai_lab_runtime.benchmarks import _burst_lifecycle_measurement as measurement
+from agentic_ai_lab_runtime.benchmarks import _burst_lifecycle_runner as runner
+from agentic_ai_lab_runtime.benchmarks import burst_lifecycle as benchmark
 
 
 def test_burst_lifecycle_measures_mixed_case_startup_and_drain() -> None:
@@ -49,7 +49,7 @@ def test_burst_lifecycle_receipt_names_units_and_parallel_boundary() -> None:
         populations=(9,), max_concurrency=3
     )[0].receipt()
 
-    assert 'schema: "poo-flow.burst-lifecycle-benchmark.v1"' in receipt
+    assert 'schema: "agentic-ai-lab.burst-lifecycle-benchmark.v1"' in receipt
     assert 'arrival-profile: "instant"' in receipt
     assert 'parallel-kind: "action-internal-fanout-join"' in receipt
     assert 'time-unit: "ms"' in receipt
@@ -69,7 +69,7 @@ def test_burst_lifecycle_streams_compact_progress(capsys) -> None:
     )
 
     progress = capsys.readouterr().err
-    assert "|poo-flow-benchmark-progress " in progress
+    assert "|agentic-ai-lab-benchmark-progress " in progress
     assert "population: 6" in progress
     assert "completed: 6" in progress
     assert "startup-p99-ms" not in progress

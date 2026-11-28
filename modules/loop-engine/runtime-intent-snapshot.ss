@@ -9,12 +9,12 @@
         "runtime-capability.ss"
         "runtime-intent-receipts.ss")
 
-(export poo-flow-user-loop-engine-intent-runtime-snapshot
-        poo-flow-user-loop-engine-runtime-snapshot/from-components)
+(export agentic-ai-lab-user-loop-engine-intent-runtime-snapshot
+        agentic-ai-lab-user-loop-engine-runtime-snapshot/from-components)
 
 ;;; Runtime intent snapshots are already serialized as bounded alists at this
 ;;; boundary; avoid depending on the heavier runtime snapshot projection owner.
-(def (poo-flow-user-loop-engine-runtime-snapshot/from-components
+(def (agentic-ai-lab-user-loop-engine-runtime-snapshot/from-components
       intent
       workflow-agreement
       lineage-receipt
@@ -25,26 +25,26 @@
       compression-receipt
       sandbox-agreement)
   (let* ((use-case-name
-          (poo-flow-user-loop-engine-intent-use-case-name intent))
+          (agentic-ai-lab-user-loop-engine-intent-use-case-name intent))
          (workflow-ref
-          (poo-flow-user-loop-engine-intent-workflow-ref intent))
+          (agentic-ai-lab-user-loop-engine-intent-workflow-ref intent))
          (spec-evolution-human-audit-review-items
-          (poo-flow-user-loop-engine-intent-ref
+          (agentic-ai-lab-user-loop-engine-intent-ref
            intent
            'spec-evolution-human-audit-review-items
            '()))
          (spec-evolution-runtime-manifest-rows
-          (poo-flow-user-loop-engine-intent-ref
+          (agentic-ai-lab-user-loop-engine-intent-ref
            intent
            'spec-evolution-runtime-manifest-rows
            '()))
          (handoff-ready?
           (and
-           (poo-flow-user-loop-engine-intent-ref
+           (agentic-ai-lab-user-loop-engine-intent-ref
             sandbox-agreement
             'handoff-ready?
             #f)
-           (poo-flow-user-loop-engine-intent-ref
+           (agentic-ai-lab-user-loop-engine-intent-ref
             workflow-agreement
             'valid?
             #f)))
@@ -70,7 +70,7 @@
      (cons 'subject-id use-case-name)
      (cons 'engine 'loop-engine)
      (cons 'use-case-name use-case-name)
-     (cons 'status (poo-flow-user-loop-engine-intent-status intent))
+     (cons 'status (agentic-ai-lab-user-loop-engine-intent-status intent))
      (cons 'result #f)
      (cons 'handoff-summary handoff-summary)
      (cons 'error #f)
@@ -83,18 +83,18 @@
      (cons 'details
            (append
             handoff-summary
-            (list (cons 'contract 'poo-flow.loop-governor.v1)
+            (list (cons 'contract 'agentic-ai-lab.loop-governor.v1)
                   (cons 'runtime-owner "marlin-agent-core")))))))
 
-(def (poo-flow-user-loop-engine-intent-runtime-snapshot intent)
-  (poo-flow-user-loop-engine-runtime-snapshot/from-components
+(def (agentic-ai-lab-user-loop-engine-intent-runtime-snapshot intent)
+  (agentic-ai-lab-user-loop-engine-runtime-snapshot/from-components
    intent
-   (poo-flow-user-loop-engine-intent-workflow-agreement intent)
-   (poo-flow-user-loop-engine-intent-lineage-receipt intent)
-   (poo-flow-user-loop-engine-intent-selector-receipt intent)
-   (poo-flow-user-loop-engine-intent-resource-dispatch-receipt intent)
-   (poo-flow-user-loop-engine-capability-receipt->alist
-    (poo-flow-user-loop-engine-intent-capability-receipt intent))
-   (poo-flow-user-loop-engine-intent-memory-receipt intent)
-   (poo-flow-user-loop-engine-intent-compression-receipt intent)
-   (poo-flow-user-loop-engine-intent-sandbox-handoff-agreement intent)))
+   (agentic-ai-lab-user-loop-engine-intent-workflow-agreement intent)
+   (agentic-ai-lab-user-loop-engine-intent-lineage-receipt intent)
+   (agentic-ai-lab-user-loop-engine-intent-selector-receipt intent)
+   (agentic-ai-lab-user-loop-engine-intent-resource-dispatch-receipt intent)
+   (agentic-ai-lab-user-loop-engine-capability-receipt->alist
+    (agentic-ai-lab-user-loop-engine-intent-capability-receipt intent))
+   (agentic-ai-lab-user-loop-engine-intent-memory-receipt intent)
+   (agentic-ai-lab-user-loop-engine-intent-compression-receipt intent)
+   (agentic-ai-lab-user-loop-engine-intent-sandbox-handoff-agreement intent)))

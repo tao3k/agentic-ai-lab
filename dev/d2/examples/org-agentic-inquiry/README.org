@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Org intent and a Context inquiry
+#+language: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/org-durable-declarations.org][design]] owns intent, inquiry, proposals and durable handoffs. This
+case contributes teaching facts and object art. The existing D2 ASCENT
+module derives the composition.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/org-agentic-inquiry/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/org-agentic-inquiry/case.ss --evaluate
+#+end_src
+
+The first PNG read like a required left-to-right sequence. The return
+arrow crossed the model and the captions were small. The revision puts
+Org intent and the model's proposed checks into Context separately,
+with the selected handoff and evidence return next to the question.
+
+The revised PNG was viewed again. The handoff and findings labels show
+separate directions; the minimum measured text is 20 px. ASCENT grounded
+9 anchors in the [[file:../../output/org-agentic-inquiry/review.json][image-bound evaluation]].
+
+PNG SHA-256: =f4d8328e1767421e5e540a5740145911c4035142e2d0c3624890def6592595f8=.

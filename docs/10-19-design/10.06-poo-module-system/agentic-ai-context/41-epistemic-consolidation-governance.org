@@ -1,0 +1,119 @@
+#+title: Context Epistemic Projection and Memory Consolidation Governance
+#+date: [2026-11-20]
+#+language: en
+#+property: STATUS design-and-formal-models-verified-no-scheme-changes
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and relationship to Slice 40
+
+Where [[file:40-context-governance-boundary.org][Slice 40]] specifies the outer Context-Governance boundary, trust-role
+lattice, restriction meet, and threat-gated Provider handoff, this slice governs
+the *epistemic interior* of the Context System across two transitions:
+
+1. *Gate 2 (Bounded Epistemic Projection and Compaction)*: projecting an inquiry
+   with competing hypotheses, active defeaters and mandatory restrictions into a
+   finite token or row budget without stripping counterevidence or manufacturing
+   false certainty ([[file:workspace-recovery.org][workspace recovery inquiry contract]]).
+2. *Gate 3 (Short-to-Long Memory Consolidation and Recall)*: promoting
+   short-term observations into versioned long-term knowledge under
+   outcome-anchored evidence, three-way Separation of Duties, retraction
+   propagation, and explicit ORG source-promotion grants
+   ([[file:01-system-boundary.org][Memory lifecycle boundary]] and [[file:org-durable-declarations.org][Org durable intent]]).
+
+No Scheme source files are added or modified by this design slice.
+
+* Gate 2: Non-droppable kernel and =OmittedAlternativesReceipt=
+
+An inquiry $q$ at evidence cut $E_\sigma$ exposes competing hypotheses
+$\mathcal{H}$, supporting premises, active defeaters $\mathrm{Defeat}(h)$, open
+questions, and mandatory restriction metadata $R$. Under a finite projection
+budget $B \in \mathbb{N}$, compaction is governed by two strict invariants:
+
+| Governance rule | Required projection behavior | Prevented failure mode |
+|-----------------+------------------------------+------------------------|
+| Non-droppable governance kernel | Every active defeater $d \in \mathrm{Defeat}(h)$ of any retained hypothesis $h$, together with mandatory restrictions $R$, must be retained in full; if $\mathrm{Cost}(R) + \mathrm{Cost}(S) + \mathrm{Cost}(\mathrm{Defeat}(S)) > B$, the projection fails closed (=refusedOverBudget=) | Stripping caveats, restrictions or counterevidence to fit a prompt window (=T-CTX-03=) |
+| Explicit omission receipt for competing hypotheses | Selecting a proper subset $S \subsetneq \mathcal{H}_{\mathrm{live}}$ of undefeated hypotheses is permitted under budget $B$ only when the projection attaches an =OmittedAlternativesReceipt= recording the omitted hypothesis identities and sets =claimsExhaustive = false= | Collapsing unresolved competing hypotheses into an apparently unique conclusion |
+
+#+begin_src typst
+$ upright("ProjectGoverned")(R, cal(H), S, B) = cases(
+  upright("RefusedOverBudget") & "if" upright("Cost")(R) + upright("Cost")(S) + |upright("Defeat")(S)| > B,
+  upright("Admitted")(S, upright("Defeat")(S), upright("none"), upright("exhaustive"): "#t") & "if within budget and" cal(H)_(upright("live")) backslash S = emptyset,
+  upright("Admitted")(S, upright("Defeat")(S), upright("some")(cal(H)_(upright("live")) backslash S), upright("exhaustive"): "#f") & "otherwise"
+) $
+#+end_src
+
+Downstream reasoning and governance rules must reject any rule expecting an
+exhaustive single-cause attribution whenever =claimsExhaustive = false= or an
+=OmittedAlternativesReceipt= is present.
+
+* Gate 3: Anti-poisoning consolidation, three-way SoD and ORG promotion
+
+Long-term retention in =Context::Memory= is neither text aging, read-count
+accumulation, nor an irreversible truth bit. Proposing a reusable long-term
+abstraction $m$ from short-term experience requires four conjoint conditions:
+
+1. *Authenticated outcome anchoring*: $m$ binds at least one authenticated,
+   currently supported =ActualOutcomeReceipt= issued by the execution/evidence
+   owner. Model confidence, turn completion or summary compactness alone cannot
+   satisfy this premise.
+2. *Explicit scope and defeat conditions*: $m$ records both its applicability
+   assumptions and explicit defeat conditions under which future observations
+   force reassessment.
+3. *Three-way Separation of Duties (=ThreeWaySoD=)*: the proposing Agent/Model
+   (=proposer=), the outcome-issuing evidence owner (=evidenceOwner=), and the
+   consolidation reviewer/policy authority (=approver=) must be pairwise
+   distinct:
+
+#+begin_src typst
+$ upright("ThreeWaySoD")(p, e, a) equiv (p != e) and (p != a) and (e != a) $
+#+end_src
+
+4. *Revalidated recall and explicit ORG promotion*:
+   - Recalling $m$ into a later Session or Worktree creates a candidate slice
+     that requires the *consumer's own active read grant* (origin grants never
+     transfer across consumers) and live support for $m$'s bound outcome.
+     Retracting or invalidating that outcome withdraws current recall while
+     preserving $m$ in historical audit lineage.
+   - Consolidating $m$ inside Memory never edits an ORG document. Promoting an
+     insight into an ORG source requires a separate expected-revision write
+     grant and triggers a fresh Orgize parse and Query generation.
+
+* Orthogonal SysML v2 Verification Allocation and Local Verification
+
+| Artifact | Disjoint formal ownership under =FormalVerificationTaxonomy= |
+|----------+--------------------------------------------------------------|
+| [[file:41-epistemic-consolidation-governance.sysml][41-epistemic-consolidation-governance.sysml]] | Domain ports + disjoint allocation of =LeanAlgebraicObligation= to =leanEngine= and =QuintInterleavingObligation= to =quintEngine=, plus =EpistemicDispatchAndBoundaryContract= |
+| [[file:41-epistemic-consolidation-governance.lean][41-epistemic-consolidation-governance.lean]] | Unbounded list induction & catalog frame laws ONLY: =sumHypothesisCost_append=, =admitted_projection_preserves_every_active_defeater=, =budget_below_kernel_refuses_projection=, =omitted_live_competitor_forces_receipt_and_non_exhaustive=, and =retract_frame_preserves_unrelated_insights= |
+| [[file:41-epistemic-consolidation-governance.qnt][41-epistemic-consolidation-governance.qnt]] | Nondeterministic (=nondet=) two-Session concurrency ONLY: asynchronous outcome vs 3-way SoD consolidation races, outcome retraction racing between Session-2 recall prepare and consume, and expected-revision ORG promotion CAS |
+
+Reproduce all checks locally without touching Scheme sources:
+
+#+begin_src sh
+lean docs/10-19-design/10.06-poo-module-system/agentic-ai-context/41-epistemic-consolidation-governance.lean
+
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context/40-context-governance-boundary.sysml \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context/41-epistemic-consolidation-governance.sysml \
+  -engine run \
+  -analysis 'ContextEpistemicConsolidationGovernance::EpistemicDispatchAndBoundaryContract(true,true,true,true,0)' \
+  -analysis 'ContextEpistemicConsolidationGovernance::EpistemicDispatchAndBoundaryContract(true,true,false,true,1)' \
+  -analysis 'ContextEpistemicConsolidationGovernance::EpistemicDispatchAndBoundaryContract(true,true,true,false,2)'
+
+quint typecheck docs/10-19-design/10.06-poo-module-system/agentic-ai-context/41-epistemic-consolidation-governance.qnt
+quint test docs/10-19-design/10.06-poo-module-system/agentic-ai-context/41-epistemic-consolidation-governance.qnt \
+  --main ContextEpistemicConsolidationGovernance
+quint verify docs/10-19-design/10.06-poo-module-system/agentic-ai-context/41-epistemic-consolidation-governance.qnt \
+  --main ContextEpistemicConsolidationGovernance --max-steps 8 --invariant safety
+#+end_src
+
+Local verification results on 2026-11-20:
+
+- Lean checked all unbounded list-induction and map-frame theorems with zero
+  errors, warnings or =sorry=.
+- Strict SysML validation passed with zero violations; =run= passed guarded
+  =mode = 0= and rejected modes =1..2=.
+- Quint passed all deterministic runs and symbolic =verify= held =safety= across
+  8 =nondet= transitions with =NoError=.

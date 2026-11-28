@@ -20,6 +20,6 @@
  (optimizationFocus . "effective session policy validation and bounded projection across agent tools, hook tools, tool catalog facts, communication channels, communication receipts, resource grants, and memory catalog facts")
  (inputShape . "one child-agent session policy with 240 agent attempts, 240 hook attempts, one tool-core catalog validation row, two communication receipts, and one memory-core catalog validation row")
  (expectedOutcome . "the session-policy-validation scenario preserves its declared semantic result under the ASP P95 gate")
- (expectedRepair . "keep user policy authoring POO-native, validate bounded attempt rows, consume tool and memory catalog validation facts through metadata rows, and return report-only receipts through explicit projection")
+ (expectedRepair . "keep user policy authoring POO, validate bounded attempt rows, consume tool and memory catalog validation facts through metadata rows, and return report-only receipts through explicit projection")
  (measurementPhases policy-object-before validation-before policy-object-after validation-after assert-time-gate observe-runtime-memory)
  (tags poo session multi-agent policy validation performance openrath))

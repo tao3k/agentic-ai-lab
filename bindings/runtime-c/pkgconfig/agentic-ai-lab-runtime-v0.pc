@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+#
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+prefix=${pcfiledir}/../..
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: agentic-ai-lab-runtime-v0
+Description: Agentic AI Lab language-neutral Runtime v0 C ABI
+Version: 0.1.0
+Libs: -L${libdir} -lagentic_ai_lab_runtime_v0
+Cflags: -I${includedir}

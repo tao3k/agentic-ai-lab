@@ -2,6 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import :clan/poo/object)
 ((benchmarkKind . scenario-e2e)
  (max_total . 25ms)
  (target_total . 15ms)
@@ -18,7 +19,7 @@
  (rule . GERBIL-SCHEME-AGENT-R043)
  (feature . poo-fixed-slot-projection)
  (optimizationFocus . "fixed POO slot projection before scalar loops")
- (inputShape . "stable native POO profile with fixed slot identifiers")
+ (inputShape . "stable POO profile with fixed slot identifiers")
  (expectedOutcome . "the poo-fixed-slot-projection scenario preserves its declared semantic result under the ASP P95 gate")
  (expectedRepair . "read fixed slots once through POO accessors and keep loop state scalar")
  (pooFormEvidence . (.o .def defpoo))

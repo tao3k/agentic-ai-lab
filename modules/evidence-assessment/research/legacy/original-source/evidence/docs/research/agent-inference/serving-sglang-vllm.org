@@ -1,0 +1,117 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: SGLang and vLLM: serving-time reasoning Library integration
+#+STATUS: deferred serving research; not the native Library architecture
+#+DATE: 2026-09-30
+#+FILETAGS: :research:llm:inference:serving:
+
+* Question and source scope
+:PROPERTIES:
+:CUSTOM_ID: serving-sglang-vllm
+:END:
+
+How can a deployed model served by SGLang or vLLM request a bounded
+=gerbil-ascent= reasoning check, receive a structured observation, and
+continue its own reasoning?  The claim is about serving-time external
+tools.  It does not require changing model weights or treating either
+server as the owner of our rule semantics.
+
+This is parked interface research, not an implementation plan for the
+current Scheme Datalog Library. The Library uses native checked DSL and
+program values; no JSON candidate decoder or serving adapter is part of
+its internal architecture. Any future serving experiment needs a separate
+priority decision after the native program and AOT/FFI boundaries are
+settled.
+
+#+NAME: serving-primary-sources
+| Key | Official documentation | Relevant section |
+|-----+------------------------+------------------|
+| SG-tool | [[https://docs.sglang.io/docs/advanced_features/tool_parser][SGLang Tool Parser]] | OpenAI-compatible API; handling and executing tools; tool-choice modes |
+| SG-structured | [[https://docs.sglang.io/docs/advanced_features/structured_outputs][SGLang Structured Outputs]] | JSON Schema, regex, EBNF grammar constraints |
+| SG-start | [[https://github.com/sgl-project/sglang/blob/main/docs/docs/get-started/quickstart.mdx][SGLang Quickstart]] | OpenAI-compatible =/v1/chat/completions= endpoint |
+| VL-tool | [[https://docs.vllm.ai/en/latest/features/tool_calling/][vLLM Tool Calling]] | Auto/named/required choice, model parser and client-side execution |
+
+These are living documentation pages, read on 2026-09-30.  An adapter
+must pin server/model/parser versions for a reproducible experiment.
+
+* What the serving APIs establish
+:PROPERTIES:
+:CUSTOM_ID: serving-evidence
+:END:
+
+#+NAME: serving-interface-evidence
+| Source locator | Documented behavior | Consequence for our design | Limit |
+|----------------+---------------------+----------------------------+-------|
+| SG-tool, OpenAI Compatible API | =--tool-call-parser= interprets model output; examples return =message.tool_calls=, execute a function in the client, then send a =tool= result back | POO Flow can run the candidate-check loop outside the model server | Parser support and model template are model-specific |
+| SG-tool, Tool Choice Mode | =required= and specific function choice use grammar-constrained calls | Force a check in an evaluation when needed | Docs say XGrammar supports this; other backends may not |
+| SG-structured, overview | JSON Schema, regex and EBNF constrain output shape | A candidate envelope can have syntactic shape constraints | Valid shape does not establish truthful facts or correct rules |
+| VL-tool, Quickstart and Automatic Function Calling | =--enable-auto-tool-choice= and =--tool-call-parser= parse a model's call; the caller handles tool execution and result messages | Same external loop can use a vLLM endpoint | Parser/chat-template support varies by model |
+| VL-tool, Named and Required Function Calling | Structured-output backend constrains the declared argument schema | Use a named tool for the first deterministic protocol test | A schema-valid call can still contain a false premise |
+| VL-tool, Auto and Strict Mode | Auto parsing may produce malformed arguments without supported structural constraints | Validate every candidate at the Library boundary | Do not infer semantic safety from constrained decoding |
+
+SGLang and vLLM are alternative model-serving backends.  The shared
+surface for this design is a chat request with declared tools and a
+returned structured tool call.  Neither parser is the authoritative
+validator for a Scheme relation program.  The Library must inspect the
+candidate and execute under an exact source snapshot and budget.
+
+* Deferred integration sketch, not adopted
+:PROPERTIES:
+:CUSTOM_ID: serving-contract
+:END:
+
+The following sketch is retained as research context only; the project
+has selected no serving tool or wire format. A future experiment might
+expose one *versioned* application tool, provisionally =reason_check=,
+whose arguments select a named task/snapshot, candidate facts or rules,
+query, and budget class.  The endpoint resolves only authorized source
+handles and validates the program before execution.  It returns an
+attempt ID, snapshot/program identities, typed status, diagnostics,
+rows or bounded witness/gap, and completion/bound flags.  The LLM caller
+receives that result as a =tool= message and may revise its candidate.
+Its name and argument representation are undecided; semantics would come
+from the native checked Library contract and the
+[[file:index.org::#agent-inference-synthesis][LLM reasoning Library contract]], not either serving framework.
+
+#+NAME: serving-owner-boundaries
+| Owner | Responsibility |
+|-------+----------------|
+| SGLang or vLLM | Generate a tool-call proposal and parse its model-specific syntax |
+| POO Flow/application adapter | Advertise capability; route call/result; maintain attempt IDs, source binding and budgets |
+| Gerbil Ascent Library | Inspect candidate declarations; execute finite relational fixpoint; return typed bounded evidence |
+| MRR/source owner | Decide semantic admission and canonical evidence lineage |
+| LLM/model caller | Choose a next reasoning step or answer using observations; no automatic admission |
+
+Other checkers can use the same attempt/result envelope for arithmetic,
+code or planning, with their own semantics.  The relational backend
+does not certify unrestricted natural-language reasoning.
+
+* First discriminator
+:PROPERTIES:
+:CUSTOM_ID: serving-discriminator
+:END:
+
+Run the same fixed model, candidate transcript, source snapshots and
+budgets through SGLang and vLLM endpoints.  The application supplies
+the same =reason_check= schema and captures raw response, parsed call,
+validated Library request, Library result and follow-up answer.
+Include a correct reachability rule, an undeclared predicate, a
+compiling wrong recursive join, and a source-withdrawal turn.  Compare:
+
+#+NAME: serving-experiment-measures
+| Layer | Required observation |
+|-------+----------------------|
+| Tool parser | Call detection, argument shape, invalid/truncated/parallel-call handling |
+| Library | Exact schema diagnostics, complete rows versus independent finite model, explicit partial/unknown status |
+| Model/tool loop | Repair turns, answer correctness, citation to exact source snapshot, abstention on unsupported result |
+| Serving | Latency and token/cost metrics, separated from semantic correctness |
+
+The initial pass may use a scripted model-call fixture to test the
+adapter before any GPU/model experiment.  A model experiment is needed
+before claiming that one server or parser helps LLM reasoning more.
+Service-side tool execution or a custom parser is a later choice only
+if the external adapter has a measured limitation.  Their existence
+does not shift source authority or proof obligations into the server.
+
+[[file:index.org][LLM reasoning research index]].

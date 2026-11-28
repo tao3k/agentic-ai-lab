@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from poo_flow_runtime import _build_profile_command as command_profile
+from agentic_ai_lab_runtime import _build_profile_command as command_profile
 
 
 def test_build_profile_command_preserves_explicit_command() -> None:

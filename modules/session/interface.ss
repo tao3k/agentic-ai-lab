@@ -5,15 +5,25 @@
 
 ;;; Public session module interface; all internal roles close through this file.
 
-(import "types.ss"
+(import (only-in :clan/poo/object .def .o)
+        "types.ss"
         "objects.ss"
         "funs.ss"
         "syntax.ss"
         "config.ss"
         "lifecycle-gate.ss")
-(export (import: "types.ss")
+(export Session
+        (import: "types.ss")
         (import: "objects.ss")
         (import: "funs.ss")
         (import: "syntax.ss")
         (import: "config.ss")
         (import: "lifecycle-gate.ss"))
+
+(.def Session
+  identity: 'session
+  tags: '(session runtime)
+  core: (.o scope-contract: SessionScope
+            exports: (.o library: 'tao3k/agentic-ai-lab/modules/session/interface
+                         bundles: agentic-ai-lab-session-module-bundles))
+  features: (.o))

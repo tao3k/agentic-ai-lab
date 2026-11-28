@@ -10,11 +10,11 @@ from random import Random
 
 import pytest
 
-from poo_flow_runtime.benchmarks._composition_lifecycle_planner import (
+from agentic_ai_lab_runtime.benchmarks._composition_lifecycle_planner import (
     _PlannedAgentSequence,
     plan_composition_workload,
 )
-from poo_flow_runtime.benchmarks._composition_lifecycle_workload import ArrivalSchedule
+from agentic_ai_lab_runtime.benchmarks._composition_lifecycle_workload import ArrivalSchedule
 
 
 def test_plans_one_bounded_group_with_explicit_composition() -> None:

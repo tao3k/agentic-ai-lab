@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID: example-worktree
+:CONTRACT_ID: context.gitops.worktree.worktrunk.v1
+:CONTRACT_REVISION: 1
+:GITOPS_PROJECT: gambit
+:GITOPS_WORKTREE: A
+:GITOPS_SOURCE_CUT: cut-1
+:GITOPS_WORKTRUNK: main
+:END:
+#+title: Example Worktree
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.gitops.worktree.worktrunk.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "worktree.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID")
+                (property value "context.gitops.worktree.worktrunk.v1"))
+  (expect exactly 1))
+
+(assert-org-element "worktree.worktrunk-binding" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "GITOPS_WORKTRUNK"))
+  (expect exactly 1))
+
+(assert-org-element "worktree.evidence-link" error
+  (bindings
+   (bind evidence (org-elements headline (child-of scope)
+                                (property source-title "Worktree evidence"))))
+  (org-elements link (descendant-of evidence))
+  (expect at-least 1))
+#+end_src
+
+* Worktree evidence
+:PROPERTIES:
+:ID: owner-evidence
+:CUSTOM_ID: worktree-evidence
+:END:
+
+Placeholder Worktree observation.
+See [[file:design.org::#design-evidence][evidence]].
+See [[attachment:reference.org::#reference-evidence][evidence]].
+See [[file:outside.org::#outside-evidence][evidence]].

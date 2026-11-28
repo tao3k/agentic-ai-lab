@@ -4,7 +4,7 @@
 
 import json
 
-from poo_flow_proof.embodied_ai_authority_declaration_replay import canonical_receipt
+from agentic_ai_lab_proof.embodied_ai_authority_declaration_replay import canonical_receipt
 
 
 def test_replay_receipt_is_deterministic() -> None:

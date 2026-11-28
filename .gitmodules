@@ -8,6 +8,7 @@
 [submodule "lambda-aitia"]
 	path = packages/lambda-aitia
 	url = https://github.com/tao3k/lambda-aitia.git
+
 [submodule "core"]
 	path = core
-	url = https://github.com/tao3k/poo-flow-core.git
+	url = https://github.com/tao3k/gebril-yuanxu.git

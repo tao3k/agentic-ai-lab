@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID: context-session-seed-root
+:CONTRACT_ID: context.session.seed.v1
+:CONTRACT_REVISION: 1
+:PROJECT_ID: agentic-ai-lab
+:WORKTREE_ID: main
+:END:
+#+title: Minimal Organic Context Seed
+#+language: en
+
+* Contract
+:PROPERTIES:
+:CONTRACT_ID: context.session.seed.v1
+:CONTRACT_SCOPE: document
+:END:
+
+#+begin_src scheme :org-contract
+(assert-org-element "seed.file-contract" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "CONTRACT_ID")
+                (property value "context.session.seed.v1"))
+  (expect exactly 1))
+
+(assert-org-element "seed.project-binding" error
+  (bindings
+   (bind file-properties (org-elements property-drawer (child-of scope))))
+  (org-elements node-property (child-of file-properties)
+                (property key "PROJECT_ID"))
+  (expect exactly 1))
+#+end_src
+
+* Initial Inquiry
+:PROPERTIES:
+:ID: sec-seed-01
+:END:
+
+#+NAME: turn-seed-01
+#+BEGIN_SRC llm :model flash :thinking low :results drawer replace
+Minimal seed stream; ASCENT facet rules guide dynamic Org evolution per case.
+#+END_SRC
+
+#+RESULTS: turn-seed-01
+:RESULTS:
+#+BEGIN_THINKING
+L0 outline active; no static domain boilerplate pre-allocated.
+#+END_THINKING
+Ready.
+:END:

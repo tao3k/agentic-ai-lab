@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_proof.embodied_ai_provider_non_authority import (
+from agentic_ai_lab_proof.embodied_ai_provider_non_authority import (
     AnalysisCandidateV1,
     AuthorityEnvelopeV1,
     AuthorityRole,
@@ -105,4 +105,4 @@ def test_missing_role_grant_fails_closed() -> None:
 
     assert trace.decision.admitted is False
     assert trace.decision.reason_kind == "authority-role-not-granted"
-    assert trace.schema_id == "poo-flow.ai-security.provider-admission-trace.v1"
+    assert trace.schema_id == "agentic-ai-lab.ai-security.provider-admission-trace.v1"

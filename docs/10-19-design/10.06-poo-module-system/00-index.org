@@ -1,119 +1,12 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-#
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-* 10.06 poo-flow Module System
-** 10.06.10 Purpose
-This document pack defines the module-system layer for =poo-flow=. The package is not a port of Doom Emacs and not a copy of Marlin's Gerbil module API. =poo-flow= remains the core control plane. External systems are reference material for interface shape, diagnostics, and modular organization.
+#+title: Module System Design — Core Ownership
 
-Public consumers import the precise owner: shared POO Module mechanisms from =core/module-system/=, product authoring and UI policy from =src/authoring/= and =src/user-interface/=, and concrete workflow or sandbox modules from =modules/*=. No aggregate Module System facade is installed.
-** 10.06.15 Agentic Control Plane RFC Suite
-- [[file:90-poo-flow-agentic-control-plane-architecture-rfc.org][90 POO Flow Agentic Control Plane Architecture RFC]]
-- [[file:91-canonical-organization-bundle-rfc.org][91 Canonical Organization Bundle RFC]]
-- [[file:92-c-runtime-interface-and-python-validation-runtime-rfc.org][92 C Runtime Interface And Python Validation Runtime RFC]]
-- [[file:93-assurance-proof-and-evidence-chain-rfc.org][93 Assurance, Proof, And Evidence Chain RFC]]
-- [[file:94-agentic-control-plane-migration-rfc.org][94 Agentic Control Plane Migration RFC]]
-- [[file:95-agentic-control-plane-execution-plan.org][95 Agentic Control Plane Execution Plan]]
-- [[file:96-agentic-control-plane-owner-test-matrix.org][96 Agentic Control Plane Owner And Test Matrix]]
-- [[file:97-agentic-control-plane-ac00-baseline-receipt.org][97 Agentic Control Plane AC-00 Baseline Receipt]]
-** 10.06.20 Reading Order
-- [[file:01-doom-core-audit.org][01 Doom Core Audit]]
-[[file:01-doom-core-audit.org][01 Doom Core Audit]]
-- [[file:02-marlin-gerbil-modules-audit.org][02 Marlin Gerbil Modules Audit]]
-[[file:02-marlin-gerbil-modules-audit.org][02 Marlin Gerbil Modules Audit]]
-- [[file:03-gerbil-scheme-c4-foundation.org][03 Gerbil Scheme C4 Foundation]]
-[[file:03-gerbil-scheme-c4-foundation.org][03 Gerbil Scheme C4 Foundation]]
-- [[file:04-poo-flow-module-system-design.org][04 poo-flow Module System Design]]
-[[file:04-poo-flow-module-system-design.org][04 poo-flow Module System Design]]
-- [[file:05-implementation-roadmap.org][05 Implementation Roadmap]]
-[[file:05-implementation-roadmap.org][05 Implementation Roadmap]]
-- [[file:06-doom-nix-interface-principles.org][06 Doom And Nix Interface Principles]]
-[[file:06-doom-nix-interface-principles.org][06 Doom And Nix Interface Principles]]
-- [[file:86-doom-emacs-core-module-boundary-research.org][86 Doom Emacs Core Module Boundary Research]]
-[[file:86-doom-emacs-core-module-boundary-research.org][86 Doom Emacs Core Module Boundary Research]]
-- [[file:07-loop-engineering-c4-control-loops.org][07 Loop Engineering With Native C4]]
-[[file:07-loop-engineering-c4-control-loops.org][07 Loop Engineering With Native C4]]
-- [[file:08-downstream-user-onboarding.org][08 Downstream User Onboarding]]
-- [[file:15-bass-cicd-module-audit.org][15 Bass CI/CD Module Audit]]
-[[file:08-downstream-user-onboarding.org][08 Downstream User Onboarding]]
-- [[file:17-poo-best-practices.org][17 POO Best Practices]]
-- [[file:22-doom-core-namespace-audit.org][22 Doom Core Namespace Audit]]
-- [[file:23-flue-agent-harness-audit.org][23 Flue Agent Harness Audit]]
-- [[file:24-agent-harness-session-run-design.org][24 Agent Harness, Session, Run, And Dispatch Design]]
-- [[file:25-funflow-cicd-check-map-gap-audit.org][25 Funflow CI/CD Check Map Gap Audit]]
-- [[file:26-workflow-cicd-user-interface-bridge.org][26 Workflow CI/CD User Interface Bridge]]
-- [[file:27-next-implementation-closure-plan.org][27 Next Implementation Closure Plan]]
-- [[file:29-gerbil-poo-programming-guidelines.org][29 Gerbil POO Programming Guidelines]]
-- [[file:30-funflow-pipeline-run-result-projection.org][30 Funflow Pipeline Run Result Projection]]
-- [[file:31-profile-object-user-interface.org][31 Profile Object User Interface]]
-- [[file:32-loop-engine-poo-native-config.org][32 Loop Engine POO-Native Config]]
-- [[file:33-loop-engine-memory-profile-audit.org][33 Loop Engine Memory Profile Audit]]
-- [[file:34-loop-operations-coordination-audit.org][34 Loop Operations Coordination Audit]]
-- [[file:35-next-loop-engine-delivery-plan.org][35 Next Loop Engine Delivery Plan]]
-- [[file:36-session-user-interface-ladder.org][36 Session User Interface Ladder]]
-[[file:36-session-user-interface-ladder.org][36 Session User Interface Ladder]]
-- [[file:37-session-core-module.org][37 Session Core Module]]
-- [[file:38-openrath-session-core-next-plan.org][38 OpenRath Session Core Next Plan]]
-- [[file:39-gerbil-build-optimization-audit.org][39 Gerbil Build Optimization Audit]]
-- [[file:40-module-registry-scale-architecture.org][40 Module Registry Scale Architecture]]
-- [[file:41-openrath-profile-policy-plan.org][41 OpenRath Profile Policy Plan]]
-[[file:41-openrath-profile-policy-plan.org][41 OpenRath Profile Policy Plan]]
-- [[file:42-openrath-session-multi-agent-audit.org][42 OpenRath Session Multi-Agent Audit]]
-- [[file:43-session-memory-recovery-rfc.org][43 Session Memory Durable Policy RFC]]
-- [[file:44-current-project-programming-style.org][44 Current Project Programming Style]]
-- [[file:164-capability-gradient-and-default-expression-surface.org][164 POO Flow Capability Gradient and Default Expression Surface]]
-- [[file:45-durable-policy-research-agenda.org][45 Durable Policy Research Agenda]]
-- [[file:83-funflow-use-module-macro-ir.org][83 FunFlow use-module Macro IR]]
-- [[file:84-funflow-local-module-composition-ui.org][84 FunFlow Local Module Composition UI]]
-- [[file:85-json-schema-contract-bridge.org][85 JSON Schema Contract Bridge]]
-- [[file:157-native-poo-type-contract-convergence.org][157 Native POO Type and Contract Convergence]]
-- [[file:82-type-contract-performance-benchmarks.org][82 Type Contract Performance Benchmarks]]
-- [[file:58-p0-boundary-namespace-design.org][58 P0 Boundary Namespace Design]]
-- [[file:72-agent-framework-capability-convergence.org][72 Agent Framework Capability Convergence]]
-- [[file:73-tool-calling-control-plane.org][73 Tool Calling Control Plane]]
-- [[file:74-poo-performance-scenario-alignment.org][74 POO Performance Scenario Alignment]]
-- [[file:75-poo-performance-scenario-replication.org][75 POO Performance Scenario Replication]]
-- [[file:76-gerbil-poo-performance-research.org][76 Gerbil POO Performance Research]]
-- [[file:77-gerbil-scheme-high-performance-report.org][77 Gerbil Scheme High Performance Report]]
-- [[file:78-turso-durable-alignment.org][78 Turso Durable Alignment]]
-- [[file:79-durable-artifact-control-plane.org][79 Durable Artifact Control Plane]]
-- [[file:80-durable-rfc-implementation-audit.org][80 Durable RFC Implementation Audit]]
-- [[file:46-durable-policy-delivery-plan.org][46 Durable Policy Delivery Plan]]
-- [[file:47-current-code-structure-audit-and-improvement-roadmap.org][47 Current Code Structure Audit And Improvement Roadmap]]
-- [[file:48-execution-plan.org][48 Execution Plan]]
-- [[file:49-scenario-test-owner-matrix.org][49 Scenario Test Owner Matrix]]
-- [[file:51-gerbil-metaprogramming-adoption-plan.org][51 Gerbil Metaprogramming Adoption Plan]]
-- [[file:52-three-loop-human-audit-runtime-plan.org][52 Three Loop Human Audit Runtime Plan]]
-- [[file:53-loopx-pressure-test-control-plane-closure.org][53 LoopX Pressure Test And Control-Plane Closure]]
-- [[file:54-runtime-abi-pressure-relief-interface.org][54 Runtime ABI Pressure Relief Interface]]
-- [[file:55-baml-agent-language-audit.org][55 BAML Agent Language Audit]]
-- [[file:56-type-facts-validation-lean-plan.org][56 Type Facts Validation And Lean Plan]]
-- [[file:57-user-graph-p0-thesis.org][57 User Graph P0 Thesis]]
-- [[file:148-algorithmic-hot-path-audit.org][148 Algorithmic Hot-Path Audit And Shared Funcs Ownership]]
-- [[file:149-persistent-native-public-closure-projection.org][149 Rejected Persistent Native Public-Closure Projection]]
-- [[file:163-standard-module-lazy-industry-conformance-rfc.org][163 Standard Module, Lazy Industry Packs, and Conformance Receipts RFC]]
-** 10.06.30 Local Evidence
-The module-system design builds on existing =poo-flow= contracts:
-- =src/core/roles.ss= owns Gerbil POO role composition and C4-facing slot probing.
-- =src/core/task.ss= owns task-family descriptors and immutable task-family registries.
-- =src/core/flow.ss= owns flow-declaration descriptors and immutable flow-declaration registries.
-- =src/core/config.ss= accepts task and flow registries at the =run-config= boundary.
-- =core/module-system/= owns generic source refs, Catalog lookup, and lazy-load values; POO Flow descriptor, activation, and authoring owners consume them directly.
-- =src/extensions/*= demonstrates descriptor bundles as extension modules.
-** 10.06.40 Delivered Surface
-The implemented module-system surface includes:
-- source refs: =local=, =package=, =registry=, and =generated=;
-- immutable module catalogs;
-- source resolution from catalog refs to already-built descriptors;
-- POO module descriptors;
-- the thin =poo-module= macro;
-- module doctor reports and alist projection;
-- descriptor activation into run-config registries;
-- typed failures for missing imports and missing catalog sources;
-- duplicate and empty-contribution diagnostics for agent/CLI inspection.
-** 10.06.50 Non-Goals
-- Do not vendor Doom Emacs, Marlin, or backend runtime code into =src=.
-- Do not let core import or re-export the module-system layer.
-- Do not execute tasks during module activation.
-- Do not let macro DSLs perform loading, validation, or runtime work.
-- Do not replace existing task/flow registries with a parallel registry type.
+The complete design chapter, its expansions and historical validation material
+have moved to [[file:../../../core/module-system/design/00-index.org][agentic-ai-lab-core Module System design]].
+The [[file:../../../core/module-system/design/README.org][current ownership and protocol guide]] distinguishes proposals, existing
+mechanisms and consumer evidence. Do not add shared mechanism design here.
+
+Agentic AI Lab owns concrete Modules, Profiles, Scenarios and application integration.
+See [[file:../10.08-config-languages/00-index.org][product configuration cases and ecosystem references]].

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 210"><g font-family="Inter,Arial,sans-serif" text-anchor="middle" fill="#234358">
+<path d="M36 51h82l20 19v105H36z" fill="#E9EDF3" stroke="#607A91" stroke-width="4"/><text x="70" y="105" font-size="29">B</text>
+<path d="M114 38h82l20 19v119H114z" fill="#FFE9CC" stroke="#A66837" stroke-width="4"/><text x="154" y="92" font-size="27">v2</text><path d="m139 121 18 18m0-18-18 18" stroke="#A64833" stroke-width="5" stroke-linecap="round"/>
+<path d="M193 21h94l25 24v133H193z" fill="#DEF2E7" stroke="#397D63" stroke-width="4"/><text x="250" y="76" font-size="29">v3</text><path d="m218 118 16 16 35-39" fill="none" stroke="#28705A" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+</g></svg>
