@@ -4,4 +4,4 @@
 
 (package: tao3k/agentic-ai-lab
  depend: ("github.com/tao3k/orgize@472bf650f7090f33e19942fb370b50882bd69dfa"
-          "github.com/tao3k/gerbil-ascent@6d0296e9a6ef0cdb8f6597392e99e275e4083636"))
+          "github.com/tao3k/gerbil-ascent@1b487e8d013b5b1de81a3dad07eeed385b0afc9c"))
