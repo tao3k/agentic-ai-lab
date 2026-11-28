@@ -64,6 +64,7 @@ ci-build-dev-qualification qualification_dir:
     mkdir -p "{{ qualification_dir }}/lib"
     ln -sfn "{{ agentic_ai_lab_gerbil_path }}/pkg" "{{ qualification_dir }}/pkg"
     gerbil env env GERBIL_PATH="{{ qualification_dir }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" just build-library
+    gerbil env env GERBIL_PATH="{{ qualification_dir }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} {{ gerbil_test_timeout }} 600s gerbil -:max-heap=4G,debug={{ gerbil_test_debug }} interactive -e '(begin (import (only-in :clan/poo/object .call) (only-in :std/make make) (only-in "./init.ss" tao3k/agentic-ai-lab.init.exports)) (.call tao3k/agentic-ai-lab.init.exports .compile-selection (quote (modules/ai-agentic-context modules/temporal-causality)) (quote ()) (lambda (targets root) (make targets srcdir: root)) package-roots?: #t))'
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss
 
 # Build the Scheme semantic AOT byte boundary into output_dir.
