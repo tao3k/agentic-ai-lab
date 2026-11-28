@@ -51,19 +51,43 @@
 
 (def (test-batches files)
   ;; Gerbil imports the entire batch before running its Harness.
-  (let loop ((remaining files) (batch '()) (size 0) (batches '()))
-    (match remaining
-      ([] (reverse (if (null? batch) batches (cons (reverse batch) batches))))
-      ([file . rest]
-       (cond
-         ((independent-test? file)
-          (loop rest '() 0 (cons [file] (if (null? batch) batches (cons (reverse batch) batches)))))
-         ((and (pair? batch)
-               (or (= size 8)
-                   (not (equal? (path-directory file) (path-directory (car batch))))))
-          (loop remaining '() 0 (cons (reverse batch) batches)))
-         (else
-          (loop rest (cons file batch) (1+ size) batches)))))))
+  ;; Singleton `t/yanxu/modules/*/module-test.ss` publication checks share the
+  ;; same `Lab` init facade; group them in bounded batches of 8 so `test-root`
+  ;; does not pay cold `init` projection 20+ times for one-line assertions.
+  (def dir-counts (make-hash-table))
+  (for-each (lambda (file)
+              (def dir (path-directory file))
+              (hash-put! dir-counts dir (1+ (hash-ref dir-counts dir 0))))
+            files)
+  (def (singleton-module-publication-test? file)
+    (and (string-prefix? "t/yanxu/modules/" file)
+         (string-suffix? "/module-test.ss" file)
+         (= (hash-ref dir-counts (path-directory file) 0) 1)))
+  (def (chunk-eight xs)
+    (let loop ((rem xs) (acc '()))
+      (if (null? rem)
+        (reverse acc)
+        (let take ((n 0) (r rem) (chunk '()))
+          (if (or (= n 8) (null? r))
+            (loop r (cons (reverse chunk) acc))
+            (take (1+ n) (cdr r) (cons (car r) chunk)))))))
+  (def smoke-files (filter singleton-module-publication-test? files))
+  (def regular-files (filter (lambda (f) (not (singleton-module-publication-test? f))) files))
+  (append
+    (chunk-eight smoke-files)
+    (let loop ((remaining regular-files) (batch '()) (size 0) (batches '()))
+      (match remaining
+        ([] (reverse (if (null? batch) batches (cons (reverse batch) batches))))
+        ([file . rest]
+         (cond
+           ((independent-test? file)
+            (loop rest '() 0 (cons [file] (if (null? batch) batches (cons (reverse batch) batches)))))
+           ((and (pair? batch)
+                 (or (= size 8)
+                     (not (equal? (path-directory file) (path-directory (car batch))))))
+            (loop remaining '() 0 (cons (reverse batch) batches)))
+           (else
+            (loop rest (cons file batch) (1+ size) batches))))))))
 
 (def (run-batch vm file-budget files)
   (displayln "LAB-TEST-BATCH " (string-join files " "))
