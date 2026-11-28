@@ -74,7 +74,8 @@
   (store-item
    mount-path
    mode)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Sandbox port bindings describe a desired container endpoint. Host port may
 ;;; be false when the runtime should allocate or map provider-side ports.
@@ -84,7 +85,8 @@
    container-port
    host-port
    protocol)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Sandbox env bindings keep value source explicit so secret/config resolution
 ;;; does not leak into user-facing flow composition.
@@ -93,7 +95,8 @@
   (name
    value
    source)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Resource sets are the reusable POO aggregate passed between sandbox-backed
 ;;; extensions before any backend-specific request projection.
@@ -102,7 +105,8 @@
   (volumes
    ports
    env)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: empty resource sets are the monoidal zero for sandbox resource
 ;;; composition across Docker, nono, and Cube setup layers.

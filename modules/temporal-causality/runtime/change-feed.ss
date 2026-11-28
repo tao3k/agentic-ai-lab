@@ -5,7 +5,7 @@
         (only-in :clan/poo/object .o .ref .slot? object? .call))
 (export make-change-feed change-feed-open! change-feed-watch! change-feed-unwatch! change-feed-observer-count change-feed-stage!
         change-feed-drain! change-feed-pending? authority-change change-feed-history)
-(defstruct feed-state (owner observers pending busy? history))
+(defstruct feed-state (owner observers pending busy? history) final: #t)
 (def (make-change-feed) (make-feed-state (current-thread) '() #f #f '()))
 (def (change-feed-pending? feed) (if (or (feed-state-pending feed) (feed-state-busy? feed)) #t #f))
 (def (change-feed-open! feed)

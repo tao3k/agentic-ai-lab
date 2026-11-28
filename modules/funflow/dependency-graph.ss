@@ -21,7 +21,8 @@
 
 (defstruct yuanxu-cicd-graph-index
   (node-names node-index dependents indegrees edges unresolved-rev)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 (def (yuanxu-cicd-checks-names checks)
   (map yuanxu-cicd-check-name checks))

@@ -75,7 +75,8 @@
    lifecycle-receipt-dependency-closed
    lifecycle-receipt-observability-clean
    lifecycle-receipt-counterexample-rejected)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Receipt predicates stay local to this owner so lifecycle gate validation can
 ;;; distinguish a missing receipt from a receipt that explicitly rejects safety.

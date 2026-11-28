@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :clan/poo/object .ref)
+        (only-in :clan/poo/object .ref .def)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config

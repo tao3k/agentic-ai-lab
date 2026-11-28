@@ -350,7 +350,8 @@
    runtime-owner
    runtime-executed
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: selector receipts make parent/root fallback decisions explicit for
 ;;; policy and sandbox isolation checks.

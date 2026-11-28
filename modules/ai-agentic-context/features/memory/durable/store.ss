@@ -493,7 +493,8 @@
    valid?
    diagnostics
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (forall (a) (-> a PooDurableRuntimeStoreIdentityRows (U #f PooDurablePolicyReceipt)))
 (def (agentic-ai-lab-durable-runtime-store-policy->receipt durable-policy identity)

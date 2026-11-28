@@ -90,7 +90,8 @@
 ;;     %
 (defstruct agentic-ai-lab-durable-policy-diagnostic-record
   (kind schema code phase slot severity payload recoverable?)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (forall (a) (-> PooDurableOptionRows PooDurableOptionKey a a))
 (def (agentic-ai-lab-durable-option options key default-value)
@@ -490,7 +491,8 @@
    valid?
    diagnostics
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> PooDurablePolicy [PooDurableIdentityRow] PooDurablePolicyReceipt)
 (def (agentic-ai-lab-durable-policy->receipt policy . maybe-identity)

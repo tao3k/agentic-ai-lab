@@ -15,7 +15,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        (only-in :clan/poo/object .ref .slot? object?)
+        (only-in :clan/poo/object .ref .slot? object? .def)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in :tao3k/agentic-ai-lab/modules/loop-engine/runtime

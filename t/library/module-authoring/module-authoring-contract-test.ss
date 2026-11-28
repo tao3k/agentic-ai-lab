@@ -7,7 +7,7 @@
         (only-in :clan/poo/mop .new)
         (only-in :clan/poo/type Record)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-         (only-in :clan/poo/object .cc .o .ref)
+         (only-in :clan/poo/object .cc .o .ref .def)
         (only-in :clan/poo/type TypeError? validate)
         (only-in :std/test check-equal? check-exception test-suite)
         :tao3k/yuanxu/module-system/authoring/admission

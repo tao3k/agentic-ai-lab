@@ -20,7 +20,7 @@
         agentic-ai-lab-search-engine-inputs)
 
 ;;; Private lowering protocol; the public engine and nodes are POO objects.
-(defstruct lowered (nodes terminals))
+(defstruct lowered (nodes terminals) final: #t)
 (def (lower-search node parents generation configuration source-cut)
   (cond
    ((agentic-ai-lab-search-stage? node)

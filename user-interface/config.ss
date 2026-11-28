@@ -1,6 +1,7 @@
 (import (only-in :tao3k/agentic-ai-lab/modules/funflow/scenario Scenario)
         (only-in :tao3k/agentic-ai-lab/init tao3k/agentic-ai-lab.init.exports)
-        (only-in :clan/poo/object .get))
+        (only-in :clan/poo/object .get)
+        (only-in :clan/poo/mop .new))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;

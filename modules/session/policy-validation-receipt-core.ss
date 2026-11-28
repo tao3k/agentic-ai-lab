@@ -95,7 +95,8 @@
    runtime-owner
    runtime-executed?
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Admission boundary: partition every requested capability and retain both allowed and denied evidence.
 ;;; Invariant: construction records runtime ownership but never executes the runtime.

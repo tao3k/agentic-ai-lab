@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :tao3k/yuanxu/syntax/path-slots
-        (only-in :clan/poo/object .get .call .ref/cached)
+        (only-in :clan/poo/object .get .call .ref/cached .def .o)
         (only-in :clan/poo/type TypeError?)
         (only-in :std/io/tempfile make-temporary-file-name clear-temporary-file!)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/job-prototypes Job. Task.)

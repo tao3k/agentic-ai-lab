@@ -1,4 +1,5 @@
 ;;; Runtime lifecycle review, not execution authorization or a repair certificate.
+(import :clan/poo/object)
 (define-program (make-lifecycle-review)
   (sources candidate flag expected_flag requirement depends design source mechanism
            model_binding control satisfies measurement metric_requirement)

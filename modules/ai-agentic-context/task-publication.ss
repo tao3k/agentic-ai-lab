@@ -60,12 +60,12 @@
 (def org-evidence-strategy
   (agentic-ai-lab-search-strategy 'task-org-evidence ContextTaskOrgEvidenceStage '()))
 
-(defstruct owner (thread identity scope queries grants policies busy? selection worktree-dependency module-resolution epoch serial pending superseded publication history))
-(defstruct module-resolution (loader path source-digests declaration-reads dependencies link-roots links))
-(defstruct evaluation (ticket serial capture engine request receipt))
-(defstruct receipt-binding (serial engine request batch ticket versions))
-(defstruct query-batch (digest members link-roots links))
-(defstruct publication (evaluation search-engine))
+(defstruct owner (thread identity scope queries grants policies busy? selection worktree-dependency module-resolution epoch serial pending superseded publication history) final: #t)
+(defstruct module-resolution (loader path source-digests declaration-reads dependencies link-roots links) final: #t)
+(defstruct evaluation (ticket serial capture engine request receipt) final: #t)
+(defstruct receipt-binding (serial engine request batch ticket versions) final: #t)
+(defstruct query-batch (digest members link-roots links) final: #t)
+(defstruct publication (evaluation search-engine) final: #t)
 
 (def (context-task-publication-host scope queries grants policies)
   (let (runtime (make-owner (current-thread) (uuid->string (random-uuid))

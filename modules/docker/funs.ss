@@ -91,7 +91,8 @@
 (defstruct docker-task-input
   (input-bindings
    args-vals)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 (def DockerTaskInput (.cc Type. sexp: 'DockerTaskInput '.element? docker-task-input?))
 
@@ -108,7 +109,8 @@
    args-vals
    output-policy
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Unit TaskFamilyDescriptor)
 (def docker-task-family-descriptor

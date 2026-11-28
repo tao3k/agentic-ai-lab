@@ -76,7 +76,7 @@
      (.ref owned 'manifest-digest) (.ref owned 'admission-digest)
      (.ref owned 'contract) (.ref owned 'policy-identity)
      (.ref owned 'policy-digest) (.ref owned 'purposes) #f)))
-(defstruct context-use-state (current owner feed))
+(defstruct context-use-state (current owner feed) final: #t)
 (def (agentic-ai-lab-context-use-host)
   (let (runtime-value (make-context-use-state (make-hash-table) (current-thread) (make-change-feed)))
     (.o kind: 'agentic-ai-lab.context-use-host.v1 private-runtime-state: runtime-value)))

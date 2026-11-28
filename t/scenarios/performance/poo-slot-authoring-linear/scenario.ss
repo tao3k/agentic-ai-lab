@@ -7,7 +7,8 @@
 ;;; the production tail-passing implementation. The baseline is evidence only;
 ;;; it is not a second runtime or a public compatibility path.
 
-(import (only-in :asp-gerbil-scheme/benchmark-api
+(import :clan/poo/object
+        (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-fixture-ref
                  benchmark-receipt-pass?

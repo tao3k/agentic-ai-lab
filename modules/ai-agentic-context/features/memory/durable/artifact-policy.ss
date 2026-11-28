@@ -81,7 +81,8 @@
    runtime-owner
    handoff-required
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Alist Symbol Datum Datum)
 (def (agentic-ai-lab-artifact-option-ref options key default-value)

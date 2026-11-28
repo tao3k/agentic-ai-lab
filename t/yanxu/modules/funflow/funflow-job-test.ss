@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :clan/poo/object .get .ref/cached .call .slot? .cc)
+(import :std/test (only-in :clan/poo/object .get .ref/cached .call .slot? .cc .def .o)
         :tao3k/yuanxu/syntax/path-slots
         :tao3k/agentic-ai-lab/modules/funflow/objects
         (only-in :tao3k/agentic-ai-lab/modules/funflow/config Config)

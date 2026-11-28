@@ -8,7 +8,7 @@
                  .o
                  .@
                  .ref
-                 object?)
+                 object? object<-alist)
         (only-in :tao3k/yuanxu/utilities/functional
                  yuanxu-set-subset?))
 

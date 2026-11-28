@@ -37,7 +37,8 @@
    diagnostics
    runtime-executed
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 ;; : (-> Symbol PooMemoryStoreSpec [Alist] PooMemoryHandoffManifest)
 (def (agentic-ai-lab-memory-handoff-manifest request-id spec . maybe-metadata)
   (agentic-ai-lab-session-require "memory handoff request id must be a symbol"

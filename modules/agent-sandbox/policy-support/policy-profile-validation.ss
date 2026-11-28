@@ -55,7 +55,8 @@
 ;;; Profile validation diagnostics keep sandbox resource and durable checks explicit.
 ;;; - Keep filesystem capability failures visible before runtime profile projection.
 (defstruct agentic-ai-lab-sandbox-profile-policy-diagnostic-entry
-  (kind schema code phase severity payload))
+  (kind schema code phase severity payload)
+  final: #t)
 
 ;; agentic-ai-lab-sandbox-profile-policy-diagnostic->alist
 ;;   : (-> PooSandboxProfilePolicyDiagnostic Alist)

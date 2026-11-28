@@ -6,7 +6,8 @@
 ;;; Boundary: focused user-interface loop-engine POO slot contract failures.
 ;;; Invariant: malformed slots fail before presentation emits intent rows.
 
-(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+(import :clan/poo/object
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

@@ -59,7 +59,8 @@
    subagents-parented
    diagnostics
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> AgenticAILabGraphRuntimeReceipt Symbol Datum)
 (def (agentic-ai-lab-graph-runtime-receipt-ref receipt key)

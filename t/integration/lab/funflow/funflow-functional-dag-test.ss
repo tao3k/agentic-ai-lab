@@ -13,7 +13,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :clan/poo/object .ref)
+        (only-in :clan/poo/object .ref .def)
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags)
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints

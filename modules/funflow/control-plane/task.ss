@@ -6,7 +6,7 @@
 ;;; Boundary: tasks describe work intent and adapter request shape.
 ;;; Invariant: only pure/scheme tasks carry an in-process executor.
 
-(import (only-in :clan/poo/object .@ .o .get .ref .slot? object?)
+(import (only-in :clan/poo/object .@ .o .get .ref .slot? object? .cc)
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/projection-syntax
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/roles
@@ -324,7 +324,8 @@
    strategy
    policy)
   id: tao3k/agentic-ai-lab/modules/funflow/control-plane/task#execution-request::t
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 (def ExecutionRequestContract
   (.cc Type. sexp: 'ExecutionRequest '.element? execution-request?))

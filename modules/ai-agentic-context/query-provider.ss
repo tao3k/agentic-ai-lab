@@ -288,7 +288,7 @@
 
 ;;; Runtime effects stay behind this owner capability. Source versions and the
 ;;; runtime evidence journal are append-only; subscribers prepare before mutation.
-(defstruct owner (thread sources versions journal feed queries))
+(defstruct owner (thread sources versions journal feed queries) final: #t)
 
 (def (context-query-host)
   (.o kind: 'context.query-provider-host.v1

@@ -144,7 +144,8 @@
    materialization-id
    injection-target
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 (def +agentic-ai-lab-promotion-checked-gates+
   '(intent-kind

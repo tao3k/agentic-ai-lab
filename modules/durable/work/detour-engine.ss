@@ -6,7 +6,7 @@
 ;;; Monotonic Overlay Lens, and Pure Mainline Re-Anchoring over WorkSnapshot.
 ;;; INVARIANT: ZERO orgize imports, ZERO ai-agentic-context imports.
 
-(import (only-in :clan/poo/object .def .o .ref)
+(import (only-in :clan/poo/object .def .o .ref object?)
         (only-in :clan/poo/mop .defgeneric .defmethod .defmethod-bundle
                  clos-call clos-compose-method-bundles
                  clos-generic-function clos-generic-protocol)

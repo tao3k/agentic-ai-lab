@@ -196,7 +196,8 @@
    diagnostics
    type-facts
    lean-fact-contracts)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> AgenticAILabBoundaryNamespaceValidation Boolean)
 (def (agentic-ai-lab-boundary-namespace-validation-valid? validation)

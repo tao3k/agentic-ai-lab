@@ -65,7 +65,8 @@
   (source
    key
    secret)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> ConfigRequirement Boolean)
 (def (config-requirement-secret? requirement)
@@ -85,7 +86,8 @@
 (defstruct config-preflight
   (requirements
    missing)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: config preflight status is the policy-visible edge for core
 ;;; behavior, keeping validation, lookup, or projection responsibilities
@@ -123,7 +125,8 @@
   (kind
    value
    secret)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> ConfigArgument Boolean)
 (def (config-argument-secret? argument)
@@ -194,7 +197,8 @@
    options
    task-registry
    flow-registry)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Public config construction keeps existing callers on default POO registries
 ;;; while allowing extensions to install descriptor bundles at the run boundary.

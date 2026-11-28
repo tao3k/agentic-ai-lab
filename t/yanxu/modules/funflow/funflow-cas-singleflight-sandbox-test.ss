@@ -14,7 +14,7 @@
 (import :std/test
         (only-in :std/io/tempfile make-temporary-file-name)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :clan/poo/object .o .ref)
+        (only-in :clan/poo/object .o .ref object?)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures Fun Number String)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/control-plane/flow
                  pure-flow scheme-flow external-flow flow-then flow-fanout)

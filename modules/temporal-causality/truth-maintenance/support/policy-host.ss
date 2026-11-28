@@ -21,7 +21,7 @@
         agentic-ai-lab-temporal-support-policy-host-registered agentic-ai-lab-temporal-support-policy-host-snapshots
         policy-host-revisions policy-host-restore-revisions!)
 ;;; Opaque runtime state, never transported; the host serializes control/use.
-(defstruct policy-host-state (current revisions owner feed clock))
+(defstruct policy-host-state (current revisions owner feed clock) final: #t)
 (def (agentic-ai-lab-temporal-support-policy-host)
   (let (runtime-value (make-policy-host-state (make-hash-table) (make-hash-table) (current-thread) (make-change-feed) #f))
     (.o kind: 'agentic-ai-lab.temporal-causality.policy-host.v1 private-runtime-state: runtime-value)))

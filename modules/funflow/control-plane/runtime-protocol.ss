@@ -10,7 +10,7 @@
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures
         (only-in :clan/poo/object .cc .get))
 
-(export AdapterResult RuntimeEnvelope RuntimeResponseLike RequestId ArtifactHandle
+(export AdapterResult RuntimeEnvelope RuntimeResponseLike RuntimeMetadata RequestId ArtifactHandle
         (import: :tao3k/agentic-ai-lab/modules/funflow/control-plane/signatures)
         make-adapter-result
         adapter-result?
@@ -49,7 +49,8 @@
    artifact-handle
    error)
   id: tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol#adapter-result::t
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Unit Symbol)
 (def +runtime-request-schema+ 'yuanxu.runtime-request.v1)
@@ -83,7 +84,8 @@
    error
    metadata)
   id: tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol#runtime-response::t
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Alist Alist Alist)
 (def (runtime-response-family-metadata family metadata)
@@ -237,6 +239,11 @@
                  (and (list? value) (every (lambda (row) (and (pair? row) (symbol? (car row)))) value)
                       (eq? (runtime-alist-ref value 'schema #f) +runtime-request-schema+)
                       (element? RequestId (runtime-alist-ref value 'request-id #f))))))
+(def RuntimeMetadata
+  (.cc Type. sexp: 'RuntimeMetadata
+    '.element? (lambda (value)
+                 (and (list? value)
+                      (every (lambda (row) (and (pair? row) (symbol? (car row)))) value)))))
 (def RuntimeResponseLike
   (.cc Type. sexp: 'RuntimeResponseLike
     '.element? (lambda (value)

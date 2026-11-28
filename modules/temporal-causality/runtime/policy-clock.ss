@@ -14,10 +14,10 @@
 (export policy-clock-owner policy-clock-owner/scheduled policy-clock-call! policy-clock-await-events!
         policy-clock-pause! policy-clock-resume! policy-clock-retry!
         policy-clock-audit policy-clock-stop! policy-clock-observed policy-clock-command! policy-clock-replace-policy! policy-clock-stop-receipt policy-clock-resource-state policy-clock-admission-state)
-(defstruct clock-client (thread phase receipt lock ingress))
-(defstruct clock-request (kind operation reply))
-(defstruct clock-ticket (identity policy generation digest end due))
-(defstruct clock-delivery (ticket observed monotonic key))
+(defstruct clock-client (thread phase receipt lock ingress) final: #t)
+(defstruct clock-request (kind operation reply) final: #t)
+(defstruct clock-ticket (identity policy generation digest end due) final: #t)
+(defstruct clock-delivery (ticket observed monotonic key) final: #t)
 (def (fingerprint value) (string-append "sha256:" (hex-encode (sha256 (string->utf8
   (call-with-output-string (lambda (p) (write value p))))))))
 (def (copy-instant value)

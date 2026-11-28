@@ -11,7 +11,7 @@
         (only-in :clan/poo/mop make-instance)
         (only-in :clan/poo/type Bool element?)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
-         (only-in :clan/poo/object .o .ref object?)
+         (only-in :clan/poo/object .o .ref object? .get)
         (only-in :std/test check-equal? test-suite)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
                  make-agentic-ai-lab-module-diagnostic)

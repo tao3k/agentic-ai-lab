@@ -253,7 +253,8 @@
    runtime-owner
    handoff-required
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: durable job receipts materialize memory checkpoint intent as a
 ;;; policy-visible value without executing provider storage.

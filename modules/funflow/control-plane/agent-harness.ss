@@ -128,7 +128,8 @@
    budget-policy
    observability-policy
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : YuanxuAgentHarness
 (defstruct yuanxu-agent-harness
@@ -141,7 +142,8 @@
    observability-sink
    runtime-executed?
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : YuanxuAgentSession
 (defstruct yuanxu-agent-session
@@ -153,7 +155,8 @@
    retention-policy
    operation-history
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : YuanxuAgentOperation
 (defstruct yuanxu-agent-operation
@@ -167,7 +170,8 @@
    status
    receipt
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : YuanxuWorkflowRun
 (defstruct yuanxu-workflow-run
@@ -182,7 +186,8 @@
    error
    terminal-receipt
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Dispatch admission is separate from workflow run completion. It records
 ;;; that input was accepted for a continuing agent/session.
@@ -197,7 +202,8 @@
    admission-status
    runtime-queue-intent
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : YuanxuRuntimeSnapshot
 (defstruct yuanxu-runtime-snapshot
@@ -209,7 +215,8 @@
    error-summary
    presentation-trace
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> YuanxuAgentProfile Alist)
 (defpoo-core-receipt-projection

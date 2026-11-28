@@ -12,7 +12,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :clan/poo/object .ref)
+        (only-in :clan/poo/object .ref .def)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         :tao3k/yuanxu/module-system/selection/objects
         :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config

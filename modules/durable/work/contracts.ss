@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/object .def .o .cc .ref .slot? object?)
         (only-in :clan/poo/mop .defgeneric .new/checked)
-        (only-in :clan/poo/type Record String Symbol Bool OrFalse Any List)
+        (only-in :clan/poo/type Record Object String Symbol Bool Pair Nullable List)
         (only-in :clan/poo/number Integer)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
@@ -71,17 +71,19 @@
                max-detour-depth: [Integer])
        identity: 'durable/work-policy))
 
+(def WorkByteSpan (Pair Integer Integer))
+
 (def WorkClaimContract
   (.cc (Record kind: [Symbol]
                node-id: [String]
-               owner-actor: [(OrFalse String)]
+               owner-actor: [(Nullable String)]
                claim-state: [String]
                claim-lease-epoch: [Integer]
                heartbeat-at: [Integer]
                lease-ttl: [Integer]
                worktree: [String]
-               extends-id: [(OrFalse String)]
-               span: [Any])
+               extends-id: [(Nullable String)]
+               span: [(Nullable WorkByteSpan)])
        identity: 'durable/work-claim))
 
 (def WorkSnapshotContract
@@ -93,17 +95,17 @@
                root-archived?: [Bool]
                checklist-done: [Integer]
                checklist-total: [Integer]
-               dag-nodes: [(List Any)]
+               dag-nodes: [(List Object)]
                mainline-done: [Integer]
                mainline-total: [Integer]
-               open-blocker-detours: [(List Any)]
-               open-side-quests: [(List Any)]
-               completed-detours: [(List Any)]
-               unsatisfied-invariants: [(List Any)]
+               open-blocker-detours: [(List String)]
+               open-side-quests: [(List String)]
+               completed-detours: [(List String)]
+               unsatisfied-invariants: [(List String)]
                max-detour-depth-observed: [Integer]
-               return-anchor-id: [(OrFalse String)]
-               claims: [(List Any)]
-               rule-overrides: [Any])
+               return-anchor-id: [(Nullable String)]
+               claims: [(List WorkClaimContract)]
+               rule-overrides: [(Nullable Object)])
        identity: 'durable/work-snapshot))
 
 (def DetourReconcileContract

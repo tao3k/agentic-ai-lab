@@ -56,11 +56,11 @@
 ;;; any consumer observes it. Bundle/WASM and future projections consume the
 ;;; same dependency graph rather than reinterpreting composition clauses.
 
-(defstruct composition-plan-target (kind name clause-kind) transparent: #t)
-(defstruct composition-plan-descriptor (key name kind source) transparent: #t)
-(defstruct composition-plan-edge (source-key target-key) transparent: #t)
-(defstruct composition-plan-state (descriptors edges) transparent: #t)
-(defstruct composition-plan-stage-view (name value) transparent: #t)
+(defstruct composition-plan-target (kind name clause-kind) transparent: #t final: #t)
+(defstruct composition-plan-descriptor (key name kind source) transparent: #t final: #t)
+(defstruct composition-plan-edge (source-key target-key) transparent: #t final: #t)
+(defstruct composition-plan-state (descriptors edges) transparent: #t final: #t)
+(defstruct composition-plan-stage-view (name value) transparent: #t final: #t)
 
 ;; The Gerbil hash constructor keeps the last duplicate key. Reversing the
 ;; source entries preserves the first declared target, stage, or binding.

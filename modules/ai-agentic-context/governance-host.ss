@@ -15,7 +15,7 @@
         context-governance-commit-subtree!
         context-governance-mediation-state)
 
-(defstruct gov-owner-state (owner query-host graph-id source-ids policy-digest mediation-state))
+(defstruct gov-owner-state (owner query-host graph-id source-ids policy-digest mediation-state) final: #t)
 
 (def (text? v) (and (string? v) (< 0 (string-length v) 257)))
 

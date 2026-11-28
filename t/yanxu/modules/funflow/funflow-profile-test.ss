@@ -5,7 +5,7 @@
         :tao3k/yuanxu/syntax/path-slots
         :tao3k/yuanxu/profile-composition/selection-syntax
         (only-in :tao3k/yuanxu/module-system/source/objects make-yuanxu-module-local-source)
-        (only-in :clan/poo/object .get .ref .ref/cached .slot?)
+        (only-in :clan/poo/object .get .ref .ref/cached .slot? .def .o)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/config-adapter
                  yuanxu-funflow-poo-pipeline->check-map)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/graph-projection

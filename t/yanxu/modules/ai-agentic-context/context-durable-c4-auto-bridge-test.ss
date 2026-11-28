@@ -12,7 +12,7 @@
 (import :std/test
         (only-in :std/list/list find)
         (only-in :std/source this-source-file)
-        (only-in :clan/poo/object .o .ref .slot?)
+        (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :tao3k/yuanxu/module-system/interface yuanxu-load-modules))
 (export context-durable-c4-auto-bridge-test)
 

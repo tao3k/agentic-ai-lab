@@ -5,7 +5,8 @@
 
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
-(import (only-in :tao3k/agentic-ai-lab/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+(import :clan/poo/object
+        (only-in :tao3k/agentic-ai-lab/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)

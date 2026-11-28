@@ -7,7 +7,7 @@
         scheduling-frame-active scheduling-frame-burst scheduling-frame-phase
         scheduling-transition)
 
-(defstruct scheduling-frame (data-capacity control-capacity burst-limit data controls active burst phase))
+(defstruct scheduling-frame (data-capacity control-capacity burst-limit data controls active burst phase) final: #t)
 
 (def (next-frame previous data controls active burst phase)
   (make-scheduling-frame (scheduling-frame-data-capacity previous)

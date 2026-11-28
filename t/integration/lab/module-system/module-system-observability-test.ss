@@ -9,7 +9,7 @@
 (import (only-in :tao3k/agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
         (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
-        (only-in :clan/poo/object .ref object?)
+        (only-in :clan/poo/object .ref object? .def .o .get .@)
         (only-in :std/test
                  check
                  check-eq?

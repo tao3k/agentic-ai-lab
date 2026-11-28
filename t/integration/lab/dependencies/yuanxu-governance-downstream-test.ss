@@ -3,7 +3,7 @@
 (import :std/test
         (only-in "../../../qualification/testing/qualification.ss"
                  macos-qualification-timing? qualification-timing-profile)
-        (only-in :clan/poo/object .get .cc .o)
+        (only-in :clan/poo/object .get .cc .o .call)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)

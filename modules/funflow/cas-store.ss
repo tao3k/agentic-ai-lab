@@ -190,9 +190,10 @@
 ;;; ---------------------------------------------------------------------------
 
 (defstruct cas-store-state
-  (mutex root-dir entries inflight pinned-capsules nonce-counter peak-inflight))
+  (mutex root-dir entries inflight pinned-capsules nonce-counter peak-inflight)
+  final: #t)
 
-(defstruct singleflight-slot (condvar done? failed? result error))
+(defstruct singleflight-slot (condvar done? failed? result error) final: #t)
 
 (.def FunflowCasStore.
   kind: 'agentic-ai-lab.funflow.cas-store.v1)

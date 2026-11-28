@@ -13,7 +13,7 @@
 (import :std/test
         (only-in :std/io/tempfile make-temporary-file-name)
         (only-in :std/string/misc string-contains)
-        (only-in :clan/poo/object .o .ref .def)
+        (only-in :clan/poo/object .o .ref .def object?)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-open journal-close! journal-get)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag

@@ -7,7 +7,8 @@
 ;;; Invariant: this declares tool specs and policy validation receipts only;
 ;;; no shell, filesystem, or MCP runtime is started.
 
-(import :tao3k/agentic-ai-lab/modules/session/syntax
+(import :clan/poo/object
+        :tao3k/agentic-ai-lab/modules/session/syntax
         :tao3k/agentic-ai-lab/modules/tool-core/config
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry

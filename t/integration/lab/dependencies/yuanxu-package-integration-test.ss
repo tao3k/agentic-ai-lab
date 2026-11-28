@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product integration uses this package's actual declaration and native environment.
 (import (only-in :std/test test-suite test-case check-equal?)
-        (only-in :clan/poo/object .get)
+        (only-in :clan/poo/object .get .o .cc)
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)

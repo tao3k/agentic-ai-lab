@@ -9,7 +9,7 @@
         ingress-drain! ingress-resources)
 
 ;; Positional queues and locks are private runtime state, not the public API.
-(defstruct ingress (state data-front data-back control-front control-back lock wake stop))
+(defstruct ingress (state data-front data-back control-front control-back lock wake stop) final: #t)
 (def (context-owner-ingress contract)
   (unless (eq? (.ref contract 'kind) 'context.scheduling-contract.v1)
     (error "Expected Context scheduling contract"))

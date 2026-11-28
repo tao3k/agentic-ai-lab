@@ -69,7 +69,8 @@
    unsupported-behavior
    sandbox-ref
    session-ref)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; loop-engine-capability-receipt-diagnostic-count
 ;; : (-> LoopEngineCapabilityReceipt Integer)

@@ -59,7 +59,8 @@
    runtime-owner
    runtime-executed
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 ;; : (-> Symbol PooSessionMemoryIntent Alist)
 (def (agentic-ai-lab-memory-diagnostic code intent)
   (agentic-ai-lab-memory-field-rows

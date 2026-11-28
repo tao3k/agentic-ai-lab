@@ -6,7 +6,7 @@
 ;;; Boundary: runner interprets plans and emits receipts.
 ;;; Invariant: adapter calls remain behind runtime-adapter functions.
 
-(import (only-in :clan/poo/object .cc)
+(import (only-in :clan/poo/object .cc .o .get)
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/projection-syntax
         :tao3k/yuanxu/utilities/algorithms
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/receipt
@@ -54,11 +54,12 @@
                 (validate-replay-report) module-binding-action)))
 
 ;; : (-> Value Receipt RunResult)
-(defstruct run-result (value receipt) transparent: #t)
+(defstruct run-result (value receipt) transparent: #t final: #t)
 
 ;; : (-> Strategy RuntimeAdapter TaskFamilyRegistry FlowDeclarationRegistry RunnerState)
 (defstruct runner-state (strategy adapter task-registry flow-registry)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Public runner construction keeps the two-argument control-plane API stable
 ;;; while allowing configured entrypoints to supply POO descriptor registries.

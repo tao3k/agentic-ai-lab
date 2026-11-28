@@ -113,7 +113,8 @@
    runtime-owner
    handoff-required
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Symbol Symbol Alist Alist Symbol [Alist])
 (def (durable-runtime-store-operation-diagnostics operation-id

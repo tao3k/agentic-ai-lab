@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Trusted runtime recovery adapter. Source producers are replayed before restore.
 (import (only-in :std/list/list find)
-        (only-in :clan/poo/object .o .ref .slot? object?)
+        (only-in :clan/poo/object .o .ref .slot? object? .call)
         :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
         :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy)

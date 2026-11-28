@@ -200,7 +200,8 @@
    segments
    public?
    repair-layer)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> AgenticAILabNamespaceDescriptor Symbol)
 (def (agentic-ai-lab-namespace-descriptor->symbol descriptor)

@@ -37,7 +37,7 @@
 (def RuntimeCommandDescriptor
   (Record runtime-command-descriptor?: (list (Exactly #t))
           name: (list Symbol) executable: (list String) arguments: (list RuntimeArguments)
-          protocol: (list Symbol) metadata: (list (List Any))))
+          protocol: (list Symbol) metadata: (list RuntimeMetadata)))
 (def (make-runtime-command-descriptor name executable arguments protocol metadata)
   (validate RuntimeCommandDescriptor
     (.o bind-these: #f runtime-command-descriptor?: #t name: name executable: executable

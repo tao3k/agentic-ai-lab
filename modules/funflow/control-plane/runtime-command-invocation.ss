@@ -34,7 +34,7 @@
 ;; : (-> Symbol Symbol Invoker Alist RuntimeCommand)
 (def RuntimeCommandContract
   (Record runtime-command?: (list (Exactly #t)) name: (list Symbol) kind: (list Symbol)
-          invoker: (list (Fun RuntimeResponseLike <- RuntimeEnvelope)) metadata: (list (List Any))))
+          invoker: (list (Fun RuntimeResponseLike <- RuntimeEnvelope)) metadata: (list RuntimeMetadata)))
 (def RuntimeArguments (Union (List String) (Fun (List String) <- RuntimeEnvelope)))
 (def (make-runtime-command name kind invoker metadata)
   (validate RuntimeCommandContract

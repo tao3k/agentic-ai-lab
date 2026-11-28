@@ -30,7 +30,8 @@
    failure-policy
    capabilities
    frontier)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Strategy-owned metadata is frozen at the runner boundary before an adapter
 ;;; receives a request, so host runtimes do not need to inspect Scheme objects.

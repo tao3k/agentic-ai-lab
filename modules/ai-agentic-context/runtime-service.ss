@@ -18,7 +18,7 @@
         context-service-issue-workspace-retry!
         context-service-retry-workspace!
         context-service-close!)
-(defstruct service-state (clock observations lock closed))
+(defstruct service-state (clock observations lock closed) final: #t)
 
 (def (text? value) (and (string? value) (< 0 (string-length value) 257)))
 (def (revision? value) (and (exact-integer? value) (<= 0 value 9223372036854775807)))

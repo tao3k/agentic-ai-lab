@@ -134,7 +134,8 @@
    handoff-required
    open?
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: communication channel receipts declare allowed session links before
 ;;; any agent message transport is used.
@@ -368,7 +369,8 @@
    handoff-required
    delivered?
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: communication receipts capture message routing evidence while
 ;;; keeping payload handling outside session policy validation.

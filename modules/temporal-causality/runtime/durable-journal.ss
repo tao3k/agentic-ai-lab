@@ -64,7 +64,7 @@
     ((pair) (cons (decode (cadr x)) (decode (caddr x))))
     (else (error "Unknown inert journal tag"))))
 (def (journal-unpack value) (decode (scheme-wire-read value)))
-(defstruct journal-state (db owner epoch active key poisoned? cut closed?))
+(defstruct journal-state (db owner epoch active key poisoned? cut closed?) final: #t)
 (def (state host (allow-closed? #f))
   (let (s (.ref host 'private-journal))
     (unless (journal-state? s) (error "Invalid durable journal"))

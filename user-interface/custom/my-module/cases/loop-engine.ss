@@ -9,7 +9,8 @@
 ;;; This case configures one concrete loop handoff story: an agent proposes a
 ;;; CI/CD repair, peer agents judge it, and a human node reviews release risk.
 ;; : [PooUserModuleSelection]
-(import :tao3k/agentic-ai-lab/modules/loop-engine/config
+(import :clan/poo/object
+        :tao3k/agentic-ai-lab/modules/loop-engine/config
         :tao3k/agentic-ai-lab/modules/session/syntax
         (only-in :tao3k/agentic-ai-lab/modules/loop-engine/control/spec-evolution
                  external-feedback-receipt-prototype

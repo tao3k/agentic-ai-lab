@@ -7,7 +7,8 @@
 ;;; Invariant: this binds session topology to effective policy validation;
 ;;; provider, tool, memory, stream, and sandbox runtime stay behind Marlin.
 
-(import :tao3k/agentic-ai-lab/modules/session/syntax
+(import :clan/poo/object
+        :tao3k/agentic-ai-lab/modules/session/syntax
         :tao3k/agentic-ai-lab/modules/ai-agentic-context/features/memory/spec
         (only-in :tao3k/yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry))

@@ -80,7 +80,8 @@
    runtime-owner
    handoff-required
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Scenario construction folds heterogeneous durable rows into one receipt
 ;;; boundary so tests can cover replay and repair handoff without executing

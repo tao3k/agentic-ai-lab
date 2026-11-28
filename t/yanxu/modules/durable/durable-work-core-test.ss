@@ -8,7 +8,7 @@
 
 (import :std/test
         (only-in :std/io/tempfile make-temporary-file-name)
-        (only-in :clan/poo/object .def .o .ref)
+        (only-in :clan/poo/object .def .o .ref object?)
         (only-in :tao3k/agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
                  journal-open journal-close! journal-get)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/durable-dag

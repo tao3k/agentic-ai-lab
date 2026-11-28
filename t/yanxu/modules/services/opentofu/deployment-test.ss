@@ -3,7 +3,7 @@
 (import :std/test
         (only-in "../../../../qualification/testing/qualification.ss"
                  macos-qualification-timing? qualification-timing-profile)
-        (only-in :clan/poo/object .get .cc .o)
+        (only-in :clan/poo/object .get .cc .o .call)
         (only-in :std/source this-source-file)
         (only-in :gerbil/runtime/loader load-path set-load-path!)
         (only-in :gerbil/expander __module-registry expander-context-id

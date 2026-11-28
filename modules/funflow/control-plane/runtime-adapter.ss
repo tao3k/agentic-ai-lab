@@ -6,7 +6,8 @@
 ;;; Boundary: adapters normalize calls to heavy runtime implementations.
 ;;; Invariant: this module only defines the request-only placeholder adapter.
 
-(import :tao3k/agentic-ai-lab/modules/funflow/control-plane/task
+(import :clan/poo/object
+        :tao3k/agentic-ai-lab/modules/funflow/control-plane/task
         :tao3k/agentic-ai-lab/modules/funflow/control-plane/runtime-protocol
         (for-template "./runtime-command-invocation.ss")
         (only-in :tao3k/yuanxu/module-system/source/module-binding module-binding-action)

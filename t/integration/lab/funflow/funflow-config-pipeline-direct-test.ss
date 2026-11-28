@@ -1,4 +1,5 @@
-(import (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+(import :clan/poo/object
+        (only-in :tao3k/agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
         (only-in :tao3k/agentic-ai-lab/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
         (only-in :tao3k/agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
 ;;; -*- Gerbil -*-

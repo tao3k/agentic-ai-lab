@@ -208,7 +208,8 @@
    runtime-owner
    runtime-executed?
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: runtime materialization receipts bind checkpoint ids, runtime
 ;;; owner, and session metadata without executing durable runtime work.

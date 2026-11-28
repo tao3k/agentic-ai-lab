@@ -42,7 +42,8 @@
    message
    detail
    recoverable)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 (def ExecutionFailureType
   (.cc Type. sexp: 'FunflowExecutionFailure '.element? execution-failure?))

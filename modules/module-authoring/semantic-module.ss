@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product-specific restricted root authoring policy; shared roles live in Core.
-(import (only-in :clan/poo/object .o)
+(import (only-in :clan/poo/object .o .def)
         (only-in :clan/poo/type validate)
         (only-in :tao3k/yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
         (only-in :tao3k/yuanxu/module-system/authoring/roles

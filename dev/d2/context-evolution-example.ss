@@ -3,6 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Illustrative admitted inputs, not authenticated real-world evidence.
+(import :clan/poo/object)
 (export context-evolution-example)
 (def (context-evolution-example)
   (.o

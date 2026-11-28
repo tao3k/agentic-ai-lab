@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Product-owned selection; Core prepares sources without runtime activation.
-(import :tao3k/yuanxu/module-system/selection/init-syntax)
+(import (only-in :tao3k/yuanxu/lang yuanxu!))
 (yuanxu!
   :load-modules "./modules" mode: auto export: ModulesSource :test-dir "./t"
   (ai-agentic-context +memory)

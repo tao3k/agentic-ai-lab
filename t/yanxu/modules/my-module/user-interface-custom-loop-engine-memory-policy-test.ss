@@ -6,7 +6,8 @@
 ;;; Boundary: tests verify loop-engine memory-policy declaration contracts.
 ;;; Invariant: malformed memory policy rows fail before runtime projection.
 
-(import (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
+(import :clan/poo/object
+        (only-in :tao3k/yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)

@@ -57,7 +57,8 @@
    descriptor-realized?
    runtime-executed
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> PooSessionMemoryReceipt Symbol Datum)
 (def (agentic-ai-lab-session-memory-receipt-ref receipt key)

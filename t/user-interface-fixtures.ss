@@ -6,7 +6,7 @@
 ;;; Boundary: shared fixtures for root user-interface tests.
 ;;; Invariant: fixtures are declarative data and never realize descriptors.
 
-(import (only-in :clan/poo/object .o .ref)
+(import (only-in :clan/poo/object .o .ref .def)
         :tao3k/yuanxu/module-system/selection/objects
         (only-in :tao3k/yuanxu/module-system/selection/syntax
                  yuanxu-modules!)

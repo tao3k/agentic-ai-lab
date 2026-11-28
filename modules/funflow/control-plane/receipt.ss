@@ -57,7 +57,8 @@
    status
    error
    children)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Receipt Boolean)
 (def (receipt-ok? receipt)

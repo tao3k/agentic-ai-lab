@@ -29,7 +29,8 @@
    summary
    expected-node-ids
    observed-node-ids)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Intent: validate that a receipt can be replayed against the plan topology
 ;;; that produced it.

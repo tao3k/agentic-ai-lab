@@ -17,8 +17,8 @@
         agentic-ai-lab-temporal-proof-host-current
         agentic-ai-lab-temporal-proof-host-watch! agentic-ai-lab-temporal-proof-host-unwatch! agentic-ai-lab-temporal-proof-host-drain!
         agentic-ai-lab-temporal-proof-host-pending? agentic-ai-lab-temporal-proof-host-policy agentic-ai-lab-temporal-proof-host-retained-digest agentic-ai-lab-temporal-proof-host-source-snapshot)
-(defstruct proof-context (admission arguments program journal))
-(defstruct proof-host-state (policy-host current proofs owner observers pending busy?))
+(defstruct proof-context (admission arguments program journal) final: #t)
+(defstruct proof-host-state (policy-host current proofs owner observers pending busy?) final: #t)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (tag? x k) (and (object? x) (.slot? x 'kind) (eq? (.ref x 'kind) k)))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8

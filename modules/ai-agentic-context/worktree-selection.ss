@@ -26,7 +26,7 @@
     (let (value (.ref branch (car names)))
       (if (null? (cdr names)) value (loop value (cdr names))))))
 
-(defstruct task-dependency (binding loader path version roots))
+(defstruct task-dependency (binding loader path version roots) final: #t)
 
 (def (resolve-task-dependency task scope role type)
   (let (binding (and (.slot? task role) (.ref task role)))

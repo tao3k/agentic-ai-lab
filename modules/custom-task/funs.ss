@@ -108,7 +108,8 @@
 (defstruct custom-repeat-spec
   (text
    count)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Invariant:
 ;;; - Non-positive repeat counts return an empty suffix.

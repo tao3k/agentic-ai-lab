@@ -63,7 +63,8 @@
    runtime-parses-scheme-source
    scheme-manufactures-runtime-handlers
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Handoff receipts summarize the session for runtime owners. They keep the
 ;;; heavy execution boundary explicit and never claim Scheme executed work.
@@ -200,7 +201,8 @@
    lean-name
    source-slot
    polarity)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> Symbol Symbol Symbol Symbol Symbol Symbol PooLeanFactKeyContract)
 (def (agentic-ai-lab-lean-fact-key key kind lean-owner lean-name source-slot polarity)

@@ -6,7 +6,8 @@
 ;;; Boundary: downstream loop-engine profile declarations.
 ;;; Invariant: standalone module; it declares workflow loop intent only.
 
-(import :tao3k/agentic-ai-lab/modules/loop-engine/config)
+(import :clan/poo/object
+        :tao3k/agentic-ai-lab/modules/loop-engine/config)
 
 (export agentic-ai-lab-custom-my-module-loops-module)
 

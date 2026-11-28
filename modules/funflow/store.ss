@@ -79,7 +79,8 @@
    address-algorithm
    content-address
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;;; Boundary: store task adapter dispatch is the policy-visible edge for
 ;;; workflow behavior, keeping validation, lookup, or projection

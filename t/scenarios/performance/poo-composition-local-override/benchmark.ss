@@ -2,6 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import :clan/poo/object)
 ((benchmarkKind . scenario-e2e)
  (max_total . 100ms)
  (target_total . 25ms)

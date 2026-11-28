@@ -11,7 +11,7 @@
 
 (import :std/test
         (only-in :std/io/tempfile make-temporary-file-name)
-        (only-in :clan/poo/object .o .ref)
+        (only-in :clan/poo/object .o .ref object?)
         (only-in :clan/poo/number Integer)
         (only-in :tao3k/agentic-ai-lab/modules/nono-sandbox/profile-interface
                  nono-sandbox-profile)

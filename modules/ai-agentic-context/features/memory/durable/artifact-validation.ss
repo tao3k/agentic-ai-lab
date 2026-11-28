@@ -58,7 +58,8 @@
    diagnostics
    runtime-executed
    source)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> PooDurableArtifactPolicyReceipt Symbol Datum)
 (def (agentic-ai-lab-durable-artifact-policy-receipt-ref receipt field)

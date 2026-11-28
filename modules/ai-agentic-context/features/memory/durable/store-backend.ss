@@ -411,7 +411,8 @@
    valid?
    diagnostics
    metadata)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> PooDurableRuntimeStoreBackend PooDurableRuntimeStoreBackendReceipt)
 (def (agentic-ai-lab-durable-runtime-store-backend->receipt backend)
@@ -585,7 +586,8 @@
    runtime-owner
    handoff-required
    runtime-executed)
-  transparent: #t)
+  transparent: #t
+  final: #t)
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt PooDurableRuntimeStoreBackendReceipt [Alist] PooDurableRuntimeStoreNegotiationReceipt)
 (def (agentic-ai-lab-durable-runtime-store-backend-negotiation contract-receipt

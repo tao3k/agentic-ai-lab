@@ -42,7 +42,8 @@
 ;;; Registry diagnostics are internal receipts for backend capability policy validation.
 ;;; - Keep duplicate entry and alias reports bounded before projecting validation rows.
 (defstruct agentic-ai-lab-sandbox-backend-capability-registry-diagnostic-entry
-  (kind schema code phase slot severity payload))
+  (kind schema code phase slot severity payload)
+  final: #t)
 
 ;; agentic-ai-lab-sandbox-backend-capability-registry-diagnostic->alist
 ;;   : (-> PooSandboxBackendCapabilityRegistryDiagnostic Alist)

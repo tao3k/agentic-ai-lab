@@ -41,17 +41,18 @@
         context-host-dispose! context-host-disposed? context-host-subscription-count
         context-host-checkpoint context-host-session? context-host-restore! context-host-query-provider context-observation-evidence
         context-host-enroll-query! context-host-refresh-query!)
-(defstruct session-owner-state (entries owner grants policies proofs proof-required? workers observations propagation-enabled? watchers parents propagation-log disposed?))
+(defstruct session-owner-state (entries owner grants policies proofs proof-required? workers observations propagation-enabled? watchers parents propagation-log disposed?) final: #t)
 ;;; The schedule and immutable terminal history publish through ONE row pointer.
-(defstruct owner-publication (schedule terminals propagation))
+(defstruct owner-publication (schedule terminals propagation) final: #t)
 (defstruct source-entry (generation source scope restriction profile task-revision ids
-                        projection task publication grant-id grant-generation authority query))
-(defstruct proof-binding (host registration state-generation policy-generation policy-digest budget source-generation digest parents authority admission query))
-(defstruct host-worker (session attempt source-generation proof-digest registration original-proof thread observation mode query))
-(defstruct runtime-observation (worker payload))
-(defstruct context-parent (session binding parents))
+                        projection task publication grant-id grant-generation authority query)
+  final: #t)
+(defstruct proof-binding (host registration state-generation policy-generation policy-digest budget source-generation digest parents authority admission query) final: #t)
+(defstruct host-worker (session attempt source-generation proof-digest registration original-proof thread observation mode query) final: #t)
+(defstruct runtime-observation (worker payload) final: #t)
+(defstruct context-parent (session binding parents) final: #t)
 ;;; Runtime Provider ownership is kept outside the portable lineage.
-(defstruct query-binding (owner observation))
+(defstruct query-binding (owner observation) final: #t)
 (def (source-entry-schedule row) (owner-publication-schedule (source-entry-publication row)))
 (def (publish-schedule! row schedule)
   (set! (source-entry-publication row)
