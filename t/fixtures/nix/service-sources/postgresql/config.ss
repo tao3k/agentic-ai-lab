@@ -1,6 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import "objects.ss" "types.ss"
+(import (only-in :clan/poo/object .def .o .cc)
+        "objects.ss" "types.ss"
         (only-in :std/source this-source-file)
         (only-in :tao3k/yuanxu/configuration/json config-json-file config-defaults))
 (export Document Config PostgreSQLScope)

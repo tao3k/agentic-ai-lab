@@ -4,7 +4,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Public Governance core interface.  Cedar remains a Provider boundary.
-(import "types.ss" "objects.ss" "funs.ss" "config.ss"
+(import (only-in :clan/poo/object .def .o)
+        "types.ss" "objects.ss" "funs.ss" "config.ss"
         "policy/higher-order-rules.ss")
 (export (import: "types.ss")
         (import: "objects.ss")
