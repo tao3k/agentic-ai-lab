@@ -8,7 +8,7 @@
         (only-in :std/make make make-clean)
         (only-in "./init.ss" tao3k/agentic-ai-lab.init.exports))
 
-;; Default package installation compiles ONLY a minimal 1-2 module baseline.
+;; Default package installation compiles ONLY a single baseline module (`funflow`).
 ;; This repository scales to 1,000-10,000+ modules: NEVER expand build-modules
 ;; into a full-repo inventory and NEVER add ad hoc native-library side-channels
 ;; (e.g. package-library-spec / with-public-library-spec) here.
@@ -16,7 +16,7 @@
 ;; demand through their own `yuanxu!` init declaration; `just test` verifies
 ;; all modules independently of default package compilation.
 (def build-modules
-  '(modules/ai-agentic-context modules/temporal-causality))
+  '(modules/funflow))
 
 (def (build-options flags)
   (foldr (lambda (flag options)
